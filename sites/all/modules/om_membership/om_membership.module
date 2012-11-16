@@ -1,0 +1,260 @@
+<?php
+/**
+ * Implements hook_permission
+ */
+function om_membership_permission() {
+  return array(
+    'administer om membership' => array(
+      'title' => t('Administer OM Membership'), 
+      'description' => t('Perform administration tasks for the Open Media Membership system.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_membership_menu() {
+  $items = array();
+  // Main module routes
+  // Main plans page
+  $items['membership'] = array(
+    'page callback' => 'om_membership_individual_plans_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  // Alias of main plans page
+  $items['membership/plans'] = $items['membership'];
+  // Organizational plans page
+  $items['membership/org-plans'] = array(
+    'page callback' => 'om_membership_org_plans_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  // Membership form
+  $items['membership/signup'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_membership_registration_form', 2),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/om_membership_registration_form.inc'
+  );
+  // Main administration plan
+  $items['admin/config/people/membership'] = array(
+    'page callback' => 'om_membership_admin_form_page',
+    'access arguments' => array('administer om membership'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  // Utility routes
+  $items['membership/add'] = array(
+    'page callback' => 'om_membership_add_membership_and_transfer',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_membership_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_membership_individual_plans_table' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_membership_individual_plans_table',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
+    'om_membership_org_plans_table' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_membership_org_plans_table',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    )
+  );
+}
+
+/**
+ * Helper to load plans and send to theme layer.
+ */
+function om_membership_individual_plans_page() {
+  global $user;
+  $plans = om_membership_get_plans();
+  return theme('om_membership_individual_plans_table', array('plans' => $plans));
+}
+
+/**
+ * Helper to load plans and send to theme layer.
+ */
+function om_membership_org_plans_page() {
+  $plans = om_membership_get_plans();
+  return theme('om_membership_org_plans_table', array('plans' => $plans));
+}
+
+function om_membership_form_page() {
+  module_load_include('inc', 'om_membership', 'includes/om_membership_registration_form.inc');
+}
+
+/**
+ * Utility function to add a membership to the cart 
+ *   and transfer the user to the first step of the form.
+ * @param int $pid
+ *   product id to add.
+ */
+function om_membership_add_membership_and_transfer($pid) {
+  global $user;
+  // Check to see if there is an existing membership in the cart.
+  $existing_memberships = om_membership_get_currently_selected_membership($user);
+  if (!empty($existing_memberships)) {
+    // If so remove that membership
+    $membership_line_item_ids = array();
+    foreach ($existing_memberships AS $membership) {
+      $membership_line_item_ids[] = $membership->line_item_id;
+    }
+    $current_order = commerce_cart_order_load($user->uid);
+    $current_order_metadata = entity_metadata_wrapper('commerce_order', $current_order);
+    $current_line_items = $current_order_metadata->commerce_line_items->value();
+    foreach ($current_line_items AS $key => $line_item) {
+      if (in_array($line_item->line_item_id, $membership_line_item_ids)) {
+        commerce_cart_order_product_line_item_delete($current_order, $line_item->line_item_id);
+      }
+    }
+  }
+  // Add membershipt to cart.
+  commerce_cart_product_add_by_id($pid, 1);
+  drupal_goto('membership/signup');
+}
+
+/**
+ * Implements hook_block_info
+ */
+function om_membership_block_info() {
+  $blocks = array();
+  $blocks['membership_top'] = array(
+    'info' => t('Membership Top Control Block'), 
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['membership_bottom'] = array(
+    'info' => t('Membership Bottom Control Block'), 
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view
+ */
+function om_membership_block_view($delta = '') {
+  $blocks = array();
+  if ($delta == 'membership_top') {
+    
+  }
+  if ($delta == 'membership_bottom') {
+    
+  }
+  return $blocks;
+}
+
+function om_membership_admin_form_page() {
+
+}
+
+/**
+ * Return all membership plans.
+ * 
+ * @param array $options
+ *   any options acceptable by commerce_product_load_multiple
+ * @returns array of product objects
+ */
+function om_membership_get_plans($options = array()) {
+  $products = array();
+  $query = db_select('commerce_product', 'product');
+  $query->fields('product', array('product_id'));
+  $query->condition('type', 'omp_membership_plan', '=');
+  $query->condition('status', 1, '=');
+  $resource = $query->execute();
+  $pids = array();
+  while($result = $resource->fetchAssoc()) {
+    $pids[] = $result['product_id'];
+  }
+  if (count($pids) > 0) {
+    $products = commerce_product_load_multiple($pids, $options);
+    usort($products, 'om_membership_sort_products_by_price');
+  }
+  return $products;
+}
+
+/**
+ * Usort callback to sort commerce products by their pricefield.
+ */
+function om_membership_sort_products_by_price($a, $b) {
+  $a_wrapper = entity_metadata_wrapper('commerce_product', $a);
+  $a_value = $a_wrapper->commerce_price->value();
+  $b_wrapper = entity_metadata_wrapper('commerce_product', $b);
+  $b_value = $b_wrapper->commerce_price->value();
+  if ($a_value['amount'] < $b_value['amount']) {
+    return -1;
+  }
+  return 1;
+}
+
+/**
+ * Get the plan features voc by name (in case the vid is different).
+ */
+function om_membership_get_plan_features() {
+  $query = db_select('taxonomy_vocabulary', 'voc');
+  $query->fields('voc', array('vid'));
+  $query->condition('machine_name', 'membership_features', '=');
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  if (isset($result[0]->vid)) {
+    return taxonomy_get_tree($result[0]->vid);
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * If a user has a membership return that role id and the product associated with it.
+ * @param object $user
+ *   Standard user object.
+ * @returns array
+ *   returns an array keyed with roles paired to matching product.
+ */
+function om_membership_get_user_memberships($user) {
+  $memberships = array();
+  $plans = om_membership_get_plans();
+  foreach($plans AS $plan) {
+    $meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
+    $membership_ref = $meta_wrapper->field_om_role->value();
+    if (in_array($membership_ref, $user->roles)) {
+      $memberships[$membership_ref] = $plan; 
+    }
+  }
+  return $memberships;
+}
+
+/**
+ * Determine if there is a membership product type in the cart and return it.
+ * @param object $user
+ *   Standard user object.
+ * @returns array
+ *   returns a product object
+ */
+function om_membership_get_currently_selected_membership($user) {
+  $memberships = array();
+  if ($current_order = commerce_cart_order_load($user->uid)) {
+    $order_meta = entity_metadata_wrapper('commerce_order', $current_order);
+    $line_items = $order_meta->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_meta->commerce_product->value();
+      if ($product->type == 'omp_membership_plan') {
+        $memberships[] = $line_item;
+      }
+    }
+  }
+  return $memberships;
+}
