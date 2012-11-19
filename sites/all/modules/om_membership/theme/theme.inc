@@ -19,6 +19,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   $cost_row = "<tr><td></td>";
   $link_row = "<tr><td></td>";
   // Build header, cost row and links
+  $table_rows = "";
   if ($variables['plans']) {
     foreach ($variables['plans'] AS $plan) {
       $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
@@ -42,14 +43,13 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
     $variables['cost_row'] = $cost_row;
     $variables['link_row'] = $link_row;
     // Build body
-    $table_rows = "";
     $plan_features = om_membership_get_plan_features();
     foreach($plan_features AS $plan_term) {
       $table_rows .= '<tr><td>' . $plan_term->name . '</td>';
       foreach($variables['plans'] AS $plan) {
         $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
         if ($plan_meta_wrapper->field_user_type->value() == 0) {
-          $features = $plan_meta_wrapper->field_om_member_features->value();
+          $features = $plan_meta_wrapper->field_membership_features->value();
           if (!empty($features)) {
             $match = FALSE;
             foreach ($features AS $feature) {
@@ -95,6 +95,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $table_header = "<th>$individual_header</th>";
   $cost_row = "<tr><td></td>";
   $link_row = "<tr><td></td>";
+  $table_rows = "";
   // Build header, cost row and links
   if ($variables['plans']) {
     foreach ($variables['plans'] AS $plan) {
@@ -119,14 +120,13 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $variables['cost_row'] = $cost_row;
     $variables['link_row'] = $link_row;
     // Build body
-    $table_rows = "";
     $plan_features = om_membership_get_plan_features();
     foreach($plan_features AS $plan_term) {
       $table_rows .= '<tr><td>' . $plan_term->name . '</td>';
       foreach($variables['plans'] AS $plan) {
         $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
         if ($plan_meta_wrapper->field_user_type->value() == 1) {
-          $features = $plan_meta_wrapper->field_om_member_features->value();
+          $features = $plan_meta_wrapper->field_membership_features->value();
           if (!empty($features)) {
             $match = FALSE;
             foreach ($features AS $feature) {
