@@ -1,0 +1,7 @@
+<?php
+
+function om_classes_entity_insert($entity, $type) {
+  if($type == 'class') {
+    dsm($entity);
+  }
+}
