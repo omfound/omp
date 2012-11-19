@@ -19,14 +19,16 @@ function om_membership_menu() {
   // Main module routes
   // Main plans page
   $items['membership'] = array(
+    'title' => t('Individual Membership Plans'),
     'page callback' => 'om_membership_individual_plans_page',
     'access arguments' => array('access content'),
     'type' => MENU_NORMAL_ITEM
   );
   // Alias of main plans page
-  $items['membership/plans'] = $items['membership'];
+  $items['membership/plans'] = array_merge($items['membership'], array('type' => MENU_CALLBACK));
   // Organizational plans page
   $items['membership/org-plans'] = array(
+    'title' => t('Organizational Membership Plans'),
     'page callback' => 'om_membership_org_plans_page',
     'access arguments' => array('access content'),
     'type' => MENU_NORMAL_ITEM
@@ -36,11 +38,12 @@ function om_membership_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_membership_registration_form', 2),
     'access arguments' => array('access content'),
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
     'file' => 'includes/om_membership_registration_form.inc'
   );
   // Main administration plan
   $items['admin/config/people/membership'] = array(
+    'title' => t('Administer Open Media Membership'),
     'page callback' => 'om_membership_admin_form_page',
     'access arguments' => array('administer om membership'),
     'type' => MENU_NORMAL_ITEM
@@ -50,7 +53,7 @@ function om_membership_menu() {
     'page callback' => 'om_membership_add_membership_and_transfer',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
-    'type' => MENU_NORMAL_ITEM
+    'type' => MENU_CALLBACK
   );
   return $items;
 }
@@ -71,6 +74,11 @@ function om_membership_theme($existing, $type, $theme, $path) {
       'template' => 'om_membership_org_plans_table',
       'file' => 'theme.inc',
       'variables' => array('plans' => array())
+    ),
+    'om_membership_registration_helper' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_membership_registration_helper',
+      'file' => 'theme.inc'
     )
   );
 }
@@ -90,10 +98,6 @@ function om_membership_individual_plans_page() {
 function om_membership_org_plans_page() {
   $plans = om_membership_get_plans();
   return theme('om_membership_org_plans_table', array('plans' => $plans));
-}
-
-function om_membership_form_page() {
-  module_load_include('inc', 'om_membership', 'includes/om_membership_registration_form.inc');
 }
 
 /**
@@ -126,36 +130,6 @@ function om_membership_add_membership_and_transfer($pid) {
   drupal_goto('membership/signup');
 }
 
-/**
- * Implements hook_block_info
- */
-function om_membership_block_info() {
-  $blocks = array();
-  $blocks['membership_top'] = array(
-    'info' => t('Membership Top Control Block'), 
-    'cache' => DRUPAL_NO_CACHE,
-  );
-  $blocks['membership_bottom'] = array(
-    'info' => t('Membership Bottom Control Block'), 
-    'cache' => DRUPAL_NO_CACHE,
-  );
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view
- */
-function om_membership_block_view($delta = '') {
-  $blocks = array();
-  if ($delta == 'membership_top') {
-    
-  }
-  if ($delta == 'membership_bottom') {
-    
-  }
-  return $blocks;
-}
-
 function om_membership_admin_form_page() {
 
 }
@@ -171,7 +145,7 @@ function om_membership_get_plans($options = array()) {
   $products = array();
   $query = db_select('commerce_product', 'product');
   $query->fields('product', array('product_id'));
-  $query->condition('type', 'omp_membership_plan', '=');
+  $query->condition('type', 'membership_plan', '=');
   $query->condition('status', 1, '=');
   $resource = $query->execute();
   $pids = array();
@@ -228,7 +202,7 @@ function om_membership_get_user_memberships($user) {
   $plans = om_membership_get_plans();
   foreach($plans AS $plan) {
     $meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
-    $membership_ref = $meta_wrapper->field_om_role->value();
+    $membership_ref = $meta_wrapper->field_associated_role->value();
     if (in_array($membership_ref, $user->roles)) {
       $memberships[$membership_ref] = $plan; 
     }

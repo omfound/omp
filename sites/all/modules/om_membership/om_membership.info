@@ -6,5 +6,3 @@ dependencies[] = "taxonomy"
 dependencies[] = "commerce"
 dependencies[] = "commerce_product"
 version = 7.x-1.0
-project status url = http://omp.omfound.org
-features[taxonomy][] = tags

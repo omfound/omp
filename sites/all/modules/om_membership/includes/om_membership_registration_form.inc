@@ -14,7 +14,8 @@ function om_membership_registration_form($form, &$form_state, $step) {
   }
   $callback = $steps[$step]['form_builder'];
   if (function_exists($callback)) {
-    $form = $callback($form, $from_state);
+    drupal_set_title('Membership Registration');
+    $callback($form, $form_state);
   }
   return $form;
 }
@@ -38,24 +39,25 @@ function om_membership_get_step($direction, $current_step = '') {
   }
   // Next grab the first step.
   if (empty($current_step)) {
-    $step = key($step_keys);
+    $current_step = $step_keys[0];
   }
-  // @Todo would be great to clean this up. May have to change step list structure.
-  $step_keys = array_flip($step_keys);
-  $current_step_number = $step_keys[$current_step];
-  $step_keys = array_flip($step_keys);
+  $step_number = $steps[$current_step]['step'];
   if ($direction == 'next') {
-    $current_step_number ++;
-    return $step_keys[$current_step_number];
+    $step_number ++;
+  }
+  else if ($direction == 'previous') {
+    $step_number --;
+  }
+  if ($step_number >= 0 && $step_number < count($steps)) {
+    foreach($steps AS $key => $step) {
+      if ($step['step'] == $step_number) {
+        return $key;
+      }
+    }
   }
   else {
-    $current_step_number --;
-    return $step_keys[$current_step_number];
+    return FALSE;
   }
-}
-
-function om_membership_get_user_step_value() {
-  
 }
 
 /**
@@ -69,22 +71,48 @@ function om_membership_list_steps() {
   $steps = array();
   global $user;
   if ($user->uid == 0) {
+    print 'this is it';
     $steps['user-registration'] = array(
       'label' => t('Create Your User Account'),
-      'form_builder' => 'om_membership_user_registration_form'
+      'form_builder' => 'om_membership_user_registration_form',
+      'step' => 0
     );
   }
-  $steps['user-registration'] = array(
-    'label' => t('Edit Your User Account'),
-    'form_builder' => 'om_membership_user_registration_form'
-  );
+  else {
+    $steps['user-registration'] = array(
+      'label' => t('Edit Your User Account'),
+      'form_builder' => 'om_membership_user_registration_form',
+      'step' => 0
+    );
+  }
+  $hook_steps = &drupal_static(__FUNCTION__);
+  if (empty($hook_steps)) {
+    $hook_steps = array();
+    $hook_steps = module_invoke_all('om_membership_registration_steps');
+  }
+  $steps = array_merge($steps, $hook_steps);
+  module_invoke_all('om_membership_alter_steps', $steps);
+  return $steps;
+}
+/**
+ * Implements hook_om_membership_registration_steps
+ */
+function om_membership_om_membership_registration_steps() {
+  $steps = array();
   $steps['contact-info'] = array(
     'label' => t('Give Us You Contact Info'),
-    'form_builder' => 'om_membership_contact_info_form'
+    'form_builder' => 'om_membership_contact_info_form',
+    'step' => 1
   );
   $steps['demographic-info'] = array(
     'label' => t('Demographic Information'),
-    'form_builder' => 'om_membership_demographic_form'
+    'form_builder' => 'om_membership_demographic_form',
+    'step' => 2
+  );
+  $steps['checkout'] = array(
+    'label' => t('Pay for your membership'),
+    'form_builder' => 'om_membership_commerce_transfer',
+    'step' => 3
   );
   return $steps;
 }
@@ -92,29 +120,90 @@ function om_membership_list_steps() {
 /**
  * Return user registration form catered for om_membership multi-step registration.
  */
-function om_membership_user_registration_form($form, &$form_state) {
+function om_membership_user_registration_form(&$form, &$form_state) {
   // First step is not fully functional. Something is preventing this form from properly submitting.
   // Needs work!
-  $form = drupal_get_form('user_register_form');
-  $form['#submit'][] = 'om_membership_user_registration_form_submit';
-  return $form;
+  om_membership_add_form_helper($form, $form_state);
+  $form = user_register_form($form, $form_state);
+  $form['#submit'][] = 'om_membership_form_submit';
 }
 
 /**
- * Submit handler for above step.
+ * Load contact info profile
  */
-function om_membership_user_registration_form_submit($form, &$form_state) {
+function om_membership_contact_info_form(&$form, &$form_state) {
+  om_membership_add_form_helper($form, $form_state);
+  om_membership_load_profile2_profile_form($form, $form_state, 'contact_info');
+}
+
+/**
+ * Load demographic profile
+ */
+function om_membership_demographic_form(&$form, &$form_state) {
+  om_membership_add_form_helper($form, $form_state);
+  om_membership_load_profile2_profile_form($form, $form_state, 'demographics');
+}
+
+/**
+ * Transfer to commerce cart.
+ */
+function om_membership_commerce_transfer(&$form, &$form_state) {
+  drupal_goto('cart');
+}
+
+/**
+ * Given references to a $form and $form_state load a profile2 profile of $type.
+ */
+function om_membership_load_profile2_profile_form(&$form, &$form_state, $type) {
+  global $user;
+  $form_state['profiles'] = array();
+  $form_state['profiles'][$type] = profile2_by_uid_load($user->uid, $type);
+  profile2_attach_form($form, $form_state);
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Next'));
+  $form['#submit'][] = 'om_membership_form_submit';
+}
+
+/**
+ *  Generic submit handler for all steps.
+ */
+function om_membership_form_submit($form, &$form_state) {
+  global $user;
   // Transfer user to next step.
   $next_step = om_membership_get_step('next');
   $form_state['redirect'] = array(
-    'membership/signup/' . $next_step,
+    'membership/signup/' .  $next_step,
    );
 }
 
-function om_membership_contact_info_form() {
+function om_membership_add_form_helper(&$form, &$form_state) {
+  global $user;
+  $prev_step = om_membership_get_step('previous');
+  $next_step = om_membership_get_step('next');
+  $steps = om_membership_list_steps();
+  $current_step = arg(2);
+  if (empty($current_step)) {
+    $current_step = key($steps);
+  }
+  $step_count = count($steps);
+  $current_step_count = $steps[$current_step]['step'] + 1;
+  $step_label = $steps[$current_step]['label'];
   
-}
-
-function om_membership_demographic_form() {
-  
+  $form['form_helper'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => FALSE
+  );
+  if (!empty($prev_step)) {
+    $form['form_helper']['form_helper_prev'] = array(
+      '#markup' => l('Back', 'membership/signup/' . $prev_step)
+    );
+  }
+  $form['form_helper']['form_helper_text'] = array(
+    '#markup' => t('!current of !total: !step', array('!current' => $current_step_count, '!total' => $step_count, '!step' => $step_label))
+  );
+  if (!empty($next_step) && $user->uid > 0) {
+    $form['form_helper']['form_helper_next'] = array(
+      '#type' => 'submit',
+      '#value' => t('Next')
+    );
+  }
 }
