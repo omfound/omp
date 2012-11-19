@@ -1,0 +1,9 @@
+<?php
+
+function om_classes_entity_insert($entity, $type) {
+  watchdog('brian', '<pre>'.print_r($type, TRUE).'</pre>');
+  watchdog('brian', '<pre>'.print_r($entity, TRUE).'</pre>');
+  if($type == 'class') {
+    dsm($entity);
+  }
+}

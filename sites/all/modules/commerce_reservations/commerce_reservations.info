@@ -13,7 +13,6 @@ dependencies[] = features
 dependencies[] = fullcalendar
 dependencies[] = image
 dependencies[] = list
-dependencies[] = omp_class_registration
 dependencies[] = rules
 dependencies[] = taxonomy
 dependencies[] = views
