@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the OMP Class Registration feature.
- */
-
-include_once('omp_class_registration.features.inc');
