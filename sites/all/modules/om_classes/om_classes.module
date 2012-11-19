@@ -1,9 +1,44 @@
 <?php
 
 function om_classes_entity_insert($entity, $type) {
-  watchdog('brian', '<pre>'.print_r($type, TRUE).'</pre>');
-  watchdog('brian', '<pre>'.print_r($entity, TRUE).'</pre>');
-  if($type == 'class') {
-    dsm($entity);
+  if($entity->type == 'class') {
+    $node = new stdClass();
+    $node->uid == $entity->uid;
+    $node->title = $entity->title;
+    $node->status = $entity->status;
+    $node->language = LANGUAGE_NONE;
+    $node->created = $entity->created;
+    $node->changed = $entity->changed;
+    $node->field_class_display_class[LANGUAGE_NONE][] = $entity->product_id;
+    node_save($node);
+  }
+}
+
+function om_classes_entity_update($entity, $type) {
+  /**
+  if($entity->type == 'class') {
+    $node->uid == $entity->uid;
+    $node = new stdClass();
+    $node->title = $entity->title;
+    $node->status = $entity->status;
+    $node->language = LANGUAGE_NONE;
+    $node->created = $entity->created;
+    $node->changed = $entity->changed;
+    node_save($node);
+  }**/
+}
+
+function om_classes_entity_display_lookup($product_id) {
+  $query = new EntityFieldQuery;
+
+  $query->entityCondition('entity_type', 'node', '=')
+    ->propertyCondition('type', 'product_display')
+    ->fieldCondition('field_product', 'product_id', $product_id, '=')
+    ->range(0, 1);
+
+  if ($result = $query->execute()) {
+    print '<pre>';
+    print_r($result);
+    print '</pre>'; 
   }
 }
