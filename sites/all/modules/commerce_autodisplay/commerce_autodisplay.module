@@ -64,7 +64,6 @@ function commerce_autodisplay_entity_insert($entity, $type) {
 }
 
 function commerce_autodisplay_entity_update($entity, $type) {
-  watchdog('briano', 'UPDATE<pre>'.print_r($entity, TRUE).'</pre>');
   if($type == 'commerce_product') {
     if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
       if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
@@ -83,9 +82,9 @@ function commerce_autodisplay_entity_update($entity, $type) {
 
 //TODO DELETE DOESNT WORK??
 function commerce_autodisplay_entity_delete($entity, $type) {
-  watchdog('briano', 'DELETE<pre>'.print_r($entity, TRUE).'</pre>');
   if($type == 'commerce_product') {
     if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      watchdog('briano', 'PREPARING DELETE<pre>'.print_r($entity, TRUE).'</pre>');
       if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
         watchdog('briano', 'DELETING: '.$nid);
         node_delete($nid);
