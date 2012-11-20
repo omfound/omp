@@ -29,16 +29,20 @@ function om_classes_entity_update($entity, $type) {
 }
 
 function om_classes_entity_display_lookup($product_id) {
-  $query = new EntityFieldQuery;
-
-  $query->entityCondition('entity_type', 'node', '=')
-    ->propertyCondition('type', 'class_display')
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node', '=')
+    ->entityCondition('bundle', 'class_display', '=')
     ->fieldCondition('field_class_display_class', 'product_id', $product_id, '=')
-    ->range(0, 1);
+    ->execute();
 
-  if ($result = $query->execute()) {
-    print '<pre>';
-    print_r($result);
-    print '</pre>'; 
+  foreach($result as $type) {
+    foreach($type as $key => $info) {
+      if($info->nid) {
+        return $info->nid;
+      }
+    } 
   }
+
+  return false;
 }
