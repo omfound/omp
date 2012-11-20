@@ -66,6 +66,7 @@ function commerce_autodisplay_entity_insert($entity, $type) {
 function commerce_autodisplay_entity_update($entity, $type) {
   if($type == 'commerce_product') {
     if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      watchdog('brianz', '<pre>'.print_r($entity, TRUE).'</pre>');
       if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
         $node = node_load($nid);
         $node->uid = $entity->uid;
