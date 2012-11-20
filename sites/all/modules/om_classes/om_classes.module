@@ -16,15 +16,20 @@ function om_classes_menu() {
 
 function commerce_autodisplay_configuration_form($form, &$form_state) {
   $product_types = commerce_product_types();
-  foreach($product_types as $type => $info) {
-    $options[$type] = $info['name'];
+  $display_types = om_classes_display_bundles();
+  foreach($display_types as $type => $field_name) {
+    $options[$type] = $type;
   }
-  $form['autodisplay_products'] = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Check off product types that should have their display created, updated and deleted automatically.'),
-    '#options' => $options, 
-    '#default_value' => variable_get('autodisplay_products', false),
-  );
+  foreach($product_types as $type => $info) {
+    $item_name = 'autodisplay_product_'.$type;
+    $form[$item_name] = array(
+      '#type' => 'select',
+      '#title' => $info['name'],
+      '#options' => $options,
+      '#default_value' => variable_get($item_name, false),
+      '#description' => t('Select a display node type to autocreate/update/delete with products of this type'), 
+    );
+  }
 
   return system_settings_form($form);
 }
@@ -85,4 +90,23 @@ function om_classes_entity_display_lookup($product_id) {
   }
 
   return false;
+}
+
+functon om_classes_display_bundles() {
+  $fields = field_info_fields();
+  $bundles = array();
+
+  foreach($fields as $field_name => $info) {
+    if($info['type'] == 'commerce_product_reference') {
+      foreach($info['bundles']['node'] as $key => $type) {
+        $bundles[$type] = $info['field_name'];
+      }
+    }
+  }
+  
+  if(!empty($bundles)) {
+    return $bundles;
+  }else{
+    return false;
+  }
 }
