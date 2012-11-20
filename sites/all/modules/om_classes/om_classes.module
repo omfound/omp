@@ -92,7 +92,7 @@ function om_classes_entity_display_lookup($product_id) {
   return false;
 }
 
-functon om_classes_display_bundles() {
+function om_classes_display_bundles() {
   $fields = field_info_fields();
   $bundles = array();
 
