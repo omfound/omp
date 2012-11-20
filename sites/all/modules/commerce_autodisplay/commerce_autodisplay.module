@@ -46,42 +46,49 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
 }
 
 function commerce_autodisplay_entity_insert($entity, $type) {
-  if($entity->type == 'class') {
-    $node = new stdClass();
-    $node->uid = $entity->uid;
-    $node->type = 'class_display';
-    $node->title = $entity->title;
-    $node->status = $entity->status;
-    $node->language = LANGUAGE_NONE;
-    $node->created = $entity->created;
-    $node->changed = $entity->changed;
-    $node->field_class_display_class[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
-    node_save($node);
-  }
-}
-
-function commerce_autodisplay_entity_update($entity, $type) {
-  if($entity->type == 'class') {
-    if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
-      $node = node_load($nid);
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      $node = new stdClass();
       $node->uid = $entity->uid;
+      $node->type = $display_type;
       $node->title = $entity->title;
       $node->status = $entity->status;
       $node->language = LANGUAGE_NONE;
       $node->created = $entity->created;
       $node->changed = $entity->changed;
+      $reference_field = commerce_autodisplay_display_bundles($entity->type);
+      $node->{$reference_field}[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
       node_save($node);
+    }
+  }
+}
+
+function commerce_autodisplay_entity_update($entity, $type) {
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
+        $node = node_load($nid);
+        $node->uid = $entity->uid;
+        $node->title = $entity->title;
+        $node->status = $entity->status;
+        $node->language = LANGUAGE_NONE;
+        $node->created = $entity->created;
+        $node->changed = $entity->changed;
+        node_save($node);
+      }
     }
   }
 }
 
 //TODO DELETE DOESNT WORK??
 function commerce_autodisplay_entity_delete($entity, $type) {
+  /**
   if($entity->type == 'class') {
     if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
       node_delete($nid);
     }
   }
+  **/
 }
 
 function commerce_autodisplay_entity_display_lookup($product_id) {
@@ -103,7 +110,7 @@ function commerce_autodisplay_entity_display_lookup($product_id) {
   return false;
 }
 
-function commerce_autodisplay_display_bundles() {
+function commerce_autodisplay_display_bundles($product_type = NULL) {
   $fields = field_info_fields();
   $bundles = array();
 
@@ -111,7 +118,13 @@ function commerce_autodisplay_display_bundles() {
     if($info['type'] == 'commerce_product_reference') {
       if(isset($info['bundles']['node'])) {
         foreach($info['bundles']['node'] as $key => $type) {
-          $bundles[$type] = $info['field_name'];
+          if($product_type) {
+            if($type == $product_type) {
+              return $info['field_name'];
+            }
+          }else{
+            $bundles[$type] = $info['field_name'];
+          }
         }
       }
     }
