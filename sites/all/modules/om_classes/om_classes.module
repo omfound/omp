@@ -4,6 +4,7 @@ function om_classes_entity_insert($entity, $type) {
   if($entity->type == 'class') {
     $node = new stdClass();
     $node->uid = $entity->uid;
+    $node->type = 'class_display';
     $node->title = $entity->title;
     $node->status = $entity->status;
     $node->language = LANGUAGE_NONE;
