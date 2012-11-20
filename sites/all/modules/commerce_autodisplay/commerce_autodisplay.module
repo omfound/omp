@@ -119,6 +119,8 @@ function commerce_autodisplay_display_bundles($product_type = NULL) {
       if(isset($info['bundles']['node'])) {
         foreach($info['bundles']['node'] as $key => $type) {
           if($product_type) {
+            dsm($type);
+            dsm($product_type);
             if($type == $product_type) {
               return $info['field_name'];
             }
