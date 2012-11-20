@@ -80,22 +80,13 @@ function commerce_autodisplay_entity_update($entity, $type) {
   }
 }
 
-//TODO DELETE DOESNT WORK??
 function commerce_autodisplay_commerce_product_delete($product) {
-  watchdog('leozor', 'DELETING PRODUCT<pre>'.print_r($product, TRUE).'</pre>');
-  /**
-  if($type == 'commerce_product') {
-    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
-      //here
-      watchdog('wtf', '<pre>'.print_r($entity, TRUE).'</pre>');
-      $nid = commerce_autodisplay_entity_display_lookup($entity->product_id);
-      watchdog('wtf', 'NID IS: '.$nid);
-      if(!empty($nid)) {
-        watchdog('wtf', 'DELETING: '.$nid);
-        node_delete($nid);
-      }
+  if($display_type = commerce_autodisplay_is_enabled($product->type)) {
+    $nid = commerce_autodisplay_entity_display_lookup($product->product_id);
+    if(!empty($nid)) {
+      node_delete($nid);
     }
-  }**/
+  }
 }
 
 function commerce_autodisplay_entity_display_lookup($product_id) {
