@@ -54,27 +54,25 @@ function om_membership_rules_action_info() {
  *   if so grant the proper user role and set the duration of the membership appropriately.
  */
 function om_membership_grant_user_role($commerce_order) {
-  if ($commerce_order->status == 'completed') {
-    $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
-    $line_items = $order_wrapper->commerce_line_items->value();
-    foreach ($line_items AS $line_item) {
-      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $product = $line_item_meta->commerce_product->value();
-      if ($product->type == 'membership_plan') {
-        $membership_dates = om_membership_determine_membership_dates($product);
-        $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
-        $order_user = user_load($commerce_order->uid);
-        $order_user->roles[$role->rid] = $role->name;
-        user_save($order_user);
-        $admin_profile = profile2_by_uid_load($order_user->uid, 'membership_administration');
-        // Here we could use a metadata wrapper to save the conenent
-        // This would be the most clean and correct way to handle saving date fields.
-        // However the date module's field implementation does not allow for this
-        // Instead we get the follwing kludge.
-        $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['start']);
-        $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['end']);
-        profile2_save($admin_profile);
-      }
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+  $line_items = $order_wrapper->commerce_line_items->value();
+  foreach ($line_items AS $line_item) {
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if ($product->type == 'membership_plan') {
+      $membership_dates = om_membership_determine_membership_dates($product);
+      $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+      $order_user = user_load($commerce_order->uid);
+      $order_user->roles[$role->rid] = $role->name;
+      user_save($order_user);
+      $admin_profile = profile2_by_uid_load($order_user->uid, 'membership_administration');
+      // Here we could use a metadata wrapper to save the conenent
+      // This would be the most clean and correct way to handle saving date fields.
+      // However the date module's field implementation does not allow for this
+      // Instead we get the follwing kludge.
+      $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['start']);
+      $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['end']);
+      profile2_save($admin_profile);
     }
   }
 }
