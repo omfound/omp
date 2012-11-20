@@ -15,21 +15,33 @@ function om_classes_menu() {
 }
 
 function commerce_autodisplay_configuration_form($form, &$form_state) {
+  $form['autodisplay_info'] = array(
+    '#type' => 'markup',
+    '#value' => '<strong>'.t('For any product type below, select the display node type to have display nodes automatically created, updated and deleted for products of that type.').'</strong>', 
+  );
+
   $product_types = commerce_product_types();
   $display_types = om_classes_display_bundles();
   foreach($display_types as $type => $field_name) {
     $options[$type] = $type;
   }
-  foreach($product_types as $type => $info) {
-    $item_name = 'autodisplay_product_'.$type;
-    $form[$item_name] = array(
-      '#type' => 'select',
-      '#title' => $info['name'],
-      '#options' => $options,
-      '#empty_option' => t('- Select -'),
-      '#empty_value' => false,
-      '#default_value' => variable_get($item_name, false),
-      '#description' => t('Select a display node type to autocreate/update/delete with products of this type'), 
+  if(!empty($product_types)) {
+    foreach($product_types as $type => $info) {
+      $item_name = 'autodisplay_product_'.$type;
+      $form[$item_name] = array(
+        '#type' => 'select',
+        '#title' => $info['name'],
+        '#options' => $options,
+        '#empty_option' => t('- Select -'),
+        '#empty_value' => false,
+        '#default_value' => variable_get($item_name, false),
+        '#description' => t('Select a display node type to autocreate/update/delete with products of this type'), 
+      );
+    }
+  }else{
+    $form['autodisplay_noproducts'] = array(
+      '#type' => 'markup',
+      '#value' => t('There are currently no product types defined on this site.'),
     );
   }
 
