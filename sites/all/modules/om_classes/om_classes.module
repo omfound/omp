@@ -1,9 +1,126 @@
 <?php
 
+function om_classes_menu() {
+  $items = array();
+  $items['admin/config/commerce_autodisplay'] = array(
+    'title' => 'Commerce Autodisplay',
+    'description' => 'Define products where displays should be automatically managed',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_autodisplay_configuration_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function commerce_autodisplay_configuration_form($form, &$form_state) {
+  $form['autodisplay_info'] = array(
+    '#markup' => '<strong>'.t('For any product type below, select the display node type to have display nodes automatically created, updated and deleted for products of that type.').'</strong>', 
+  );
+
+  $product_types = commerce_product_types();
+  $display_types = om_classes_display_bundles();
+  foreach($display_types as $type => $field_name) {
+    $options[$type] = $type;
+  }
+  if(!empty($product_types)) {
+    foreach($product_types as $type => $info) {
+      $item_name = 'autodisplay_product_'.$type;
+      $form[$item_name] = array(
+        '#type' => 'select',
+        '#title' => $info['name'],
+        '#options' => $options,
+        '#empty_option' => t('- Select -'),
+        '#empty_value' => false,
+        '#default_value' => variable_get($item_name, false),
+        '#description' => t('Select a display node type to autocreate/update/delete with products of this type'), 
+      );
+    }
+  }else{
+    $form['autodisplay_noproducts'] = array(
+      '#markup' => t('There are currently no product types defined on this site.'),
+    );
+  }
+
+  return system_settings_form($form);
+}
+
 function om_classes_entity_insert($entity, $type) {
-  watchdog('brian', '<pre>'.print_r($type, TRUE).'</pre>');
-  watchdog('brian', '<pre>'.print_r($entity, TRUE).'</pre>');
-  if($type == 'class') {
-    dsm($entity);
+  if($entity->type == 'class') {
+    $node = new stdClass();
+    $node->uid = $entity->uid;
+    $node->type = 'class_display';
+    $node->title = $entity->title;
+    $node->status = $entity->status;
+    $node->language = LANGUAGE_NONE;
+    $node->created = $entity->created;
+    $node->changed = $entity->changed;
+    $node->field_class_display_class[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
+    node_save($node);
+  }
+}
+
+function om_classes_entity_update($entity, $type) {
+  if($entity->type == 'class') {
+    if($nid = om_classes_entity_display_lookup($entity->product_id)) {
+      $node = node_load($nid);
+      $node->uid = $entity->uid;
+      $node->title = $entity->title;
+      $node->status = $entity->status;
+      $node->language = LANGUAGE_NONE;
+      $node->created = $entity->created;
+      $node->changed = $entity->changed;
+      node_save($node);
+    }
+  }
+}
+
+//TODO DELETE DOESNT WORK??
+function om_classes_entity_delete($entity, $type) {
+  if($entity->type == 'class') {
+    if($nid = om_classes_entity_display_lookup($entity->product_id)) {
+      node_delete($nid);
+    }
+  }
+}
+
+function om_classes_entity_display_lookup($product_id) {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node', '=')
+    ->entityCondition('bundle', 'class_display', '=')
+    ->fieldCondition('field_class_display_class', 'product_id', $product_id, '=')
+    ->execute();
+
+  foreach($result as $type) {
+    foreach($type as $key => $info) {
+      if($info->nid) {
+        return $info->nid;
+      }
+    } 
+  }
+
+  return false;
+}
+
+function om_classes_display_bundles() {
+  $fields = field_info_fields();
+  $bundles = array();
+
+  foreach($fields as $field_name => $info) {
+    if($info['type'] == 'commerce_product_reference') {
+      if(isset($info['bundles']['node'])) {
+        foreach($info['bundles']['node'] as $key => $type) {
+          $bundles[$type] = $info['field_name'];
+        }
+      }
+    }
+  }
+  
+  if(!empty($bundles)) {
+    return $bundles;
+  }else{
+    return false;
   }
 }
