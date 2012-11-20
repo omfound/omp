@@ -80,7 +80,7 @@ function om_membership_list_steps() {
   else {
     $steps['user-registration'] = array(
       'label' => t('Edit Your User Account'),
-      'form_builder' => 'om_membership_user_registration_form',
+      'form_builder' => 'om_membership_profile_edit_form',
       'step' => 0
     );
   }
@@ -124,6 +124,16 @@ function om_membership_user_registration_form(&$form, &$form_state) {
   // Needs work!
   om_membership_add_form_helper($form, $form_state);
   $form = user_register_form($form, $form_state);
+  $form['#submit'][] = 'om_membership_form_submit';
+}
+
+function om_membership_profile_edit_form(&$form, &$form_state) {
+  global $user;
+  om_membership_add_form_helper($form, $form_state);
+  if (!function_exists('user_profile_form')) {
+    require_once(drupal_get_path('module', 'user') . '/user.pages.inc');
+  }
+  $form = user_profile_form($form, $form_state, $user);
   $form['#submit'][] = 'om_membership_form_submit';
 }
 

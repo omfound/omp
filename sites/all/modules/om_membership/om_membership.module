@@ -288,8 +288,10 @@ function om_membership_return_membership_roles() {
  * Implements hook_cron
  */
 function om_membership_cron() {
-  $users = om_membership_get_expired_memberships();;
-  foreach ($users AS $user) {
-    rules_invoke_event('om_membership_on_expiration', $user);
+  if (module_exists('rules')) {
+    $users = om_membership_get_expired_memberships();
+    foreach ($users AS $user) {
+      rules_invoke_event('om_membership_on_expiration', $user);
+    }
   }
 }

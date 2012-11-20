@@ -65,6 +65,7 @@ function om_membership_grant_user_role($commerce_order) {
         $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
         $order_user = user_load($commerce_order->uid);
         $order_user->roles[$role->rid] = $role->name;
+        user_save($order_user);
         $admin_profile = profile2_by_uid_load($order_user->uid, 'membership_administration');
         // Here we could use a metadata wrapper to save the conenent
         // This would be the most clean and correct way to handle saving date fields.
