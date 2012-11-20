@@ -23,7 +23,7 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
     '#type' => 'checkboxes',
     '#title' => t('Check off product types that should have their display created, updated and deleted automatically.'),
     '#options' => $options, 
-    '#default_value' => unserialize(variable_get('autodisplay_products', false)),
+    '#default_value' => variable_get('autodisplay_products', false),
   );
 
   return system_settings_form($form);
