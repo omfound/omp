@@ -1,6 +1,0 @@
-name = Open Media Classes
-description = Provides customizations for the class system.
-core = 7.x
-package = "Open Media System"
-version = 7.x-1.0
-project status url = http://omp.omfound.org
