@@ -130,10 +130,6 @@ function om_membership_add_membership_and_transfer($pid) {
   drupal_goto('membership/signup');
 }
 
-function om_membership_admin_form_page() {
-
-}
-
 /**
  * Return all membership plans.
  * 
@@ -231,4 +227,69 @@ function om_membership_get_currently_selected_membership($user) {
     }
   }
   return $memberships;
+}
+
+function om_membership_determine_membership_dates($product) {
+  $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+  $duration = $product_metadata->field_duration->value();
+  $start = time();
+  $year_seconds = 31536000;
+  if ($duration == 0) {
+    $end = $start + (100 * $year_seconds);
+  }
+  else {
+    $end = $start + ($duration * $year_seconds);
+  }
+  $dates = array(
+    'start' => $start,
+    'end' => $end
+  );
+  return $dates;
+}
+
+/**
+ * Query the database for users that have expired memberships.
+ * @returns array()
+ *   an array of user objects.
+ */
+function om_membership_get_expired_memberships() {
+  // This could be pretty simply modified to allow
+  // advanced warnings for membership expiration.
+  $users = array();
+  $query = db_select('field_data_field_membership_end', 'end');
+  $query->join('profile', 'profile', 'end.entity_id=profile.pid');
+  $query->fields('profile', array('uid'));
+  $query->condition("field_membership_end_value", date('Y-m-d G:i:s'), '<');
+  $resource = $query->execute();
+  dsm($resource);
+  while($result = $resource->fetchAssoc()) {
+    $users[] = user_load($result['uid']);
+  }
+  return $users;
+}
+
+/**
+ * Return a list of all roles usable by the membership system.
+ */
+function om_membership_return_membership_roles() {
+  $roles = &drupal_static(__FUNCTION__);
+  if (empty($roles)) {
+    $role_field = field_info_field('field_associated_role');
+    foreach ($role_field['settings']['referenceable_roles'] AS $rid => $value) {
+      if ($value != 0) {
+        $roles[$rid] = user_role_load($rid);
+      }
+    } 
+  }
+  return $roles;
+}
+
+/**
+ * Implements hook_cron
+ */
+function om_membership_cron() {
+  $users = om_membership_get_expired_memberships();;
+  foreach ($users AS $user) {
+    rules_invoke_event('om_membership_on_expiration', $user);
+  }
 }

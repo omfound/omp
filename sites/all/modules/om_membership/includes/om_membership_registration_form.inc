@@ -71,7 +71,6 @@ function om_membership_list_steps() {
   $steps = array();
   global $user;
   if ($user->uid == 0) {
-    print 'this is it';
     $steps['user-registration'] = array(
       'label' => t('Create Your User Account'),
       'form_builder' => 'om_membership_user_registration_form',
@@ -175,6 +174,9 @@ function om_membership_form_submit($form, &$form_state) {
    );
 }
 
+/**
+ * Create helper that displays steps with a prev/next button.
+ */
 function om_membership_add_form_helper(&$form, &$form_state) {
   global $user;
   $prev_step = om_membership_get_step('previous');
@@ -194,16 +196,22 @@ function om_membership_add_form_helper(&$form, &$form_state) {
   );
   if (!empty($prev_step)) {
     $form['form_helper']['form_helper_prev'] = array(
-      '#markup' => l('Back', 'membership/signup/' . $prev_step)
+      '#prefix' => '<div id="form-helper-prev">',
+      '#markup' => l('Back', 'membership/signup/' . $prev_step),
+      '#suffix' => '</div>'
     );
   }
   $form['form_helper']['form_helper_text'] = array(
-    '#markup' => t('!current of !total: !step', array('!current' => $current_step_count, '!total' => $step_count, '!step' => $step_label))
+    '#prefix' => '<div id="form-helper-text">',
+    '#markup' => t('!current of !total: !step', array('!current' => $current_step_count, '!total' => $step_count, '!step' => $step_label)),
+    '#suffix' => '</div>'
   );
   if (!empty($next_step) && $user->uid > 0) {
     $form['form_helper']['form_helper_next'] = array(
+      '#prefix' => '<div id="form-helper-next">',
       '#type' => 'submit',
-      '#value' => t('Next')
+      '#value' => t('Next'),
+      '#suffix' => '</div>'
     );
   }
 }
