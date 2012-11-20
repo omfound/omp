@@ -11,6 +11,7 @@ function om_classes_entity_insert($entity, $type) {
     $node->created = $entity->created;
     $node->changed = $entity->changed;
     $node->field_class_display_class[LANGUAGE_NONE][] = $entity->product_id;
+    watchdog('brianz', '<pre>'.print_r($node, TRUE).'</pre>');
     node_save($node);
   }
 }
@@ -18,6 +19,7 @@ function om_classes_entity_insert($entity, $type) {
 function om_classes_entity_update($entity, $type) {
   if($entity->type == 'class') {
     if($nid = om_classes_entity_display_lookup($entity->product_id)) {
+      watchdog('brianz', 'nid: '.$nid.', product id: '.$entity->product_id);
       $node = node_load($nid);
       $node->uid = $entity->uid;
       $node->title = $entity->title;
