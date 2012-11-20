@@ -3,7 +3,7 @@
 function om_classes_entity_insert($entity, $type) {
   if($entity->type == 'class') {
     $node = new stdClass();
-    $node->uid == $entity->uid;
+    $node->uid = $entity->uid;
     $node->title = $entity->title;
     $node->status = $entity->status;
     $node->language = LANGUAGE_NONE;
@@ -18,7 +18,7 @@ function om_classes_entity_update($entity, $type) {
   if($entity->type == 'class') {
     if($nid = om_classes_entity_display_lookup($entity->product_id)) {
       $node = node_load($nid);
-      $node->uid == $entity->uid;
+      $node->uid = $entity->uid;
       $node->title = $entity->title;
       $node->status = $entity->status;
       $node->language = LANGUAGE_NONE;
