@@ -16,9 +16,16 @@ function om_classes_menu() {
 
 function commerce_autodisplay_configuration_form($form, &$form_state) {
   $product_types = commerce_product_types();
-  print '<pre>';
-  print_r($product_types);
-  print '</pre>';
+  foreach($product_types as $type => $info) {
+    $options[$type] = $info['name'];
+  }
+  $form['autodisplay_products'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Check off product types that should have their display created, updated and deleted automatically.'),
+    '#options' => $options, 
+  );
+
+  return system_settings_form($form);
 }
 
 function om_classes_entity_insert($entity, $type) {
