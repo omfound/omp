@@ -56,7 +56,7 @@ function commerce_autodisplay_entity_insert($entity, $type) {
       $node->language = LANGUAGE_NONE;
       $node->created = $entity->created;
       $node->changed = $entity->changed;
-      $reference_field = commerce_autodisplay_display_bundles($entity->type);
+      $reference_field = commerce_autodisplay_display_bundles($display_type);
       $node->{$reference_field}[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
       node_save($node);
     }
@@ -119,8 +119,6 @@ function commerce_autodisplay_display_bundles($product_type = NULL) {
       if(isset($info['bundles']['node'])) {
         foreach($info['bundles']['node'] as $key => $type) {
           if($product_type) {
-            dsm($type);
-            dsm($product_type);
             if($type == $product_type) {
               return $info['field_name'];
             }
