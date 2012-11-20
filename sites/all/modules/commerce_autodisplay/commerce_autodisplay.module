@@ -1,6 +1,6 @@
 <?php
 
-function om_classes_menu() {
+function commerce_autodisplay_menu() {
   $items = array();
   $items['admin/config/commerce_autodisplay'] = array(
     'title' => 'Commerce Autodisplay',
@@ -20,7 +20,7 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
   );
 
   $product_types = commerce_product_types();
-  $display_types = om_classes_display_bundles();
+  $display_types = commerce_autodisplay_display_bundles();
   foreach($display_types as $type => $field_name) {
     $options[$type] = $type;
   }
@@ -34,7 +34,6 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
         '#empty_option' => t('- Select -'),
         '#empty_value' => false,
         '#default_value' => variable_get($item_name, false),
-        '#description' => t('Select a display node type to autocreate/update/delete with products of this type'), 
       );
     }
   }else{
@@ -46,46 +45,51 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
   return system_settings_form($form);
 }
 
-function om_classes_entity_insert($entity, $type) {
-  if($entity->type == 'class') {
-    $node = new stdClass();
-    $node->uid = $entity->uid;
-    $node->type = 'class_display';
-    $node->title = $entity->title;
-    $node->status = $entity->status;
-    $node->language = LANGUAGE_NONE;
-    $node->created = $entity->created;
-    $node->changed = $entity->changed;
-    $node->field_class_display_class[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
-    node_save($node);
-  }
-}
-
-function om_classes_entity_update($entity, $type) {
-  if($entity->type == 'class') {
-    if($nid = om_classes_entity_display_lookup($entity->product_id)) {
-      $node = node_load($nid);
+function commerce_autodisplay_entity_insert($entity, $type) {
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      $node = new stdClass();
       $node->uid = $entity->uid;
+      $node->type = $display_type;
       $node->title = $entity->title;
       $node->status = $entity->status;
       $node->language = LANGUAGE_NONE;
       $node->created = $entity->created;
       $node->changed = $entity->changed;
+      $reference_field = commerce_autodisplay_display_bundles($display_type);
+      $node->{$reference_field}[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
       node_save($node);
     }
   }
 }
 
-//TODO DELETE DOESNT WORK??
-function om_classes_entity_delete($entity, $type) {
-  if($entity->type == 'class') {
-    if($nid = om_classes_entity_display_lookup($entity->product_id)) {
+function commerce_autodisplay_entity_update($entity, $type) {
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
+        $node = node_load($nid);
+        $node->uid = $entity->uid;
+        $node->title = $entity->title;
+        $node->status = $entity->status;
+        $node->language = LANGUAGE_NONE;
+        $node->created = $entity->created;
+        $node->changed = $entity->changed;
+        node_save($node);
+      }
+    }
+  }
+}
+
+function commerce_autodisplay_commerce_product_delete($product) {
+  if($display_type = commerce_autodisplay_is_enabled($product->type)) {
+    $nid = commerce_autodisplay_entity_display_lookup($product->product_id);
+    if(!empty($nid)) {
       node_delete($nid);
     }
   }
 }
 
-function om_classes_entity_display_lookup($product_id) {
+function commerce_autodisplay_entity_display_lookup($product_id) {
   $query = new EntityFieldQuery();
   $result = $query
     ->entityCondition('entity_type', 'node', '=')
@@ -104,7 +108,7 @@ function om_classes_entity_display_lookup($product_id) {
   return false;
 }
 
-function om_classes_display_bundles() {
+function commerce_autodisplay_display_bundles($product_type = NULL) {
   $fields = field_info_fields();
   $bundles = array();
 
@@ -112,7 +116,13 @@ function om_classes_display_bundles() {
     if($info['type'] == 'commerce_product_reference') {
       if(isset($info['bundles']['node'])) {
         foreach($info['bundles']['node'] as $key => $type) {
-          $bundles[$type] = $info['field_name'];
+          if($product_type) {
+            if($type == $product_type) {
+              return $info['field_name'];
+            }
+          }else{
+            $bundles[$type] = $info['field_name'];
+          }
         }
       }
     }
@@ -120,6 +130,14 @@ function om_classes_display_bundles() {
   
   if(!empty($bundles)) {
     return $bundles;
+  }else{
+    return false;
+  }
+}
+
+function commerce_autodisplay_is_enabled($product_type) {
+  if($display_type = variable_get('autodisplay_product_'.$product_type, false)) {
+    return $display_type; 
   }else{
     return false;
   }
