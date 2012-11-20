@@ -100,8 +100,10 @@ function om_classes_display_bundles() {
 
   foreach($fields as $field_name => $info) {
     if($info['type'] == 'commerce_product_reference') {
-      foreach($info['bundles']['node'] as $key => $type) {
-        $bundles[$type] = $info['field_name'];
+      if(isset($info['bundles']['node']) {
+        foreach($info['bundles']['node'] as $key => $type) {
+          $bundles[$type] = $info['field_name'];
+        }
       }
     }
   }
