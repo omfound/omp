@@ -123,3 +123,11 @@ function commerce_autodisplay_display_bundles() {
     return false;
   }
 }
+
+function commerce_autodisplay_is_enabled($product_type) {
+  if($display_type = variable_get('autodisplay_product_'.$product_type, false)) {
+    return $display_type; 
+  }else{
+    return false;
+  }
+}
