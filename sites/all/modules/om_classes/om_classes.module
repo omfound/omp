@@ -1,5 +1,26 @@
 <?php
 
+function om_classes_menu() {
+  $items = array();
+  $items['admin/config/commerce_autodisplay'] = array(
+    'title' => 'Commerce Autodisplay',
+    'description' => 'Define products where displays should be automatically managed',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_autodisplay_configuration_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function commerce_autodisplay_configuration_form($form, &$form_state) {
+  $product_types = commerce_product_types();
+  print '<pre>';
+  print_r($product_types);
+  print '</pre>';
+}
+
 function om_classes_entity_insert($entity, $type) {
   if($entity->type == 'class') {
     $node = new stdClass();
@@ -30,6 +51,7 @@ function om_classes_entity_update($entity, $type) {
   }
 }
 
+//TODO DELETE DOESNT WORK??
 function om_classes_entity_delete($entity, $type) {
   if($entity->type == 'class') {
     if($nid = om_classes_entity_display_lookup($entity->product_id)) {
