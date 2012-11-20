@@ -16,8 +16,7 @@ function om_classes_menu() {
 
 function commerce_autodisplay_configuration_form($form, &$form_state) {
   $form['autodisplay_info'] = array(
-    '#type' => 'markup',
-    '#value' => '<strong>'.t('For any product type below, select the display node type to have display nodes automatically created, updated and deleted for products of that type.').'</strong>', 
+    '#markup' => '<strong>'.t('For any product type below, select the display node type to have display nodes automatically created, updated and deleted for products of that type.').'</strong>', 
   );
 
   $product_types = commerce_product_types();
@@ -40,8 +39,7 @@ function commerce_autodisplay_configuration_form($form, &$form_state) {
     }
   }else{
     $form['autodisplay_noproducts'] = array(
-      '#type' => 'markup',
-      '#value' => t('There are currently no product types defined on this site.'),
+      '#markup' => t('There are currently no product types defined on this site.'),
     );
   }
 
