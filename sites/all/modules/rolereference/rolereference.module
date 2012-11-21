@@ -12,6 +12,7 @@ function rolereference_field_info() {
       'settings'          => array('referenceable_roles' => array()),
       'default_widget'    => 'options_select',
       'default_formatter' => 'rolereference_default',
+      'property_type' => 'integer',
     )
   );
 }
