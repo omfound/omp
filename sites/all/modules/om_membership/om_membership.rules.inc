@@ -72,6 +72,7 @@ function om_membership_grant_user_role($commerce_order) {
       // Instead we get the follwing kludge.
       $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['start']);
       $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['end']);
+      $admin_proifle->field_membership_type[LANGUAGE_NONE][0]['value'] = $role->name;
       profile2_save($admin_profile);
     }
   }

@@ -41,7 +41,16 @@ function om_membership_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'includes/om_membership_registration_form.inc'
   );
-  // Main administration plan
+  // Organizational registration
+  $items['user/%user/edit/org-members'] = array(
+    'title' => t('Manage Organizational Membership'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_membership_organization_member_signup_page', 1),
+    'access callback' => 'om_membership_organization_member_signup_page_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+  // Main administration page @TODO Remove if we end up not usinga main admin page.
   $items['admin/config/people/membership'] = array(
     'title' => t('Administer Open Media Membership'),
     'page callback' => 'om_membership_admin_form_page',
@@ -131,6 +140,33 @@ function om_membership_add_membership_and_transfer($pid) {
 }
 
 /**
+ * Access check to determine if a user has an organizational membership that is current.
+ *  @returns boolean
+ */
+function om_membership_organization_member_signup_page_access($user) {
+  $profile2 = profile2_by_uid_load($user->uid, 'membership_administration');
+  $profile2_wrapper = entity_metadata_wrapper('profile2', $profile2);
+  if (is_object($profile2_wrapper) && $profile2_wrapper->field_membership_end->value() > time()) {
+    $memberships = om_membership_get_user_memberships($user);
+    if (!empty($memberships)) {
+      foreach ($memberships AS $membership) {
+        if (is_object($membership)) {
+          $membership_meta = entity_metadata_wrapper('commerce_product', $membership);
+          if ($membership_meta->field_user_type->value() == 1) {
+            return TRUE;
+          }
+        }
+      }
+    } 
+  }
+  return FALSE;
+}
+
+function om_membership_organization_member_signup_page($form, &$form_state, $user) {
+  return array();
+}
+
+/**
  * Return all membership plans.
  * 
  * @param array $options
@@ -199,7 +235,7 @@ function om_membership_get_user_memberships($user) {
   foreach($plans AS $plan) {
     $meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
     $membership_ref = $meta_wrapper->field_associated_role->value();
-    if (in_array($membership_ref, $user->roles)) {
+    if (!empty($user->roles[$membership_ref])) {
       $memberships[$membership_ref] = $plan; 
     }
   }
@@ -261,7 +297,6 @@ function om_membership_get_expired_memberships() {
   $query->fields('profile', array('uid'));
   $query->condition("field_membership_end_value", date('Y-m-d G:i:s'), '<');
   $resource = $query->execute();
-  dsm($resource);
   while($result = $resource->fetchAssoc()) {
     $users[] = user_load($result['uid']);
   }
