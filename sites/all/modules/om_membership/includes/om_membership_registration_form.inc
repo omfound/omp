@@ -202,7 +202,8 @@ function om_membership_add_form_helper(&$form, &$form_state) {
   
   $form['form_helper'] = array(
     '#type' => 'fieldset',
-    '#collapsible' => FALSE
+    '#collapsible' => FALSE,
+    '#weight' => -9999
   );
   if (!empty($prev_step)) {
     $form['form_helper']['form_helper_prev'] = array(
