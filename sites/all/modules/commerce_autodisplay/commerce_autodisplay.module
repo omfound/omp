@@ -154,6 +154,7 @@ function commerce_autodisplay_preprocess_page(&$vars) {
           foreach ($vars['tabs']['#primary'] as $key => $info) {
             if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
               $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product_id.'/edit';
+              $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
             }
           }
         }
