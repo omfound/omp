@@ -41,12 +41,11 @@ function om_membership_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'includes/om_membership_registration_form.inc'
   );
-  // Main administration page @TODO Remove if we end up not usinga main admin page.
-  $items['admin/config/people/membership'] = array(
-    'title' => t('Administer Open Media Membership'),
-    'page callback' => 'om_membership_admin_form_page',
-    'access arguments' => array('administer om membership'),
-    'type' => MENU_NORMAL_ITEM
+  // Renewal Page.
+  $items['membership/renewal'] = array(
+    'page callback' => 'om_membership_renewal_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
   // Utility routes
   $items['membership/add'] = array(
@@ -75,13 +74,15 @@ function om_membership_theme($existing, $type, $theme, $path) {
       'file' => 'theme.inc',
       'variables' => array('plans' => array())
     ),
-    'om_membership_registration_helper' => array(
+    'om_membership_renewal_table' => array(
       'path' => $path . '/theme',
-      'template' => 'om_membership_registration_helper',
-      'file' => 'theme.inc'
+      'template' => 'om_membership_renewal_table',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
     )
   );
 }
+
 /**
  * Implements hook_profile2_form_alter
  */
@@ -126,6 +127,11 @@ function om_membership_individual_plans_page() {
 function om_membership_org_plans_page() {
   $plans = om_membership_get_plans();
   return theme('om_membership_org_plans_table', array('plans' => $plans));
+}
+
+function om_membership_renewal_page() {
+  $plans = om_membership_get_plans();
+  return theme('om_membership_renewal_table', array('plans' => $plans));
 }
 
 /**

@@ -191,3 +191,15 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $variables['table_header'] = $table_header;
   $variables['table_rows'] = $table_rows;
 }
+
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function om_membership_preprocess_om_membership_renewal_table(&$variables) {
+  global $user;
+  $user_plan = om_membership_get_user_memberships($user);
+  $user_plan = array_shift($user_plan);
+  if ($variables['plans'][count($variables['plans']) - 1]->product_id != $user_plan->product_id) {
+    $plan_metadata = entity_metadata_wrapper('commerce_product', $user_plan);
+  }
+}
