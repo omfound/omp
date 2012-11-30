@@ -143,6 +143,15 @@ function commerce_autodisplay_is_enabled($product_type) {
   }
 }
 
+
 function commerce_autodisplay_preprocess_page(&$vars) {
-  dsm($vars);
+  $node = menu_get_object();
+  $display_types = commerce_autodisplay_display_bundles();
+  if ($field_name = $display_types[$node->type]) {
+    if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
+      if ($product = commerce_product_load($product_id) {
+        dsm($product);
+      } 
+    }
+  }
 }
