@@ -150,7 +150,7 @@ function commerce_autodisplay_preprocess_page(&$vars) {
   if ($field_name = $display_types[$node->type]) {
     if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
       if ($product = commerce_product_load($product_id)) {
-        if (commerce_autodisplay_is_enabled($product->type) {
+        if (commerce_autodisplay_is_enabled($product->type)) {
           foreach ($vars['tabs']['#primary'] as $key => $info) {
             if ($info['#link']['href'] = 'node/'.$node->nid.'/edit') {
               $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product_id.'/edit?destination=node/'.$node->nid;
