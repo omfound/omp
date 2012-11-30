@@ -143,7 +143,11 @@ function commerce_autodisplay_is_enabled($product_type) {
   }
 }
 
-
+/**
+ * Implementation of hook_preprocess_page
+ * For product display nodes that have been setup on the config page this alters
+ * the edit links to go to the product edit page and then redirect back to the node
+ */
 function commerce_autodisplay_preprocess_page(&$vars) {
   $node = menu_get_object();
   $display_types = commerce_autodisplay_display_bundles();
@@ -161,5 +165,4 @@ function commerce_autodisplay_preprocess_page(&$vars) {
       } 
     }
   }
-  dsm($vars);
 }
