@@ -142,3 +142,7 @@ function commerce_autodisplay_is_enabled($product_type) {
     return false;
   }
 }
+
+function commerce_autodisplay_menu_link(array $variables) {
+  dsm($variables);
+}
