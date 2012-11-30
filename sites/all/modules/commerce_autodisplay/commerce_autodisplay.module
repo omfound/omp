@@ -143,6 +143,6 @@ function commerce_autodisplay_is_enabled($product_type) {
   }
 }
 
-function commerce_autodisplay_menu_link(array $variables) {
-  dsm($variables);
+function commerce_autodisplay_preprocess_page(&$vars) {
+  dsm($vars);
 }
