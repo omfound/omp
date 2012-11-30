@@ -41,15 +41,6 @@ function om_membership_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'includes/om_membership_registration_form.inc'
   );
-  // Organizational registration
-  $items['user/%user/edit/org-members'] = array(
-    'title' => t('Manage Organizational Membership'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('om_membership_organization_member_signup_page', 1),
-    'access callback' => 'om_membership_organization_member_signup_page_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-  );
   // Main administration page @TODO Remove if we end up not usinga main admin page.
   $items['admin/config/people/membership'] = array(
     'title' => t('Administer Open Media Membership'),
@@ -90,6 +81,34 @@ function om_membership_theme($existing, $type, $theme, $path) {
       'file' => 'theme.inc'
     )
   );
+}
+/**
+ * Implements hook_profile2_form_alter
+ */
+function om_membership_form_profile2_form_alter(&$form, &$form_state) {
+  if (!empty($form['profile_manage_organizational_membership'])) {
+    unset($form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE]['add_more']);
+    $field_keys = array_keys($form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE]);
+    foreach ($field_keys AS $key => $value) {
+      if (!is_numeric($value)) {
+        unset($field_keys[$key]);
+      }
+    }
+    $membership = om_membership_get_user_memberships($form['#user']);
+    if (!empty($membership)) {
+      $membership_meta = entity_metadata_wrapper('commerce_product', array_shift($membership));
+      $allowed_fields = $membership_meta->field_membership_invitations->value();
+      $field_count = $allowed_fields - (count($field_keys) - 1);
+      $start_count = count($field_keys);
+      $field_copy = $form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE][$start_count - 1];
+      if ($field_count <= 0) {
+        unset($form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE][$allowed_fields]);
+      }
+      for ($i = $start_count; $i < ($start_count + $field_count) - 1; $i++) {
+        $form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE][$i] = $field_copy;
+      }
+    }
+  }
 }
 
 /**
@@ -140,33 +159,6 @@ function om_membership_add_membership_and_transfer($pid) {
 }
 
 /**
- * Access check to determine if a user has an organizational membership that is current.
- *  @returns boolean
- */
-function om_membership_organization_member_signup_page_access($user) {
-  $profile2 = profile2_by_uid_load($user->uid, 'membership_administration');
-  $profile2_wrapper = entity_metadata_wrapper('profile2', $profile2);
-  if (is_object($profile2_wrapper) && $profile2_wrapper->field_membership_end->value() > time()) {
-    $memberships = om_membership_get_user_memberships($user);
-    if (!empty($memberships)) {
-      foreach ($memberships AS $membership) {
-        if (is_object($membership)) {
-          $membership_meta = entity_metadata_wrapper('commerce_product', $membership);
-          if ($membership_meta->field_user_type->value() == 1) {
-            return TRUE;
-          }
-        }
-      }
-    } 
-  }
-  return FALSE;
-}
-
-function om_membership_organization_member_signup_page($form, &$form_state, $user) {
-  return array();
-}
-
-/**
  * Return all membership plans.
  * 
  * @param array $options
@@ -174,19 +166,22 @@ function om_membership_organization_member_signup_page($form, &$form_state, $use
  * @returns array of product objects
  */
 function om_membership_get_plans($options = array()) {
-  $products = array();
-  $query = db_select('commerce_product', 'product');
-  $query->fields('product', array('product_id'));
-  $query->condition('type', 'membership_plan', '=');
-  $query->condition('status', 1, '=');
-  $resource = $query->execute();
-  $pids = array();
-  while($result = $resource->fetchAssoc()) {
-    $pids[] = $result['product_id'];
-  }
-  if (count($pids) > 0) {
-    $products = commerce_product_load_multiple($pids, $options);
-    usort($products, 'om_membership_sort_products_by_price');
+  $products = &drupal_static(__FUNCTION__);
+  if (empty($products)) {
+    $products = array();
+    $query = db_select('commerce_product', 'product');
+    $query->fields('product', array('product_id'));
+    $query->condition('type', 'membership_plan', '=');
+    $query->condition('status', 1, '=');
+    $resource = $query->execute();
+    $pids = array();
+    while($result = $resource->fetchAssoc()) {
+      $pids[] = $result['product_id'];
+    }
+    if (count($pids) > 0) {
+      $products = commerce_product_load_multiple($pids, $options);
+      usort($products, 'om_membership_sort_products_by_price');
+    }
   }
   return $products;
 }
@@ -264,14 +259,21 @@ function om_membership_get_currently_selected_membership($user) {
   }
   return $memberships;
 }
-
+/**
+ * Given a commerce product entity determine the date range for a new membership.
+ *   NB: Unlimited memberships are treated as normal memberships with distant end dates.
+ * @param $product object
+ *   Instance of a commerce product.
+ * @returns array()
+ *   returns an array keyed with start and end.
+ */
 function om_membership_determine_membership_dates($product) {
   $product_metadata = entity_metadata_wrapper('commerce_product', $product);
   $duration = $product_metadata->field_duration->value();
   $start = time();
   $year_seconds = 31536000;
   if ($duration == 0) {
-    $end = $start + (100 * $year_seconds);
+    $end = $start + (250 * $year_seconds);
   }
   else {
     $end = $start + ($duration * $year_seconds);
@@ -319,6 +321,204 @@ function om_membership_return_membership_roles() {
   return $roles;
 }
 
+function om_membership_get_all_org_members() {
+  $users = &drupal_static(__FUNCTION__);
+  if (empty($users)) {
+    $users = array();
+    $plans = om_membership_get_plans();
+    foreach ($plans AS $key => $plan) {
+      $plan_meta = entity_metadata_wrapper('commerce_product', $plan);
+      if ($plan_meta->field_user_type->value() == 1) {
+        $rid = $plan_meta->field_associated_role->value();
+        $query = db_select('users_roles', 'roles');
+        $query->fields('roles', array('uid'));
+        $query->condition('roles.rid', $rid, '=');
+        $resource = $query->execute();
+        while($result = $resource->fetchAssoc()) {
+          $user = user_load($result['uid']);
+          $users[] = $user;
+        }
+      }
+    }
+  }
+  return $users;
+}
+
+/**
+ * Get a list of all organiztional admin users.
+ *  @returns array
+ *    returns array of user objects
+ */
+function om_membership_get_org_admin_member_users() {
+  $users = array();
+  $org_users = om_membership_get_all_org_members();
+  foreach ($org_users AS $org_user) {
+    $admin = om_membership_validate_org_admin_member($org_user);
+    if (!empty($admin)) {
+      $users[] = $org_user;
+    }
+  }
+  return $users;
+}
+
+/**
+ * Determine if the provided user is the admin member of an organizational membership.
+ *  @param $user StdClass
+ *    $user object
+ *  @returns boolean
+ */
+function om_membership_validate_org_admin_member($user) {
+  $plan = om_membership_get_user_memberships($user);
+  $users = array();
+  $query = db_select('field_data_field_membership_end', 'end');
+  $query->join('profile', 'profile', 'end.entity_id=profile.pid');
+  $query->join('commerce_order', 'c_order', 'profile.uid=c_order.uid');
+  $query->fields('c_order', array('order_id'));
+  $query->condition("field_membership_end_value", date('Y-m-d G:i:s'), '>');
+  $query->condition("profile.uid", $user->uid, '=');
+  $resource = $query->execute();
+  while($result = $resource->fetchAssoc()) {
+    $order = commerce_order_load($result['order_id']);
+    $order_metadata = entity_metadata_wrapper('commerce_order', $order);
+    $line_items = $order_metadata->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_meta->commerce_product->value();
+      $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+      if (!empty($product->field_user_type)) {
+        $membership_type = $product_metadata->field_user_type->value();
+        if ($membership_type == 1) {
+          return TRUE;
+        }
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check to see if the order contains a membership_plan product.
+ *   if so grant the proper user role and set the duration of the membership appropriately.
+ */
+function om_membership_grant_user_role($commerce_order) {
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+  $line_items = $order_wrapper->commerce_line_items->value();
+  foreach ($line_items AS $line_item) {
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if ($product->type == 'membership_plan') {
+      $membership_dates = om_membership_determine_membership_dates($product);
+      $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+      $order_user = user_load($commerce_order->uid);
+      $order_user->roles[$role->rid] = $role->name;
+      user_save($order_user);
+      $admin_profile = profile2_by_uid_load($order_user->uid, 'membership_administration');
+      // Here we could use a metadata wrapper to save the conenent
+      // This would be the most clean and correct way to handle saving date fields.
+      // However the date module's field implementation does not allow for this
+      // Instead we get the follwing kludge.
+      $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['start']);
+      $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['end']);
+      $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $role->name;
+      profile2_save($admin_profile);
+    }
+  }
+}
+
+/**
+ * Remove all membership roles from a user.
+ */
+function om_membership_remove_user_role($user) {
+  $user_modified = FALSE;
+  $membership_roles = om_membership_return_membership_roles();
+  foreach ($user->roles AS $rid => $role) {
+    if (!empty($membership_roles[$rid])) {
+      $user_modified = TRUE;
+      unset($user->roles[$rid]);
+    }
+  }
+  if ($user_modified == TRUE) {
+    user_save($user);
+  }
+}
+/** 
+ * Search through all org membership holders and make sure their membership status is valid.
+ *   Create users for invited email addresses not associated with an account already.
+ *   Add roles to existing invited users and remove roles from defunct users.
+ */
+function om_membership_validate_all_org_sub_members() {
+  // We will remove users from this array of all org members until we are left with only defuct members.
+  // They will then be removed.
+  $org_members = om_membership_get_all_org_members();
+  $admins = om_membership_get_org_admin_member_users();
+  if (!empty($admins)) {
+    foreach($admins AS $admin) {
+      $admin_membership = om_membership_get_user_memberships($admin);
+      $admin_membership = array_shift($admin_membership);
+      $admin_role = user_role_load($admin_membership->field_associated_role[LANGUAGE_NONE][0]['rid']);
+      $org_profile = profile2_by_uid_load($admin->uid, 'manage_organizational_membership');
+      $org_profile_metadata = entity_metadata_wrapper('profile2', $org_profile);
+      $admin_profile = profile2_by_uid_load($admin->uid, 'membership_administration');
+      $invites = $org_profile_metadata->field_invitations->value();
+      // First remove admins
+      foreach($org_members AS $key => $member) {
+        if ($member->mail == $admin->mail) {
+          unset($org_members[$key]);
+        }
+      }
+      // Next look for valid sub members.
+      foreach($invites AS $invite) {
+        $invited_user = user_load_by_mail($invite);
+        if (empty($invited_user)) {
+          // If the user doesn't exist create them and add role.
+          $new_user = new StdClass;
+          $new_user->roles = array();
+          $new_user->roles[$admin_role->rid] = $admin_role->name;
+          $new_user->name = substr($invite, 0, strpos($invite, '@'));
+          $new_user->mail = $invite;
+          $new_user->password = user_password();
+          $new_user->status = 1;
+          $new_user->is_new = 1;
+          user_save($new_user);
+          $new_user_profile = profile2_by_uid_load($new_user->uid, 'membership_administration');
+          $new_user_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'];
+          $new_user_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'];
+          $new_user_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'];
+          profile2_save($new_user_profile);
+          if (module_exists('rules')) {
+            rules_invoke_event('om_membership_new_org_sub_member', $new_user);
+          }
+        }
+        else {
+          // If the user does exist remove them from the list and add their role.
+          foreach($org_members AS $key => $member) {
+            if ($member->mail == $invite) {
+              unset($org_members[$key]);
+            }
+          }
+          // If the invited user has an account, but not the roll add it!
+          if (empty($invited_user->roles[$admin_role->rid])) {
+            $invited_user->roles[$admin_role->rid] = $admin_role->name;
+            user_save($invited_user);
+            $new_user_profile = profile2_by_uid_load($invited_user->uid, 'membership_administration');
+            $new_user_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'];
+            $new_user_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'];
+            $new_user_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'];
+            profile2_save($new_user_profile);
+            if (module_exists('rules')) {
+              rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+            }
+          }
+        }
+      }
+    }
+  }
+  // Remove defunct users.
+  foreach($org_members AS $key => $member) {
+    om_membership_remove_user_role($member);
+  }
+}
+
 /**
  * Implements hook_cron
  */
@@ -329,4 +529,5 @@ function om_membership_cron() {
       rules_invoke_event('om_membership_on_expiration', $user);
     }
   }
+  om_membership_validate_all_org_sub_members();
 }

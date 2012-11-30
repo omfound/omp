@@ -5,12 +5,19 @@
  */
 function om_membership_preprocess_om_membership_individual_plans_table(&$variables) {
   // Build the somewhat complex membership table and send related variables to the template for assembly
+  global $user;
   // Header Section
   $login_link = l('Login', 'user', array('attributes' => array('class' => array('green')), 'query' => array('destination' => $_GET['q'])));
   $login = t('Already have an account ? {!login}', array('!login' => $login_link));
   $group_plans_link = l('Click Here', 'membership/org-plans', array('attributes' => array('class' => array('red'))));
   $group_plan = t('For A Group Membership {!click}', array('!click' => $group_plans_link));
   $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
+  $membership = new StdClass();
+  if ($user->uid > 0) {
+    $membership = om_membership_get_user_memberships($user);
+    $membership = array_shift($membership);
+    $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
+  }
   $variables['header'] = $header;
   // Body Section
   // We build the table in four sections table header, table body, cost row and sign up links.
@@ -34,7 +41,20 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
           $price = '$' . $price;
         }
         $cost_row .= "<td>$price</td>";
-        $link = l('Sign Up', 'membership/add/' . $plan->product_id);
+        if (!empty($membership->product_id)) {
+          if ($membership->product_id == $plan->product_id) {
+            $link = 'You Current <br/> Membership Level';
+          }
+          else if ((int)$membership_wrapper->commerce_price->value() <= (int)$plan_meta_wrapper->commerce_price->value()) {
+            $link = '-';
+          }
+          else if ((int)$membership_wrapper->commerce_price->value() >= (int)$plan_meta_wrapper->commerce_price->value()) {
+            $link = l('Upgrade Membership', 'membership/add/' . $plan->product_id);
+          }
+        }
+        else {
+          $link = l('Sign Up', 'membership/add/' . $plan->product_id);
+        }
         $link_row .= "<td>$link</td>";
       }
     }
@@ -83,10 +103,16 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   // Pretty much the same as above with a few key differences.
   // Product field_user_type = 1 && links are different.
   // Header Section
+  global $user;
   $login_link = l('Login', 'user', array('attributes' => array('class' => array('green')), 'query' => array('destination' => $_GET['q'])));
   $login = t('Already have an account ? {!login}', array('!login' => $login_link));
   $group_plans_link = l('Click Here', 'membership', array('attributes' => array('class' => array('red'))));
   $group_plan = t('For an Individual Membership {!click}', array('!click' => $group_plans_link));
+  if ($user->uid > 0) {
+    $membership = om_membership_get_user_memberships($user);
+    $membership = array_shift($membership);
+    $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
+  }
   $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
   $variables['header'] = $header;
   // Body Section
@@ -111,7 +137,20 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
           $price = '$' . $price;
         }
         $cost_row .= "<td>$price</td>";
-        $link = l('Sign Up', 'membership/add/' . $plan->product_id);
+        if (!empty($membership->product_id)) {
+          if ($membership->product_id == $plan->product_id) {
+            $link = 'You Current <br/> Membership Level';
+          }
+          else if ((int)$membership_wrapper->commerce_price->value() <= (int)$plan_meta_wrapper->commerce_price->value()) {
+            $link = '-';
+          }
+          else if ((int)$membership_wrapper->commerce_price->value() >= (int)$plan_meta_wrapper->commerce_price->value()) {
+            $link = l('Upgrade Membership', 'membership/add/' . $plan->product_id);
+          }
+        }
+        else {
+          $link = l('Sign Up', 'membership/add/' . $plan->product_id);
+        }
         $link_row .= "<td>$link</td>";
       }
     }
