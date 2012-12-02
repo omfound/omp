@@ -5,23 +5,6 @@
  */
 
 /**
- * Implements hook_commerce_product_default_types().
- */
-function commerce_reservations_commerce_product_default_types() {
-  $items = array(
-    'reservable_product' => array(
-      'type' => 'reservable_product',
-      'name' => 'Reservable Product',
-      'description' => 'This product is reservable, and works with the commerce reservation system.',
-      'help' => '',
-      'revision' => '1',
-      'module' => 'commerce_product_ui',
-    ),
-  );
-  return $items;
-}
-
-/**
  * Implements hook_views_api().
  */
 function commerce_reservations_views_api() {

@@ -10,6 +10,612 @@
 function commerce_reservations_field_default_fields() {
   $fields = array();
 
+  // Exported field: 'commerce_line_item-reservable_product-commerce_display_path'.
+  $fields['commerce_line_item-reservable_product-commerce_display_path'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'commerce_line_item',
+      ),
+      'field_name' => 'commerce_display_path',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '1',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => 255,
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 3,
+        ),
+        'display' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'commerce_display_path',
+      'label' => 'Display path',
+      'required' => TRUE,
+      'settings' => array(
+        'text_processing' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'text',
+        'settings' => array(
+          'size' => 60,
+        ),
+        'type' => 'text_textfield',
+        'weight' => '0',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-commerce_product'.
+  $fields['commerce_line_item-reservable_product-commerce_product'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'commerce_line_item',
+      ),
+      'field_name' => 'commerce_product',
+      'foreign keys' => array(
+        'product_id' => array(
+          'columns' => array(
+            'product_id' => 'product_id',
+          ),
+          'table' => 'commerce_product',
+        ),
+      ),
+      'indexes' => array(
+        'product_id' => array(
+          0 => 'product_id',
+        ),
+      ),
+      'locked' => '1',
+      'module' => 'commerce_product_reference',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_product_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'commerce_cart',
+          'settings' => array(
+            'combine' => TRUE,
+            'default_quantity' => 1,
+            'line_item_type' => 'product',
+            'show_quantity' => FALSE,
+            'show_single_product_attributes' => FALSE,
+          ),
+          'type' => 'commerce_cart_add_to_cart_form',
+          'weight' => 2,
+        ),
+        'display' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_cart',
+          'settings' => array(
+            'combine' => TRUE,
+            'default_quantity' => 1,
+            'line_item_type' => 'product',
+            'show_quantity' => FALSE,
+            'show_single_product_attributes' => FALSE,
+          ),
+          'type' => 'commerce_cart_add_to_cart_form',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'commerce_product',
+      'label' => 'Product',
+      'required' => TRUE,
+      'settings' => array(
+        'field_injection' => TRUE,
+        'referenceable_types' => array(),
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'commerce_product_reference',
+        'settings' => array(
+          'autocomplete_match' => 'contains',
+          'autocomplete_path' => 'commerce_product/autocomplete',
+          'size' => 60,
+        ),
+        'type' => 'commerce_product_reference_autocomplete',
+        'weight' => '0',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-commerce_total'.
+  $fields['commerce_line_item-reservable_product-commerce_total'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'commerce_line_item',
+      ),
+      'field_name' => 'commerce_total',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'currency_price' => array(
+          0 => 'amount',
+          1 => 'currency_code',
+        ),
+      ),
+      'locked' => '1',
+      'module' => 'commerce_price',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_price',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 1,
+        ),
+        'display' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 1,
+        ),
+        'node_teaser' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 1,
+        ),
+        'token' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 1,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'commerce_total',
+      'label' => 'Total',
+      'required' => TRUE,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'commerce_price',
+        'settings' => array(
+          'currency_code' => 'default',
+        ),
+        'type' => 'commerce_price_full',
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-commerce_unit_price'.
+  $fields['commerce_line_item-reservable_product-commerce_unit_price'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'commerce_line_item',
+      ),
+      'field_name' => 'commerce_unit_price',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'currency_price' => array(
+          0 => 'amount',
+          1 => 'currency_code',
+        ),
+      ),
+      'locked' => '1',
+      'module' => 'commerce_price',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'commerce_price',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'display' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'node_teaser' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+        'token' => array(
+          'label' => 'hidden',
+          'module' => 'commerce_price',
+          'settings' => array(
+            'calculation' => FALSE,
+          ),
+          'type' => 'commerce_price_formatted_amount',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'commerce_unit_price',
+      'label' => 'Unit price',
+      'required' => TRUE,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'commerce_price',
+        'settings' => array(
+          'currency_code' => 'default',
+        ),
+        'type' => 'commerce_price_full',
+        'weight' => '0',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-field_checked_out_accessories'.
+  $fields['commerce_line_item-reservable_product-field_checked_out_accessories'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_checked_out_accessories',
+      'foreign keys' => array(
+        'tid' => array(
+          'columns' => array(
+            'tid' => 'tid',
+          ),
+          'table' => 'taxonomy_term_data',
+        ),
+      ),
+      'indexes' => array(
+        'tid' => array(
+          0 => 'tid',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'taxonomy',
+      'settings' => array(
+        'allowed_values' => array(
+          0 => array(
+            'vocabulary' => 'reservable_product_accessories',
+            'parent' => '0',
+          ),
+        ),
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'taxonomy_term_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'commerce_cart_settings' => array(
+        'field_access' => 0,
+      ),
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'taxonomy',
+          'settings' => array(),
+          'type' => 'taxonomy_term_reference_link',
+          'weight' => 6,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'field_checked_out_accessories',
+      'label' => 'Checked Out Accessories',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '4',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-field_checkout_status'.
+  $fields['commerce_line_item-reservable_product-field_checkout_status'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_checkout_status',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'Awaiting Checkout' => 'Awaiting Checkout',
+          'No Show' => 'No Show',
+          'Checked Out' => 'Checked Out',
+          'Checked In' => 'Checked In',
+          'Overdue' => 'Overdue',
+        ),
+        'allowed_values_function' => '',
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'commerce_cart_settings' => array(
+        'field_access' => 0,
+      ),
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 5,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'field_checkout_status',
+      'label' => 'Checkout Status',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '3',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-field_reservation_dates'.
+  $fields['commerce_line_item-reservable_product-field_reservation_dates'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_reservation_dates',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'date',
+      'settings' => array(
+        'cache_count' => '4',
+        'cache_enabled' => 0,
+        'granularity' => array(
+          'day' => 'day',
+          'hour' => 'hour',
+          'minute' => 'minute',
+          'month' => 'month',
+          'second' => 0,
+          'year' => 'year',
+        ),
+        'profile2_private' => FALSE,
+        'timezone_db' => 'UTC',
+        'todate' => 'optional',
+        'tz_handling' => 'site',
+      ),
+      'translatable' => '0',
+      'type' => 'datetime',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'commerce_cart_settings' => array(
+        'field_access' => 0,
+      ),
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'date',
+          'settings' => array(
+            'format_type' => 'long',
+            'fromto' => 'both',
+            'multiple_from' => '',
+            'multiple_number' => '',
+            'multiple_to' => '',
+          ),
+          'type' => 'date_default',
+          'weight' => 4,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'field_reservation_dates',
+      'label' => 'Reservation Dates',
+      'required' => 0,
+      'settings' => array(
+        'default_value' => 'now',
+        'default_value2' => 'same',
+        'default_value_code' => '',
+        'default_value_code2' => '',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'date',
+        'settings' => array(
+          'increment' => '15',
+          'input_format' => 'm/d/Y - g:i:sa',
+          'input_format_custom' => '',
+          'label_position' => 'above',
+          'text_parts' => array(),
+          'year_range' => '-3:+3',
+        ),
+        'type' => 'date_select',
+        'weight' => '2',
+      ),
+    ),
+  );
+
+  // Exported field: 'commerce_line_item-reservable_product-field_returned_accessories'.
+  $fields['commerce_line_item-reservable_product-field_returned_accessories'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_returned_accessories',
+      'foreign keys' => array(
+        'tid' => array(
+          'columns' => array(
+            'tid' => 'tid',
+          ),
+          'table' => 'taxonomy_term_data',
+        ),
+      ),
+      'indexes' => array(
+        'tid' => array(
+          0 => 'tid',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'taxonomy',
+      'settings' => array(
+        'allowed_values' => array(
+          0 => array(
+            'vocabulary' => 'reservable_product_accessories',
+            'parent' => '0',
+          ),
+        ),
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'taxonomy_term_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'reservable_product',
+      'commerce_cart_settings' => array(
+        'field_access' => 0,
+      ),
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'taxonomy',
+          'settings' => array(),
+          'type' => 'taxonomy_term_reference_link',
+          'weight' => 7,
+        ),
+      ),
+      'entity_type' => 'commerce_line_item',
+      'field_name' => 'field_returned_accessories',
+      'label' => 'Returned Accessories',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '5',
+      ),
+    ),
+  );
+
   // Exported field: 'commerce_product-reservable_product-commerce_price'.
   $fields['commerce_product-reservable_product-commerce_price'] = array(
     'field_config' => array(
@@ -1195,10 +1801,14 @@ function commerce_reservations_field_default_fields() {
   t('Abbreviation');
   t('Body');
   t('Certifications Required');
+  t('Checked Out Accessories');
+  t('Checkout Status');
   t('Commercial Cost');
+  t('Display path');
   t('If this accessory works for a certain product, or a few individual products, select those here.  If it is a generic accessory, for more then a few products, leave this field blank.');
   t('Member Cost');
   t('Price');
+  t('Product');
   t('Product Category');
   t('Product Description');
   t('Product Image');
@@ -1207,8 +1817,12 @@ function commerce_reservations_field_default_fields() {
   t('Reservable Product Notes');
   t('Reservable Product Reference');
   t('Reservable Product Status');
+  t('Reservation Dates');
+  t('Returned Accessories');
   t('Select a product category (ie. cameras) this accessory belongs to.  If the accessory is for all product categories, or if the accessory is for a specific product, leave this field set to "none."');
   t('This is a description of this individual product.  This field is more for internal notes about the product.  The description of the product type should be put in the product display, as that is what will display in the reservation user interface.');
+  t('Total');
+  t('Unit price');
 
   return $fields;
 }
