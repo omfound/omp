@@ -1,7 +1,7 @@
 name = Commerce Reservations
 description = Provides a product reservation system using Drupal Commerce.
 core = 7.x
-package = Other
+package = Commerce Reservations
 php = 5.2.4
 dependencies[] = commerce
 dependencies[] = commerce_cart
@@ -30,7 +30,6 @@ features[field][] = commerce_line_item-reservable_product-field_returned_accesso
 features[field][] = commerce_product-reservable_product-commerce_price
 features[field][] = commerce_product-reservable_product-field_certifications_required
 features[field][] = commerce_product-reservable_product-field_commercial_cost
-features[field][] = commerce_product-reservable_product-field_crp_product_description
 features[field][] = commerce_product-reservable_product-field_crp_product_title
 features[field][] = commerce_product-reservable_product-field_member_cost
 features[field][] = commerce_product-reservable_product-field_res_product_status

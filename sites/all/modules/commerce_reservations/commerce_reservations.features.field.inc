@@ -909,79 +909,6 @@ function commerce_reservations_field_default_fields() {
     ),
   );
 
-  // Exported field: 'commerce_product-reservable_product-field_crp_product_description'.
-  $fields['commerce_product-reservable_product-field_crp_product_description'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_crp_product_description',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'locked' => '0',
-      'module' => 'text',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'text_long',
-    ),
-    'field_instance' => array(
-      'bundle' => 'reservable_product',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => 'This is a description of this individual product.  This field is more for internal notes about the product.  The description of the product type should be put in the product display, as that is what will display in the reservation user interface.',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '3',
-        ),
-        'line_item' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'node_teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'commerce_product',
-      'field_name' => 'field_crp_product_description',
-      'label' => 'Product Description',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '5',
-        ),
-        'type' => 'text_textarea',
-        'weight' => '3',
-      ),
-    ),
-  );
-
   // Exported field: 'commerce_product-reservable_product-field_crp_product_title'.
   $fields['commerce_product-reservable_product-field_crp_product_title'] = array(
     'field_config' => array(
@@ -1810,7 +1737,6 @@ function commerce_reservations_field_default_fields() {
   t('Price');
   t('Product');
   t('Product Category');
-  t('Product Description');
   t('Product Image');
   t('Product Title');
   t('Reservable Product');
@@ -1820,7 +1746,6 @@ function commerce_reservations_field_default_fields() {
   t('Reservation Dates');
   t('Returned Accessories');
   t('Select a product category (ie. cameras) this accessory belongs to.  If the accessory is for all product categories, or if the accessory is for a specific product, leave this field set to "none."');
-  t('This is a description of this individual product.  This field is more for internal notes about the product.  The description of the product type should be put in the product display, as that is what will display in the reservation user interface.');
   t('Total');
   t('Unit price');
 
