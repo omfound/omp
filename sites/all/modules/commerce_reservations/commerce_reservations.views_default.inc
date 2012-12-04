@@ -203,6 +203,7 @@ function commerce_reservations_views_default_views() {
   $handler->display->display_options['style_options']['defaultView'] = 'agendaWeek';
   $handler->display->display_options['style_options']['right'] = 'agendaWeek month';
   $handler->display->display_options['style_options']['theme'] = FALSE;
+  $handler->display->display_options['style_options']['contentHeight'] = 500;
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';

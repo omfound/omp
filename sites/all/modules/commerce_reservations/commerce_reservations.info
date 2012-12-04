@@ -45,6 +45,7 @@ features[node][] = reservable_product_display
 features[rules_config][] = rules_apply_commercial_reservation_pricing
 features[rules_config][] = rules_apply_reservation_pricing
 features[rules_config][] = rules_send_reservation_confirmation_email
+features[taxonomy][] = certifications
 features[taxonomy][] = omp_certifications
 features[taxonomy][] = product_categories
 features[taxonomy][] = reservable_product
