@@ -50,6 +50,8 @@ function commerce_product_clone_cloneform($original_product) {
 
       // Reset some values we want to be unique.
       $product = clone $original_product;
+      dsm('product:');
+      dsm($product);
       $product->product_id = NULL;
       $product->revision_id = NULL;
       $product->uid = $user->uid;
