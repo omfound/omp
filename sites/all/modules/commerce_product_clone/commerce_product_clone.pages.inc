@@ -58,7 +58,7 @@ function commerce_product_clone_cloneform($original_product) {
       //HACK: BRIAN
       //$product->title = t('Clone of !title', array('!title' => $product->title));
       $product->title = t('!title', array('!title' => $product->title));
-      $product->field_class_source = array('und' => array($original_product->product_id));
+      //$product->field_class_source = array('und' => array($original_product->product_id));
       dsm($product);
       //END HACK: BRIAN
 
