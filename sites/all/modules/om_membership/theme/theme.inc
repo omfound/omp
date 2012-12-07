@@ -14,7 +14,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
   $membership = new StdClass();
   if ($user->uid > 0) {
-    $membership = om_membership_get_user_memberships($user);
+    $membership = om_membership_get_user_membership_products($user);
     $membership = array_shift($membership);
     $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
   }
@@ -42,13 +42,15 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         }
         $cost_row .= "<td>$price</td>";
         if (!empty($membership->product_id)) {
+          $membership_price = $membership_wrapper->commerce_price->value();
+          $current_plan_price = $plan_meta_wrapper->commerce_price->value();
           if ($membership->product_id == $plan->product_id) {
             $link = 'You Current <br/> Membership Level';
           }
-          else if ((int)$membership_wrapper->commerce_price->value() <= (int)$plan_meta_wrapper->commerce_price->value()) {
+          else if ($membership_price['amount'] >= $current_plan_price['amount']) {
             $link = '-';
           }
-          else if ((int)$membership_wrapper->commerce_price->value() >= (int)$plan_meta_wrapper->commerce_price->value()) {
+          else if ($membership_price['amount'] <= $current_plan_price['amount']) {
             $link = l('Upgrade Membership', 'membership/add/' . $plan->product_id);
           }
         }
@@ -109,7 +111,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $group_plans_link = l('Click Here', 'membership', array('attributes' => array('class' => array('red'))));
   $group_plan = t('For an Individual Membership {!click}', array('!click' => $group_plans_link));
   if ($user->uid > 0) {
-    $membership = om_membership_get_user_memberships($user);
+    $membership = om_membership_get_user_membership_products($user);
     $membership = array_shift($membership);
     $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
   }
@@ -138,13 +140,15 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
         }
         $cost_row .= "<td>$price</td>";
         if (!empty($membership->product_id)) {
+          $membership_price = $membership_wrapper->commerce_price->value();
+          $current_plan_price = $plan_meta_wrapper->commerce_price->value();
           if ($membership->product_id == $plan->product_id) {
             $link = 'You Current <br/> Membership Level';
           }
-          else if ((int)$membership_wrapper->commerce_price->value() <= (int)$plan_meta_wrapper->commerce_price->value()) {
+          else if ($membership_price['amount'] >= $current_plan_price['amount']) {
             $link = '-';
           }
-          else if ((int)$membership_wrapper->commerce_price->value() >= (int)$plan_meta_wrapper->commerce_price->value()) {
+          else if ($membership_price['amount'] <= $current_plan_price['amount']) {
             $link = l('Upgrade Membership', 'membership/add/' . $plan->product_id);
           }
         }
@@ -197,7 +201,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
  */
 function om_membership_preprocess_om_membership_renewal_table(&$variables) {
   global $user;
-  $user_plan = om_membership_get_user_memberships($user);
+  $user_plan = om_membership_get_user_membership_products($user);
   $user_plan = array_shift($user_plan);
   if ($variables['plans'][count($variables['plans']) - 1]->product_id != $user_plan->product_id) {
     $plan_metadata = entity_metadata_wrapper('commerce_product', $user_plan);

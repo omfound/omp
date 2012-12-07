@@ -95,7 +95,7 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
         unset($field_keys[$key]);
       }
     }
-    $membership = om_membership_get_user_memberships($form['#user']);
+    $membership = om_membership_get_user_membership_products($form['#user']);
     if (!empty($membership)) {
       $membership_meta = entity_metadata_wrapper('commerce_product', array_shift($membership));
       $allowed_fields = $membership_meta->field_membership_invitations->value();
@@ -116,7 +116,6 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
  * Helper to load plans and send to theme layer.
  */
 function om_membership_individual_plans_page() {
-  global $user;
   $plans = om_membership_get_plans();
   return theme('om_membership_individual_plans_table', array('plans' => $plans));
 }
@@ -129,6 +128,9 @@ function om_membership_org_plans_page() {
   return theme('om_membership_org_plans_table', array('plans' => $plans));
 }
 
+/**
+ * Helper to load plans and send to theme layer.
+ */
 function om_membership_renewal_page() {
   $plans = om_membership_get_plans();
   return theme('om_membership_renewal_table', array('plans' => $plans));
@@ -174,20 +176,8 @@ function om_membership_add_membership_and_transfer($pid) {
 function om_membership_get_plans($options = array()) {
   $products = &drupal_static(__FUNCTION__);
   if (empty($products)) {
-    $products = array();
-    $query = db_select('commerce_product', 'product');
-    $query->fields('product', array('product_id'));
-    $query->condition('type', 'membership_plan', '=');
-    $query->condition('status', 1, '=');
-    $resource = $query->execute();
-    $pids = array();
-    while($result = $resource->fetchAssoc()) {
-      $pids[] = $result['product_id'];
-    }
-    if (count($pids) > 0) {
-      $products = commerce_product_load_multiple($pids, $options);
-      usort($products, 'om_membership_sort_products_by_price');
-    }
+    $products = commerce_product_load_multiple(array(), array('type' => 'membership_plan'));
+    usort($products, '_om_membership_sort_products_by_price');
   }
   return $products;
 }
@@ -195,7 +185,7 @@ function om_membership_get_plans($options = array()) {
 /**
  * Usort callback to sort commerce products by their pricefield.
  */
-function om_membership_sort_products_by_price($a, $b) {
+function _om_membership_sort_products_by_price($a, $b) {
   $a_wrapper = entity_metadata_wrapper('commerce_product', $a);
   $a_value = $a_wrapper->commerce_price->value();
   $b_wrapper = entity_metadata_wrapper('commerce_product', $b);
@@ -224,23 +214,81 @@ function om_membership_get_plan_features() {
 }
 
 /**
- * If a user has a membership return that role id and the product associated with it.
- * @param object $user
- *   Standard user object.
- * @returns array
- *   returns an array keyed with roles paired to matching product.
+ * Get a list of a users unique membership products.
+ *  @param user StdClass
+ *    Standard instance of user.
+ *  @param active boolean
+ *    Whether or not to return only active memberships.
+ *  @returns array()
+ *    Array of commerce product instances.
  */
-function om_membership_get_user_memberships($user) {
+function om_membership_get_user_membership_products($user, $active = TRUE) {
+  $products = array();
+  $orders = om_membership_get_user_membership_orders($user, $active);
+  if (!empty($orders)) {
+  foreach($orders AS $order) {
+    $order_products = om_membership_order_contains_membership($order);
+      foreach ($order_products AS $product) {
+        if (!in_array($product->product_id, $products)) {
+          $products[$product->product_id] = $product;
+        }
+      }
+    }
+  }
+  return $products;
+}
+
+/**
+ * Get a user's membership orders. NB: Each order may only have 1 membership item.
+ *  This is enforced by om_membership_add_membership_and_transfer.
+ *  @param user StdClass
+ *    Standard instance of user.
+ *  @param active boolean
+ *    Whether or not to return only active memberships.
+ *  @returns array()
+ *    Array of commerce order instances.
+ */
+function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $memberships = array();
-  $plans = om_membership_get_plans();
-  foreach($plans AS $plan) {
-    $meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
-    $membership_ref = $meta_wrapper->field_associated_role->value();
-    if (!empty($user->roles[$membership_ref])) {
-      $memberships[$membership_ref] = $plan; 
+  $acceptable_statuses = array('processing', 'completed', 'checked out');
+  // Here we may want to make this something like -- anything other than pending.
+  $orders = commerce_order_load_multiple(array(), array('uid' => $user->uid));
+  if (!empty($orders)) {
+    // Just in case orders are not in sequence, order them by creation date.
+    usort($orders, '_om_membership_sort_orders_by_created');
+    foreach ($orders AS $order) {
+      if (in_array($order->status, $acceptable_statuses)) {
+        $membership_products = om_membership_order_contains_membership($order);
+        if (!empty($membership_products)) {
+          $order_metadata = entity_metadata_wrapper('commerce_order', $order);
+          if ($active == TRUE) {
+            // We will only accept 1 membership per order.
+            $product = $membership_products[0];
+            $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+            $exp = $order->created + ($product_metadata->field_duration->value() * 31536000);
+            $now = time();
+            if ($now > $order->created && $now < $exp) {
+              $memberships[] = $order;
+            }
+          }
+          else {
+            $memberships[] = $order;
+          }
+        }
+      }
     }
   }
   return $memberships;
+}
+
+/**
+ * Usort helper to return a list of objects sorted by a numeric parameter created.
+ */
+function _om_membership_sort_orders_by_created($a, $b) {
+  if (is_object($a) && is_object($b) && $a->created < $b->created) {
+    return -1;
+  }
+  return 1;
 }
 
 /**
@@ -258,13 +306,14 @@ function om_membership_get_currently_selected_membership($user) {
     foreach ($line_items AS $line_item) {
       $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
       $product = $line_item_meta->commerce_product->value();
-      if ($product->type == 'omp_membership_plan') {
+      if ($product->type == 'membership_plan') {
         $memberships[] = $line_item;
       }
     }
   }
   return $memberships;
 }
+
 /**
  * Given a commerce product entity determine the date range for a new membership.
  *   NB: Unlimited memberships are treated as normal memberships with distant end dates.
@@ -297,16 +346,21 @@ function om_membership_determine_membership_dates($product) {
  *   an array of user objects.
  */
 function om_membership_get_expired_memberships() {
-  // This could be pretty simply modified to allow
-  // advanced warnings for membership expiration.
   $users = array();
-  $query = db_select('field_data_field_membership_end', 'end');
-  $query->join('profile', 'profile', 'end.entity_id=profile.pid');
-  $query->fields('profile', array('uid'));
-  $query->condition("field_membership_end_value", date('Y-m-d G:i:s'), '<');
-  $resource = $query->execute();
-  while($result = $resource->fetchAssoc()) {
-    $users[] = user_load($result['uid']);
+  $roles = om_membership_return_membership_roles();
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      if (empty($users[$row->uid])) {
+       $memberships = om_membership_get_user_membership_orders($row);
+       if (empty($memberships)) {
+         $users[] = user_load($row->uid);
+       }
+      }
+    }
   }
   return $users;
 }
@@ -325,6 +379,29 @@ function om_membership_return_membership_roles() {
     } 
   }
   return $roles;
+}
+
+/**
+ * If a commerce_order object contains membership line items return those items.
+ *  @param $commerce_order stdClass()
+ *    Standard commerce order instance.
+ *  @returns array()
+ *    Array of commerce product instances.
+ */
+function om_membership_order_contains_membership($commerce_order) {
+  $memberships = array();
+  if (is_object($commerce_order)) {
+    $order_metadata = entity_metadata_wrapper('commerce_order', $commerce_order);
+    $line_items = $order_metadata->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_metadata = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_metadata->commerce_product->value();
+      if ($product->type == 'membership_plan') {
+        $memberships[] = $product;
+      }
+    }
+  }
+  return $memberships;
 }
 
 function om_membership_get_all_org_members() {
@@ -374,7 +451,7 @@ function om_membership_get_org_admin_member_users() {
  *  @returns boolean
  */
 function om_membership_validate_org_admin_member($user) {
-  $plan = om_membership_get_user_memberships($user);
+  $plan = om_membership_get_user_membership_products($user);
   $users = array();
   $query = db_select('field_data_field_membership_end', 'end');
   $query->join('profile', 'profile', 'end.entity_id=profile.pid');
@@ -404,7 +481,8 @@ function om_membership_validate_org_admin_member($user) {
 
 /**
  * Check to see if the order contains a membership_plan product.
- *   if so grant the proper user role and set the duration of the membership appropriately.
+ *  if so grant the proper user role and set the duration of the membership appropriately.
+ *  Primarily used as a rules action.
  */
 function om_membership_grant_user_role($commerce_order) {
   $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
@@ -413,20 +491,37 @@ function om_membership_grant_user_role($commerce_order) {
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
     $product = $line_item_meta->commerce_product->value();
     if ($product->type == 'membership_plan') {
-      $membership_dates = om_membership_determine_membership_dates($product);
-      $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
-      $order_user = user_load($commerce_order->uid);
-      $order_user->roles[$role->rid] = $role->name;
-      user_save($order_user);
-      $admin_profile = profile2_by_uid_load($order_user->uid, 'membership_administration');
-      // Here we could use a metadata wrapper to save the conenent
-      // This would be the most clean and correct way to handle saving date fields.
-      // However the date module's field implementation does not allow for this
-      // Instead we get the follwing kludge.
-      $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['start']);
-      $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = date('Y-m-d G:i:s', $membership_dates['end']);
-      $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $role->name;
-      profile2_save($admin_profile);
+      $existing_memberships = om_membership_get_user_membership_orders($commerce_order, FALSE);
+      if (empty($existing_memberships)) {
+        $membership_dates = om_membership_determine_membership_dates($product);
+        $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+        $order_user = user_load($commerce_order->uid);
+        $order_user->roles[$role->rid] = $role->name;
+        user_save($order_user);
+      }
+      else {
+        $last_membership = count($existing_memberships) - 1;
+        $membership_products = om_membership_order_contains_membership($existing_memberships[$last_membership]);
+        $existing_product = $membership_products[0];
+        $product_metadata = entity_metadata_wrapper('commerce_product', $existing_product);
+        $update_period = $product_metadata->field_update_period->value() * 86400;
+        $exp = $existing_memberships[$last_membership]->created + ($product_metadata->field_duration->value() * 31536000);
+        if (time() + $update_period >= $exp) {
+          // This is the Update portion of the code.
+          // Here we want to find the membership furthest into the future && chain this one onto that one.
+          $commerce_order->created = $exp;
+          commerce_order_save($commerce_order);
+        }
+        else {
+          // This is the upsell portion of the code.
+          // Here we want to simply remove the current role and add the new one leaving the dates alone.
+          $order_user = user_load($commerce_order->uid);
+          $order_user = om_membership_remove_user_role($order_user);
+          $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+          $order_user->roles[$role->rid] = $role->name;
+          user_save($order_user);
+        }
+      }
     }
   }
 }
@@ -444,7 +539,7 @@ function om_membership_remove_user_role($user) {
     }
   }
   if ($user_modified == TRUE) {
-    user_save($user);
+   return user_save($user);
   }
 }
 /** 
@@ -459,7 +554,7 @@ function om_membership_validate_all_org_sub_members() {
   $admins = om_membership_get_org_admin_member_users();
   if (!empty($admins)) {
     foreach($admins AS $admin) {
-      $admin_membership = om_membership_get_user_memberships($admin);
+      $admin_membership = om_membership_get_user_membership_products($admin);
       $admin_membership = array_shift($admin_membership);
       $admin_role = user_role_load($admin_membership->field_associated_role[LANGUAGE_NONE][0]['rid']);
       $org_profile = profile2_by_uid_load($admin->uid, 'manage_organizational_membership');
@@ -486,11 +581,6 @@ function om_membership_validate_all_org_sub_members() {
           $new_user->status = 1;
           $new_user->is_new = 1;
           user_save($new_user);
-          $new_user_profile = profile2_by_uid_load($new_user->uid, 'membership_administration');
-          $new_user_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'];
-          $new_user_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'];
-          $new_user_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'];
-          profile2_save($new_user_profile);
           if (module_exists('rules')) {
             rules_invoke_event('om_membership_new_org_sub_member', $new_user);
           }
@@ -506,11 +596,6 @@ function om_membership_validate_all_org_sub_members() {
           if (empty($invited_user->roles[$admin_role->rid])) {
             $invited_user->roles[$admin_role->rid] = $admin_role->name;
             user_save($invited_user);
-            $new_user_profile = profile2_by_uid_load($invited_user->uid, 'membership_administration');
-            $new_user_profile->field_membership_start[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_start[LANGUAGE_NONE][0]['value'];
-            $new_user_profile->field_membership_end[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_end[LANGUAGE_NONE][0]['value'];
-            $new_user_profile->field_membership_type[LANGUAGE_NONE][0]['value'] = $admin_profile->field_membership_type[LANGUAGE_NONE][0]['value'];
-            profile2_save($new_user_profile);
             if (module_exists('rules')) {
               rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
             }
