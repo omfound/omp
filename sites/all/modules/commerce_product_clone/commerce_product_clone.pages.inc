@@ -50,8 +50,6 @@ function commerce_product_clone_cloneform($original_product) {
 
       // Reset some values we want to be unique.
       $product = clone $original_product;
-      dsm('product:');
-      dsm($product);
       $product->product_id = NULL;
       $product->revision_id = NULL;
       $product->uid = $user->uid;
@@ -62,6 +60,8 @@ function commerce_product_clone_cloneform($original_product) {
       $product->title = t('!title', array('!title' => $product->title));
       $product->field_class_source = array('und' => array($original_product->product_id));
       //END HACK: BRIAN
+      dsm('product:');
+      dsm($product);
 
       // Set the page title.
       drupal_set_title($product->title);
