@@ -21,7 +21,7 @@
 	    basePath = '';
     }
     tipContent = new Object();
-    var item = $('#block-views-calendar_product_view-block div.views-row');
+    var item = $('#block-views-calendar-product-view-block div.views-row');
     $('.meta').remove();
     //Hide all of our commerce item fields on page load
     $('#block-views-calendar_product_view-block .add-to-cart').hide();
@@ -75,6 +75,7 @@
     }
     //The user has selected a reservable item
     $(item).mousedown(function() {
+      console.log(this);
       //show the calendar
       $('.view-reservation-calendar').css('top', '530px');
       $('.view-reservation-calendar').animate({
