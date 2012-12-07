@@ -1,0 +1,5 @@
+<?php
+
+function commerce_registration_clone_entity_insert($entity, $type) {
+  dsm($entity);
+}
