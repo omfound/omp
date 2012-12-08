@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implements hook_block_info().
+ */
+
+function commerce_reservations_block_info(){
+  $blocks = array();
+  $blocks['item_info'] = array(  //This block will be used to create an area to display item info on the calendar page
+    'info' => t('Item Information')
+  );
+  
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+ 
+function commerce_reservations_block_view($delta = ''){
+  $block = array();
+  
+  switch ($delta) {    
+    case 'item_info':
+      $block['subject'] = 'Item Info';
+      $block['content'] = theme('commerce_reservations_item_info', array('block_delta' => $delta));
+      break;
+    }
+  return $block;
+}
+
+/*
+ *  Implements hook_theme
+ */
+
+function commerce_reservations_theme(){
+	return array(
+	  'commerce_reservations_item_info' => array(
+	    'template' => 'commerce_reservations_item_info',
+	    'path' => drupal_get_path('module', 'commerce_reservations') . '/theme',
+	    'file' => 'theme.inc',
+	    'variables' => array(
+	      'block_delta' => NULL,
+	    ),
+	  ),
+	);
+}
