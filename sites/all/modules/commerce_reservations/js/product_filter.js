@@ -10,7 +10,6 @@
 	      item.attr('id', 'selected-product');
 	      var nid = $(this).find('.nid .field-content').text();
 	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
-	      console.log(pid);
 	      //Remove events from the calendar
 	      $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
@@ -21,7 +20,6 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
-	          console.log(data);
 	          $('a.fullcalendar-event-details', data).each(function(index){
                 event = new Object();
                 event.field = $(this).attr('field');
@@ -55,6 +53,12 @@
           }
         });
 	    });
+	    $('.fullcalendar .fc-content').unbind().mouseup(function(){
+        view = $('.fullcalendar').fullCalendar('getView');
+        if (view.name == 'agendaWeek'){
+	        console.log("!");
+        }
+      });
     }
   }
 }(jQuery));
