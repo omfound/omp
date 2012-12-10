@@ -43,12 +43,15 @@ function om_membership_rules_event_info() {
   return $items;
 }
 
+/**
+ * Implements hook_rules_condition_info
+ */
 function om_membership_rules_condition_info() {
   return array(
     'om_membership_order_contains_upsell' => array(
-      'label' => t('Order is donation'),
+      'label' => t('Order contains an upsold membership'),
       'arguments' => array(
-        'order_id' => array('label' => t('Order Id'), 'type' => 'integer'),
+        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
       ),
       'help' => t('Does the order trigger a membership upsell.'),
       'module' => 'om_membership',
@@ -83,26 +86,78 @@ function om_membership_rules_action_info() {
     )
   );
   $actions['om_membership_upsell_discount'] = array(
-    'label' => t('Discount membership by current membership difference.'),
+    'label' => t('Discount membership by current membership difference'),
     'group' => 'Open Media Membership',
     'parameter' => array(
       'commerce_line_item' => array(
         'type' => 'commerce_line_item',
-        'label' => t('Line Item'),
-      ),
-      'user' => array(
-        'type' => 'user',
-        'label' => t('Order User'),
+        'label' => t('Commerce Order'),
       )
     )
   );
   return $actions;
 }
 
-function om_membership_order_contains_upsell($order) {
-  
+/**
+ * Condition handler that check to see if an order contains a membership upsell.
+ */
+function om_membership_order_contains_upsell($commerce_order) {
+  if (!empty($commerce_order)) {
+    // See if there is a membership in the order at all... if not don't go any further.
+    $products = om_membership_order_contains_membership($commerce_order);
+    if (!empty($products)) {
+      // Get the user's current membership level
+      $current_memberships = om_membership_get_user_membership_products($commerce_order);
+      if (!empty($current_memberships)) {
+        // NB not sure what end of this array we should take off of.
+        $current_memberships = array_pop($current_memberships);
+        $current_membership_metadata = entity_metadata_wrapper('commerce_product', $current_memberships);
+        $current_membership_price = $current_membership_metadata->commerce_price->value();
+        $product = array_shift($products);
+        $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+        $product_price = $product_metadata->commerce_price->value();
+        // If the user's current membership is cheaper than the one in the cart return TRUE
+        if ($current_membership_price['amount'] <= $product_price['amount']) {
+          return TRUE;
+        }
+      }
+    }
+  }
+  return FALSE;
 }
 
-function om_membership_upsell_discount($line_item, $user) {
-  
+/**
+ * Action handler to discount a product in an upsell situation.
+ */
+function om_membership_upsell_discount($commerce_line_item) {
+  if (!empty($commerce_line_item)) {
+    $commerce_order = commerce_order_load($commerce_line_item->order_id);
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if ($product->type == 'membership_plan') {
+      $unit_price = commerce_price_wrapper_value($line_item_meta, 'commerce_unit_price', TRUE);
+      $current_memberships = om_membership_get_user_membership_products($commerce_order);
+      $current_memberships = array_pop($current_memberships);
+      // Current membership
+      $current_membership_metadata = entity_metadata_wrapper('commerce_product', $current_memberships);
+      $current_membership_price = $current_membership_metadata->commerce_price->value();
+      // Membership in cart
+      $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+      $product_price = $product_metadata->commerce_price->value();
+      // Perform discount
+      $updated_amount = $product_price['amount'] - $current_membership_price['amount'];
+      $difference = array(
+        'amount' => $updated_amount,
+        'currency_code' => $unit_price['currency_code'],
+        'data' => array(),
+      );
+      $line_item_meta->commerce_unit_price->amount = $updated_amount;
+      $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_meta->commerce_unit_price->value(),
+        'base_price',
+        $difference,
+        TRUE
+      );
+    }
+  }
 }
