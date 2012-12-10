@@ -366,6 +366,42 @@ function om_membership_get_expired_memberships() {
 }
 
 /**
+ * Ensure that all users have the membership types they are supposed to.
+ */
+function om_membership_adjust_existing_memberships() {
+  $users = array();
+  $roles = om_membership_return_membership_roles();
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      dsm($row);
+      $memberships = om_membership_get_user_membership_orders($row, FALSE);
+      if (!empty($memberships)) {
+        foreach($memberships AS $membership) {
+          $membership_products = om_membership_order_contains_membership($membership);
+            if (!empty($membership_products)) {
+            $product = $membership_products[0];
+            $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+            $exp = $membership->created + ($product_metadata->field_duration->value() * 31536000);
+            $now = time();
+            if ($now > $membership->created && $now < $exp) {
+              $user = user_load($row->uid);
+              om_membership_remove_user_role($user);
+              $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+              $user->roles[$role->rid] = $role->name;
+              user_save($user);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Return a list of all roles usable by the membership system.
  */
 function om_membership_return_membership_roles() {
@@ -404,6 +440,9 @@ function om_membership_order_contains_membership($commerce_order) {
   return $memberships;
 }
 
+/**
+ * Get a list of all the org type members.
+ */
 function om_membership_get_all_org_members() {
   $users = &drupal_static(__FUNCTION__);
   if (empty($users)) {
@@ -542,6 +581,7 @@ function om_membership_remove_user_role($user) {
    return user_save($user);
   }
 }
+
 /** 
  * Search through all org membership holders and make sure their membership status is valid.
  *   Create users for invited email addresses not associated with an account already.
@@ -554,12 +594,18 @@ function om_membership_validate_all_org_sub_members() {
   $admins = om_membership_get_org_admin_member_users();
   if (!empty($admins)) {
     foreach($admins AS $admin) {
-      $admin_membership = om_membership_get_user_membership_products($admin);
-      $admin_membership = array_shift($admin_membership);
+      $admin_memberships = om_membership_get_user_membership_products($admin);
+      // Need to find the first org membership
+      foreach ($admin_memberships AS $possible_membership) {
+         $possible_membership_meta = entity_metadata_wrapper('commerce_product', $possible_membership);
+         if (is_object($possible_membership_meta) && $possible_membership_meta->field_user_type->value() == 1) {
+           $admin_membership = $possible_membership;
+           break;
+         }
+      }
       $admin_role = user_role_load($admin_membership->field_associated_role[LANGUAGE_NONE][0]['rid']);
       $org_profile = profile2_by_uid_load($admin->uid, 'manage_organizational_membership');
       $org_profile_metadata = entity_metadata_wrapper('profile2', $org_profile);
-      $admin_profile = profile2_by_uid_load($admin->uid, 'membership_administration');
       $invites = $org_profile_metadata->field_invitations->value();
       // First remove admins
       foreach($org_members AS $key => $member) {
@@ -615,10 +661,14 @@ function om_membership_validate_all_org_sub_members() {
  */
 function om_membership_cron() {
   if (module_exists('rules')) {
+    // Get expirees
     $users = om_membership_get_expired_memberships();
     foreach ($users AS $user) {
       rules_invoke_event('om_membership_on_expiration', $user);
     }
+    // Adjust any incorrect or outdated membership records.
+    om_membership_adjust_existing_memberships();
   }
+  // Ensure that relationships between org member admins and subs are correct.
   om_membership_validate_all_org_sub_members();
 }

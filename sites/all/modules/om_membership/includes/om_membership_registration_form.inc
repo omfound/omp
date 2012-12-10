@@ -116,7 +116,6 @@ function om_membership_om_membership_registration_steps() {
     $product = $plan_meta->commerce_product->value();
     $product_meta = entity_metadata_wrapper('commerce_product', $product);
     if ($product_meta->field_user_type->value() == 1) {
-      dsm('here');
       $steps['manage-org-profile'] = array(
         'label' => t('Demographic Information'),
         'form_builder' => 'om_membership_org_profile_form',
