@@ -1,0 +1,351 @@
+<?php
+
+/**
+ * @file
+ * Code for the OM Project feature.
+ */
+
+include_once('om_project.features.inc');
+
+
+/**
+ * Implementation of hook_permission().
+ */
+
+function om_project_permission() {
+  return array(
+    'administer project' => array(
+      'title' => t('Administer OM Project'), 
+      'description' => t('Administer OMP functionality for project interface.'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+
+function om_project_menu() {
+  
+  $items = array();
+  
+  // Help section.
+  if (module_exists('advanced_help')) {
+    
+    $items['admin/advanced_help/openmedia/project'] = array(
+      'title' => t('OM Project Help'),
+      'page callback' => 'om_project_index_page',
+      'access arguments' => array('view advanced help index'),
+      'type' => MENU_NORMAL_ITEM
+    );
+    
+  }
+  
+  $items['node/%node/project-manage-stats'] = array(
+    'title' => t('Stats'),
+    'description' => t('Takes node object and returns list of Members'),
+    'page callback' => 'om_project_stats',
+    'page arguments' => array(1),
+    'access callback' => 'om_project_manage_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
+  );
+  
+  if (!module_exists('om_show')) {
+    
+    $items['node/%node/project-manage'] = array(
+      'title' => t('Manage Shows'),
+      'description' => t('Takes node object and returns options for Project Admins'),
+      'page callback' => 'om_project_manage',
+      'access callback' => 'om_project_manage_access',
+      'access arguments' => array(1),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 12,
+    );
+    
+    $items['project/%node/project-manage/metadata_reset'] = array(
+      'title' => t('Metadata Reset'),
+      'description' => t('Takes node ID and resets all shows to the Project metadata settings'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('_om_project_sync_show_metadata'),
+      'access callback' => 'om_project_manage_access',
+      'access arguments' => array(1),
+      'type' => MENU_CALLBACK,
+    );
+    
+    $items['project/%node/project-manage/om_project_sync_all_shows_to_project_owner'] = array(
+     'title' => t('Sync All Shows To Project Owner'),
+     'description' => t('Takes user object and returns Projects'),
+     'page callback' => 'drupal_get_form',
+     'page arguments' => array('_om_project_sync_all_shows_to_project_owner'),
+     'access callback' => 'om_project_manage_access',
+     'access arguments' => array(1),
+     'type' => MENU_CALLBACK,
+     'weight' => 7,
+    );
+    
+  } // if om_show
+  
+ return $items;
+}
+
+/**
+ * Advanced help helper function.
+ * @returns themed help page.
+ */
+
+function om_project_index_page() {
+  $output = theme('advanced_help_topic',
+    array(
+      'module' => 'om_project',
+      'topic' => 'about-om-project',
+    )
+  );
+  $output .= '&nbsp;' . t('Help resources for Open Media Project.');
+  return $output;
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+
+function om_project_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'om_project_node_form'  && module_exists('advanced_help')) {
+    
+    $output = '&nbsp;' . t('What does locally produced mean?') ;
+    
+    $output .= theme('advanced_help_topic', 
+      array(
+        'module' => 'om_project',
+        'topic' => 'locally-produced',
+      )
+    );
+    $form['field_om_locally_produced']['und']['#description'] = $output;
+  }
+}
+
+/**
+  * Access check for om_project -- is user owner of node or system admin?
+  * @param $nid node id of current project
+  * @return boolean
+  */
+
+function om_project_manage_access($node) {
+  if ($node->type == 'om_project') {
+    global $user;
+    if ($user->uid == $node->uid || user_access('administer project')) {
+      return TRUE;
+    } 
+  }
+}
+
+/**
+ * Create renderable array for project manage page.
+ * @returns $render renderable array of links.
+ */
+
+function om_project_manage() {
+  
+  $nid = arg(1);
+  
+  $render = array(
+    '#prefix' => '<ul>',
+    // #REQUIRES om_show and OPS
+    t('Show Statuses')  => array(
+      '#prefix' => '<li>',
+      '#markup' => l('Check the Status of Shows in this Project', 'shows/status/project/' . $nid),
+      '#suffix' => '</li>',
+    ),
+    t('Add User')  => array(
+      '#prefix' => '<li>',
+      '#markup' => l('Add Users to Project', 'node/' . $nid . '/group'),
+      '#suffix' => '</li>',
+    ),
+    t('Sync Metadata')  => array(
+      '#prefix' => '<li>',
+      '#markup' => l('Push Metadata to Shows', 'project/' . $nid . '/project-manage/metadata_reset'),
+      '#suffix' => '</li>',
+    ),
+    t('Sync Shows to Project Owner')  => array(
+      '#prefix' => '<li>',
+      '#markup' => l('Sync All Shows to Project Owner', 'project/' . $nid . '/project-manage/om_project_sync_all_shows_to_project_owner'),
+      '#suffix' => '</li>',
+    ),
+    '#suffix' => '</ul>',
+  );
+  return $render;
+}
+
+/**
+ * Helper function builds confirmation form for om_project_sync_show_metadata.
+ * @returns $form array.
+ */
+
+function _om_project_sync_show_metadata() {
+  $nid = arg(1);
+  // Add Confirm node 
+  $form = array();
+  $message = t('Are you sure you want to push this project\'s metadata to all related shows?');
+  $description = t('The following action is irreversible.');
+  $form = confirm_form($form, $message,'node/' . $nid . '/project-manage', $description, $yes = NULL, $no = NULL, $name = 'confirm');
+  $form['#submit'][] = 'om_project_sync_show_metadata';
+  return $form;
+}
+
+/**
+ * Syncs all related show nodes metadata to the projects.
+ */
+
+function om_project_sync_show_metadata($form, $form_state) {
+  
+  $nid = arg(1);
+  
+  $project = node_load($nid);
+  
+  $children = db_select('field_data_field_om_show_projects', 'projects');
+  $children->fields('projects', array('entity_id'));
+  $children->condition('field_om_show_projects_nid', $nid);
+  $result = $children->execute();
+  
+  $meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language');
+  
+  foreach($project AS $key => $object) {
+    if (in_array($key, $meta_entities)) {
+      $project_meta[$key] = $object;
+    }
+  }
+  
+  while ($child = $result->fetchAssoc()) {
+    $child = node_load($child['entity_id']);
+    $child = array_merge((array)$child, $project_meta);
+    node_save((object)$child);
+  }
+  
+  drupal_set_message('Metadata has been pushed to this project\'s shows.');
+  drupal_goto('node/' . $nid . '/project-manage');
+}
+
+/**
+ * Helper function builds confirmation form for om_project_sync_all_shows_to_project_owner.
+ * @returns $form array.
+ */
+
+function _om_project_sync_all_shows_to_project_owner () {
+  $nid = arg(1);
+  // Add Confirm node 
+  $form = array();
+  $message = t('Are you sure you want to sync the ownership of all shows with this project?');
+  $description = t('The following action is irreversible.');
+  $form = confirm_form($form, $message,'node/' . $nid . '/project-manage', $description, $yes = NULL, $no = NULL, $name = 'confirm');
+  $form['#submit'][] = 'om_project_sync_all_shows_to_project_owner';
+  return $form;
+}
+
+/**
+  * Custom function to sync all show nodes ot project ownership. Acess callback om_project_manage_access.
+  */
+
+function om_project_sync_all_shows_to_project_owner () {
+  
+  $nid = arg(1); // get Project nid from URL
+  
+  $project = node_load($nid);
+  
+  $children = db_select('field_data_field_om_show_projects', 'projects');
+  $children->fields('projects', array('entity_id'));
+  $children->condition('field_om_show_projects_nid', $nid);
+  $result = $children->execute();
+  
+  while ($child = $result->fetchAssoc()) {
+    $child = node_load($child['entity_id']);
+    $child->uid = $project->uid;
+    node_save($child);
+  }
+  
+  drupal_set_message('Show ownership has been synced to the owner of this project.');
+  drupal_goto('node/' . $nid . '/project-manage');
+}
+
+/**
+ * Create a renderable array for the project status page.
+ * @returns renderable array
+ */
+
+function om_project_stats() {
+  
+  $nid = arg(1);
+  
+  $airing_section = array();
+  $show_section = array();
+  $merci_section = array();
+  $render = array();
+  
+  if (module_exists('om_airing')) {
+    $airing_section = array(
+      t('Project Airings Header')  => array(
+        '#prefix' => '<h2>',
+        '#markup' => t('Project Airings'),
+        '#suffix' => '</h2>',
+      ),
+      t('Project Airings')  => array(
+        '#prefix' => '<div>',
+        '#markup' => t('This section is currently under construction.'),
+        '#suffix' => '</div>',
+      )
+    );
+  }
+  
+  if (module_exists('om_show')) {
+    $show_section = array(
+      t('Show Stats Header')  => array(
+        '#prefix' => '<h2>',
+        '#markup' => t('Show Stats'),
+        '#suffix' => '</h2>',
+      ),
+      t('Show Statuses')  => array(
+        '#prefix' => '<div>',
+        '#markup' => t('This section is currently under construction.'),
+        '#suffix' => '</div>',
+      )
+    );
+  }
+  
+  if (module_exists('merci')) {
+    $merci_section = array(
+      t('Project Reservations Header')  => array(
+        '#prefix' => '<h2>',
+        '#markup' => t('Project Reservations'),
+        '#suffix' => '</h2>',
+      ),
+      t('Project Reservations')  => array(
+        '#prefix' => '<div>',
+        '#markup' => t('The 7.x branch of MERCI does not currently support project-based reservations.'),
+        '#suffix' => '</div>',
+      ),
+    );
+  }
+  
+  $render = array_merge($airing_section, $show_section, $merci_section);
+  
+  if (empty($render)) {
+    $links = array(
+      '!airings' => l('OM Airing', 'http://drupal.org/project/om_airing'),
+      '!show' => l('OM Show', 'http://drupal.org/project/om_show'),
+      '!merci' => l('MERCI', 'http://drupal.org/project/merci'),
+    );
+    $render = array(
+      t('Stats Empty Header')  => array(
+        '#prefix' => '<h2>',
+        '#markup' => t('Project Stats'),
+        '#suffix' => '</h2>',
+      ),
+      t('Stats Empty')  => array(
+        '#prefix' => '<div>',
+        '#markup' => t('This tab contains reports from !airings, !show, and !merci. You currently don\'t have any of these modules installed/enabled.', $links),
+        '#suffix' => '</div>',
+      ),
+    );
+  }
+  return $render;
+}

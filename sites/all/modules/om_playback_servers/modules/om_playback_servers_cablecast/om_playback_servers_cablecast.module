@@ -1,0 +1,189 @@
+<?php
+
+/**
+ * Implements hook_om_playback_servers_om_playback_server
+ */
+function om_playback_servers_cablecast_om_playback_servers_om_playback_server() {
+  return array(
+    'cablecast' => array(
+      'title' => t('Cablecast'),
+      'description' => t('Provides API support for Tightrope Cablecasts.'),
+      'type' => 'om_playback_server',
+      'path' => drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_server',
+      'file' => 'cablecast_playback_server.inc',
+      'playback_server' => array(
+        'class' => 'cablecastPlaybackServerController',
+        'parent' => 'playbackServerController',
+      ),
+    )
+  );
+}
+
+/**
+ * Implements hook_permission
+ */
+function om_playback_servers_cablecast_permission() {
+  return array(
+    'use cablecast media browser' => array(
+      'title' => t('Use Cablecast Media Browser'),
+      'description' => t('Select orphaned files from your Cablecast, create show metadata and store them on a node.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_stream_wrappers().
+ */
+function om_playback_servers_cablecast_stream_wrappers() {
+  return array(
+    'cablecast' => array(
+      'name' => t('Cablecast Content'),
+      'class' => 'MediaCablecastStreamWrapper',
+      'description' => t('Content found on your Cablecast.'),
+      'type' => STREAM_WRAPPERS_READ_VISIBLE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_presave()
+ */
+function om_playback_servers_cablecast_node_presave($node) {
+  $fields = field_info_instances('node', $node->type);
+  foreach($fields AS $field_name => $field) {
+    if ($field['widget'] && $field['widget']['type'] == 'media_generic' && !empty($node->{$field_name}['und'][0]['fid'])) {
+      $file = file_load($node->{$field_name}['und'][0]['fid']);
+      $scheme = file_uri_scheme($file->uri);
+      if ($scheme == 'cablecast') {
+        $wrapper = file_stream_wrapper_get_instance_by_uri($file->uri);
+        $file = $wrapper::updateCablecastFileResource($file, $node);
+        if (property_exists($node, 'field_om_show_id')) {
+          $uri = str_replace('cablecast://', '', $file->uri);
+          $parts = explode('/', $uri);
+          if (is_numeric($parts[1])) {
+            $node->field_om_show_id['und'][0]['value'] = $parts[1];
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Set up a media browser plugin for Cablecast media
+ */
+
+/**
+ * Implements hook_media_browser_plugin_info
+ */
+function om_playback_servers_cablecast_media_browser_plugin_info() {
+  $plugins = array();
+  $plugins['om_playback_server_cablecast_media_browser'] = array(
+    'title' => t('Cablecast'),
+    'class' => 'CablecastMediaBrowser',
+    // Support for Media 1.x browser plugin API.
+    '#title' => t('Cablecast')
+  );
+  return $plugins;
+}
+
+/**
+ * Implements hook_media_browser_plugin_view().
+ */
+function om_playback_servers_cablecast_media_browser_plugin_view($plugin_name, $params) {
+  require_once(drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_servers_cablecast_media_browser_form.inc');
+  if ($plugin_name == 'om_playback_server_cablecast_media_browser') {
+    $params += array('types' => array());
+    $form = drupal_get_form('om_playback_servers_cablecast_media_browser_form', $params);
+    return array(
+      '#title' => t('Playback Server URL'),
+      'form' => array($form),
+    );
+  }
+}
+
+if (module_exists('media')) {
+  $media_path = drupal_get_path('module', 'media');
+  if (!class_exists('MediaReadOnlyStreamWrapper')) {
+    require_once($media_path . '/includes/MediaReadOnlyStreamWrapper.inc');
+  }
+  /**
+   * Very small stream wrapper for Cablecast Content.
+   */
+  class MediaCablecastStreamWrapper extends MediaReadOnlyStreamWrapper {
+    function getTarget($f) {
+      return FALSE;
+    }
+  
+    static function getMimeType($uri, $mapping = NULL) {
+      return 'video/cablecast';
+    }
+    /**
+     * Create & alter final uri if not present.
+     * Check to see if filename has changed on the cc.
+     * Set IA field.
+     */
+    static function updateCablecastFileResource($file, $entity) {
+      // We will always expect the patter cablecast://int channel number/string filename
+      // or cablecast://int channel number/int showId
+      $uri = str_replace('cablecast://', '', $file->uri);
+      $parts = explode('/', $uri);
+      if (is_numeric($parts[0])) {
+        $pbs = om_playback_servers_get_pbs_by_term($parts[0]);
+        $pbs = array_shift($pbs);
+        $controller = om_playback_servers_entity_get_controller($pbs);
+        if (isset($parts[1]) && is_numeric($parts[1])) {
+          // Presume a show id
+          // Update filename in stream wrapper?
+          // Not sure if we would want to do that as it adds a lot of extra time to save.
+          return $file;
+        }
+        else if (isset($parts[1]) && !is_numeric($parts[1])) {
+          // Presume a filename
+          $show = menu_get_object();
+          $show->title = $entity->title;
+          $show->field_om_show_duration = $entity->field_om_show_duration;
+          try {
+            $metadata = $controller->create_metadata($pbs, $show);
+            if (isset($metadata['ShowID'])) {
+              $file->uri = 'cablecast://' . $parts[0] . '/' . $metadata['ShowID'];
+              // Need to do PUT to cc here: we should also save the uri to the file as filename
+              // pattern will be showid-reelid-filename.mpg
+              return file_save($file);
+            }
+          }
+          catch (Exception $e) {
+            form_set_error('url', $e->getMessage());
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  if (!class_exists('MediaBrowserPlugin')) {
+    require_once($media_path . '/includes/MediaBrowserPluginInterface.inc');
+    require_once($media_path . '/includes/MediaBrowserPlugin.inc');
+  }
+
+  /**
+   * Media browser plugin for remote files.
+   */
+  class CablecastMediaBrowser extends MediaBrowserPlugin {
+    /**
+     * Implements MediaBrowserPluginInterface::access().
+     */
+    public function access($account = NULL) {
+      return user_access('administer files', $account) || user_access('use cablecast media browser', $account);
+    }
+  
+    /**
+     * Implements MediaBrowserPlugin::view().
+     */
+    public function view() {
+      require_once(drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_servers_cablecast_media_browser_form.inc');
+      $build['form'] = drupal_get_form('om_playback_servers_cablecast_media_browser_form', $this->params);
+      return $build;
+    }
+  }
+}

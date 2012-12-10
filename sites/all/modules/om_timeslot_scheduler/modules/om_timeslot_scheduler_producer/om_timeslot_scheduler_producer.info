@@ -1,0 +1,5 @@
+name = Open Media Timeslot Scheduler Producer
+description = Provides producer centered centered scheduling.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "om_timeslot_scheduler"

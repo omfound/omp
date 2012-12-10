@@ -1,0 +1,82 @@
+<?php
+function om_playback_servers_schema() {
+  $schema['om_playback_servers'] = array(
+    'description' => 'Stores information on individual playback server entities',
+    'fields' => array(
+      'pbsid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique pbs entity id',
+      ),
+      'name' => array(
+        'description' => 'The name of the pbs',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'ompbs_type' => array(
+        'description' => 'Type of pbs',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'uri' => array(
+        'description' => 'URL or IP address of the server',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'location_id' => array(
+        'description' => 'Location id for server.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'mount' => array(
+        'description' => 'Mount path to servers hot folder',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'output' => array(
+        'description' => 'Output for multiplexed servers',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'channel' => array(
+        'description' => 'Term id of the channel.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'user' => array(
+        'description' => 'Server username',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'password' => array(
+        'description' => 'Server password',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'indexes' => array(
+      'pbsid' => array('pbsid'),
+    ),
+    'primary key' => array('pbsid'),
+  );
+  
+return $schema;
+}
