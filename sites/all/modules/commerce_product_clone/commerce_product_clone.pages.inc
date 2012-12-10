@@ -55,13 +55,11 @@ function commerce_product_clone_cloneform($original_product) {
       $product->uid = $user->uid;
       $product->created = NULL;
       $product->sku = NULL;
-      //HACK: BRIAN
       //$product->title = t('Clone of !title', array('!title' => $product->title));
+      //HACK: BRIAN
       $product->title = t('!title', array('!title' => $product->title));
-      $product->field_class_source = array('und' => array($original_product->product_id));
+      $product->field_class_source = array('und' => array(array('value' => $original_product->product_id)));
       //END HACK: BRIAN
-      dsm('product:');
-      dsm($product);
 
       // Set the page title.
       drupal_set_title($product->title);
