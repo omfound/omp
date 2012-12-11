@@ -103,17 +103,6 @@ function commerce_reservations_views_default_views() {
     'line_item_type' => 'reservable_product',
   );
   $handler->display->display_options['fields']['field_crp_product_reference']['delta_offset'] = '0';
-  /* Field: Content: Product Image */
-  $handler->display->display_options['fields']['field_image_1']['id'] = 'field_image_1';
-  $handler->display->display_options['fields']['field_image_1']['table'] = 'field_data_field_image';
-  $handler->display->display_options['fields']['field_image_1']['field'] = 'field_image';
-  $handler->display->display_options['fields']['field_image_1']['label'] = '';
-  $handler->display->display_options['fields']['field_image_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_image_1']['click_sort_column'] = 'fid';
-  $handler->display->display_options['fields']['field_image_1']['settings'] = array(
-    'image_style' => '155x116',
-    'image_link' => '',
-  );
   /* Field: Commerce Product: Commercial Cost */
   $handler->display->display_options['fields']['field_commercial_cost']['id'] = 'field_commercial_cost';
   $handler->display->display_options['fields']['field_commercial_cost']['table'] = 'field_data_field_commercial_cost';
