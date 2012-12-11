@@ -201,9 +201,64 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
  */
 function om_membership_preprocess_om_membership_renewal_table(&$variables) {
   global $user;
-  $user_plan = om_membership_get_user_membership_products($user);
-  $user_plan = array_shift($user_plan);
-  if ($variables['plans'][count($variables['plans']) - 1]->product_id != $user_plan->product_id) {
-    $plan_metadata = entity_metadata_wrapper('commerce_product', $user_plan);
+  $user_plans = om_membership_get_user_membership_orders($user, FALSE);
+  if (!empty($user_plans)) {
+    // See if a renewal is needed.
+    // Send features to template.
+    foreach ($user_plans AS $user_plan) {
+      $products = om_membership_order_contains_membership($user_plan);
+      if (!empty($products)) {
+        $product = $products[0];
+        $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+        $exp = $user_plan->created + ($product_metadata->field_duration->value() * 31536000);
+        $update_period = $product_metadata->field_update_period->value() * 86400;
+        $now = time();
+        // This logic is messed up! @TODO Start Here.
+        if ($now >= $exp - $update_period) {
+          // User is in renewal time.
+          $status = 'renew';
+          $all_features = om_membership_get_plan_features();
+          $current_features = $product_metadata->field_membership_features->value();
+          $unique_features = array_udiff($all_features, $current_features, '_om_membership_compare_vocs');
+          if (!empty($unique_features)) {
+            $variables['features'] = '<ul>';
+              foreach ($unique_features AS $feature) {
+                $variables['features'] .= '<li>' . $feature->name . '</li>';
+              }
+            $variables['features'] .= '</ul>';
+          }
+        }
+        else if ($user_plan->created > $now) {
+          $status = 'prepurchased';
+        }
+        else if ($now >= $exp) {
+          $status = 'expired';
+        }
+        else if ($now >= $user_plan->created && $now <= $exp) {
+          $status = 'current';
+        }
+      }
+    }
+  }
+  else {
+    $status = 'none';
+  }
+  $variables['membership_status'] = $status;
+  switch ($status) {
+    case 'current':
+      $upgrade = l('upgrade', 'membership/plans');
+      $variables['message'] = t('Your membership is not set to expire soon. However, you can !upgrade at any time.', array('!upgrade' => $upgrade));
+      break;
+    case 'prepurchased':
+      $variables['message'] = t('Your memberships has already been renewed.');
+      break;
+    case 'none':
+      $sign_up = l('Sign up', 'membership/plans');
+      $variables['message'] = t('Your membership has already expired. !signup for a new one now.', array('!signup' => $sign_up));
+      break;
+    case 'none':
+      $sign_up = l('Sign Up Now!', 'membership/plans');
+      $variables['message'] = t('You don\'t seem to have an active membership to renew. !signup', array('!signup' => $sign_up));
+      break;
   }
 }

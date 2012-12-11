@@ -214,6 +214,20 @@ function om_membership_get_plan_features() {
 }
 
 /**
+ * array_udiff helper function to compare two vocabularies.
+ */
+function _om_membership_compare_vocs($a, $b) {
+  if (is_object($a) && is_object($b)) {
+    if ($a->tid == $b->tid) {
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
+}
+
+/**
  * Get a list of a users unique membership products.
  *  @param user StdClass
  *    Standard instance of user.
