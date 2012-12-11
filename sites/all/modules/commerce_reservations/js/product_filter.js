@@ -6,6 +6,7 @@
 	      basePath = '';
       }
 	    var item = $('#block-views-calendar-product-view-block div.views-row');
+	    $('.commerce-add-to-cart').hide();
 	    item.mousedown(function(){
 	      item.attr('id', 'selected-product');
 	      var nid = $(this).find('.nid .field-content').text();
@@ -52,13 +53,14 @@
               });
           }
         });
+        $('.fullcalendar .fc-content').unbind().mouseup(function(){
+          view = $('.fullcalendar').fullCalendar('getView');
+          if (view.name == 'agendaWeek'){
+            quantity = $('#selected-product select#edit-quantity').val();
+	          $('#selected-product .commerce-add-to-cart').show();
+          }
+        });
 	    });
-	    $('.fullcalendar .fc-content').unbind().mouseup(function(){
-        view = $('.fullcalendar').fullCalendar('getView');
-        if (view.name == 'agendaWeek'){
-	        console.log("!");
-        }
-      });
     }
   }
 }(jQuery));
