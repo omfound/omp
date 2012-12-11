@@ -213,8 +213,7 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
         $exp = $user_plan->created + ($product_metadata->field_duration->value() * 31536000);
         $update_period = $product_metadata->field_update_period->value() * 86400;
         $now = time();
-        // This logic is messed up! @TODO Start Here.
-        if ($now >= $exp - $update_period) {
+        if ($now >= ($exp - $update_period) && $now <= $exp) {
           // User is in renewal time.
           $status = 'renew';
           $all_features = om_membership_get_plan_features();
@@ -252,7 +251,7 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
     case 'prepurchased':
       $variables['message'] = t('Your memberships has already been renewed.');
       break;
-    case 'none':
+    case 'expired':
       $sign_up = l('Sign up', 'membership/plans');
       $variables['message'] = t('Your membership has already expired. !signup for a new one now.', array('!signup' => $sign_up));
       break;
