@@ -33,19 +33,6 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
 function commerce_registration_form_state($form) {
   $form_id = $form['#form_id'];
   $form_state = array();
-  // With $_GET, these forms are always submitted if requested.
-  if ($form_state['method'] == 'get' && !empty($form_state['always_process'])) {
-    if (!isset($form_state['input']['form_build_id'])) {
-      $form_state['input']['form_build_id'] = $form['#build_id'];
-    }
-    if (!isset($form_state['input']['form_id'])) {
-      $form_state['input']['form_id'] = $form_id;
-    }
-    if (!isset($form_state['input']['form_token']) && isset($form['#token'])) {
-      $form_state['input']['form_token'] = drupal_get_token($form['#token']);
-    }
-  }
-
   $form = form_builder($form_id, $form, $form_state);
   return $form_state;
 }
