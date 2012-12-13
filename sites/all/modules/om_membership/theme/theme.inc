@@ -210,12 +210,14 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
       if (!empty($products)) {
         $product = $products[0];
         $product_metadata = entity_metadata_wrapper('commerce_product', $product);
-        $exp = $user_plan->created + ($product_metadata->field_duration->value() * 31536000);
+        $exp = $user_plan->created + ($product_metadata->field_duration->value() * 31688800);
         $update_period = $product_metadata->field_update_period->value() * 86400;
         $now = time();
         if ($now >= ($exp - $update_period) && $now <= $exp) {
           // User is in renewal time.
           $status = 'renew';
+          $variables['renewal_link'] = l('Renew Now!', 'membership/add/' . $product->product_id);
+          $variables['update_link'] = l('Upgrade Now!', 'membership/plans');
           $all_features = om_membership_get_plan_features();
           $current_features = $product_metadata->field_membership_features->value();
           $unique_features = array_udiff($all_features, $current_features, '_om_membership_compare_vocs');

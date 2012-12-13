@@ -2,12 +2,12 @@
 <div id="main-options">
   <div id="current-plan">
     <p>Your membership is about to expire. Continue enjoying all the benefits you receive from your membership in the future.</p>
-    <?php print l('Renew Now!', 'membership/renew-same-level'); ?>
+    <?php print $renewal_link; ?>
   </div>
   <div id="upgrade-plan">
     <?php if (!empty($features)): ?>
     <p>Upgrade your membership today and enjoy all these added benefits:</p>
-      <?php print $features; ?>
+      <?php print $update_link; ?>
     <?php endif; ?>
     <?php print l('Upgrade Now!', 'membership/plans'); ?>
   </div>
