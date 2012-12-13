@@ -144,6 +144,9 @@ function om_membership_renewal_page() {
  */
 function om_membership_add_membership_and_transfer($pid) {
   global $user;
+  // User's memberships
+  $user_memberships = om_membership_get_user_membership_products($user);
+  $user_memberships = array_shift($user_memberships);
   // Check to see if there is an existing membership in the cart.
   $existing_memberships = om_membership_get_currently_selected_membership($user);
   if (!empty($existing_memberships)) {
@@ -161,8 +164,10 @@ function om_membership_add_membership_and_transfer($pid) {
       }
     }
   }
-  // Add membershipt to cart.
-  commerce_cart_product_add_by_id($pid, 1);
+  if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
+    // Add membershipt to cart.
+    commerce_cart_product_add_by_id($pid, 1);
+  }
   drupal_goto('membership/signup');
 }
 
@@ -279,7 +284,7 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
             // We will only accept 1 membership per order.
             $product = $membership_products[0];
             $product_metadata = entity_metadata_wrapper('commerce_product', $product);
-            $exp = $order->created + ($product_metadata->field_duration->value() * 31536000);
+            $exp = $order->created + ($product_metadata->field_duration->value() * 31688800);
             $now = time();
             if ($now > $order->created && $now < $exp) {
               $memberships[] = $order;
@@ -340,7 +345,7 @@ function om_membership_determine_membership_dates($product) {
   $product_metadata = entity_metadata_wrapper('commerce_product', $product);
   $duration = $product_metadata->field_duration->value();
   $start = time();
-  $year_seconds = 31536000;
+  $year_seconds = 31688800;
   if ($duration == 0) {
     $end = $start + (250 * $year_seconds);
   }
@@ -391,7 +396,6 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('roles.rid', $rid, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
-      dsm($row);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
       if (!empty($memberships)) {
         foreach($memberships AS $membership) {
@@ -399,7 +403,7 @@ function om_membership_adjust_existing_memberships() {
             if (!empty($membership_products)) {
             $product = $membership_products[0];
             $product_metadata = entity_metadata_wrapper('commerce_product', $product);
-            $exp = $membership->created + ($product_metadata->field_duration->value() * 31536000);
+            $exp = $membership->created + ($product_metadata->field_duration->value() * 31688800);
             $now = time();
             if ($now > $membership->created && $now < $exp) {
               $user = user_load($row->uid);
@@ -558,7 +562,7 @@ function om_membership_grant_user_role($commerce_order) {
         $existing_product = $membership_products[0];
         $product_metadata = entity_metadata_wrapper('commerce_product', $existing_product);
         $update_period = $product_metadata->field_update_period->value() * 86400;
-        $exp = $existing_memberships[$last_membership]->created + ($product_metadata->field_duration->value() * 31536000);
+        $exp = $existing_memberships[$last_membership]->created + ($product_metadata->field_duration->value() * 31688800);
         if (time() + $update_period >= $exp) {
           // This is the Update portion of the code.
           // Here we want to find the membership furthest into the future && chain this one onto that one.
