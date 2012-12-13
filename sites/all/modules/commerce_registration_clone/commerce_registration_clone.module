@@ -3,3 +3,11 @@
 function commerce_registration_clone_entity_insert($entity, $type) {
   dsm($entity);
 }
+
+function commerce_registration_create_registration($display_nid) {
+  require_once(drupal_get_path('module', 'commerce_registration').'/includes/commerce_registration.forms.inc');
+  $node = node_load($display_nid);
+  $type = 'node'; 
+  $form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $node);  
+  dsm($form);
+}
