@@ -15,10 +15,35 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
   $destination_commerce_code = 'commerce_product-'.$destination_product_id;
 
   $source_form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $source_display_node);  
-  $destination_form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $destination_display_node);
-  $settings = $source_form['settings'][$source_commerce_code]; 
+  $source_form_state = commerce_registration_form_state($source_form);
+  
+  //$destination_form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $destination_display_node);
+  //$settings = $source_form['settings'][$source_commerce_code]; 
   //$destination_form['settings'][$destination_commerce_code] = $source_form['settings'][$source_commerce_code];
+ 
+  //$form_state['values'] = $stuff;
+  //$form_state['build_info']['args'] = array(&$destination_display_node);
+  //drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
   
-  
-  dsm($settings);
+  dsm($source_form_state);
+}
+
+function commerce_registration_form_state($form) {
+  $form_id = $form['#form_id'];
+  $form_state = array();
+  // With $_GET, these forms are always submitted if requested.
+  if ($form_state['method'] == 'get' && !empty($form_state['always_process'])) {
+    if (!isset($form_state['input']['form_build_id'])) {
+      $form_state['input']['form_build_id'] = $form['#build_id'];
+    }
+    if (!isset($form_state['input']['form_id'])) {
+      $form_state['input']['form_id'] = $form_id;
+    }
+    if (!isset($form_state['input']['form_token']) && isset($form['#token'])) {
+      $form_state['input']['form_token'] = drupal_get_token($form['#token']);
+    }
+  }
+
+  $form = form_builder($form_id, $form, $form_state);
+  return $form_state;
 }
