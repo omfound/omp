@@ -131,6 +131,8 @@ function commerce_registration_node_registrations_settings_form_validate($form, 
  * Registration settings form submission for product display nodes.
  */
 function commerce_registration_node_registrations_settings_form_submit($form, &$form_state) {
+  //HACK: DEBUG BRIAN
+  dsm($form_state);
   foreach ($form_state['values']['settings'] as $id => $settings) {
     list($type, $id) = explode('-', $id);
     $temp_form_state = array(

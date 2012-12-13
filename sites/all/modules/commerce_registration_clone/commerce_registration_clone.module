@@ -4,10 +4,21 @@ function commerce_registration_clone_entity_insert($entity, $type) {
   dsm($entity);
 }
 
-function commerce_registration_create_registration($display_nid) {
+function commerce_registration_clone_registration($source_display_nid, $destination_display_nid) {
   require_once(drupal_get_path('module', 'commerce_registration').'/includes/commerce_registration.forms.inc');
-  $node = node_load($display_nid);
   $type = 'node'; 
-  $form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $node);  
-  dsm($form);
+  $source_display_node = node_load($source_display_nid);
+  $source_product_id = $source_display_node->field_class_display_class[$source_display_node->language][0]['product_id'];
+  $source_commerce_code = 'commerce_product-'.$source_product_id;
+  $destination_display_node = node_load($destination_display_nid);
+  $destination_product_id = $destination_display_node->field_class_display_class[$destination_display_node->language][0]['product_id'];
+  $destination_commerce_code = 'commerce_product-'.$destination_product_id;
+
+  $source_form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $source_display_node);  
+  $destination_form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $destination_display_node);
+  $settings = $source_form['settings'][$source_commerce_code]; 
+  //$destination_form['settings'][$destination_commerce_code] = $source_form['settings'][$source_commerce_code];
+  
+  
+  dsm($settings);
 }
