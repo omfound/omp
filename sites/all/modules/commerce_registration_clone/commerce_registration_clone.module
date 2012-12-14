@@ -19,7 +19,7 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
   $source_form_state_values = commerce_registration_form_state_values('commerce_registration_node_registrations_settings_form', 'node', $source_display_node);
   dsm($source_form_state_values);
   
-  $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings']['$source_commerce_code'];
+  $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings'][$source_commerce_code];
   //$form_state['build_info']['args'] = array(&$destination_display_node);
   //drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
   dsm('form state'); 
