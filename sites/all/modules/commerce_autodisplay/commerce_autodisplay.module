@@ -10,8 +10,24 @@ function commerce_autodisplay_menu() {
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['node/%node/product-delete'] = array(
+    'title' => 'Delete',
+    'description' => 'Delete products associated with nodes',
+    'access callback' => 'commerce_autodisplay_delete_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
 
   return $items;
+}
+
+function commerce_autodisplay_delete_tab_access($node) {
+  $product = commerce_autodisplay_node_product($node); 
+  if($product) {
+    return true;
+  }else{
+    return false;
+  }
 }
 
 function commerce_autodisplay_configuration_form($form, &$form_state) {
@@ -150,21 +166,30 @@ function commerce_autodisplay_is_enabled($product_type) {
  */
 function commerce_autodisplay_preprocess_page(&$vars) {
   $node = menu_get_object();
+  $product = commerce_autodisplay_node_product($node);
+  if($product) {
+    foreach ($vars['tabs']['#primary'] as $key => $info) {
+      if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
+        $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product->product_id.'/edit';
+        $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
+      }
+    }
+  }
+}
+
+function commerce_autodisplay_node_product($node) {
   $display_types = commerce_autodisplay_display_bundles();
   if(!empty($node->type) && !empty($display_types)) {
     if ($field_name = $display_types[$node->type]) {
       if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
         if ($product = commerce_product_load($product_id)) {
           if (commerce_autodisplay_is_enabled($product->type)) {
-            foreach ($vars['tabs']['#primary'] as $key => $info) {
-              if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
-                $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product_id.'/edit';
-                $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
-              }
-            }
+            return $product;
           }
-        } 
+        }
       }
     }
   }
+
+  return false;
 }
