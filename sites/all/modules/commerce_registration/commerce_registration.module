@@ -201,6 +201,7 @@ function commerce_registration_registration_page($type, $node) {
 /**
  * Implements hook_commerce_checkout_page_info().
  */
+/**
 function commerce_registration_commerce_checkout_page_info() {
   $pages = array();
   $pages['registration'] = array(
@@ -211,14 +212,13 @@ function commerce_registration_commerce_checkout_page_info() {
     'buttons' => TRUE,
   );
   return $pages;
-}
+}**/
 
 /**
  * Implements hook_commerce_checkout_pane_info().
  */
 function commerce_registration_commerce_checkout_pane_info() {
   $panes = array();
-  /**
   $panes['registration_information'] = array(
     'title' => t('Registration Information'),
     'base' => 'commerce_registration_information',
@@ -227,7 +227,7 @@ function commerce_registration_commerce_checkout_pane_info() {
     'weight' => -50,
     'review' => TRUE,
     'file' => 'includes/commerce_registration.checkout_pane.inc',
-  );**/
+  );
   return $panes;
 }
 
