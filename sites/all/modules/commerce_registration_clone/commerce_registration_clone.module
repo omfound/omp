@@ -36,8 +36,6 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
   $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings'][$source_commerce_code];
   $form_state = commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code);
   $form_state['build_info']['args'] = array('node', &$destination_display_node);
-  dsm('this was first');
-  dsm('Updating registration with clone information');
   drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
 }
 
