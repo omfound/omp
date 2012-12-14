@@ -4,6 +4,7 @@ function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkou
   global $user;
   $cart = commerce_cart_order_load($user->uid);
   $registration_enabled = false;
+  dsm($cart);
   foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
     if(commerce_registration_product_has_registration_field($info->product_id)) {
       $registration_enabled = true;
