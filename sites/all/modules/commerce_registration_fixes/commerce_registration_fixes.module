@@ -11,10 +11,12 @@ function commerce_registration_fixes_is_registration_cart() {
   $cart = commerce_cart_order_load($user->uid);
   $registration_status = false;
 
-  foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
-    $line_item = commerce_line_item_load($info['line_item_id']); 
-    if(commerce_registration_product_has_registration_field($line_item->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
-      $registration_status = true;
+  if($cart->commerce_line_items[LANGUAGE_NONE][0]) {
+    foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
+      $line_item = commerce_line_item_load($info['line_item_id']); 
+      if(commerce_registration_product_has_registration_field($line_item->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+        $registration_status = true;
+      }
     }
   }
 
