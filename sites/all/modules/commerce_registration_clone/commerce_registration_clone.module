@@ -4,11 +4,8 @@ function commerce_registration_clone_entity_insert($entity, $type) {
   if($entity->type == 'class_display') {
     $product = commerce_product_load($entity->field_class_display_class[LANGUAGE_NONE][0]['product_id']);
     if($source_product = $product->field_class_source[LANGUAGE_NONE][0]['value']) {
-      dsm('got the source product');
       $source_display = commerce_autodisplay_entity_display_lookup($source_product);
-      dsm('Source Display: '.$source_display);
       if(is_numeric($source_display)) {
-        dsm('Cloning registration...');
         commerce_registration_clone_registration($source_display, $entity->nid);
       }
     }
@@ -36,6 +33,7 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
   $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings'][$source_commerce_code];
   $form_state = commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code);
   $form_state['build_info']['args'] = array('node', &$destination_display_node);
+  dsm($form_state);
   drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
 }
 
