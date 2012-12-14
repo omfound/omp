@@ -18,6 +18,7 @@ function commerce_autodisplay_menu() {
     'access callback' => 'commerce_autodisplay_delete_tab_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
   );
 
   return $items;
