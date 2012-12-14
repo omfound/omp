@@ -1,5 +1,8 @@
 <?php
 
+function commerce_registration_fixes_commerce_checkout_router($order, $checkout_page) {
+  
+}
 function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
   if(!commerce_registration_fixes_is_registration_cart()) {
     unset($checkout_pages['registration']);
@@ -8,9 +11,16 @@ function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkou
 
 function commerce_registration_fixes_is_registration_cart() {
   global $user;
-  $cart = commerce_cart_order_load($user->uid);
-  $registration_status = false;
 
+  //disable notices momentarily due to unresolvable issue with commerce
+  //http://drupal.org/node/1461726
+  $old_error_reporting = error_reporting(error_reporting() ^ E_NOTICE);
+  $current_error_reporting = error_reporting();
+  error_reporting(E_ERROR | E_WARNING | E_PARSE);
+  $cart = commerce_cart_order_load($user->uid);
+  error_reporting($old_error_reporting);
+
+  $registration_status = false;
   if(!empty($cart->commerce_line_items[LANGUAGE_NONE])) {
     foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
       $line_item = commerce_line_item_load($info['line_item_id']); 
