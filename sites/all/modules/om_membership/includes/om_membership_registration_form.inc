@@ -166,7 +166,9 @@ function om_membership_org_profile_form(&$form, &$form_state) {
  * Transfer to commerce cart.
  */
 function om_membership_commerce_transfer(&$form, &$form_state) {
-  drupal_goto('cart');
+  global $user;
+  $order = commerce_cart_order_load($user->uid);
+  drupal_goto('checkout/' . $order->order_id . '/checkout');
 }
 
 /**
