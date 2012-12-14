@@ -9,6 +9,8 @@ function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkou
     if(commerce_registration_product_has_registration_field($info->line_item_id)) {
       dsm('Commerce registration enabled for: '.$info->line_item_id);
       $registration_enabled = true;
+    }else{
+      dsm('Commerce registration not enabled for: '.$info->line_item_id);
     }
   }
 
