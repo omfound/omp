@@ -109,20 +109,6 @@ function om_membership_om_membership_registration_steps() {
     'form_builder' => 'om_membership_demographic_form',
     'step' => 2
   );
-  $plan = om_membership_get_currently_selected_membership($user);
-  if (!empty($plan)) {
-    $plan = array_shift($plan);
-    $plan_meta = entity_metadata_wrapper('commerce_line_item', $plan);
-    $product = $plan_meta->commerce_product->value();
-    $product_meta = entity_metadata_wrapper('commerce_product', $product);
-    if ($product_meta->field_user_type->value() == 1) {
-      $steps['manage-org-profile'] = array(
-        'label' => t('Demographic Information'),
-        'form_builder' => 'om_membership_org_profile_form',
-        'step' => 2
-      );
-    }
-  }
   $steps['checkout'] = array(
     'label' => t('Pay for your membership'),
     'form_builder' => 'om_membership_commerce_transfer',
