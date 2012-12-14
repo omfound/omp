@@ -218,6 +218,7 @@ function commerce_registration_commerce_checkout_page_info() {
  */
 function commerce_registration_commerce_checkout_pane_info() {
   $panes = array();
+  /**
   $panes['registration_information'] = array(
     'title' => t('Registration Information'),
     'base' => 'commerce_registration_information',
@@ -226,7 +227,7 @@ function commerce_registration_commerce_checkout_pane_info() {
     'weight' => -50,
     'review' => TRUE,
     'file' => 'includes/commerce_registration.checkout_pane.inc',
-  );
+  );**/
   return $panes;
 }
 
