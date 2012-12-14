@@ -113,6 +113,21 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
 }
 
 /**
+ * Implements hook_profile2_access
+ */
+function om_membership_profile2_access($op, $profile = NULL, $account = NULL) {
+  global $user;
+  if ($profile->type == 'manage_organizational_membership') {
+    if (om_membership_validate_org_admin_member($user) == TRUE) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+}
+
+/**
  * Helper to load plans and send to theme layer.
  */
 function om_membership_individual_plans_page() {
@@ -508,29 +523,13 @@ function om_membership_get_org_admin_member_users() {
  *  @returns boolean
  */
 function om_membership_validate_org_admin_member($user) {
-  $plan = om_membership_get_user_membership_products($user);
-  $users = array();
-  $query = db_select('field_data_field_membership_end', 'end');
-  $query->join('profile', 'profile', 'end.entity_id=profile.pid');
-  $query->join('commerce_order', 'c_order', 'profile.uid=c_order.uid');
-  $query->fields('c_order', array('order_id'));
-  $query->condition("field_membership_end_value", date('Y-m-d G:i:s'), '>');
-  $query->condition("profile.uid", $user->uid, '=');
-  $resource = $query->execute();
-  while($result = $resource->fetchAssoc()) {
-    $order = commerce_order_load($result['order_id']);
-    $order_metadata = entity_metadata_wrapper('commerce_order', $order);
-    $line_items = $order_metadata->commerce_line_items->value();
-    foreach ($line_items AS $line_item) {
-      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $product = $line_item_meta->commerce_product->value();
-      $product_metadata = entity_metadata_wrapper('commerce_product', $product);
-      if (!empty($product->field_user_type)) {
-        $membership_type = $product_metadata->field_user_type->value();
-        if ($membership_type == 1) {
-          return TRUE;
-        }
-      }
+  $product = om_membership_get_user_membership_products($user);
+  if (!empty($product)) {
+    $product = array_shift($product);
+    $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+    $membership_type = $product_metadata->field_user_type->value();
+    if ($membership_type == 1) {
+      return TRUE;
     }
   }
   return FALSE;
