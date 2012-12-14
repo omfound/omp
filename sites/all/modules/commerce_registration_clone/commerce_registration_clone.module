@@ -1,6 +1,7 @@
 <?php
 
 function commerce_registration_clone_module_implements_alter(&$implementations, $hook) {
+  dsm($hook);
   if($hook == 'entity_insert') {
     dsm($implementations);
   }
