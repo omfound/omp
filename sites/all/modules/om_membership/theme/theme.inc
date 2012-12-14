@@ -45,7 +45,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
           $membership_price = $membership_wrapper->commerce_price->value();
           $current_plan_price = $plan_meta_wrapper->commerce_price->value();
           if ($membership->product_id == $plan->product_id) {
-            $link = 'You Current <br/> Membership Level';
+            $link = 'Your Current <br/> Membership Level';
           }
           else if ($membership_price['amount'] >= $current_plan_price['amount']) {
             $link = '-';
