@@ -100,7 +100,7 @@ function om_membership_om_membership_registration_steps() {
   global $user;
   $steps = array();
   $steps['contact-info'] = array(
-    'label' => t('Give Us You Contact Info'),
+    'label' => t('Give Us Your Contact Info'),
     'form_builder' => 'om_membership_contact_info_form',
     'step' => 1
   );
@@ -110,7 +110,7 @@ function om_membership_om_membership_registration_steps() {
     'step' => 2
   );
   $steps['checkout'] = array(
-    'label' => t('Pay for your membership'),
+    'label' => t('Pay for Your Membership'),
     'form_builder' => 'om_membership_commerce_transfer',
     'step' => 3
   );
