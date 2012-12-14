@@ -3,7 +3,14 @@
 function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
   global $user;
   $cart = commerce_cart_order_load($user->uid);
-  dsm($cart); 
-  //commerce_registration_product_has_registration_field($product->product_id)
-  //dsm($checkout_pages);
+  $registration_enabled = false;
+  foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
+    if(commerce_registration_product_has_registration_field($product->product_id)) {
+      $registration_enabled = true;
+    }
+  }
+
+  if(!$registration_enabled) {
+    unset($checkout_pages['registration']);
+  }
 }
