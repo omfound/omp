@@ -3,7 +3,7 @@
 function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
   if(!commerce_registration_fixes_is_registration_cart()) {
     dsm('removing registration page');
-    unset($checkout_pages['registration'];
+    unset($checkout_pages['registration']);
   }
   $registration_status = commerce_registration_fixes_is_registration_cart();
 }
