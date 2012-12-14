@@ -1,5 +1,11 @@
 <?php
 
+function commerce_registration_clone_module_implements_alter(&$implementations, $hook) {
+  if($hook == 'entity_insert') {
+    dsm($implementations);
+  }
+}
+
 function commerce_registration_clone_entity_insert($entity, $type) {
   if($entity->type == 'class_display') {
     $product = commerce_product_load($entity->field_class_display_class[LANGUAGE_NONE][0]['product_id']);
