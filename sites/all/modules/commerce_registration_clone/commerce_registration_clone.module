@@ -4,10 +4,34 @@ function commerce_registration_clone_entity_insert($entity, $type) {
   dsm($entity);
 }
 
-function commerce_registration_create_registration($display_nid) {
+function commerce_registration_clone_registration($source_display_nid, $destination_display_nid) {
   require_once(drupal_get_path('module', 'commerce_registration').'/includes/commerce_registration.forms.inc');
-  $node = node_load($display_nid);
   $type = 'node'; 
-  $form = drupal_get_form('commerce_registration_node_registrations_settings_form', $type, $node);  
-  dsm($form);
+  $source_display_node = node_load($source_display_nid);
+  $source_product_id = $source_display_node->field_class_display_class[$source_display_node->language][0]['product_id'];
+  $source_commerce_code = 'commerce_product-'.$source_product_id;
+  $destination_display_node = node_load($destination_display_nid);
+  $destination_product_id = $destination_display_node->field_class_display_class[$destination_display_node->language][0]['product_id'];
+  $destination_commerce_code = 'commerce_product-'.$destination_product_id;
+
+  $source_form_state_values = commerce_registration_form_state_values('commerce_registration_node_registrations_settings_form', 'node', $source_display_node);
+  
+  $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings']['$source_commerce_code'];
+  //$form_state['build_info']['args'] = array(&$destination_display_node);
+  //drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
+  dsm('form state'); 
+  dsm($form_state);
+}
+
+function commerce_registration_form_state_values($form_id, $form_type, $display_node) {
+  $form_state = array();
+  $args = func_get_args();
+
+  // Remove $form_id from the arguments.
+  array_shift($args);
+  $form_state['build_info']['args'] = $args;
+
+  drupal_build_form($form_id, $form_state); 
+
+  return $form_state['values'];
 }
