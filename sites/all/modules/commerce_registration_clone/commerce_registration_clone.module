@@ -5,7 +5,9 @@ function commerce_registration_clone_entity_insert($entity, $type) {
     $product = commerce_product_load($entity->field_class_display_class[$entity->language][0]['product_id']);
     if($source_product = $product->field_class_source[$product->language][0]['value']) {
       $source_display = commerce_autodisplay_entity_display_lookup($source_product);
+      dsm('Source Display: '.$source_display);
       if(is_numeric($source_display)) {
+        dsm('Cloning registration...');
         commerce_registration_clone_registration($source_display, $entity->nid);
       }
     }
@@ -13,6 +15,8 @@ function commerce_registration_clone_entity_insert($entity, $type) {
 }
 
 function commerce_registration_clone_registration($source_display_nid, $destination_display_nid) {
+  dsm('source nid: '.$source_display_nid);
+  dsm('destination nid: '.$destination_display_nid);
   //make the form available
   require_once(drupal_get_path('module', 'commerce_registration').'/includes/commerce_registration.forms.inc');
 
