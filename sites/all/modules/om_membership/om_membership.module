@@ -84,6 +84,22 @@ function om_membership_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter
+ */
+function om_membership_form_commerce_checkout_form_checkout_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'commerce_checkout_form_checkout') {
+    global $user;
+    $plan = om_membership_get_currently_selected_membership($user);
+    if (!empty($plan)) {
+      if (!function_exists('om_membership_add_form_helper')) {
+        require_once(drupal_get_path('module', 'om_membership') . '/includes/om_membership_registration_form.inc');
+      }
+      om_membership_add_form_helper($form, $form_state);
+    }
+  }
+}
+
+/**
  * Implements hook_profile2_form_alter
  */
 function om_membership_form_profile2_form_alter(&$form, &$form_state) {
