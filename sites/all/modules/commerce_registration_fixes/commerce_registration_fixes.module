@@ -5,12 +5,13 @@ function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkou
   $cart = commerce_cart_order_load($user->uid);
   $registration_enabled = false;
   foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
-    if(commerce_registration_product_has_registration_field($product->product_id)) {
+    if(commerce_registration_product_has_registration_field($info->product_id)) {
       $registration_enabled = true;
     }
   }
 
   if(!$registration_enabled) {
+    dsm('removing registration checkout page');
     unset($checkout_pages['registration']);
   }
 }
