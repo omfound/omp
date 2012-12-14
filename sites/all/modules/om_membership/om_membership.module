@@ -47,6 +47,12 @@ function om_membership_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK
   );
+  // Completion Page.
+  $items['membership/complete'] = array(
+    'page callback' => 'om_membership_completion_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
   // Utility routes
   $items['membership/add'] = array(
     'page callback' => 'om_membership_add_membership_and_transfer',
@@ -79,6 +85,11 @@ function om_membership_theme($existing, $type, $theme, $path) {
       'template' => 'om_membership_renewal_table',
       'file' => 'theme.inc',
       'variables' => array('plans' => array())
+    ),
+    'om_membership_checkout_completion' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_membership_checkout_completion',
+      'file' => 'theme.inc'
     )
   );
 }
@@ -165,6 +176,13 @@ function om_membership_org_plans_page() {
 function om_membership_renewal_page() {
   $plans = om_membership_get_plans();
   return theme('om_membership_renewal_table', array('plans' => $plans));
+}
+
+/**
+ * Helper to load membership completion page
+ */
+function om_membership_completion_page() {
+  return theme('om_membership_checkout_completion');
 }
 
 /**
@@ -613,6 +631,7 @@ function om_membership_remove_user_role($user) {
   if ($user_modified == TRUE) {
    return user_save($user);
   }
+  return $user;
 }
 
 /** 

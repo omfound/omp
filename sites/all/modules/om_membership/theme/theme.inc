@@ -263,3 +263,26 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
       break;
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function om_membership_preprocess_om_membership_checkout_completion(&$variables) {
+  global $user;
+  $orders = om_membership_get_user_membership_orders($user);
+  if (!empty($orders)) {
+    if (om_membership_validate_org_admin_member($user) == TRUE) {
+      $account_link = l('account', 'user/' . $user->uid);
+      $membership_admin = l('administer your organization', 'user/' . $user->uid . '/edit/manage_organizational_membership');
+      $variables['message'] = t("Thanks! Your membership has been activated! Return to your !account or !admin. Please contact station personnel if you have any questions.", array('!account' => $account_link, '!admin' => $membership_admin));
+    }
+    else {
+      $account_link = l('account', 'user/' . $user->uid);
+      $variables['message'] = t("Thanks! Your membership has been activated! Return to your !account. Please contact station personnel if you have any questions.", array('!account' => $account_link));
+    }
+  }
+  else {
+    $home = l('home', '<front>');
+    $variables['message'] = t("No memberships were found on this account. There must have been an error. Return !home.", array('!home' => $home));
+  }
+}

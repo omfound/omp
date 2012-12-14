@@ -48,6 +48,15 @@ function om_membership_rules_event_info() {
  */
 function om_membership_rules_condition_info() {
   return array(
+    'om_membership_order_contains_membership_product' => array(
+      'label' => t('Order contains a membership'),
+      'arguments' => array(
+        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
+      ),
+      'help' => t('Does the order contain a membership.'),
+      'module' => 'om_membership',
+      'group' => 'Open Media Membership'
+    ),
     'om_membership_order_contains_upsell' => array(
       'label' => t('Order contains an upsold membership'),
       'arguments' => array(
@@ -99,7 +108,20 @@ function om_membership_rules_action_info() {
 }
 
 /**
- * Condition handler that check to see if an order contains a membership upsell.
+ * Condition handler that check to see if an order contains a membership line item.
+ */
+function om_membership_order_contains_membership_product($commerce_order) {
+  if (!empty($commerce_order)) {
+    $membership = om_membership_order_contains_membership($commerce_order);
+    if (!empty($membership)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Condition handler that checks to see if an order contains a membership upsell.
  */
 function om_membership_order_contains_upsell($commerce_order) {
   if (!empty($commerce_order)) {
