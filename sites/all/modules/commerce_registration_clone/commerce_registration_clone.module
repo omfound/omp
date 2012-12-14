@@ -17,6 +17,7 @@ function commerce_registration_clone_registration($source_display_nid, $destinat
   $source_form_state_values = commerce_registration_form_state_values('commerce_registration_node_registrations_settings_form', 'node', $source_display_node);
   
   $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings'][$source_commerce_code];
+  $form_state = commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code);
   $form_state['build_info']['args'] = array('node', &$destination_display_node);
   dsm($form_state);
   drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
@@ -33,4 +34,14 @@ function commerce_registration_form_state_values($form_id, $form_type, $display_
   drupal_build_form($form_id, $form_state); 
 
   return $form_state['values'];
+}
+
+function commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code) {
+  if($form_state['values']['settings'][$destination_commerce_code]['multiple_registrations'] == 0) {
+    $form_state['values']['settings'][$destination_commerce_code]['multiple_registrations'] = null;
+  }
+  if($form_state['values']['settings'][$destination_commerce_code]['reminder']['send_reminder'] == 0) {
+    $form_state['values']['settings'][$destination_commerce_code]['reminder']['send_reminder'] = null;
+  }
+  return $form_state;
 }
