@@ -638,6 +638,7 @@ function registration_entity_insert($entity, $entity_type) {
   $registration_type = registration_get_entity_registration_type($entity_type, $entity);
   if ($registration_type !== FALSE) {
     dsm('registrations setting its defaults');
+    dsm($entity_type);
     registration_entity_set_default_settings($entity_type, $entity);
   }
 }
