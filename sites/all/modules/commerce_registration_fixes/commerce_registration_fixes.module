@@ -1,21 +1,23 @@
 <?php
 
 function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
+  if(!commerce_registration_fixes_is_registration_cart()) {
+    dsm('removing registration page');
+    unset($checkout_pages['registration'];
+  }
+  $registration_status = commerce_registration_fixes_is_registration_cart();
+}
+
+function commerce_registration_fixes_is_registration_cart() {
   global $user;
   $cart = commerce_cart_order_load($user->uid);
-  $registration_enabled = false;
-  dsm($cart);
+  $registration_status = false;
+
   foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
-    if(commerce_registration_product_has_registration_field($info->line_item_id)) {
-      dsm('Commerce registration enabled for: '.$info['line_item_id']);
-      $registration_enabled = true;
-    }else{
-      dsm('Commerce registration not enabled for: '.$info['line_item_id']);
-    }
+    $line_item = commerce_line_item_load($info['line_item_id']); 
+    dsm($line_item);
+    //commerce_registration_product_has_registration_field($info->line_item_id);
   }
 
-  if(!$registration_enabled) {
-    dsm('removing registration checkout page');
-    unset($checkout_pages['registration']);
-  }
+  return $registration_status; 
 }
