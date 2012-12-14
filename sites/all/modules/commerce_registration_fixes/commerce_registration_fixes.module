@@ -5,7 +5,6 @@ function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkou
     dsm('removing registration page');
     unset($checkout_pages['registration']);
   }
-  $registration_status = commerce_registration_fixes_is_registration_cart();
 }
 
 function commerce_registration_fixes_is_registration_cart() {
@@ -15,8 +14,9 @@ function commerce_registration_fixes_is_registration_cart() {
 
   foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
     $line_item = commerce_line_item_load($info['line_item_id']); 
-    dsm($line_item);
-    //commerce_registration_product_has_registration_field($info->line_item_id);
+    if(commerce_registration_product_has_registration_field($line_item->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+      $registration_status = true;
+    }
   }
 
   return $registration_status; 
