@@ -1,5 +1,5 @@
 <?php
 
-commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
+function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
   dsm($checkout_pages);
 }
