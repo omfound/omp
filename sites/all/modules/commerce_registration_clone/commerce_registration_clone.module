@@ -6,7 +6,7 @@ function commerce_registration_clone_module_implements_alter(&$implementations, 
 }
 
 function commerce_registration_clone_entity_insert($entity, $type) {
-  if($entity->type == 'commerce_product') {
+  if($type == 'commerce_product') {
     dsm('the product is being added now..');
   }
   if($entity->type == 'class_display') {
