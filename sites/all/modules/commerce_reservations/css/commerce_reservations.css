@@ -1,0 +1,11 @@
+/*
+ * Basic css for the commerce_reservations module.
+ */
+ 
+#selected-product{
+	border: 1px solid red;
+}
+
+.not-available{
+	color: red;
+} 
