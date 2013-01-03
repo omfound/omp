@@ -6,11 +6,13 @@
 	      basePath = '';
       }
 	    var item = $('#block-views-calendar-product-view-block div.views-row');
-	    $('.commerce-add-to-cart').hide();
+	    $('.commerce-add-to-cart #edit-line-item-fields').hide();
+	    $('.commerce-add-to-cart #edit-submit').hide();
+	    $('.commerce-add-to-cart #edit-product-id').hide();
 	    item.mousedown(function(){
 	      item.attr('id', 'selected-product');
 	      var nid = $(this).find('.views-field-nid .field-content').text();
-	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
+	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content select[name="product_id"]').val();
 	      console.log(pid);
 	      //Remove events from the calendar
 	      $(".fullcalendar").fullCalendar('removeEvents', function(event){
