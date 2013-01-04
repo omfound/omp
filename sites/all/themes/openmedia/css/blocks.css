@@ -1,0 +1,22 @@
+/**
+ * @file
+ * Block Styling
+ */
+
+
+/** Header Blocks **/
+#block-system-main-menu {
+  float: left;
+  margin-right: 20px;
+  min-width: 100px;
+  height: 60px;
+  padding-top: 18px;
+}
+
+#block-om-theme-assets-om-round-social-media {
+  float: left;
+}
+
+#block-om-theme-assets-om-site-links {
+  float: left;
+}

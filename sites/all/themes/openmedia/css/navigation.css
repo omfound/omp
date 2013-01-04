@@ -1,0 +1,32 @@
+/**
+ * @file
+ * Navigation Styling
+ */
+
+#block-system-main-menu ul li {
+  list-style: none;
+  float: left;
+  margin-right: 5px;
+}
+
+#block-system-main-menu ul li a:link,
+#block-system-main-menu ul li a:visited {
+  background: white;
+  color: #373737;
+  font-size: 14px;
+  padding: 10px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 3px;
+  -webkit-transition: background 0.7s linear;
+  -moz-transition: background 0.7s linear;
+  -o-transition: background 0.7s linear;
+  transition: background 0.7s linear;
+}
+
+#block-system-main-menu ul li a:focus,
+#block-system-main-menu ul li a:hover {
+  background-color: #3A93CD;
+  color: #FFFFFF;
+}
