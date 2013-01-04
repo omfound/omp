@@ -8,14 +8,17 @@ function om_theme_assets_preprocess_om_round_social_media(&$variables) {
   $options = array('attributes' => array('target' => '_blank'));
   $facebook_url = variable_get('facebook_url', FALSE);
   if (!empty($facebook_url)) {
+    $options['attributes']['class'] = array('facebook');
     $links[] = l('Facebook', $facebook_url, $options);
   }
   $twitter_url = variable_get('twitter_url', FALSE);
   if (!empty($twitter_url)) {
+    $options['attributes']['class'] = array('twitter');
     $links[] = l('Twitter', $twitter_url, $options);
   }
   $openmedia_network_url = 'http://google.com';
   if (!empty($openmedia_network_url)) {
+    $options['attributes']['class'] = array('om-network');
     $links[] = l('Open Media Network', $openmedia_network_url, $options);
   }
   $variables['links'] = $links;
@@ -28,12 +31,12 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   global $user;
   $links = array();
   if ($user->uid > 0) {
-    $links[] = l('Logout', 'user/logout');
-    $links[] = l('Profile', 'users/' . $user->name);
+    $links[] = l('Logout', 'user/logout') . ' | ';
+    $links[] = l('Profile', 'users/' . $user->name) . ' | ';
   }
   else {
-    $links[] = l('Login', 'user');
-    $links[] = l('Register', 'user/register');
+    $links[] = l('Login', 'user') . ' | ';
+    $links[] = l('Register', 'user/register') . ' | ';
   }
   $links[] = l('Help', 'help');
   $variables['links'] = $links;
