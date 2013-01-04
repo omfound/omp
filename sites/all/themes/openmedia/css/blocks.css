@@ -8,15 +8,54 @@
 #block-system-main-menu {
   float: left;
   margin-right: 20px;
-  min-width: 100px;
-  height: 60px;
-  padding-top: 18px;
+  padding: 18px 0 10px 0;
 }
 
 #block-om-theme-assets-om-round-social-media {
   float: left;
+  padding: 18px 0 10px 0;
+}
+
+#block-om-theme-assets-om-round-social-media ul li {
+  float: left;
+  list-style: none;
+  margin-right: 5px;
+}
+
+#block-om-theme-assets-om-round-social-media ul li a:link,
+#block-om-theme-assets-om-round-social-media ul li a:visited {
+  display: block;
+  width: 21px;
+  height: 21px;
+  text-indent: -999em;
+}
+
+#block-om-theme-assets-om-round-social-media ul li a.facebook {
+  background: transparent url(../images/round-social-icons.png) top left no-repeat;
+}
+
+#block-om-theme-assets-om-round-social-media ul li a.twitter {
+  background: transparent url(../images/round-social-icons.png) top center no-repeat;
+}
+
+#block-om-theme-assets-om-round-social-media ul li a.om-network {
+  background: transparent url(../images/round-social-icons.png) top right no-repeat;
 }
 
 #block-om-theme-assets-om-site-links {
+  float: right;
+  padding: 18px 0 10px 0;
+}
+
+#block-om-theme-assets-om-site-links ul li {
+  list-style: none;
   float: left;
+  font-size: 10px;
+  color: #3A93CC;
+}
+
+#block-om-theme-assets-om-site-links ul li a:link,
+#block-om-theme-assets-om-site-links ul li a:visited {
+  font-size: 10px;
+  color: #3A93CC;
 }

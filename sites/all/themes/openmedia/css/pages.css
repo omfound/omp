@@ -12,10 +12,15 @@
  * Body
  */
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: transparent url(../images/bg.jpg) top left repeat;
+  height: 100%;
 }
 
 /*
@@ -57,9 +62,12 @@ div.messages ul {
   margin-bottom: 0;
 }
 
+.front #page {
+  height: 100%;
+}
+
 #header {
   background-color: #FFFFFF;
-  height: 60px;
   box-shadow: 3px 3px 3px #AAAAAA;
   padding: 0;
 }
@@ -67,4 +75,14 @@ div.messages ul {
 #header ul {
   margin: 0;
   padding: 0;
+}
+
+.front #main {
+  margin-top: 3em;
+  padding-top: 0;
+  *background-color: #DCD5C3;
+  background-color: rgba(220, 213, 195, .75);
+  height: 100%;
+  outline: 1px solid #B7B1A4;
+  border-top: solid 1px #E1DBCD;
 }
