@@ -41,3 +41,11 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   $links[] = l('Help', 'help');
   $variables['links'] = $links;
 }
+
+function om_theme_assets_preprocess_om_callout_block(&$variables) {
+  if (!empty($variables['block_info'])) {
+     $variables['block_title'] = '<h3>' . l($variables['block_info']['block_title'], $variables['block_info']['url']) . '</h3>';
+     $options = array('html' => TRUE);
+     $variables['block_image'] = l('<img src="' . $variables['block_info']['image_path'] . '" />', $variables['block_info']['url'], $options);
+  }
+}
