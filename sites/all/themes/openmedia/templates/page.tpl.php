@@ -4,7 +4,7 @@
       <?php print render($page['header']); ?>
     </div>
   </header>
-  <div id="above-content">
+  <div id="above-content" class="clearfix">
     <?php print render($page['above_content']); ?>
   </div>
   <div id="main">
@@ -38,11 +38,9 @@
           <?php print $sidebar_second; ?>
         </aside><!-- /.sidebars -->
       <?php endif; ?>
+      <div id="footer-wrapper">
+        <?php print render($page['footer']); ?>
+      </div>
     </div>
   </div><!-- /#main -->
-  <div id="footer" class="clearfix">
-    <div id="footer-inner">
-      <?php print render($page['footer']); ?>
-    </div>
-  </div>
 </div><!-- /#page -->

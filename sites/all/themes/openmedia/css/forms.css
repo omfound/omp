@@ -142,3 +142,65 @@ form table .item-list ul {
 td.menu-disabled {
   background: #ccc;
 }
+
+/** Custom Forms **/
+
+.form-field-type-file,
+.form-field-type-file * {
+  display: inline-block;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  margin-right: 10px;
+  line-height: 12px;
+}
+
+input[type="submit"],
+input[type="button"],
+input[type="text"],
+input[type="password"],
+textarea,
+.form-field-type-file a:link,
+.form-field-type-file a:visited {
+  font-family: Helvetica, Arial, sans-serif;
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 0%, #f9f9f9 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f9f9f9)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 0%,#f9f9f9 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 ); /* IE6-9 */
+  color: #333333;
+  border: solid 1px #CCCCCC;
+  border-radius: 5px;
+  padding: 6px;
+  box-shadow: 1px 2px 3px #EFEFEF;
+  text-decoration: none;
+}
+
+input[type="submit"]:focus,
+input[type="button"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="text"]:hover,
+input[type="password"]:hover,
+textarea:hover,
+.form-field-type-file a:focus,
+.form-field-type-file a:hover {
+  background: #FFFFFF;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+input[type="submit"],
+input[type="button"] {
+  margin-right: 5px;
+}
+.media-item img,
+.media-item .media-thumbnail,
+.media-widget .preview .media-item {
+  margin: 0;
+}

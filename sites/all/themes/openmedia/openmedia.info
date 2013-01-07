@@ -51,6 +51,7 @@ stylesheets[all][] = system.menus.css
 stylesheets[all][] = css/normalize.css
 stylesheets[all][] = css/wireframes.css
 stylesheets[all][] = css/layouts/fixed-width.css
+stylesheets[all][] = fonts/fonts.css
 stylesheets[all][] = css/page-backgrounds.css
 stylesheets[all][] = css/tabs.css
 stylesheets[all][] = css/pages.css

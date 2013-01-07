@@ -52,10 +52,86 @@
   float: left;
   font-size: 10px;
   color: #3A93CC;
+  margin-left: 2px;
 }
 
 #block-om-theme-assets-om-site-links ul li a:link,
 #block-om-theme-assets-om-site-links ul li a:visited {
   font-size: 10px;
   color: #3A93CC;
+}
+
+/** Top Banner **/
+#block-views-site-banner-block {
+  width: 980px;
+  margin: auto;
+}
+
+/** Callout Blocks **/
+#block-om-theme-assets-om-callout-block-0,
+#block-om-theme-assets-om-callout-block-1,
+#block-om-theme-assets-om-callout-block-2 {
+  width: 300px;
+  float: left;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#block-om-theme-assets-om-callout-block-0 h3,
+#block-om-theme-assets-om-callout-block-1 h3,
+#block-om-theme-assets-om-callout-block-2 h3 {
+  margin: 10px 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+#block-om-theme-assets-om-callout-block-0 h3 a:link,
+#block-om-theme-assets-om-callout-block-0 h3 a:visited,
+#block-om-theme-assets-om-callout-block-1 h3 a:link,
+#block-om-theme-assets-om-callout-block-1 h3 a:visited,
+#block-om-theme-assets-om-callout-block-2 h3 a:link,
+#block-om-theme-assets-om-callout-block-2 h3 a:visited {
+  *color: #000000;
+  color: rgba(0, 0, 0, .85);
+  text-shadow: 1px 1px 1px #EFEFEF, 0 0 0 #DCD5C3, -1px -1px -1px #DCD5C3;
+  text-decoration: none;
+}
+
+#block-om-theme-assets-om-callout-block-0 img,
+#block-om-theme-assets-om-callout-block-1 img,
+#block-om-theme-assets-om-callout-block-2 img {
+  box-shadow: 1px 1px 3px #AAAAAA;
+}
+
+#block-om-theme-assets-om-callout-block-1 {
+  margin: 20px 40px 0 40px;
+}
+
+/** Footer Menu **/
+#block-menu-menu-additional-links ul {
+  margin: 0;
+  padding: 0;
+}
+
+#block-menu-menu-additional-links ul li {
+  margin: 0;
+  padding: 7px;
+  float: left;
+  list-style: none;
+  line-height: 10px;
+}
+
+#block-menu-menu-additional-links ul li a:link,
+#block-menu-menu-additional-links ul li a:visited {
+  font-weight: bold;
+  color: black;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+#block-menu-menu-additional-links ul li a:focus,
+#block-menu-menu-additional-links ul li a:hover {
+  text-decoration: underline;
 }

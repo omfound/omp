@@ -30,3 +30,8 @@
   background-color: #3A93CD;
   color: #FFFFFF;
 }
+
+/** Admin Menu **/
+#admin-menu {
+  text-shadow: none;
+}
