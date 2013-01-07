@@ -1,13 +1,4 @@
 <?php
-
-/**
- * @file
- * Code for the OM Project feature.
- */
-
-include_once('om_project.features.inc');
-
-
 /**
  * Implementation of hook_permission().
  */
