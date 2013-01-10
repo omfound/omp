@@ -19,6 +19,10 @@ function om_theme_assets_block_info() {
       'cache' => DRUPAL_CACHE_GLOBAL
     );
   }
+  $blocks['om_action_items'] = array(
+    'info' => t('Action Items'), 
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
   return $blocks;
 }
 
@@ -33,6 +37,14 @@ function om_theme_assets_block_view($delta = "") {
       break;
     case 'om_site_links':
       $blocks['content'] = theme('om_site_links');
+      break;
+    case 'om_action_items':
+      // Glom all action items into one block.
+      $blocks['content'] = '';
+      $action_items = om_theme_assets_action_item_content();
+      foreach ($action_items AS $action_item) {
+        $blocks['content'] .= theme('om_action_item', $action_item);
+      }
       break;
   }
   if (is_numeric(stripos($delta, 'om_callout_block_'))) {
@@ -63,6 +75,10 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
       'path' => $path . '/theme',
       'template' => 'om_callout_block',
       'file' => 'theme.inc'
+    ),
+    'om_action_item' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_action_item'
     )
   );
 }
@@ -92,6 +108,49 @@ function om_theme_assets_callout_block_content() {
       'block_title' => t('OMP for Education, Libraries, and CTCs'),
       'image_path' => $base_path . $theme_path . '/images/callout-3.png',
       'url' => 'http://google.com'
+    )
+  );
+}
+
+/**
+ * Helper function to return action items.
+ *   @todo make these editable from the ui.
+ */
+function om_theme_assets_action_item_content() {
+  $theme_path = drupal_get_path('theme', 'openmedia');
+  global $base_path;
+  return array(
+    0 => array(
+      'admin_title' => 'Action Item Block 0',
+      'bubble_text' => t('56'),
+      'black_text' => t('Community Channel!'),
+      'blue_text' => t('See Schedule >>'),
+      'url' => 'http://google.com',
+      'position' => 'first'
+    ),
+    1 => array(
+      'admin_title' => 'Action Item Block 1',
+      'bubble_text' => t('57'),
+      'black_text' => t('The Producer\'s Channel!'),
+      'blue_text' => t('See Schedule >>'),
+      'url' => 'http://google.com',
+      'position' => ''
+    ),
+    2 => array(
+      'admin_title' => 'Action Item Block 2',
+      'bubble_text' => t('219'),
+      'black_text' => t('News Channel!'),
+      'blue_text' => t('See Schedule >>'),
+      'url' => 'http://google.com',
+      'position' => ''
+    ),
+    3 => array(
+      'admin_title' => 'Action Item Block 3',
+      'bubble_text' => t('Go'),
+      'black_text' => t('Becoming a Member'),
+      'blue_text' => t('Donate Now >>'),
+      'url' => 'membership',
+      'position' => 'last'
     )
   );
 }
