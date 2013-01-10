@@ -2,7 +2,9 @@
  * @file
  * Views Styling
  */
-
+body.page-views #content {
+  background-color: transparent;
+}
 
 .omp-grid .views-row {
   float: left;
