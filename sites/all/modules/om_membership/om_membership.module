@@ -709,6 +709,15 @@ function om_membership_validate_all_org_sub_members() {
 }
 
 /**
+ * Implements hook_url_inbound_alter
+ */
+function om_membership_url_inbound_alter(&$path, $original_path, $path_language) {
+  if ($path == 'user/register') {
+    $path = 'membership';
+  }
+}
+
+/**
  * Implements hook_cron
  */
 function om_membership_cron() {

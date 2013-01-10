@@ -8,9 +8,9 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   global $user;
   // Header Section
   $login_link = l('Login', 'user', array('attributes' => array('class' => array('green')), 'query' => array('destination' => $_GET['q'])));
-  $login = t('Already have an account ? {!login}', array('!login' => $login_link));
+  $login = t('Already have an account ? !login', array('!login' => $login_link));
   $group_plans_link = l('Click Here', 'membership/org-plans', array('attributes' => array('class' => array('red'))));
-  $group_plan = t('For A Group Membership {!click}', array('!click' => $group_plans_link));
+  $group_plan = t('For A Group Membership !click', array('!click' => $group_plans_link));
   $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
   $membership = new StdClass();
   if ($user->uid > 0) {
@@ -21,8 +21,9 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   $variables['header'] = $header;
   // Body Section
   // We build the table in four sections table header, table body, cost row and sign up links.
-  $individual_header = t('Individual Membership Plans');
-  $table_header = "<th>$individual_header</th>";
+  $break = "<br/>";
+  $individual_header = t('Individual !break Membership Plans', array('!break' => $break));
+  $table_header = "<th class='table-title'>$individual_header</th>";
   $cost_row = "<tr><td></td>";
   $link_row = "<tr><td></td>";
   // Build header, cost row and links
@@ -40,7 +41,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         else {
           $price = '$' . $price;
         }
-        $cost_row .= "<td>$price</td>";
+        $cost_row .= "<td class='price'>$price</td>";
         if (!empty($membership->product_id)) {
           $membership_price = $membership_wrapper->commerce_price->value();
           $current_plan_price = $plan_meta_wrapper->commerce_price->value();
@@ -57,7 +58,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         else {
           $link = l('Sign Up', 'membership/add/' . $plan->product_id);
         }
-        $link_row .= "<td>$link</td>";
+        $link_row .= "<td class='action'>$link</td>";
       }
     }
     $cost_row .= "</tr>";
@@ -66,8 +67,13 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
     $variables['link_row'] = $link_row;
     // Build body
     $plan_features = om_membership_get_plan_features();
-    foreach($plan_features AS $plan_term) {
-      $table_rows .= '<tr><td>' . $plan_term->name . '</td>';
+    $feature_count = count($plan_features);
+    foreach($plan_features AS $key => $plan_term) {
+      $last_class = '';
+      if ($key + 1 == $feature_count) {
+          $last_class = "last";
+        }
+      $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
       foreach($variables['plans'] AS $plan) {
         $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
         if ($plan_meta_wrapper->field_user_type->value() == 0) {
@@ -80,14 +86,14 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
                }
             }
             if ($match == TRUE) {
-              $table_rows .= "<td class='feature-yes'>Yes</td>";
+              $table_rows .= "<td class='feature feature-yes'>Yes</td>";
             }
             else {
-              $table_rows .= "<td class='feature-no'>No</td>";
+              $table_rows .= "<td class='feature feature-no'>No</td>";
             }
           }
           else {
-            $table_rows .= "<td class='feature-no'>No</td>";
+            $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
       }
@@ -107,9 +113,9 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   // Header Section
   global $user;
   $login_link = l('Login', 'user', array('attributes' => array('class' => array('green')), 'query' => array('destination' => $_GET['q'])));
-  $login = t('Already have an account ? {!login}', array('!login' => $login_link));
+  $login = t('Already have an account ? !login', array('!login' => $login_link));
   $group_plans_link = l('Click Here', 'membership', array('attributes' => array('class' => array('red'))));
-  $group_plan = t('For an Individual Membership {!click}', array('!click' => $group_plans_link));
+  $group_plan = t('For an Individual Membership !click', array('!click' => $group_plans_link));
   if ($user->uid > 0) {
     $membership = om_membership_get_user_membership_products($user);
     $membership = array_shift($membership);
@@ -119,8 +125,9 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $variables['header'] = $header;
   // Body Section
   // We build the table in four sections table header, table body, cost row and sign up links.
-  $individual_header = t('Organizational Membership Plans');
-  $table_header = "<th>$individual_header</th>";
+  $break = "<br/>";
+  $individual_header = t('Organizational !break Membership Plans', array('!break' => $break));
+  $table_header = "<th class='table-title'>$individual_header</th>";
   $cost_row = "<tr><td></td>";
   $link_row = "<tr><td></td>";
   $table_rows = "";
@@ -138,7 +145,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
         else {
           $price = '$' . $price;
         }
-        $cost_row .= "<td>$price</td>";
+        $cost_row .= "<td class='price'>$price</td>";
         if (!empty($membership->product_id)) {
           $membership_price = $membership_wrapper->commerce_price->value();
           $current_plan_price = $plan_meta_wrapper->commerce_price->value();
@@ -155,7 +162,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
         else {
           $link = l('Sign Up', 'membership/add/' . $plan->product_id);
         }
-        $link_row .= "<td>$link</td>";
+        $link_row .= "<td class='action'>$link</td>";
       }
     }
     $cost_row .= "</tr>";
@@ -164,8 +171,13 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $variables['link_row'] = $link_row;
     // Build body
     $plan_features = om_membership_get_plan_features();
-    foreach($plan_features AS $plan_term) {
-      $table_rows .= '<tr><td>' . $plan_term->name . '</td>';
+    $feature_count = count($plan_features);
+    foreach($plan_features AS $key => $plan_term) {
+      $last_class = '';
+      if ($key + 1 == $feature_count) {
+          $last_class = "last";
+        }
+      $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
       foreach($variables['plans'] AS $plan) {
         $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
         if ($plan_meta_wrapper->field_user_type->value() == 1) {
@@ -178,14 +190,14 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
                }
             }
             if ($match == TRUE) {
-              $table_rows .= "<td class='feature-yes'>Yes</td>";
+              $table_rows .= "<td class='feature feature-yes'>Yes</td>";
             }
             else {
-              $table_rows .= "<td class='feature-no'>No</td>";
+              $table_rows .= "<td class='feature feature-no'>No</td>";
             }
           }
           else {
-            $table_rows .= "<td class='feature-no'>No</td>";
+            $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
       }
@@ -224,7 +236,7 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
           if (!empty($unique_features)) {
             $variables['features'] = '<ul>';
               foreach ($unique_features AS $feature) {
-                $variables['features'] .= '<li>' . $feature->name . '</li>';
+                $variables['features'] .= '<li class="feature">' . $feature->name . '</li>';
               }
             $variables['features'] .= '</ul>';
           }
