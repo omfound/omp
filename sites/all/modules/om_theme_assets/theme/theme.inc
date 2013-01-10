@@ -32,7 +32,8 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   $links = array();
   if ($user->uid > 0) {
     $links[] = l('Logout', 'user/logout') . ' | ';
-    $links[] = l('Profile', 'users/' . $user->name) . ' | ';
+    $clean_name = strtolower(str_replace(' ', '-', $user->name));
+    $links[] = l('Profile', 'users/' . $clean_name) . ' | ';
   }
   else {
     $links[] = l('Login', 'user') . ' | ';
