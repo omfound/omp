@@ -6,6 +6,18 @@ body.page-views #main #content {
   background-color: transparent;
 }
 
+.omp-grid {
+}
+.omp-grid:after {
+  visibility: hidden;
+  display: block;
+  content: "";
+  clear: both;
+  height: 0;
+}
+* html .omp-grid             { zoom: 1; } /* IE6 */
+*:first-child+html .omp-grid { zoom: 1; } /* IE7 */
+
 .omp-grid .views-row {
   float: left;
   margin-left: 18px;
