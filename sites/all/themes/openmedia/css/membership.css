@@ -19,7 +19,7 @@
   list-style: none;
 }
 
-h1#page-title {
+.section-membership h1#page-title {
   display: none;
 }
 
