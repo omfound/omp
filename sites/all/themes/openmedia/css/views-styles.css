@@ -3,7 +3,8 @@
  * Views Styling
  */
 
-.omp-grid {
+
+.omp-grid .views-row {
   float: left;
   margin-left: 18px;
   width: 180px;
