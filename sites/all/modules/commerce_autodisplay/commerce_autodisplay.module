@@ -188,11 +188,13 @@ function commerce_autodisplay_preprocess_page(&$vars) {
 function commerce_autodisplay_node_product($node) {
   $display_types = commerce_autodisplay_display_bundles();
   if(!empty($node->type) && !empty($display_types)) {
-    if ($field_name = $display_types[$node->type]) {
-      if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
-        if ($product = commerce_product_load($product_id)) {
-          if (commerce_autodisplay_is_enabled($product->type)) {
-            return $product;
+    if(!empty($display_types[$node->type])) {
+      if ($field_name = $display_types[$node->type]) {
+        if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
+          if ($product = commerce_product_load($product_id)) {
+            if (commerce_autodisplay_is_enabled($product->type)) {
+              return $product;
+            }
           }
         }
       }
