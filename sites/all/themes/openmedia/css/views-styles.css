@@ -2,7 +2,7 @@
  * @file
  * Views Styling
  */
-body.page-views #content {
+body.page-views #main #content {
   background-color: transparent;
 }
 
