@@ -7,6 +7,15 @@
   <div id="above-content" class="clearfix">
     <?php print render($page['above_content']); ?>
   </div>
+  <?php if (!empty($page['action_items'])): ?>
+  <div id="action-item">
+    <div class="wrapper">
+      <div id="action-item-inner" class="clearfix">
+        <?php print render($page['action_items']); ?>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
   <div id="main">
     <div id="main-inner" class="clearfix">
       <div id="content" class="column" role="main">

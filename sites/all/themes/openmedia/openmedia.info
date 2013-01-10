@@ -66,6 +66,7 @@ stylesheets[all][] = css/print.css
 
 ; OMP Specific Functionality
 stylesheets[all][] = css/membership.css
+stylesheets[all][] = css/classes.css
 
 ; Built-in conditional stylesheet support has been removed from Zen 7.x-5.x.
 ; Instead, Zen now adds conditional-comment-included classes to the html
@@ -105,6 +106,7 @@ regions[header]         = Header
 ;regions[highlighted]    = Highlighted
 regions[help]           = Help
 regions[above_content] = Above Content
+regions[action_items] = Action Items
 regions[content]        = Content
 regions[sidebar_first]  = First sidebar
 regions[sidebar_second] = Second sidebar
