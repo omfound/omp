@@ -8,10 +8,12 @@ function commerce_registration_clone_module_implements_alter(&$implementations, 
 function commerce_registration_clone_entity_insert($entity, $type) {
   if($type == 'commerce_product') {
     $display = commerce_autodisplay_entity_display_lookup($entity->product_id); 
-    if($source_product = $entity->field_class_source[LANGUAGE_NONE][0]['value']) {
-      $source_display = commerce_autodisplay_entity_display_lookup($source_product);
-      if(is_numeric($source_display)) {
-        commerce_registration_clone_registration($source_display, $display);
+    if(!empty($entity->field_class_source[LANGUAGE_NONE][0]['value')) {
+      if($source_product = $entity->field_class_source[LANGUAGE_NONE][0]['value']) {
+        $source_display = commerce_autodisplay_entity_display_lookup($source_product);
+        if(is_numeric($source_display)) {
+          commerce_registration_clone_registration($source_display, $display);
+        }
       }
     }
   }
