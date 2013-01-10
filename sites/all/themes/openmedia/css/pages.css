@@ -27,6 +27,18 @@ body {
   text-shadow: 1px 1px 1px #EFEFEF;
 }
 
+.red,
+.red:link,
+.red:visited {
+  color: #90281D;
+}
+
+.green,
+.green:link,
+.green:visited {
+  color: #84B63F;
+}
+
 /*
  * The skip-link link will be completely hidden until a user tabs to the link.
  * See the element-focusable rule in system.base.css.
@@ -64,10 +76,6 @@ div.messages { /* Important messages (status, warning, and error) for the user. 
 div.messages ul {
   margin-top: 0;
   margin-bottom: 0;
-}
-
-div.error {
-  display: none;
 }
 
 .front #page {
