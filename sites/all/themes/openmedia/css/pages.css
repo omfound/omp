@@ -80,6 +80,11 @@ div.messages ul {
 
 .front #page {
   height: 100%;
+  page: 0;
+}
+
+.front #main #content {
+  padding: 0;
 }
 
 #header {
@@ -108,6 +113,11 @@ div.messages ul {
   height: 100%;
   outline: 1px solid #B7B1A4;
   border-top: solid 1px #E1DBCD;
+}
+
+.front .region-sidebar-second {
+  margin-top: 60px;
+  width: 220px;
 }
 
 .breadcrumb ol li,

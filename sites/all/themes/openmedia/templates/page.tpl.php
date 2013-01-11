@@ -42,7 +42,7 @@
         $sidebar_second = render($page['sidebar_second']);
       ?>
       <?php if ($sidebar_first || $sidebar_second): ?>
-        <aside class="sidebars">
+        <aside class="sidebars clearfix">
           <?php print $sidebar_first; ?>
           <?php print $sidebar_second; ?>
         </aside><!-- /.sidebars -->
