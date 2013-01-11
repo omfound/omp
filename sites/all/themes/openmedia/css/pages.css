@@ -93,6 +93,14 @@ div.messages ul {
   padding: 0;
 }
 
+#action-item {
+  border-top: 1px solid #B7B1A4;
+}
+
+#action-item .wrapper {
+  border-top: 1px solid #E1DBCD;
+}
+
 .front #main {
   padding-top: 0;
   *background-color: #DCD5C3;
