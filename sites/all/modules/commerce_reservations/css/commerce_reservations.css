@@ -13,3 +13,7 @@
 .view-id-reservation_calendar{
 	line-height: 1.0;
 }
+
+.view-id-reservation_calendar .fc-select-helper{
+	background-color: green;
+}

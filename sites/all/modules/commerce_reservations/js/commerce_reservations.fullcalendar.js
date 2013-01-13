@@ -12,9 +12,9 @@
       }
       options.selectable = true;
       options.selectHelper = true;
+      options.dragOpacity = 1.0;
       options.unselectAuto = false;
       options.select = function(start, end, allDay) {
-        console.log(start);
         if (!allDay){
 	        $('#selected-product .commerce-add-to-cart #edit-submit').show();
 	        $('.not-available').remove();
