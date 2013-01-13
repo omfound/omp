@@ -14,7 +14,7 @@
       options.selectHelper = true;
       options.unselectAuto = false;
       options.select = function(start, end, allDay) {
-        console.log(this);
+        console.log(start);
         if (!allDay){
 	        $('#selected-product .commerce-add-to-cart #edit-submit').show();
 	        $('.not-available').remove();
