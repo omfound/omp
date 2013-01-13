@@ -191,15 +191,12 @@ function commerce_reservations_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'fullcalendar';
   $handler->display->display_options['style_options']['defaultView'] = 'agendaWeek';
   $handler->display->display_options['style_options']['right'] = 'agendaWeek month';
-  $handler->display->display_options['style_options']['theme'] = FALSE;
   $handler->display->display_options['style_options']['contentHeight'] = 500;
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class = "res-title-number">3</div>
-    <div class = "res-title">Choose Your Dates</div>
-<p><b>Calendar:</b>The calendar shows when items are NOT available to rent.  To make a reservation, click and drag on the calendar.  To make a reservation for multiple days, select your start date and time from the calendar, and fill end the end date and time on the date form.</p>';
+  $handler->display->display_options['header']['area']['content'] = '<p>The calendar shows when items are NOT available to rent.  To make a reservation, click and drag on the calendar.  To make a reservation for multiple days, select your start date and time from the calendar, and fill end the end date and time on the date form.</p>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   /* Relationship: Commerce Line item: Referenced product */
   $handler->display->display_options['relationships']['commerce_product_product_id']['id'] = 'commerce_product_product_id';
