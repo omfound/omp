@@ -12,6 +12,7 @@ function commerce_reservations_default_rules_configuration() {
   $items['rules_apply_commercial_reservation_pricing'] = entity_import('rules_config', '{ "rules_apply_commercial_reservation_pricing" : {
       "LABEL" : "Apply Commercial Reservation Pricing",
       "PLUGIN" : "reaction rule",
+      "ACTIVE" : false,
       "REQUIRES" : [ "commerce_reservations", "commerce_product_reference" ],
       "ON" : [ "commerce_product_calculate_sell_price" ],
       "IF" : [
