@@ -22,6 +22,7 @@
 .not-front #content h1 {
   font-family: 'PTSansBold', sans-serif;
   font-size: 36px;
+  line-height: 40px;
   padding: 0 0 10px 0;
   margin: 0;
 }
