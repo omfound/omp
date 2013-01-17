@@ -1,5 +1,17 @@
 <?php
 
+function openmedia_preprocess_page(&$variables) {
+  if ($_GET['q'] == 'classes') {
+    $options = array(
+      'type' => 'file',
+      'group' => JS_LIBRARY
+    );
+    drupal_add_js('sites/all/libraries/masonry/jquery.masonry.min.js', $options);
+    $options['group'] = JS_DEFAULT;
+    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-grid.js', $options);
+  }
+}
+
 function openmedia_region_info() {
   $region_info = &drupal_static(__FUNCTION__);
   if (!isset($region_info)) {

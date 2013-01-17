@@ -1,11 +1,3 @@
-/**
- * @file
- * Views Styling
- */
-body.page-views #main #content {
-  background-color: transparent;
-}
-
 .omp-grid {
   margin: 0 0 20px 0;
 }
@@ -66,7 +58,7 @@ body.page-views #main #content {
   border-top: 1px solid #B7B1A4;
 }
 
-.omp-grid .divider .inner {
+#main .omp-grid .divider .inner {
   border-top: 1px solid #FFFFFF;
 }
 
@@ -75,7 +67,8 @@ body.page-views #main #content {
   border-top-left-radius: 3px;
 }
 
-.omp-grid .views-row .title {
+.omp-grid .views-row .title,
+.omp-grid .views-row .date {
   padding: 0 10px;
 }
 
@@ -91,20 +84,39 @@ body.page-views #main #content {
   float: left;
 }
 
+.omp-grid .label {
+  padding: 0;
+  margin: 0;
+  font-weight: bold;
+}
+
+
+
 /** Specific Grids **/
 .front .omp-grid .floated {
   margin-right: 10px;
 }
 
 .front .counter-tray {
-  padding: 0 10px;
   font-size: 11px;
+}
+
+.front .counter-tray .inner,
+.certifications-required,
+.certifications-earned  {
+  padding: 0 10px;
+}
+
+.certifications-required,
+.certifications-earned {
+  line-height: 16px;
+  margin: 5px 0;
 }
 
 /** Front Page Sidebar **/
 .front #block-views-front-page-news-block .views-row {
   margin-bottom: 20px;
-  width: 220px;
+  width: 196px;
   height: auto;
   background-color: #FBF0D4;
   border: solid 1px #99948A;
@@ -154,4 +166,9 @@ body.page-views #main #content {
   color: #3a93cc;
   margin-top: 6px;
   margin-bottom: 4px;
+}
+
+/** Remove class grid padding **/
+.page-classes #content-inner {
+  padding: 0;
 }

@@ -7,28 +7,35 @@
   <div id="above-content" class="clearfix">
     <?php print render($page['above_content']); ?>
   </div>
+  <?php if (!empty($page['action_items'])): ?>
+  <div id="action-item">
+    <div class="wrapper">
+      <div id="action-item-inner" class="clearfix">
+        <?php print render($page['action_items']); ?>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
   <div id="main">
     <div class="inner">
       <div id="main-inner" class="clearfix">
         <div id="content" class="column" role="main">
-          <div id="content-inner"
-            <?php print render($page['highlighted']); ?>
-            <?php print $breadcrumb; ?>
-            <a id="main-content"></a>
-            <?php print render($title_prefix); ?>
-            <?php if ($title): ?>
-              <h1 class="title" id="page-title"><?php print $title; ?></h1>
-            <?php endif; ?>
-            <?php print render($title_suffix); ?>
-            <?php print $messages; ?>
-            <?php print render($tabs); ?>
-            <?php print render($page['help']); ?>
-            <?php if ($action_links): ?>
-              <ul class="action-links"><?php print render($action_links); ?></ul>
-            <?php endif; ?>
-            <?php print render($page['content']); ?>
-            <?php print $feed_icons; ?>
-          </div>
+          <?php print render($page['highlighted']); ?>
+          <?php print $breadcrumb; ?>
+          <a id="main-content"></a>
+          <?php print render($title_prefix); ?>
+          <?php if ($title): ?>
+            <h1 class="title" id="page-title"><?php print $title; ?></h1>
+          <?php endif; ?>
+          <?php print render($title_suffix); ?>
+          <?php print $messages; ?>
+          <?php print render($tabs); ?>
+          <?php print render($page['help']); ?>
+          <?php if ($action_links): ?>
+            <ul class="action-links"><?php print render($action_links); ?></ul>
+          <?php endif; ?>
+          <?php print render($page['content']); ?>
+          <?php print $feed_icons; ?>
         </div><!-- /#content -->
         <?php
           // Render the sidebars to see if there's anything in them.
@@ -45,15 +52,6 @@
     </div>
   </div><!-- /#main -->
 </div><!-- /#page -->
-  <?php if (!empty($page['action_items'])): ?>
-  <div id="action-item">
-    <div class="wrapper">
-      <div id="action-item-inner" class="clearfix">
-        <?php print render($page['action_items']); ?>
-      </div>
-    </div>
-  </div>
-  <?php endif; ?>
 <div id="footer-wrapper">
   <div class="inner">
     <?php print render($page['footer']); ?>
