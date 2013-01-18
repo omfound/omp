@@ -1,6 +1,7 @@
 name = Open Media Timeslot Scheduler
 description = Provides an API for Open Media Timeslot Scheduler Producer and Open Media Timeslot Scheduler Automation
 core = 7.x
+configure = om_timeslot_scheduler/admin
 package = "Open Media System"
 dependencies[] = "calendar"
 dependencies[] = "ctools"
