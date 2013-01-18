@@ -11,7 +11,7 @@
     <div class="inner">
       <div id="main-inner" class="clearfix">
         <div id="content" class="column" role="main">
-          <div id="content-inner"
+          <div id="content-inner">
             <?php print render($page['highlighted']); ?>
             <?php print $breadcrumb; ?>
             <a id="main-content"></a>
