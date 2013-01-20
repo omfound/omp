@@ -5,6 +5,38 @@
  */
 
 /**
+ * Implements hook_commerce_line_item_default_types().
+ */
+function commerce_reservations_commerce_line_item_default_types() {
+  $items = array(
+    'reservable_product' => array(
+      'name' => 'Reservable Product',
+      'description' => 'A customizable product line item type.',
+      'product' => TRUE,
+      'add_form_submit_value' => 'Add product',
+      'base' => 'commerce_product_line_item',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_commerce_product_default_types().
+ */
+function commerce_reservations_commerce_product_default_types() {
+  $items = array(
+    'reservable_product' => array(
+      'type' => 'reservable_product',
+      'name' => 'Reservable Product',
+      'description' => '',
+      'help' => '',
+      'revision' => '1',
+    ),
+  );
+  return $items;
+}
+
+/**
  * Implements hook_views_api().
  */
 function commerce_reservations_views_api() {
