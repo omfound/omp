@@ -752,7 +752,7 @@ function commerce_reservations_field_default_fields() {
           'currency_code' => 'default',
         ),
         'type' => 'commerce_price_full',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -837,7 +837,7 @@ function commerce_reservations_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '7',
+        'weight' => '5',
       ),
     ),
   );
@@ -998,7 +998,7 @@ function commerce_reservations_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '8',
+        'weight' => '6',
       ),
     ),
   );
@@ -1074,7 +1074,7 @@ function commerce_reservations_field_default_fields() {
           'rows' => '5',
         ),
         'type' => 'text_textarea',
-        'weight' => '10',
+        'weight' => '7',
       ),
     ),
   );
