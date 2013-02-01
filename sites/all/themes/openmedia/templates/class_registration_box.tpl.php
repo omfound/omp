@@ -1,6 +1,6 @@
 <div id="registration-box">
   <?php if (!empty($price)): ?>
-    <div class="price">
+    <div class="price clearfix">
       <div class="price-value">
         <?php print $price; ?>
       </div>

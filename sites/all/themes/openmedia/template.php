@@ -63,7 +63,7 @@ function openmedia_preprocess_node(&$variables) {
       if (!empty($memberships)) {
         $price = $product_meta->field_class_member_price->value();
         if ($price['amount'] != 0) {
-          $price = '$' . ($price['amount'] / 1000);
+          $price = '$' . (round(($price['amount'] / 1000), 2));
         }
         else {
           $price = 'Free';
@@ -71,15 +71,16 @@ function openmedia_preprocess_node(&$variables) {
         $discount_message = t('Includes membership discount.');
       }
     } 
-    if (empty($price) && $price['amount'] != 0) {
+    if (!isset($price)) {
       $price = $product_meta->commerce_price->value();
-      $price = '$' . ($price['amount'] / 1000);
+      $price = '$' . (round(($price['amount'] / 1000), 2));
     }
-    else if($price['amount'] == 0) {
+    else if(isset($price) && $price['amount'] == 0) {
        $price = 'Free';
     }
     $location = $product_meta->field_class_location->value();
     $coords = $product_meta->field_class_coordinates->value();
+    $directions_link = '';
     if (!empty($coords['lat']) && !empty($coords['lon'])) {
       $options = array('attributes' => array('target' => '_blank'),'query' => array('q' => $coords['lat'] . ', ' . $coords['lon']));
       $directions_link = l('Get Directions', 'http://maps.google.com', $options);
