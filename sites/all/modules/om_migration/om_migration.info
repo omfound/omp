@@ -1,0 +1,10 @@
+name = "Openmedia Migration"
+description = "The Openmedia drupal 6 to 7 migration"
+package = "Open Media System"
+core = 7.x
+dependencies[] = migrate
+dependencies[] = list
+dependencies[] = number
+
+files[] = om_migration.module
+files[] = om_users.inc

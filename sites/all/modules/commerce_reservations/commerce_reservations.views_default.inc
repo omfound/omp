@@ -103,28 +103,18 @@ function commerce_reservations_views_default_views() {
     'line_item_type' => 'reservable_product',
   );
   $handler->display->display_options['fields']['field_crp_product_reference']['delta_offset'] = '0';
-  /* Field: Commerce Product: Commercial Cost */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_commercial_cost']['id'] = 'field_commercial_cost';
   $handler->display->display_options['fields']['field_commercial_cost']['table'] = 'field_data_field_commercial_cost';
   $handler->display->display_options['fields']['field_commercial_cost']['field'] = 'field_commercial_cost';
   $handler->display->display_options['fields']['field_commercial_cost']['relationship'] = 'field_crp_product_reference_product_id';
   $handler->display->display_options['fields']['field_commercial_cost']['label'] = 'Commercial Cost per Hour';
-  $handler->display->display_options['fields']['field_commercial_cost']['click_sort_column'] = 'amount';
-  $handler->display->display_options['fields']['field_commercial_cost']['type'] = 'commerce_price_formatted_amount';
-  $handler->display->display_options['fields']['field_commercial_cost']['settings'] = array(
-    'calculation' => FALSE,
-  );
-  /* Field: Commerce Product: Member Cost */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_member_cost']['id'] = 'field_member_cost';
   $handler->display->display_options['fields']['field_member_cost']['table'] = 'field_data_field_member_cost';
   $handler->display->display_options['fields']['field_member_cost']['field'] = 'field_member_cost';
   $handler->display->display_options['fields']['field_member_cost']['relationship'] = 'field_crp_product_reference_product_id';
   $handler->display->display_options['fields']['field_member_cost']['label'] = 'Member Cost per Hour';
-  $handler->display->display_options['fields']['field_member_cost']['click_sort_column'] = 'amount';
-  $handler->display->display_options['fields']['field_member_cost']['type'] = 'commerce_price_formatted_amount';
-  $handler->display->display_options['fields']['field_member_cost']['settings'] = array(
-    'calculation' => FALSE,
-  );
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -191,12 +181,15 @@ function commerce_reservations_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'fullcalendar';
   $handler->display->display_options['style_options']['defaultView'] = 'agendaWeek';
   $handler->display->display_options['style_options']['right'] = 'agendaWeek month';
+  $handler->display->display_options['style_options']['theme'] = FALSE;
   $handler->display->display_options['style_options']['contentHeight'] = 500;
   /* Header: Global: Text area */
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<p>The calendar shows when items are NOT available to rent.  To make a reservation, click and drag on the calendar.  To make a reservation for multiple days, select your start date and time from the calendar, and fill end the end date and time on the date form.</p>';
+  $handler->display->display_options['header']['area']['content'] = '<div class = "res-title-number">3</div>
+    <div class = "res-title">Choose Your Dates</div>
+<p><b>Calendar:</b>The calendar shows when items are NOT available to rent.  To make a reservation, click and drag on the calendar.  To make a reservation for multiple days, select your start date and time from the calendar, and fill end the end date and time on the date form.</p>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   /* Relationship: Commerce Line item: Referenced product */
   $handler->display->display_options['relationships']['commerce_product_product_id']['id'] = 'commerce_product_product_id';
