@@ -108,7 +108,7 @@
 .sidebar-first .region-sidebar-first {
   /* Span 1 column, starting in 1st column from left. */
   float: left;
-  width: 220px;
+  width: 230px;
   margin-left: 0px;
   margin-right: -250px;
 }
@@ -148,7 +148,7 @@
 .two-sidebars .region-sidebar-first {
   /* Span 1 column, starting in 1st column from left. */
   float: left;
-  width: 220px;
+  width: 230px;
   margin-left: 0px;
   margin-right: -250px;
 }
@@ -156,7 +156,7 @@
 .two-sidebars .region-sidebar-second {
   /* Span 1 column, starting in 5th column from left. */
   float: left;
-  width: 220px;
+  width: 230px;
   margin-left: 760px;
   margin-right: -980px;
 }
