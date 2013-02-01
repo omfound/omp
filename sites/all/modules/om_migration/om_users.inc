@@ -1,3 +1,4 @@
+<?php
 // User Migration class
 class omUserMigration extends Migration {
   // class constructor
@@ -18,7 +19,7 @@ class omUserMigration extends Migration {
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
       // users active in since January 2012
-      ->condition('u.access > (select unix_timestamp() - 395*24*60*60)')
+      ->condition('u.access', '(select unix_timestamp() - 395*24*60*60)', '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
     $this->source = new MigrateSourceSQL($query, $source_fields);
