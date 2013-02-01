@@ -32,6 +32,34 @@ body {
 .green:visited {
   color: #84B63F;
 }
+input[type="submit"].gray-button,
+a:link.gray-button,
+a:visited.gray-button {
+  display: inline-block;
+  color: #FFFFFF;
+  background-color: #BBBBBB;
+  padding: 3px;
+  text-shadow: none;
+  font-size: 12px;
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #AAAAAA;
+  border-right: solid 1px #AAAAAA;
+  box-shadow: none;
+  border-radius: 0;
+  background-image: none;
+}
+input[type="submit"]:hover.gray-button,
+input[type="submit"]:focus.gray-button,
+a:focus.gray-button,
+a:hover.gray-button {
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #EFEFEF;
+  border-right: solid 1px #EFEFEF;
+  background-color: #BBBBBB;
+}
+
 
 /*
  * The skip-link link will be completely hidden until a user tabs to the link.
