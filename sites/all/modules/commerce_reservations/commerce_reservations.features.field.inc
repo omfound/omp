@@ -76,7 +76,7 @@ function commerce_reservations_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'text_textfield',
-        'weight' => '0',
+        'weight' => '2',
       ),
     ),
   );
@@ -160,7 +160,7 @@ function commerce_reservations_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'commerce_product_reference_autocomplete',
-        'weight' => '0',
+        'weight' => '4',
       ),
     ),
   );
@@ -244,7 +244,7 @@ function commerce_reservations_field_default_fields() {
           'currency_code' => 'default',
         ),
         'type' => 'commerce_price_full',
-        'weight' => '1',
+        'weight' => '5',
       ),
     ),
   );
@@ -328,7 +328,7 @@ function commerce_reservations_field_default_fields() {
           'currency_code' => 'default',
         ),
         'type' => 'commerce_price_full',
-        'weight' => '0',
+        'weight' => '3',
       ),
     ),
   );
@@ -397,7 +397,7 @@ function commerce_reservations_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '4',
+        'weight' => '8',
       ),
     ),
   );
@@ -461,7 +461,7 @@ function commerce_reservations_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '3',
+        'weight' => '7',
       ),
     ),
   );
@@ -490,9 +490,9 @@ function commerce_reservations_field_default_fields() {
           'year' => 'year',
         ),
         'profile2_private' => FALSE,
-        'repeat' => 0,
+        'repeat' => '0',
         'timezone_db' => 'UTC',
-        'todate' => 'optional',
+        'todate' => 'required',
         'tz_handling' => 'site',
       ),
       'translatable' => '0',
@@ -501,7 +501,7 @@ function commerce_reservations_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'reservable_product',
       'commerce_cart_settings' => array(
-        'field_access' => 1,
+        'field_access' => 0,
       ),
       'deleted' => '0',
       'description' => '',
@@ -518,7 +518,7 @@ function commerce_reservations_field_default_fields() {
             'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
-          'weight' => 4,
+          'weight' => 8,
         ),
       ),
       'entity_type' => 'commerce_line_item',
@@ -545,7 +545,7 @@ function commerce_reservations_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '2',
+        'weight' => '6',
       ),
     ),
   );
@@ -614,7 +614,7 @@ function commerce_reservations_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '5',
+        'weight' => '9',
       ),
     ),
   );
