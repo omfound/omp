@@ -501,7 +501,7 @@ function commerce_reservations_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'reservable_product',
       'commerce_cart_settings' => array(
-        'field_access' => 0,
+        'field_access' => 1,
       ),
       'deleted' => '0',
       'description' => '',
