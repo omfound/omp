@@ -21,7 +21,7 @@ class omUserMigration extends Migration {
       // users active in since January 2012
       // this condition statement doesn't work, so have to hard-code start of 2012 in seconds
       // ->condition('u.access','(select unix_timestamp() - 395*24*60*60)', '>')
-      ->condition('u.access',1325639055, '>')
+      ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
     $this->source = new MigrateSourceSQL($query, $source_fields);
