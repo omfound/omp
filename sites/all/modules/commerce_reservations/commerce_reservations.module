@@ -662,14 +662,48 @@ function commerce_reservations_product_type_check($order_id) {
 /**
  * Condition callback to check whether or not a line item product should be charged daily
  */
-
-//code goes here :)
+function commerce_reservations_charge_by_the_day_check($order_id) {
+	if (is_numeric($order_id)) {
+	  $order = commerce_order_load($order_id);
+    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+    if (!empty($order->commerce_line_items)){
+      foreach($order_wrapper->commerce_line_items->getIterator() as $key => $line_item_wrapper) {
+        $product = $line_item_wrapper->commerce_product->value();
+        $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+        if (!empty($product->field_charge_by_the_)) {
+	        $value = $product_wrapper->field_charge_by_the_->value();
+	        if ($value == 'day') {
+		        return TRUE;
+	        }
+        }
+      }
+    }
+	}
+	return FALSE;
+}
 
 /**
  * Condition callback to check whether or not a line item product should be charged hourly
  */
-
-//code goes here :)
+function commerce_reservations_charge_by_the_hour_check($order_id) {
+	if (is_numeric($order_id)) {
+	  $order = commerce_order_load($order_id);
+    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+    if (!empty($order->commerce_line_items)){
+      foreach($order_wrapper->commerce_line_items->getIterator() as $key => $line_item_wrapper) {
+        $product = $line_item_wrapper->commerce_product->value();
+        $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+        if (!empty($product->field_charge_by_the_)) {
+	        $value = $product_wrapper->field_charge_by_the_->value();
+	        if ($value == 'hour') {
+		        return TRUE;
+	        }
+        }
+      }
+    }
+	}
+	return FALSE;
+}
 
 /**
  * Implements hook_rules_action_info
@@ -681,10 +715,10 @@ function commerce_reservations_rules_action_info() {
   // Prepare an array of arithmetical actions for altering prices.
   $action_types = array(
     'commerce_reservations_price_per_hour' => array(
-      'label' => t('Multiply commercial price by hour'),
+      'label' => t('Multiply price by hour'),
     ),
     'commerce_reservations_price_per_day' => array(
-      'label' => t('Multiply member price by day'),
+      'label' => t('Multiply price by day'),
     ),
   );
 
@@ -757,14 +791,18 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
 }
 
 function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $product = $line_item_wrapper->commerce_product->value();
+  //if the product is not a reservable product, duck out
   if ($product->type != 'reservable_product') {
     return;
   }
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  
   $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
+    dpm("!123");
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
     $days_diff = floor(($end - $start) / 86400);
@@ -779,6 +817,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
+    dpm($line_item);
    
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
@@ -789,6 +828,16 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       $difference,
       TRUE
     );
+    
+    $line_item_wrapper->save();
+    $line_item_new = commerce_line_item_load($line_item_wrapper->line_item_id->value());
+    dpm($line_item_new);
+    entity_get_controller('commerce_line_item')->resetCache(array($line_item->line_item_id));
+    $order_id = $line_item_wrapper->order_id->value();
+    $order = commerce_order_load($order_id);
+    dpm($order);
+    commerce_order_calculate_total($order);
+    commerce_order_save($order);
   }
 }
 
