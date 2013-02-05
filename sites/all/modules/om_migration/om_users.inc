@@ -13,7 +13,7 @@ class omUserMigration extends Migration {
     );
 
     // only import active users from the old db
-    $query = db_select('dom_prod'.'.users', 'u')
+    $query = db_select(SOURCE_DATABASE .'.users', 'u')
       ->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
