@@ -602,10 +602,10 @@ function check_view_overlaps(&$view){
 function commerce_reservations_rules_condition_info() {
   return array(
     'commerce_reservations_product_type_check' => array(
-      'label' => t('Order has a reservation'),
+      'label' => t('Line Item is a reservation'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item ID'), 
           'type' => 'integer'
         ),
       ),
@@ -616,8 +616,8 @@ function commerce_reservations_rules_condition_info() {
     'commerce_reservations_charge_by_the_day_check' => array(
       'label' => t('Apply Daily Reservation Pricing'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item ID'), 
           'type' => 'integer'
         ),
       ),
@@ -643,17 +643,11 @@ function commerce_reservations_rules_condition_info() {
 /**
  * Condition callback to check whether or not an order contains a reservation. Thanks Leo!
  */
-function commerce_reservations_product_type_check($order_id) {
-  if (is_numeric($order_id)) {
-    $order = commerce_order_load($order_id);
-    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
-    if (!empty($order->commerce_line_items)){
-      foreach($order_wrapper->commerce_line_items->getIterator() as $key => $line_item_wrapper) {
-        $product = $line_item_wrapper->commerce_product->value();
-        if ($product->type == 'reservable_product') {
-          return TRUE;
-        }
-      }
+function commerce_reservations_product_type_check($lid) {
+  if (is_numeric($lid)) {
+    $line_item = commerce_line_item_load($lid);
+    if ($line_item->type == 'reservable_product') {
+	    return TRUE;
     }
   }
   return FALSE;
@@ -662,14 +656,34 @@ function commerce_reservations_product_type_check($order_id) {
 /**
  * Condition callback to check whether or not a line item product should be charged daily
  */
-
-//code goes here :)
+function commerce_reservations_charge_by_the_day_check($lid) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+    if ($product_wrapper->field_charge_by_the_->value() == 'day') {
+	    return TRUE;
+    }
+	}
+	return FALSE;
+}
 
 /**
  * Condition callback to check whether or not a line item product should be charged hourly
  */
-
-//code goes here :)
+function commerce_reservations_charge_by_the_hour_check($order_id) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+    if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
+	    return TRUE;
+    }
+	}
+	return FALSE;
+}
 
 /**
  * Implements hook_rules_action_info
@@ -681,10 +695,10 @@ function commerce_reservations_rules_action_info() {
   // Prepare an array of arithmetical actions for altering prices.
   $action_types = array(
     'commerce_reservations_price_per_hour' => array(
-      'label' => t('Multiply commercial price by hour'),
+      'label' => t('Multiply price by hour'),
     ),
     'commerce_reservations_price_per_day' => array(
-      'label' => t('Multiply member price by day'),
+      'label' => t('Multiply price by day'),
     ),
   );
 
@@ -757,11 +771,14 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
 }
 
 function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $product = $line_item_wrapper->commerce_product->value();
+  //if the product is not a reservable product, duck out
   if ($product->type != 'reservable_product') {
     return;
   }
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  
   $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
