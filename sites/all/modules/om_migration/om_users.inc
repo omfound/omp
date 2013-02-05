@@ -13,19 +13,16 @@ class omUserMigration extends Migration {
     );
 
     // only import active users from the old db
-    $query = db_select(SOURCE_DATABASE .'.users', 'u')
+    $query = db_select('dom_prod'.'.users', 'u')
       ->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
-      // users active in since January 2012
-      // this condition statement doesn't work, so have to hard-code start of 2012 in seconds
-      // ->condition('u.access','(select unix_timestamp() - 395*24*60*60)', '>')
+      // grab users who have accessed site since cutoff date
       ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
     $this->source = new MigrateSourceSQL($query, $source_fields);
-    // ...
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
 

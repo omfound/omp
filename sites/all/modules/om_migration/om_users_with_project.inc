@@ -13,21 +13,21 @@ class omUserWithProjectMigration extends Migration {
     );
 
     $query = db_select(SOURCE_DATABASE .'.users', 'u');
-    $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
+    $query->join(SOURCE_DATABASE .'.node', 'n', 'n.uid = u.uid'); //JOIN node with users
+    $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');
+    $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // set query to be distinct
       // user is active user
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
-      //$query->distinct(TRUE)
       // grab users who have accessed site since cutoff date
       // Don't limit this migration by date
       // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
-    // select distinct uid from node join content_type_om_project using(nid);
-    $query->join('node', 'n', 'u.uid = n.uid'); //JOIN node with users
-    //$query->join('content_type_om_project', 'p', 'n.nid = p.nid');
+     //select distinct uid from node join content_type_om_project using(nid);
+
     $this->source = new MigrateSourceSQL($query, $source_fields);
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
