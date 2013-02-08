@@ -25,7 +25,7 @@
   padding: 0 0 10px 0;
   margin: 0;
 }
-
+.page-dashboard #content h1,
 .page-views #content h1 {
   line-height: 36px;
 }
