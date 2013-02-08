@@ -69,6 +69,12 @@ function om_dashboard_pane_page($pane) {
  * Page callback to view all panes on one page.
  */
 function om_dashboard_page() {
+  $options = array(
+    'type' => 'file',
+     'group' => JS_LIBRARY
+  );
+  drupal_add_js('sites/all/libraries/masonry/jquery.masonry.min.js', $options);
+  drupal_add_js(drupal_get_path('module', 'om_dashboard') . '/js/dashboard-masonry.js', $options);
   $panes = om_dashboard_get_panes();
   $rendered_panes = "";
   foreach ($panes AS $pane) {
