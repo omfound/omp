@@ -5,7 +5,7 @@
       $container.find('.pane').css('margin-right', 0);
       var masonryOptions = {
         itemSelector : '.pane',
-        columnWidth : 325,
+        columnWidth : 350,
         gutterWidth : 30
       };
       $container.imagesLoaded( function(){

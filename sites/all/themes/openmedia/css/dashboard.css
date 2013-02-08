@@ -4,11 +4,15 @@
   border: none;
 }
 
+.page-dashboard #content-inner {
+  padding: 0;
+}
+
 .page-dashboard #content .pane {
   background-color: #FFFFFF;
   box-shadow: 1px 1px 2px #AAA, -1px -1px 2px #AAA;
   margin: 0 30px 30px 0;
-  width: 325px;
+  width: 350px;
   float: left;
 }
 
@@ -17,7 +21,7 @@
 }
 
 .page-dashboard #content h3 {
-  width: 315px;
+  width: 340px;
   color: #FFFFFF;
   background: #54474F;
   text-shadow: none;
