@@ -1,5 +1,10 @@
 <?php
 
+// define the source database
+define("SOURCE_DATABASE", 'dom_prod');
+// All users who have signed into account after this date will be migrated.
+$cutoff = new DateTime("2012-01-01");
+define("USER_MIGRATION_CUTOFF",$cutoff->getTimestamp());
 /**
  * You must implement hook_migrate_api(), setting the API level to 2, for
  * your migration classes to be recognized by the Migrate module.
@@ -7,11 +12,14 @@
 function om_migration_migrate_api() {
   $api = array(
     'api' => 2,
+    'migrations' => array(
+      'OM_USER' => array('class_name' => 'omUserMigration'),
+      'OM_USER2' => array('class_name' => 'omUserWithProjectMigration'),
+    ),
   );
+
   return $api;
 }
 
 
 
-// define the source database
-define("SOURCE_DATABASE", 'dom_prod');

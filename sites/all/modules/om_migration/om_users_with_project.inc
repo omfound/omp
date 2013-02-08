@@ -1,9 +1,9 @@
 <?php
 // User Migration class
-class omUserMigration extends Migration {
+class omUserWithProjectMigration extends Migration {
   // class constructor
   public function __construct() {
-    parent::__construct(MigrateGroup::getInstance('om_users_group'));
+    parent::__construct(MigrateGroup::getInstance('om_users_with_project_group'));
     $this->description = t('Migrate Drupal 6 users');
 
     // some field definitions; roles will be added later in prepareRow()
@@ -12,16 +12,22 @@ class omUserMigration extends Migration {
       'roles' => t('The set of roles assigned to a user.'),
     );
 
-    // only import active users from the old db
-    $query = db_select(SOURCE_DATABASE .'.users', 'u')
-      ->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
+    $query = db_select(SOURCE_DATABASE .'.users', 'u');
+    $query->join(SOURCE_DATABASE .'.node', 'n', 'n.uid = u.uid'); //JOIN node with users
+    $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');
+    $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
+      // set query to be distinct
+      // user is active user
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
       // grab users who have accessed site since cutoff date
-      ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
+      // Don't limit this migration by date
+      // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
+     //select distinct uid from node join content_type_om_project using(nid);
+
     $this->source = new MigrateSourceSQL($query, $source_fields);
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
