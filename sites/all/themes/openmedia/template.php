@@ -120,6 +120,7 @@ function openmedia_process_show(&$variables) {
         $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables['language']][0]['uri']); 
       }
     }
+    drupal_add_js('/sites/all/libraries/jwplayer/jwplayer.js');
     drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
     drupal_add_js(drupal_get_path('theme', 'openmedia').'/js/jwplayer-default.js');
   }
