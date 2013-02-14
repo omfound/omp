@@ -490,6 +490,7 @@ function commerce_reservations_field_default_fields() {
           'year' => 'year',
         ),
         'profile2_private' => FALSE,
+        'repeat' => 0,
         'timezone_db' => 'UTC',
         'todate' => 'optional',
         'tz_handling' => 'site',
@@ -514,6 +515,7 @@ function commerce_reservations_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => 4,
@@ -538,6 +540,7 @@ function commerce_reservations_field_default_fields() {
           'input_format' => 'm/d/Y - g:i:sa',
           'input_format_custom' => '',
           'label_position' => 'above',
+          'repeat_collapsed' => 0,
           'text_parts' => array(),
           'year_range' => '-3:+3',
         ),
@@ -749,7 +752,7 @@ function commerce_reservations_field_default_fields() {
           'currency_code' => 'default',
         ),
         'type' => 'commerce_price_full',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -839,44 +842,49 @@ function commerce_reservations_field_default_fields() {
     ),
   );
 
-  // Exported field: 'commerce_product-reservable_product-field_commercial_cost'.
-  $fields['commerce_product-reservable_product-field_commercial_cost'] = array(
+  // Exported field: 'commerce_product-reservable_product-field_charge_by_the_'.
+  $fields['commerce_product-reservable_product-field_charge_by_the_'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_commercial_cost',
-      'field_permissions' => array(
-        'type' => '0',
-      ),
+      'field_name' => 'field_charge_by_the_',
       'foreign keys' => array(),
       'indexes' => array(
-        'currency_price' => array(
-          0 => 'amount',
-          1 => 'currency_code',
+        'value' => array(
+          0 => 'value',
         ),
       ),
       'locked' => '0',
-      'module' => 'commerce_price',
-      'settings' => array(),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'hour' => 'Hour',
+          'day' => 'Day',
+        ),
+        'allowed_values_function' => '',
+        'profile2_private' => FALSE,
+      ),
       'translatable' => '0',
-      'type' => 'commerce_price',
+      'type' => 'list_text',
     ),
     'field_instance' => array(
       'bundle' => 'reservable_product',
+      'commerce_cart_settings' => array(
+        'attribute_field' => 0,
+        'attribute_widget' => 'select',
+      ),
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => '',
+      'description' => 'If nothing is selected here, the system will simply charge the buyer the product price, not multiplied by a period of time.',
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'commerce_price',
-          'settings' => array(
-            'calculation' => FALSE,
-          ),
-          'type' => 'commerce_price_formatted_amount',
-          'weight' => '4',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 9,
         ),
         'line_item' => array(
           'label' => 'above',
@@ -892,19 +900,17 @@ function commerce_reservations_field_default_fields() {
         ),
       ),
       'entity_type' => 'commerce_product',
-      'field_name' => 'field_commercial_cost',
-      'label' => 'Commercial Cost',
+      'field_name' => 'field_charge_by_the_',
+      'label' => 'Charge by The:',
       'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'commerce_price',
-        'settings' => array(
-          'currency_code' => 'default',
-        ),
-        'type' => 'commerce_price_full',
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
         'weight' => '6',
       ),
     ),
@@ -990,77 +996,6 @@ function commerce_reservations_field_default_fields() {
         ),
         'type' => 'taxonomy_autocomplete',
         'weight' => '2',
-      ),
-    ),
-  );
-
-  // Exported field: 'commerce_product-reservable_product-field_member_cost'.
-  $fields['commerce_product-reservable_product-field_member_cost'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_member_cost',
-      'field_permissions' => array(
-        'type' => '0',
-      ),
-      'foreign keys' => array(),
-      'indexes' => array(
-        'currency_price' => array(
-          0 => 'amount',
-          1 => 'currency_code',
-        ),
-      ),
-      'locked' => '0',
-      'module' => 'commerce_price',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'commerce_price',
-    ),
-    'field_instance' => array(
-      'bundle' => 'reservable_product',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'commerce_price',
-          'settings' => array(
-            'calculation' => FALSE,
-          ),
-          'type' => 'commerce_price_formatted_amount',
-          'weight' => '5',
-        ),
-        'line_item' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'node_teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'commerce_product',
-      'field_name' => 'field_member_cost',
-      'label' => 'Member Cost',
-      'required' => 0,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'commerce_price',
-        'settings' => array(
-          'currency_code' => 'default',
-        ),
-        'type' => 'commerce_price_full',
-        'weight' => '5',
       ),
     ),
   );
@@ -1213,7 +1148,7 @@ function commerce_reservations_field_default_fields() {
           'rows' => '5',
         ),
         'type' => 'text_textarea',
-        'weight' => '10',
+        'weight' => '9',
       ),
     ),
   );
@@ -1729,12 +1664,12 @@ function commerce_reservations_field_default_fields() {
   t('Abbreviation');
   t('Body');
   t('Certifications Required');
+  t('Charge by The:');
   t('Checked Out Accessories');
   t('Checkout Status');
-  t('Commercial Cost');
   t('Display path');
+  t('If nothing is selected here, the system will simply charge the buyer the product price, not multiplied by a period of time.');
   t('If this accessory works for a certain product, or a few individual products, select those here.  If it is a generic accessory, for more then a few products, leave this field blank.');
-  t('Member Cost');
   t('Price');
   t('Product');
   t('Product Category');

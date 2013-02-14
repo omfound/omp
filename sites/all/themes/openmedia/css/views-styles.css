@@ -1,13 +1,7 @@
-/**
- * @file
- * Views Styling
- */
-body.page-views #main #content {
-  background-color: transparent;
+.omp-grid {
+  margin: 0 0 20px 0;
 }
 
-.omp-grid {
-}
 .omp-grid:after {
   visibility: hidden;
   display: block;
@@ -15,17 +9,170 @@ body.page-views #main #content {
   clear: both;
   height: 0;
 }
-* html .omp-grid             { zoom: 1; } /* IE6 */
-*:first-child+html .omp-grid { zoom: 1; } /* IE7 */
+
+* html .omp-grid {
+  zoom: 1;  /* IE6 */
+}
+
+*:first-child+html .omp-grid {
+  zoom: 1; /* IE7 */
+}
 
 .omp-grid .views-row {
   float: left;
-  margin-left: 18px;
-  width: 180px;
-  height: 235px;
-  background-color: #fff;
+  margin-left: 42px;
+  margin-bottom: 20px;
+  width: 220px;
+  height: auto;
+  background-color: #EFEFEF;
+  border: solid 1px #99948A;
+  border-radius: 3px;
+  /** 
+    * Images rounded corners compete with these.
+    * This creates some weird artifacts.
+    * Thus we make sure the corners of the background are out of the way.
+    */
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  box-shadow: 1px 1px 1px #AAAAAA;
+  -webkit-transition: background 0.5s linear;
+  -moz-transition: background 0.5s linear;
+  -o-transition: background 0.5s linear;
+  transition: background 0.5s linear;
 }
 
-.omp-grid .views-field {
-  
+.no-sidebars .omp-grid .views-row {
+  margin-left: 30px;
+}
+
+.omp-grid .views-row:hover {
+  background-color: #FFFFFF;
+}
+
+#content .omp-grid .views-row-start {
+  margin: 0;
+}
+
+/** Create the Beveled Divider **/
+.omp-grid .divider {
+  border-top: 1px solid #B7B1A4;
+}
+
+#main .omp-grid .divider .inner {
+  border-top: 1px solid #FFFFFF;
+}
+
+.omp-grid .views-row img {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.omp-grid .views-row .title,
+.omp-grid .views-row .date {
+  padding: 0 10px;
+}
+
+.omp-grid .views-row .title a:link,
+.omp-grid .views-row .title a:visited {
+  color: #000000;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.omp-grid .floated {
+  float: left;
+}
+
+.omp-grid .label {
+  padding: 0;
+  margin: 0;
+  font-weight: bold;
+}
+
+
+
+/** Specific Grids **/
+.front .omp-grid .floated {
+  margin-right: 3px;
+}
+
+.front .counter-tray {
+  font-size: 11px;
+}
+
+.front .counter-tray .inner,
+.certifications-required,
+.certifications-earned  {
+  padding: 0 10px;
+}
+
+.certifications-required,
+.certifications-earned {
+  line-height: 16px;
+  margin: 5px 0;
+}
+
+/** Front Page Sidebar **/
+.front #block-views-front-page-news-block .views-row {
+  margin-bottom: 20px;
+  width: 196px;
+  height: auto;
+  background-color: #FBF0D4;
+  border: solid 1px #99948A;
+  border-radius: 3px;
+  /** 
+    * Images rounded corners compete with these.
+    * This creates some weird artifacts.
+    * Thus we make sure the corners of the background are out of the way.
+    */
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  box-shadow: 1px 1px 1px #AAAAAA;
+  -webkit-transition: background 0.5s linear;
+  -moz-transition: background 0.5s linear;
+  -o-transition: background 0.5s linear;
+  transition: background 0.5s linear;
+}
+
+.front #block-views-front-page-news-block .views-row:hover {
+  background: #FAF5E7;
+}
+
+.front #block-views-front-page-news-block .views-row img {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.front #block-views-front-page-news-block .views-row .title,
+.front #block-views-front-page-news-block .views-row .created,
+.front #block-views-front-page-news-block .views-row .body,
+.front #block-views-front-page-news-block .views-row .read-more {
+  padding: 0 10px;
+}
+
+.front #block-views-front-page-news-block .views-row .title a:link,
+.front #block-views-front-page-news-block .views-row .title a:visited {
+  color: #000000;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.front #block-views-front-page-news-block .views-row .read-more a:link,
+.front #block-views-front-page-news-block .views-row .read-more a:visited {
+  font-size: 12px;
+  font-weight: bold;
+  color: #3a93cc;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+/** Remove class grid padding **/
+.page-classes #content-inner {
+  padding: 0;
+}
+
+.page-classes .breadcrumb {
+  display: none;
 }

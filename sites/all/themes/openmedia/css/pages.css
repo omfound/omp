@@ -11,16 +11,10 @@
 /*
  * Body
  */
-
-html {
-  height: 100%;
-}
-
 body {
   margin: 0;
   padding: 0;
   background: transparent url(../images/bg.jpg) top left repeat;
-  height: 100%;
   font-family: Helvetica, Arial, sans-serif;
   color: #333333;
   font-size: 12px;
@@ -38,6 +32,34 @@ body {
 .green:visited {
   color: #84B63F;
 }
+input[type="submit"].gray-button,
+a:link.gray-button,
+a:visited.gray-button {
+  display: inline-block;
+  color: #FFFFFF;
+  background-color: #BBBBBB;
+  padding: 3px;
+  text-shadow: none;
+  font-size: 12px;
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #AAAAAA;
+  border-right: solid 1px #AAAAAA;
+  box-shadow: none;
+  border-radius: 0;
+  background-image: none;
+}
+input[type="submit"]:hover.gray-button,
+input[type="submit"]:focus.gray-button,
+a:focus.gray-button,
+a:hover.gray-button {
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #EFEFEF;
+  border-right: solid 1px #EFEFEF;
+  background-color: #BBBBBB;
+}
+
 
 /*
  * The skip-link link will be completely hidden until a user tabs to the link.
@@ -79,7 +101,17 @@ div.messages ul {
 }
 
 .front #page {
-  height: 100%;
+  page: 0;
+}
+
+.front #main #content {
+  padding: 0;
+}
+
+.page-classes #main #content {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 #header {
@@ -93,13 +125,28 @@ div.messages ul {
   padding: 0;
 }
 
+.front #action-item {
+  border-top: 1px solid #B7B1A4;
+}
+
+.front #action-item .wrapper {
+  border-top: 1px solid #E1DBCD;
+}
+
 .front #main {
   padding-top: 0;
   *background-color: #DCD5C3;
   background-color: rgba(220, 213, 195, .75);
-  height: 100%;
-  outline: 1px solid #B7B1A4;
+  border-top: 1px solid #B7B1A4;
+  
+}
+
+.front #main .inner {
   border-top: solid 1px #E1DBCD;
+}
+
+.front .region-sidebar-second {
+  margin-top: 60px;
 }
 
 .breadcrumb ol li,
@@ -115,8 +162,20 @@ div.messages ul {
   margin-bottom: 30px;
 }
 
-#footer-wrapper {
-  border-top: solid 1px #B7B1A4;
+.front .region-sidebar-second {
+  padding: 0;
+  width: 196px;
+}
+
+.front #footer-wrapper {
+  *background-color: #DCD5C3;
+  background-color: rgba(220, 213, 195, .75);
+}
+
+#footer-wrapper .inner {
+  width: 980px;
+  margin: auto;
+  border-top: 1px solid #B7B1A4;
 }
 
 #footer {

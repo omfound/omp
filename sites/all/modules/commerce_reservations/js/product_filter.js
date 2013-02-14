@@ -12,8 +12,7 @@
 	    item.mousedown(function(){
 	      item.attr('id', 'selected-product');
 	      var nid = $(this).find('.views-field-nid .field-content').text();
-	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content select[name="product_id"]').val();
-	      console.log(pid);
+	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
 	      //Remove events from the calendar
 	      $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
@@ -70,8 +69,6 @@
             }
           });
           quantity = $('#selected-product #edit-quantity').val();
-          console.log(nid);
-          console.log(pid);
           $.ajax(
           {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
             cache : false,

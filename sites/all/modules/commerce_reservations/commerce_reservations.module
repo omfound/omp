@@ -1421,3 +1421,23 @@ function commerce_reservations_week_days(){
   );
   return $days;
 }
+
+/**
+ * Implementation of hook_theme()
+ */
+function commerce_reservations_theme() {
+  $path = drupal_get_path('module', 'commerce_reservations');
+  return array(
+    'views_view_fields__reservation_orders' => array (
+      'arguments' => array('view' => NULL, 'field' => NULL, 'row' => NULL),
+      'template' => 'views-view-fields--reservation-orders',
+      'base hook' => 'views_view-fields',
+      'path' => $path . '/theme',
+      'preprocess functions' => array(
+        'template_preprocess',
+        'template_preprocess_views_view_fields',
+        'commerce_reservations_preprocess_views_view_fields__reservation_orders',
+      ),
+    ),
+  );
+}
