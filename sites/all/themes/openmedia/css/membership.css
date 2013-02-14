@@ -95,8 +95,11 @@
   text-decoration: underline;
 }
 
-/** Membership Steps **/
+#om-membership-registration-form {
+  padding-top: 10px;
+}
 
+/** Membership Steps **/
 #edit-form-helper {
   padding: 10px 0 10px 0;
   margin: 0;
@@ -142,7 +145,15 @@
   font-family: 'PTSansRegular', sans-serif;
 }
 
+fieldset.checkout-buttons {
+  padding: 1em;
+}
+
 input.checkout-cancel,
 input.checkout-back {
   box-shadow: none;
+}
+
+.section-checkout table {
+  width: 100%;
 }

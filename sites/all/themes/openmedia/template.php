@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exists('date')) {
-  require_once(drupal_get_path('theme', 'openmedia') . '/date-repeat-helper.inc');
+  require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
 }
 
 function openmedia_preprocess_page(&$variables) {

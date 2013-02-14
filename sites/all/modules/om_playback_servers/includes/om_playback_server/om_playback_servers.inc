@@ -26,72 +26,39 @@ abstract class playbackServerController {
   /**
    * Methods dealing with metadata transmission.
    */
-  abstract function create_metadata($pbs, $metadata);
-  abstract function check_metadata_status($pbs, $metadata);
-  abstract function update_metadata($pbs, $metadata);
-  abstract function delete_metadata($pbs, $metadata);
+  abstract function create_metadata($pbs, $metadata = array());
+  abstract function check_metadata_status($pbs, $metadata = array());
+  abstract function update_metadata($pbs, $metadata = array());
+  abstract function delete_metadata($pbs, $metadata = array());
 
   /**
    * Methods dealing with file transmission.
    */
 
-  abstract function transfer_file($pbs, $file_uri); // This method may be legacy and TBD
-  abstract function check_file_status($pbs, $parameters);
+  public function transfer_file($pbs, $file_uri) {
+    // This method may be legacy and TBD
+  } 
+  public function check_file_status($pbs, $parameters) {
+    
+  }
 
   /**
    * Methods dealing with airings.
    */
-  abstract function create_airing($pbs, $schedule_obj);
-  abstract function update_airing($pbs, $schedule_obj);
-  abstract function get_airing($pbs, $schedule_obj);
-  abstract function delete_airing($pbs, $schedule_obj);
+  abstract function create_airing($pbs, $schedule_obj = array());
+  abstract function update_airing($pbs, $schedule_obj = array());
+  abstract function get_airing($pbs, $schedule_obj = array());
+  abstract function delete_airing($pbs, $schedule_obj = array());
 
   /**
    * Methods dealing with system health
    */
-  abstract function get_server_health();
+  abstract function get_server_health($pbs);
 
   /**
    * Optional method to handle file storage. Given a uri.. react appropriately.
    */
-  abstract function handle_file_storage($uri);
-
-  /**
-   * Shared function to ensure responses are properly formatted.
-   */
-  public function format_response($object, $type) {
-    $missing = array();
-    switch ($type) {
-      case 'airing':
-        if (empty($object->guid)) {
-          $missing[] = 'guid';
-        }
-        if (empty($object->start)) {
-          $missing[] = 'start';
-        }
-        if (empty($object->end)) {
-          $missing[] = 'end';
-        }
-        if (empty($object->show_id)) {
-          $missing[] = 'show';
-        }
-        break;
-      case 'status':
-        break;
-    }
-    if (empty($missing)) {
-      return TRUE;
-    }
-    else {
-      return $missing;
-    }
-  }
-  
-  public function generalize_data_structure($airing, $map) {
-    $formated_airing = array();
-    foreach ($map AS $key => $value) {
-      $formated_airing[$value] = $airing[$key];
-    }
-    return $formated_airing;
+  public function handle_file_storage($uri) {
+    
   }
 }

@@ -44,8 +44,10 @@ function date_repeat_helper_fetch_all_date_formats($entity_type, $entity, $field
   //store day type
   if (count($entity->{$field_name}[$entity->language]) > 1) {
     $date['day-type'] = 'repeating';
-    $date['repeat-desc'] = date_repeat_rrule_description($entity->{$field_name}[$entity->language][0]['rrule']);
-    $date['repeat-desc'] = goc_activities_cleanup_date_repeat_desc($date['repeat-desc']);
+    if (isset($entity->{$field_name}[$entity->language][0]['rrule'])) {
+      $date['repeat-desc'] = date_repeat_rrule_description($entity->{$field_name}[$entity->language][0]['rrule']);
+      $date['repeat-desc'] = date_repeat_helper_cleanup_date_repeat_desc($date['repeat-desc']);
+    }
   }
   else {
     if (date('d/m/Y', $date['raw'][0]['start']) == date('d/m/Y', $date['raw'][0]['end'])) {
@@ -141,6 +143,19 @@ function date_repeat_helper_format_date($date_info, $date_item_array) {
   return $output;
 }
 
+/**
+ * Utility function to clean up date repeat rule, making it more presentable on the front end.
+ */
+function date_repeat_helper_cleanup_date_repeat_desc($desc) {
+  $desc = str_replace('   ', ', ', $desc);
+  $desc = str_replace('  ', ', ', $desc);
+  $desc = str_replace(' .', '.', $desc);
+  $desc = str_replace('every week', 'weekly', $desc);
+  $desc = str_replace('every month', 'monthly', $desc);
+  $desc = str_replace('every year', 'yearly', $desc);
+  return $desc;
+}
+
 function date_repeat_helper_date_info($node, $field_name) {
   if (is_numeric($node)) {
     $node = node_load($node);
@@ -159,7 +174,7 @@ function date_repeat_helper_date_info($node, $field_name) {
   }
 }
 
-function  date_repeat_helper_date_nids($node, $field_name) {
+function date_repeat_helper_date_nids($node, $field_name) {
   $field_info = field_info_field($field_name);
   $scheme = array();
   foreach ($field_info['storage']['details']['sql']['FIELD_LOAD_CURRENT'] AS $table => $values) {

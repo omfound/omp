@@ -602,10 +602,10 @@ function check_view_overlaps(&$view){
 function commerce_reservations_rules_condition_info() {
   return array(
     'commerce_reservations_product_type_check' => array(
-      'label' => t('Order has a reservation'),
+      'label' => t('Line Item is a reservation'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item ID'), 
           'type' => 'integer'
         ),
       ),
@@ -613,15 +613,27 @@ function commerce_reservations_rules_condition_info() {
       'module' => 'commerce_reservations',
       'group' => t('Commerce Reservations Rules'),
     ),
-    'commerce_reservations_commercial_check' => array(
-      'label' => t('Reservation is Commercial'),
+    'commerce_reservations_charge_by_the_day_check' => array(
+      'label' => t('Apply Daily Reservation Pricing'),
+      'arguments' => array(
+        'lid' => array(
+          'label' => t('Line Item ID'), 
+          'type' => 'integer'
+        ),
+      ),
+      'help' => t('This condition checks to see if the line item product should be charged daily.'),
+      'module' => 'commerce_reservations',
+      'group' => t('Commerce Reservations Rules'),
+    ),
+    'commerce_reservations_charge_by_the_hour_check' => array(
+      'label' => t('Apply Hourly Reservation Pricing'),
       'arguments' => array(
         'order_id' => array(
           'label' => t('Order Id'), 
           'type' => 'integer'
         ),
       ),
-      'help' => t('This condition checks to see if this reservation is a commercial reservation.'),
+      'help' => t('This condition checks to see if the line item product should be charged hourly.'),
       'module' => 'commerce_reservations',
       'group' => t('Commerce Reservations Rules'),
     ),
@@ -631,31 +643,46 @@ function commerce_reservations_rules_condition_info() {
 /**
  * Condition callback to check whether or not an order contains a reservation. Thanks Leo!
  */
-function commerce_reservations_product_type_check($order_id) {
-  if (is_numeric($order_id)) {
-    $order = commerce_order_load($order_id);
-    if (!empty($order->commerce_line_items)){
-      foreach($order->commerce_line_items['und'] AS $line_item) {
-        $line_item = commerce_line_item_load($line_item['line_item_id']);
-        $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-        if ($product->type == 'reservable_product') {
-          return TRUE;
-        }
-      }
+function commerce_reservations_product_type_check($lid) {
+  if (is_numeric($lid)) {
+    $line_item = commerce_line_item_load($lid);
+    if ($line_item->type == 'reservable_product') {
+	    return TRUE;
     }
   }
   return FALSE;
 }
+
 /**
- * Condition callback to check whether or not an reservation is commercial.
+ * Condition callback to check whether or not a line item product should be charged daily
  */
- 
-function commerce_reservations_commercial_check($line_id){
-  $line_item = commerce_line_item_load($line_id);
-  if ($line_item->field_commercial_reservation['und'][0]['value'] == 1){
-	  return TRUE;
-  }
-  return FALSE;
+function commerce_reservations_charge_by_the_day_check($lid) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+    if ($product_wrapper->field_charge_by_the_->value() == 'day') {
+	    return TRUE;
+    }
+	}
+	return FALSE;
+}
+
+/**
+ * Condition callback to check whether or not a line item product should be charged hourly
+ */
+function commerce_reservations_charge_by_the_hour_check($order_id) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+    if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
+	    return TRUE;
+    }
+	}
+	return FALSE;
 }
 
 /**
@@ -667,20 +694,11 @@ function commerce_reservations_rules_action_info() {
 
   // Prepare an array of arithmetical actions for altering prices.
   $action_types = array(
-    'commerce_reservations_commercial_price_per_hour' => array(
-      'label' => t('Multiply commercial price by hour'),
+    'commerce_reservations_price_per_hour' => array(
+      'label' => t('Multiply price by hour'),
     ),
-    'commerce_reservations_member_price_per_hour' => array(
-      'label' => t('Multiply member price by hour'),
-    ),
-    'commerce_reservations_member_price_per_day' => array(
-      'label' => t('Multiply member price by day'),
-    ),
-    'commerce_reservations_commercial_price_per_day' => array(
-      'label' => t('Multiply commercial price by day'),
-    ),
-    'commerce_reservations_email_confirmation' => array(
-      'label' => t('Send an email confirmation regarding the reservation order'),
+    'commerce_reservations_price_per_day' => array(
+      'label' => t('Multiply price by day'),
     ),
   );
 
@@ -714,13 +732,15 @@ function commerce_reservations_rules_action_info() {
   return $actions;
 }
 
-function commerce_reservations_commercial_price_per_hour($line_item, $component_name, $round_mode){
+function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
+  
+  //First check to make sure the product is a reservable product
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if ($product->type != 'reservable_product') {
     return;
   }
-  $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
@@ -729,8 +749,8 @@ function commerce_reservations_commercial_price_per_hour($line_item, $component_
     if ($hours_diff < 1){
 	    $hours_diff = 1;
     }
-    $commercial_rate = $product->field_commercial_cost['und'][0]['amount'];
-    $updated_price = $hours_diff * $commercial_rate;
+    $rate = $product->commerce_price['und'][0]['amount'];
+    $updated_price = $hours_diff * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
@@ -739,10 +759,10 @@ function commerce_reservations_commercial_price_per_hour($line_item, $component_
     );
    
     // Set the amount of the unit price and add the difference as a component.
-    $wrapper->commerce_unit_price->amount = $updated_price;
+    $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
-    $wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $wrapper->commerce_unit_price->value(),
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
       $difference,
       TRUE
@@ -750,49 +770,16 @@ function commerce_reservations_commercial_price_per_hour($line_item, $component_
   }
 }
 
-function commerce_reservations_member_price_per_hour($line_item, $component_name, $round_mode){
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
-    return;
-  }
-  $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
+function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
   
-  if (property_exists($line_item, "field_reservation_dates")){
-    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_diff = floor(($end - $start) / 3600);
-    if ($hours_diff < 1){
-	    $hours_diff = 1;
-    }
-    $commercial_rate = $product->field_member_cost['und'][0]['amount'];
-    $updated_price = $hours_diff * $commercial_rate;
-    $current_amount = $unit_price['amount'];
-    $difference = array(
-      'amount' => $updated_price - $current_amount,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-   
-    // Set the amount of the unit price and add the difference as a component.
-    $wrapper->commerce_unit_price->amount = $updated_price;
-    
-    $wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-  }
-}
-
-function commerce_reservations_commercial_price_per_day($line_item, $component_name, $round_mode){
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $product = $line_item_wrapper->commerce_product->value();
+  //if the product is not a reservable product, duck out
   if ($product->type != 'reservable_product') {
     return;
   }
-  $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
+  
+  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
@@ -801,8 +788,8 @@ function commerce_reservations_commercial_price_per_day($line_item, $component_n
     if ($days_diff < 1){
 	    $days_diff = 1;
     }
-    $commercial_rate = $product->field_commercial_cost['und'][0]['amount'];
-    $updated_price = $days_diff * $commercial_rate;
+    $rate = $product->commerce_price['und'][0]['amount'];
+    $updated_price = $days_diff * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
@@ -811,10 +798,10 @@ function commerce_reservations_commercial_price_per_day($line_item, $component_n
     );
    
     // Set the amount of the unit price and add the difference as a component.
-    $wrapper->commerce_unit_price->amount = $updated_price;
+    $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
-    $wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $wrapper->commerce_unit_price->value(),
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
       $difference,
       TRUE
@@ -822,42 +809,7 @@ function commerce_reservations_commercial_price_per_day($line_item, $component_n
   }
 }
 
-function commerce_reservations_member_price_per_day($line_item, $component_name, $round_mode){
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
-    return;
-  }
-  $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
-  
-  if (property_exists($line_item, "field_reservation_dates")){
-    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $days_diff = floor(($end - $start) / 86400);
-    if ($days_diff < 1){
-	    $days_diff = 1;
-    }
-    $commercial_rate = $product->field_member_cost['und'][0]['amount'];
-    $updated_price = $days_diff * $commercial_rate;
-    $current_amount = $unit_price['amount'];
-    $difference = array(
-      'amount' => $updated_price - $current_amount,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-   
-    // Set the amount of the unit price and add the difference as a component.
-    $wrapper->commerce_unit_price->amount = $updated_price;
-    
-    $wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-  }
-}
-
+//This is legacy code for email confirmation, needs to be looked at
 
 function commerce_reservations_email_confirmation($line_item, $component_name, $round_mode){
   $order_id = $line_item->order_id;
