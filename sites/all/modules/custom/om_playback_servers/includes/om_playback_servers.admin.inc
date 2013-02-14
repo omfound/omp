@@ -189,7 +189,7 @@ function om_playback_servers_admin_list() {
     'start' => 1360859450,
     'end' => 1361723441
   );
-  $controller->get_server_health($pbs, $schedule_info);
+  $controller->create_metadata($pbs, $schedule_info);
   
   $term_query = $query = db_select('taxonomy_vocabulary', 'voc');
   $term_query->fields('voc', array('vid'));

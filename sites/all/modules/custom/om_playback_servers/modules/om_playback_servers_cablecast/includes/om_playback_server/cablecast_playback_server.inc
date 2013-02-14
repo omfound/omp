@@ -5,7 +5,29 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with metadata transmission.
    */
   public function create_metadata($pbs, $metadata = array()) {
-    
+    if (is_object($metadata)) {
+      $metadata = array($metadata);
+    }
+    foreach ($metadata AS $show) {
+      // Map drupal fields to cablecast fields.
+      $params = array (
+        'LocalID'       => '', //string</LocalID>
+        'Title'         => $show->title,
+        'CGTitle'       => $show->title, //string</CGTitle>
+        'ProjectID'     => 0, //int</ProjectID>
+        'CGExempt'      => 'false', //boolean</CGExempt>
+        'ProducerID'    => 0, //int</ProducerID>
+        'CategoryID'    => 0, //int</CategoryID>
+        'EventDate'     => date('Y-m-d\TH:i:s', $node->created), //dateTime</EventDate>
+        'Comments'      => '',
+        'CustomFields'  => array(),
+        'OnDemand'  => FALSE,
+        'OnDemandStatus'  => '',
+        'CrawlLengthInSeconds' => 0,
+        'CrawlText' => '',
+        'BugText' => '',
+      );
+    }
   }
   public function check_metadata_status($pbs, $metadata = array()) {
     
@@ -73,5 +95,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       }
       throw new Exception($message);
     }
+  }
+  private function create_reel($pbs, $show) {
+    
   }
 }
