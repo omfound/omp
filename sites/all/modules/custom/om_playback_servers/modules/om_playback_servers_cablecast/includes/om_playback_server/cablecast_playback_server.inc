@@ -9,6 +9,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       $metadata = array($metadata);
     }
     foreach ($metadata AS $show) {
+      $reel = $this->create_reel($pbs, $show);
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
@@ -18,7 +19,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CGExempt'      => 'false', //boolean</CGExempt>
         'ProducerID'    => 0, //int</ProducerID>
         'CategoryID'    => 0, //int</CategoryID>
-        'EventDate'     => date('Y-m-d\TH:i:s', $node->created), //dateTime</EventDate>
+        'EventDate'     => date('Y-m-d\TH:i:s', $show->created), //dateTime</EventDate>
         'Comments'      => '',
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
@@ -26,22 +27,51 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CrawlLengthInSeconds' => 0,
         'CrawlText' => '',
         'BugText' => '',
+        'Reels'=> $reel,
+        'LocationID' => $pbs->location_id
       );
+      $this->soap_request($pbs, 'CreateNewShowRecord', $params);
     }
   }
   public function check_metadata_status($pbs, $metadata = array()) {
-    
+    $shows = array();
+    $output = array();
+    die($metadata);
+    if (is_numeric($metadata)) {
+      $metadata = array($metadata);
+    }
+    foreach($metadata AS $id) {
+      $response = $this->soap_request($pbs, 'GetShowInformation', array('ShowID' => $id));
+      if (is_object($response->GetShowInformationResult)) {
+        $shows[] = (array) $response->GetShowInformationResult;
+      }
+    }
+    if (count($shows) == 1) {
+      return array_shift($shows);
+    }
+    return $shows;
   }
   public function update_metadata($pbs, $metadata = array()) {
   }
   public function delete_metadata($pbs, $metadata = array()) {
-    
   }
   /**
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
-    
+    $schedule_item = array(
+      'ChannelID'   => $pbs->output, //int</ChannelID>
+      'LocationID'  => $pbs->location_id, //int</LocationID>
+      'ShowID'      => $schedule_info['ShowID'], //int</ShowID>
+      'RunDateTime' => date('Y-m-d\TH:i:s', $schedule_info['start']), //dateTime</RunDateTime>
+      'RunLock'     => TRUE, //boolean</RunLock> 
+      'RunBump'     => 0, //int</RunBump>
+      'CGExempt'    => FALSE, //boolean</CGExempt>
+      'BugText'     => '', //string</BugText>
+      'CrawlText'   => '', //string</CrawlText>
+      'CrawlLength' => 0, //int</CrawlLength>
+    );
+    $this->soap_request($pbs, 'AddScheduleEvent', $schedule_item);
   }
   public function update_airing($pbs, $schedule_info = array()) {
     
@@ -55,7 +85,20 @@ class cablecastPlaybackServerController extends playbackServerController {
         'restrictToShowID' => 0
       );
       $request = $this->soap_request($pbs, 'GetScheduleInformation', $schedule_request);
-      dsm($request);
+      $airings = array();
+      if (!empty($request->GetScheduleInformationResult->ScheduleInfo)) {
+        if (is_object($request->GetScheduleInformationResult->ScheduleInfo)) {
+          $request->GetScheduleInformationResult->ScheduleInfo = array($request->GetScheduleInformationResult->ScheduleInfo);
+        }
+        foreach ($request->GetScheduleInformationResult->ScheduleInfo AS $airing) {
+          $airings[] = array(
+            'uid' => $airing->ScheduleID,
+            'start' => $airing->StartTime,
+            'end' => $airing->EndTime
+           );
+        }
+      }
+      return $airings;
     }
     else {
       throw new Exception('Cablecast Playback Server: received empty schedule information');
@@ -96,7 +139,29 @@ class cablecastPlaybackServerController extends playbackServerController {
       throw new Exception($message);
     }
   }
-  private function create_reel($pbs, $show) {
-    
+  private function create_reel($pbs, $file) {
+    $format = 0;
+    $duration = 0;
+    $lang = $file->language;
+    if (isset($file->field_om_show_media_format[$lang][0]['value'])) {
+      if ($file->field_om_show_media_format[$lang][0]['value'] == 'hd') {
+        $format = 1;
+      }
+      if ($file->field_om_show_media_format[$lang][0]['value'] == 'sd') {
+        $format = 2;
+      }
+    }
+    if (isset($file->field_om_show_duration[$lang][0]['value'])) {
+      $duration = $file->field_om_show_duration[$lang][0]['value'];
+    }
+    return array(
+      'NewReel' => array(
+        'FormatID'=> $format, //int</FormatID>
+        'CueSeconds'=> $duration , //int</LengthSeconds>
+        'LengthSeconds'=> 0 , //int</LengthSeconds>
+        'Title'=> 0, //int</Title>
+        'Chapter'=> 0, //int</Chapter>
+      ),
+    );
   }
 }
