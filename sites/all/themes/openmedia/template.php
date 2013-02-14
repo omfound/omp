@@ -95,14 +95,13 @@ function openmedia_preprocess_node(&$variables) {
       $registration_button = drupal_render($variables['content']['field_class_display_class']);
     }
     // send details to theme function
-    dsm($registration);
     $registration_details = array(
       'price' => $price,
       'discount_message' => $discount_message,
       'dates' => $final_date,
       'location' => $location,
       'directions_link' => $directions_link,
-      'seats_left' => $registration['capacity'],
+      'seats_left' => $registration['capacity'] - registration_event_count('commerce_product', $product->product_id),
       'registration_button' => $registration_button
     );
     $variables['registration_box'] = theme('class_registration_box', array('registration_details' => $registration_details));
