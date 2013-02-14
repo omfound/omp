@@ -112,7 +112,17 @@ function openmedia_preprocess_node(&$variables) {
 }
 
 function openmedia_process_show(&$variables) {
-  dsm($variables);
+  if($variables['field_om_show_video'][$variables->language]) {
+    $jwplayer = array();
+    foreach($variables['field_om_show_video'] as $key => $info) {
+      $jwplayer[$key]['path'] = $info['safe_value'];
+      if($variables['field_show_thumbnail'][$variables->language][0]['uri']) {
+        $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables->language][0]['uri']); 
+      }
+    }
+    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+    drupal_add_js(drupal_get_path('theme', 'openmedia').'/js/jwplayer-default.js');
+  }
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
