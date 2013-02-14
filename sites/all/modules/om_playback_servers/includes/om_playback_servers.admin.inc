@@ -182,6 +182,15 @@ function om_playback_servers_admin_form_submit($form, &$form_state) {
  *     render array.
  */
 function om_playback_servers_admin_list() {
+  $pbs = om_playback_servers_load(1);
+  $pbs = array_shift($pbs);
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  $schedule_info = array(
+    'start' => 1360859450,
+    'end' => 1361723441
+  );
+  $controller->get_server_health($pbs, $schedule_info);
+  
   $term_query = $query = db_select('taxonomy_vocabulary', 'voc');
   $term_query->fields('voc', array('vid'));
   $term_query->condition('machine_name', 'channels', '=');

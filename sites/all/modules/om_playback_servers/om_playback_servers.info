@@ -6,7 +6,5 @@ dependencies[] = "ctools"
 dependencies[] = "entity"
 dependencies[] = "features"
 dependencies[] = "taxonomy"
-dependencies[] = "om_log"
 version = 7.x-1.0
-project status url = http://omp.omfound.org
 features[taxonomy][] = tags
