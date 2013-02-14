@@ -1,8 +1,7 @@
 <?php
-  
-require_once('sites/all/modules/om_timeslot_scheduler/includes/timeslot_scheduling_rule/timeslot_scheduling_rule.inc');
-require_once('sites/all/modules/om_timeslot_scheduler/includes/om_timeslot_scheduler.admin.inc');
 
+require_once(drupal_get_path('module', 'om_timeslot_scheduler').'/includes/timeslot_scheduling_rule/timeslot_scheduling_rule.inc');
+require_once(drupal_get_path('module', 'om_timeslot_scheduler').'/includes/om_timeslot_scheduler.admin.inc');
 
 include_once('om_timeslot_scheduler.features.inc');
 
