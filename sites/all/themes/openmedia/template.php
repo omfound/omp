@@ -95,6 +95,7 @@ function openmedia_preprocess_node(&$variables) {
       $registration_button = drupal_render($variables['content']['field_class_display_class']);
     }
     // send details to theme function
+    dsm($registration);
     $registration_details = array(
       'price' => $price,
       'discount_message' => $discount_message,
