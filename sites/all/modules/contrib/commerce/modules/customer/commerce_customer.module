@@ -116,7 +116,9 @@ function commerce_customer_profile_default_label($profile) {
   if (!empty($profile->commerce_customer_address)) {
     // Wrap the customer profile object for easier access to its field data.
     $profile_wrapper = entity_metadata_wrapper('commerce_customer_profile', $profile);
-    $label = $profile_wrapper->commerce_customer_address->name_line->value();
+    if (isset($profile_wrapper->commerce_customer_address->name_line)) {
+      $label = $profile_wrapper->commerce_customer_address->name_line->value();
+    }
   }
 
   // Return the profile ID if we couldn't derive a label from an address field.
@@ -403,7 +405,7 @@ function commerce_customer_commerce_checkout_pane_info() {
     }
 
     $checkout_panes['customer_profile_' . $type] = array(
-      'title' => !empty($instance['label']) ? check_plain($instance['label']) : $profile_type['name'],
+      'title' => !empty($instance['label']) ? $instance['label'] : $profile_type['name'],
       'file' => 'includes/commerce_customer.checkout_pane.inc',
       'base' => 'commerce_customer_profile_pane',
       'page' => !empty($instance) ? 'checkout' : 'disabled',
@@ -1198,7 +1200,7 @@ function commerce_customer_profile_property_info_callback(&$info, $entity_type, 
  *     ...
  *   )
  */
-function commerce_customer_match_customer_profiles($field, $ids = array(), $limit = NULL) {
+function commerce_customer_match_customer_profiles($field, $ids = array(), $limit = 50) {
   $results = &drupal_static(__FUNCTION__, array());
 
   // Create unique id for static cache.
@@ -1223,7 +1225,7 @@ function commerce_customer_match_customer_profiles($field, $ids = array(), $limi
  *
  * Returns an array of products matching the specific parameters.
  */
-function _commerce_customer_match_customer_profiles_standard($field, $ids = array(), $limit = NULL) {
+function _commerce_customer_match_customer_profiles_standard($field, $ids = array(), $limit = 50) {
   // Build the query object with the necessary fields.
   $query = db_select('commerce_customer_profile', 'cp');
   $profile_id_alias = $query->addField('cp', 'profile_id');
@@ -1344,9 +1346,11 @@ function commerce_customer_profile_copy_validate($element, &$form_state, $form) 
     commerce_order_save($form_state['order']);
 
     // Unset any cached addressfield data for this customer profile.
-    foreach ($form_state['addressfield'] as $key => $value) {
-      if (strpos($key, 'commerce_customer_profile|' . $type) === 0) {
-        unset($form_state['addressfield'][$key]);
+    if (!empty($form_state['addressfield'])) {
+      foreach ($form_state['addressfield'] as $key => $value) {
+        if (strpos($key, 'commerce_customer_profile|' . $type) === 0) {
+          unset($form_state['addressfield'][$key]);
+        }
       }
     }
   }
@@ -1383,10 +1387,16 @@ function commerce_customer_profile_copy_fields($info, &$target, $source, &$form_
     if (is_array($field)) {
       foreach ($field as $langcode => $items) {
         if (is_array($items)) {
+          $target[$field_name][$langcode] = array();
+
           foreach ($items as $delta => $item) {
             $target[$field_name][$langcode][$delta] = $item;
             $form_state['order']->data['profile_copy'][$pane_id]['elements'][$field_name][$langcode][$delta] = TRUE;
           }
+        }
+        else {
+          $target[$field_name][$langcode] = $items;
+          $form_state['order']->data['profile_copy'][$pane_id]['elements'][$field_name][$langcode] = TRUE;
         }
       }
     }

@@ -786,7 +786,7 @@ function commerce_product_autocomplete($entity_type, $field_name, $bundle, $stri
  *     ...
  *   )
  */
-function commerce_product_match_products($field, $instance = NULL, $string = '', $match = 'contains', $ids = array(), $limit = NULL, $access_tag = FALSE) {
+function commerce_product_match_products($field, $instance = NULL, $string = '', $match = 'contains', $ids = array(), $limit = 50, $access_tag = FALSE) {
   $results = &drupal_static(__FUNCTION__, array());
 
   // Create unique id for static cache.
@@ -812,7 +812,7 @@ function commerce_product_match_products($field, $instance = NULL, $string = '',
  *
  * Returns an array of products matching the specific parameters.
  */
-function _commerce_product_match_products_standard($instance, $string = '', $match = 'contains', $ids = array(), $limit = NULL, $access_tag = FALSE) {
+function _commerce_product_match_products_standard($instance, $string = '', $match = 'contains', $ids = array(), $limit = 50, $access_tag = FALSE) {
   // Build the query object with the necessary fields.
   $query = db_select('commerce_product', 'cp');
 
@@ -820,6 +820,9 @@ function _commerce_product_match_products_standard($instance, $string = '', $mat
   if ($access_tag) {
     $query->addTag('commerce_product_access');
   }
+
+  // Add a global query tag so anyone can alter this query.
+  $query->addTag('commerce_product_match');
 
   $product_id_alias = $query->addField('cp', 'product_id');
   $product_sku_alias = $query->addField('cp', 'sku');
@@ -928,6 +931,16 @@ function template_preprocess_commerce_product_sku(&$variables) {
  */
 function template_preprocess_commerce_product_title(&$variables) {
   $variables['title'] = check_plain($variables['title']);
+}
+
+/**
+ * Returns the options list for the product status property.
+ */
+function commerce_product_status_options_list() {
+  return array(
+    0 => t('Disabled'),
+    1 => t('Active'),
+  );
 }
 
 /**
