@@ -1,6 +1,6 @@
 <?php
 
-require_once('sites/all/modules/om_playback_servers/includes/om_playback_servers.admin.inc');
+require_once(drupal_get_path('module', 'om_playback_servers').'/includes/om_playback_servers.admin.inc');
 
 /**
  * Implements hook_permission
