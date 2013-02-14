@@ -112,9 +112,7 @@ function openmedia_preprocess_node(&$variables) {
 }
 
 function openmedia_process_show(&$variables) {
-  dsm($variables);
-  if($variables['field_om_show_video'][$variables->language]) {
-    dsm('adding stuff');
+  if($variables['field_om_show_video'][0]['value']) {
     $jwplayer = array();
     foreach($variables['field_om_show_video'] as $key => $info) {
       $jwplayer[$key]['path'] = $info['safe_value'];
