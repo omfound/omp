@@ -147,6 +147,12 @@ function commerce_payment_pane_checkout_form_validate($form, &$form_state, $chec
       $payment_method = commerce_payment_method_instance_load($pane_values['payment_method']);
 
       if ($callback = commerce_payment_method_callback($payment_method, 'submit_form_validate')) {
+        // Initialize the payment details array to accommodate payment methods
+        // that don't add any additional details to the checkout pane form.
+        if (!isset($pane_values['payment_details'])) {
+          $pane_values['payment_details'] = array();
+        }
+
         $result = $callback($payment_method, $pane_form['payment_details'], $pane_values['payment_details'], $order, array($checkout_pane['pane_id'], 'payment_details'));
 
         // To prevent payment method validation routines from having to return TRUE
@@ -237,6 +243,11 @@ function commerce_payment_redirect_pane_checkout_form(&$form, &$form_state, $che
 
   // If the user came to the cancel URL...
   if (arg(3) == 'back' && arg(4) == $order->data['payment_redirect_key']) {
+    // Perform any payment cancellation functions if necessary.
+    if ($callback = commerce_payment_method_callback($payment_method, 'redirect_form_back')) {
+      $callback($order, $payment_method);
+    }
+
     // Send the customer to the previous step of the checkout process.
     commerce_payment_redirect_pane_previous_page($order, t('Customer canceled payment at the payment gateway.'));
     drupal_goto(commerce_checkout_order_uri($order));
@@ -269,9 +280,12 @@ function commerce_payment_redirect_pane_checkout_form(&$form, &$form_state, $che
 
   // If the function to build the redirect form exists...
   if ($callback = commerce_payment_method_callback($payment_method, 'redirect_form')) {
-    // Generate a key to use in the return URL from the redirected service.
-    $order->data['payment_redirect_key'] = drupal_hash_base64(time());
-    commerce_order_save($order);
+    // Generate a key to use in the return URL from the redirected service if it
+    // does not already exist.
+    if (empty($order->data['payment_redirect_key'])) {
+      $order->data['payment_redirect_key'] = drupal_hash_base64(time());
+      commerce_order_save($order);
+    }
 
     // If the payment method has the 'offsite_autoredirect' option enabled, add
     // the redirection behavior.
