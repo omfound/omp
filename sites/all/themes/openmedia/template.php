@@ -17,6 +17,9 @@ function openmedia_preprocess_page(&$variables) {
 }
 
 function openmedia_preprocess_node(&$variables) {
+  /** SHOW NODE **/
+  if ($variables['node']->type == 'om_show') { openmedia_process_show($variables); }
+
   /** CLASS DISPLAY NODE NODE **/
   if ($variables['node']->type == 'class_display') {
     global $user;
@@ -105,6 +108,20 @@ function openmedia_preprocess_node(&$variables) {
       'registration_button' => $registration_button
     );
     $variables['registration_box'] = theme('class_registration_box', array('registration_details' => $registration_details));
+  }
+}
+
+function openmedia_process_show(&$variables) {
+  if($variables['field_om_show_video'][$variables->language]) {
+    $jwplayer = array();
+    foreach($variables['field_om_show_video'] as $key => $info) {
+      $jwplayer[$key]['path'] = $info['safe_value'];
+      if($variables['field_show_thumbnail'][$variables->language][0]['uri']) {
+        $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables->language][0]['uri']); 
+      }
+    }
+    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+    drupal_add_js(drupal_get_path('theme', 'openmedia').'/js/jwplayer-default.js');
   }
 }
 
