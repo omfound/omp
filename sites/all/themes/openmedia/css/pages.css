@@ -249,4 +249,7 @@ div#block-om-social-om-social-vertical-sharing {
   float: left;
   width: 120px;
 }
+div#block-om-social-om-social-vertical-sharing div.social-service {
+  margin-bottom: 10px;
+}
 /** END SHOW PAGES **/
