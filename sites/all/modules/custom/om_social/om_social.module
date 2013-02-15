@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * Implements hook_theme
+ */
+
+function om_social_theme($existing, $type, $theme, $path) {
+  return array(
+    'facebook_share' => array(
+      'template' => 'facebook_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'twitter_share' => array(
+      'template' => 'twitter_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'pinterest_share' => array(
+      'template' => 'pinterest_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('image_url' => '')
+    ),
+    'google_share' => array(
+      'template' => 'google_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'custom_print' => array(
+      'function' => 'om_social_custom_print_theme'
+    ),
+  );
+}
+
+/**
+ * Custom theme function to make print icon.
+ */
+
+function om_social_custom_print_theme() {
+  global $base_path;
+  $icon ='<img src="' . $base_path . drupal_get_path('module', 'om_social') . '/theme/images/print-icon.png" />';
+  $options = array('html' => TRUE);
+  return l($icon, 'print/' . $_GET['q'], $options);
+}
