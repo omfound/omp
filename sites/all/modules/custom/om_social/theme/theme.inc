@@ -36,3 +36,16 @@ function om_social_preprocess_google_share(&$variables) {
   })();";
   drupal_add_js($js, 'inline');
 }
+
+function om_social_preprocess_om_social_vertical_sharing(&$variables) {
+  $services = array();
+  $services['facebook'] = theme('facebook_share');
+  $services['twitter'] = theme('twitter_share');
+  $services['google'] = theme('google_share');
+
+  <?php if (!empty($image_path)): ?>
+    $services['pinterest'] = theme('pinterest_share', array('image_path' => $image_path));
+  <?php endif; ?>
+
+  $variables['services'] = $services;
+}
