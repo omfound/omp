@@ -93,6 +93,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     
   }
   public function get_airing($pbs, $schedule_info = array()) {
+    dsm($schedule_info);
     if (!empty($schedule_info)) {
       $params = array (
         'ChannelID' => $pbs->output,
