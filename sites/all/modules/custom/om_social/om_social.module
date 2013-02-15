@@ -1,6 +1,18 @@
 <?php
 
 /**
+ * Implements hook_block_info
+ */
+function om_social_block_info() {
+  $blocks = array();
+  $blocks['om_social_vertical_sharing'] = array(
+    'info' => t('Vertical Social Icons'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
  * Implements hook_block_view
  */
 function om_social_block_view($delta = "") {
