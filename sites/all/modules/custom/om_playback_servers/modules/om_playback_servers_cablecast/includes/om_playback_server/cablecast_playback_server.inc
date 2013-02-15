@@ -55,11 +55,27 @@ class cablecastPlaybackServerController extends playbackServerController {
   }
   public function delete_metadata($pbs, $metadata = array()) {
   }
+  
+  /**
+   * --Methods dealing with files
+   */
+  public function check_file_status($pbs, stdClass $show) {
+    $lang = $show->language;
+    $id = $show->field_om_show_playback_server_id[$lang][0]['value'];
+    $params = array(
+      'LocationID' => $pbs->location_id,
+      'IncludeValidFiles' => TRUE,
+      'IncludeInvalidFiles' => TRUE,
+      'RestrictToShowID' => $id
+    );
+    return $this->soap_request($pbs, 'GetDigitalFiles', $params);
+  }
+  
   /**
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
-    $schedule_item = array(
+    $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
       'ShowID'      => $schedule_info['ShowID'], //int</ShowID>
@@ -71,20 +87,20 @@ class cablecastPlaybackServerController extends playbackServerController {
       'CrawlText'   => '', //string</CrawlText>
       'CrawlLength' => 0, //int</CrawlLength>
     );
-    $this->soap_request($pbs, 'AddScheduleEvent', $schedule_item);
+    $this->soap_request($pbs, 'AddScheduleEvent', $params);
   }
   public function update_airing($pbs, $schedule_info = array()) {
     
   }
   public function get_airing($pbs, $schedule_info = array()) {
     if (!empty($schedule_info)) {
-      $schedule_request = array (
+      $params = array (
         'ChannelID' => $pbs->output,
         'FromDate' => date("Y-m-d\TH:i:s", $schedule_info['start']),
         'ToDate' => date("Y-m-d\TH:i:s", $schedule_info['end']),
         'restrictToShowID' => 0
       );
-      $request = $this->soap_request($pbs, 'GetScheduleInformation', $schedule_request);
+      $request = $this->soap_request($pbs, 'GetScheduleInformation', $params);
       $airings = array();
       if (!empty($request->GetScheduleInformationResult->ScheduleInfo)) {
         if (is_object($request->GetScheduleInformationResult->ScheduleInfo)) {
@@ -111,8 +127,7 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with system health
    */
   public function get_server_health($pbs) {
-    $channels = $this->soap_request($pbs, 'GetChannels');
-    dsm($channels);
+    return $this->soap_request($pbs, 'GetChannels');
   }
   // Custom and helper methods
   /**
@@ -123,8 +138,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       $endpoint = $pbs->uri . '/CablecastWS/CablecastWS.asmx?WSDL';
       $client = new SoapClient($endpoint, array('cache_wsdl' => 0));
       $auth = array(
-        'username' => $pbs->user,
-        'password' => $pbs->password
+        'Username' => $pbs->user,
+        'Password' => $pbs->password
       );
       $data = array_merge($data, $auth);
       return $client->{$function}($data);
@@ -163,5 +178,46 @@ class cablecastPlaybackServerController extends playbackServerController {
         'Chapter'=> 0, //int</Chapter>
       ),
     );
+  }
+  
+  /**
+   * Get a list of all formats from the pbs location.
+   */
+  private function get_formats($pbs) {
+    return $this->soap_request($pbs, 'GetFormats', array('LocationID' => $pbs->location_id));
+  }
+  
+  /**
+   * Get a list of all files with filter criteria.
+   */
+  public function get_digital_files($pbs, $options = array()) {
+    $params = array(
+      'LocationID' => $pbs->location_id,
+      'IncludeValidFiles' => TRUE,
+      'IncludeInvalidFiles' => FALSE,
+      'RestrictToShowID' => 0
+    );
+    $params = array_merge($params, $options);
+    return $this->soap_request($pbs, 'GetDigitalFiles', $params);
+  }
+  /**
+   * Rename a digital file.
+   */
+  public function rename_file($pbs, $new_file = array()) {
+    return $this->soap_request($pbs, 'RenameDigitalFile', $new_file);
+  }
+  /**
+   * Send autopilot.
+   */
+  public function send_autopilot($pbs, $options) {
+    $params = array(
+      'LocationID' => $pbs->location_id,
+      'endDateTime' => date('Y-m-d\TH:i:s'),
+      'StickyDevices' => FALSE,
+      'ClearBumps' => FALSE,
+      'SendEventsToHardware' => FALSE
+    );
+    $params = array_merge($params, $options);
+    return $this->soap_request($pbs, 'SendAutopilot', $params);
   }
 }
