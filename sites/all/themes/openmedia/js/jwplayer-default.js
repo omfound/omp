@@ -5,9 +5,9 @@
       for(i = 0; i < Drupal.settings.jwplayer.length; ++i) {
         jwplayer("jwplayer-"+i).setup({
           file: Drupal.settings.jwplayer[i].path,
-          height: 360,
+          height: 340,
           image: Drupal.settings.jwplayer[i].image,
-          width: 640
+          width: 550 
         });
       }
     }

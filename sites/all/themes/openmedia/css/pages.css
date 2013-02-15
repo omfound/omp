@@ -239,3 +239,14 @@ div.messages ul {
   border-top: solid 1px #E1DBCD !important;
   padding: 0;
 }
+
+/** SHOW PAGES **/
+article.node-om-show {
+  float: left;
+  width: 560px; 
+}
+div#block-om-social-om-social-vertical-sharing {
+  float: left;
+  width: 120px;
+}
+/** END SHOW PAGES **/
