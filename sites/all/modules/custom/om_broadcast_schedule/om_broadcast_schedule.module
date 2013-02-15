@@ -304,7 +304,6 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
  * Create airings that were not present on the Drupal side.
  */
 function _om_broadcast_schedule_create_new(&$context) {
-  //dsm($context['results']['create_airings']);
   foreach ($context['results']['create_airings'] AS $airing) {
     om_broadcast_schedule_create_airing_node($airing);
   }
