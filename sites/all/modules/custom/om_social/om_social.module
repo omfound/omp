@@ -1,9 +1,33 @@
 <?php
 
 /**
+ * Implements hook_block_info
+ */
+function om_social_block_info() {
+  $blocks = array();
+  $blocks['om_social_vertical_sharing'] = array(
+    'info' => t('Vertical Social Icons'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view
+ */
+function om_social_block_view($delta = "") {
+  $blocks = array();
+  switch($delta) {
+    case 'om_social_vertical_sharing':
+      $blocks['content'] = theme('om_social_vertical_sharing');
+      break;
+  }
+  return $blocks;
+} 
+
+/**
  * Implements hook_theme
  */
-
 function om_social_theme($existing, $type, $theme, $path) {
   return array(
     'facebook_share' => array(
@@ -32,6 +56,11 @@ function om_social_theme($existing, $type, $theme, $path) {
     ),
     'custom_print' => array(
       'function' => 'om_social_custom_print_theme'
+    ),
+    'om_social_vertical_sharing' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_social_vertical_sharing',
+      'file' => 'theme.inc'
     ),
   );
 }
