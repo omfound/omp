@@ -45,7 +45,6 @@
  */
 ?>
 <?php if(count($items) > 0) { ?>
-  <?php drupal_add_js('/sites/all/libraries/jwplayer/jwplayer.js'); ?> 
   <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <?php if (!$label_hidden): ?>
       <div class="field-label"<?php print $title_attributes; ?>><?php print $label ?>:&nbsp;</div>
@@ -54,13 +53,6 @@
       <?php foreach ($items as $delta => $item): ?>
         <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
           <div id="jwplayer-<?php print $delta; ?>">Loading video...</div>
-          <script type="text/javascript">
-            jwplayer("jwplayer-<?php print $delta; ?>").setup({
-              file: "<?php print $item['#markup']; ?>",
-              height: 360,
-              width: 640
-            });
-          </script>
         </div>
       <?php endforeach; ?>
     </div>
