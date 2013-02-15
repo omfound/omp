@@ -17,6 +17,7 @@ class omUserWithMembershipMigration extends Migration {
     $query->join(CIVI_DATABASE .'.civicrm_membership', 'cm', 'cm.contact_id=ccum.contact_id'); //JOIN with membership
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // set query to be distinct
+      ->distinct()
       // user is active user
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.

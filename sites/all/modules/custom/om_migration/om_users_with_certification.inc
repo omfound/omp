@@ -17,6 +17,7 @@ class omUserWithCertificationMigration extends Migration {
     $query->join(CIVI_DATABASE .'.civicrm_membership', 'cm', 'cm.contact_id=ccum.contact_id'); //JOIN with membership
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // select distinct uid as drupal_id from users u,
+      ->distinct()
       // dom_civi_prod.civicrm_uf_match ccum,
       // dom_civi_prod.civicrm_membership cm where u.uid=ccum.uf_id and cm.contact_id=ccum.contact_id;
       // user is active user
