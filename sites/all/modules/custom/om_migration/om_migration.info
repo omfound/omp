@@ -9,3 +9,5 @@ dependencies[] = number
 files[] = om_migration.module
 files[] = om_users.inc
 files[] = om_users_with_project.inc
+files[] = om_users_with_membership.inc
+files[] = om_users_with_certification.inc

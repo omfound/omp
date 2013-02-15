@@ -2,6 +2,7 @@
 
 // define the source database
 define("SOURCE_DATABASE", 'dom_prod');
+define("CIVI_DATABASE", 'dom_civi_prod');
 // All users who have signed into account after this date will be migrated.
 $cutoff = new DateTime("2012-01-01");
 define("USER_MIGRATION_CUTOFF",$cutoff->getTimestamp());
@@ -15,6 +16,8 @@ function om_migration_migrate_api() {
     'migrations' => array(
       'OM_USER' => array('class_name' => 'omUserMigration'),
       'OM_USER2' => array('class_name' => 'omUserWithProjectMigration'),
+      'OM_USER3' => array('class_name' => 'omUserWithMembershipMigration'),
+      'OM_USER4' => array('class_name' => 'omUserWithCertificationMigration'),
     ),
   );
 
