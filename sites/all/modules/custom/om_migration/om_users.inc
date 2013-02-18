@@ -65,7 +65,6 @@ class omUserMigration extends Migration {
   // end omUserMigration class constructor
 
   // massage the user roles before saving
-  // TODO: customize for DOM roles for D6 and D7
   public function prepareRow($current_row) {
     $source_id = $current_row->uid;
     $query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
