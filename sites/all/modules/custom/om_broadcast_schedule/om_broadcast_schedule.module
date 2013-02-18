@@ -117,38 +117,18 @@ function om_broadcast_schedule_manual_sync_form($form, &$form_state) {
     '#title' => t('Start Date'),
     '#description' => t('Date and time to begin syncing.'),
     '#required' => TRUE,
-    '#type' => 'default',
-    '#timepicker' => '',
-    '#input' => TRUE,
-    '#tree' => TRUE,
-    '#date_timezone' => date_default_timezone(),
-    '#date_flexible' => 0,
-    '#date_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
-    '#date_increment' => 1,
-    '#date_year_range' => '-3:+3',
-    '#date_label_position' => 'above',
-    '#process' => array('date_popup_element_process'),
-    '#value_callback' => 'date_popup_element_value_callback',
-    '#theme_wrappers' => array('date_popup'),
+	  '#type' => 'date_popup',
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d - H:i'
   );
 
   $form['om_broadcast_schedule_end'] = array(
     '#title' => t('End Date'),
-    '#description' => t('Date and time to end syncing.'),
+    '#description' => t('Date and time to end scheduling.'),
     '#required' => TRUE,
-    '#type' => 'default',
-    '#timepicker' => '',
-    '#input' => TRUE,
-    '#tree' => TRUE,
-    '#date_timezone' => date_default_timezone(),
-    '#date_flexible' => 0,
-    '#date_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
-    '#date_increment' => 1,
-    '#date_year_range' => '-3:+3',
-    '#date_label_position' => 'above',
-    '#process' => array('date_popup_element_process'),
-    '#value_callback' => 'date_popup_element_value_callback',
-    '#theme_wrappers' => array('date_popup'),
+	  '#type' => 'date_popup',
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d - H:i'
   );
 
   $form['om_broadcast_schedule_manual_sync_warining'] = array(
@@ -172,7 +152,6 @@ function om_broadcast_schedule_manual_sync($form, &$form_state) {
 
   $start = strtotime($form_state['values']['om_broadcast_schedule_start']);
   $end = strtotime($form_state['values']['om_broadcast_schedule_end']);
-  
   // Setup Batch Process For Manual Sync
   $function = 'om_broadcast_schedule_sync_schedule';
   $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end);
@@ -325,7 +304,6 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
  * Create airings that were not present on the Drupal side.
  */
 function _om_broadcast_schedule_create_new(&$context) {
-  //dsm($context['results']['create_airings']);
   foreach ($context['results']['create_airings'] AS $airing) {
     om_broadcast_schedule_create_airing_node($airing);
   }
@@ -351,12 +329,11 @@ function om_broadcast_schedule_create_airing_node($airing) {
   $node = new stdClass();
   $node->type = 'om_airing';
   $node->uid = 1;
-
-  $node->title = $airing['title'] . ' ' . date('Y-m-d\TG:i:s', $airing['start']);
+  $node->title = $airing['title'] . ' ' . $airing['start'];
   $node->field_om_airing_guid['und'][0]['value'] = $airing['uid'];
   $node->field_om_show_id['und'][0]['value'] = $airing['show_id'];
-  $node->field_om_airing_dates['und'][0]['value'] = $airing['start'];
-  $node->field_om_airing_dates['und'][0]['value2'] = $airing['end'];
+  $node->field_om_airing_dates['und'][0]['value'] = strtotime($airing['start']);
+  $node->field_om_airing_dates['und'][0]['value2'] = strtotime($airing['end']);
   $node->field_om_airing_channel['und'][0]['tid'] = $airing['channel_tid'];
 
   $node = node_save($node);

@@ -14,22 +14,19 @@ class omUserWithCertificationMigration extends Migration {
 
     $query = db_select(SOURCE_DATABASE .'.users', 'u');
     $query->join(CIVI_DATABASE .'.civicrm_uf_match', 'ccum', 'ccum.uf_id = u.uid'); //JOIN users with civi join table
-    $query->join(CIVI_DATABASE .'.civicrm_membership', 'cm', 'cm.contact_id=ccum.contact_id'); //JOIN with membership
+    $query->join(CIVI_DATABASE .'.civicrm_group_contact', 'cgc', 'cgc.contact_id=ccum.contact_id'); //JOIN with membership
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // select distinct uid as drupal_id from users u,
       ->distinct()
-      // dom_civi_prod.civicrm_uf_match ccum,
-      // dom_civi_prod.civicrm_membership cm where u.uid=ccum.uf_id and cm.contact_id=ccum.contact_id;
       // user is active user
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
-      // grab users who have accessed site since cutoff date
+      // let's try migrating the following: interns, edit, field and studio cert
+      ->condition('cgc.group_id',array(9,16,17,18,19,31,41,42,49),'IN')
       // Don't limit this migration by date
       // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
-      // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
-      //select distinct uid from node join content_type_om_project using(nid);
 
     $this->source = new MigrateSourceSQL($query, $source_fields);
     // No need to force users to reset their passwords
@@ -93,6 +90,20 @@ class omUserWithCertificationMigration extends Migration {
       if ($row->rid == 4) {
         $roles['3'] = '3';
       }
+      // Certifications
+      // Edit role
+      if ($row->rid == 26) {
+        $roles['13'] = '13';
+      }
+      // Field role
+      if ($row->rid == 10) {
+        $roles['14'] = '14';
+      }
+      // Studio role
+      if ($row->rid == 12) {
+        $roles['15'] = '15';
+      }
+
       // Collaboraters are role id 5 in both old and new dbs
       // skip roles greater than 4 for now
       if ($row->rid > 4) {

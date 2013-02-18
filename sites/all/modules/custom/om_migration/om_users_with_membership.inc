@@ -91,6 +91,20 @@ class omUserWithMembershipMigration extends Migration {
       if ($row->rid == 4) {
         $roles['3'] = '3';
       }
+      // Certifications
+      // Edit role
+      if ($row->rid == 26) {
+        $roles['13'] = '13';
+      }
+      // Field role
+      if ($row->rid == 10) {
+        $roles['14'] = '14';
+      }
+      // Studio role
+      if ($row->rid == 12) {
+        $roles['15'] = '15';
+      }
+
       // Collaboraters are role id 5 in both old and new dbs
       // skip roles greater than 4 for now
       if ($row->rid > 4) {
