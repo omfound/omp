@@ -17,6 +17,8 @@ class omUserWithProjectMigration extends Migration {
     $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // set query to be distinct
+      // select distinct uid as drupal_id from users u,
+      ->distinct()
       // user is active user
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.

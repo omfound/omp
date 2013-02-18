@@ -15,6 +15,8 @@ class omUserMigration extends Migration {
     // only import active users from the old db
     $query = db_select(SOURCE_DATABASE .'.users', 'u')
       ->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
+      // select distinct uid as drupal_id from users u,
+      ->distinct()
       ->condition('u.status', 1, '=')
       // grab users greater than UID 20, since there are that many created on the new site.
       ->condition('u.uid', 20, '>')
