@@ -4,7 +4,7 @@
  */
 function om_social_preprocess_facebook_share(&$variables) {
   if (empty($variables['url'])) {
-    $variables['url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/' . $_GET['q'];
+    $variables['url'] = goc_social_get_current_path();
   }
   $js = "(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -23,7 +23,7 @@ function om_social_preprocess_twitter_share(&$variables) {
 
 function om_social_preprocess_pinterest_share(&$variables) {
   if (empty($variables['url'])) {
-    $variables['url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/' . $_GET['q'];
+    $variables['url'] = goc_social_get_current_path();
   }
   //drupal_add_js('//assets.pinterest.com/js/pinit.js', 'external');
 }

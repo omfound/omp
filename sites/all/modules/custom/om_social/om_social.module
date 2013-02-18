@@ -75,3 +75,9 @@ function om_social_custom_print_theme() {
   $options = array('html' => TRUE);
   return l($icon, 'print/' . $_GET['q'], $options);
 }
+
+function om_social_get_current_path() {
+  global $base_url;
+  $current_path = $base_url.'/'.request_path()
+  return $current_path;
+}
