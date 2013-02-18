@@ -78,6 +78,6 @@ function om_social_custom_print_theme() {
 
 function om_social_get_current_path() {
   global $base_url;
-  $current_path = $base_url.'/'.request_path()
+  $current_path = $base_url.'/'.request_path();
   return $current_path;
 }
