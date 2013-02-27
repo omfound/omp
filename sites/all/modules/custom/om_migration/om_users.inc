@@ -18,8 +18,8 @@ class omUserMigration extends Migration {
       // select distinct uid as drupal_id from users u,
       ->distinct()
       ->condition('u.status', 1, '=')
-      // grab users greater than UID 20, since there are that many created on the new site.
-      ->condition('u.uid', 20, '>')
+      // grab users greater than UID 31, since there are that many created on the new site.
+      ->condition('u.uid', 31, '>')
       // grab users who have accessed site since cutoff date
       ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.

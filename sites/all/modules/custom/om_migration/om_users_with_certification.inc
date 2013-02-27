@@ -20,8 +20,8 @@ class omUserWithCertificationMigration extends Migration {
       ->distinct()
       // user is active user
       ->condition('u.status', 1, '=')
-      // grab users greater than UID 20, since there are that many created on the new site.
-      ->condition('u.uid', 20, '>')
+      // grab users greater than UID 31, since there are that many created on the new site.
+      ->condition('u.uid', 31, '>')
       // let's try migrating the following: interns, edit, field and studio cert
       ->condition('cgc.group_id',array(9,16,17,18,19,31,41,42,49),'IN')
       // Don't limit this migration by date

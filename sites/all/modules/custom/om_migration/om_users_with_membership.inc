@@ -20,8 +20,8 @@ class omUserWithMembershipMigration extends Migration {
       ->distinct()
       // user is active user
       ->condition('u.status', 1, '=')
-      // grab users greater than UID 20, since there are that many created on the new site.
-      ->condition('u.uid', 20, '>')
+      // grab users greater than UID 31, since there are that many created on the new site.
+      ->condition('u.uid', 31, '>')
       // grab users who have accessed site since cutoff date
       // Don't limit this migration by date
       // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
