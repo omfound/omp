@@ -81,3 +81,100 @@ function om_social_get_current_path() {
   $current_path = $base_url.'/'.request_path();
   return $current_path;
 }
+
+function om_social_page_alter(&$page) {
+  $object = menu_get_object();
+  if (!empty($object) && is_numeric($object->nid)) {
+    om_social_facebook_header($object);
+  }
+}
+
+function om_social_facebook_header($node) {
+  //SITE NAME
+  $site_name = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:site_name',
+      'content' => variable_get('site_name', 'Open Media Project'),
+    ),
+  );
+  drupal_add_html_head($site_name, 'node_' . $node->nid.'_og_site_name');
+
+  //TITLE
+  $title = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:title',
+      'content' => $node->title,
+    ),
+  );
+  drupal_add_html_head($title, 'node_' . $node->nid . '_og_title');
+
+  //URL
+  global $base_url;
+  $query = drupal_get_path_alias();
+  $path = $base_url . '/' . $query;
+  $og_path = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:url',
+      'content' => $path,
+    ),
+  );
+  drupal_add_html_head($og_path, 'node_' . $node->nid . '_og_path');
+
+  //TYPE
+  switch($node->type) {
+    case 'om_show':
+      $type = 'tv_episode';
+    break;
+    case 'om_project':
+      $type = 'tv_show';
+    break;
+    default:
+      $type = 'article';
+    break;
+  }
+
+  $og_type = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:type',
+      'content' => $type,
+    ),
+  );
+  drupal_add_html_head($og_type, 'node_' . $node->nid . '_og_type');
+
+  //DESCRIPTION
+  $alter = array(
+    'max_length' => 250,
+    'word_boundary' => true,
+    'ellipsis' => true
+  );
+  $short_desc = views_trim_text($alter, strip_tags($node->body[$node->language][0]['value']));
+  $og_desc = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:description',
+      'content' => $short_desc,
+    ),
+  );
+  drupal_add_html_head($og_desc, 'node_' . $node->nid . '_og_desc');
+
+  //IMAGE
+  if(!empty($node->field_show_thumbnail[$node->language][0]['uri'])) {
+    $image = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
+  }
+ 
+  if($image) {
+    $og_image = array(
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'property' => 'og:image',
+        'content' => $image,
+      ),
+    );
+    drupal_add_html_head($og_image, 'node_' . $node->nid . '_og_image');
+  }
+}
+
