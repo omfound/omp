@@ -13,7 +13,7 @@ class omUserWithProjectMigration extends Migration {
     );
 
     $query = Database::getConnection('default', 'legacy')
-      ->select('users','u')
+      ->select('users','u');
     //$query = db_select(SOURCE_DATABASE .'.users', 'u');
     $query->join(SOURCE_DATABASE .'.node', 'n', 'n.uid = u.uid'); //JOIN node with users
     $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');

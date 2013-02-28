@@ -13,7 +13,7 @@ class omUserWithMembershipMigration extends Migration {
     );
 
     $query = Database::getConnection('default', 'legacy')
-      ->select('users','u')
+      ->select('users','u');
     //$query = db_select(SOURCE_DATABASE .'.users', 'u');
     $query->join(CIVI_DATABASE .'.civicrm_uf_match', 'ccum', 'ccum.uf_id = u.uid'); //JOIN users with civi join table
     $query->join(CIVI_DATABASE .'.civicrm_membership', 'cm', 'cm.contact_id=ccum.contact_id'); //JOIN with membership
