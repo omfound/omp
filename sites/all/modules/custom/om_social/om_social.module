@@ -151,6 +151,7 @@ function om_social_facebook_header($node) {
     'word_boundary' => true,
     'ellipsis' => true
   );
+  dsm($node);
   $short_desc = views_trim_text($alter, strip_tags($node->body[$node->language][0]['value']));
   $og_desc = array(
     '#tag' => 'meta',
