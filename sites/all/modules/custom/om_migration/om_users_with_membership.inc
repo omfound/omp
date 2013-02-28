@@ -78,7 +78,7 @@ class omUserWithMembershipMigration extends Migration {
   public function prepareRow($current_row) {
     $source_id = $current_row->uid;
     $query = Database::getConnection('default', 'legacy')
-      ->select('users_roles','u')
+      ->select('users_roles','r')
     //$query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
       ->fields('r', array('uid', 'rid'))
       ->condition('r.uid', $source_id, '=');
