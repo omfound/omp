@@ -12,7 +12,9 @@ class omUserWithCertificationMigration extends Migration {
       'roles' => t('The set of roles assigned to a user.'),
     );
 
-    $query = db_select(SOURCE_DATABASE .'.users', 'u');
+    $query = Database::getConnection('default', 'legacy')
+      ->select('users','u');
+    //$query = db_select(SOURCE_DATABASE .'.users', 'u');
     $query->join(CIVI_DATABASE .'.civicrm_uf_match', 'ccum', 'ccum.uf_id = u.uid'); //JOIN users with civi join table
     $query->join(CIVI_DATABASE .'.civicrm_group_contact', 'cgc', 'cgc.contact_id=ccum.contact_id'); //JOIN with membership
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
@@ -73,7 +75,9 @@ class omUserWithCertificationMigration extends Migration {
   // massage the user roles before saving
   public function prepareRow($current_row) {
     $source_id = $current_row->uid;
-    $query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
+    $query = Database::getConnection('default', 'legacy')
+      ->select('user_roles','r')
+    //$query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
       ->fields('r', array('uid', 'rid'))
       ->condition('r.uid', $source_id, '=');
     $results = $query->execute();

@@ -12,7 +12,9 @@ class omUserWithProjectMigration extends Migration {
       'roles' => t('The set of roles assigned to a user.'),
     );
 
-    $query = db_select(SOURCE_DATABASE .'.users', 'u');
+    $query = Database::getConnection('default', 'legacy')
+      ->select('users','u')
+    //$query = db_select(SOURCE_DATABASE .'.users', 'u');
     $query->join(SOURCE_DATABASE .'.node', 'n', 'n.uid = u.uid'); //JOIN node with users
     $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');
     $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
@@ -76,7 +78,9 @@ class omUserWithProjectMigration extends Migration {
   // TODO: customize for DOM roles for D6 and D7
   public function prepareRow($current_row) {
     $source_id = $current_row->uid;
-    $query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
+    $query = Database::getConnection('default', 'legacy')
+      ->select('user_roles','u')
+    //$query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
       ->fields('r', array('uid', 'rid'))
       ->condition('r.uid', $source_id, '=');
     $results = $query->execute();
