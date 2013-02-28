@@ -13,7 +13,10 @@ class omUserMigration extends Migration {
     );
 
     // only import active users from the old db
-    $query = db_select(SOURCE_DATABASE .'.users', 'u')
+    //$query = db_select(SOURCE_DATABASE .'.users', 'u')
+    // next 2 lines need to use getConnection and select since databases are on separate servers
+    $query = Database::getConnection('default', 'legacy')
+      ->select('users','u')
       ->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
       // select distinct uid as drupal_id from users u,
       ->distinct()
@@ -69,7 +72,9 @@ class omUserMigration extends Migration {
   // massage the user roles before saving
   public function prepareRow($current_row) {
     $source_id = $current_row->uid;
-    $query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
+    //$query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
+    $query = Database::getConnection('default', 'legacy')
+      ->select('users_roles','r')
       ->fields('r', array('uid', 'rid'))
       ->condition('r.uid', $source_id, '=');
     $results = $query->execute();
