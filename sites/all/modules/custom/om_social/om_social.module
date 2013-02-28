@@ -146,13 +146,17 @@ function om_social_facebook_header($node) {
   drupal_add_html_head($og_type, 'node_' . $node->nid . '_og_type');
 
   //DESCRIPTION
+  if(isset($node->body[$node->language])) {
+    $description = $node->body[$node->language][0]['value'];
+  }else{
+    $description = $node->title;
+  }
   $alter = array(
     'max_length' => 250,
     'word_boundary' => true,
     'ellipsis' => true
   );
-  dsm($node);
-  $short_desc = views_trim_text($alter, strip_tags($node->body[$node->language][0]['value']));
+  $short_desc = views_trim_text($alter, strip_tags($description));
   $og_desc = array(
     '#tag' => 'meta',
     '#attributes' => array(
