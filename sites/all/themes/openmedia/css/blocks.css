@@ -202,3 +202,33 @@
 #block-menu-menu-additional-links ul li a:hover {
   text-decoration: underline;
 }
+
+/** Search Block **/
+#block-search-form {
+  background: #F4F4F4;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  border: solid 1px #99948A;
+  height: 28px;
+}
+
+#block-search-form input.form-text {
+  width: 160px;
+}
+
+#block-search-form .form-item,
+#block-search-form .form-actions {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#block-search-form input.form-submit {
+  margin: 0;
+  background: #FFFFFF url(../images/search-icon.jpg) center center no-repeat;
+  text-indent: -999em;
+  display: block;
+  width: 29px;
+  height: 29px;
+  margin-left: 5px;
+}

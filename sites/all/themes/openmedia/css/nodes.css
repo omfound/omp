@@ -162,3 +162,122 @@
 #registration-box .direction-link a:visited {
   color: #3C2D36;
 }
+
+/** 
+ * Show nodes
+ */
+
+.node-type-om-show .node {
+  padding-top: 10px;
+}
+
+.node-type-om-show .node #show-left {
+  width: 550px;
+  float: left;
+  position: relative;
+}
+
+.node-type-om-show .node #show-right {
+  width: 140px;
+  float: left;
+  padding-left: 20px;
+}
+
+.node-type-om-show .node .field-name-field-om-show-video {
+  margin-bottom: 20px;
+}
+
+.node-type-om-show #show-left .edit-link-wrapper {
+  text-align: right;
+  float: left;
+  width: 50px;
+}
+
+.node-type-om-show #show-left .edit-link-wrapper .icon {
+  background: transparent url(../images/pencil-icon.png) bottom left no-repeat;
+  width: 14px;
+  height: 19px;
+  float: left;
+}
+
+.node-type-om-show .node h2 {
+  margin-bottom: 10px;
+  float: left;
+  width: 500px;
+}
+
+.node-type-om-show #show-details-left {
+  float: left;
+  padding: 5px 10px 5px 0;
+  width: 30px;
+}
+
+.node-type-om-show #show-details-right.with-photo {
+  width: 510px;
+  float: left;
+}
+
+.node-type-om-show #show-details-right.without-photo {
+  width: 550px;
+  float: left;
+}
+
+.node-type-om-show #show-details-right {
+  padding: 5px 0px;
+}
+
+.node-type-om-show #show-details-right div {
+  float: left;
+  margin-right: 3px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.node-type-om-show #show-details-right #author {
+  float: none;
+}
+
+.node-type-om-show #show-details-right #author a:link,
+.node-type-om-show #show-details-right #author a:visited {
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.node-type-om-show #show-details-right #author a:focus,
+.node-type-om-show #show-details-right #author a:hover {
+  text-decoration: underline;
+}
+
+.node-type-om-show #description {
+  margin: 10px 0;
+  position: relative;
+}
+
+.node-type-om-show #description .show-hide-toggle {
+  position: absolute;
+  top: -15px;
+  left: 239px;
+}
+
+.node-type-om-show #description .inner {
+  padding-top: 20px;
+}
+
+.node-type-om-show #voting-msg {
+  width: 375px;
+  float: left;
+  padding: 20px;
+}
+
+#voting-widget {
+  width: 135px;
+  float: left;
+}
+
+#vote-summary {
+  width: 45px;
+  font-weight: bold;
+  font-size: 18px;
+  background: transparent url(../images/ideal-star.jpg) 100% 37% no-repeat;
+}
