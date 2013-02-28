@@ -32,7 +32,8 @@ class omUserWithProjectMigration extends Migration {
       ->orderBy('u.uid', 'ASC');
      //select distinct uid from node join content_type_om_project using(nid);
 
-    $this->source = new MigrateSourceSQL($query, $source_fields);
+    $this->source = new MigrateSourceSQL($query, $source_fields,NULL,
+      array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
 

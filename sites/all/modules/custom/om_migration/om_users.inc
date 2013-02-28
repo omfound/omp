@@ -27,7 +27,8 @@ class omUserMigration extends Migration {
       ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       // TODO: also need to add users that have an active project. Perhaps in diff migation class.
       ->orderBy('u.uid', 'ASC');
-    $this->source = new MigrateSourceSQL($query, $source_fields);
+    // Add False, so it doesn't try to auto-join the destination table like a bug-ridden CMS.
+    $this->source = new MigrateSourceSQL($query, $source_fields, NULL, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
 

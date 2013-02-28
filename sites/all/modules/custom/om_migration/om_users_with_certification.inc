@@ -30,7 +30,8 @@ class omUserWithCertificationMigration extends Migration {
       // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
       ->orderBy('u.uid', 'ASC');
 
-    $this->source = new MigrateSourceSQL($query, $source_fields);
+    $this->source = new MigrateSourceSQL($query, $source_fields, NULL,
+      array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
 
