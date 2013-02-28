@@ -9,7 +9,6 @@ dependencies[] = fivestar
 dependencies[] = geocoder
 dependencies[] = geofield
 dependencies[] = list
-dependencies[] = media
 dependencies[] = node_reference
 dependencies[] = number
 dependencies[] = om_project
