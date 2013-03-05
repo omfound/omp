@@ -220,6 +220,7 @@
 .node-type-om-show #show-details-right.without-photo {
   width: 550px;
   float: left;
+  margin-bottom: 15px;
 }
 
 .node-type-om-show #show-details-right {
@@ -280,4 +281,43 @@
   font-weight: bold;
   font-size: 18px;
   background: transparent url(../images/ideal-star.jpg) 100% 37% no-repeat;
+}
+
+/** 
+ * Project Nodes
+ **/
+#project-left {
+  float: left;
+  width: 220px;
+}
+
+#project-left .label {
+  float: left;
+  width: 60px;
+  margin-right: 10px;
+}
+
+#project-left .value {
+  float: left;
+  width: 150px;
+}
+
+#project-right {
+  float: left;
+  width: 475px;
+  margin-left: 15px;
+}
+
+#project-date-author {
+  line-height: 12px;
+  margin-bottom: 5px;
+}
+
+#show-grid {
+  clear: left;
+  margin: 10px 0 0 0;
+}
+
+#show-grid .inner {
+  padding: 10px 0;
 }

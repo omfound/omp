@@ -182,6 +182,56 @@ function openmedia_preprocess_node__om_show(&$variables) {
   }
 }
 
+function openmedia_preprocess_node__om_project(&$variables) {
+  // Author Info
+  // User picture
+  if (isset($variables['picture']) && $variables['picture'] > 0) {
+    $file = file_load($variables['picture']);
+    $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
+  }
+  $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
+  // Logo
+  if (isset($variables['node']->field_om_project_logo[$variables['language']][0])) {
+    $variables['logo'] = theme('image_style', array('style_name' => '220x135', 'path' => $variables['node']->field_om_project_logo[$variables['node']->language][0]['uri']));
+  }
+  // Body
+  $variables['description'] = drupal_render($variables['content']['body']);
+  // Local production
+  $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
+  if ($locally_produced == 1) {
+    $variables['locally_produced'] = 'Local Production';
+  }
+  // Rating
+  if (isset($variables['node']->field_om_rating[$variables['language']][0])) {
+    $variables['rating'] = $variables['node']->field_om_rating[$variables['language']][0]['taxonomy_term']->name;
+  }
+  // Language
+  if (isset($variables['node']->field_om_language[$variables['language']][0])) {
+    $variables['project_language'] = $variables['node']->field_om_language[$variables['language']][0]['taxonomy_term']->name;
+  }
+  // Genre
+  if (isset($variables['node']->field_om_genre[$variables['language']][0])) {
+    $variables['genre'] = $variables['node']->field_om_genre[$variables['language']][0]['taxonomy_term']->name;
+  }
+  // Theme
+  if (isset($variables['node']->field_om_theme[$variables['language']][0])) {
+    $variables['theme'] = $variables['node']->field_om_theme[$variables['language']][0]['taxonomy_term']->name;
+  }
+  // Page Count
+  $stats = statistics_get($variables['node']->nid);
+  $variables['view_count'] = $stats['totalcount'] . ' Views';
+  // Get Shows that reference this project
+  $variables['show_grid'] = '';
+  $options = array('html' => TRUE);
+  $shows = openmedia_get_project_child_shows($variables['node']->nid);
+  foreach ($shows AS $show_nid) {
+    $img = openmedia_get_thumbnail_from_show_nid($show_nid);
+    if (!empty($img)) {
+      $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+    }
+  }
+}
+
 function openmedia_theme($existing, $type, $theme, $path) {
   return array(
     'class_registration_box' => array(
@@ -249,4 +299,43 @@ function openmedia_region_info() {
     }
   }
   return $region_info;
+}
+
+/**
+ * Get child shows associated with a project.
+ *   @param $nid
+ *     int node id
+ *   @return $nids
+ *     array node ids
+ */
+function openmedia_get_project_child_shows($nid) {
+  $query = db_select('field_data_field_om_show_project', 'show_ref');
+  $query->fields('show_ref', array('entity_id'));
+  $query->condition('field_om_show_project_nid', $nid, '=');
+  $resource = $query->execute();
+  $nids = array();
+  while ($row = $resource->fetchAssoc()) {
+    $nids[] = $row['entity_id'];
+  }
+  return $nids;
+}
+
+/**
+ * Get a rendered thumbnail from a show node id.
+ *   @param $nid
+ *     int node id
+ *   @return $img
+ *     string img or bool false
+ */
+function openmedia_get_thumbnail_from_show_nid($nid) {
+  $preset = '196x135';
+  $query = db_select('field_data_field_show_thumbnail', 'image');
+  $query->fields('image', array('field_show_thumbnail_fid'));
+  $query->condition('entity_id', $nid, '=');
+  $resource = $query->execute();
+  while ($result = $resource->fetchAssoc()) {
+    $file = file_load($result['field_show_thumbnail_fid']);
+    return theme('image_style', array('path' => $file->uri, 'style_name' => $preset));
+  }
+  return FALSE;
 }
