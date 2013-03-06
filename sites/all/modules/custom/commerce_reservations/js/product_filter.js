@@ -6,8 +6,8 @@
 	      basePath = '';
       }
 	    var item = $('#block-views-calendar-product-view-block div.views-row');
-	    $('.commerce-add-to-cart #edit-line-item-fields').hide();
-	    $('.commerce-add-to-cart #edit-submit').hide();
+	    $('.commerce-add-to-cart div[id^="edit-line-item-fields"]').hide();
+	    $('.commerce-add-to-cart input[id^="edit-submit"]').hide();
 	    $('.commerce-add-to-cart #edit-product-id').hide();
 	    item.mousedown(function(){
 	      item.attr('id', 'selected-product');
