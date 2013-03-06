@@ -18,6 +18,8 @@ function om_migration_migrate_api() {
       'OM_USER2' => array('class_name' => 'omUserWithProjectMigration'),
       'OM_USER3' => array('class_name' => 'omUserWithMembershipMigration'),
       'OM_USER4' => array('class_name' => 'omUserWithCertificationMigration'),
+      'OM_PROJ' => array('class_name' => 'omProjectMigration'),
+      'OM_SHOW' => array('class_name' => 'omShowMigration'),
     ),
   );
 
