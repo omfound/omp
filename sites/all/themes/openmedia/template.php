@@ -328,7 +328,7 @@ function openmedia_get_project_child_shows($nid) {
  *     string img or bool false
  */
 function openmedia_get_thumbnail_from_show_nid($nid) {
-  $preset = '196x135';
+  $preset = '100x70';
   $query = db_select('field_data_field_show_thumbnail', 'image');
   $query->fields('image', array('field_show_thumbnail_fid'));
   $query->condition('entity_id', $nid, '=');

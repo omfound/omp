@@ -321,3 +321,14 @@
 #show-grid .inner {
   padding: 10px 0;
 }
+
+#show-grid .inner a {
+  display: block;
+  float: left;
+  margin: 0 6px 0px 0;
+}
+
+#show-grid .inner img {
+  padding: 5px;
+  border: solid 1px #B7B1A4;
+}
