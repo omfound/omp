@@ -36,7 +36,6 @@ class cablecastPlaybackServerController extends playbackServerController {
   public function check_metadata_status($pbs, $metadata = array()) {
     $shows = array();
     $output = array();
-    die($metadata);
     if (is_numeric($metadata)) {
       $metadata = array($metadata);
     }
@@ -93,7 +92,6 @@ class cablecastPlaybackServerController extends playbackServerController {
     
   }
   public function get_airing($pbs, $schedule_info = array()) {
-    dsm($schedule_info);
     if (!empty($schedule_info)) {
       $params = array (
         'ChannelID' => $pbs->output,
@@ -137,10 +135,10 @@ class cablecastPlaybackServerController extends playbackServerController {
   private function soap_request($pbs, $function, $data = array()) {
     try {
       $endpoint = $pbs->uri . '/CablecastWS/CablecastWS.asmx?WSDL';
-      $client = new SoapClient($endpoint, array('cache_wsdl' => 0));
+      $client = new SoapClient($endpoint);
       $auth = array(
-        'Username' => $pbs->user,
-        'Password' => $pbs->password
+        'username' => $pbs->user,
+        'password' => $pbs->password
       );
       $data = array_merge($data, $auth);
       return $client->{$function}($data);
@@ -196,6 +194,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       'LocationID' => $pbs->location_id,
       'IncludeValidFiles' => TRUE,
       'IncludeInvalidFiles' => FALSE,
+      'RestrictToOrphanedFiles' => TRUE,
       'RestrictToShowID' => 0
     );
     $params = array_merge($params, $options);

@@ -116,9 +116,9 @@ function om_playback_servers_menu() {
  * @param pbsid
  *   the pbsid of the pbs to load and pass along
  */
-function om_playback_servers_load($pbsid) {
-  $pbs_ids = array($pbsid);
-  $pbs = entity_get_controller('om_playback_server')->load($pbs_ids);
+function om_playback_servers_load($pbs_id, $conditions = array(), $reset = FALSE) {
+  $pbs_ids = array($pbs_id);
+  $pbs = entity_load('om_playback_server', $pbs_ids, $conditions, $reset);
   return $pbs;
 }
 
