@@ -883,22 +883,37 @@ function commerce_reservations_commerce_order_status_info(){
   return $order_statuses;
 }
 
+/*
+ * Implements hook_commerce_checkout_complete
+ */
+function commerce_reservations_commerce_checkout_complete($order) {
+	$order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+	foreach ($order_wrapper->commerce_line_items->getIterator() as $line_item_wrapper) {
+		if ($line_item_wrapper->type->value() == 'reservable_product') {
+			$line_item_wrapper->field_checkout_status->set('Awaiting Checkout');
+			$line_item_wrapper->save();
+		}
+	}
+}
+
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
-  $order = commerce_order_load($line_item->order_id);
-  $user = user_load($order->uid);
-  $nid = str_replace('node/', "", $line_item->commerce_display_path['und'][0]['value']);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $order = commerce_order_load($line_item_wrapper->order_id->value());
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+  $account = user_load($order_wrapper->uid->value());
+  $account_wrapper = entity_metadata_wrapper('user', $account);
+  $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
-  $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value'] . " UTC");
-  date_default_timezone_set($line_item->field_reservation_dates['und'][0]['timezone']);
+  $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
+  $start_date = strtotime($line_item_wrapper->field_reservation_dates->value()['value'] . " UTC");
+  date_default_timezone_set($line_item_wrapper->field_reservation_dates->value()['timezone']);
   $start_date = date('l, F d, Y h:i a', $start_date);
-  $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2'] . " UTC");
+  $end_date = strtotime($line_item_wrapper->field_reservation_dates->value()['value2'] . " UTC");
   $end_date = date('l, F d, Y h:i a', $end_date);
-  $product_ids = $product_display->field_crp_product_reference['und'];
   $product_options = array();
-  foreach($product_ids as $pid){
-    $product = commerce_product_load($pid);
-    $product_sku = $product->sku;
+  foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
+    $product_sku = $product_wrapper->sku->value();
     $product_options[] = $product_sku;
   }
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
@@ -920,11 +935,11 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   }
   
   $form['lid'] = array(
-    '#markup' => '<p>You are checking out ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
+    '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
   );
   $form['product_picker'] = array(
     '#type' => 'select',
-    '#title' => 'Which ' . $product_display->title .  ' is the user checking out?',
+    '#title' => 'Which ' . $product_display_wrapper->title->value() .  ' is the user checking out?',
     '#options' => drupal_map_assoc($product_options),
     '#default_value' => 0
   );
