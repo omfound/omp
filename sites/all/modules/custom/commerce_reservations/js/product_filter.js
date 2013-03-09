@@ -10,7 +10,12 @@
 	    $('.commerce-add-to-cart input[id^="edit-submit"]').hide();
 	    $('.commerce-add-to-cart #edit-product-id').hide();
 	    item.mousedown(function(){
-	      item.attr('id', 'selected-product');
+	      item.each(function(index){
+		      $(this).removeAttr('id');
+		      $(this).find('div[id^="edit-line-item-fields"]').hide();
+		      $(this).find('input[id^="edit-submit"]').hide();
+	      });
+	      $(this).attr('id', 'selected-product');
 	      var nid = $(this).find('.views-field-nid .field-content').text();
 	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
 	      //Remove events from the calendar
@@ -60,7 +65,7 @@
           if (view.name == 'agendaWeek'){
             quantity = $('#selected-product select#edit-quantity').val();
 	          $('#selected-product .commerce-add-to-cart').show();
-	          $('#selected-product #edit-line-item-fields').show();
+	          $('.commerce-add-to-cart div[id^="edit-line-item-fields"]').show();
 	          $('#selected-product .field-name-field-reservation-dates .form-select').change(function(){
               startYear = $('#selected-product .start-date-wrapper .date-year .form-select').val();
               startMonth = $('#selected-product .start-date-wrapper .date-month .form-select').val();
