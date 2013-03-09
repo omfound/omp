@@ -9,12 +9,15 @@
 	    $('.commerce-add-to-cart div[id^="edit-line-item-fields"]').hide();
 	    $('.commerce-add-to-cart input[id^="edit-submit"]').hide();
 	    $('.commerce-add-to-cart #edit-product-id').hide();
+	    $('.commerce-add-to-cart .form-item-quantity').hide();
 	    item.mousedown(function(){
 	      item.each(function(index){
 		      $(this).removeAttr('id');
 		      $(this).find('div[id^="edit-line-item-fields"]').hide();
 		      $(this).find('input[id^="edit-submit"]').hide();
+		      $(this).find('.form-item-quantity').hide();
 	      });
+	      $(this).find('.form-item-quantity').show();;
 	      $(this).attr('id', 'selected-product');
 	      var nid = $(this).find('.views-field-nid .field-content').text();
 	      var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
