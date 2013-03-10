@@ -962,16 +962,20 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
 function commerce_reservations_line_item_checkout_form_submit($form, &$form_state){
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
-  $line_item->commerce_product['und'][0]['product_id'] = $product->product_id;
-  $line_item->line_item_label = $product->sku;
-  $line_item->field_checkout_status['und'][0]['value'] = 'Checked Out';
-  foreach($form_state['input']['accessories'] as $accessory){
-    if ($accessory){
-      $line_item->field_accessories['und'][]['tid'] = $accessory;
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
+  $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
+  $line_item_wrapper->field_checkout_status->set('Checked Out');
+  if (!is_null($form_state['input']['accessories'])) {
+    foreach($form_state['input']['accessories'] as $accessory){
+      if ($accessory){
+        $line_item->field_accessories['und'][]['tid'] = $accessory;
+      }
     }
   }
-  commerce_line_item_save($line_item);
+  $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
 }
 
