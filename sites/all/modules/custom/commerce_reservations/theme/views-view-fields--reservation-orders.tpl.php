@@ -1,4 +1,4 @@
-<?php dpm($row);?>
+<?php //dpm($row);?>
 <?php $checkedout = FALSE;?>
 <?php if (sizeof($row->field_field_checkout_status) > 0):?>
   <?php if ($row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>

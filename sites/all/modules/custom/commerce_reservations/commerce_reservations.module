@@ -906,10 +906,11 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
-  $start_date = strtotime($line_item_wrapper->field_reservation_dates->value()['value'] . " UTC");
-  date_default_timezone_set($line_item_wrapper->field_reservation_dates->value()['timezone']);
+  $date_array = $line_item_wrapper->field_reservation_dates->value();
+  $start_date = strtotime($date_array['value'] . " UTC");
+  date_default_timezone_set($date_array['timezone']);
   $start_date = date('l, F d, Y h:i a', $start_date);
-  $end_date = strtotime($line_item_wrapper->field_reservation_dates->value()['value2'] . " UTC");
+  $end_date = strtotime($date_array['value2'] . " UTC");
   $end_date = date('l, F d, Y h:i a', $end_date);
   $product_options = array();
   foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
