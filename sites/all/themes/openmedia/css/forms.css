@@ -204,3 +204,7 @@ input[type="button"] {
 .media-widget .preview .media-item {
   margin: 0;
 }
+form div.field-widget-cablecast-file-selector-widget table th,
+form div.field-widget-cablecast-file-selector-widget table td {
+  padding-right: 5px;
+}
