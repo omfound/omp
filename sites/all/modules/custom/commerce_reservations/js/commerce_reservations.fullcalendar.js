@@ -13,7 +13,7 @@
       options.selectable = true;
       options.selectHelper = true;
       options.dragOpacity = 1.0;
-      options.unselectAuto = false;
+      options.unselectAuto = true;
       options.select = function(start, end, allDay) {
         if (!allDay){
 	        $('#selected-product .commerce-add-to-cart #edit-submit').show();
