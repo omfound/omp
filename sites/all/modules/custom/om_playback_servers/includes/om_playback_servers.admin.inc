@@ -182,13 +182,6 @@ function om_playback_servers_admin_form_submit($form, &$form_state) {
  *     render array.
  */
 function om_playback_servers_admin_list() {
-/*
-  $file = new stdClass();
-  $file->uri = 'cablecast://1';
-  $file->name = 'fileone.mp4';
-  file_save($file);
-*/
-
   $term_query = $query = db_select('taxonomy_vocabulary', 'voc');
   $term_query->fields('voc', array('vid'));
   $term_query->condition('machine_name', 'channels', '=');

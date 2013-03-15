@@ -30,7 +30,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id
       );
-      $this->soap_request($pbs, 'CreateNewShowRecord', $params);
+      return $this->soap_request($pbs, 'CreateNewShowRecord', $params);
     }
   }
   public function check_metadata_status($pbs, $metadata = array()) {
@@ -220,4 +220,4 @@ class cablecastPlaybackServerController extends playbackServerController {
     $params = array_merge($params, $options);
     return $this->soap_request($pbs, 'SendAutopilot', $params);
   }
-}
+} 
