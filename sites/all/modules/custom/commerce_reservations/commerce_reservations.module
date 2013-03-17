@@ -965,13 +965,15 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');
+  $checked_out_accessories = array();
   if (!is_null($form_state['input']['accessories'])) {
     foreach($form_state['input']['accessories'] as $accessory){
       if ($accessory){
-        $line_item_wrapper->field_checked_out_accessories->set(array($accessory));
+        $checked_out_accessories[] = $accessory;
       }
     }
   }
+  $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
 }
@@ -1114,18 +1116,18 @@ function missing_accessories_confirm($form, &$form_state, $line_id, $missing_ite
 function missing_accessories_confirm_form_submit($form, &$form_state){
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $checked_out_items = $line_item_wrapper->field_checked_out_accessories->value();
   $missing_items = explode('-', $form_state['build_info']['args'][1]);
-  foreach($line_item->field_accessories['und'] as $index => $item){
-    foreach($missing_items as $miss_index => $missing_item){
-      if ($item['tid'] == $missing_item){
-        break;
-      } elseif ($miss_index == sizeof($missing_items) - 1){
-	      $line_item->field_returned_accessories['und'][$index] = $item;
-      }
+  $returned_items = array();
+  foreach ($checked_out_items as $item) {
+    if (in_array($item->tid, $missing_items)) {
+      $returned_items[] = $item->tid;
     }
   }
-  $line_item->field_checkout_status['und'][0]['value'] = 'Checked In';
-  commerce_line_item_save($line_item);
+  $line_item_wrapper->field_returned_accessories->set($returned_items);
+  $line_item_wrapper->field_checkout_status->set('Checked In');
+  $line_item_wrapper->save();
   $email = variable_get('cr_admin_email');
   global $language;
   $params = array(
