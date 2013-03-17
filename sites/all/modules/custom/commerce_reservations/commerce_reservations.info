@@ -41,6 +41,7 @@ features[field][] = taxonomy_term-omp_certifications-field_abbr
 features[field][] = taxonomy_term-reservable_product_accessories-field_crp_category
 features[field][] = taxonomy_term-reservable_product_accessories-field_reservable_product
 features[node][] = reservable_product_display
+features[rules_config][] = rules_apply_reservation_price_by_day
 features[taxonomy][] = certifications
 features[taxonomy][] = omp_certifications
 features[taxonomy][] = product_categories
