@@ -42,6 +42,7 @@ features[field][] = taxonomy_term-reservable_product_accessories-field_crp_categ
 features[field][] = taxonomy_term-reservable_product_accessories-field_reservable_product
 features[node][] = reservable_product_display
 features[rules_config][] = rules_apply_reservation_price_by_day
+features[rules_config][] = rules_apply_reservation_price_by_the_hour
 features[taxonomy][] = certifications
 features[taxonomy][] = omp_certifications
 features[taxonomy][] = product_categories

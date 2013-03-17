@@ -27,5 +27,23 @@ function commerce_reservations_default_rules_configuration() {
       ]
     }
   }');
+  $items['rules_apply_reservation_price_by_the_hour'] = entity_import('rules_config', '{ "rules_apply_reservation_price_by_the_hour" : {
+      "LABEL" : "Apply Reservation Price by the Hour",
+      "PLUGIN" : "reaction rule",
+      "REQUIRES" : [ "commerce_reservations", "commerce_product_reference" ],
+      "ON" : [ "commerce_product_calculate_sell_price" ],
+      "IF" : [
+        { "commerce_reservations_charge_by_the_hour_check" : { "lid" : [ "commerce-line-item:line-item-id" ] } }
+      ],
+      "DO" : [
+        { "commerce_reservations_price_per_hour" : {
+            "commerce_line_item" : [ "commerce_line_item" ],
+            "component_name" : "base_price",
+            "round_mode" : "1"
+          }
+        }
+      ]
+    }
+  }');
   return $items;
 }

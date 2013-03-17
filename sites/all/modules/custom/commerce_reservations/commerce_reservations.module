@@ -628,8 +628,8 @@ function commerce_reservations_rules_condition_info() {
     'commerce_reservations_charge_by_the_hour_check' => array(
       'label' => t('Apply Hourly Reservation Pricing'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item Id'),
           'type' => 'integer'
         ),
       ),
@@ -672,7 +672,7 @@ function commerce_reservations_charge_by_the_day_check($lid) {
 /**
  * Condition callback to check whether or not a line item product should be charged hourly
  */
-function commerce_reservations_charge_by_the_hour_check($order_id) {
+function commerce_reservations_charge_by_the_hour_check($lid) {
 	if (is_numeric($lid)) {
 	  $line_item = commerce_line_item_load($lid);
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
