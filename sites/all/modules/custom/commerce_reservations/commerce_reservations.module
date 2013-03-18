@@ -628,8 +628,8 @@ function commerce_reservations_rules_condition_info() {
     'commerce_reservations_charge_by_the_hour_check' => array(
       'label' => t('Apply Hourly Reservation Pricing'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item Id'),
           'type' => 'integer'
         ),
       ),
@@ -659,12 +659,12 @@ function commerce_reservations_product_type_check($lid) {
 function commerce_reservations_charge_by_the_day_check($lid) {
 	if (is_numeric($lid)) {
 	  $line_item = commerce_line_item_load($lid);
-    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 	  $product = $line_item_wrapper->commerce_product->value();
 	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-    if ($product_wrapper->field_charge_by_the_->value() == 'day') {
+      if ($product_wrapper->field_charge_by_the_->value() == 'day') {
 	    return TRUE;
-    }
+      }
 	}
 	return FALSE;
 }
@@ -672,15 +672,15 @@ function commerce_reservations_charge_by_the_day_check($lid) {
 /**
  * Condition callback to check whether or not a line item product should be charged hourly
  */
-function commerce_reservations_charge_by_the_hour_check($order_id) {
+function commerce_reservations_charge_by_the_hour_check($lid) {
 	if (is_numeric($lid)) {
 	  $line_item = commerce_line_item_load($lid);
-    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 	  $product = $line_item_wrapper->commerce_product->value();
 	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-    if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
+      if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
 	    return TRUE;
-    }
+      }
 	}
 	return FALSE;
 }
@@ -771,9 +771,9 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
 }
 
 function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = $line_item_wrapper->commerce_product->value();
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   //if the product is not a reservable product, duck out
   if ($product->type != 'reservable_product') {
     return;
@@ -782,13 +782,15 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
   $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
-    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+    $date_array = $line_item_wrapper->field_reservation_dates->value();
+    $start = strtotime($date_array["value"]);
+    $end = strtotime($date_array["value2"]);
     $days_diff = floor(($end - $start) / 86400);
     if ($days_diff < 1){
 	    $days_diff = 1;
     }
-    $rate = $product->commerce_price['und'][0]['amount'];
+    $price_array = $product_wrapper->commerce_price->value();
+    $rate = $price_array['amount'];
     $updated_price = $days_diff * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
@@ -796,10 +798,8 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
-   
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
-    
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -907,11 +907,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $product_display = node_load($nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
   $date_array = $line_item_wrapper->field_reservation_dates->value();
-  $start_date = strtotime($date_array['value'] . " UTC");
-  date_default_timezone_set($date_array['timezone']);
-  $start_date = date('l, F d, Y h:i a', $start_date);
-  $end_date = strtotime($date_array['value2'] . " UTC");
-  $end_date = date('l, F d, Y h:i a', $end_date);
+  $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
+  $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
   $product_options = array();
   foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
     $product_sku = $product_wrapper->sku->value();
@@ -922,21 +919,21 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $accessories = array();
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
-    if ($loaded_term->field_crp_category == $product_display->field_crp_category){
-      $accessories[$loaded_term->tid] = $loaded_term->name;
+    $term_wrapper = entity_metadata_wrapper('taxonomy_term', $loaded_term);
+    if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
+      $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
     }
     if ($loaded_term->field_reservable_product){
-      foreach($loaded_term->field_reservable_product['und'] as $term){
-        $loaded_product_term = taxonomy_term_load($term['tid']);
-        if ($loaded_product_term->name == $product_display->title){
-          $accessories[$loaded_term->tid] = $loaded_term->name;
+      foreach($term_wrapper->field_reservable_product->getIterator() as $product_term_wrapper){
+        if ($product_term_wrapper->name->value() == $product_display_wrapper->title->value()){
+          $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
         }
       }
     }
   }
   
   $form['lid'] = array(
-    '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
+    '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a'),
   );
   $form['product_picker'] = array(
     '#type' => 'select',
@@ -968,55 +965,55 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');
+  $checked_out_accessories = array();
   if (!is_null($form_state['input']['accessories'])) {
     foreach($form_state['input']['accessories'] as $accessory){
       if ($accessory){
-        $line_item->field_accessories['und'][]['tid'] = $accessory;
+        $checked_out_accessories[] = $accessory;
       }
     }
   }
+  $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
-  $order = commerce_order_load($line_item->order_id);
-  $user = user_load($order->uid);
-  $nid = str_replace('node/', "", $line_item->commerce_display_path['und'][0]['value']);
-  $product_display = node_load($nid);
-  $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value'] . " UTC");
-  date_default_timezone_set($line_item->field_reservation_dates['und'][0]['timezone']);
-  $start_date = date('l, F d, Y h:i a', $start_date);
-  $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2'] . " UTC");
-  $end_date = date('l, F d, Y h:i a', $end_date);
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $order = commerce_order_load($line_item_wrapper->order_id->value());
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+  $account = user_load($order_wrapper->uid->value());
+  $account_wrapper = entity_metadata_wrapper('user', $account);
+  $date_array = $line_item_wrapper->field_reservation_dates->value();
+  $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
+  $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
+  $product = $line_item_wrapper->commerce_product->value();
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   $fields = field_info_field('field_res_product_status');
   $status_options = $fields['settings']['allowed_values'];
   $checked_options = array();
   foreach ($status_options as $key => $option){
     if ($product->field_res_product_status){
-      foreach ($product->field_res_product_status['und'] as $old_val){
-        if ($option == $old_val['value']){
+      foreach ($product_wrapper->field_res_product_status->getIterator() as $old_val){
+        if ($option == $old_val->value()){
           $checked_options[]  = $option;
         }
       }
     }
   }
   $accessories = array();
-  foreach($line_item->field_accessories['und'] as $term_id){
-    $term = taxonomy_term_load($term_id['tid']);
-    $accessories[$term->tid] = $term->name;
+  foreach($line_item_wrapper->field_checked_out_accessories->getIterator() as $term_wrapper){
+    $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
   }
   if ($product->field_reservable_product_notes){
-    $product_notes = $product->field_reservable_product_notes['und'][0]['safe_value'];
+    $product_notes = $product_wrapper->field_reservable_product_notes->value();
   } else{
     $product_notes = '';
   }
-  
-  
+
   $form['lid'] = array(
-    '#markup' => '<p>You are checking in ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date . '</br>' . 'User checked out sku number: ' . $product->sku . '</br>',
+    '#markup' => '<p>You are checking in ' . $account_wrapper->name->value() . "'s reservation for " . $product_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a') . '</br>' . 'User checked out sku number: ' . $product_wrapper->sku->value() . '</br>',
   );
   $form['item_status'] = array(
     '#type' => 'checkboxes',
@@ -1047,21 +1044,25 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $line_id = $form_state['build_info']['args'][0];
   $missing_items = array();
   $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   foreach ($form_state['input']['accessories'] as $index => $term_id){
     if (!$term_id){
       $missing_items[] = $index;
     }
   }
+  $product = $line_item_wrapper->commerce_product->value();
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   if (sizeof($missing_items) > 0){
-    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
     $index = 0;
     $notes = $form_state['values']['item_notes'];
-    $product->field_reservable_product_notes['und'][0]['value'] = $notes;
+    $product_wrapper->field_reservable_product_notes->set($notes);
+    $status_values = array();
     foreach ($form_state['values']['item_status'] as $state => $value){
-      $product->field_res_product_status['und'][$index]['value'] = $value;
+      $status_values[] = $value;
       $index++;
     }
-    commerce_product_save($product);
+    $product_wrapper->field_res_product_status->set($status_values);
+    $product_wrapper->save();
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
 	    if ($index != sizeof($missing_items) - 1){
@@ -1072,21 +1073,24 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
     }
     $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
     drupal_goto($path);
-  }  else{
-    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  } else{
     $index = 0;
     $notes = $form_state['values']['item_notes'];
-    $product->field_reservable_product_notes['und'][0]['value'] = $notes;
-    foreach ($form_state['values']['item_status'] as $state => $value){
-      $product->field_res_product_status['und'][$index]['value'] = $value;
+    $product_wrapper->field_reservable_product_notes->set($notes);
+    $status_values = array();
+    foreach ($form_state['values']['item_status'] as $value){
+      $status_values[] = $value;
       $index++;
     }
-    commerce_product_save($product);
-    $line_item->field_checkout_status['und'][0]['value'] = 'Checked In';
-    foreach($line_item->field_returned_accessories['und'] as $item){
-      $line_item->field_accessories['und'] = $item;
+    $product_wrapper->field_res_product_status->set($status_values);
+    $product_wrapper->save();
+    $line_item_wrapper->field_checkout_status->set('Checked In');
+    $returned_accessories = array();
+    foreach($form_state['values']['accessories'] as $item){
+      $returned_accessories[] = $item;
     }
-    commerce_line_item_save($line_item);
+    $line_item_wrapper->field_returned_accessories->set($returned_accessories);
+    $line_item_wrapper->save();
     $form_state['redirect'] = 'administer_reservations';
   }
 }
@@ -1112,18 +1116,18 @@ function missing_accessories_confirm($form, &$form_state, $line_id, $missing_ite
 function missing_accessories_confirm_form_submit($form, &$form_state){
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $checked_out_items = $line_item_wrapper->field_checked_out_accessories->value();
   $missing_items = explode('-', $form_state['build_info']['args'][1]);
-  foreach($line_item->field_accessories['und'] as $index => $item){
-    foreach($missing_items as $miss_index => $missing_item){
-      if ($item['tid'] == $missing_item){
-        break;
-      } elseif ($miss_index == sizeof($missing_items) - 1){
-	      $line_item->field_returned_accessories['und'][$index] = $item;
-      }
+  $returned_items = array();
+  foreach ($checked_out_items as $item) {
+    if (in_array($item->tid, $missing_items)) {
+      $returned_items[] = $item->tid;
     }
   }
-  $line_item->field_checkout_status['und'][0]['value'] = 'Checked In';
-  commerce_line_item_save($line_item);
+  $line_item_wrapper->field_returned_accessories->set($returned_items);
+  $line_item_wrapper->field_checkout_status->set('Checked In');
+  $line_item_wrapper->save();
   $email = variable_get('cr_admin_email');
   global $language;
   $params = array(
