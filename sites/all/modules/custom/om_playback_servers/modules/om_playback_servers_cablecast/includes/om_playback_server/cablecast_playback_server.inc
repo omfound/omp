@@ -151,7 +151,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         $message =  'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
       }
       else {
-        $message =  'Cablecast Playback Server: malformed playback server: ' . $e->getMessage();
+        $message =  'Cablecast Playback Server: malformed playback server entity: ' . $e->getMessage();
       }
       throw new Exception($message);
     }

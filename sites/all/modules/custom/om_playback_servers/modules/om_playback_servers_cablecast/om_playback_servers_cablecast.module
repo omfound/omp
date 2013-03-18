@@ -74,3 +74,15 @@ function om_playback_servers_cablecast_permission() {
   );
 }
 
+/**
+ * Get ia url from cablecast uri.
+ */
+function om_playback_servers_cablecast_file_ia_url($uri) {
+  try {
+    $cablecast_file_controller = new cablecastFile();
+    return $cablecast_file_controller->get_ia_url($uri);
+  }
+  catch(Exception $e) {
+    $message =  'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
+  }
+}
