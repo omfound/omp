@@ -68,8 +68,9 @@ function om_playback_servers_cablecast_om_playback_servers_om_playback_server() 
 function om_playback_servers_cablecast_permission() {
   return array(
     'use cablecast media browser' => array(
-      'title' => t('Use Cablecast Media Browser'),
+      'title' => t('Use Cablecast Media Selector'),
       'description' => t('Select orphaned files from your Cablecast, create show metadata and store them on a node.'),
     ),
   );
 }
+

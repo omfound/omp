@@ -70,26 +70,27 @@ function om_playback_servers_cablecast_field_widget_info() {
  * Implements hook_field_widget_form
  */
 function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  drupal_add_css(drupal_get_path('module', 'om_playback_servers_cablecast') . '/css/om_playback_servers_cablecast_file_selector.css');
-  if (empty($items)) {
-    $cablecast_file_interface = new cablecastFile();
-    $files = $cablecast_file_interface->get_orphaned_files();
-    $widget = array(
-      '#title' => t('Select a File from Ingest:'),
-      '#type' => 'select',
-      '#options' => $files,
-      '#empty_option' => '- Select a File -',
-      '#empty_value' => 'none'
-    );
-    
+  if (user_access('use cablecast media browser')) {
+    drupal_add_css(drupal_get_path('module', 'om_playback_servers_cablecast') . '/css/om_playback_servers_cablecast_file_selector.css');
+    if (empty($items)) {
+      $cablecast_file_interface = new cablecastFile();
+      $files = $cablecast_file_interface->get_orphaned_files();
+      $widget = array(
+        '#title' => t('Select a File from Ingest:'),
+        '#type' => 'select',
+        '#options' => $files,
+        '#empty_option' => '- Select a File -',
+        '#empty_value' => 'none'
+      );
+    }
+    else {
+      $widget = array(
+        '#markup' => '<label>' . t('Broadcast File') . '</label>' . om_playback_servers_cablecast_create_widget_table($items)
+      );
+    }
+    $element['uri'] = $widget;
+    return $element;
   }
-  else {
-    $widget = array(
-      '#markup' => '<label>' . t('Broadcast File') . '</label>' . om_playback_servers_cablecast_create_widget_table($items)
-    );
-  }
-  $element['uri'] = $widget;
-  return $element;
 }
 
 /**
