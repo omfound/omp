@@ -5,7 +5,8 @@ core = 7.x
 dependencies[] = migrate
 dependencies[] = list
 dependencies[] = number
-
+dependencies[] = "commerce"
+dependencies[] = "commerce_product"
 files[] = om_migration.module
 files[] = om_users.inc
 files[] = om_users_with_project.inc
