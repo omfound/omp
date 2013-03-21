@@ -22,9 +22,13 @@ function om_migration_create_new_order($user, $start_date) {
 }
 
 function om_migration_create_line_item($type) {
-  //$current_order = commerce_cart_order_load($user->uid);
-  //$current_order_metadata = entity_metadata_wrapper('commerce_order', $current_order);
-  //$current_line_items = $current_order_metadata->commerce_line_items->value();
+  // commerce_line_item_new();
+  // test in devel/php
+  // dsm($item);
+  // commerce_product_line_item_new($product, $quantity = 1, $order_id = 0, $data = array(), $type = 'product')
+  $current_order = commerce_cart_order_load($user->uid);
+  $current_order_metadata = entity_metadata_wrapper('commerce_order', $current_order);
+  $current_line_items = $current_order_metadata->commerce_line_items->value();
   return $line_item;
 }
 
