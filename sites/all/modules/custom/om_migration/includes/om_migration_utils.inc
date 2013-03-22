@@ -1,10 +1,17 @@
 <?php
 
-// create new membership for user
+/**
+ * Create new membership for user.
+ *
+ * @param $uid user id
+ * @param $product_id product id of membership
+ * @param $start_date start date of membership in seconds
+ */
 function om_migration_create_new_member($uid, $product_id, $start_date) {
   // grab array of membership product_id => role_id mappings
   $om_memrole = om_migration_role_product_relationships();
   $order = commerce_order_new($uid);
+  // save order to generate order_id
   commerce_order_save($order);
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $order->created = $start_date;
@@ -19,7 +26,9 @@ function om_migration_create_new_member($uid, $product_id, $start_date) {
 }
 
 /**
- * @params: $uid, $role_id is the rid of the role
+ * Grant role for a user.
+ * @param $uid
+ * @param $role_id is the rid of the role
  */
 function om_migration_grant_user_role($uid, $role_id) {
   // Save the user object with the new role.
