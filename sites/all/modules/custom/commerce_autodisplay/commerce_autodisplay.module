@@ -179,10 +179,12 @@ function commerce_autodisplay_preprocess_page(&$vars) {
   $node = menu_get_object();
   $product = commerce_autodisplay_node_product($node);
   if($product) {
-    foreach ($vars['tabs']['#primary'] as $key => $info) {
-      if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
-        $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product->product_id.'/edit';
-        $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
+    if($vars['tabs']['#primary']) {
+      foreach ($vars['tabs']['#primary'] as $key => $info) {
+        if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
+          $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product->product_id.'/edit';
+          $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
+        }
       }
     }
   }
