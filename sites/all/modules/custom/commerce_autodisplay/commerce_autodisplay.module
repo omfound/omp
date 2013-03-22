@@ -27,7 +27,10 @@ function commerce_autodisplay_menu() {
 function commerce_autodisplay_delete_tab_access($node) {
   $product = commerce_autodisplay_node_product($node); 
   if($product) {
-    return true;
+    $url = 'admin/commerce/products/'.$product->product_id.'/delete';
+    if(drupal_valid_path($url)) {
+      return true;
+    }
   }else{
     return false;
   }
