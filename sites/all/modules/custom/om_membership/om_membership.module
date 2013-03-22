@@ -330,9 +330,6 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
         if (!empty($membership_products)) {
           $order_metadata = entity_metadata_wrapper('commerce_order', $order);
           if ($active == TRUE) {
-	    print '<pre>';
-	    print_r($order);
-	    print '</pre>';
             // We will only accept 1 membership per order.
             $product = $membership_products[0];
             $product_metadata = entity_metadata_wrapper('commerce_product', $product);
@@ -340,7 +337,10 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
             $now = time();
             if ($now > $order->created && $now < $exp) {
               $memberships[] = $order;
-            }
+	    }
+	    elseif (!$product_metadata->field_duration->value()) {
+	      $memberships[] = $order;
+	    }
           }
           else {
             $memberships[] = $order;
