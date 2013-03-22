@@ -1,8 +1,5 @@
 <?php
 
-function commerce_registration_fixes_commerce_checkout_router($order, $checkout_page) {
-  
-}
 function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
   if(!commerce_registration_fixes_is_registration_cart()) {
     unset($checkout_pages['registration']);
@@ -31,4 +28,8 @@ function commerce_registration_fixes_is_registration_cart() {
   }
 
   return $registration_status; 
+}
+
+function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) {
+  print $form_id;
 }
