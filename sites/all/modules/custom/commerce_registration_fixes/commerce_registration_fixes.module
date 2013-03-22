@@ -39,16 +39,16 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
     $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
 
     foreach($form['registration_information'] as $class_key => $class) {
-      foreach($class as $reg_key => $reg) {
-        if($first_name) {
-          $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
-        }
-        if($last_name) {
-          $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
-        }
-        if($phone) {
-          $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
-        }
+      reset($class);
+      $reg_key = key($class);
+      if($first_name) {
+        $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
+      }
+      if($last_name) {
+        $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
+      }
+      if($phone) {
+        $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
       }
     }
   }
