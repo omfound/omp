@@ -31,6 +31,9 @@ function commerce_registration_fixes_is_registration_cart() {
 }
 
 function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) {
+  print '<pre>';
+  print_r($form_state);
+  print '</pre>';
   if($form_id == 'commerce_checkout_form_registration') {
     global $user;
     $contact_info = profile2_load_by_user($user, 'contact_info');
