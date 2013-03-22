@@ -37,5 +37,8 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
     print '<pre>';
     print_r($info);
     print '</pre>';
+    print '<pre>';
+    print_r($form);
+    print '</pre>';
   }
 }
