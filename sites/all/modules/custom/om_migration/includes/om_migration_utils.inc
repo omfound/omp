@@ -1,23 +1,9 @@
 <?php
 
-// this should be in the module file instead
-// map membership product_id => role_id
-$om_memrole_map = array();
-// programming membership
-$om_memrole_map[1] = 5;
-// field membership
-$om_memrole_map[3] = 6;
-// studio membership
-$om_memrole_map[4] = 8;
-// unlimited membership
-$om_memrole_map[5] = 9;
-// organizational membership
-$om_memrole_map[6] = 10;
-
-
 // create new membership for user
-function om_migration_create_new_member($product_id, $uid, $start_date) {
-  global $om_memrole_map;
+function om_migration_create_new_member($uid, $product_id, $start_date) {
+  // grab array of membership product_id => role_id mappings
+  $om_memrole = om_migration_role_product_relationships();
   $order = commerce_order_new($uid);
   commerce_order_save($order);
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
@@ -29,11 +15,11 @@ function om_migration_create_new_member($product_id, $uid, $start_date) {
   commerce_order_save($order);
 
   // Now grant the user the role
-  om_migration_grant_user_role($uid, $om_memrole_map[$product_id]);
+  om_migration_grant_user_role($uid, $om_memrole[$product_id]);
 }
 
 /**
- * @params: $uid, $role is the rid of the role
+ * @params: $uid, $role_id is the rid of the role
  */
 function om_migration_grant_user_role($uid, $role_id) {
   // Save the user object with the new role.
