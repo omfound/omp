@@ -11,7 +11,7 @@ function commerce_login_commerce_checkout_router($order, $checkout_page) {
  * Implements hook_url_outbound_alter().
  * Keeps the login destination between the login and create new account tabs
  */
-function commerce_login_user_router_url_outbound_alter(&$path, &$options, $original_path) {
+function commerce_login_url_outbound_alter(&$path, &$options, $original_path) {
   // Always make login/logout links go to the current page.
   switch ($path) {
     case 'user':
