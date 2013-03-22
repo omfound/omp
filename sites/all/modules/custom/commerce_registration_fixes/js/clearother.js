@@ -1,9 +1,10 @@
 (function ($, Drupal, window, document, undefined) {
   Drupal.behaviors.clearOther = {
     attach : function(context) {
-      alert('clearing the stuff');
       $('select').change(function() {
-        alert($(this).val());
+        if($(this).val() == 'registration_registrant_type_anon') {
+	  $('input').val("");
+        }
       });
     }
   }
