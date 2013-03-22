@@ -31,9 +31,6 @@ function commerce_registration_fixes_is_registration_cart() {
 }
 
 function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) {
-  print '<pre>';
-  print_r($form_state);
-  print '</pre>';
   if($form_id == 'commerce_checkout_form_registration') {
     global $user;
     $contact_info = profile2_load_by_user($user, 'contact_info');
@@ -45,14 +42,16 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
       reset($class);
       $reg_key = key($class);
       print 'THE KEY: '.$reg_key;
-      if($first_name) {
-        $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
-      }
-      if($last_name) {
-        $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
-      }
-      if($phone) {
-        $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
+      if($reg_key) {
+        if($first_name) {
+          $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
+        }
+        if($last_name) {
+          $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
+        }
+        if($phone) {
+          $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
+        }
       }
     }
   }
