@@ -321,14 +321,14 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $acceptable_statuses = array('processing', 'completed', 'checked out');
   // Here we may want to make this something like -- anything other than pending.
   $orders = commerce_order_load_multiple(array(), array('uid' => $user->uid));
-  print '<pre>';
-  print_r($orders);
-  print '</pre>';
   if (!empty($orders)) {
     // Just in case orders are not in sequence, order them by creation date.
     usort($orders, '_om_membership_sort_orders_by_created');
     foreach ($orders AS $order) {
       if (in_array($order->status, $acceptable_statuses)) {
+	print '<pre>';
+	print_r($order);
+	print '</pre>';
         $membership_products = om_membership_order_contains_membership($order);
         if (!empty($membership_products)) {
           $order_metadata = entity_metadata_wrapper('commerce_order', $order);
