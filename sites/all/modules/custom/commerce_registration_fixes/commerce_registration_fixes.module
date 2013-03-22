@@ -50,6 +50,7 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
         if($first_name) {
           $form['registration_information'][$class_key][$reg_key]['field_first_name']['#default_value'] = $first_name; 
 	  print 'ZEVALUE: '.$form['registration_information'][$class_key][$reg_key]['field_first_name']['#type'];
+	  print '<br />ISETTHIS: '.$form['registration_information'][$class_key][$reg_key]['field_first_name']['#default_value'];
         }
         if($last_name) {
           $form['registration_information'][$class_key][$reg_key]['field_last_name']['#default_value'] = $first_name; 
