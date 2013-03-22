@@ -3,7 +3,7 @@
     attach : function(context) {
       $('select').change(function() {
         if($(this).val() == 'registration_registrant_type_anon') {
-	  $('input').val("");
+	  $(this).closest('fieldset').find('input').val("");
         }
       });
     }
