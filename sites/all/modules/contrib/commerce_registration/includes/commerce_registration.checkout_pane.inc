@@ -70,6 +70,9 @@ function commerce_registration_information_checkout_form($form, &$form_state, $c
         // -------------------------------------------------------------------------
         // All the following code can be deleted if we use the form builder from ER.
         // -------------------------------------------------------------------------
+	print '<pre>';
+	print_r($entity);
+	print '</pre>';
         $mail = $entity->mail;
         $options = registration_access_people($entity);
         if ((count($options) == 0)
