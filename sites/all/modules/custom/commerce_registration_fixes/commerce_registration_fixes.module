@@ -34,15 +34,18 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
   if($form_id == 'commerce_checkout_form_registration') {
     global $user;
     $contact_info = profile2_load_by_user($user, 'contact_info');
-    print '<pre>';
-    print_r($form);
-    print '</pre>';
+    //print '<pre>';
+    //print_r($form);
+    //print '</pre>';
     $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
     $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
     $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
 
     print 'THE FIRST NAME: '.$first_name;
     foreach($form['registration_information'] as $class_key => $class) {
+      print '<pre>';
+      print_r($class);
+      print '</pre>';
       foreach($class as $reg_key => $reg) {
         if($first_name) {
           $form['registration_information'][$class_key][$reg_key]['field_first_name']['#default_value'] = $first_name; 
