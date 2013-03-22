@@ -41,16 +41,17 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
     $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
     $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
 
-    foreach($form['registration_information'] as $class => $info) {
-      foreach($info as $class_key => $class_fields) {
+    print 'THE FIRST NAME: '.$first_name;
+    foreach($form['registration_information'] as $class_key => $class) {
+      foreach($class as $reg_key => $reg) {
         if($first_name) {
-          $form['registration_information'][$class][$class_key]['field_first_name']['#default_value'] = $first_name; 
+          $form['registration_information'][$class_key][$reg_key]['field_first_name']['#default_value'] = $first_name; 
         }
         if($last_name) {
-          $form['registration_information'][$class][$class_key]['field_last_name']['#default_value'] = $first_name; 
+          $form['registration_information'][$class_key][$reg_key]['field_last_name']['#default_value'] = $first_name; 
         }
         if($phone) {
-          $form['registration_information'][$class][$class_key]['field_phone_number']['#default_value'] = $phone; 
+          $form['registration_information'][$class_key][$reg_key]['field_phone_number']['#default_value'] = $phone; 
         }
       }
     }
