@@ -43,10 +43,13 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
 
     print 'THE FIRST NAME: '.$first_name;
     foreach($form['registration_information'] as $class_key => $class) {
-      print '<pre>';
-      print_r($class);
-      print '</pre>';
+      //print '<pre>';
+      //print_r($class);
+      //print '</pre>';
       foreach($class as $reg_key => $reg) {
+	print '<pre>';
+	print_r($reg);
+	print '</pre>';
         if($first_name) {
           $form['registration_information'][$class_key][$reg_key]['field_first_name']['#default_value'] = $first_name; 
         }
