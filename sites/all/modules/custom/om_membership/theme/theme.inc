@@ -282,9 +282,6 @@ function om_membership_preprocess_om_membership_renewal_table(&$variables) {
 function om_membership_preprocess_om_membership_checkout_completion(&$variables) {
   global $user;
   $orders = om_membership_get_user_membership_orders($user);
-  print '<pre>';
-  print_r($orders);
-  print '</pre>';
   if (!empty($orders)) {
     if (om_membership_validate_org_admin_member($user) == TRUE) {
       $account_link = l('account', 'user/' . $user->uid);
