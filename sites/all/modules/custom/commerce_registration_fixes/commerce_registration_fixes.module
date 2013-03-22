@@ -32,6 +32,8 @@ function commerce_registration_fixes_is_registration_cart() {
 
 function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) {
   if($form_id == 'commerce_checkout_form_registration') {
+    $form['omp']['#after_build'] = array('commerce_registration_fixes_load_js');
+
     global $user;
     $contact_info = profile2_load_by_user($user, 'contact_info');
     $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
@@ -42,7 +44,6 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
       if(is_array($class)) {
         reset($class);
         $reg_key = key($class);
-        print 'THE KEY: '.$reg_key;
         if($reg_key) {
           if($first_name) {
             $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
@@ -59,3 +60,7 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
   }
 }
 
+function commerce_registration_fixes_load_js($element) {
+  drupal_add_js(drupal_get_path('module', 'commerce_registration_fixes').'/js/clearother.js');
+  return $element;	
+}
