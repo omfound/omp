@@ -1052,17 +1052,19 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   }
   $product = $line_item_wrapper->commerce_product->value();
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  $notes = $form_state['values']['item_notes'];
+  $index = 0;
+  $product_wrapper->field_reservable_product_notes->set($notes);
+  $product_wrapper->field_reservable_product_notes->set($notes);
+  $status_values = array();
+  foreach ($form_state['values']['item_status'] as $value){
+    $status_values[] = $value;
+    $index++;
+  }
+  $product_wrapper->field_res_product_status->set($status_values);
+  $product_wrapper->save();
+
   if (sizeof($missing_items) > 0){
-    $index = 0;
-    $notes = $form_state['values']['item_notes'];
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $status_values = array();
-    foreach ($form_state['values']['item_status'] as $state => $value){
-      $status_values[] = $value;
-      $index++;
-    }
-    $product_wrapper->field_res_product_status->set($status_values);
-    $product_wrapper->save();
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
 	    if ($index != sizeof($missing_items) - 1){
@@ -1074,16 +1076,6 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
     $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
     drupal_goto($path);
   } else{
-    $index = 0;
-    $notes = $form_state['values']['item_notes'];
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $status_values = array();
-    foreach ($form_state['values']['item_status'] as $value){
-      $status_values[] = $value;
-      $index++;
-    }
-    $product_wrapper->field_res_product_status->set($status_values);
-    $product_wrapper->save();
     $line_item_wrapper->field_checkout_status->set('Checked In');
     $returned_accessories = array();
     foreach($form_state['values']['accessories'] as $item){
