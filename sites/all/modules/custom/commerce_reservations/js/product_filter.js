@@ -31,11 +31,12 @@
               return true;
             }
           });
+              console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + 1);
           $.ajax(
           {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
             cache : false,
             success : function (data) {
-	          $('a.fullcalendar-event-details', data).each(function(index){
+              $('a.fullcalendar-event-details', data).each(function(index){
                 event = new Object();
                 event.field = $(this).attr('field');
                 event.index = $(this).attr('index');
@@ -45,25 +46,44 @@
                 event.start = $(this).attr('start');
                 event.end = $(this).attr('end');
                 event.url = $(this).attr('href');
-                if ($(this).children('span').hasClass('closed-date')){
-                  event.allDay = true;
-                  event.className = 'closed-all-day';
-                } else{
-                  event.allDay = ($(this).attr('allDay') === '1');
-                  event.className = 'overlap';
-                }
+                event.allDay = ($(this).attr('allDay') === '1');
+                event.className = 'overlap';
                 event.editable = ($(this).attr('editable') === '1');
                 event.color = '#912711';
-                if ($(this).children('span').hasClass('closed-hours')){
-                  event.backgroundColor = '#2B6893';
-                  event.className = 'closed-hours';
-                } else {
                 event.backgroundColor = '#912711';
-                }
                 event.eventBorderColor = '#912711';
                 event.textColor = '#912711';
                 dom_id: this.dom_id;
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
+              });
+              $('.closed_dates', data).each(function(index){
+                  event = new Object();
+                  event.title = 'Closed';
+                  event.start = $(this).attr('date');
+                  event.allDay = true;
+                  event.className = 'closed-all-day';
+                  event.editable = ($(this).attr('editable') === '1');
+                  event.color = '#912711';
+                  event.backgroundColor = '#912711';
+                  event.eventBorderColor = '#912711';
+                  event.textColor = '#912711';
+                  dom_id: this.dom_id;
+                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
+              });
+              $('.closed-time', data).each(function(index){
+                  event = new Object();
+                  event.title = 'Closed';
+                  event.start = $(this).attr('start');
+                  event.end = $(this).attr('end');
+                  event.allDay = false;
+                  event.className = 'closed-time';
+                  event.editable = ($(this).attr('editable') === '1');
+                  event.color = '#912711';
+                  event.backgroundColor = '#2B6893';
+                  event.eventBorderColor = '#912711';
+                  event.textColor = '#912711';
+                  dom_id: this.dom_id;
+                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
             }
           });
@@ -105,13 +125,15 @@
               });
             }
           });
-          $('#selected-product #edit-quantity').change(function(){
+          $('#selected-product select[id^="edit-quantity"]').change(function(){
+              console.log('plumber');
             $(".fullcalendar").fullCalendar('removeEvents', function(event){
               if (event.className == 'overlap'){
                 return true;
               }
             });
-            quantity = $('#selected-product #edit-quantity').val();
+            quantity = $('#selected-product select[id^="edit-quantity"]').val();
+            console.log(quantity);
             $.ajax(
             {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
               cache : false,
@@ -126,25 +148,29 @@
                   event.start = $(this).attr('start');
                   event.end = $(this).attr('end');
                   event.url = $(this).attr('href');
-                  if ($(this).children('span').hasClass('closed-date')){
-                    event.allDay = true;
-                    event.className = 'closed-all-day';
-                  } else{
-                    event.allDay = ($(this).attr('allDay') === '1');
-                    event.className = 'overlap';
-                  }
+                  event.allDay = ($(this).attr('allDay') === '1');
+                  event.className = 'overlap';
                   event.editable = ($(this).attr('editable') === '1');
                   event.color = '#912711';
-                  if ($(this).children('span').hasClass('closed-hours')){
-                    event.backgroundColor = '#2B6893';
-                    event.className = 'closed-hours';
-                  } else {
-                    event.backgroundColor = '#912711';
-                  }
+                  event.backgroundColor = '#912711';
                   event.eventBorderColor = '#912711';
                   event.textColor = '#912711';
                   dom_id: this.dom_id;
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
+                });
+                console.log(data);
+                $('.closed-dates', data).each(function(index){
+                  console.log("!");
+                  event = new Object();
+                  event.start = $(this).attr('date');
+                  event.allDay = true;
+                  event.className = 'closed-all-day';
+//                if ($(this).children('span').hasClass('closed-hours')){
+//                    event.backgroundColor = '#2B6893';
+//                    event.className = 'closed-hours';
+//                } else {
+//                    event.backgroundColor = '#912711';
+//                }
                 });
               }
             });
