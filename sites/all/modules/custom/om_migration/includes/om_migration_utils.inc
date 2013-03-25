@@ -1,5 +1,23 @@
 <?php
 
+function om_migration_civi_product_relationships() {
+  return array(
+    // programming membership
+    4 => 1,
+    // field
+    6 => 3,
+    // studio
+    7 => 4,
+    // editor to unlimited
+    8 => 5,
+    // unlimited
+    9 => 5,
+    // organizational np
+    10 => 6,
+    // organiztional
+    12 => 6,
+  );
+}
 /**
  * Create new membership for user.
  *
@@ -34,21 +52,28 @@ function om_migration_grant_user_role($uid, $role_id) {
   // Save the user object with the new role.
   user_multiple_role_edit(array($uid), 'add_role', $role_id);
 }
-
+/**
+ * Returns array of memberships.
+ * @return each entry array with @uid, @start_date, @end_date, @membership_type
+ */
 function om_migration_get_civi_memberships() {
-  $result = array();
+  $results = array();
+  $map_civi_prod = array();
+  $map_civi_prod = om_migration_civi_prod_relationships();
   $query = Database::getConnection('default', 'civi')
   ->select('civicrm_membership','cm');
   $query->join('civicrm_uf_match', 'ccum', 'cm.contact_id=ccum.contact_id');
+  $query->condition('membership_type_id', array_keys($map_civi_prod), 'IN');
   $query->fields('cm', array('membership_type_id','start_date','end_date'))
   ->addField('ccum','uf_id','uid');
+  // only grab memberships that are still active.
   $query->where(" cm.end_date > NOW() ");
   //$query->range(0,30);
   //dpq($query);
   $res = $query->execute();
   foreach ($res as $rec) {
     //print "uid: ". $rec->uid ." start_date:". $rec->start_date . " product: " . $rec->membership_type_id . "\n";
-    $result[] = array($rec->uid, strtotime($rec->start_date), strtotime($rec->end_date), $rec->membership_type_id); 
+    $results[] = array($rec->uid, strtotime($rec->start_date), strtotime($rec->end_date), $rec->membership_type_id);
   }
-  return $result;
+  return $results;
 }

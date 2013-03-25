@@ -29,15 +29,29 @@ function om_migration_migrate_api() {
 function om_migration_role_product_relationships() {
   return array(
     // programming membership
-    1 => 5,
+    5 => 1,
     // field
-    3 => 6,
+    6 => 3,
     // studio
-    4 => 8,
+    8 => 4,
     // unlimited
-    5 => 9,
+    9 => 5,
     // organizational
-    6 => 10,
+    10 => 6,
   );
 }
+//function om_migration_role_product_relationships() {
+//  return array(
+//    // programming membership
+//    1 => 5,
+//    // field
+//    3 => 6,
+//    // studio
+//    4 => 8,
+//    // unlimited
+//    5 => 9,
+//    // organizational
+//    6 => 10,
+//  );
+//}
 
