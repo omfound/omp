@@ -65,13 +65,16 @@ class omProjectMigration extends Migration {
   // massage the user roles before saving
   // TODO: customize for DOM roles for D6 and D7
   public function prepareRow($current_row) {
-    print_r($current_row);
     // If this project's user has not been migrated -- ignore this project.
     if (!empty($current_row->uid)) {
       $user = user_load($current_row->uid);
       if (empty($user)) {
-        return FALSE;
+        $current_row->uid = 13693;
       }
+    }
+    // Make sure this project actually has shows.
+    if (!$this->check_for_shows($current_row->nid)) {
+      return FALSE;
     }
     $current_row->field_om_project_type_nid = $this->legacy_node_lookup($current_row->field_om_project_type_nid);
     if (!empty($current_row->field_om_theme_nid)) {
@@ -124,6 +127,19 @@ class omProjectMigration extends Migration {
     }
     else {
       return $term;
+    }
+    public function check_for_shows($nid) {
+      $query = Database::getConnection('default', 'legacy')->select('og_ancestry','og');
+      $query->fields('og', array('nid'));
+      $query->condition('group_nid', $nid, '=');
+      $resource = $query->execute();
+      $result = $resource->fetchAll();
+      if (!empty($result)) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
     }
   }
 } // close the omUserMigration class
