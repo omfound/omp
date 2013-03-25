@@ -11,5 +11,8 @@ function commerce_alters_form_alter(&$form, &$form_state, $form_id) {
     if($first_name && $last_name) {
       $form['customer_profile_billing']['commerce_customer_address'][LANGUAGE_NONE][0]['name_block']['name_line']['#default_value'] = $full_name;
     }
+    print '<pre>';
+    print_r($form);
+    print '</pre>';
   }
 }
