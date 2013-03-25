@@ -5,7 +5,7 @@
       {url : 'closed_times',
         cache : false,
         success : function (data) {
-          console.log(data);
+          $(".fullcalendar").fullCalendar('removeEvents');
           $('.closed_dates', data).each(function(index){
               event = new Object();
               event.title = 'Closed';
