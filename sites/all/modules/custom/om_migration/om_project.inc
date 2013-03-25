@@ -22,7 +22,7 @@ class omProjectMigration extends Migration {
     $query->fields('language', array('field_om_language_value'));
     $query->fields('rating', array('field_om_rating_value'));
     $query->condition('n.type', 'om_project', '=');
-    $this->source = new MigrateSourceSQL($query);
+    $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationNode('om_project');
 
