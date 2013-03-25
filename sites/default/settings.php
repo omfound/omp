@@ -235,12 +235,21 @@ if (!isset($_SERVER['PANTHEON_ENVIRONMENT'])) {
   );
 }
 // the name 'legacy' is not used anywhere
+$databases['civi']['default'] = array(
+  'driver' => 'mysql',
+  'database' => 'dom_civi_prod', // this is the name used to define the SOURCE_DATABASE constant above
+  'username' => 'dom_mig',
+  'password' => 'UncleTupel0',
+  'host'     => '129.19.150.4',
+  'prefix' => '',
+);
+// the name 'legacy' is not used anywhere
 $databases['legacy']['default'] = array(
   'driver' => 'mysql',
   'database' => 'dom_prod', // this is the name used to define the SOURCE_DATABASE constant above
-  'username' => 'dom',
-  'password' => 'n0secret',
-  'host' => '173.230.154.132',
+  'username' => 'dom_mig',
+  'password' => 'UncleTupel0',
+  'host'     => '129.19.150.4',
   'prefix' => '',
 );
 /**
