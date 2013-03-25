@@ -128,18 +128,18 @@ class omProjectMigration extends Migration {
     else {
       return $term;
     }
-    public function check_for_shows($nid) {
-      $query = Database::getConnection('default', 'legacy')->select('og_ancestry','og');
-      $query->fields('og', array('nid'));
-      $query->condition('group_nid', $nid, '=');
-      $resource = $query->execute();
-      $result = $resource->fetchAll();
-      if (!empty($result)) {
-        return TRUE;
-      }
-      else {
-        return FALSE;
-      }
+  }
+  public function check_for_shows($nid) {
+    $query = Database::getConnection('default', 'legacy')->select('og_ancestry','og');
+    $query->fields('og', array('nid'));
+    $query->condition('group_nid', $nid, '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
     }
   }
 } // close the omUserMigration class
