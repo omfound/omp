@@ -73,9 +73,11 @@ class omProjectMigration extends Migration {
       }
     }
     // Make sure this project actually has shows.
+/*
     if (!$this->check_for_shows($current_row->nid)) {
       return FALSE;
     }
+*/
     $current_row->field_om_project_type_nid = $this->legacy_node_lookup($current_row->field_om_project_type_nid);
     if (!empty($current_row->field_om_theme_nid)) {
       $theme_name = $this->legacy_node_lookup($current_row->field_om_theme_nid);
