@@ -62,6 +62,17 @@ function commerce_registration_rules_action_info() {
       ),
     ),
   );
+  $actions['commerce_registration_delete_registrations'] = array(
+    'label' => t('Delete all registrations on an Order'),
+    'group' => t('Commerce Registration'),
+    'parameter' => array(
+      'commerce_order' => array(
+        'type' => 'commerce_order',
+        'label' => t('Commerce Order'),
+        'description' => t('All registrations on this order will be deleted.'),
+      ),
+    ),
+  );
 
   return $actions;
 }
@@ -142,9 +153,49 @@ function commerce_registration_set_state($order, $registration_state) {
   foreach ($regs as $row) {
     $registration = registration_load($row->registration_id);
     $key = array_keys($registration_state);
-    $registration->state = (int) $registration_state[$key[0]];
+    $registration->state = $registration_state[$key[0]];
     registration_save($registration);
   }
+}
+
+/**
+ * Action callback.
+ *
+ * Deletes all registrations on an order.
+ */
+function commerce_registration_delete_registrations($order) {
+  $regs = db_select('registration', 'r')
+    ->fields('r')
+    ->condition('order_id', $order->order_id)
+    ->execute();
+  $registration_ids = array();
+  foreach ($regs as $row) {
+    $registration_ids[] = $row->registration_id;
+  }
+  registration_delete_multiple($registration_ids);
+  if (isset($order->data['register_entities'])) {
+    unset($order->data['register_entities']);
+  }
+  commerce_order_save($order);
+}
+
+/**
+ * Action callback.
+ *
+ * Deletes all registrations on an order for a given line item.
+ */
+function commerce_registration_delete_lineitem_registration($lineitem) {
+  $wrapper = entity_metadata_wrapper('commerce_line_item', $lineitem);
+  $order = $wrapper->commerce_order->value();
+  if (in_array($wrapper->type->value(), commerce_product_line_item_types())) {
+    $product = $wrapper->commerce_product->value();
+    $key = 'prod-' . $product->sku->value();
+    if (isset($order->data['register_entities'])
+      && isset($order->data['register_entities'][$key])) {
+      unset($order->data['register_entities'][$key]);
+    }
+  }
+  commerce_order_save($order);
 }
 
 /**
@@ -156,8 +207,8 @@ function commerce_registration_set_state($order, $registration_state) {
  */
 function commerce_registration_get_states() {
   $states = registration_states();
-  foreach ($states as $id => $state) {
-    $options[$id] = $state->label;
+  foreach ($states as $state) {
+    $options[$state->name] = $state->label;
   }
   return $options;
 }

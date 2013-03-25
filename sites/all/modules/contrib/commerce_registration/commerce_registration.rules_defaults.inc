@@ -13,8 +13,8 @@ function commerce_registration_default_rules_configuration() {
   $rule1->active = TRUE;
   $rule1->event('commerce_checkout_complete')
     ->action('commerce_registration_set_state', array(
-      'commerce_order:select' => "commerce_order",
-      'registration_state' => 2,
+      'commerce_order:select' => "commerce-order",
+      'registration_state' => 'pending',
     )
   );
   $rule2 = rules_reaction_rule();
@@ -22,8 +22,8 @@ function commerce_registration_default_rules_configuration() {
   $rule2->active = TRUE;
   $rule2->event('commerce_payment_order_paid_in_full')
     ->action('commerce_registration_set_state', array(
-      'commerce_order:select' => "commerce_order",
-      'registration_state' => 1,
+      'commerce_order:select' => "commerce-order",
+      'registration_state' => 'complete',
     )
   );
 

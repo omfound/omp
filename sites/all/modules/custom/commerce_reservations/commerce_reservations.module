@@ -164,31 +164,37 @@ function commerce_reservations_get_closed_times(){
       case 'Sunday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 0);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Monday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 1);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Tuesday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 2);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Wednesday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 3);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Thursday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 4);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Friday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 5);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
+
       case 'Saturday':
         $array = getDateForSpecificDayBetweenDates('today', '+3 month', 6);
         $all_days_closed = array_merge($all_days_closed, $array);
-        break;
+      break;
     }
   }
   print '<div class = "closed-dates-wrapper">';
@@ -1052,17 +1058,19 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   }
   $product = $line_item_wrapper->commerce_product->value();
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  $notes = $form_state['values']['item_notes'];
+  $index = 0;
+  $product_wrapper->field_reservable_product_notes->set($notes);
+  $product_wrapper->field_reservable_product_notes->set($notes);
+  $status_values = array();
+  foreach ($form_state['values']['item_status'] as $value){
+    $status_values[] = $value;
+    $index++;
+  }
+  $product_wrapper->field_res_product_status->set($status_values);
+  $product_wrapper->save();
+
   if (sizeof($missing_items) > 0){
-    $index = 0;
-    $notes = $form_state['values']['item_notes'];
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $status_values = array();
-    foreach ($form_state['values']['item_status'] as $state => $value){
-      $status_values[] = $value;
-      $index++;
-    }
-    $product_wrapper->field_res_product_status->set($status_values);
-    $product_wrapper->save();
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
 	    if ($index != sizeof($missing_items) - 1){
@@ -1074,16 +1082,6 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
     $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
     drupal_goto($path);
   } else{
-    $index = 0;
-    $notes = $form_state['values']['item_notes'];
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $status_values = array();
-    foreach ($form_state['values']['item_status'] as $value){
-      $status_values[] = $value;
-      $index++;
-    }
-    $product_wrapper->field_res_product_status->set($status_values);
-    $product_wrapper->save();
     $line_item_wrapper->field_checkout_status->set('Checked In');
     $returned_accessories = array();
     foreach($form_state['values']['accessories'] as $item){
@@ -1320,35 +1318,38 @@ function commerce_reservations_settings_form($form, &$form_state){
   );
   return $form;
 }
-
-function commerce_reservations_settings_form_submit($form, &$form_state){
-  if ($form_state['values']['allow_commercial'] == 1){
+/*
+ * @function
+ * Form sets global variables to be used by the reservation system
+ */
+function commerce_reservations_settings_form_submit($form, &$form_state) {
+  if ($form_state['values']['allow_commercial'] == 1) {
 	  variable_set('cr_allow_commercial', 1);
   } else{
 	  variable_set('cr_allow_commercial', 0);
   }
-  if ($form_state['input']['email_confirm']){
+  if ($form_state['input']['email_confirm']) {
     variable_set('cr_email_admin_confirm', 1);
     variable_set('cr_admin_email', $form_state['input']['email']);
-  } else{
-    variable_set('cr_email_admin_confirm', 0);
+  } else {
+   variable_set('cr_email_admin_confirm', 0);
     $email = variable_get('cr_admin_email');
-    if ($email){
+   if ($email){
       variable_del($email);
     }
   }
   $total = 0;
-  $old_total = variable_get('cr_closed_total');
+  $old_total = variable_get('cr_closed_total', 0);
   for ($i = 0; $i < $old_total; $i++){
-    $variable = 'cr_closed_dates_' . $i;
-    variable_del($variable);
+    $hours_var = 'cr_closed_dates_' . $i;
+    variable_del($hours_var);
   }
   foreach($form_state['input'] as $key => $value){
     if (substr($key, 0,5) == 'dates'){
       if (!empty($value['date'])){
-        $variable = 'cr_closed_' . $key;
+        $hours_var = 'cr_closed_' . $key;
         $var_val = $value['date'];
-        variable_set($variable, $var_val);
+        variable_set($hours_var, $var_val);
         $total++;
       }
     }
@@ -1356,10 +1357,10 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
   variable_set('cr_closed_total', $total);
   foreach ($form_state['input']['weekend_days'] as $key => $value){
     $day = 'cr_' . $key;
-    $variable = $day . '_hours';
+    $hours_var = $day . '_hours';
     if ($value){
       variable_set($day, 'closed');
-      variable_del($variable);
+      variable_del($hours_var);
     } else{
       variable_set($day, 'open');
       $index_open = 'open_' . strtolower($key);
@@ -1368,7 +1369,7 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
         'open' => $form_state['input'][$index_open],
         'closed' => $form_state['input'][$index_closed],
       );
-      variable_set($variable, $hours);
+      variable_set($hours_var, $hours);
     }
   }
 }

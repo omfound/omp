@@ -324,12 +324,9 @@ function commerce_registration_form_alter(&$form, &$form_state, $form_id) {
                 $price = commerce_currency_format($wrapper->commerce_price->amount->value(),
                   $wrapper->commerce_price->currency_code->value());
                 $selector = ($count == count($form['product_id']['#options']) ? "prev" : "next");
-                $form['product_id']['#attached']['js'] = array(
-                  '(function ($) { Drupal.behaviors.commerce_registration = { attach: function (context, settings) { $("select[name=\'product_id\'] option[value=\''
-                    . $product_id . '\']").attr(\'disabled\', \'disabled\'); $("select[name=\'product_id\'] option:selected").'
-                    . $selector . '(\'option\').attr(\'selected\', \'selected\'); $(window).load(function() { $("select[name=\'product_id\']").change(); }) } }; }) (jQuery);'
-                  => array('type' => 'inline'),
-                );
+                drupal_add_js('(function ($) { $("select[name=\'product_id\'] option[value=\''
+                  . $product_id . '\']").attr(\'disabled\', \'disabled\'); $("select[name=\'product_id\'] option:selected").'
+                  . $selector . '(\'option\').attr(\'selected\', \'selected\'); $(window).load(function() { $("select[name=\'product_id\']").change(); }) }) (jQuery);', 'inline');
                 $form['unavailable']['product_unavailable_' . $product_id] = array(
                   '#markup' => '<em>' . t('@product (@price)',
                   array(
@@ -511,14 +508,40 @@ function commerce_registration_node_settings_form_submit($form, $form_state) {
  * is shown to the user.
  */
 function commerce_registration_add_to_cart_validate($form, &$form_state) {
+  global $user;
   $product_id = $form_state['values']['product_id'];
   $product = commerce_product_load($product_id);
-  if (commerce_registration_product_has_registration_field($product_id)
-      && (!registration_status('commerce_product', $product_id, TRUE)
-      || !registration_register_page_access('commerce_product', $product))) {
-    form_set_error('product_id',
-      t('This product is not available for registration at this time.'));
-    return FALSE;
+  if (commerce_registration_product_has_registration_field($product_id)) {
+    // Let the user know if they have an existing registration.
+    $query = new EntityFieldQuery;
+    $result = $query
+      ->entityCondition('entity_type', 'registration')
+      ->propertyCondition('entity_id', $product_id)
+      ->propertyCondition('user_uid', $user->uid)
+      ->propertyCondition('state', registration_get_active_states())
+      ->range(0, 1)
+      ->execute();
+    if (!empty($result)) {
+      $message = 'You have already registered for %product.';
+      $message_variables = array(
+        '%product' => $product->title,
+      );
+      // If the user has access to view their own registrations, include a link
+      // to the registration detail page.
+      $registration = registration_load(reset($result['registration'])->registration_id);
+      if (registration_access('view', $registration)) {
+        $message .= ' You can <a href="!uri">view your registration</a>.';
+        $uri = $registration->uri();
+        $message_variables['!uri'] = url($uri['path']);
+      }
+      drupal_set_message(t($message, $message_variables));
+    }
+
+    // Check that registrations are open and the user has access.
+    if (!registration_status('commerce_product', $product_id, TRUE) || !registration_register_page_access('commerce_product', $product)) {
+      form_set_error('product_id', t('This product is not available for registration at this time.'));
+      return FALSE;
+    }
   }
   return TRUE;
 }
@@ -601,6 +624,7 @@ function commerce_registration_field_extra_fields_alter(&$info) {
             if ($product_field['label'] == t('Registration')) {
               $info[$entity_type][$bundle_name]['display']['product:' . $product_field_name]['configurable'] = FALSE;
               $info[$entity_type][$bundle_name]['display']['product:' . $product_field_name]['visible'] = FALSE;
+              $info[$entity_type][$bundle_name]['display']['product:' . $product_field_name]['weight'] = 0;
             }
           }
         }
@@ -719,6 +743,9 @@ function commerce_registration_form_commerce_order_ui_order_form_alter(&$form, &
       foreach ($items as $index => $data) {
         $line_item = commerce_line_item_load((int) $data['line_item_id']);
         $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+        if ($line_item_wrapper->type->value() != 'product') {
+          continue;
+        }
         $product_id = $line_item_wrapper->commerce_product->product_id->value();
         if (in_array($product_id, array_keys($products))) {
           $products[$product_id]++;
@@ -737,7 +764,11 @@ function commerce_registration_form_commerce_order_ui_order_form_alter(&$form, &
         $product = commerce_product_load((int) $product_id);
         $product = entity_metadata_wrapper('commerce_product', $product);
         $show_settings = TRUE;
-        $title = check_plain($product->title->value() . ' - Registrant #' . $label++);
+        $title_vars = array(
+          '@product' => $product->title->value(),
+          '@count' => $label++,
+        );
+        $title = check_plain(t('@product - Registrant #@count', $title_vars));
         for ($i = 0; $i < $quantity; $i++) {
           if (isset($override_title)) {
             $label = $i + 1;
@@ -780,5 +811,39 @@ function commerce_registration_form_commerce_order_ui_order_form_alter(&$form, &
       unset($form['registration_settings']);
     }
     $form_state['rebuild'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_commerce_cart_order_refresh().
+ */
+function commerce_registration_commerce_cart_order_refresh($order_wrapper) {
+  $order = $order_wrapper->value();
+
+  // Make sure registration entities still match up to products.
+  if (isset($order->data['register_entities'])) {
+    // Save a copy of register_entities to find registrations no longer associated with a product.
+    $register_entities = $order->data['register_entities'];
+
+    foreach ($order_wrapper->commerce_line_items as $line_item_wrapper) {
+      if (!in_array($line_item_wrapper->type->value(), commerce_product_line_item_types())) {
+        continue;
+      }
+      $product = $line_item_wrapper->commerce_product;
+      if (isset($order->data['register_entities']['prod-' . $product->sku->value()])) {
+        // This registration still has a product.
+        unset($register_entities['prod-' . $product->sku->value()]);
+      }
+    }
+
+    // Delete registrations which no longer have a matching product in the cart.
+    $orphan_registration_ids = array();
+    foreach ($register_entities as $key => $registrations) {
+      foreach ($registrations as $registration) {
+        $orphan_registration_ids[] = $registration->registration_id;
+      }
+      unset($order->data['register_entities'][$key]);
+    }
+    registration_delete_multiple($orphan_registration_ids);
   }
 }

@@ -20,8 +20,10 @@ class CommerceRegistrationHandlerFieldRegistrationEntity extends views_handler_f
    */
   function render($values) {
     $product = commerce_product_load($values->registration_entity_id);
-    $uri = entity_uri('commerce_product', $product);
-    $text = t('@product (@sku)', array('@product' => $product->title, '@sku' => $product->sku));
-    return l($text, $uri['path']);
+    if (!empty($product)) {
+      $uri = entity_uri('commerce_product', $product);
+      $text = t('@product (@sku)', array('@product' => $product->title, '@sku' => $product->sku));
+      return l($text, $uri['path']);
+    }
   }
 }
