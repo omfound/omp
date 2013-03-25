@@ -34,3 +34,21 @@ function om_migration_grant_user_role($uid, $role_id) {
   // Save the user object with the new role.
   user_multiple_role_edit(array($uid), 'add_role', $role_id);
 }
+
+function om_migration_get_civi_memberships() {
+  $result = array();
+  $query = Database::getConnection('default', 'civi')
+  ->select('civicrm_membership','cm');
+  $query->join('civicrm_uf_match', 'ccum', 'cm.contact_id=ccum.contact_id');
+  $query->fields('cm', array('membership_type_id','start_date','end_date'))
+  ->addField('ccum','uf_id','uid');
+  $query->where(" cm.end_date > NOW() ");
+  //$query->range(0,30);
+  //dpq($query);
+  $res = $query->execute();
+  foreach ($res as $rec) {
+    //print "uid: ". $rec->uid ." start_date:". $rec->start_date . " product: " . $rec->membership_type_id . "\n";
+    $result[] = array($rec->uid, strtotime($rec->start_date), strtotime($rec->end_date), $rec->membership_type_id); 
+  }
+  return $result;
+}
