@@ -44,7 +44,7 @@
 	    var item = $('#block-views-calendar-product-view-block div.views-row');
 	    $('.commerce-add-to-cart div[id^="edit-line-item-fields"]').hide();
 	    $('.commerce-add-to-cart input[id^="edit-submit"]').hide();
-	    $('.commerce-add-to-cart #edit-product-id').hide();
+	    $('.commerce-add-to-cart select[id^="edit-product-id"]').hide();
 	    $('.commerce-add-to-cart .form-item-quantity').hide();
 	    item.mousedown(function(){
 	      if (!$(this).is('#selected-product')) {
