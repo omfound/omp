@@ -1,0 +1,5 @@
+<?php
+
+function commerce_alters_form_alter(&$form, &$form_state, $form_id) {
+  print $form_id;
+}
