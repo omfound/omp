@@ -1,6 +1,42 @@
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
+    $.ajax(
+      {url : 'closed_times',
+        cache : false,
+        success : function (data) {
+          console.log(data);
+          $('.closed_dates', data).each(function(index){
+              event = new Object();
+              event.title = 'Closed';
+              event.start = $(this).attr('date');
+              event.allDay = true;
+              event.className = 'closed-all-day';
+              event.editable = ($(this).attr('editable') === '1');
+              event.color = '#912711';
+              event.backgroundColor = '#912711';
+              event.eventBorderColor = '#912711';
+              event.textColor = '#912711';
+              dom_id: this.dom_id;
+              $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+          $('.closed-time', data).each(function(index){
+              event = new Object();
+              event.title = 'Closed';
+              event.start = $(this).attr('start');
+              event.end = $(this).attr('end');
+              event.allDay = false;
+              event.className = 'closed-time';
+              event.editable = ($(this).attr('editable') === '1');
+              event.color = '#912711';
+              event.backgroundColor = '#2B6893';
+              event.eventBorderColor = '#912711';
+              event.textColor = '#912711';
+              dom_id: this.dom_id;
+              $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+        }
+      });
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
 	      basePath = '';
@@ -54,35 +90,6 @@
                 event.textColor = '#912711';
                 dom_id: this.dom_id;
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
-              });
-              $('.closed_dates', data).each(function(index){
-                  event = new Object();
-                  event.title = 'Closed';
-                  event.start = $(this).attr('date');
-                  event.allDay = true;
-                  event.className = 'closed-all-day';
-                  event.editable = ($(this).attr('editable') === '1');
-                  event.color = '#912711';
-                  event.backgroundColor = '#912711';
-                  event.eventBorderColor = '#912711';
-                  event.textColor = '#912711';
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
-              });
-              $('.closed-time', data).each(function(index){
-                  event = new Object();
-                  event.title = 'Closed';
-                  event.start = $(this).attr('start');
-                  event.end = $(this).attr('end');
-                  event.allDay = false;
-                  event.className = 'closed-time';
-                  event.editable = ($(this).attr('editable') === '1');
-                  event.color = '#912711';
-                  event.backgroundColor = '#2B6893';
-                  event.eventBorderColor = '#912711';
-                  event.textColor = '#912711';
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
             }
           });
@@ -154,35 +161,6 @@
                   event.textColor = '#912711';
                   dom_id: this.dom_id;
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
-                });
-                $('.closed_dates', data).each(function(index){
-                    event = new Object();
-                    event.title = 'Closed';
-                    event.start = $(this).attr('date');
-                    event.allDay = true;
-                    event.className = 'closed-all-day';
-                    event.editable = ($(this).attr('editable') === '1');
-                    event.color = '#912711';
-                    event.backgroundColor = '#912711';
-                    event.eventBorderColor = '#912711';
-                    event.textColor = '#912711';
-                    dom_id: this.dom_id;
-                    $(".fullcalendar").fullCalendar('renderEvent', event, true);
-                });
-                $('.closed-time', data).each(function(index){
-                    event = new Object();
-                    event.title = 'Closed';
-                    event.start = $(this).attr('start');
-                    event.end = $(this).attr('end');
-                    event.allDay = false;
-                    event.className = 'closed-time';
-                    event.editable = ($(this).attr('editable') === '1');
-                    event.color = '#912711';
-                    event.backgroundColor = '#2B6893';
-                    event.eventBorderColor = '#912711';
-                    event.textColor = '#912711';
-                    dom_id: this.dom_id;
-                    $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
               }
             });

@@ -368,7 +368,6 @@ function calendar_filter($pid, $node, $quantity = 0){
   $view->selected_nid = $nid;
   $view->quantity = $quantity;
   $display = $view -> preview('page_1', $args);
-  commerce_reservations_get_closed_times();
   print $display;
 }
 
