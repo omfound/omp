@@ -77,10 +77,10 @@ class omProjectMigration extends Migration {
     if (!empty($current_row->field_om_theme_nid)) {
       $theme_name = $this->legacy_node_lookup($current_row->field_om_theme_nid);
       if (!empty($theme_name)) {
-        $current_row->field_om_theme_nid = $theme_name;
+        $current_row->field_om_theme_nid = $this->migration_lookup($theme_name);
       }
     }
-    $current_row->field_om_language_value = $this->language_lookup($current_row->field_om_language_value);
+    $current_row->field_om_language_value = $this->migration_lookup($current_row->field_om_language_value);
     return TRUE;
   }
   
@@ -108,23 +108,22 @@ class omProjectMigration extends Migration {
     }
     return FALSE;
   }
-  public function language_lookup($lang) {
-    if (empty($lang)) {
-      return "English";
-    }
-    $botched_language_references = array(
+  public function migration_lookup($term) {
+    $botched_terms = array(
       'en' => "English",
       'eng' => "English",
       'sp' => "Spanish",
       'spa' => "Spanish",
       'ara' => "Arabic",
-      'jpn' => "Japanese"
+      'jpn' => "Japanese",
+      'Music' => "Music & Entertainment",
+      'African American' => 'Cultural Perspectives'
     );
-    if (!empty($botched_language_references[$lang])) {
-      return $botched_language_references[$lang];
+    if (!empty($botched_terms[$term])) {
+      return $botched_terms[$term];
     }
     else {
-      return FALSE;
+      return $term;
     }
   }
 } // close the omUserMigration class
