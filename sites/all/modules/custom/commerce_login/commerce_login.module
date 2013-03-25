@@ -1,0 +1,26 @@
+<?php
+
+function commerce_login_commerce_checkout_router($order, $checkout_page) {
+  if(user_is_anonymous()) {
+    drupal_set_message('Please sign in or create a new account to continue with checkout.');
+    drupal_goto('user', array('query' => array('destination' => 'checkout')));
+  }
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ * Keeps the login destination between the login and create new account tabs
+ */
+function commerce_login_url_outbound_alter(&$path, &$options, $original_path) {
+  // Always make login/logout links go to the current page.
+  switch ($path) {
+    case 'user':
+    case 'user/register':
+    case 'user/logout':
+    case 'user/login':
+      if (isset($_GET['destination'])) {
+        $options['query']['destination'] = $_GET['destination'];
+      }
+      break;
+  }
+}

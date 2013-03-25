@@ -337,7 +337,10 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
             $now = time();
             if ($now > $order->created && $now < $exp) {
               $memberships[] = $order;
-            }
+	    }
+	    elseif (!$product_metadata->field_duration->value()) {
+	      $memberships[] = $order;
+	    }
           }
           else {
             $memberships[] = $order;
@@ -580,7 +583,7 @@ function om_membership_grant_user_role($commerce_order) {
   foreach ($line_items AS $line_item) {
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
     $product = $line_item_meta->commerce_product->value();
-    if ($product->type == 'membership_plan') {
+    if ($product->type == 'membership_plan' && $product->field_associated_role[LANGUAGE_NONE][0]['rid']) {
       $existing_memberships = om_membership_get_user_membership_orders($commerce_order, FALSE);
       if (empty($existing_memberships)) {
         $membership_dates = om_membership_determine_membership_dates($product);

@@ -79,7 +79,7 @@ function theme_commerce_registration_order($variables) {
 
     $rows[] = array(
       l($registration->registration_id, 'registration/' . $registration->registration_id),
-      l($registration->mail, 'mailto:' . $registration->mail),
+      l($wrapper->mail->value(), 'mailto:' . $wrapper->mail->value()),
       $user_col,
       $link,
       $registration->count,

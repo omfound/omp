@@ -16,8 +16,10 @@
       options.unselectAuto = true;
       options.select = function(start, end, allDay) {
         if (!allDay){
-	        $('#selected-product .commerce-add-to-cart #edit-submit').show();
-	        $('.not-available').remove();
+	      $('#selected-product .commerce-add-to-cart .form-submit').show();
+	      $('.not-available').each(function(){
+              $(this).remove();
+            });
           //First check for whether the selected time for the reservation is in the past.
           dontCheck = false;
           today = new Date();
@@ -32,8 +34,8 @@
               //Check for overlaps
               if (array[i].className == 'overlap'){
                 if(!(array[i].start >= end || array[i].end <= start)){
-	                $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	                $('#selected-product').append('<span class="not-available overlap-message">The time you have select is not available for the product.  Please select a time that does not overlap a period where there are not enough products for your reservation.</span>');
+	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
+	              $('#selected-product').append('<span class="not-available overlap-message">The time you have select is not available for the product.  Please select a time that does not overlap a period where there are not enough products for your reservation.</span>');
                 }
               }
               //Check for closed days
@@ -41,27 +43,26 @@
                 if (array[i].start.getDate() == start.getDate()){
                   if (array[i].start.getMonth() == start.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-	                    $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	                    $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	                  $('#selected-product .commerce-add-to-cart .form-submit').hide();
+	                  $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                     }
                   }
-                }
-                if (array[i].start.getDate() == end.getDate()){
+                } else if (array[i].start.getDate() == end.getDate()){
                   if (array[i].start.getMonth() == end.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-	                    $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	                    $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	                  $('#selected-product .commerce-add-to-cart .form-submit').hide();
+	                  $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                     }   
                   }
                 }
               //Check for closed times
               } else if (array[i].className == 'closed-time'){
                 if (start >= array[i].start && start < array[i].end){
-	                $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	                $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
+	              $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                 } else if(end >= array[i].start && end < array[i].end){
-	                $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	                $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
+	              $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                 }
               }
             }

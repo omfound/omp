@@ -3,14 +3,14 @@ description = Registration integration for Drupal Commerce.
 package = Commerce (contrib)
 core = 7.x
 
-dependencies[] = commerce
+dependencies[] = commerce_customer_ui
 dependencies[] = registration
 
 files[] = includes/views/handlers/commerce_registration_handler_field_registration_entity.inc
 
-; Information added by drupal.org packaging script on 2012-11-15
-version = "7.x-2.0-beta3+18-dev"
+; Information added by drupal.org packaging script on 2013-03-15
+version = "7.x-2.0-beta5+6-dev"
 core = "7.x"
 project = "commerce_registration"
-datestamp = "1352940389"
+datestamp = "1363326137"
 

@@ -158,6 +158,10 @@ a:hover.inset-button {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1eff0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
+table {
+  width: 100%;
+}
+
 /** Create the Beveled Divider **/
 .divider {
   border-top: 1px solid #B7B1A4;
@@ -287,4 +291,8 @@ div.messages ul {
 #footer {
   border-top: solid 1px #E1DBCD !important;
   padding: 0;
+}
+
+body.page-user-orders div.commerce-registration {
+  margin-top: 20px;
 }
