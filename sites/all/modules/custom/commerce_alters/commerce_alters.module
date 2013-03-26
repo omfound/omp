@@ -1,6 +1,6 @@
 <?php
 
-function commerce_field_widget_addressfield_standard_form_alter(&$element, &$form_state, &$context) { 
+function commerce_alters_field_widget_addressfield_standard_form_alter(&$element, &$form_state, &$context) { 
   //http://drupal.org/node/1589134
   if($element['#bundle'] == 'billing') {
     global $user;
@@ -13,7 +13,7 @@ function commerce_field_widget_addressfield_standard_form_alter(&$element, &$for
       $element['name_block']['name_line']['#default_value'] = $full_name;
     }
   }
-  //print '<pre>';
-  //print_r($element);
-  //print '</pre>';
+  print '<pre>';
+  print_r($element);
+  print '</pre>';
 }
