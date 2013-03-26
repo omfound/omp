@@ -391,9 +391,6 @@ function openmedia_commerce_registration_order($variables) {
 
     $host_label = entity_label($registration->entity_type, $host_entity);
     $host_uri = entity_uri($registration->entity_type, $host_entity);
-    print '<pre>';
-    print_r($registration);
-    print '</pre>';
     $user_col = '';
     if ($registration->user_uid) {
       $user = $wrapper->user->value();
@@ -402,9 +399,9 @@ function openmedia_commerce_registration_order($variables) {
     }
 
     $link = $host_label;
-    if (isset($host_uri['path'])) {
-      //commerce_autodisplay_entity_display_lookup($product_id);
-      $link = l($host_label, $host_uri['path']);
+    $display_nid = commerce_autodisplay_entity_display_lookup($registration->entity_id);
+    if (isset($display_nid)) {
+      $link = l($host_label, 'node/'.$display_nid);
     }
 
     $rows[] = array(
