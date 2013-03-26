@@ -4,17 +4,40 @@
  * Implements hook_rules_action_info
  */
 function om_classes_rules_action_info() {
-  $actions = array();
-  $actions['om_classes_discount'] = array(
+  $action_types = array();
+  $action_types['om_classes_discount'] = array(
     'label' => t('Discount class based on membership rate.'),
     'group' => 'Open Media Classes',
-    'parameter' => array(
-      'commerce_line_item' => array(
-        'type' => 'commerce_line_item',
-        'label' => t('Commerce Order'),
-      )
-    )
+    'amount description' => t('Discount class line items to membership rate specified on class product.'),
   );
+
+  // Define the action using a common set of parameters.
+  foreach ($action_types as $key => $value) {
+    $actions[$key] = array(
+      'label' => $value['label'],
+      'parameter' => array(
+        'commerce_line_item' => array(
+          'type' => 'commerce_line_item',
+          'label' => t('Line item'),
+        ),
+        'component_name' => array(
+          'type' => 'text',
+          'label' => t('Price component type'),
+          'description' => t('Price components track changes to prices made during the price calculation process, and they are carried over from the unit price to the total price of a line item. When an order total is calculated, it combines all the components of every line item on the order. When the unit price is altered by this action, the selected type of price component will be added to its data array and reflected in the order total display when it is formatted with components showing. Defaults to base price, which displays as the order Subtotal.'),
+          'options list' => 'commerce_line_item_price_component_options_list',
+          'default value' => 'base_price',
+        ),
+        'round_mode' => array(
+          'type' => 'integer',
+          'label' => t('Price rounding mode'),
+          'description' => t('Round the resulting price amount after performing this operation.'),
+          'options list' => 'commerce_round_mode_options_list',
+          'default value' => COMMERCE_ROUND_HALF_UP,
+        ),
+      ),
+      'group' => t('Commerce Line Item'),
+    );
+
   return $actions;
 }
 
@@ -56,8 +79,8 @@ function om_classes_line_item_is_class($commerce_line_item) {
 /**
  * Action handler to discount a class based on membership rate.
  */
-function om_classes_discount($commerce_line_item) {
-  if (!empty($commerce_line_item)) {
+function om_classes_discount($line_item, $component_name, $round_mode) {
+  if (!empty($line_item)) {
     $commerce_order = commerce_order_load($commerce_line_item->order_id);
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
     $unit_price = commerce_price_wrapper_value($line_item_meta, 'commerce_unit_price', TRUE);
@@ -77,16 +100,12 @@ function om_classes_discount($commerce_line_item) {
       'data' => array(), 
     );
 
-    $line_item_meta->commerce_unit_price->amount = $current_price - $updated_price;
+    $line_item_meta->commerce_unit_price->amount = $updated_price;
     $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
       $line_item_meta->commerce_unit_price->value(), 
-      'base_price', 
+      $component_name,
       $discounted_price, 
       TRUE
     );
-
-    //print '<pre>';
-    //print_r($product);
-    //print '</pre>';
   }
 }
