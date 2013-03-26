@@ -54,11 +54,10 @@ function om_migration_grant_user_role($uid, $role_id) {
 }
 /**
  * Returns array of memberships.
- * @return each entry array with @uid, @start_date, @end_date, @membership_type
+ * @return each entry array with @uid, @start_date, @membership_type
  */
 function om_migration_get_civi_memberships() {
   $results = array();
-  $map_civi_prod = array();
   $map_civi_prod = om_migration_civi_prod_relationships();
   $query = Database::getConnection('default', 'civi')
   ->select('civicrm_membership','cm');
@@ -71,9 +70,19 @@ function om_migration_get_civi_memberships() {
   //$query->range(0,30);
   //dpq($query);
   $res = $query->execute();
+  $one_year = 365*24*3600;
   foreach ($res as $rec) {
     //print "uid: ". $rec->uid ." start_date:". $rec->start_date . " product: " . $rec->membership_type_id . "\n";
-    $results[] = array($rec->uid, strtotime($rec->start_date), strtotime($rec->end_date), $rec->membership_type_id);
+    $start = strtotime($rec->start_date);
+    $end = strtotime($rec->end_date);
+    // make start whichever is latest: start or (end - one_year)
+    // because in commerce all memberships have duration 1 year, but in civi the
+    // start date was never updated when memberships were renewed, just the end
+    // date.
+    if ($start < $end - $one_year) {
+      $start = $end - $one_year;
+    }
+    $results[] = array($rec->uid, $start, $rec->membership_type_id);
   }
   return $results;
 }
