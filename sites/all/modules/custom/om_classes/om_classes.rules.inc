@@ -6,7 +6,7 @@
 function om_classes_rules_action_info() {
   $actions = array();
   $actions['om_classes_discount'] = array(
-    'label' => t('Discount class based on current role or membership line items'),
+    'label' => t('Discount class based on membership rate.'),
     'group' => 'Open Media Classes',
     'parameter' => array(
       'commerce_line_item' => array(
@@ -54,7 +54,7 @@ function om_classes_line_item_is_class($commerce_line_item) {
 }
 
 /**
- * Action handler to discount a class based on role or line item.
+ * Action handler to discount a class based on membership rate.
  */
 function om_classes_discount($commerce_line_item) {
   if (!empty($commerce_line_item)) {
@@ -62,11 +62,14 @@ function om_classes_discount($commerce_line_item) {
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
     $unit_price = commerce_price_wrapper_value($line_item_meta, 'commerce_unit_price', TRUE);
     $current_price = $unit_price['amount'];
+
     $product = $line_item_meta->commerce_product->value();
-    print '<pre>';
-    print_r($product);
-    print '</pre>';
-    $updated_price = '2222';
+    if ($product->field_class_member_price[LANGUAGE_NONE][0]['value']) {
+      $updated_price = $product->field_class_member_price[LANGUAGE_NONE][0]['value'] * 100;
+    }
+    else {
+      $updated_price = $current_price;
+    }
 
     $discounted_price = array(
       'amount' => $current_price - $updated_price,
