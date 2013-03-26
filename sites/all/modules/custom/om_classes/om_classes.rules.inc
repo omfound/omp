@@ -25,8 +25,12 @@ function om_classes_rules_condition_info() {
   return array(
     'om_classes_line_item_is_class' => array(
       'label' => t('Line item is a class'),
-      'arguments' => array(
-        'commerce_line_item' => array('label' => t('Commerce Line Item'), 'type' => 'commerce_line_item'),
+      'parameter' => array(
+        'commerce_order' => array(
+          'type' => 'commerce_line_item',
+          'label' => t('Commerce Line Item'),
+          'description' => t('The Commerce Line Item that should be checked for a register enabled product.'),
+        ),
       ),
       'help' => t('Is this line item a class.'),
       'module' => 'om_classes',
