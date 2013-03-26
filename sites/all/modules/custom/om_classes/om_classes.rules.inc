@@ -45,8 +45,8 @@ function om_classes_discount($commerce_line_item) {
       TRUE
     );
 
-    print '<pre>';
-    print_r($product);
-    print '</pre>';
+    //print '<pre>';
+    //print_r($product);
+    //print '</pre>';
   }
 }

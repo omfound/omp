@@ -506,6 +506,7 @@ function om_membership_order_contains_membership($commerce_order, $paid_only = f
         if (!$paid_only) {
           $memberships[] = $product;
 	}
+	print 'PRICE: '.$product->commerce_price[$product->language][0]['amount'];
 	elseif ($product->commerce_price[$product->language][0]['amount'] > 0) {
 	  $memberships[] = $product;
 	}
