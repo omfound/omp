@@ -1,0 +1,17 @@
+<?php
+
+function om_classes_order_contains_class($commerce_order) {
+  $classes = array();
+  if (is_object($commerce_order)) {
+    $order_metadata = entity_metadata_wrapper('commerce_order', $commerce_order);
+    $line_items = $order_metadata->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_metadata = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_metadata->commerce_product->value();
+      if (is_object($product) && $product->type == 'class') {
+        $classes[] = $product;
+      }
+    }
+  }
+  return $classes;
+}
