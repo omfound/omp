@@ -1,6 +1,13 @@
 <?php
 
+function commerce_field_widget_addressfield_standard_form_alter(&$element, &$form_state, &$context) { 
+  print '<pre>';
+  print_r($element);
+  print '</pre>';
+}
+
 function commerce_alters_form_alter(&$form, &$form_state, $form_id) {
+  /**
   if($form_id == 'commerce_checkout_form_checkout') {
     global $user;
     $contact_info = profile2_load_by_user($user, 'contact_info');
@@ -15,4 +22,5 @@ function commerce_alters_form_alter(&$form, &$form_state, $form_id) {
     print_r($form);
     print '</pre>';
   }
+  **/
 }
