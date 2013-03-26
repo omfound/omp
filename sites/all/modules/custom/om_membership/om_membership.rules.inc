@@ -183,7 +183,7 @@ function om_membership_user_has_paid_membership($commerce_order) {
     $membership = om_membership_get_user_membership_products($user, $active = TRUE);
     if (!empty($membership)) {
       foreach($membership as $product) {
-        if($product->commerce_price[$product->language][0]['amount'] > 0) {
+        if($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
 	  return TRUE;
         } 
       }
