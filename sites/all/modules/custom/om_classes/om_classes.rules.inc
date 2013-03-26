@@ -23,7 +23,7 @@ function om_classes_rules_condition_info() {
 function om_classes_rules_action_info() {
   $actions = array();
   $actions['om_classes_discount'] = array(
-    'label' => t('Discount class based on membership line item'),
+    'label' => t('Discount class based on current role or membership line items'),
     'group' => 'Open Media Classes',
     'parameter' => array(
       'commerce_line_item' => array(
