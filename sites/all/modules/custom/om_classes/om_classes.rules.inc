@@ -15,6 +15,7 @@ function om_classes_rules_action_info() {
   foreach ($action_types as $key => $value) {
     $actions[$key] = array(
       'label' => $value['label'],
+      'group' => $value['group'],
       'parameter' => array(
         'commerce_line_item' => array(
           'type' => 'commerce_line_item',
@@ -35,7 +36,6 @@ function om_classes_rules_action_info() {
           'default value' => COMMERCE_ROUND_HALF_UP,
         ),
       ),
-      'group' => t('Commerce Line Item'),
     );
   }
 
