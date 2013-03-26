@@ -39,7 +39,9 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
     $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
     $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
     $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
-
+    print '<pre>';
+    print_r($form);
+    print '</pre>';
     foreach($form['registration_information'] as $class_key => $class) {
       if(is_array($class)) {
         reset($class);
