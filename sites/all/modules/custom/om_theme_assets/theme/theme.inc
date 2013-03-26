@@ -40,6 +40,9 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
     $links[] = l('Register', 'user/register') . ' | ';
   }
   $links[] = l('Help', 'help');
+  if (drupal_valid_path('cart')) {
+    $links[] = ' | '.l('Shopping Cart', 'cart');
+  }
   $variables['links'] = $links;
 }
 
