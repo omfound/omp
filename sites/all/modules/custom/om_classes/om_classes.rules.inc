@@ -1,23 +1,6 @@
 <?php
 
 /**
- * Implements hook_rules_condition_info
- */
-function om_classes_rules_condition_info() {
-  return array(
-    'om_classes_order_contains_class_product' => array(
-      'label' => t('Order contains a class'),
-      'arguments' => array(
-        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
-      ),
-      'help' => t('Does the order contain a class.'),
-      'module' => 'om_classes',
-      'group' => 'Open Media Classes'
-    ),
-  );
-}
-
-/**
  * Implements hook_rules_action_info
  */
 function om_classes_rules_action_info() {
@@ -33,20 +16,6 @@ function om_classes_rules_action_info() {
     )
   );
   return $actions;
-}
-
-
-/**
- * Condition handler that check to see if an order contains a class line item.
- */
-function om_classes_order_contains_class_product($commerce_order) {
-  if (!empty($commerce_order)) {
-    $classes = om_classes_order_contains_class($commerce_order);
-    if (!empty($classes)) {
-      return TRUE;
-    }
-  }
-  return FALSE;
 }
 
 /**
