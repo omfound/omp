@@ -75,6 +75,24 @@ function om_membership_rules_condition_info() {
       'module' => 'om_membership',
       'group' => 'Open Media Membership'
     ),
+    'om_membership_user_has_membership' => array(
+      'label' => t('Order user has a current membership'),
+      'arguments' => array(
+        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
+      ),
+      'help' => t('Does the user creating the order have a membership.'),
+      'module' => 'om_membership',
+      'group' => 'Open Media Membership'
+    ),
+    'om_membership_user_has_paid_membership' => array(
+      'label' => t('Order user has a current paid membership'),
+      'arguments' => array(
+        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
+      ),
+      'help' => t('Does the user creating the order have a paid membership.'),
+      'module' => 'om_membership',
+      'group' => 'Open Media Membership'
+    ),
   );
 }
 
@@ -135,6 +153,35 @@ function om_membership_order_contains_membership_product($commerce_order) {
 function om_membership_order_contains_paid_membership_product($commerce_order) {
   if (!empty($commerce_order)) {
     $membership = om_membership_order_contains_membership($commerce_order, true);
+    if (!empty($membership)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Condition handler that check to see if an order contains a membership line item.
+ */
+function om_membership_user_has_membership($commerce_order) {
+  if (!empty($commerce_order)) {
+    global $user;
+    $membership = om_membership_get_currently_selected_membership($user);
+    if (!empty($membership)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Condition handler that check to see if an order contains a membership line item.
+ */
+function om_membership_user_has_paid_membership($commerce_order) {
+  if (!empty($commerce_order)) {
+    //BRIAN HERE -- need to figure out of rid is paid
+    global $user;
+    $membership = om_membership_get_currently_selected_membership($user);
     if (!empty($membership)) {
       return TRUE;
     }
