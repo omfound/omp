@@ -62,10 +62,10 @@ function om_classes_discount($commerce_line_item) {
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
     $unit_price = commerce_price_wrapper_value($line_item_meta, 'commerce_unit_price', TRUE);
     $current_price = $unit_price['amount'];
-    print '<pre>';
-    print_r($unit_price);
-    print '</pre>';
     $product = $line_item_meta->commerce_product->value();
+    print '<pre>';
+    print_r($product);
+    print '</pre>';
     $updated_price = '2222';
 
     $discounted_price = array(
