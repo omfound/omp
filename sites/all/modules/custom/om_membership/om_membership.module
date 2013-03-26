@@ -504,15 +504,10 @@ function om_membership_order_contains_membership($commerce_order, $paid_only = f
       $product = $line_item_metadata->commerce_product->value();
       if (is_object($product) && $product->type == 'membership_plan') {
         if (!$paid_only) {
-	  print '<pre>';
-	  print_r($product);
-	  print '</pre>';
           $memberships[] = $product;
 	}
-	else {
-	  print '<pre>';
-	  print_r($product);
-	  print '</pre>';
+	elseif ($product->commerce_price[$product->language][0]['amount'] > 0) {
+	  $memberships[] = $product;
 	}
       }
     }
