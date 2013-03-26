@@ -19,6 +19,37 @@ function om_classes_rules_action_info() {
 }
 
 /**
+ * Implements hook_rules_condition_info
+ */
+function om_classes_rules_condition_info() {
+  return array(
+    'om_classes_line_item_is_class' => array(
+      'label' => t('Line item is a class'),
+      'arguments' => array(
+        'commerce_line_item' => array('label' => t('Commerce Line Item'), 'type' => 'commerce_line_item'),
+      ),
+      'help' => t('Is this line item a class.'),
+      'module' => 'om_classes',
+      'group' => 'Open Media Classes'
+    ),
+  );
+}
+
+/**
+ * Condition handler to detect if a line item is a class
+ */
+function om_classes_line_item_is_class($commerce_line_item) {
+  if (!empty($commerce_line_item)) {
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if($product->type == 'class') {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Action handler to discount a class based on role or line item.
  */
 function om_classes_discount($commerce_line_item) {
