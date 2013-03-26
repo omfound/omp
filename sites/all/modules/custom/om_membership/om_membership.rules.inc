@@ -250,7 +250,7 @@ function om_membership_upsell_discount($commerce_line_item) {
           'currency_code' => $unit_price['currency_code'],
           'data' => array(),
         );
-        $line_item_meta->commerce_unit_price->amount = $product_price['amount'] - $current_membership_price['amount'];;
+        $line_item_meta->commerce_unit_price->amount = $product_price['amount'] - $current_membership_price['amount'];
         $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
         $line_item_meta->commerce_unit_price->value(),
           'base_price',

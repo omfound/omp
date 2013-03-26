@@ -77,7 +77,7 @@ function om_classes_discount($commerce_line_item) {
       'data' => array(), 
     );
 
-    $line_item_meta->commerce_unit_price->amount = $updated_price;
+    $line_item_meta->commerce_unit_price->amount = $current_price - $updated_price;
     $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
       $line_item_meta->commerce_unit_price->value(), 
       'base_price', 
