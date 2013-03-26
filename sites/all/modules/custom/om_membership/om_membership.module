@@ -204,6 +204,10 @@ function om_membership_add_membership_and_transfer($pid) {
     foreach ($existing_memberships AS $membership) {
       $membership_line_item_ids[] = $membership->line_item_id;
     }
+    print '<pre>';
+    print_r($membership_line_ids);
+    print '</pre>';
+
     $current_order = commerce_cart_order_load($user->uid);
     $current_order_metadata = entity_metadata_wrapper('commerce_order', $current_order);
     $current_line_items = $current_order_metadata->commerce_line_items->value();
