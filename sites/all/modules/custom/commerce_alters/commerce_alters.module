@@ -11,6 +11,7 @@ function commerce_alters_field_widget_addressfield_standard_form_alter(&$element
 
     if($first_name && $last_name) {
       $element['name_block']['name_line']['#default_value'] = $full_name;
+      $element['#address']['name_line'] = $full_name;
     }
   }
   print '<pre>';
