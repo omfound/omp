@@ -37,6 +37,7 @@ function om_classes_rules_action_info() {
       ),
       'group' => t('Commerce Line Item'),
     );
+  }
 
   return $actions;
 }
