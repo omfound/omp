@@ -488,20 +488,6 @@ function om_membership_return_membership_roles() {
 }
 
 /**
- * Return a users current membership role if any, false otherwise.
- */
-function om_membership_current_membership_role() {
-  global $user;
-  $membership_roles = om_membership_return_membership_roles();
-  foreach ($user->roles AS $rid => $role) {
-    if (!empty($membership_roles[$rid])) {
-      return $rid;
-    }
-  }
-  return false;
-}
-
-/**
  * If a commerce_order object contains membership line items return those items.
  *  @param $commerce_order stdClass()
  *    Standard commerce order instance.
