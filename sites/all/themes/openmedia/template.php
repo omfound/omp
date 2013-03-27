@@ -74,7 +74,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
-      print 'PRICEIZ: '.$price;
       if ($price != 0) {
         $price = '$' . (round(($price / 100), 2));
       }
@@ -86,9 +85,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
   } 
   if (!isset($price)) {
     $price = $product_meta->commerce_price->value();
-    $price = '$' . (round(($price['amount'] / 100), 2));
+    $price = '$' . (round(($price / 100), 2));
   }
-  else if(isset($price) && $price['amount'] == 0) {
+  else if(isset($price) && $price == 0) {
      $price = 'Free';
   }
   $location = $product_meta->field_class_location->value();
