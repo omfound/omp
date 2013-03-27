@@ -136,7 +136,7 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
   //hide old project nid
   global $user;
   if(!in_array('administrator', $user->roles)) {
-    $form['field_old_project_id']['#access'] = false;
+    $form['field_old_project_id']['#type'] = 'hidden';
   }
 }
 
