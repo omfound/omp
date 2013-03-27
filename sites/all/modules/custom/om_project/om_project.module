@@ -132,6 +132,8 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
     );
     $form['field_om_locally_produced']['und']['#description'] = $output;
   }
+
+  dsm($form);
 }
 
 /**
