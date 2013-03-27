@@ -73,13 +73,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $memberships = om_membership_get_user_membership_products($user);
     $discount_message = '';
     if (!empty($memberships)) {
-      print '<pre>';
-      print_r($product_meta->field_class_member_price);
-      print '</pre>';
       $price = $product_meta->field_class_member_price->value();
-      print 'PRICE: '.$price;
-      if ($price['amount'] != 0) {
-        $price = '$' . (round(($price['amount'] / 100), 2));
+      if ($price != 0) {
+        $price = '$' . (round(($price / 100), 2));
       }
       else {
         $price = 'Free';
