@@ -103,9 +103,28 @@ function om_project_index_page() {
 
 function om_project_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'om_project_node_form'  && module_exists('advanced_help')) {
+    $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
+    $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
     
+    $form['om_show_metadata'] = array(
+      '#title' => t('Show Metadata'),
+      //'#description' => t('Metadata fields for this show.'),
+      '#type' => 'fieldset',
+      '#collapsible' => FALSE,
+      '#weight' => 3 ,
+      '#prefix' => '<div class = "show_metadata">',
+      '#suffix' => '</div>', 
+    );
+
+    // move metadata to fieldset
+    foreach ($om_show_meta_entities AS $field) {
+      $form['om_show_metadata'][$field] = $form[$field];
+      unset($form[$field]);
+    }
+    $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
+
     $output = '&nbsp;' . t('What does locally produced mean?') ;
-    
+   
     $output .= theme('advanced_help_topic', 
       array(
         'module' => 'om_project',
