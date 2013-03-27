@@ -4,3 +4,4 @@ core = 7.x
 package = Open Media System
 php = 5.2.4
 project = om_project
+dependencies[] = advanced_help 

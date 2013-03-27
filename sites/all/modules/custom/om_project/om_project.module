@@ -102,8 +102,7 @@ function om_project_index_page() {
  */
 
 function om_project_form_alter(&$form, &$form_state, $form_id) {
-  dsm($form_id);
-  if ($form_id == 'om_project_node_form'  && module_exists('advanced_help')) {
+  if ($form_id == 'om_project_node_form' && module_exists('advanced_help')) {
     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
     
