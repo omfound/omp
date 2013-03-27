@@ -96,11 +96,13 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
        foreach($om_show_meta_entities AS $field) {
-         $value_array = $project->{$field}['und'][0];
-         foreach($value_array AS $value) {
+	 if(!empty($project->{$field}['und']) && is_array($project->{$field}['und'][0])) {
+           $value_array = $project->{$field}['und'][0];
+           foreach($value_array AS $value) {
              unset($form_state['input'][$field]['und']);
              $form['om_show_metadata'][$field]['und']['#default_value'] = $value;
-         }
+           }
+	 }
        }
        foreach($om_show_project_info AS $field) {
 	 if(!empty($project->{$field}['und']) && is_array($project->{$field}['und'][0])) {
