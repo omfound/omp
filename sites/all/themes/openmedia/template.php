@@ -111,6 +111,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('gray-button');
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
   }
+  print '<pre>';
+  print_r($registration);
+  print '</pre>';
   // send details to theme function
   $registration_details = array(
     'price' => $price,
