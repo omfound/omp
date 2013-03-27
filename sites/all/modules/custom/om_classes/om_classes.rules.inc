@@ -96,7 +96,7 @@ function om_classes_discount($commerce_line_item, $component_name, $round_mode) 
     }
 
     $discounted_price = array(
-      'amount' => $current_price - $updated_price,
+      'amount' => $updated_price - $current_price,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(), 
     );
