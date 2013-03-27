@@ -85,8 +85,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
   } 
   if (!isset($price)) {
     $price = $product_meta->commerce_price->value();
+    $price = $price['amount'];
     if ($price != 0) {
-      $price = '$' . $price;
+      $price = '$' . (round(($price / 100), 2));
     }
     else {
       $price = 'Free';
