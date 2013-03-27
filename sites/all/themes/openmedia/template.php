@@ -112,7 +112,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
   }
 
-  if ($capacity == 0) {
+
+  if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
   }
   else {
