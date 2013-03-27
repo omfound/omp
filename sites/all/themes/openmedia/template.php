@@ -105,9 +105,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
   $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
   $final_date = date_repeat_helper_ordered_dates($date_info);
   $options = array('attributes' => array('class' => 'gray-button'));
-  print '<pre>';
-  print_r($variables['content']['field_class_display_class']);
-  print '</pre>';
   if (!empty($variables['content']['field_class_display_class'])) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
     $variables['content']['field_class_display_class'][0]['submit']['#value'] = t('Register Now');
@@ -123,6 +120,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $seats_left = $registration['capacity'] - registration_event_count('commerce_product', $product->product_id);
     if($seats_left <= 0) {
       $seats_left = 'No';
+      $registration_button = '';
     }
   }
 
