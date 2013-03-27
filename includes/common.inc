@@ -6532,7 +6532,6 @@ function drupal_array_set_nested_value(array &$array, array $parents, $value, $f
     if ($force && isset($ref) && !is_array($ref)) {
       $ref = array();
     }
-    dsm(debug_backtrace());
     $ref = &$ref[$parent];
   }
   $ref = $value;
