@@ -88,6 +88,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $price = '$' . (round(($price / 100), 2));
   }
   else if(isset($price) && $price == 0) {
+     print 'just wow: '.$price;
      $price = 'Free';
   }
   $location = $product_meta->field_class_location->value();
