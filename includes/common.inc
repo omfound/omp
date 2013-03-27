@@ -6525,6 +6525,7 @@ function element_set_attributes(array &$element, array $map) {
  * @see drupal_array_get_nested_value()
  */
 function drupal_array_set_nested_value(array &$array, array $parents, $value, $force = FALSE) {
+  dsm($array);
   $ref = &$array;
   foreach ($parents as $parent) {
     // PHP auto-creates container arrays and NULL entries without error if $ref
