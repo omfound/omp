@@ -74,9 +74,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
-      print 'AMOUNTIS: '.$price['amount'];
       if ($price != 0) {
-        $price = '$' . (round(($price / 100), 2));
+        $price = '$' . $price;
       }
       else {
         $price = 'Free';
@@ -86,11 +85,13 @@ function openmedia_preprocess_node__class_display(&$variables) {
   } 
   if (!isset($price)) {
     $price = $product_meta->commerce_price->value();
-    $price = '$' . (round(($price / 100), 2));
-  }
-  else if(isset($price) && $price == 0) {
-     print 'just wow: '.$price;
-     $price = 'Free';
+    if ($price != 0) {
+      $price = '$' . (round(($price / 100), 2));
+    }
+    else {
+      print 'PRICEIZ: '.$price;
+      $price = 'Free';
+    }
   }
   $location = $product_meta->field_class_location->value();
   $coords = $product_meta->field_class_coordinates->value();
