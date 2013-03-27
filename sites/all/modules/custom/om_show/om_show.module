@@ -103,11 +103,13 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
          }
        }
        foreach($om_show_project_info AS $field) {
-         $value_array = $project->{$field}['und'][0];
-         foreach($value_array AS $value) {
+	 if(is_array($project->{$field}['und'][0])) {
+           $value_array = $project->{$field}['und'][0];
+           foreach($value_array AS $value) {
              unset($form_state['input'][$field]['und']);
              $form[$field]['und'][0]['value']['#default_value'] = $value;
-         }
+           }
+	 }
        }
      }
     
