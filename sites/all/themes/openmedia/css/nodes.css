@@ -284,17 +284,23 @@
 }
 
 /**
- * Show Node Forms
+ * Show && Project Node Forms
  **/
-body.page-node-add-om-show .form-item label {
+body.page-node-add-om-show .form-item label,
+body.page-node-add-om-project .form-item label
+{
   float: left;
   margin-right: 10px;
 }
-body.page-node-add-om-show .form-item label.option {
+body.page-node-add-om-show .form-item label.option,
+body.page-node-add-om-project .form-item label.option
+{
   float: none;
   margin-right: 0;
 }
-body.page-node-add-om-show .form-type-radio {
+body.page-node-add-om-show .form-type-radio,
+body.page-node-add-om-project .form-type-radio
+{
   clear: left;
 }
 
