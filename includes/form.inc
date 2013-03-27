@@ -2515,9 +2515,6 @@ function form_type_token_value($element, $input = FALSE) {
  *   Form state array where the value change should be recorded.
  */
 function form_set_value($element, $value, &$form_state) {
-  dsm($form_state['values']);
-  dsm($element['#parents']);
-  dsm($value);
   drupal_array_set_nested_value($form_state['values'], $element['#parents'], $value, TRUE);
 }
 
