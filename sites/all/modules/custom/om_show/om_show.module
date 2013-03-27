@@ -133,6 +133,7 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
       $form['field_om_show_playback_server_id']['#type'] = 'hidden';
       $form['field_om_show_media_format']['#type'] = 'hidden';
       $form['field_om_show_duration']['#type'] = 'hidden';
+      $form['revision_information']['#access'] = FALSE;
     }
   }
 }
