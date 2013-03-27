@@ -93,6 +93,7 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
      $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
 
      // If there is a value for project try and load in meta values.
+     /**
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
        foreach($om_show_meta_entities AS $field) {
@@ -113,9 +114,10 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
            }
 	 }
        }
-     }
+     }**/
     
     // Only provide ajax if we are on node add screen.
+    /**
     if (arg(2) != 'edit') {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
       $form['field_om_show_project']['und']['#ajax'] = array(
@@ -126,7 +128,7 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
     }
     else {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
-    }
+    }**/
     if (!user_access('administer show')) {
       $form['field_om_show_aired']['#type'] = 'hidden';
       $form['field_om_show_video']['#type'] = 'hidden';
