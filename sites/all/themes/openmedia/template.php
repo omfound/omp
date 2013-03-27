@@ -89,7 +89,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
       $price = '$' . (round(($price / 100), 2));
     }
     else {
-      print 'PRICEIZ: '.$price;
       $price = 'Free';
     }
   }
