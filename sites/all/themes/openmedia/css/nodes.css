@@ -283,6 +283,18 @@
   background: transparent url(../images/ideal-star.jpg) 100% 37% no-repeat;
 }
 
+/**
+ * Show Node Forms
+ **/
+body.page-node-add-om-show .form-item label {
+  float: left;
+  margin-right: 10px;
+}
+body.page-node-add-om-show .form-item label.option {
+  float: none;
+  margin-right: 0;
+}
+
 /** 
  * Project Nodes
  **/
