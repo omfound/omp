@@ -81,7 +81,7 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
        '#type' => 'fieldset',
        '#collapsible' => FALSE,
        '#weight' => 3 ,
-       '#prefix' => '<div class = "show_metadata"',
+       '#prefix' => '<div class = "show_metadata">',
        '#suffix' => '</div>', 
      );
 
