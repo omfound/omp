@@ -92,6 +92,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
     else {
       $price = 'Free';
     }
+    $member_price = $product_meta->field_class_member_price->value();
+    $discount_message = t('Member rate: ').$member_price.', '.l('login or sign up today!', 'user');
   }
   $location = $product_meta->field_class_location->value();
   $coords = $product_meta->field_class_coordinates->value();
