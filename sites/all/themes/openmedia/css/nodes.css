@@ -294,6 +294,9 @@ body.page-node-add-om-show .form-item label.option {
   float: none;
   margin-right: 0;
 }
+body.page-node-add-om-show .form-type-radio {
+  clear: left;
+}
 
 /** 
  * Project Nodes
