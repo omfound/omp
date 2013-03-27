@@ -25,7 +25,7 @@ function om_migration_civi_product_relationships() {
  * @param $product_id product id of membership
  * @param $start_date start date of membership in seconds
  */
-function om_migration_create_new_member($uid, $product_id, $start_date) {
+function om_migration_create_new_member_order($uid, $product_id, $start_date) {
   // grab array of membership product_id => role_id mappings
   $om_memrole = om_migration_role_product_relationships();
   $order = commerce_order_new($uid);
@@ -38,6 +38,7 @@ function om_migration_create_new_member($uid, $product_id, $start_date) {
   commerce_line_item_save($line_item);
   $order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($order);
+  commerce_order_complete($order);
 
   // Now grant the user the role
   om_migration_grant_user_role($uid, $om_memrole[$product_id]);
@@ -82,6 +83,7 @@ function om_migration_get_civi_memberships() {
     if ($start < $end - $one_year) {
       $start = $end - $one_year;
     }
+    om_migration_create_new_member_order($uid,$map_civi_prod[$rec->membership_type_id],$start);
     $results[] = array($rec->uid, $start, $rec->membership_type_id);
   }
   return $results;
