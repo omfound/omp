@@ -74,6 +74,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
+      print 'AMOUNTIS: '.$price['amount'];
       if ($price != 0) {
         $price = '$' . (round(($price / 100), 2));
       }
