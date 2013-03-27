@@ -77,6 +77,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
       print_r($product_meta->field_class_member_price);
       print '</pre>';
       $price = $product_meta->field_class_member_price->value();
+      print 'PRICE: '.$price;
       if ($price['amount'] != 0) {
         $price = '$' . (round(($price['amount'] / 100), 2));
       }
