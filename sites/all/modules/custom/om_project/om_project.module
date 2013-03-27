@@ -121,7 +121,6 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
       $form['om_show_metadata'][$field] = $form[$field];
       unset($form[$field]);
     }
-    $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
 
     $output = '&nbsp;' . t('What does locally produced mean?') ;
    
