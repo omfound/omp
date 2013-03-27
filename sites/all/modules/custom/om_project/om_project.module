@@ -107,8 +107,8 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
     
     $form['om_show_metadata'] = array(
-      '#title' => t('Show Metadata'),
-      //'#description' => t('Metadata fields for this show.'),
+      '#title' => t('Metadata'),
+      '#description' => t('These settings will trickle down to submitted shows (but you can override them if necessary).'),
       '#type' => 'fieldset',
       '#collapsible' => FALSE,
       '#weight' => 3 ,
