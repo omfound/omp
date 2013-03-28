@@ -10,7 +10,7 @@ function om_membership_menu() {
     'title' => t('Registration History'),
     'page callback' => 'om_classes_user_registrations',
     'access callback' => 'om_classes_user_registrations_access',
-    'type' => MENU_NORMAL_ITEM
+    'type' => MENU_CALLBACK
   );
 
   return $items;
