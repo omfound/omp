@@ -121,7 +121,12 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $membership = array_shift($membership);
     $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
   }
-  $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
+  if (!user_is_anonymous()) {
+    $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
+  }
+  else {
+    $header = "<ul id='membership-header'><li>$group_plan</li></ul>";
+  }
   $variables['header'] = $header;
   // Body Section
   // We build the table in four sections table header, table body, cost row and sign up links.
