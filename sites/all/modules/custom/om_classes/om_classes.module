@@ -20,7 +20,7 @@ function om_classes_user_registrations_access() {
   if (!user_is_anonymous()) {
     return true;
   }
-  return true;
+  return false;
 }
 
 function om_classes_order_contains_class($commerce_order) {
