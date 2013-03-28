@@ -48,7 +48,7 @@ function om_classes_get_registrations($user) {
   if (count($registrations > 0)) {
     foreach($registrations as $key => $registration) {
       $product = commerce_product_load($registration->entity_id);
-      $registrations[$key]['product'] = $product;
+      $registrations[$key]->product = $product;
     }
 
     return $registrations;
