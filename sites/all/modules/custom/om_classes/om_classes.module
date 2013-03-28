@@ -1,5 +1,28 @@
 <?php
 
+/**
+*  * Implements hook_menu
+*   */
+function om_membership_menu() {
+  $items = array();
+
+  $items['user/registrations'] = array(
+    'title' => t('Registration History'),
+    'page callback' => 'om_classes_user_registrations',
+    'access callback' => 'om_classes_user_registrations_access',
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+function om_classes_user_registrations_access() {
+  if (!user_is_anonymous()) {
+    return true;
+  }
+  return false;
+}
+
 function om_classes_order_contains_class($commerce_order) {
   $classes = array();
   if (is_object($commerce_order)) {
@@ -33,7 +56,10 @@ function om_classes_theme($existing, $type, $theme, $path) {
 /**
  * Helper to load plans and send to theme layer.
  */
-function om_classes_user_registrations($user) {
+function om_classes_user_registrations($user = false) {
+  if (!$user) {
+    global $user;
+  }
   $registrations = om_classes_get_registrations($user);
   return theme('om_classes_user_registrations', array('registrations' => $registrations));
 }
