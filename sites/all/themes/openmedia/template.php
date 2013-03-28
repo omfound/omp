@@ -104,7 +104,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
   }
   $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
   $final_date = date_repeat_helper_ordered_dates($date_info);
-  dsm($final_date);
   $options = array('attributes' => array('class' => 'gray-button'));
   if (!empty($variables['content']['field_class_display_class'])) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
@@ -282,13 +281,15 @@ function openmedia_preprocess_class_registration_box(&$variables) {
     }
     if (!empty($details['dates'])) {
       if (!empty($details['dates'])) {
-        if (!empty($details['dates'][0]['end'])) {
-          $time = date('g:i:s a', $details['dates'][0]['start']) . ' - ' . date('g:i:s a', $details['dates'][0]['end']);
+        foreach ($details['dates'] as $key => $date) {
+          if (!empty($date['end'])) {
+            $time = date('g:i:s a', $date['start']) . ' - ' . date('g:i:s a', $date['end']);
+          }
+          else {
+            $time = date('g:i:s a', $date['start']);
+          }
+          $variables['dates'] .= '<div>' . date('l, F nS, Y', $date['start']) . '</div><div>' . $time . '</div>';
         }
-        else {
-          $time = date('g:i:s a', $details['dates']['start']);
-        }
-        $variables['dates'] = '<div>' . date('l, F nS, Y', $details['dates'][0]['start']) . '</div><div>' . $time . '</div>';
       }
     }
     if (!empty($details['registration_button'])) {
