@@ -104,6 +104,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
   }
   $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
   $final_date = date_repeat_helper_ordered_dates($date_info);
+  print '<pre>';
+  print_r($final_date);
+  print '</pre>';
   $options = array('attributes' => array('class' => 'gray-button'));
   if (!empty($variables['content']['field_class_display_class'])) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
