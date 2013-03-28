@@ -14,11 +14,31 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/shows',
   );
+  $content['menu']['shows']['view'] = array(
+    '#title' => t('View Shows'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/shows',
+  );
 	$content['menu']['shows']['add'] = array(
     '#title' => t('Submit new show'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-show',
 	);
+  $content['menu']['projects'] = array(
+    '#title' => t('Manage Projects'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/projects',
+  );
+  $content['menu']['projects']['view'] = array(
+    '#title' => t('View Projects'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/projects',
+  );
+  $content['menu']['projects']['add'] = array(
+    '#title' => t('Submit new project'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'node/add/om-project',
+  );
 }
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
