@@ -23,7 +23,7 @@ function om_classes_theme($existing, $type, $theme, $path) {
   return array(
     'om_classes_user_registrations' => array(
       'path' => $path . '/theme',
-      'template' => 'om_classes_user_registrations_table',
+      'template' => 'om_classes_user_registrations',
       'file' => 'theme.inc',
       'variables' => array('plans' => array())
     ),
@@ -33,9 +33,9 @@ function om_classes_theme($existing, $type, $theme, $path) {
 /**
  * Helper to load plans and send to theme layer.
  */
-function om_classes_user_registrations_table($user) {
+function om_classes_user_registrations($user) {
   $registrations = om_classes_get_registrations($user);
-  return theme('om_classes_user_registrations_table', array('registrations' => $registrations));
+  return theme('om_classes_user_registrations', array('registrations' => $registrations));
 }
 
 function om_classes_get_registrations($user) {
