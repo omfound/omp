@@ -2,7 +2,6 @@
 
 
 function om_admin_menu_admin_menu_output_build(&$content) {
-  dsm($content);
   $paid_memberships = array(
 		'Programming Membership',
 		'Field Producer Membership', 
@@ -27,6 +26,10 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-show',
 	);
+}
+
+function om_admin_menu_admin_menu_output_alter(&$content) {
+  dsm($content);
 }
 
 function om_admin_menu_role_access($roles) {
