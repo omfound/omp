@@ -58,7 +58,7 @@ a:link.gray-button,
 a:visited.gray-button {
   display: inline-block;
   color: #FFFFFF;
-  background-color: #BBBBBB;
+  background: #BBBBBB;
   padding: 3px;
   text-shadow: none;
   font-size: 12px;
@@ -79,14 +79,14 @@ a:hover.gray-button {
   border-left: solid 1px #EFEFEF;
   border-bottom: solid 1px #EFEFEF;
   border-right: solid 1px #EFEFEF;
-  background-color: #BBBBBB;
+  background: #BBBBBB;
 }
 
 input[type="submit"].blue-button,
 a:link.blue-button,
 a:visited.blue-button {
   display: inline-block;
-  background-color: #3395D2;
+  background: #3395D2;
   padding: 3px;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px rgba(51, 51, 51, .85);
@@ -111,7 +111,7 @@ input[type="submit"].red-button,
 a:link.red-button,
 a:visited.red-button {
   display: inline-block;
-  background-color: #91291E;
+  background: #91291E;
   padding: 3px;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px rgba(51, 51, 51, .85);
