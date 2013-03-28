@@ -23,9 +23,9 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
   global $user;
-  //if (!in_array('administrator', $user->roles) && $user->uid != 1) {
-    unset($content['menu']['admin/content']);
-  //}
+  if (!in_array('administrator', $user->roles) && $user->uid != 1) {
+    unset($content['menu']['node/add']);
+  }
 }
 
 function om_admin_menu_role_access($roles) {
