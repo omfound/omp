@@ -166,9 +166,15 @@
 #registration-box .dates .date-instance {
   border-bottom: 1px solid #000;
 }
+
 #registration-box .dates .last {
   border-bottom: none;
 }
+
+#registration-box .dates {
+  line-height: 1em;
+}
+
 /** 
  * Show nodes
  */
