@@ -40,7 +40,7 @@ function om_classes_user_registrations_table() {
 
 function om_classes_get_registrations($uid) {
   $query = "SELECT * FROM registration WHERE user_uid = :uid ORDER BY created ASC";
-  $results = db_query($query, array(':uid' => $user->uid);
+  $results = db_query($query, array(':uid' => $user->uid));
   $registrations = array();
   foreach ($results as $registration) {
     $registrations[$registration->id] = $registration; 
