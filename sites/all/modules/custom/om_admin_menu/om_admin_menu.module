@@ -2,6 +2,7 @@
 
 
 function om_admin_menu_admin_menu_output_build(&$content) {
+  dsm($content);
   $paid_memberships = array(
 		'Programming Membership',
 		'Field Producer Membership', 
