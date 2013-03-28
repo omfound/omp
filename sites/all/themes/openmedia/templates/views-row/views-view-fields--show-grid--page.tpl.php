@@ -9,7 +9,9 @@
       <?php print $fields['totalcount']->content; ?> View(s)
     </div>
     <div class="comment-count floated">
-      <?php print $fields['comment_count']->content; ?> Comment(s)
+      <?php if (!empty($fields['comment_count']->content)) { ?>
+        <?php print $fields['comment_count']->content; ?> Comment(s)
+      <?php } ?>
     </div>
     <div class="voting-result floated">
       Rating: 
