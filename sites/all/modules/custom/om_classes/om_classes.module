@@ -38,7 +38,7 @@ function om_classes_user_registrations_table() {
   return theme('om_classes_user_registrations_table', array('registrations' => $registrations));
 }
 
-function om_classes_get_registrations($uid) {
+function om_classes_get_registrations($user) {
   $query = "SELECT * FROM registration WHERE user_uid = :uid ORDER BY created ASC";
   $results = db_query($query, array(':uid' => $user->uid));
   $registrations = array();
