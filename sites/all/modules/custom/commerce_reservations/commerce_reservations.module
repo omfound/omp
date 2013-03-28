@@ -58,9 +58,11 @@ function commerce_reservations_fullcalendar_api() {
  * Implements hook_permission
  */
 function commerce_reservations_permission() {
-  'administer_commerce_reservations' => array(
-    'title' => t('Administer commerce reservations'),
-    'description' => t('Change global settings for commerce reservations'),
+  return array(
+    'administer_commerce_reservations' => array(
+      'title' => t('Administer commerce reservations'),
+      'description' => t('Change global settings for commerce reservations'),
+    ),
   );
 }
 
