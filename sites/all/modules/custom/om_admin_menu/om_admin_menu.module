@@ -10,10 +10,10 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 		'Unlimited Membership', 
 		'Organizational or Group Membership'
 	);
-
-	$content['menu']['dashboard'] = array(
-		'#title' => t('Dashboard'),
-    '#access' => om_admin_menu_role_access('authenticated user'),
+ 
+  $content['menu']['dashboard'] = array(
+    '#title' => t('Dashboard'),
+    '#access' => om_admin_menu_role_access(array('authenticated user')),
     '#href' => 'dashboard',
 	);
   $content['menu']['shows'] = array(
