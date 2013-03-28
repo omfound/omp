@@ -121,7 +121,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $membership = array_shift($membership);
     $membership_wrapper = entity_metadata_wrapper('commerce_product', $membership);
   }
-  if (!user_is_anonymous()) {
+  if (user_is_anonymous()) {
     $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
   }
   else {
