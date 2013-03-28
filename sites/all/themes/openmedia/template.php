@@ -104,11 +104,11 @@ function openmedia_preprocess_node__class_display(&$variables) {
   }
   $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
   $final_date = date_repeat_helper_ordered_dates($date_info);
-  $options = array('attributes' => array('class' => 'gray-button'));
+  $options = array('attributes' => array('class' => 'red-button'));
   if (!empty($variables['content']['field_class_display_class'])) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
     $variables['content']['field_class_display_class'][0]['submit']['#value'] = t('Register Now');
-    $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('gray-button');
+    $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
   }
 
