@@ -11,7 +11,12 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   $login = t('Already have an account ? !login', array('!login' => $login_link));
   $group_plans_link = l('Click Here', 'membership/org-plans', array('attributes' => array('class' => array('red'))));
   $group_plan = t('For A Group Membership !click', array('!click' => $group_plans_link));
-  $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
+  if (user_is_anonymous()) {
+    $header = "<ul id='membership-header'><li>$login</li><li>$group_plan</li></ul>";
+  }
+  else {
+    $header = "<ul id='membership-header'><li>$group_plan</li></ul>";
+  }
   $membership = new StdClass();
   if ($user->uid > 0) {
     $membership = om_membership_get_user_membership_products($user);
