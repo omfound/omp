@@ -19,6 +19,9 @@ function om_classes_preprocess_om_classes_user_registrations(&$variables) {
       require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
       $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $registration->product, 'field_class_date');
       $final_dates = date_repeat_helper_ordered_dates($date_info);
+      print '<pre>';
+      print_r($final_dates);
+      print '</pre>';
       $start_date = $final_dates[0]['start'];
 
       $order = commerce_order_load($registration->order_id);
