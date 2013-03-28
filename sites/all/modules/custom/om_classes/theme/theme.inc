@@ -9,7 +9,7 @@ function om_classes_preprocess_om_classes_user_registrations(&$variables) {
       'Class',
       'Registration ID',
       'Order State',
-      '# Registered',
+      'Registrations',
       'Created',
       'Starts On',
       'Cost Paid',
