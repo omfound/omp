@@ -163,6 +163,9 @@
   color: #3C2D36;
 }
 
+#registration-box .dates .odd {
+  border-top: 1px solid #000;
+}
 /** 
  * Show nodes
  */
