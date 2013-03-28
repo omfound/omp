@@ -282,7 +282,8 @@ function openmedia_preprocess_class_registration_box(&$variables) {
     if (!empty($details['dates'])) {
       if (!empty($details['dates'])) {
         $variables['dates'] = '';
-        $counter = 0;
+        $counter = 1;
+        $num_items = count($details['dates']);
         foreach ($details['dates'] as $key => $date) {
           if (!empty($date['end'])) {
             $time = date('g:i:s a', $date['start']) . ' - ' . date('g:i:s a', $date['end']);
@@ -296,6 +297,12 @@ function openmedia_preprocess_class_registration_box(&$variables) {
           else {
             $class = 'odd';
           }
+          if ($counter == 1) {
+            $class .= ' first';
+          }
+          if ($counter == $num_items) {
+            $class .= ' last';
+          } 
           $variables['dates'] .= '<div class="date-instance '.$class.'"><div>' . date('l, F nS, Y', $date['start']) . '</div><div>' . $time . '</div></div>';
           $counter++;
         }
