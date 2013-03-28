@@ -281,6 +281,8 @@ function openmedia_preprocess_class_registration_box(&$variables) {
     }
     if (!empty($details['dates'])) {
       if (!empty($details['dates'])) {
+        $variables['dates'] = '';
+        $counter = 0;
         foreach ($details['dates'] as $key => $date) {
           if (!empty($date['end'])) {
             $time = date('g:i:s a', $date['start']) . ' - ' . date('g:i:s a', $date['end']);
@@ -288,7 +290,14 @@ function openmedia_preprocess_class_registration_box(&$variables) {
           else {
             $time = date('g:i:s a', $date['start']);
           }
-          $variables['dates'] .= '<div>' . date('l, F nS, Y', $date['start']) . '</div><div>' . $time . '</div>';
+          if ($counter % 2 == 0) {
+            $class = 'even';
+          }
+          else {
+            $class = 'odd';
+          }
+          $variables['dates'] .= '<div class="date-instance '.$class.'"><div>' . date('l, F nS, Y', $date['start']) . '</div><div>' . $time . '</div></div>';
+          $counter++;
         }
       }
     }
