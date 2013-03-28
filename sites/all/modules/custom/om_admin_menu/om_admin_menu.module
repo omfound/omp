@@ -2,14 +2,7 @@
 
 
 function om_admin_menu_admin_menu_output_build(&$content) {
-  $paid_memberships = array(
-		'Programming Membership',
-		'Field Producer Membership', 
-		'Editor Membership', 
-		'Studio Producer Membership', 
-		'Unlimited Membership', 
-		'Organizational or Group Membership'
-	);
+  $paid_memberships = om_admin_menu_paid_memberships();
  
   $content['menu']['dashboard'] = array(
     '#title' => t('Dashboard'),
@@ -29,7 +22,10 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 }
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
-  dsm($content);
+  global $user;
+  if (!in_array('administrator', $user->roles) && $uid != 1) {
+    unset($content['menu']['admin/content'];
+  }
 }
 
 function om_admin_menu_role_access($roles) {
@@ -41,4 +37,17 @@ function om_admin_menu_role_access($roles) {
     } 
   }
   return FALSE;
+}
+
+function om_admin_menu_paid_memberships() {
+  $paid_memberships = array(
+		'Programming Membership',
+		'Field Producer Membership', 
+		'Editor Membership', 
+		'Studio Producer Membership', 
+		'Unlimited Membership', 
+		'Organizational or Group Membership'
+	);
+
+  return $paid_memberships;
 }
