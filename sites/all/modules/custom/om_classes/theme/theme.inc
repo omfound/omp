@@ -11,7 +11,7 @@ function om_classes_preprocess_om_classes_user_registrations(&$variables) {
       'Order State',
       '# Registered',
       'Created',
-      'Start Date',
+      'Starts On',
       'Cost Paid',
     );
     $rows = array();
@@ -19,14 +19,12 @@ function om_classes_preprocess_om_classes_user_registrations(&$variables) {
       require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
       $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $registration->product, 'field_class_date');
       $final_dates = date_repeat_helper_ordered_dates($date_info);
-      print '<pre>';
-      print_r($final_dates);
-      print '</pre>';
-      $start_date = $final_dates[0]['start'];
+      $start_date = $final_dates[0]['formatted']['plain'];
 
       $order = commerce_order_load($registration->order_id);
       $wrapper = entity_metadata_wrapper('commerce_order', $order);
-      $order_total = $wrapper->commerce_order_total->amount->value();
+      $order_total = $wrapper->commerce_order_total->currency_code->value();
+      //$order_total = $wrapper->commerce_order_total->amount->value();
 
       $rows[] = array( 
         l($registration->product->title, 'node/'.commerce_autodisplay_entity_display_lookup($registration->entity_id)),
