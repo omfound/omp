@@ -38,7 +38,9 @@ function om_migration_create_new_member_order($uid, $product_id, $start_date) {
   commerce_line_item_save($line_item);
   $order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($order);
-  commerce_order_complete($order);
+  //commerce_order_complete($order);
+  //commerce_order_rules_update_state($order,"Completed");
+  commerce_order_status_update($order,"completed");
 
   // Now grant the user the role
   om_migration_grant_user_role($uid, $om_memrole[$product_id]);
@@ -59,7 +61,7 @@ function om_migration_grant_user_role($uid, $role_id) {
  */
 function om_migration_get_civi_memberships() {
   $results = array();
-  $map_civi_prod = om_migration_civi_prod_relationships();
+  $map_civi_prod = om_migration_civi_product_relationships();
   $query = Database::getConnection('default', 'civi')
   ->select('civicrm_membership','cm');
   $query->join('civicrm_uf_match', 'ccum', 'cm.contact_id=ccum.contact_id');
@@ -83,7 +85,7 @@ function om_migration_get_civi_memberships() {
     if ($start < $end - $one_year) {
       $start = $end - $one_year;
     }
-    om_migration_create_new_member_order($uid,$map_civi_prod[$rec->membership_type_id],$start);
+    om_migration_create_new_member_order($rec->uid,$map_civi_prod[$rec->membership_type_id],$start);
     $results[] = array($rec->uid, $start, $rec->membership_type_id);
   }
   return $results;
