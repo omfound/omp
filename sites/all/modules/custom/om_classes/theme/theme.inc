@@ -23,8 +23,9 @@ function om_classes_preprocess_om_classes_user_registrations(&$variables) {
 
       $order = commerce_order_load($registration->order_id);
       $wrapper = entity_metadata_wrapper('commerce_order', $order);
-      $order_total = $wrapper->commerce_order_total->currency_code->value();
-      //$order_total = $wrapper->commerce_order_total->amount->value();
+      $currency = $wrapper->commerce_order_total->currency_code->value();
+      $price = $wrapper->commerce_order_total->amount->value();
+      $order_total = commerce_currency_format($price, $currency, $order);
 
       $rows[] = array( 
         l($registration->product->title, 'node/'.commerce_autodisplay_entity_display_lookup($registration->entity_id)),
