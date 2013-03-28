@@ -82,6 +82,7 @@ a:hover.gray-button {
   background-color: #BBBBBB;
 }
 
+input[type="submit"].blue-button,
 a:link.blue-button,
 a:visited.blue-button {
   display: inline-block;
@@ -97,6 +98,8 @@ a:visited.blue-button {
   margin: 0 5px;
 }
 
+input[type="submit"]:hover.blue-button,
+input[type="submit"]:focus.blue-button,
 a:focus.blue-button,
 a:hover.blue-button {
   box-shadow: none;
@@ -104,6 +107,7 @@ a:hover.blue-button {
   border: solid 1px #3395D2;
 }
 
+input[type="submit"].red-button,
 a:link.red-button,
 a:visited.red-button {
   display: inline-block;
@@ -119,6 +123,8 @@ a:visited.red-button {
   margin: 0 5px;
 }
 
+input[type="submit"]:hover.red-button,
+input[type="submit"]:focus.red-button,
 a:focus.red-button,
 a:hover.red-button {
   box-shadow: none;
