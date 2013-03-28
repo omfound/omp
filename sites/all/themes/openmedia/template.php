@@ -286,10 +286,10 @@ function openmedia_preprocess_class_registration_box(&$variables) {
         $num_items = count($details['dates']);
         foreach ($details['dates'] as $key => $date) {
           if (!empty($date['end'])) {
-            $time = date('g:i:s a', $date['start']) . ' - ' . date('g:i:s a', $date['end']);
+            $time = date('g:i a', $date['start']) . ' - ' . date('g:i a', $date['end']);
           }
           else {
-            $time = date('g:i:s a', $date['start']);
+            $time = date('g:i a', $date['start']);
           }
           if ($counter % 2 == 0) {
             $class = 'even';
