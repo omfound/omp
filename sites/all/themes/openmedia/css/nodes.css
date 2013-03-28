@@ -102,6 +102,11 @@
 #registration-box .registration-button {
   float: left;
   width: 83px;
+  font-size: 14px;
+}
+
+#registration-box .registration-button input {
+  padding: 5px;
 }
 
 #registration-box .registration-button .gray-button {
