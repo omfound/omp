@@ -7,15 +7,6 @@
   <div id="above-content" class="clearfix">
     <?php print render($page['above_content']); ?>
   </div>
-  <?php if (!empty($page['action_items'])): ?>
-  <div id="action-item">
-    <div class="wrapper">
-      <div id="action-item-inner" class="clearfix">
-        <?php print render($page['action_items']); ?>
-      </div>
-    </div>
-  </div>
-  <?php endif; ?>
   <div id="main">
     <div class="inner">
       <div id="main-inner" class="clearfix">
@@ -52,6 +43,15 @@
     </div>
   </div><!-- /#main -->
 </div><!-- /#page -->
+<?php if (!empty($page['action_items'])): ?>
+<div id="action-item">
+  <div class="wrapper">
+    <div id="action-item-inner" class="clearfix">
+      <?php print render($page['action_items']); ?>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
 <div id="footer-wrapper">
   <div class="inner">
     <?php print render($page['footer']); ?>
