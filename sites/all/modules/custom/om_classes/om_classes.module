@@ -43,9 +43,7 @@ function om_classes_get_registrations($user) {
   $results = db_query($query, array(':uid' => $user->uid));
   $registrations = array();
   foreach ($results as $registration) {
-    if ($registration->id) {
-      $registrations[$registration->id] = $registration; 
-    }
+    $registrations[$registration->registration_id] = $registration; 
   }
   if (count($registrations > 0)) {
     foreach($registrations as $key => $registration) {
