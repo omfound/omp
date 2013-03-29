@@ -133,7 +133,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('57'),
       'black_text' => t('The Producer\'s Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'http://google.com',
+      'url' => 'channel-57',
       'position' => ''
     ),
     2 => array(
@@ -141,7 +141,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('219'),
       'black_text' => t('News Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'http://google.com',
+      'url' => 'channel-219',
       'position' => ''
     ),
     3 => array(
