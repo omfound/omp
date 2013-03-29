@@ -112,7 +112,7 @@ function om_show_project_modifier($project_form_field) {
     $project_form_field[$language]['#default_value'] = $keys[1];
   }
   if(count($project_form_field[$language]['#options']) < 2) {
-    $project_form_field['#description'] = '<strong>'.t('You currently have no projects.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.').'</strong>';
+    $project_form_field[$language]['#description'] = '<strong>'.t('You currently have no projects.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.').'</strong>';
     drupal_set_message('In order to submit shows or make reservations you must first'.' '.l('create a project', 'node/add/om-project').'.', 'warning');
   }
 
