@@ -100,8 +100,24 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
       $form['revision_information']['#access'] = FALSE;
     }
 
-    dsm($form);
+    //Smarter project selector
+    $form['field_om_show_project'] = om_show_project_modifier($form['field_om_show_project']);
   }
+}
+
+function om_show_project_modifier($project_form_field) {
+  $language = $project_form_field['#language'];
+  if(count($project_form_field[$language]['#options']) == 2) {
+    $keys = array_keys($project_form_field[$language]['#options']);
+    $project_form_field[$language]['#default_value'] = $keys[1];
+  }
+  if(count($project_form_field[$language]['#options']) < 2) {
+    $project_form_field = array(
+      '#markup' => t('No projects available.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.');
+    );
+  }
+
+  return $project_form_field;
 }
 
 function om_show_reload($form, $form_state) {
