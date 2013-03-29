@@ -113,7 +113,7 @@ function om_show_project_modifier($project_form_field) {
   }
   if(count($project_form_field[$language]['#options']) < 2) {
     $project_form_field = array(
-      '#markup' => t('No projects available.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.');
+      '#markup' => t('No projects available.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.'),
     );
   }
 
