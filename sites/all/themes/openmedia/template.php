@@ -166,7 +166,9 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
   $stats = statistics_get($variables['node']->nid);
   $variables['view_count'] = $stats['totalcount'] . ' Views';
-  $variables['comment_count'] = $variables['node']->comment_count . ' Comments';
+  if (!empty($variables['node']->comment_count)) {
+    $variables['comment_count'] = $variables['node']->comment_count . ' Comments';
+  }
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
   if ($locally_produced == 1) {
     $variables['locally_produced'] = 'Local Production';
