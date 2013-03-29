@@ -95,19 +95,19 @@ function om_theme_assets_callout_block_content() {
       'admin_title' => 'Callout Block 1',
       'block_title' => t('OMP for Public Access and Community Media'),
       'image_path' => $base_path . $theme_path . '/images/callout-1.jpg',
-      'url' => 'channel-56'
+      'url' => 'http://56.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1'
     ),
     1 => array(
       'admin_title' => 'Callout Block 2',
       'block_title' => t('OMP for Government'),
       'image_path' => $base_path . $theme_path . '/images/callout-2.png',
-      'url' => 'channel-57'
+      'url' => 'http://57.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1'
     ),
     2 => array(
       'admin_title' => 'Callout Block 3',
       'block_title' => t('OMP for Education, Libraries, and CTCs'),
       'image_path' => $base_path . $theme_path . '/images/callout-3.png',
-      'url' => 'channel-219'
+      'url' => 'http://129.19.150.250/Cablecast/Public/Schedule.aspx?ChannelID=2'
     )
   );
 }
@@ -125,7 +125,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('56'),
       'black_text' => t('Community Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'channel-56',
+      'url' => 'http://56.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1',
       'position' => 'first'
     ),
     1 => array(
@@ -133,7 +133,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('57'),
       'black_text' => t('The Producer\'s Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'channel-57',
+      'url' => 'http://57.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1',
       'position' => ''
     ),
     2 => array(
@@ -141,7 +141,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('219'),
       'black_text' => t('News Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'channel-219',
+      'url' => 'http://129.19.150.250/Cablecast/Public/Schedule.aspx?ChannelID=2',
       'position' => ''
     ),
     3 => array(
