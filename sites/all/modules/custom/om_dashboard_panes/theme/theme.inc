@@ -60,6 +60,16 @@ function om_dashboard_panes_preprocess_om_classes_pane(&$variables) {
 }
 
 /**
+  *  * Implements hook_preprocess_hook
+  *   */
+function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
+  global $user;
+  $registration_table = om_classes_user_registrations($user, 'simple');
+  $variables['registration_table'] = $registration_table;
+  $variables['title'] = t('Class Registrations');
+}
+
+/**
  * Implements hook_preprocess_hook
  */
 function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {

@@ -47,18 +47,29 @@ function om_classes_theme($existing, $type, $theme, $path) {
       'file' => 'theme.inc',
       'variables' => array('plans' => array())
     ),
+    'om_classes_user_registrations_simple' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_classes_user_registrations_simple',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
   );
 }
 
 /**
  * Helper to load plans and send to theme layer.
  */
-function om_classes_user_registrations($user = false) {
+function om_classes_user_registrations($user = false, $format = 'full') {
   if (!$user) {
     global $user;
   }
   $registrations = om_classes_get_registrations($user);
-  return theme('om_classes_user_registrations', array('registrations' => $registrations));
+  if ($format == 'full') {
+    return theme('om_classes_user_registrations', array('registrations' => $registrations));
+  }
+  else {
+    return theme('om_classes_user_registrations_simple', array('registrations' => $registrations));
+  }
 }
 
 function om_classes_get_registrations($user) {
