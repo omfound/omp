@@ -99,6 +99,8 @@ function om_show_form_alter(&$form, &$form_state, $form_id) {
       $form['field_om_show_duration']['#type'] = 'hidden';
       $form['revision_information']['#access'] = FALSE;
     }
+
+    dsm($form);
   }
 }
 
