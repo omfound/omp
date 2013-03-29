@@ -101,13 +101,13 @@ function om_theme_assets_callout_block_content() {
       'admin_title' => 'Callout Block 2',
       'block_title' => t('OMP for Government'),
       'image_path' => $base_path . $theme_path . '/images/callout-2.png',
-      'url' => 'http://google.com'
+      'url' => 'channel-57'
     ),
     2 => array(
       'admin_title' => 'Callout Block 3',
       'block_title' => t('OMP for Education, Libraries, and CTCs'),
       'image_path' => $base_path . $theme_path . '/images/callout-3.png',
-      'url' => 'http://google.com'
+      'url' => 'channel-219'
     )
   );
 }
