@@ -16,7 +16,7 @@ function om_theme_assets_preprocess_om_round_social_media(&$variables) {
     $options['attributes']['class'] = array('twitter');
     $links[] = l('Twitter', $twitter_url, $options);
   }
-  $openmedia_network_url = 'http://google.com';
+  $openmedia_network_url = 'http://omp.omfound.org';
   if (!empty($openmedia_network_url)) {
     $options['attributes']['class'] = array('om-network');
     $links[] = l('Open Media Network', $openmedia_network_url, $options);
