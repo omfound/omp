@@ -53,7 +53,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       ),
       'dependency' => 'om_show'
     ),
-    'membership' => array(
+    'class_registrations' => array(
       'theme' => array(
         'om_class_registration_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
