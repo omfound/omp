@@ -325,4 +325,6 @@ body.front h2.block-title {
   font-size: 1.9em;
   background-color: #fff;
   padding-left: 5px;
+  margin-top: 0.75em;
+  line-height: 36px;
 }
