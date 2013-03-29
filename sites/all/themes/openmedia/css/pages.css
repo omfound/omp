@@ -168,6 +168,10 @@ table {
   width: 100%;
 }
 
+td {
+  padding: 10px;
+}
+
 /** Create the Beveled Divider **/
 .divider {
   border-top: 1px solid #B7B1A4;
