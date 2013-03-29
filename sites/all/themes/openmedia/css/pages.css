@@ -319,11 +319,11 @@ body.front h1.title,
 body.front h2.block-title {
   font-size: 1.9em;
   font-family: 'PTSansBold', sans-serif;
-  padding-left: 5px;
   margin-top: 0.75em;
   line-height: 36px;
 }
 body.front h1.title {
+  margin-bottom: 0;
 }
 body.front h2.block-title {
   margin-bottom: 5px;
