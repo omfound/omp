@@ -175,6 +175,9 @@ td {
 th {
   padding-left: 10px;
 }
+body.page-membership th {
+  padding-left: 0;
+}
 
 /** Create the Beveled Divider **/
 .divider {
