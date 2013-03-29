@@ -37,7 +37,7 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   }
   else {
     $links[] = l('Login', 'user') . ' | ';
-    $links[] = l('Register', 'user/register') . ' | ';
+    $links[] = l('Register', 'membership') . ' | ';
   }
   $links[] = l('Help', 'help');
   if (drupal_valid_path('cart')) {
