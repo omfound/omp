@@ -7,7 +7,7 @@ function commerce_autodisplay_menu() {
     'description' => 'Define products where displays should be automatically managed',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_autodisplay_configuration_form'),
-    'access arguments' => array('access administration pages'),
+    'access arguments' => array('administer products'),
     'type' => MENU_NORMAL_ITEM,
   );
   $items['node/%node/product-delete'] = array(
