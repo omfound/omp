@@ -2,6 +2,7 @@
 
 /**
  * Implements hook_om_dashboard_panes
+ * Masonry alternates sides left, right, left, right
  */
 function om_dashboard_panes_om_dashboard_panes() {
   return array(
@@ -10,6 +11,15 @@ function om_dashboard_panes_om_dashboard_panes() {
         'om_profile_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
           'template' => 'om_profile_pane',
+          'file' => 'theme.inc'
+        )
+      )
+    ),
+    'classes' => array(
+      'theme' => array(
+        'om_classes_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_classes_pane',
           'file' => 'theme.inc'
         )
       )
@@ -23,6 +33,16 @@ function om_dashboard_panes_om_dashboard_panes() {
         )
       ),
       'dependency' => 'om_membership',
+    ),
+    'class_registrations' => array(
+      'theme' => array(
+        'om_class_registration_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_class_registration_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_classes',
     ),
     'reservations' => array(
       'theme' => array(
@@ -43,25 +63,6 @@ function om_dashboard_panes_om_dashboard_panes() {
         )
       ),
       'dependency' => 'om_show'
-    ),
-    'class_registrations' => array(
-      'theme' => array(
-        'om_class_registration_pane' => array(
-          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
-          'template' => 'om_class_registration_pane',
-          'file' => 'theme.inc'
-        )
-      ),
-      'dependency' => 'om_classes',
-    ),
-    'classes' => array(
-      'theme' => array(
-        'om_classes_pane' => array(
-          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
-          'template' => 'om_classes_pane',
-          'file' => 'theme.inc'
-        )
-      )
     ),
   );
 }
