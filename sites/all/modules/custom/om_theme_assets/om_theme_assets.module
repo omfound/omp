@@ -125,7 +125,7 @@ function om_theme_assets_action_item_content() {
       'bubble_text' => t('56'),
       'black_text' => t('Community Channel!'),
       'blue_text' => t('See Schedule >>'),
-      'url' => 'http://google.com',
+      'url' => 'channel-56',
       'position' => 'first'
     ),
     1 => array(
