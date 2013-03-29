@@ -318,3 +318,9 @@ body.page-views div#content-inner {
 body.page-classes div#content-inner {
   padding: 0;
 }
+
+body.front h1.title {
+  font-size: 1.9em;
+  background-color: #fff;
+  padding-left: 5px;
+}
