@@ -115,7 +115,7 @@ function om_show_project_modifier($project_form_field) {
     $project_form_field = array(
       '#markup' => t('No projects available.').' '.l('Please add one', 'node/add/om-show').' '.t('before submitting a show.'),
     );
-    drupal_set_message('In order to submit shows or make reservations you must first').' '.l('create a project', 'node/add/om-project'), 'warning');
+    drupal_set_message('In order to submit shows or make reservations you must first'.' '.l('create a project', 'node/add/om-project'), 'warning');
   }
 
   return $project_form_field;
