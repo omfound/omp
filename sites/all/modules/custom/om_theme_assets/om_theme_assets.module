@@ -93,21 +93,21 @@ function om_theme_assets_callout_block_content() {
   return array(
     0 => array(
       'admin_title' => 'Callout Block 1',
-      'block_title' => t('OMP for Public Access and Community Media'),
+      'block_title' => t('Become a Member'),
       'image_path' => $base_path . $theme_path . '/images/callout-1.jpg',
-      'url' => 'http://56.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1'
+      'url' => 'membership'
     ),
     1 => array(
       'admin_title' => 'Callout Block 2',
-      'block_title' => t('OMP for Government'),
+      'block_title' => t('Take a Class'),
       'image_path' => $base_path . $theme_path . '/images/callout-2.png',
-      'url' => 'http://57.denveropenmedia.org:3000/external_schedule/simple_day_schedule/1'
+      'url' => 'classes'
     ),
     2 => array(
       'admin_title' => 'Callout Block 3',
-      'block_title' => t('OMP for Education, Libraries, and CTCs'),
+      'block_title' => t('Rent Equipment'),
       'image_path' => $base_path . $theme_path . '/images/callout-3.png',
-      'url' => 'http://129.19.150.250/Cablecast/Public/Schedule.aspx?ChannelID=2'
+      'url' => 'reservations'
     )
   );
 }
