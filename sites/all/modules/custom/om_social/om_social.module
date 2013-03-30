@@ -183,7 +183,10 @@ function om_social_facebook_header($node) {
   }
 }
 
-function om_social_fb_comment_count($url) {
+function om_social_fb_comment_count($url = false) {
+  if (!$url) {
+    $url = $GLOBALS['base_url'].request_path();
+  }
   $request_url = 'https://graph.facebook.com/comments/?ids='.$url;
   $requests = file_get_contents($request_url);
   $comments = json_decode($requests);
