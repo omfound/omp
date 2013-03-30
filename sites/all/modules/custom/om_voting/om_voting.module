@@ -21,6 +21,7 @@ function om_voting_menu() {
 }
 
 function om_voting_postmark_inbound () {
-  //om_voting_postmark_init();
-  watchdog('postmark', '<pre>'.print_r(file_get_contents('php://input'), true).'</pre>');
+  om_voting_postmark_init();
+  $inbound = new \Postmark\Inbound(file_get_contents('php://input'));
+  watchdog('postmark', 'FromEmail: '.$inbound->FromEmail);
 }
