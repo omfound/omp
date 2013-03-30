@@ -22,6 +22,5 @@ function om_voting_menu() {
 
 function om_voting_postmark_inbound () {
   //om_voting_postmark_init();
-  watchdog('postmark', '<pre>'.print_r($_POST).'</pre>');
-  watchdog('postmark', '<pre>'.print_r($_REQUEST, true).'</pre>');
+  watchdog('postmark', '<pre>'.print_r(file_get_contents('php://input')).'</pre>');
 }
