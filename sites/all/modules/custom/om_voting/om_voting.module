@@ -1,0 +1,5 @@
+<?php
+
+function om_voting_postmark_init() {
+  require_once('sites/all/libraries/postmark/lib/Postmark/Autoloader.php');
+}
