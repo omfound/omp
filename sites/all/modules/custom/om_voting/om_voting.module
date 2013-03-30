@@ -18,7 +18,7 @@ function om_voting_menu() {
 
 function om_voting_postmark_inbound () {
   $email = json_decode(file_get_contents('php://input'));
-  if ($vote = om_voting_prepare_vote ($email) {
+  if ($vote = om_voting_prepare_vote($email)) {
     drupal_write_record('votingapi_vote', $vote); 
   }
   watchdog('postmark', '<pre>'.print_r($email, TRUE).'</pre>');
