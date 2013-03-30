@@ -193,7 +193,6 @@ function votingapi_current_user_identifier() {
  * Implementation of hook_votingapi_storage_add_vote().
  */
 function votingapi_votingapi_storage_add_vote(&$vote) {
-  watchdog('votingapi', '<pre>'.print_r($vote, TRUE).'</pre>');
   drupal_write_record('votingapi_vote', $vote);
 }
 
