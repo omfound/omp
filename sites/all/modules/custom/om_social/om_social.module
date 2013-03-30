@@ -186,5 +186,6 @@ function om_social_facebook_header($node) {
 function om_social_fb_comment_count($url) {
   $request_url = 'https://graph.facebook.com/comments/?ids='.$url;
   $requests = file_get_contents($request_url);
-  dsm($requests);
+  $comments = json_decode($requests);
+  dsm($comments);
 }
