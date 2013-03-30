@@ -34,6 +34,7 @@
           <?php print $view_count; ?> |
         </div>
         <div id="comment-count" class="bold">
+          <?php $comment_count = om_social_fb_comment_count(); ?>
           <?php print $comment_count; ?>
         </div>
       </div>
