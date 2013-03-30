@@ -1,8 +1,8 @@
 <?php
 
 /**
-*  * Implements hook_menu
-*   */
+** Implements hook_menu
+**/
 function om_classes_menu() {
   $items = array();
 

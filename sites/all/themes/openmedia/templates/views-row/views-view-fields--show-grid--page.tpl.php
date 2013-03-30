@@ -9,8 +9,11 @@
       <?php print $fields['totalcount']->content; ?> View(s)
     </div>
     <div class="comment-count floated">
-      <?php if (!empty($fields['comment_count']->content)) { ?>
-        <?php print $fields['comment_count']->content; ?> Comment(s)
+      <?php $options = array('absolute' => TRUE); ?>
+      <?php $url = url('node/' . $row->nid, $options); ?>
+      <?php $comment_count = om_social_fb_comment_count($url); ?>
+      <?php if ($comment_count != 0) { ?>
+        <?php print $comment_count; ?> Comment(s)
       <?php } ?>
     </div>
     <div class="voting-result floated">
