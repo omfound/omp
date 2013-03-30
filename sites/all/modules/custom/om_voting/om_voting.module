@@ -20,6 +20,9 @@ function om_voting_postmark_inbound () {
   $email = json_decode(file_get_contents('php://input'));
   if ($vote = om_voting_prepare_vote($email)) {
     drupal_write_record('votingapi_vote', $vote); 
+    $to_values = explode('@', $email->ToFull[0]->Email);
+    $nid = $to_values[0];
+    votingapi_recalculate_results('node', $nid);
   }
   watchdog('postmark', '<pre>'.print_r($email, TRUE).'</pre>');
 }
