@@ -9,6 +9,7 @@
       <?php print $fields['totalcount']->content; ?> View(s)
     </div>
     <div class="comment-count floated">
+      <?php dsm($fields); ?>
       <?php $comment_count = om_social_fb_comment_count(); ?>
       <?php if ($comment_count != 0) { ?>
         <?php print $coment_count; ?> Comment(s)
