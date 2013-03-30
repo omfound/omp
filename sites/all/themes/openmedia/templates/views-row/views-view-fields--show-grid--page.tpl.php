@@ -1,5 +1,4 @@
 <?php $rating_5 = round(($row->votingapi_vote_node_percent_vote_value / 100) * 5); ?>
-<?php dsm($row); ?> 
 <?php print $fields['field_show_thumbnail']->content; ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
@@ -10,9 +9,11 @@
       <?php print $fields['totalcount']->content; ?> View(s)
     </div>
     <div class="comment-count floated">
-      <?php $comment_count = om_social_fb_comment_count(); ?>
+      <?php $options = array('absolute' => TRUE); ?>
+      <?php $url = url('node/' . $row->nid, $options); ?>
+      <?php $comment_count = om_social_fb_comment_count($url); ?>
       <?php if ($comment_count != 0) { ?>
-        <?php print $coment_count; ?> Comment(s)
+        <?php print $comment_count; ?> Comment(s)
       <?php } ?>
     </div>
     <div class="voting-result floated">
