@@ -458,3 +458,7 @@ function openmedia_commerce_registration_order($variables) {
 
   return $title . theme('table', $table) . theme('pager') . "</div>";
 }
+
+function openmedia_preprocess_views_view_unformatted($vars) {
+  drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
+}
