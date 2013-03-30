@@ -167,6 +167,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $stats = statistics_get($variables['node']->nid);
   $variables['view_count'] = $stats['totalcount'] . ' Views';
   $path = $GLOBALS['base_url'].'/'.request_path();
+  dsm($path);
   $comment_count = om_social_fb_comment_count($path);
   if ($comment_count != 0) { $variables['comment_count'] = $comment_count . ' Comments'; }
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
