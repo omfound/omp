@@ -34,7 +34,23 @@ function om_voting_prepare_vote ($email) {
   $nid = $to_values[0];
   if (is_numeric($vote_value) && is_numeric($nid)) {
     if ($vote_value == 1 || $vote_value == 2 || $vote_value == 3 || $vote_value == 4 || $vote_value == 5) {
-      $vote_value = $vote_value * 10;
+      switch($vote_value) {
+        case 1:
+          $vote_value = 20;
+          break;
+        case 2:
+          $vote_value = 40;
+          break;
+        case 3:
+          $vote_value = 60;
+          break;
+        case 4:
+          $vote_value = 80;
+          break;
+        case 5:
+          $vote_value = 100;
+          break;
+      }
       $vote = array(
         'entity_type' => 'node',
         'entity_id' => $nid,
