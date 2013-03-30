@@ -3,124 +3,173 @@
 class omShowMigration extends Migration {
   // class constructor
   public function __construct() {
-    parent::__construct(MigrateGroup::getInstance('om_shows_group'));
-    $this->description = t('Migrate Drupal 6 show nodes');
-
-    // some field definitions; roles will be added later in prepareRow()
-    $source_fields = array(
-      'uid' => t('User ID'),
-      'roles' => t('The set of roles assigned to a user.'),
-    );
-
-    $query = Database::getConnection('default', 'legacy')
-      ->select('users','u');
-    //$query = db_select(SOURCE_DATABASE .'.users', 'u');
-    $query->join(SOURCE_DATABASE .'.node', 'n', 'n.uid = u.uid'); //JOIN node with users
-    $query->join(SOURCE_DATABASE .'.content_type_om_project', 'p', 'p.nid = n.nid');
-    $query = $query->fields('u', array('uid', 'name', 'pass', 'mail', 'created', 'access', 'login', 'status', 'init'))
-      // set query to be distinct
-      // select distinct uid as drupal_id from users u,
-      ->distinct()
-      // user is active user
-      ->condition('u.status', 1, '=')
-      // grab users greater than UID 31, since there are that many created on the new site.
-      ->condition('u.uid', 31, '>')
-      // grab users who have accessed site since cutoff date
-      // Don't limit this migration by date
-      // ->condition('u.access',USER_MIGRATION_CUTOFF, '>')
-      // TODO: also need to add users that have an active project. Perhaps in diff migation class.
-      ->orderBy('u.uid', 'ASC');
-     //select distinct uid from node join content_type_om_project using(nid);
-
-    $this->source = new MigrateSourceSQL($query, $source_fields,NULL,
-      array('map_joinable' => FALSE));
+    parent::__construct(MigrateGroup::getInstance('om_projects_group'));
+    $this->description = t('Migrate Drupal 6 projects cck nodes');
+    $query = Database::getConnection('default', 'legacy')->select('node','n');
+    $query->join('node_revisions', 'r', 'n.nid=r.nid');
+    $query->join('content_type_om_show', 'cts', 'n.nid=cts.nid');
+    $query->join('content_field_om_locally_produced', 'locally_produced', 'n.nid=locally_produced.nid');
+    $query->join('content_field_om_theme', 'theme', 'n.nid=theme.nid');
+    $query->join('content_field_om_genre', 'genre', 'n.nid=genre.nid');
+    $query->join('content_field_om_language', 'language', 'n.nid=language.nid');
+    $query->join('content_field_om_rating', 'rating', 'n.nid=rating.nid');
+    $query->fields('n', array('nid', 'title', 'uid', 'status', 'created', 'created', 'changed'));
+    $query->fields('r', array('body'));
+    $query->fields('cts', array('field_om_show_tightrope_id_value', 'field_om_show_original_list', 'field_om_show_capture_fid', 'field_om_show_episode_number_value'));
+    $query->fields('locally_produced', array('field_om_locally_produced_value'));
+    $query->fields('theme', array('field_om_theme_nid'));
+    $query->fields('genre', array('field_om_genre_value'));
+    $query->fields('language', array('field_om_language_value'));
+    $query->fields('rating', array('field_om_rating_value'));
+    $query->condition('n.type', 'om_show', '=');
+    $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
-    $this->destination = new MigrateDestinationUser(array('md5_passwords' => TRUE));
+    $this->destination = new MigrateDestinationNode('om_show');
 
     // map source and destination keys
     $this->map = new MigrateSQLMap($this->machineName,
       array(
-        'uid' => array(
+        'nid' => array(
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
-          'description' => 'D6 Unique User ID',
-          'alias' => 'u',
+          'description' => 'D6 Unique Node ID',
+          'alias' => 'n',
         )
       ),
-      MigrateDestinationUser::getKeySchema()
+      MigrateDestinationNode::getKeySchema()
     );
 
     // Create the field mappings
     // order: $destination, $source
-    $this->addFieldMapping('is_new')->defaultValue(TRUE);
+    $this->addFieldMapping('field_old_show_id', 'nid');
+    $this->addFieldMapping('title', 'title');
     $this->addFieldMapping('uid', 'uid');
-    $this->addFieldMapping('field_legacy_uid', 'uid');
-    $this->addFieldMapping('name', 'name')->dedupe('users', 'name');
-    $this->addFieldMapping('pass', 'pass');
-    $this->addFieldMapping('mail', 'mail')->dedupe('users', 'mail');
-    $this->addFieldMapping('language')->defaultValue('');
-    $this->addFieldMapping('theme')->defaultValue('');
-    $this->addFieldMapping('signature')->defaultValue('');
-    $this->addFieldMapping('signature_format')->defaultValue('filtered_html');
-    $this->addFieldMapping('created', 'created');
-    $this->addFieldMapping('access', 'access');
-    $this->addFieldMapping('login', 'login');
     $this->addFieldMapping('status', 'status');
-    $this->addFieldMapping('picture')->defaultValue(0);
-    $this->addFieldMapping('init', 'init');
-    $this->addFieldMapping('timezone')->defaultValue(NULL);
-    $this->addFieldMapping('path')->issueGroup(t('DNM')); // DNM = Do Not Map
-    $this->addFieldMapping('roles', 'roles');
+    $this->addFieldMapping('created', 'created');
+    $this->addFieldMapping('changed', 'changed');
+    $this->addFieldMapping('body', 'body');
+    $this->addFieldMapping('field_om_locally_produced', 'field_om_locally_produced_value');
+    $this->addFieldMapping('field_om_theme', 'field_om_theme_nid');
+    $this->addFieldMapping('field_om_genre', 'field_om_genre_value');
+    $this->addFieldMapping('field_om_language', 'field_om_language_value');
+    $this->addFieldMapping('field_om_rating', 'field_om_rating_value');
+    $this->addFieldMapping('field_om_show_playback_server_id', 'field_om_show_tightrope_id_value');
+    $this->addFieldMapping('field_om_show_project', 'field_om_show_original_list');
+    $this->addFieldMapping('field_show_thumbnail', 'field_om_show_capture_fid');
+    $this->addFieldMapping('field_om_show_episode_number', 'field_om_show_episode_number_value');
   }
-  // end omUserMigration class constructor
 
-  // massage the user roles before saving
-  // TODO: customize for DOM roles for D6 and D7
   public function prepareRow($current_row) {
-    $source_id = $current_row->uid;
-    $query = Database::getConnection('default', 'legacy')
-      ->select('users_roles','r')
-    //$query = db_select(SOURCE_DATABASE .'.users_roles', 'r')
-      ->fields('r', array('uid', 'rid'))
-      ->condition('r.uid', $source_id, '=');
-    $results = $query->execute();
-    // add the Authenticated role for everyone
-    $roles = array('2' => '2');
-    foreach ($results as $row) {
-      // adjust the old to new role id's
-      // Editors (rid 3) need role id 4
-      if ($row->rid == 3) {
-        $roles['4'] = '4';
+    // If this project's user has not been migrated -- ignore this project.
+    if (!empty($current_row->uid)) {
+      $user = user_load($current_row->uid);
+      if (empty($user)) {
+        $current_row->uid = 13693;
       }
-      // Admins (rid 4) need role id 3
-      if ($row->rid == 4) {
-        $roles['3'] = '3';
-      }
-      // Certifications
-      // Edit role
-      if ($row->rid == 26) {
-        $roles['13'] = '13';
-      }
-      // Field role
-      if ($row->rid == 10) {
-        $roles['14'] = '14';
-      }
-      // Studio role
-      if ($row->rid == 12) {
-        $roles['15'] = '15';
-      }
-
-
-      // Collaboraters are role id 5 in both old and new dbs
-      // skip roles greater than 4 for now
-      if ($row->rid > 4) {
-        continue;
-      }
-      $roles[$row->rid] = $row->rid;
     }
-    $current_row->roles = $roles;
+    // Make sure this project actually has shows.
+    if (!empty($current_row->field_om_theme_nid)) {
+      $theme_name = $this->legacy_node_lookup($current_row->field_om_theme_nid);
+      if (!empty($theme_name)) {
+        $current_row->field_om_theme_nid = $this->migration_lookup($theme_name);
+      }
+    }
+    $current_row->field_om_language_value = $this->migration_lookup($current_row->field_om_language_value);
+    
+    $project_nid = $this->get_projects($current_row->nid);
+    if (is_numeric($project_nid) && $project_nid != 1) {
+      $current_row->field_om_show_original_list = $project_nid;
+    }
+    $file = $this->lookup_file($current_row->field_om_show_capture_fid);
+    if (!empty($file)) {
+      $current_row->field_om_show_capture_fid = $file;
+    }
+    print_r($current_row);
     return TRUE;
-    // return FALSE if you wish to skip a particular row
+  }
+
+  public function get_term_name($tid) {
+    $query = Database::getConnection('default', 'legacy')->select('term_data','term');
+    $query->fields('term', array('name'));
+    $query->condition('tid', $old_tid, '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      $result = array_shift($result);
+      return $result->name;
+    }
+    return FALSE;
+  }
+
+  public function legacy_node_lookup($nid) {
+    $query = Database::getConnection('default', 'legacy')->select('node','n');
+    $query->fields('n', array('title'));
+    $query->condition('nid', $nid, '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      $result = array_shift($result);
+      return $result->title;
+    }
+    return FALSE;
+  }
+
+  public function migration_lookup($term) {
+    $botched_terms = array(
+      'en' => "English",
+      'eng' => "English",
+      'sp' => "Spanish",
+      'spa' => "Spanish",
+      'ara' => "Arabic",
+      'jpn' => "Japanese",
+      'Music' => "Music & Entertainment",
+      'African American' => 'Cultural Perspectives'
+    );
+    if (!empty($botched_terms[$term])) {
+      return $botched_terms[$term];
+    }
+    else {
+      return $term;
+    }
+  }
+
+  public function get_projects($nid) {
+    $query = Database::getConnection('default', 'legacy')->select('og_ancestry','og');
+    $query->fields('og', array('group_nid'));
+    $query->condition('nid', $nid, '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      $nid = array_shift($result);
+      $nid = $nid->group_nid;
+      $query = Database::getConnection('default', 'default')->select('field_revision_field_old_project_id','op');
+      $query->fields('op', array('entity_id'));
+      $query->condition('field_old_project_id_value', $nid, '=');
+      $resource = $query->execute();
+      $result = $resource->fetchAll();
+      if (!empty($result)) {
+        $project_nid = array_shift($result);
+        $project_nid = $project_nid->entity_id;
+        return $project_nid;
+      }
+    }
+    return FALSE;
+  }
+
+  public function lookup_file($fid) {
+    $query = Database::getConnection('default', 'legacy')->select('files','f');
+    $query->fields('f', array('filepath'));
+    $query->condition('fid', $fid, '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      $file = array_shift($result);
+      $file = 'http://denveropenmedia.org/' . $file->filepath;
+      if (file_exists($file)) {
+        return $file;
+      }
+    }
+    return FALSE;
   }
 } // close the omUserMigration class

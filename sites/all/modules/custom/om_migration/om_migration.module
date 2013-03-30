@@ -75,3 +75,35 @@ function om_migration_role_product_relationships() {
   );
 }
 
+function om_migration_menu() {
+  $items = array();
+  $items['update-cablecast-files'] = array(
+    'page callback' => 'om_migration_update_cablecast_files',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function om_migration_update_cablecast_files() {
+  $query = db_select('field_data_field_om_show_playback_server_id', 'pbsid');
+  $query->fields('pbsid', array('entity_id', 'field_om_show_playback_server_id_value'));
+  $resource = $query->execute();
+  while($result = $resource->fetchObject()) {
+    if (!empty($result->entity_id) && !empty($result->field_om_show_playback_server_id_value)) {
+      $new_record = new stdClass();
+      $new_record->entity_type = 'node';
+      $new_record->bundle = 'om_show';
+      $new_record->deleted = 0;
+      $new_record->entity_id = $result->entity_id;
+      $new_record->revision_id = $result->entity_id;
+      $new_record->language = 'und';
+      $new_record->delta = 0;
+      $new_record->field_om_show_broadcast_file_uri = 'cablecast://' . $result->field_om_show_playback_server_id_value;
+      print '<pre>';
+      print_r($new_record);
+      print '</pre>';
+      drupal_write_record('field_data_field_om_show_broadcast_file', $new_record);
+    }
+  }
+}

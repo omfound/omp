@@ -9,6 +9,7 @@ dependencies[] = "commerce"
 dependencies[] = "commerce_order"
 dependencies[] = "commerce_product"
 files[] = om_project.inc
+files[] = om_show.inc
 files[] = om_migration.module
 files[] = om_users.inc
 files[] = om_users_with_project.inc
