@@ -82,6 +82,11 @@ function om_migration_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_CALLBACK
   );
+  $items['update-geofield'] = array(
+    'page callback' => 'om_migration_update_geofield',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK
+  );
   return $items;
 }
 
@@ -106,4 +111,31 @@ function om_migration_update_cablecast_files() {
       drupal_write_record('field_data_field_om_show_broadcast_file', $new_record);
     }
   }
+}
+
+function om_migration_update_geofield() {
+  $query = db_select('field_data_field_old_lat', 'lat');
+  $query->join('field_data_field_old_lon', 'lon', 'lat.entity_id=lon.entity_id');
+  $query->fields('lat', array('entity_id', 'field_old_lat_value'));
+  $query->fields('lon', array('field_old_lon_value'));
+  $query->range(0, 10);
+  $resource = $query->execute();
+  while($result = $resource->fetchObject()) {
+    if (!empty($result->field_old_lat_value)) {
+      $node = node_load($result->entity_id);
+      $node->field_om_show_geofield = array(
+        $node->language => array(
+          0 => array(
+            'lat' => $result->field_old_lat_value,
+            'lon' => $result->field_old_lon_value,
+            'geo_type' => 'point',
+            'wkt' => 'POINT (' . $result->field_old_lon_value .' ' . $result->field_old_lat_value . ')'
+          )
+        )
+      );
+      node_save($node);
+      
+    }
+  }
+  return array();
 }
