@@ -22,9 +22,7 @@ class omUserCleanupMigration extends Migration {
       ->distinct()
       ->condition('u.status', 1, '=')
       // grab users greater than UID 31, since there are that many created on the new site.
-      ->condition('u.uid', array(4,7,19,26,28), ' IN ')
-      // TODO: also need to add users that have an active project. Perhaps in diff migation class.
-      ->orderBy('u.uid', 'ASC');
+      ->condition('u.uid', array(4,7,19,26,28), 'IN');
     // Add False, so it doesn't try to auto-join the destination table like a bug-ridden CMS.
     $this->source = new MigrateSourceSQL($query, $source_fields, NULL, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
