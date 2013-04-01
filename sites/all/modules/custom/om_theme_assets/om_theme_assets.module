@@ -155,6 +155,6 @@ function om_theme_assets_action_item_content() {
   );
 }
 
-function om_them_assets_form_alter(&$form, &$form_state, $form_id) {
+function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
   dsm($form);
 }
