@@ -188,7 +188,8 @@ function om_social_fb_comment_count($url = false) {
     $url = $GLOBALS['base_url'].request_path();
   }
   $request_url = 'https://graph.facebook.com/comments/?ids='.$url;
-  $requests = file_get_contents($request_url);
+  //$requests = file_get_contents($request_url);
+  $requests = '';
   $comments = json_decode($requests);
   
   if(!empty($comments->$url->comments->data)) {
