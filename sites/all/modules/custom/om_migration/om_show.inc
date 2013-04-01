@@ -7,20 +7,23 @@ class omShowMigration extends Migration {
     $this->description = t('Migrate Drupal 6 projects cck nodes');
     $query = Database::getConnection('default', 'legacy')->select('node','n');
     $query->join('node_revisions', 'r', 'n.nid=r.nid');
-    $query->join('content_type_om_show', 'cts', 'n.nid=cts.nid');
-    $query->join('content_field_om_locally_produced', 'locally_produced', 'n.nid=locally_produced.nid');
-    $query->join('content_field_om_theme', 'theme', 'n.nid=theme.nid');
-    $query->join('content_field_om_genre', 'genre', 'n.nid=genre.nid');
-    $query->join('content_field_om_language', 'language', 'n.nid=language.nid');
-    $query->join('content_field_om_rating', 'rating', 'n.nid=rating.nid');
+    $query->leftJoin('content_type_om_show', 'cts', 'n.nid=cts.nid');
+    $query->leftJoin('content_field_om_locally_produced', 'locally_produced', 'n.nid=locally_produced.nid');
+    $query->leftJoin('content_field_om_theme', 'theme', 'n.nid=theme.nid');
+    $query->leftJoin('content_field_om_genre', 'genre', 'n.nid=genre.nid');
+    $query->leftJoin('content_field_om_language', 'language', 'n.nid=language.nid');
+    $query->leftJoin('content_field_om_rating', 'rating', 'n.nid=rating.nid');
+    $query->leftJoin('location_instance', 'loc_in', 'n.nid=loc_in.nid');
+    $query->leftJoin('location', 'loc', 'loc_in.lid=loc.lid');
     $query->fields('n', array('nid', 'title', 'uid', 'status', 'created', 'created', 'changed'));
     $query->fields('r', array('body'));
-    $query->fields('cts', array('field_om_show_tightrope_id_value', 'field_om_show_original_list', 'field_om_show_capture_fid', 'field_om_show_episode_number_value'));
+    $query->fields('cts', array('field_om_show_tightrope_id_value', 'field_om_show_original_list', 'field_om_show_capture_fid', 'field_om_show_episode_number_value', 'field_om_show_season_value', 'field_om_show_duration_value'));
     $query->fields('locally_produced', array('field_om_locally_produced_value'));
     $query->fields('theme', array('field_om_theme_nid'));
     $query->fields('genre', array('field_om_genre_value'));
     $query->fields('language', array('field_om_language_value'));
     $query->fields('rating', array('field_om_rating_value'));
+    $query->fields('loc', array('latitude', 'longitude'));
     $query->condition('n.type', 'om_show', '=');
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
@@ -58,6 +61,10 @@ class omShowMigration extends Migration {
     $this->addFieldMapping('field_om_show_project', 'field_om_show_original_list');
     $this->addFieldMapping('field_show_thumbnail', 'field_om_show_capture_fid');
     $this->addFieldMapping('field_om_show_episode_number', 'field_om_show_episode_number_value');
+    $this->addFieldMapping('field_om_show_season', 'field_om_show_season_value');
+    $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
+    $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
+    $this->addFieldMapping('field_old_lat', 'latitude');
   }
 
   public function prepareRow($current_row) {
