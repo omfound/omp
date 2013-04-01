@@ -460,5 +460,6 @@ function openmedia_commerce_registration_order($variables) {
 }
 
 function openmedia_preprocess_views_view_unformatted($vars) {
+  dsm($vars);
   drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
 }
