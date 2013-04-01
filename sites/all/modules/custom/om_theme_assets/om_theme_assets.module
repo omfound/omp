@@ -159,6 +159,6 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
   if($form['#id'] == 'views-exposed-form-show-grid-page') {
     $form['sort_by']['#default_value'] = 'value';
     $form['sort_order']['#default_value'] = 'DESC';
-    dsm($form);
+    dsm($form_state);
   }
 }
