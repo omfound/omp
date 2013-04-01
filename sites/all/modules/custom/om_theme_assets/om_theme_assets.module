@@ -156,9 +156,10 @@ function om_theme_assets_action_item_content() {
 }
 
 function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
-  if($form['#id'] == 'views-exposed-form-show-grid-page') {
-    watchdog('views_brian', '<pre>'.print_r($_GET, TRUE).'</pre>');
-    $form_state['input']['sort_by'] = 'value';
-    $form_state['input']['sort_order'] = 'DESC';
+  if ($form['#id'] == 'views-exposed-form-show-grid-page') {
+    if (!$_GET['sort_by'] && !$_GET['sort_order']) {
+      $form_state['input']['sort_by'] = 'value';
+      $form_state['input']['sort_order'] = 'DESC';
+    }
   }
 }
