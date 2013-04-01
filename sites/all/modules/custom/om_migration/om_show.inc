@@ -15,6 +15,7 @@ class omShowMigration extends Migration {
     $query->leftJoin('content_field_om_rating', 'rating', 'n.nid=rating.nid');
     $query->leftJoin('location_instance', 'loc_in', 'n.nid=loc_in.nid');
     $query->leftJoin('location', 'loc', 'loc_in.lid=loc.lid');
+    $query->leftJoin('internet_archive', 'ia', 'n.nid=ia.nid');
     $query->fields('n', array('nid', 'title', 'uid', 'status', 'created', 'created', 'changed'));
     $query->fields('r', array('body'));
     $query->fields('cts', array('field_om_show_tightrope_id_value', 'field_om_show_original_list', 'field_om_show_capture_fid', 'field_om_show_episode_number_value', 'field_om_show_season_value', 'field_om_show_duration_value'));
@@ -24,6 +25,7 @@ class omShowMigration extends Migration {
     $query->fields('language', array('field_om_language_value'));
     $query->fields('rating', array('field_om_rating_value'));
     $query->fields('loc', array('latitude', 'longitude'));
+    $query->fields('ia', array('archive_url'));
     $query->condition('n.type', 'om_show', '=');
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
@@ -63,6 +65,7 @@ class omShowMigration extends Migration {
     $this->addFieldMapping('field_om_show_episode_number', 'field_om_show_episode_number_value');
     $this->addFieldMapping('field_om_show_season', 'field_om_show_season_value');
     $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
+    $this->addFieldMapping('field_om_show_video', 'archive_url');
     $this->addFieldMapping('field_old_lat', 'latitude');
   }
 

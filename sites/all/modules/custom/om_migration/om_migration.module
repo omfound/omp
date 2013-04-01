@@ -75,24 +75,32 @@ function om_migration_role_product_relationships() {
   );
 }
 
-function om_migration_menu() {
+/**
+ * Implements hook_drush_help().
+ */
+function om_migration_drush_help($command) {
+  dsm('vombule');
+  switch ($command) {
+    case 'drush:dom-migration-extras':
+      return dt('Run extra conversions and field changes needed for the dom migration');
+  }
+}
+
+/**
+ * Implements hook_drush_command().
+ */
+function om_migration_drush_command() {
   $items = array();
-  $items['update-cablecast-files'] = array(
-    'page callback' => 'om_migration_update_cablecast_files',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
-  );
-  $items['update-geofield'] = array(
-    'page callback' => 'om_migration_update_geofield',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
-  );
-  $items['update-voting'] = array(
-    'page callback' => 'om_migration_update_voting',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
+  $items['dom-migration-extras'] = array(
+    'description' => dt('Run updates.'),
+    'aliases' => array('dme'),
   );
   return $items;
+}
+
+function drush_om_migration_dom_migration_extras() {
+  //log to the command line with an OK status
+  drush_log('Running my-command', 'ok');
 }
 
 function om_migration_update_cablecast_files() {
