@@ -63,7 +63,6 @@ class omShowMigration extends Migration {
     $this->addFieldMapping('field_om_show_episode_number', 'field_om_show_episode_number_value');
     $this->addFieldMapping('field_om_show_season', 'field_om_show_season_value');
     $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
-    $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
     $this->addFieldMapping('field_old_lat', 'latitude');
   }
 

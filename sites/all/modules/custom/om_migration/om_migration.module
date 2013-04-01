@@ -87,6 +87,11 @@ function om_migration_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_CALLBACK
   );
+  $items['update-voting'] = array(
+    'page callback' => 'om_migration_update_voting',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK
+  );
   return $items;
 }
 
@@ -118,7 +123,6 @@ function om_migration_update_geofield() {
   $query->join('field_data_field_old_lon', 'lon', 'lat.entity_id=lon.entity_id');
   $query->fields('lat', array('entity_id', 'field_old_lat_value'));
   $query->fields('lon', array('field_old_lon_value'));
-  $query->range(0, 10);
   $resource = $query->execute();
   while($result = $resource->fetchObject()) {
     if (!empty($result->field_old_lat_value)) {
@@ -134,7 +138,33 @@ function om_migration_update_geofield() {
         )
       );
       node_save($node);
-      
+    }
+  }
+  return array();
+}
+
+function om_migration_update_voting() {
+  $query = Database::getConnection('default', 'legacy')->select('votingapi_vote','vote');
+  $query->fields('vote', array('content_id', 'value', 'timestamp', 'vote_source', 'uid'));
+  $query->condition('content_type', 'node', '=');
+  $query->condition('value_type', 'percent', '=');
+  $resource = $query->execute();
+  while ($result = $resource->fetchObject()) {
+    $query = Database::getConnection('default', 'default')->select('field_data_field_old_show_id','old_nid');
+    $query->fields('old_nid', array('entity_id'));
+    $query->condition('field_old_show_id_value', $result->content_id, '=');
+    $resource_old_nid = $query->execute();
+    while($result_old_nid = $resource_old_nid->fetchObject()) {
+      $vote = new StdClass();
+      $vote->entity_id = $result_old_nid->entity_id;
+      $vote->revision_id = $result_old_nid->entity_id;
+      $vote->entity_type = 'node';
+      $vote->value_type = 'percent';
+      $vote->value = $result->value;
+      $vote->timestamp = $result->timestamp;
+      $vote->vote_source = $result->vote_source;
+      $vote->uid = $result->uid;
+      drupal_write_record('votingapi_vote', $vote);
     }
   }
   return array();
