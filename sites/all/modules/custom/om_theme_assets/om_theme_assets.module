@@ -160,5 +160,6 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
     $form['sort_by']['#default_value'] = 'value';
     $form['sort_order']['#default_value'] = 'DESC';
     dsm($form_state);
+    dsm($_GET);
   }
 }
