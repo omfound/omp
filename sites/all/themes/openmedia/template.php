@@ -458,3 +458,14 @@ function openmedia_commerce_registration_order($variables) {
 
   return $title . theme('table', $table) . theme('pager') . "</div>";
 }
+
+function openmedia_preprocess_views_view_unformatted($vars) {
+  switch($vars['view']->name) {
+    case 'calendar_product_view':
+      drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
+      break;
+    case 'show_grid':
+      drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
+      break;
+  }
+}

@@ -1,4 +1,4 @@
-<?php $rating_5 = round(($row->votingapi_vote_node_percent_vote_value / 100) * 5); ?>
+<?php $rating_5 = round(($row->votingapi_cache_node_average_value / 100) * 5); ?>
 <?php print $fields['field_show_thumbnail']->content; ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
