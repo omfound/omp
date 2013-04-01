@@ -25,7 +25,7 @@ class omShowMigration extends Migration {
     $query->fields('language', array('field_om_language_value'));
     $query->fields('rating', array('field_om_rating_value'));
     $query->fields('loc', array('latitude', 'longitude'));
-    $query->fields('ia', array('archive_url'));
+    $query->fields('ia', array('item', 'filename'));
     $query->condition('n.type', 'om_show', '=');
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
@@ -65,7 +65,7 @@ class omShowMigration extends Migration {
     $this->addFieldMapping('field_om_show_episode_number', 'field_om_show_episode_number_value');
     $this->addFieldMapping('field_om_show_season', 'field_om_show_season_value');
     $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
-    $this->addFieldMapping('field_om_show_video', 'archive_url');
+    $this->addFieldMapping('field_om_show_video', 'item');
     $this->addFieldMapping('field_old_lat', 'latitude');
   }
 
@@ -93,6 +93,9 @@ class omShowMigration extends Migration {
     $file = $this->lookup_file($current_row->field_om_show_capture_fid);
     if (!empty($file)) {
       $current_row->field_om_show_capture_fid = $file;
+    }
+    if (!empty($current_row->item)) {
+      $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $current_row->filename . '.mp4';
     }
     print_r($current_row);
     return TRUE;
