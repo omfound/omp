@@ -1,4 +1,4 @@
-<?php print $fields['field_show_thumbnail']->content; ?>
+<?php print $fields['field_news_image']->content; ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
 </div>
