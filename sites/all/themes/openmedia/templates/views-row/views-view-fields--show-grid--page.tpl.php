@@ -5,11 +5,11 @@
 </div>
 <div class="counter-tray divider">
   <div class="inner clearfix">
-    <?php if ($fields['totalcount']->content > 0) { ?>
+    <?php //if ($fields['totalcount']->content > 0) { ?>
       <div class="view-count floated">
         <?php print $fields['totalcount']->content; ?> View(s)
       </div>
-    <?php } ?>
+    <?php } //?>
     <div class="comment-count floated">
       <?php $options = array('absolute' => TRUE); ?>
       <?php $url = url('node/' . $row->nid, $options); ?>
