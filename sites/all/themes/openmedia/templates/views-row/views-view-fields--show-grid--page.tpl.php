@@ -5,9 +5,10 @@
 </div>
 <div class="counter-tray divider">
   <div class="inner clearfix">
-    <?php if ((int)$fields['totalcount']->content > 0) { ?>
+    <?php $count = $fields['totalcount']->content; ?>
+    <?php if ($count > 0) { ?>
       <div class="view-count floated">
-        <?php print $fields['totalcount']->content; ?> View(s)
+        <?php print $count; ?> View(s)
       </div>
     <?php } ?>
     <div class="comment-count floated">
