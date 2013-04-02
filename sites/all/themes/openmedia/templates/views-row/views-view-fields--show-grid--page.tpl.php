@@ -1,5 +1,4 @@
 <?php $rating_5 = round(($row->votingapi_cache_node_average_value / 100) * 5); ?>
-<?php dsm($row); ?>
 <?php print $fields['field_show_thumbnail']->content; ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
@@ -7,11 +6,11 @@
 <div class="counter-tray divider">
   <div class="inner clearfix">
     <?php $count = $fields['totalcount']->content; ?>
-    <?php //if ($count > 0) { ?>
+    <?php if ($row->node_counter_totalcount > 0) { ?>
       <div class="view-count floated">
         <?php print $count; ?> View(s)
       </div>
-    <?php //} ?>
+    <?php } ?>
     <div class="comment-count floated">
       <?php $options = array('absolute' => TRUE); ?>
       <?php $url = url('node/' . $row->nid, $options); ?>
