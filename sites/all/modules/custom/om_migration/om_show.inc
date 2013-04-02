@@ -25,7 +25,7 @@ class omShowMigration extends Migration {
     $query->fields('language', array('field_om_language_value'));
     $query->fields('rating', array('field_om_rating_value'));
     $query->fields('loc', array('latitude', 'longitude'));
-    $query->fields('ia', array('item', 'filename'));
+    $query->fields('ia', array('item', 'filename', 'derivatives'));
     $query->condition('n.type', 'om_show', '=');
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
@@ -95,7 +95,12 @@ class omShowMigration extends Migration {
       $current_row->field_om_show_capture_fid = $file;
     }
     if (!empty($current_row->item)) {
-      $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $current_row->filename . '.mp4';
+      $derivatives = unserialize($current_row->derivatives);
+      foreach ($derivatives AS $key => $derivative) {
+        if (is_numeric(stripos($key, 'mp4'))) {
+          $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $derivative;
+        }
+      }
     }
     print_r($current_row);
     return TRUE;
