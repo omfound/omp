@@ -50,12 +50,12 @@
       <div id="voting-msg">
         <?php print $vote_message; ?>
       </div>
-      <?php if (!empty($vote_summary)) { ?>
         <div id="voting-widget">
-          <?php print $vote_summary; ?>
+          <?php if (!empty($vote_summary)) { ?>
+            <?php print $vote_summary; ?>
+          <?php } ?>
           <?php print $vote_widget; ?>
         </div>
-      <?php } ?>
     </div>
     <div class="divider">
       <div class="inner">

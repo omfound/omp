@@ -188,12 +188,12 @@ function openmedia_preprocess_node__om_show(&$variables) {
   }
   // Voting
   if (module_exists('fivestar')) {
-    if ($vote_info['average']['value']) {
+    if (!empty($vote_info['average']['value'])) {
       $vote_info = fivestar_get_votes('node', $variables['node']->nid);
       $current_vote = round(($vote_info['average']['value'] / 100) * 5);
       $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
-      $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
     }
+    $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
   }
   $learn = l('Learn More About Voting', '<front>');
   $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. !link', array('!link' => $learn));
