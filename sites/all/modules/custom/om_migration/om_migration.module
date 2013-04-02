@@ -18,7 +18,6 @@ function om_migration_migrate_api() {
       'OM_USER2' => array('class_name' => 'omUserWithProjectMigration'),
       'OM_USER3' => array('class_name' => 'omUserWithMembershipMigration'),
       'OM_USER4' => array('class_name' => 'omUserWithCertificationMigration'),
-      'OM_USER5' => array('class_name' => 'omUserCleanupMigration'),
       'om_project' => array('class_name' => 'omProjectMigration'),
       'OM_SHOW' => array('class_name' => 'omShowMigration'),
     ),
@@ -76,26 +75,6 @@ function om_migration_role_product_relationships() {
   );
 }
 
-function om_migration_menu() {
-  $items = array();
-  $items['update-cablecast-files'] = array(
-    'page callback' => 'om_migration_update_cablecast_files',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
-  );
-  $items['update-geofield'] = array(
-    'page callback' => 'om_migration_update_geofield',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
-  );
-  $items['update-voting'] = array(
-    'page callback' => 'om_migration_update_voting',
-    'access arguments' => array('administer site configuration'),
-    'type' => MENU_CALLBACK
-  );
-  return $items;
-}
-
 function om_migration_update_cablecast_files() {
   $query = db_select('field_data_field_om_show_playback_server_id', 'pbsid');
   $query->fields('pbsid', array('entity_id', 'field_om_show_playback_server_id_value'));
@@ -111,9 +90,6 @@ function om_migration_update_cablecast_files() {
       $new_record->language = 'und';
       $new_record->delta = 0;
       $new_record->field_om_show_broadcast_file_uri = 'cablecast://' . $result->field_om_show_playback_server_id_value;
-      print '<pre>';
-      print_r($new_record);
-      print '</pre>';
       drupal_write_record('field_data_field_om_show_broadcast_file', $new_record);
     }
   }
