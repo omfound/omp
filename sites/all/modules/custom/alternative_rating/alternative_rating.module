@@ -2,7 +2,7 @@
 //TODO Need a second bayesian table for web results that uses global average instead
 
 function alternative_rating_menu() {
-  $items['admin/settings/alternative_rating'] = array(
+  $items['admin/config/alternative_rating'] = array(
 	  'title' => t('Alternative Rating Settings'),
 	  'description' => t('Provides alternative rating distributions'),
 	  'page callback' => 'drupal_get_form',
@@ -123,14 +123,12 @@ function alternative_rating_shows_by_category ($tid) {
   return $shows;
 }
 
-function alternative_rating_settings() {
-  $form_key = 'rebuild';
+function alternative_rating_settings($form, &$form_state) {
   $form['rebuild_tools']['category_averages'] = array(
-  	'#type' => 'markup',
-  	'#value' => alternative_rating_display_category_averages(),
+  	'#markup' => alternative_rating_display_category_averages(),
   );
-  $form['rebuild_tools'][$form_key] = array(
-    '#value' => '<br />'.l('rebuild ratings cache',
+  $form['rebuild_tools']['rebuild'] = array(
+    '#markup' => '<br />'.l('rebuild ratings cache',
       'admin/settings/alternative_rating/rebuild').'<br />',
   );
 
