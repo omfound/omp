@@ -40,6 +40,9 @@ function alternative_rating_display_category_averages() {
 		$display .= '<tr>';
 		$display .= '<td>'.$title.'</td>';
 		$display .= '<td>'.$show_count.'</td>';
+    print '<pre>';
+    print_r($average);
+    print '</pre>';
 		$display .= '<td>'.$average.'</td>';
 		$display .= '<td>'.$shows_above_average.'</td>';
 		$display .= '<td>'.$shows_no_ratings.'</td>';
