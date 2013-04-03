@@ -93,7 +93,7 @@ class omShowMigration extends Migration {
       $current_row->field_om_show_original_list = $project_nid;
     }
     else {
-      $current_row->field_om_show_original_list = NULL;
+      $current_row->field_om_show_original_list = 19173;
     }
     $file = $this->lookup_file($current_row->field_om_show_capture_fid);
     if (!empty($file)) {
