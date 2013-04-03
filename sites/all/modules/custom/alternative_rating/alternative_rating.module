@@ -93,7 +93,7 @@ function alternative_rating_shows_above_average($category_average, $tid) {
 
   $count = 0;
   foreach($result as $show) {
-    $average = alternative_rating_show_average ($show->nid)
+    $average = alternative_rating_show_average ($show->nid);
     if ($average >= $category_average) {
       $count++;
     }
