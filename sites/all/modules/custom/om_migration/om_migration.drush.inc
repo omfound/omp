@@ -27,6 +27,8 @@ function om_migration_drush_command() {
  * Implements drush_hook_command()
  */
 function drush_om_migration_dom_migration_extras() {
+  return dt('Running dom content updates.');
+/*
   dt('Running dom content updates.');
   om_migration_update_cablecast_files();
   dt('Updated Cablecast legacy show ids to Cablecast URIs.');
@@ -34,4 +36,5 @@ function drush_om_migration_dom_migration_extras() {
   dt('Updated geofields.');
   om_migration_update_voting();
   dt('Updated voting table.');
+*/
 }
