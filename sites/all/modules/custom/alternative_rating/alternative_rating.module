@@ -113,7 +113,7 @@ function alternative_rating_show_average ($nid) {
 
 function alternative_rating_shows_by_category ($tid) {
   $query = '
-    SELECT nid
+    SELECT taxonomy_index.nid
     FROM {taxonomy_index}
     JOIN {node} ON node.nid = taxonomy_index.nid
     WHERE taxonomy_index.tid = :tid AND node.type = :type';
