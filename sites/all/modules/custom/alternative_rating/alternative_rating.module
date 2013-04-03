@@ -125,10 +125,10 @@ function alternative_rating_shows_by_category ($tid) {
 
 function alternative_rating_settings($form, &$form_state) {
   $form['rebuild_tools']['category_averages'] = array(
-  	'#value' => alternative_rating_display_category_averages(),
+  	'#markup' => alternative_rating_display_category_averages(),
   );
   $form['rebuild_tools']['rebuild'] = array(
-    '#value' => '<br />'.l('rebuild ratings cache',
+    '#markup' => '<br />'.l('rebuild ratings cache',
       'admin/settings/alternative_rating/rebuild').'<br />',
   );
 
