@@ -234,7 +234,7 @@ $databases['legacy']['default'] = array(
   'password' => 'UncleTupel0',
   'host'     => '129.19.150.4',
   'prefix' => '',
-)
+);
 
 /**
  * Access control for update.php script.
