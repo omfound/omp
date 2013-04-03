@@ -76,7 +76,7 @@ class omShowMigration extends Migration {
     if (!empty($current_row->uid)) {
       $user = user_load($current_row->uid);
       if (empty($user)) {
-        $current_row->uid = 13693;
+        $current_row->uid = 19171;
       }
     }
     // Make sure this project actually has shows.
