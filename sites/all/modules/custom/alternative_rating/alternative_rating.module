@@ -83,7 +83,7 @@ function alternative_rating_show_vote_count ($nid) {
   $query = '
     SELECT COUNT(votingapi_vote.value)
     FROM {votingapi_vote}
-    WHERE votingapi_vote.entity_id = :nid');
+    WHERE votingapi_vote.entity_id = :nid';
   $count = db_query($query, array(':nid' => $nid))->fetchField();
   return $count;
 }
