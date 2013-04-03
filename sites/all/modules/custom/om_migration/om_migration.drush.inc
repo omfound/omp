@@ -28,12 +28,10 @@ function om_migration_drush_command() {
  */
 function drush_om_migration_dom_migration_extras() {
   drush_log('Running dom content updates.', 'success');
-/*
   om_migration_update_cablecast_files();
   drush_log('Updated Cablecast legacy show ids to Cablecast URIs.', 'success');
   om_migration_update_geofield();
   drush_log('Updated geofields.', 'success');
   om_migration_update_voting();
   drush_log('Updated voting.', 'success');
-*/
 }
