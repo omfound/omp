@@ -5,9 +5,9 @@
 
 function om_project_permission() {
   return array(
-    'administer project' => array(
-      'title' => t('Administer OM Project'), 
-      'description' => t('Administer OMP functionality for project interface.'),
+    'admin of project' => array(
+      'title' => t('Admin of Project'), 
+      'description' => t('Has administrative rights on a project'),
     ),
   );
 }
@@ -22,29 +22,27 @@ function om_project_menu() {
   
   // Help section.
   if (module_exists('advanced_help')) {
-    
     $items['admin/advanced_help/openmedia/project'] = array(
       'title' => t('OM Project Help'),
       'page callback' => 'om_project_index_page',
       'access arguments' => array('view advanced help index'),
       'type' => MENU_NORMAL_ITEM
     );
-    
   }
   
-  $items['node/%node/project-manage-stats'] = array(
-    'title' => t('Stats'),
-    'description' => t('Takes node object and returns list of Members'),
-    'page callback' => 'om_project_stats',
+  // Set up member management section.
+  $items['node/%node/project-membership'] = array(
+    'title' => t('Manage Project Members'),
+    'description' => t('Manage project members. Members are granted privileges on this project\'s shows and reservations.'),
+    'page callback' => 'om_project_membership_page',
     'page arguments' => array(1),
     'access callback' => 'om_project_manage_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'weight' => 10,
   );
   
-  if (!module_exists('om_show')) {
-    
+  $node_info = entity_get_info('node');
+  if (isset($node_info['bundles']['om_show'])) {
     $items['node/%node/project-manage'] = array(
       'title' => t('Manage Shows'),
       'description' => t('Takes node object and returns options for Project Admins'),
@@ -75,10 +73,18 @@ function om_project_menu() {
      'type' => MENU_CALLBACK,
      'weight' => 7,
     );
-    
-  } // if om_show
-  
+  }
  return $items;
+}
+
+function om_project_theme($existing, $type, $theme, $path) {
+  return array(
+    'project_member_list' => array(
+      'template' => 'project_member_list',
+      'path' => $path . '/theme',
+      'variables' => array('leader' => '', 'members' => array())
+    )
+  );
 }
 
 /**
@@ -282,85 +288,59 @@ function om_project_sync_all_shows_to_project_owner () {
   drupal_goto('node/' . $nid . '/project-manage');
 }
 
-/**
- * Create a renderable array for the project status page.
- * @returns renderable array
- */
+function om_project_membership_page($node) {
+  $options = array(0 => array('entity_id' => $node->nid));
+  $memberships = om_project_membership_load($options);
+  $admin = '';
+  $members = array();
+  if (!empty($memberships)) {
+    foreach($memberships AS $membership) {
+      if ($membership->isadmin == 1) {
+        $user = user_load($membership->uid);
+        $admin = $user->name;
+      }
+      else {
+        $user = user_load($membership->uid);
+        $members[] = $user->name;
+      }
+    }
+  }
+  return theme('project_member_list', array('admin' => $admin, 'members' => $members));
+}
 
-function om_project_stats() {
-  
-  $nid = arg(1);
-  
-  $airing_section = array();
-  $show_section = array();
-  $merci_section = array();
-  $render = array();
-  
-  if (module_exists('om_airing')) {
-    $airing_section = array(
-      t('Project Airings Header')  => array(
-        '#prefix' => '<h2>',
-        '#markup' => t('Project Airings'),
-        '#suffix' => '</h2>',
-      ),
-      t('Project Airings')  => array(
-        '#prefix' => '<div>',
-        '#markup' => t('This section is currently under construction.'),
-        '#suffix' => '</div>',
-      )
-    );
+function om_project_membership_add(stdClass $member) {
+  return drupal_write_record('om_project_members', $member);
+}
+
+function om_project_membership_update(stdClass $member) {
+  return drupal_write_record('om_project_members', $member, 'pmid');
+}
+
+function om_project_membership_load($options = array()) {
+  $query = db_select('om_project_members', 'opm');
+  $query->fields('opm', array());
+  if (!empty($options)) {
+    foreach ($options AS $filter) {
+      $query->condition($filter['field'], $filter['value'], $filter['operator']);
+    }
   }
-  
-  if (module_exists('om_show')) {
-    $show_section = array(
-      t('Show Stats Header')  => array(
-        '#prefix' => '<h2>',
-        '#markup' => t('Show Stats'),
-        '#suffix' => '</h2>',
-      ),
-      t('Show Statuses')  => array(
-        '#prefix' => '<div>',
-        '#markup' => t('This section is currently under construction.'),
-        '#suffix' => '</div>',
-      )
-    );
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  if (!empty($result)) {
+    return $result;
   }
-  
-  if (module_exists('merci')) {
-    $merci_section = array(
-      t('Project Reservations Header')  => array(
-        '#prefix' => '<h2>',
-        '#markup' => t('Project Reservations'),
-        '#suffix' => '</h2>',
-      ),
-      t('Project Reservations')  => array(
-        '#prefix' => '<div>',
-        '#markup' => t('The 7.x branch of MERCI does not currently support project-based reservations.'),
-        '#suffix' => '</div>',
-      ),
-    );
+}
+
+function om_project_membership_delete($options = array()) {
+  $query = db_delete('om_project_members');
+  if (!empty($options)) {
+    foreach ($options AS $filter) {
+      $query->condition($filter['field'], $filter['value'], $filter['operator']);
+    }
   }
-  
-  $render = array_merge($airing_section, $show_section, $merci_section);
-  
-  if (empty($render)) {
-    $links = array(
-      '!airings' => l('OM Airing', 'http://drupal.org/project/om_airing'),
-      '!show' => l('OM Show', 'http://drupal.org/project/om_show'),
-      '!merci' => l('MERCI', 'http://drupal.org/project/merci'),
-    );
-    $render = array(
-      t('Stats Empty Header')  => array(
-        '#prefix' => '<h2>',
-        '#markup' => t('Project Stats'),
-        '#suffix' => '</h2>',
-      ),
-      t('Stats Empty')  => array(
-        '#prefix' => '<div>',
-        '#markup' => t('This tab contains reports from !airings, !show, and !merci. You currently don\'t have any of these modules installed/enabled.', $links),
-        '#suffix' => '</div>',
-      ),
-    );
+  else {
+    return FALSE;
   }
-  return $render;
+  $resource = $query->execute();
+  return TRUE;
 }
