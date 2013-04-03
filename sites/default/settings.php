@@ -210,48 +210,32 @@
  *   );
  * @endcode
  */
-#$databases['default']['default'] = array(
-#  'driver' => 'mysql',
-#  'database' => 'openmedia',
-#  #'database' => 'omf',
-#  'username' => 'root',
-#  'password' => '23skidoo',
-#  'host' => 'localhost',
-#  'prefix' => 'main_',
-#  'collation' => 'utf8_general_ci',
-#);
 
-
-
-if (!isset($_SERVER['PANTHEON_ENVIRONMENT'])) {
-  //Drupal 7
-  $databases['default']['default'] = array(
-    'driver' => 'mysql',
-    'database' => 'openmedia',
-    'username' => 'root', // this is just an example, don't do this!
-    'password' => '23skidoo', // or especially this!!
-    'host' => 'localhost',
-    'prefix' => '',
-  );
-}
-// the name 'legacy' is not used anywhere
-$databases['civi']['default'] = array(
-  'driver' => 'mysql',
-  'database' => 'dom_civi_prod', // this is the name used to define the SOURCE_DATABASE constant above
-  'username' => 'dom_mig',
-  'password' => 'UncleTupel0',
-  'host'     => '129.19.150.4',
-  'prefix' => '',
+$databases = array (
+  'default' => 
+  array (
+    'default' => 
+    array (
+      'database' => 'openmedia_drupal',
+      'username' => 'openmedia',
+      'password' => 'LNMGvMMarnGJwZDA',
+      'host' => 'localhost',
+      'port' => '',
+      'driver' => 'mysql',
+      'prefix' => '',
+    )
+  )
 );
-// the name 'legacy' is not used anywhere
+
 $databases['legacy']['default'] = array(
   'driver' => 'mysql',
   'database' => 'dom_prod', // this is the name used to define the SOURCE_DATABASE constant above
-  'username' => 'dom_mig',
-  'password' => 'UncleTupel0',
-  'host'     => '129.19.150.4',
+  'username' => 'openmedia',
+  'password' => 'LNMGvMMarnGJwZDA',
+  'host' => 'localhost',
   'prefix' => '',
 );
+
 /**
  * Access control for update.php script.
  *
