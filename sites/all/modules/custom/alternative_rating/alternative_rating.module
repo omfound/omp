@@ -263,8 +263,7 @@ function alternative_rating_populate() {
 
 function alternative_rating_category_title($tid) {
   $term = taxonomy_term_load($tid);
-  dsm($term);
-  return $term->title;
+  return $term->name;
 }
 
 /**
