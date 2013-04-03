@@ -230,11 +230,11 @@ $databases = array (
 $databases['legacy']['default'] = array(
   'driver' => 'mysql',
   'database' => 'dom_prod', // this is the name used to define the SOURCE_DATABASE constant above
-  'username' => 'openmedia',
-  'password' => 'LNMGvMMarnGJwZDA',
-  'host' => 'localhost',
+  'username' => 'dom_mig',
+  'password' => 'UncleTupel0',
+  'host'     => '129.19.150.4',
   'prefix' => '',
-);
+)
 
 /**
  * Access control for update.php script.
