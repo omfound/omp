@@ -48,8 +48,8 @@ function alternative_rating_display_category_averages() {
 	$display .= '</table>';
 	$display .= '<strong>AVERAGE ACROSS ALL VOTES: </strong>'.alternative_rating_total_average().'<br />';
 	
-	$missing_category = db_result(db_query("SELECT COUNT(nid) FROM {content_type_om_show} WHERE field_om_show_theme_nid IS NULL"));
-	$display .= '<strong>SHOWS MISSING CATEGORY: </strong>'.$missing_category.'<br />';
+	//$missing_category = db_result(db_query("SELECT COUNT(nid) FROM {content_type_om_show} WHERE field_om_show_theme_nid IS NULL"));
+	//$display .= '<strong>SHOWS MISSING CATEGORY: </strong>'.$missing_category.'<br />';
 	return $display;
 }
 
@@ -97,8 +97,9 @@ function alternative_rating_shows_above_average($category_average, $tid) {
     if ($average >= $category_average) {
       $count++;
     }
+  }
     
-		return $count;
+	return $count;
 }
 
 function alternative_rating_show_average ($nid) {
