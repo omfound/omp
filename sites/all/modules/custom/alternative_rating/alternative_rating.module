@@ -22,24 +22,20 @@ function alternative_rating_menu() {
   return $items;
 }
 
-/**
 function alternative_rating_display_category_averages() {
-	$categories = alternative_rating_categories();
-	foreach($categories as $key => $category) {
-		$averages[$key] = alternative_rating_category_average($key);
-	}
+  $averages = alternative_rating_categories();
 	
 	$display .= '<br /><br /><h2>Current Category Averages:</h2>';
 	$display .= '<table><tr><th>Category</th><th>Shows</th><th>Average</th><th>Shows Above Average</th><th>Shows with no Ratings</th></tr>';
 	
-	foreach($averages as $nid => $average) {
-		$title = alternative_rating_node_title($nid);
+	foreach($averages as $tid => $average) {
+		$title = alternative_rating_category_title($tid);
 		$shows_above_average = 0;
-		$shows_above_average = shows_above_average($average, $nid);
+		$shows_above_average = alternative_rating_shows_above_average($average, $tid);
 		$shows_no_ratings = 0;
-		$shows_no_ratings = shows_with_no_ratings($nid);
+		$shows_no_ratings = alternative_rating_shows_with_no_ratings($tid);
 		$show_count = 0;
-		$show_count = shows_in_category($nid);
+		$show_count = alternative_rating_number_shows_in_category($tid);
 		
 		$display .= '<tr>';
 		$display .= '<td>'.$title.'</td>';
@@ -57,50 +53,73 @@ function alternative_rating_display_category_averages() {
 	return $display;
 }
 
-function shows_in_category($nid) {
-    $result = db_result(db_query("
-    	SELECT COUNT(nid)
-    	FROM {content_type_om_show}
-    	WHERE content_type_om_show.field_om_show_theme_nid = %d", $nid));
-    
-    return $result;
+function alternative_rating_number_shows_in_category ($tid) {
+  $query = '
+    SELECT COUNT(taxonomy_index.nid)
+    FROM {taxonomy_index}
+    JOIN {node} ON node.nid = taxonomy_index.nid
+    WHERE taxonomy_index.tid = :tid AND node.type = :type';
+
+  $count = db_query($query, array(':tid' => $tid, ':type' => 'om_show'))->fetchField();
+  return $count;
 }
 
-function shows_with_no_ratings($nid) {
-    $result = db_query("
-    	SELECT nid
-    	FROM {content_type_om_show}
-    	WHERE content_type_om_show.field_om_show_theme_nid = %d", $nid);
+function alternative_rating_shows_with_no_ratings($tid) {
+  $shows = alternative_rating_shows_by_category($tid);
     
-    $count = 0;
-    while($show = db_fetch_array($result)) {
-    	$vote_count = 0;
-    	$vote_count = db_result(db_query("SELECT COUNT(votingapi_vote.value) FROM {votingapi_vote} WHERE votingapi_vote.content_id=%d", $show['nid']));
-    	if($vote_count <= 0) {
-    		$count ++;
-    	}
+  $count = 0;
+  foreach($shows as $show) {
+  	$vote_count = 0;
+    $vote_count = alternative_rating_show_vote_count ($show->nid);
+  	if($vote_count <= 0) {
+      $count ++;
+   	}
+  }
+    
+  return $count;
+}
+
+function alternative_rating_show_vote_count ($nid) {
+  $query = '
+    SELECT COUNT(votingapi_vote.value)
+    FROM {votingapi_vote}
+    WHERE votingapi_vote.entity_id = :nid');
+  $count = db_query($query, array(':nid' => $nid))->fetchField();
+  return $count;
+}
+
+function alternative_rating_shows_above_average($category_average, $tid) {
+  $result = alternative_rating_shows_by_category($tid);
+
+  $count = 0;
+  foreach($result as $show) {
+    $average = alternative_rating_show_average ($show->nid)
+    if ($average >= $category_average) {
+      $count++;
     }
     
 		return $count;
 }
 
-function shows_above_average($category_average, $nid) {
-    $result = db_query("
-    	SELECT nid
-    	FROM {content_type_om_show}
-    	WHERE content_type_om_show.field_om_show_theme_nid = %d", $nid);
-    
-    $count = 0;
-    while($show = db_fetch_array($result)) {
-    	$average = db_result(db_query("SELECT AVG(votingapi_vote.value) FROM {votingapi_vote} WHERE votingapi_vote.content_id=%d", $show['nid']));
-    	if($average >= $category_average) {
-    		$count ++;
-    	}
-    }
-    
-		return $count;
+function alternative_rating_show_average ($nid) {
+  $query = '
+    SELECT AVG(votingapi_vote.value)
+    FROM {votingapi_vote}
+    WHERE votingapi_vote.entity_id = :nid';
+  $average = db_query($query, array(':nid' => $nid))->fetchField();
+  return $average;
 }
-**/
+
+function alternative_rating_shows_by_category ($tid) {
+  $query = '
+    SELECT nid
+    FROM {taxonomy_index}
+    JOIN {node} ON node.nid = taxonomy_index.nid
+    WHERE taxonomy_index.tid = :tid AND node.type = :type';
+  $shows = db_query($query, array(':tid' => $tid, ':type' => 'om_show'));
+
+  return $shows;
+}
 
 function alternative_rating_settings() {
   $form_key = 'rebuild';
@@ -240,16 +259,10 @@ function alternative_rating_populate() {
   }
 }
 
-/**
-function alternative_rating_node_title($nid) {
-  $result = db_query("SELECT title FROM node WHERE nid = %d", $nid);
-  if ($row = db_fetch_object($result)) {
-    return $row->title;
-  } else {
-    return false;
-  }
+function alternative_rating_category_title($tid) {
+  $term = taxonomy_term_load($tid);
+  return $term->title;
 }
-**/
 
 /**
  * Implementation of hook_perm().
