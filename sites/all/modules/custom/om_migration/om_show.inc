@@ -27,6 +27,7 @@ class omShowMigration extends Migration {
     $query->fields('loc', array('latitude', 'longitude'));
     $query->fields('ia', array('item', 'filename', 'derivatives'));
     $query->condition('n.type', 'om_show', '=');
+    $query->range(0, 150);
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationNode('om_show');
@@ -67,6 +68,7 @@ class omShowMigration extends Migration {
     $this->addFieldMapping('field_om_show_duration', 'field_om_show_duration_value');
     $this->addFieldMapping('field_om_show_video', 'item');
     $this->addFieldMapping('field_old_lat', 'latitude');
+    $this->addFieldMapping('field_old_lon', 'longitude');
   }
 
   public function prepareRow($current_row) {
@@ -89,6 +91,9 @@ class omShowMigration extends Migration {
     $project_nid = $this->get_projects($current_row->nid);
     if (is_numeric($project_nid) && $project_nid != 1) {
       $current_row->field_om_show_original_list = $project_nid;
+    }
+    else {
+      $current_row->field_om_show_original_list = NULL;
     }
     $file = $this->lookup_file($current_row->field_om_show_capture_fid);
     if (!empty($file)) {
