@@ -1,8 +1,22 @@
 <?php
+/**
+ * Implementation of hook_permission().
+ */
+
+function om_show_permission() {
+  return array(
+    'administer show' => array(
+      'title' => t('Administer OM Show'), 
+      'description' => t('Administer OMP functionality for the show interface.'),
+    )
+  );
+}
 
 /**
  * Implements hook_views_query_alter
  */
 function om_show_views_query_alter(&$view, &$query) {
-  dsm($view);
+  if ($view->name == 'user_projects' && user_access('administer show')) {
+    dsm($query);
+  }
 }
