@@ -14,6 +14,7 @@
       $('.views-row').mousedown(function(){
         $('.view-reservation-calendar').css('top', '530px');
         $('.view-reservation-calendar').css('visibility', 'visible');
+        $('.view-reservation-calendar').css('height', 'auto');
         $('#reservations-header').fadeIn(1000);
         $('#block-views-reservations-cart-block-1').css('margin-top', '675px');
         itemTitle = $(this).find('.title').clone();
