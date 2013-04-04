@@ -94,7 +94,6 @@
             }
           });
           $('.fullcalendar .fc-content').unbind().mouseup(function(){
-            alert('away from cal');
             view = $('.fullcalendar').fullCalendar('getView');
             if (view.name == 'agendaWeek'){
               quantity = $('#selected-product select#edit-quantity').val();
