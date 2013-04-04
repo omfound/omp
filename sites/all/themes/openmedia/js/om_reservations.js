@@ -2,7 +2,7 @@
   Drupal.behaviors.om_reservations = {
     attach: function (context, settings) {
       //Hide the calendar and product info box
-      $('.view-reservation-calendar').css('height', '0px');
+      //$('.view-reservation-calendar').css('height', '0px');
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#reservations-header').hide();
       $('.view-reservation-calendar').css('top', '-9000px');
