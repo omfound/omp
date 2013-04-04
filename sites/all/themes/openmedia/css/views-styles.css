@@ -224,14 +224,15 @@
 }
 
 #block-views-calendar-product-view-block #reservations-header #right-side{
-  float: right;
-  width: 280px;
+  float: left;
+  width: 600px;
+  padding: 10px;
 }
 
 #block-views-calendar-product-view-block #reservations-header{
   background-color: white;
   width: 100%;
-  height: 250px;
+  height: 175px;
   -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
