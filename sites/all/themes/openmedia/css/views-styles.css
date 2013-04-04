@@ -233,7 +233,7 @@
   moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
-  width: 545px;
+  width: 100%;
 }
 
 #block-views-calendar-product-view-block .res-title-number{
