@@ -38,8 +38,14 @@
         $(leftContent).fadeIn(1000);
         $(rightContent).fadeIn(1000);
         $(body).fadeIn(1000);
+        // pickedDates is set here
         datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-        datesID.attr('id', 'pickedDates');
+        $.each(datesID,
+          function() {
+            var newId = 'pickedDates ' + $(this).attr('id');
+            $(this).attr('id', newId);
+          }
+        )
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
           view = $('.fullcalendar').fullCalendar('getView');
           if (view.name == 'agendaWeek'){
@@ -98,7 +104,6 @@
                   }
                 },
                 onShow: function(){
-                  console.log('on show');
                   //TODO: Find a way to add chosen to form select elements
                   $('.qtip-content [id|=edit-quantity]').val(quantity);
                   $('#pickedDates .start-date-wrapper .form-select').focus(function(){
