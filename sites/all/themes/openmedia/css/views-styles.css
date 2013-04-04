@@ -167,6 +167,11 @@
 }
 
 /** Reservations Styles **/
+#block-views-calendar-product-view-block .view-filters {
+ padding-top: 5px;
+ padding-left: 5px;
+}
+
 #block-views-calendar-product-view-block .views-row{
   width: 172px;
   height: 125px;
