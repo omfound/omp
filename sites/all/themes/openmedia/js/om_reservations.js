@@ -40,12 +40,7 @@
         $(body).fadeIn(1000);
         // pickedDates is set here
         datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-        $.each(datesID,
-          function() {
-            var newId = 'pickedDates ' + $(this).attr('id');
-            $(this).attr('id', newId);
-          }
-        )
+        datesID.attr('id', 'pickedDates');
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
           view = $('.fullcalendar').fullCalendar('getView');
           if (view.name == 'agendaWeek'){
