@@ -38,8 +38,8 @@
         $(leftContent).fadeIn(1000);
         $(rightContent).fadeIn(1000);
         $(body).fadeIn(1000);
-        datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-        datesID.attr('id', 'pickedDates');
+        //datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
+        //datesID.attr('id', 'pickedDates');
 
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
           view = $('.fullcalendar').fullCalendar('getView');
