@@ -236,6 +236,7 @@
   -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  margin-bottom: 25px;
 }
 
 #block-views-calendar-product-view-block .view-filters {
