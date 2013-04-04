@@ -49,7 +49,7 @@
             dateFields = new Object();
             $('.form-item-quantity').hide();
             $('#leftContent .large-image').addClass('no-quantity');
-            $('#pickedDates').show();
+            datesID.show();
             $('#left-side .form-submit').show();
             //Make sure the user hasn't tried to select multiple days and lost the add to cart form
             if ($('#left-side .add-to-cart').is('*')){
