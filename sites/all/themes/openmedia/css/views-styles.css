@@ -280,8 +280,8 @@
 
 #block-views-calendar-product-view-block #rightContent .title {
   position: static;
-  width: none;
-  height: none;
+  width: 100%;
+  height: auto;
   text-align: left;
   border: none;
 }
