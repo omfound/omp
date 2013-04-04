@@ -17,6 +17,8 @@ function om_show_permission() {
  */
 function om_show_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_projects' && user_access('administer show')) {
-    dsm($query);
+    if (isset($query->where[0])) {
+      unset($query->where[0]);
+    }
   }
 }

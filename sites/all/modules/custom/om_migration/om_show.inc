@@ -94,16 +94,17 @@ class omShowMigration extends Migration {
     else {
       $current_row->field_om_show_original_list = 19171;
     }
-    drush_log($current_row->nid . ' : ' . $current_row->field_om_show_original_list, 'success');
     $file = $this->lookup_file($current_row->field_om_show_capture_fid);
     if (!empty($file)) {
       $current_row->field_om_show_capture_fid = $file;
     }
     if (!empty($current_row->item)) {
       $derivatives = unserialize($current_row->derivatives);
-      foreach ($derivatives AS $key => $derivative) {
-        if (is_numeric(stripos($key, 'mp4'))) {
-          $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $derivative['name'];
+      if (!empty($derivatives)) {}
+        foreach ($derivatives AS $key => $derivative) {
+          if (is_numeric(stripos($key, 'mp4'))) {
+            $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $derivative['name'];
+          }
         }
       }
     }
