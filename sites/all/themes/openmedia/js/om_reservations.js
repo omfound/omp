@@ -40,6 +40,7 @@
         $(body).fadeIn(1000);
 
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
+          alert('firing date div');
           view = $('.fullcalendar').fullCalendar('getView');
           if (view.name == 'agendaWeek'){
             quantity = $('#selected-product select#edit-quantity').val();
