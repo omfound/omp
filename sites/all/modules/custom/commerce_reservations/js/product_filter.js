@@ -97,7 +97,8 @@
             view = $('.fullcalendar').fullCalendar('getView');
             if (view.name == 'agendaWeek'){
               quantity = $('#selected-product select#edit-quantity').val();
-              //$('#selected-product .commerce-add-to-cart .form-submit').show();
+            alert('showing add to cart');
+            $('#selected-product .commerce-add-to-cart .form-submit').show();
 	          $('#selected-product .commerce-add-to-cart').show();
 	          $('#selected-product div[id^="edit-line-item-fields"]').show();
 	          $('#selected-product .field-name-field-reservation-dates .form-select').change(function(){
