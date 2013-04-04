@@ -167,6 +167,10 @@
 }
 
 /** Reservations Styles **/
+#block-views-calendar-product-view-block {
+  background-color: #fff;
+}
+
 #block-views-calendar-product-view-block .views-exposed-widgets {
  padding-top: 5px;
  padding-left: 10px;
