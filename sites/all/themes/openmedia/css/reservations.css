@@ -546,3 +546,9 @@ body.page-reservations fieldset {
 .page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-hour {
   clear: left;
 }
+
+.page-reservations select#edit-line-item-fields-field-reservation-dates-und-0-value-ampm--9,
+.page-reservations select#edit-line-item-fields-field-reservation-dates-und-0-value2-ampm--9 {
+  position: relative;
+  top: -4px;
+}
