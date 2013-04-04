@@ -11,6 +11,7 @@ body.page-reservations .fieldset-wrapper {
 }
 body.page-reservations fieldset {
   border: 0px;
+  padding: 0;
 }
 
 .view-id-reservation_calendar div.view-header{
@@ -195,7 +196,7 @@ body.page-reservations fieldset {
 }
 
 .page-reservations .add-to-cart .form-wrapper{
-	margin-top: 0px;
+	margin: 0px;
 }
 
 .page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
