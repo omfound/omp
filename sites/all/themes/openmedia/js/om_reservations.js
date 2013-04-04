@@ -40,7 +40,7 @@
         $(body).fadeIn(1000);
         datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
         datesID.attr('id', 'pickedDates');
-
+console.log(datesID);
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
           view = $('.fullcalendar').fullCalendar('getView');
           if (view.name == 'agendaWeek'){
