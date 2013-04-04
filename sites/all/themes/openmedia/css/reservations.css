@@ -186,7 +186,7 @@ body.page-reservations fieldset {
 	border-width: 0px 0px !important; 
 }
 
-#pickedDates legend{
+.page-reservations div.field-widget-date-select legend{
 	background-color: #adbec5;
 	width: 225px;
 	padding-left: 10px;
