@@ -77,7 +77,7 @@
     $(item).mousedown(function() {
       console.log(this);
       //show the calendar
-      $('.view-reservation-calendar').css('top', '530px');
+      $('.view-reservation-calendar').css('top', '510px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
