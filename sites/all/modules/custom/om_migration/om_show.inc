@@ -27,7 +27,6 @@ class omShowMigration extends Migration {
     $query->fields('loc', array('latitude', 'longitude'));
     $query->fields('ia', array('item', 'filename', 'derivatives'));
     $query->condition('n.type', 'om_show', '=');
-    $query->range(0, 150);
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationNode('om_show');
@@ -89,7 +88,7 @@ class omShowMigration extends Migration {
     $current_row->field_om_language_value = $this->migration_lookup($current_row->field_om_language_value);
     
     $project_nid = $this->get_projects($current_row->nid);
-    if (is_numeric($project_nid) && $project_nid != 1) {
+    if (!empty($project_nid) && is_numeric($project_nid) && $project_nid != 1) {
       $current_row->field_om_show_original_list = $project_nid;
     }
     else {
@@ -166,7 +165,7 @@ class omShowMigration extends Migration {
     if (!empty($result)) {
       $nid = array_shift($result);
       $nid = $nid->group_nid;
-      $query = Database::getConnection('default', 'default')->select('field_revision_field_old_project_id','op');
+      $query = Database::getConnection('default', 'default')->select('field_data_field_old_project_id','op');
       $query->fields('op', array('entity_id'));
       $query->condition('field_old_project_id_value', $nid, '=');
       $resource = $query->execute();
