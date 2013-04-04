@@ -38,9 +38,6 @@
         $(leftContent).fadeIn(1000);
         $(rightContent).fadeIn(1000);
         $(body).fadeIn(1000);
-        // pickedDates is set here
-        datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-        datesID.attr('id', 'pickedDates');
         
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
           view = $('.fullcalendar').fullCalendar('getView');
@@ -50,7 +47,6 @@
             $('.form-item-quantity').hide();
             $('#leftContent .large-image').addClass('no-quantity');
             $('#left-side .add-to-cart [id|=edit-line-item-fields]').show();
-            $('#pickedDates').show();
             $('#left-side .form-submit').show();
             //Make sure the user hasn't tried to select multiple days and lost the add to cart form
             if ($('#left-side .add-to-cart').is('*')){
