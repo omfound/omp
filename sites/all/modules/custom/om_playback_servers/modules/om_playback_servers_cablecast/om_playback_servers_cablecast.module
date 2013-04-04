@@ -86,3 +86,46 @@ function om_playback_servers_cablecast_file_ia_url($uri) {
     $message =  'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
   }
 }
+
+/**
+ * Get shows with a broadcast uri, but no vod file and check ia to see if there is
+ *   a vod resource available yet. If so, update node.
+ */
+function om_playback_servers_cablecast_update_vod_field() {
+  $query = db_select('field_data_field_om_show_video', 'vod_files');
+  $query->fields('vod_files', array('entity_id'));
+  $resource = $query->execute();
+  $nids = array();
+  while ($result = $resource->fetchAssoc()) {
+    $nids[] = $result['entity_id'];
+  }
+  $query_uri = db_select('field_data_field_om_show_broadcast_file', 'bc_files');
+  $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
+  $query_uri->condition('entity_id', $nids, 'NOT IN');
+  $resource = $query_uri->execute();
+  while ($result = $resource->fetchAssoc()) {
+    if (class_exists('cablecastFile')) {
+      $cablecast_file_controller = new cablecastFile();
+      $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
+      if (!empty($url)) {
+        $node = node_load($result['entity_id']);
+        $node->field_om_show_video = array(
+          $node->language => array(
+            0 => array(
+              'value' => $url
+            )
+          )
+        );
+        node_save($node);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_cron
+ */
+function om_playback_servers_cablecast_cron() {
+  om_playback_servers_cablecast_update_vod_field();
+  watchdog('om_playback_servers_cablecast', 'Cablecast Playback Server cron ran.');
+}

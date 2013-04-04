@@ -28,8 +28,16 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CrawlText' => '',
         'BugText' => '',
         'Reels'=> $reel,
-        'LocationID' => $pbs->location_id
+        'LocationID' => $pbs->location_id,
       );
+      if (isset($show->field_archive_transfer[$show->language]) && $show->field_archive_transfer[$show->language][0]['value'] == 1) {
+        $params['CustomFields'] = array(
+          'CustomField' => array(
+            'Name' => 'Archive-Upload',
+            'Value' => 'x'
+          )
+        );
+      }
       return $this->soap_request($pbs, 'CreateNewShowRecord', $params);
     }
   }

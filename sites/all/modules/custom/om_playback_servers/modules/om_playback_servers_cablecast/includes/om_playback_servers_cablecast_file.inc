@@ -97,12 +97,51 @@ class cablecastFile {
    * Return IA encoding status.
    **/
   public function get_ia_status($uri) {
-    return 'Processing';
+    $meta_data = $this->get_show_record($uri);
+    $status = '';
+    if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
+      foreach ($meta_data['CustomFields']->CustomField AS $field) {
+        if ($field->Name == 'Archive-URL') {
+           $status = 'Complete';
+        }
+        if ($field->Name == 'Archive-Upload') {
+          if ($status != 'Complete') {
+            $status = 'Processing';
+          }
+        }
+      }
+    }
+    else {
+      $status = 'Unqueued';
+    }
+    return $status;
   }
   /**
    * Get the VOD derivitive from IA.
    **/
   public function get_ia_url($uri) {
-    
+    $meta_data = $this->get_show_record($uri);
+    if (!empty($meta_data) && !empty($meta_data['CustomFields'])) {
+      foreach ($meta_data['CustomFields']->CustomField AS $field) {
+        if ($field->Name == 'Archive-URL') {
+          return $field->Value;
+        }
+      }
+    }
+    return false;
+  }
+  /**
+   * Return the show record
+   **/
+  public function get_show_record($uri) {
+    $show_id = $this->get_show_id($uri);
+    $controller = om_playback_servers_entity_get_controller($this->pbs);
+    $meta_data = $controller->check_metadata_status($this->pbs, $show_id);
+    if (!empty($meta_data)) {
+      return $meta_data;
+    }
+    else {
+      return FALSE;
+    }
   }
 }
