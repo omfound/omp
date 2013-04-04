@@ -39,11 +39,12 @@
         $(rightContent).fadeIn(1000);
         $(body).fadeIn(1000);
 
+        /**
         $('.fullcalendar .fc-content').unbind().mouseup(function(){
             $('#date-div').append(addToCart);
             $('#date-div').show();
             console.log("!");
-        });
+        });**/
 
       });
     }
