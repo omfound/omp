@@ -115,12 +115,15 @@ function om_playback_servers_cablecast_field_presave($entity_type, $entity, $fie
  */
 function om_playback_servers_cablecast_create_widget_table($values) {
   $cablecast_file_interface = new cablecastFile();
-  $header = '<thead><th>Filename</th><th>Uri</th><th>Internet Archive Status</th><th>Remove</th></head>';
+  $header = '<thead><th>Filename</th><th>Uri</th><th>Internet Archive Status</th></head>';
   $body = '';
   foreach ($values AS $value) {
     $file_name = $cablecast_file_interface->get_original_file_name($value['uri']);
+    if (empty($file_name)) {
+      $file_name = 'N/A';
+    }
     $ia_status = $cablecast_file_interface->get_ia_status($value['uri']);
-    $body = '<tr><td>' . $file_name . '</td><td>' . $value['uri'] . '</td><td>' . $ia_status . '</td><td> - </td></tr>';
+    $body = '<tr><td>' . $file_name . '</td><td>' . $value['uri'] . '</td><td>' . $ia_status . '</td></tr>';
   }
   return "<table>$header $body</table>";
 }
