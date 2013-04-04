@@ -99,33 +99,33 @@
                 onShow: function(){
                   //TODO: Find a way to add chosen to form select elements
                   $('.qtip-content [id|=edit-quantity]').val(quantity);
-                  $('#pickedDates .start-date-wrapper .form-select').focus(function(){
+                  $('.qtip .start-date-wrapper .form-select').focus(function(){
 	                  previousStart = $(this).val();
                   }).change(function(){
-                    startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
-                    startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
+                    startYear = $('.qtip .start-date-wrapper .date-year .form-select').val();
+                    startMonth = $('.qtip .start-date-wrapper .date-month .form-select').val();
                     //fullcalendar select option is expecting a 0 based month array
                     startMonth = parseInt(startMonth) - 1;
-                    startDay = $('#pickedDates .start-date-wrapper .date-day .form-select').val();
-                    if ($('#pickedDates .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                      startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+                    startDay = $('.qtip .start-date-wrapper .date-day .form-select').val();
+                    if ($('.qtip .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                      startHour = $('.qtip .start-date-wrapper .date-hour .form-select').val();
                       startHour = parseInt(startHour) + 12;
                     } else{
-                      startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+                      startHour = $('.qtip .start-date-wrapper .date-hour .form-select').val();
                     }
-                    startMinutes = $('#pickedDates .start-date-wrapper .date-minute .form-select').val();
-                    endYear = $('#pickedDates .end-date-wrapper .date-year .form-select').val();
-                    endMonth = $('#pickedDates .end-date-wrapper .date-month .form-select').val();
+                    startMinutes = $('.qtip .start-date-wrapper .date-minute .form-select').val();
+                    endYear = $('.qtip .end-date-wrapper .date-year .form-select').val();
+                    endMonth = $('.qtip .end-date-wrapper .date-month .form-select').val();
                     //fullcalendar select option is expecting a 0 based month array
                     endMonth = parseInt(endMonth) - 1;
-                    endDay = $('#pickedDates .end-date-wrapper .date-day .form-select').val();
-                    if ($('#pickedDates .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                      endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+                    endDay = $('.qtip .end-date-wrapper .date-day .form-select').val();
+                    if ($('.qtip .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                      endHour = $('.qtip .end-date-wrapper .date-hour .form-select').val();
                       endHour = parseInt(endHour) + 12;
                     } else{
-                      endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+                      endHour = $('.qtip .end-date-wrapper .date-hour .form-select').val();
                     }              
-                    endMinutes = $('#pickedDates .end-date-wrapper .date-minute .form-select').val();
+                    endMinutes = $('.qtip .end-date-wrapper .date-minute .form-select').val();
                     startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
                     endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
                     startParse = Date.parse(startDate);
@@ -143,31 +143,31 @@
 	                    });
                     }
                   });
-                  $('#pickedDates .end-date-wrapper .form-select').change(function(){
-                    startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
-                    startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
+                  $('.qtip .end-date-wrapper .form-select').change(function(){
+                    startYear = $('.qtip .start-date-wrapper .date-year .form-select').val();
+                    startMonth = $('.qtip .start-date-wrapper .date-month .form-select').val();
                     //fullcalendar select option is expecting a 0 based month array
                     startMonth = parseInt(startMonth) - 1;
-                    startDay = $('#pickedDates .start-date-wrapper .date-day .form-select').val();
-                    if ($('#pickedDates .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                      startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+                    startDay = $('.qtip .start-date-wrapper .date-day .form-select').val();
+                    if ($('.qtip .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                      startHour = $('.qtip .start-date-wrapper .date-hour .form-select').val();
                       startHour = parseInt(startHour) + 12;
                     } else{
-                      startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+                      startHour = $('.qtip .start-date-wrapper .date-hour .form-select').val();
                     }
-                    startMinutes = $('#pickedDates .start-date-wrapper .date-minute .form-select').val();
-                    endYear = $('#pickedDates .end-date-wrapper .date-year .form-select').val();
-                    endMonth = $('#pickedDates .end-date-wrapper .date-month .form-select').val();
+                    startMinutes = $('.qtip .start-date-wrapper .date-minute .form-select').val();
+                    endYear = $('.qtip .end-date-wrapper .date-year .form-select').val();
+                    endMonth = $('.qtip .end-date-wrapper .date-month .form-select').val();
                     //fullcalendar select option is expecting a 0 based month array
                     endMonth = parseInt(endMonth) - 1;
-                    endDay = $('#pickedDates .end-date-wrapper .date-day .form-select').val();
-                    if ($('#pickedDates .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                      endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+                    endDay = $('.qtip .end-date-wrapper .date-day .form-select').val();
+                    if ($('.qtip .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                      endHour = $('.qtip .end-date-wrapper .date-hour .form-select').val();
                       endHour = parseInt(endHour) + 12;
                     } else{
-                      endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+                      endHour = $('.qtip .end-date-wrapper .date-hour .form-select').val();
                     }              
-                    endMinutes = $('#pickedDates .end-date-wrapper .date-minute .form-select').val();
+                    endMinutes = $('.qtip .end-date-wrapper .date-minute .form-select').val();
                     startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
                     endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
                     $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
