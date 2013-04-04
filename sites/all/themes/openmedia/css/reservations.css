@@ -3,11 +3,14 @@
 .view-id-reservation_calendar{
 }
 
-body.page-reservations.fieldset-wrapper {
+body.page-reservations .fieldset-wrapper {
   padding: 10px;
   background: #dddddd;
-  border: 0px solid #eeeeee;
+  border: 0px;
   text-shadow: none;
+}
+body.page-reservations fieldset {
+  border: 0px;
 }
 
 .view-id-reservation_calendar div.view-header{
