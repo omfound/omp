@@ -43,37 +43,37 @@
           alert('firing date div');
           view = $('.fullcalendar').fullCalendar('getView');
           if (view.name == 'agendaWeek'){
-            quantity = $('#selected-product select#edit-quantity').val();
+            quantity = $('#date-div select#edit-quantity').val();
           $('#date-div').append(addToCart);
           $('#date-div').show();
-          //$('#selected-product .commerce-add-to-cart .form-submit').show();
-	        $('#selected-product .commerce-add-to-cart').show();
-	        $('#selected-product div[id^="edit-line-item-fields"]').show();
-	        $('#selected-product .field-name-field-reservation-dates .form-select').change(function(){
-              startYear = $('#selected-product .start-date-wrapper .date-year .form-select').val();
-              startMonth = $('#selected-product .start-date-wrapper .date-month .form-select').val();
+          //$('#date-div .commerce-add-to-cart .form-submit').show();
+	        $('#date-div .commerce-add-to-cart').show();
+	        $('#date-div div[id^="edit-line-item-fields"]').show();
+	        $('#date-div .field-name-field-reservation-dates .form-select').change(function(){
+              startYear = $('#date-div .start-date-wrapper .date-year .form-select').val();
+              startMonth = $('#date-div .start-date-wrapper .date-month .form-select').val();
               //fullcalendar select option is expecting a 0 based month array
               startMonth = parseInt(startMonth) - 1;
-              startDay = $('#selected-product .start-date-wrapper .date-day .form-select').val();
-              if ($('#selected-product .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                startHour = $('#selected-product .start-date-wrapper .date-hour .form-select').val();
+              startDay = $('#date-div .start-date-wrapper .date-day .form-select').val();
+              if ($('#date-div .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                startHour = $('#date-div .start-date-wrapper .date-hour .form-select').val();
                 startHour = parseInt(startHour) + 12;
               } else{
-                startHour = $('#selected-product .start-date-wrapper .date-hour .form-select').val();
+                startHour = $('#date-div .start-date-wrapper .date-hour .form-select').val();
               }
-              startMinutes = $('#selected-product .start-date-wrapper .date-minute .form-select').val();
-              endYear = $('#selected-product .end-date-wrapper .date-year .form-select').val();
-              endMonth = $('#selected-product .end-date-wrapper .date-month .form-select').val();
+              startMinutes = $('#date-div .start-date-wrapper .date-minute .form-select').val();
+              endYear = $('#date-div .end-date-wrapper .date-year .form-select').val();
+              endMonth = $('#date-div .end-date-wrapper .date-month .form-select').val();
               //fullcalendar select option is expecting a 0 based month array
               endMonth = parseInt(endMonth) - 1;
-              endDay = $('#selected-product .end-date-wrapper .date-day .form-select').val();
-              if ($('#selected-product .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
-                endHour = $('#selected-product .end-date-wrapper .date-hour .form-select').val();
+              endDay = $('#date-div .end-date-wrapper .date-day .form-select').val();
+              if ($('#date-div .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+                endHour = $('#date-div .end-date-wrapper .date-hour .form-select').val();
                 endHour = parseInt(endHour) + 12;
               } else{
-                endHour = $('#selected-product .end-date-wrapper .date-hour .form-select').val();
+                endHour = $('#date-div .end-date-wrapper .date-hour .form-select').val();
               }
-              endMinutes = $('#selected-product .end-date-wrapper .date-minute .form-select').val();
+              endMinutes = $('#date-div .end-date-wrapper .date-minute .form-select').val();
               startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
               endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
               $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
