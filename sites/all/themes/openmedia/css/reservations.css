@@ -541,3 +541,8 @@ body.page-reservations fieldset {
 .page-reservations-reports-usage-report #block-system-main .quarterly-report td.odd{
 	background-color: #e9e8e8;
 }
+
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value-hour,
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-hour {
+  clear: left;
+}
