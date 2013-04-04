@@ -167,6 +167,15 @@
 }
 
 /** Reservations Styles **/
+#block-views-calendar-product-view-block {
+  background-color: #fff;
+}
+
+#block-views-calendar-product-view-block .views-exposed-widgets {
+ padding-top: 5px;
+ padding-left: 10px;
+}
+
 #block-views-calendar-product-view-block .views-row{
   width: 172px;
   height: 125px;
@@ -195,7 +204,7 @@
 
 
 #block-views-calendar-product-view-block .item-area{
-  width: 545px;
+  width: 100%;
   overflow-x: scroll;
   white-space: nowrap;
   height: 150px;
@@ -224,16 +233,17 @@
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
 }
 
-#block-views-calendar-product-view-block .view-filters{
+#block-views-calendar-product-view-block .view-filters {
   background-color: white;
   height: 50px;
+  margin-bottom: 15px;
 }
 
 #block-views-calendar-product-view-block #top-area{
   moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
-  width: 545px;
+  width: 100%;
 }
 
 #block-views-calendar-product-view-block .res-title-number{
@@ -251,7 +261,7 @@
   height: 23px;
   background-color: #912a1b;
   color: white;
-  width: 548px;
+  width: 100%;
   padding-top: 7px;
 }
 
