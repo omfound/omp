@@ -234,7 +234,7 @@ body.page-reservations fieldset {
 }
 
 .page-reservations .add-to-cart .form-item{
-	margin-right: 0px;
+  margin: 0;
 }
 
 .page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-month,
