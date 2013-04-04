@@ -100,7 +100,7 @@ class omShowMigration extends Migration {
     }
     if (!empty($current_row->item)) {
       $derivatives = unserialize($current_row->derivatives);
-      if (!empty($derivatives)) {}
+      if (!empty($derivatives) && is_array($derivatives)) {
         foreach ($derivatives AS $key => $derivative) {
           if (is_numeric(stripos($key, 'mp4'))) {
             $current_row->item = 'http://www.archive.org/download/' . $current_row->item . '/' . $derivative['name'];
