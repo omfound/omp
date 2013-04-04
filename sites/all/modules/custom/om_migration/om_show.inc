@@ -27,7 +27,6 @@ class omShowMigration extends Migration {
     $query->fields('loc', array('latitude', 'longitude'));
     $query->fields('ia', array('item', 'filename', 'derivatives'));
     $query->condition('n.type', 'om_show', '=');
-    $query->range(0, 150);
     $this->source = new MigrateSourceSQL($query, array(), null, array('map_joinable' => FALSE));
     // No need to force users to reset their passwords
     $this->destination = new MigrateDestinationNode('om_show');
