@@ -88,17 +88,14 @@ class omShowMigration extends Migration {
     }
     $current_row->field_om_language_value = $this->migration_lookup($current_row->field_om_language_value);
     
-/*
     $project_nid = $this->get_projects($current_row->nid);
     if (is_numeric($project_nid) && $project_nid != 1) {
       $current_row->field_om_show_original_list = $project_nid;
     }
     else {
-      
+      $current_row->field_om_show_original_list = 19171;
     }
-*/
-    $current_row->field_om_show_original_list = 19171;
-    
+    drush_log($current_row->nid . ' : ' . $current_row->field_om_show_original_list, 'success');
     $file = $this->lookup_file($current_row->field_om_show_capture_fid);
     if (!empty($file)) {
       $current_row->field_om_show_capture_fid = $file;
@@ -111,7 +108,7 @@ class omShowMigration extends Migration {
         }
       }
     }
-    print_r($current_row);
+    //print_r($current_row);
     return TRUE;
   }
 
