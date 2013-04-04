@@ -3,6 +3,13 @@
 .view-id-reservation_calendar{
 }
 
+body.page-reservations.fieldset-wrapper {
+  padding: 10px;
+  background: #dddddd;
+  border: 0px solid #eeeeee;
+  text-shadow: none;
+}
+
 .view-id-reservation_calendar div.view-header{
 	background-color: white;
 	color: #5d5d5f;
