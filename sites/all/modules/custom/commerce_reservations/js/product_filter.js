@@ -54,7 +54,6 @@
 		        $(this).find('input[id^="edit-submit"]').hide();
 		        $(this).find('.form-item-quantity').hide();
 	        });
-          alert('firing quantity show');
 	        $(this).find('.form-item-quantity').show();;
 	        $(this).attr('id', 'selected-product');
 	        var nid = $(this).find('.views-field-nid .field-content').text();
