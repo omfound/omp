@@ -112,8 +112,8 @@
       $(body).fadeIn(1000);
       $(memberPrice).fadeIn(1000);
       $(commercialPrice).fadeIn(1000);
-      datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-      datesID.attr('id', 'pickedDates');
+      //datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
+      //datesID.attr('id', 'pickedDates');
       $('.form-item-product-id').hide();
       $('#left-side .add-to-cart [id|=edit-line-item-fields]').hide();
       $('.form-item-quantity label').remove();
