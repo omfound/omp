@@ -12,6 +12,7 @@
 
 .view-id-reservation_calendar{
 	line-height: 1.0;
+  width: 750px;
 }
 
 .view-id-reservation_calendar .fc-select-helper{
