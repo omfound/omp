@@ -22,3 +22,30 @@ function om_show_views_query_alter(&$view, &$query) {
     }
   }
 }
+
+function om_show_migrate_flash() {
+  db_set_active('legacy');
+  $query = "
+    SELECT content_type_om_show.nid, files.filepath FROM content_type_om_show
+    JOIN files ON files.fid = content_type_om_show.field_om_show_flash_fid";
+  $results = db_query($query);
+  $flash_files = array();
+  foreach ($results as $result) {
+    $flash_files[$result->nid] = $result->filepath;
+  }
+  db_set_active('default');
+
+  $query = "
+    SELECT node.nid, field_data_field_om_show_video.field_om_show_video_value
+    FROM {node}
+    JOIN {field_data_field_om_show_video} ON field_data_field_om_show_video.entity_id = node.nid
+    WHERE field_data_field_om_show_video.field_om_show_video_value = ''";
+  $results = db_query($query);
+  $shows_without_video = array();
+  foreach($results as $result) {
+    $shows_without_video[$result->nid] = $result->field_om_show_video_value;
+  }
+
+  dsm($shows_without_video);
+  dsm($flash_files);
+}
