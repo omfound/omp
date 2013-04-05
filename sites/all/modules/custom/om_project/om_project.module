@@ -41,6 +41,25 @@ function om_project_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   
+  $items['project/%node/project-membership/remove'] = array(
+    'title' => t('Remove member from project.'),
+    'description' => t('Takes node ID and resets all shows to the Project metadata settings'),
+    'page callback' => 'om_project_membership_remove_member_page',
+    'page arguments' => array(1, 4),
+    'access callback' => 'om_project_manage_access',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['project/%node/project-membership/promote'] = array(
+    'title' => t('Promote user to admin'),
+    'page callback' => 'om_project_membership_promote_member_page',
+    'page arguments' => array(1, 4),
+    'access callback' => 'om_project_manage_access',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  
   $node_info = entity_get_info('node');
   if (isset($node_info['bundles']['om_show'])) {
     $items['node/%node/project-manage'] = array(
@@ -77,12 +96,16 @@ function om_project_menu() {
  return $items;
 }
 
+/**
+ * Implements hook_theme
+ */
 function om_project_theme($existing, $type, $theme, $path) {
   return array(
     'project_member_list' => array(
       'template' => 'project_member_list',
+      'file' => 'theme.inc',
       'path' => $path . '/theme',
-      'variables' => array('leader' => '', 'members' => array())
+      'variables' => array('admins' => array(), 'members' => array())
     )
   );
 }
@@ -251,7 +274,6 @@ function om_project_sync_show_metadata($form, $form_state) {
  * Helper function builds confirmation form for om_project_sync_all_shows_to_project_owner.
  * @returns $form array.
  */
-
 function _om_project_sync_all_shows_to_project_owner () {
   $nid = arg(1);
   // Add Confirm node 
@@ -264,9 +286,8 @@ function _om_project_sync_all_shows_to_project_owner () {
 }
 
 /**
-  * Custom function to sync all show nodes ot project ownership. Acess callback om_project_manage_access.
-  */
-
+ * Custom function to sync all show nodes ot project ownership. Acess callback om_project_manage_access.
+ */
 function om_project_sync_all_shows_to_project_owner () {
   
   $nid = arg(1); // get Project nid from URL
@@ -288,16 +309,18 @@ function om_project_sync_all_shows_to_project_owner () {
   drupal_goto('node/' . $nid . '/project-manage');
 }
 
+/**
+ * Page callback for member admin tab.
+ */
 function om_project_membership_page($node) {
-  $options = array(0 => array('entity_id' => $node->nid));
-  $memberships = om_project_membership_load($options);
-  $admin = '';
+  $memberships = om_project_get_project_members($node->nid);
+  $admin = array();
   $members = array();
   if (!empty($memberships)) {
     foreach($memberships AS $membership) {
       if ($membership->isadmin == 1) {
         $user = user_load($membership->uid);
-        $admin = $user->name;
+        $admin[] = $user->name;
       }
       else {
         $user = user_load($membership->uid);
@@ -305,17 +328,184 @@ function om_project_membership_page($node) {
       }
     }
   }
-  return theme('project_member_list', array('admin' => $admin, 'members' => $members));
+  return theme('project_member_list', array('admins' => $admin, 'members' => $members));
 }
 
+function om_project_member_form() {
+  global $user;
+  $form = array();
+  $is_admin = om_project_user_is_project_admin($user->uid, arg(1));
+  if ($is_admin == TRUE) {
+    $form['project_user_select'] = array(
+      '#type' => 'textfield', 
+      '#title' => t('Add members'), 
+      '#autocomplete_path' => 'user/autocomplete',
+    );
+    $form['project_user_select_submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Add'
+    );
+    $form['#submit'] = array('om_project_member_form_submit');
+  }
+  return $form;
+}
+
+function om_project_member_form_submit($form, $form_state) {
+  if (!empty($form_state['values']['project_user_select'])) {
+    $user = user_load_by_name($form_state['values']['project_user_select']);
+    $membership = new StdClass();
+    $membership->entity_id = arg(1);
+    $membership->uid = $user->uid;
+    $membership->isadmin = 0;
+    om_project_membership_add($membership);
+    drupal_set_message('Added user: ' . $form_state['values']['project_user_select'] . ' to the project.');
+  }
+}
+
+function om_project_membership_remove_member_page($node, $user) {
+  om_project_remove_member_from_project($node->nid, $user);
+  drupal_set_message('Removed user: ' . $user . ' from the project.');
+  drupal_goto('node/' . $node->nid . '/project-membership');
+}
+
+function om_project_membership_promote_member_page($node, $user) {
+  om_project_promote_member_from_project($node->nid, $user);
+  drupal_set_message('Promoted user: ' . $user . ' to admin the project.');
+  drupal_goto('node/' . $node->nid . '/project-membership');
+}
+
+/**
+ * Implements hook_node_insert
+ */
+function om_project_node_insert($node) {
+  if ($node->type == 'om_project') {
+    $membership = new StdClass();
+    $membership->entity_id = $node->nid;
+    $membership->uid = $node->uid;
+    $membership->isadmin = 1;
+    om_project_membership_add($membership);
+  }
+}
+
+/**
+ * Implements hook_node_delete
+ */
+function om_project_node_delete($node) {
+  if ($node->type == 'om_project') {
+    $options = array();
+    $options[] = array('field' => 'entity_id', 'value' => $node->nid, 'operator' => '=');
+    $memberships = om_project_membership_delete($options);
+  }
+}
+
+/**
+ * Implements hook_node_access
+ */
+function om_project_node_access($node, $op, $account) {
+  if (is_object($node) && $node->type == 'om_project') {
+    if ($op == 'view' || $op == 'create') {
+      return NODE_ACCESS_IGNORE;
+    }
+    $user_is_member = FALSE;
+    $user_is_admin = FALSE;
+    $user_had_access = FALSE;
+    $members = om_project_get_project_members($node->nid);
+    foreach($members AS $member) {
+      if ($member->uid == $account->uid) {
+        $user_is_member = TRUE;
+        if ($member->isadmin == 1) {
+          $user_is_admin = TRUE;
+        }
+      }
+    }
+    switch ($op) {
+      case 'delete':
+        if ($user_is_admin == TRUE) {
+          return NODE_ACCESS_ALLOW;
+        }
+        break;
+      case 'update':
+        if ($user_is_member == TRUE) {
+          return NODE_ACCESS_ALLOW;
+        }
+        break;
+    }
+  }
+  return NODE_ACCESS_IGNORE;
+}
+
+function om_project_user_is_project_admin($uid, $nid) {
+  $admin = om_project_get_project_members($nid, TRUE);
+  if (!empty($admin)) {
+    $admin = array_shift($admin);
+    if ($admin->uid == $uid) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Get a given project's members.
+ */
+function om_project_get_project_members($nid, $admin = FALSE) {
+  $options = array();
+  $options[] = array('field' => 'entity_id', 'value' => $nid, 'operator' => '=');
+  if ($admin == TRUE) {
+    $options[] = array('field' => 'isadmin', 'value' => 1, 'operator' => '=');
+  }
+  $memberships = om_project_membership_load($options);
+  if (!empty($memberships)) {
+    return $memberships;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function om_project_remove_member_from_project($nid, $user) {
+  $user = user_load_by_name($user);
+  if (is_object($user)) {
+    $options = array();
+    $options[] = array('field' => 'uid', 'value' => $user->uid, 'operator' => '=');
+    $options[] = array('field' => 'entity_id', 'value' => $nid, 'operator' => '=');
+    om_project_membership_delete($options);
+  }
+}
+
+function om_project_promote_member_from_project($nid, $user) {
+  $user = user_load_by_name($user);
+  if (is_object($user)) {
+    $options = array();
+    $options[] = array('field' => 'uid', 'value' => $user->uid, 'operator' => '=');
+    $options[] = array('field' => 'entity_id', 'value' => $nid, 'operator' => '=');
+    $memberships = om_project_membership_load($options);
+    if (!empty($memberships)) {
+      $memberships = array_shift($memberships);
+      $memberships->isadmin = 1;
+      om_project_membership_update($memberships);
+    }
+  }
+}
+
+/**
+ * Create a record in the om_project_members table
+ */
 function om_project_membership_add(stdClass $member) {
+  $member->timestamp = time();
   return drupal_write_record('om_project_members', $member);
 }
 
+/**
+ * Update a record in the om_project_members table
+ */
 function om_project_membership_update(stdClass $member) {
   return drupal_write_record('om_project_members', $member, 'pmid');
 }
 
+/**
+ * Get a record in the om_project_members table
+ */
 function om_project_membership_load($options = array()) {
   $query = db_select('om_project_members', 'opm');
   $query->fields('opm', array());
@@ -331,6 +521,10 @@ function om_project_membership_load($options = array()) {
   }
 }
 
+/**
+ * Delete a record in the om_project_members table.
+ *   NB: Must supply options!
+ */
 function om_project_membership_delete($options = array()) {
   $query = db_delete('om_project_members');
   if (!empty($options)) {
