@@ -280,9 +280,8 @@ function alternative_rating_permission() {
 * Implementation of hook_views_api().
 * @return Array with Views API version.
 */
-/**
 function alternative_rating_views_api() {
-  return array('api' => 2.0);
+  return array('api' => 3.0);
 }
 
 function alternative_rating_views_data() {
@@ -312,7 +311,7 @@ function alternative_rating_views_data() {
 	);
 	
 	return $data;
-}**/
+}
 
 function alternative_rating_bayesian_value($nid) {
   $query = '

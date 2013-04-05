@@ -16,7 +16,7 @@
       options.unselectAuto = true;
       options.select = function(start, end, allDay) {
         if (!allDay){
-	      $('#selected-product .commerce-add-to-cart .form-submit').show();
+	      $('.qtip .commerce-add-to-cart .form-submit').show();
 	      $('.not-available').each(function(){
               $(this).remove();
             });
@@ -24,8 +24,8 @@
           dontCheck = false;
           today = new Date();
           if (start < today){
-	          $('#selected-product .commerce-add-to-cart #edit-submit').hide();
-	          $('#selected-product').append('<span class="not-available closed-message">You are unable to make a reservation in the past.</span>');
+	          $('.qtip .commerce-add-to-cart #edit-submit').hide();
+	          $('.qtip').append('<span class="not-available closed-message">You are unable to make a reservation in the past.</span>');
 	          dontCheck = true;
           }
           var array = $('.fullcalendar').fullCalendar('clientEvents');
@@ -34,8 +34,8 @@
               //Check for overlaps
               if (array[i].className == 'overlap'){
                 if(!(array[i].start >= end || array[i].end <= start)){
-	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
-	              $('#selected-product').append('<span class="not-available overlap-message">The time you have select is not available for the product.  Please select a time that does not overlap a period where there are not enough products for your reservation.</span>');
+	              $('.qtip .commerce-add-to-cart .form-submit').hide();
+	              $('.qtip').append('<span class="not-available overlap-message">The time you have select is not available for the product.  Please select a time that does not overlap a period where there are not enough products for your reservation.</span>');
                 }
               }
               //Check for closed days
@@ -43,26 +43,26 @@
                 if (array[i].start.getDate() == start.getDate()){
                   if (array[i].start.getMonth() == start.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-	                  $('#selected-product .commerce-add-to-cart .form-submit').hide();
-	                  $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	                  $('.qtip .commerce-add-to-cart .form-submit').hide();
+	                  $('.qtip').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                     }
                   }
                 } else if (array[i].start.getDate() == end.getDate()){
                   if (array[i].start.getMonth() == end.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-	                  $('#selected-product .commerce-add-to-cart .form-submit').hide();
-	                  $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	                  $('.qtip .commerce-add-to-cart .form-submit').hide();
+	                  $('.qtip').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                     }   
                   }
                 }
               //Check for closed times
               } else if (array[i].className == 'closed-time'){
                 if (start >= array[i].start && start < array[i].end){
-	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
-	              $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	              $('.qtip .commerce-add-to-cart .form-submit').hide();
+	              $('.qtip').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                 } else if(end >= array[i].start && end < array[i].end){
-	              $('#selected-product .commerce-add-to-cart .form-submit').hide();
-	              $('#selected-product').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
+	              $('.qtip .commerce-add-to-cart .form-submit').hide();
+	              $('.qtip').append('<span class="not-available closed-message">You are unable to pick up or drop off the product during times we are closed.</span>');
                 }
               }
             }
@@ -82,12 +82,12 @@
 	          startMinutes = "00";
           }
           
-          $('#selected-product .start-date-wrapper .date-month .form-select').val(startMonth);
-          $('#selected-product .start-date-wrapper .date-day .form-select').val(startDate);
-          $('#selected-product .start-date-wrapper .date-year .form-select').val(startYear);
-          $('#selected-product .start-date-wrapper .date-hour .form-select').val(startHour);
-          $('#selected-product .start-date-wrapper .date-minute .form-select').val(startMinutes);
-          $('#selected-product .start-date-wrapper .date-ampm .form-select').val(ampm);
+          $('.qtip .start-date-wrapper .date-month .form-select').val(startMonth);
+          $('.qtip .start-date-wrapper .date-day .form-select').val(startDate);
+          $('.qtip .start-date-wrapper .date-year .form-select').val(startYear);
+          $('.qtip .start-date-wrapper .date-hour .form-select').val(startHour);
+          $('.qtip .start-date-wrapper .date-minute .form-select').val(startMinutes);
+          $('.qtip .start-date-wrapper .date-ampm .form-select').val(ampm);
           
           endMonth = end.getMonth() + 1;
           endDate = end.getDate();
@@ -104,12 +104,12 @@
 	          endMinutes = "00";
           }
           
-          $('#selected-product .end-date-wrapper .date-month .form-select').val(endMonth);
-          $('#selected-product .end-date-wrapper .date-day .form-select').val(endDate);
-          $('#selected-product .end-date-wrapper .date-year .form-select').val(endYear);
-          $('#selected-product .end-date-wrapper .date-hour .form-select').val(endHour);
-          $('#selected-product .end-date-wrapper .date-minute .form-select').val(endMinutes);
-          $('#selected-product .end-date-wrapper .date-ampm .form-select').val(ampm);
+          $('.qtip .end-date-wrapper .date-month .form-select').val(endMonth);
+          $('.qtip .end-date-wrapper .date-day .form-select').val(endDate);
+          $('.qtip .end-date-wrapper .date-year .form-select').val(endYear);
+          $('.qtip .end-date-wrapper .date-hour .form-select').val(endHour);
+          $('.qtip .end-date-wrapper .date-minute .form-select').val(endMinutes);
+          $('.qtip .end-date-wrapper .date-ampm .form-select').val(ampm);
         }
       }
       return options;
