@@ -36,14 +36,19 @@ function om_show_migrate_flash() {
   db_set_active('default');
 
   $query = "
-    SELECT node.nid, field_data_field_om_show_video.field_om_show_video_value
+    SELECT node.nid, field_data_field_om_show_video.field_om_show_video_value, field_data_field_old_show_id.field_old_show_id_value
     FROM {node}
     JOIN {field_data_field_om_show_video} ON field_data_field_om_show_video.entity_id = node.nid
-    WHERE field_data_field_om_show_video.field_om_show_video_value = ''";
+    JOIN {field_data_field_old_show_id} ON field_data_field_old_show_id.entity_id = node.nid
+    WHERE field_data_field_om_show_video.field_om_show_video_value = '' AND node.type = 'om_show'";
   $results = db_query($query);
   $shows_without_video = array();
   foreach($results as $result) {
-    $shows_without_video[$result->nid] = $result->field_om_show_video_value;
+    $shows_without_video[$result->field_old_show_id_value] = $result->nid;
+  }
+
+  foreach ($shows_without_video as $key => $nid) {
+    //stuff
   }
 
   dsm($shows_without_video);
