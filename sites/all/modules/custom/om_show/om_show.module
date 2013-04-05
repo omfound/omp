@@ -47,10 +47,12 @@ function om_show_migrate_flash() {
     $shows_without_video[$result->field_old_show_id_value] = $result->nid;
   }
 
-  foreach ($shows_without_video as $key => $nid) {
-    //stuff
+  $update_shows = array();
+  foreach ($shows_without_video as $old_nid => $new_nid) {
+    if ($flash_files[$old_nid]) {
+      $update_shows[$new_nid] = $flash_files[$old_nid];
+    }
   }
 
-  dsm($shows_without_video);
-  dsm($flash_files);
+  dsm($update_shows);
 }
