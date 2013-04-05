@@ -529,7 +529,8 @@ function votingapi_votingapi_storage_standard_results($entity_type, $entity_id) 
   foreach ($results as $result) {
     $cache[$result->tag][$result->value_type]['count'] = $result->value_count;
     $cache[$result->tag][$result->value_type]['average'] = $result->value_sum / $result->value_count;
-    if ($result->value_type == 'points') {
+    //HACK: BRIAN: ADDING PERCENTAGE FOR SUMS
+    if ($result->value_type == 'points' || $result->value_type == 'percentage') {
       $cache[$result->tag][$result->value_type]['sum'] = $result->value_sum;
     }
   }
