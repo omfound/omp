@@ -480,5 +480,6 @@ function openmedia_preprocess_views_view_unformatted($vars) {
 }
 
 function openmedia_preprocess_field(&$variables, $hook) {
+  dsm('testing');
   dsm($variables);
 }
