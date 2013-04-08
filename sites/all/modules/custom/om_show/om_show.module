@@ -54,5 +54,16 @@ function om_show_migrate_flash() {
     }
   }
 
-  dsm($update_shows);
+  $update_count = 0;
+  foreach($update_shows as $new_nid => $flash_file) {
+    $updated = db_update('field_data_field_om_show_video')
+      ->fields(array(
+        'field_om_show_video_value' => $flash_file,
+      ))
+      ->condition('field_data_field_om_show_video.entity_id', $new_nid, '=')
+      ->execute();
+    $update_count++;
+  }
+
+  drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
 }
