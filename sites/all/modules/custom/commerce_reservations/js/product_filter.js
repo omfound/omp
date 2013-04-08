@@ -56,10 +56,10 @@
 	        });
 	        $(this).find('.form-item-quantity').show();;
 	        $(this).attr('id', 'selected-product');
-	        var nid = $(this).find('.views-field-nid .field-content').text();
-	        var pid = $(this).find('.views-field-field-crp-product-reference .field-content input[name="product_id"]').val();
+	        var nid = $(this).find('.nid .field-content').text();
+	        var pid = $(this).find('.add-to-cart .field-content input[name="product_id"]').val();
 	        if (typeof(pid) === 'undefined') {
-	          var pid = $(this).find('.views-field-field-crp-product-reference .field-content select[name="product_id"]').val();
+	          var pid = $(this).find('.add-to-cart .field-content select[name="product_id"]').val();
 	        }
 	        //Remove events from the calendar
 	        $(".fullcalendar").fullCalendar('removeEvents', function(event){
