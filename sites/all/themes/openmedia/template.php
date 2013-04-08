@@ -486,7 +486,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       dsm('no thumbnail available');
     }
     else {
-      dsm($vars['fields']['field_show_thumbnail']->raw);
+      dsm($vars['fields']['field_show_thumbnail']->content);
     }
   }
 }
