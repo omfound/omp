@@ -481,5 +481,8 @@ function openmedia_preprocess_views_view_unformatted($vars) {
 
 function openmedia_preprocess_views_view_fields(&$vars) {
   $view = $vars['view'];
+  if ($view->name == 'show_grid') {
+    dsm($vars['fields']);
+  }
   dsm($view->name);
 }
