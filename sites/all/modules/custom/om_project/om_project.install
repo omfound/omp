@@ -6,7 +6,6 @@ function om_project_schema() {
       'pmid' => array(
         'type' => 'serial',
         'not null' => TRUE,
-        'description' => 'Primary Key: Unique project membership id',
       ),
       'entity_id' => array(
         'type' => 'int',
@@ -19,7 +18,6 @@ function om_project_schema() {
         'not null' => TRUE,
       ),
       'isadmin' => array(
-        'description' => 'URL or IP address of the server',
         'type' => 'int',
         'length' => 1,
         'not null' => TRUE,
