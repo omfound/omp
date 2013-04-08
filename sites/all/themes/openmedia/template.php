@@ -475,7 +475,6 @@ function openmedia_preprocess_views_view_unformatted($vars) {
       break;
     case 'show_grid':
       drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
-      dsm($vars);
       break;
   }
 }
