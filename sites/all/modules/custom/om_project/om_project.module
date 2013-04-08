@@ -62,6 +62,16 @@ function om_project_menu() {
   
   $node_info = entity_get_info('node');
   if (isset($node_info['bundles']['om_show'])) {
+    $items['node/%node/project-manage'] = array(
+      'title' => t('Manage Shows'),
+      'description' => t('Takes node object and returns options for Project Admins'),
+      'page callback' => 'om_project_manage',
+      'access callback' => 'om_project_manage_access',
+      'access arguments' => array(1),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 12,
+    );
+    
     $items['project/%node/project-manage/metadata_reset'] = array(
       'title' => t('Metadata Reset'),
       'description' => t('Takes node ID and resets all shows to the Project metadata settings'),
@@ -258,7 +268,7 @@ function om_project_sync_show_metadata($form, $form_state) {
  * Helper function builds confirmation form for om_project_sync_all_shows_to_project_owner.
  * @returns $form array.
  */
-function _om_project_sync_all_shows_to_project_owner () {
+function _om_project_sync_all_shows_to_project_owner() {
   $nid = arg(1);
   // Add Confirm node 
   $form = array();
@@ -272,7 +282,7 @@ function _om_project_sync_all_shows_to_project_owner () {
 /**
  * Custom function to sync all show nodes ot project ownership. Acess callback om_project_manage_access.
  */
-function om_project_sync_all_shows_to_project_owner () {
+function om_project_sync_all_shows_to_project_owner() {
   
   $nid = arg(1); // get Project nid from URL
   
@@ -321,10 +331,9 @@ function om_project_membership_page($node) {
  *   That endpoint requires the administer users permission.
  */
 function om_project_member_form() {
-  global $user;
+  $node = menu_get_object();
   $form = array();
-  $is_admin = om_project_user_is_project_admin($user->uid, arg(1));
-  if ($is_admin == TRUE) {
+  if (is_object($node) && om_project_manage_access($node)) {
     $form['project_user_select'] = array(
       '#type' => 'textfield', 
       '#title' => t('Add members'), 
