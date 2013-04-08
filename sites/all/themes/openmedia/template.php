@@ -479,7 +479,7 @@ function openmedia_preprocess_views_view_unformatted($vars) {
   }
 }
 
-function openmedia_preprocess_field(&$variables, $hook) {
+function openmedia_preprocess_field(&$variables) {
   if($variables['element']['#field_name'] == 'field_show_thumbail') {
     dsm('field here');
     watchdog('brian', 'field here');
