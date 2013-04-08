@@ -482,7 +482,11 @@ function openmedia_preprocess_views_view_unformatted($vars) {
 function openmedia_preprocess_views_view_fields(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
-    dsm($vars['fields']['field_show_thumbnail']->raw);
+    if (!$vars['fields']['field_show_thumbnail']->raw) {
+      dsm('no thumbnail available');
+    }
+    else {
+      dsm($vars['fields']['field_show_thumbnail']->raw);
+    }
   }
-  dsm($view->name);
 }
