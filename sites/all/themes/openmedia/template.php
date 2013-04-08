@@ -150,7 +150,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   if(!empty($variables['field_om_show_video'][0]['value'])) {
     $jwplayer = array();
     foreach($variables['field_om_show_video'] as $key => $info) {
-      if (!valid_url($info['safe_value'], true) {
+      if (!valid_url($info['safe_value'], true)) {
         $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
       }
       else {
