@@ -475,14 +475,7 @@ function openmedia_preprocess_views_view_unformatted($vars) {
       break;
     case 'show_grid':
       drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
+      dsm($vars);
       break;
-  }
-}
-
-function openmedia_preprocess_field(&$variables) {
-  watchdog('brian', '<pre>'.print_r($variables, TRUE).'</pre>');
-  if($variables['element']['#field_name'] == 'field_show_thumbail') {
-    dsm('field here');
-    watchdog('brian', 'field here');
   }
 }
