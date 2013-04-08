@@ -479,3 +479,7 @@ function openmedia_preprocess_views_view_unformatted($vars) {
       break;
   }
 }
+
+function openmedia_preprocess_views_view_fields(&$vars) {
+  dsm($vars);
+}
