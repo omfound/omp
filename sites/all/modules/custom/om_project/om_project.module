@@ -178,7 +178,7 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
 function om_project_manage_access($node) {
   if ($node->type == 'om_project') {
     global $user;
-    if ($user->uid == $node->uid || user_access('administer project')) {
+    if ($user->uid == $node->uid || user_access('administer project') || om_project_user_is_project_admin($user->uid, $node->nid)) {
       return TRUE;
     } 
   }
@@ -195,15 +195,9 @@ function om_project_manage() {
   
   $render = array(
     '#prefix' => '<ul>',
-    // #REQUIRES om_show and OPS
-    t('Show Statuses')  => array(
-      '#prefix' => '<li>',
-      '#markup' => l('Check the Status of Shows in this Project', 'shows/status/project/' . $nid),
-      '#suffix' => '</li>',
-    ),
     t('Add User')  => array(
       '#prefix' => '<li>',
-      '#markup' => l('Add Users to Project', 'node/' . $nid . '/group'),
+      '#markup' => l('Add Users to Project', 'project/' . $nid . '/project-membership'),
       '#suffix' => '</li>',
     ),
     t('Sync Metadata')  => array(
@@ -213,7 +207,7 @@ function om_project_manage() {
     ),
     t('Sync Shows to Project Owner')  => array(
       '#prefix' => '<li>',
-      '#markup' => l('Sync All Shows to Project Owner', 'project/' . $nid . '/project-manage/om_project_sync_all_shows_to_project_owner'),
+      '#markup' => l('Sync All Shows to Project Author', 'project/' . $nid . '/project-manage/om_project_sync_all_shows_to_project_owner'),
       '#suffix' => '</li>',
     ),
     '#suffix' => '</ul>',
@@ -331,6 +325,11 @@ function om_project_membership_page($node) {
   return theme('project_member_list', array('admins' => $admin, 'members' => $members));
 }
 
+/**
+ * Auto complete add to members form.
+ *   NB: Uses the user module's user/autocomplete endpoint.
+ *   That endpoint requires the administer users permission.
+ */
 function om_project_member_form() {
   global $user;
   $form = array();
@@ -350,6 +349,9 @@ function om_project_member_form() {
   return $form;
 }
 
+/**
+ * Submit handler for the above form.
+ */
 function om_project_member_form_submit($form, $form_state) {
   if (!empty($form_state['values']['project_user_select'])) {
     $user = user_load_by_name($form_state['values']['project_user_select']);
@@ -362,12 +364,18 @@ function om_project_member_form_submit($form, $form_state) {
   }
 }
 
+/**
+ * Page callback for removing a member
+ */
 function om_project_membership_remove_member_page($node, $user) {
   om_project_remove_member_from_project($node->nid, $user);
   drupal_set_message('Removed user: ' . $user . ' from the project.');
   drupal_goto('node/' . $node->nid . '/project-membership');
 }
 
+/**
+ * Page callback for promoting a member
+ */
 function om_project_membership_promote_member_page($node, $user) {
   om_project_promote_member_from_project($node->nid, $user);
   drupal_set_message('Promoted user: ' . $user . ' to admin the project.');
@@ -400,9 +408,12 @@ function om_project_node_delete($node) {
 
 /**
  * Implements hook_node_access
+ *   NB: We don't deny access. Here we either allow or ignore.
+ *   This respects the users role/permissions.
  */
 function om_project_node_access($node, $op, $account) {
-  if (is_object($node) && $node->type == 'om_project') {
+  $types = array('om_project', 'om_show');
+  if (is_object($node) && in_array($node->type, $types)) {
     if ($op == 'view' || $op == 'create') {
       return NODE_ACCESS_IGNORE;
     }
@@ -434,6 +445,9 @@ function om_project_node_access($node, $op, $account) {
   return NODE_ACCESS_IGNORE;
 }
 
+/**
+ * Determine if a user is the admin of a given project.
+ */
 function om_project_user_is_project_admin($uid, $nid) {
   $admin = om_project_get_project_members($nid, TRUE);
   if (!empty($admin)) {
@@ -463,6 +477,9 @@ function om_project_get_project_members($nid, $admin = FALSE) {
   }
 }
 
+/**
+ * Helper function to remove a member from a project.
+ */
 function om_project_remove_member_from_project($nid, $user) {
   $user = user_load_by_name($user);
   if (is_object($user)) {
@@ -473,6 +490,9 @@ function om_project_remove_member_from_project($nid, $user) {
   }
 }
 
+/**
+ * Helper function to promote a member to project admins.
+ */
 function om_project_promote_member_from_project($nid, $user) {
   $user = user_load_by_name($user);
   if (is_object($user)) {
