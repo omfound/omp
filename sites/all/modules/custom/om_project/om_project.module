@@ -62,16 +62,6 @@ function om_project_menu() {
   
   $node_info = entity_get_info('node');
   if (isset($node_info['bundles']['om_show'])) {
-    $items['node/%node/project-manage'] = array(
-      'title' => t('Manage Shows'),
-      'description' => t('Takes node object and returns options for Project Admins'),
-      'page callback' => 'om_project_manage',
-      'access callback' => 'om_project_manage_access',
-      'access arguments' => array(1),
-      'type' => MENU_LOCAL_TASK,
-      'weight' => 12,
-    );
-    
     $items['project/%node/project-manage/metadata_reset'] = array(
       'title' => t('Metadata Reset'),
       'description' => t('Takes node ID and resets all shows to the Project metadata settings'),
