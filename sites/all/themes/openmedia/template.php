@@ -150,7 +150,13 @@ function openmedia_preprocess_node__om_show(&$variables) {
   if(!empty($variables['field_om_show_video'][0]['value'])) {
     $jwplayer = array();
     foreach($variables['field_om_show_video'] as $key => $info) {
-      $jwplayer[$key]['path'] = $info['safe_value'];
+      if (!valid_url($info['safe_value'], true) {
+        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
+      }
+      else {
+        $video_path = $info['safe_value'];
+      }
+      $jwplayer[$key]['path'] = $video_path;
       if($variables['field_show_thumbnail'][$variables['language']][0]['uri']) {
         $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables['language']][0]['uri']); 
       }
