@@ -14,5 +14,6 @@ function internet_archive_thumb_from_file_url($url) {
 
 function internet_archive_item_from_file_url($url) {
   $urlinfo = parse_url($url);
-  dsm($urlinfo);
+  $parts = explode('/', $urlinfo['path']);
+  dsm($parts);
 }
