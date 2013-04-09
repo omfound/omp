@@ -5,6 +5,7 @@ function internet_archive_thumb_from_file_url($url) {
     $pathinfo = pathinfo($url);
     if (!empty($pathinfo['filename'])) {
       $filename = $pathinfo['filename'] . '_000001.jpg';
+      $filename = str_replace('_512kb', '', $filename);
 
       $link = 'http://www.archive.org/download/';
       $link .= $item .'/'. $item .'.thumbs/';
