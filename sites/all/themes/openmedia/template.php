@@ -159,10 +159,10 @@ function openmedia_preprocess_node__om_show(&$variables) {
       $jwplayer[$key]['path'] = $video_path;
       if ($variables['field_show_thumbnail'][$variables['language']][0]['uri']) {
         $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables['language']][0]['uri']); 
+        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
+          $jwplayer[$key]['image'] = $image_url;
+        }
       }
-      elseif ($image_url = internet_archive_thumb_from_file_url($video_path)) {
-        $jwplayer[$key]['image'] = $image_url;
-      } 
     }
     drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
     drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
