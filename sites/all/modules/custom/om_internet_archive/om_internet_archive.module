@@ -1,0 +1,13 @@
+<?php
+
+function internet_archive_thumb_from_file_url($url) {
+  $pathinfo = pathinfo($url);
+  $filename = $pathinfo['filename'] . '_000001.jpg';
+
+  $link = 'http://www.archive.org/download/';
+  $link .= $item .'/'. $item .'.thumbs/';
+  $link .= $filename;
+
+  return $link;
+}
+
