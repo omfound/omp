@@ -22,7 +22,7 @@ function om_membership_rules_event_info() {
     'label' => t('When Creating Org Sub-Members'),
     'group' => 'Open Media Membership',
     'variables' => array(
-      'user' => array(
+      'new_org_user' => array(
         'label' => t('New User'),
         'type' => 'user',
         'skip save' => TRUE,
