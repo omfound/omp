@@ -483,12 +483,14 @@ function openmedia_preprocess_views_view_fields(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
-      $image = '<img typeof="foaf:Image" src="http://dev.openmedia.gotpantheon.com/sites/default/files/styles/220x135/public/default_images/no_image.jpg" width="220" height="135" alt="success" />';
+      $url = 'http://dev.openmedia.gotpantheon.com/sites/default/files/styles/220x135/public/default_images/no_image.jpg';
+      $image = '<img typeof="foaf:Image" src="'.$url.'" width="220" height="135" alt="success" />';
       $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
       $content = '<div class="field-content">';
       $content .= $url;
       $content .= '</div>';
       $vars['fields']['field_show_thumbnail']->content = $content;
+      dsm($vars['fields']['field_om_show']->content);
     }
   }
 }
