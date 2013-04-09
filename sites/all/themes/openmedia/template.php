@@ -486,6 +486,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       if (!empty($vars['fields']['field_om_show_video']->content)) {
         if ($url = internet_archive_thumb_from_file_url(strip_tags($vars['fields']['field_om_show_video']->content))) {
           dsm($url);
+          watchdog('brian', $url);
           $image = '<img typeof="foaf:Image" src="'.$url.'" width="220" height="135" alt="success" />';
           $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
           $content = '<div class="field-content">';
