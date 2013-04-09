@@ -747,3 +747,29 @@ function om_membership_cron() {
   // Ensure that relationships between org member admins and subs are correct.
   om_membership_validate_all_org_sub_members();
 }
+
+function om_membership_token_info() {
+  $info['tokens']['user']['org_user_login_link'] = array(
+    'name' => t('Organization User Login Link'),
+    'description' => t('Provides a one time login link for new organization users'),
+  );
+
+  return $info;
+}
+
+function om_membership_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'user' && !empty($data['user'])) {
+    $account = $data['user'];
+
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+      case 'org_user_login_link':
+        $replacements[$original] = user_pass_reset_url($account);
+        break;
+      }
+    }
+  }
+
+  return $replacements;
+}
