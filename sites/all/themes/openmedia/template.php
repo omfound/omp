@@ -490,7 +490,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       $content .= $url;
       $content .= '</div>';
       $vars['fields']['field_show_thumbnail']->content = $content;
-      dsm($vars['fields']['field_om_show']->content);
+      dsm($vars['fields']['field_om_show_video']->content);
     }
   }
 }
