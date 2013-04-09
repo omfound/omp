@@ -1,8 +1,8 @@
 <?php
 
 function internet_archive_thumb_from_file_url($url) {
+  internet_archive_item_from_file_url($url);
   $pathinfo = pathinfo($url);
-  dsm($pathinfo);
   $filename = $pathinfo['filename'] . '_000001.jpg';
 
   $link = 'http://www.archive.org/download/';
@@ -12,3 +12,7 @@ function internet_archive_thumb_from_file_url($url) {
   return $link;
 }
 
+function internet_archive_item_from_file_url($url) {
+  $urlinfo = parse_url($url);
+  dsm($urlinfo);
+}
