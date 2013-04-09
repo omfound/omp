@@ -343,10 +343,10 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
             $now = time();
             if ($now > $order->created && $now < $exp) {
               $memberships[] = $order;
-	    }
-	    elseif (!$product_metadata->field_duration->value()) {
-	      $memberships[] = $order;
-	    }
+	          }
+	          elseif (!$product_metadata->field_duration->value()) {
+	            $memberships[] = $order;
+	          }
           }
           else {
             $memberships[] = $order;
