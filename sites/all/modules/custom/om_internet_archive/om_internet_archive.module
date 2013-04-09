@@ -18,7 +18,7 @@ function internet_archive_thumb_from_file_url($url) {
 }
 
 function internet_archive_item_from_file_url($url) {
-  if (strpos('archive.org', $url) !== false && strpos('download', $url) !== false) {
+  if (strpos($url, 'archive.org') !== false && strpos($url, 'download') !== false) {
     $urlinfo = parse_url($url);
     if (!empty($urlinfo['path'])) {
       $parts = explode('/', $urlinfo['path']);
