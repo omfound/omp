@@ -494,6 +494,22 @@ function om_membership_return_membership_roles() {
   return $roles;
 }
 
+function om_membership_role_product($rid) {
+  $query = "
+    SELECT entity_id
+    FROM {field_data_field_associated_role}
+    WHERE field_associated_role_rid = :rid";
+  $product_id = db_query($query, array(':rid' => $rid))->fetchField();
+  if (!empty($product_id)) {
+    $product = commerce_product_load($product_id);
+    if (!empty($product)) {
+      return $product;
+    }
+  }
+
+  return false;
+}
+
 /**
  * If a commerce_order object contains membership line items return those items.
  *  @param $commerce_order stdClass()
