@@ -494,6 +494,18 @@ function om_membership_return_membership_roles() {
   return $roles;
 }
 
+function om_membership_user_memberships($user) {
+  $membership_roles = om_membership_return_membership_roles();
+  $matches = array();
+  $matches = array_intersect_key($membership_roles, $user->roles);
+  if (!empty($matches)) {
+    return $matches;
+  }
+  else {
+    return false;
+  }
+}
+
 function om_membership_role_product($rid) {
   $query = "
     SELECT entity_id

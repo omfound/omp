@@ -23,7 +23,7 @@ function om_membership_rules_event_info() {
     'group' => 'Open Media Membership',
     'variables' => array(
       'new_org_user' => array(
-        'label' => t('New User'),
+        'label' => t('New User granted org membership'),
         'type' => 'user',
         'skip save' => TRUE,
       ),
@@ -33,8 +33,8 @@ function om_membership_rules_event_info() {
     'label' => t('When Adding an Org Membership to Existing Users'),
     'group' => 'Open Media Membership',
     'variables' => array(
-      'user' => array(
-        'label' => t('User'),
+      'existing_org_user' => array(
+        'label' => t('Existing user granted org membership'),
         'type' => 'user',
         'skip save' => TRUE,
       ),
