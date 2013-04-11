@@ -166,7 +166,7 @@ function om_membership_order_contains_paid_membership_product($commerce_order) {
 function om_membership_user_has_membership($commerce_order) {
   if (!empty($commerce_order)) {
     global $user;
-    $membership = om_membership_get_user_membership_products($user, $active = TRUE);
+    $membership = om_membership_user_memberships($user);
     if (!empty($membership)) {
       return TRUE;
     }
@@ -180,11 +180,11 @@ function om_membership_user_has_membership($commerce_order) {
 function om_membership_user_has_paid_membership($commerce_order) {
   if (!empty($commerce_order)) {
     global $user;
-    $membership = om_membership_get_user_membership_products($user, $active = TRUE);
+    $membership = om_membership_user_memberships($user);
     if (!empty($membership)) {
-      foreach($membership as $product) {
-        if($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
-	  return TRUE;
+      foreach($membership as $rid => $info) {
+        if ($info->product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
+	        return TRUE;
         } 
       }
     }
