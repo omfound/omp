@@ -487,7 +487,7 @@ function om_membership_return_membership_roles() {
     foreach ($role_field['settings']['referenceable_roles'] AS $rid => $value) {
       if ($value != 0) {
         $roles[$rid] = user_role_load($rid);
-        $roles[$rid]['product'] = om_membership_role_product($rid);
+        $roles[$rid]->product = om_membership_role_product($rid);
       }
     } 
   }
