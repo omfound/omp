@@ -494,16 +494,28 @@ function om_membership_return_membership_roles() {
   return $roles;
 }
 
-function om_membership_user_memberships($user) {
+function om_membership_user_memberships($user, $paid_only = false) {
   $membership_roles = om_membership_return_membership_roles();
   $matches = array();
   $matches = array_intersect_key($membership_roles, $user->roles);
   if (!empty($matches)) {
-    return $matches;
+    if (!$paid_only) {
+      return $matches;
+    }
+    else {
+      $paid_matches = array();
+      foreach ($matches as $rid => $info) {
+        if ($info->product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
+          $paid_matches[$rid] = $info;
+        }
+      }
+      if (!empty($paid_matches)) {
+        return $paid_matches;
+      }
+    }
   }
-  else {
-    return false;
-  }
+  
+  return false;
 }
 
 function om_membership_role_product($rid) {

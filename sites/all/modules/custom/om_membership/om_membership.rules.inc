@@ -180,13 +180,9 @@ function om_membership_user_has_membership($commerce_order) {
 function om_membership_user_has_paid_membership($commerce_order) {
   if (!empty($commerce_order)) {
     global $user;
-    $membership = om_membership_user_memberships($user);
+    $membership = om_membership_user_memberships($user, true);
     if (!empty($membership)) {
-      foreach($membership as $rid => $info) {
-        if ($info->product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
-	        return TRUE;
-        } 
-      }
+      return TRUE;
     }
   }
   return FALSE;
