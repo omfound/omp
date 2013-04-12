@@ -232,6 +232,8 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
     $controller = om_playback_servers_entity_get_controller($pbs);
     if (is_object($controller)) {
       $airings = $controller->get_airing($pbs, $run_info);
+      dsm($airings);
+      die();
       $airing_array = array();
       // Then we'd do something with the airings...
       foreach ($airings AS $airing) {
