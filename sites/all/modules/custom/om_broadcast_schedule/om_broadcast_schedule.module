@@ -233,7 +233,7 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
     if (is_object($controller)) {
       $airings = $controller->get_airing($pbs, $run_info);
       dsm($airings);
-      watchdog('om_broadcast_sync debug','airings: ' . print_r($airings));
+      watchdog('om_broadcast_sync DEBUG','airings: ' . print_r($airings));
       die();
       $airing_array = array();
       // Then we'd do something with the airings...
