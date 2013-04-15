@@ -132,6 +132,7 @@
             }
           });
           $('#left-side [id|=edit-quantity]').change(function(){
+            alert('updating calendar');
             $(".fullcalendar").fullCalendar('removeEvents', function(event){
               if (event.className == 'overlap'){
                 return true;
