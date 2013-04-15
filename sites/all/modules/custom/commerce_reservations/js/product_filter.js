@@ -82,7 +82,7 @@
         }, 500 );
       $('#reservations-header').fadeIn(1000);
       $('#block-system-main').animate({
-        height: '575px'
+        height: '625px'
       }, 500 );  
       //here we grab the fields from the selected item and move them to the "item info" area on the page
       $(item).removeClass('selected_product');
@@ -195,7 +195,7 @@
                     opacity: '1'
                   }, 500 );
                   $('.page-reservations #block-system-main').animate({
-                    height: '575px'
+                    height: '625px'
                   }, 1000 );
                   $('.page-reservations #middle-wrapper').animate({
                     height: '1260px'
@@ -239,7 +239,7 @@
                 opacity: '1'
               }, 500 );
               $('.page-reservations #block-system-main').animate({
-                height: '575px'
+                height: '625px'
               }, 1000 );
               $('.page-reservations #middle-wrapper').animate({
                 height: '1260px'
