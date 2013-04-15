@@ -656,6 +656,8 @@ function om_timeslot_scheduler_process_commit($pid) {
       $meta_data = $controller->create_metadata($pbs, $show_node);
       watchdog("DEBUG bulk scheduling", "meta_data: " . $meta_data);
       dsm($meta_data);
+      if (!is_array($meta_data)) {     print '<pre>' . print_r(debug_backtrace(), TRUE) . '</pre>';  }
+      if (!is_array($show_node)) {     print '<pre>' . print_r(debug_backtrace(), TRUE) . '</pre>';  }
       $show_node->field_om_show_id['und'][0]['value'] = $meta_data['ShowID'];
     }
     $meta_data = array_merge($meta_data, (array)$item);
