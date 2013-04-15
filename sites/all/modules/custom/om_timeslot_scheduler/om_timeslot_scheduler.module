@@ -648,6 +648,33 @@ function om_timeslot_scheduler_process_commit($pid) {
   foreach($cache_items AS $item) {
     $meta_data = array();
     $show_node = node_load($item->show_id);
+<<<<<<< HEAD
+    $lang = $show_node->language;
+    // If a station had more than one type of playback server they would get stuck here
+    // Would have to find a solution that allows pbs to claim fields.
+    if (!empty($show_node->field_om_show_broadcast_file[$lang][0]['value'])) {
+      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['value']);
+      
+      $meta_data = array_merge((array)$meta_data, (array)$item);
+      $result = $controller->create_airing($pbs, $meta_data);
+      if (isset($result['ScheduleID'])) {
+        $airing = array(
+          'title' => $show_node->title,
+          'start' => $item->start,
+          'end' => $item->end,
+          'channel_tid' => $run_info[0]->channel_tid,
+          'show_id' => $show_node->nid,
+          'uid' => $result['ScheduleID'],
+        );
+        if (isset($show_node->field_om_show_aired[$lang][0]['value'])) {
+          $show_node->field_om_show_aired[$lang][0]['value'] ++;
+        }
+        else {
+          $show_node->field_om_show_aired[$lang][0]['value'] = 1;
+        }
+        node_save($show_node);
+        om_broadcast_schedule_create_airing_node($airing);
+=======
     if (isset($show_node->field_om_show_id['und'][0]['value'])) {
       $meta_data = $controller->check_metadata_status($pbs, $show_node->field_om_show_id['und'][0]['value']);
     }
@@ -671,9 +698,8 @@ function om_timeslot_scheduler_process_commit($pid) {
       }
       else {
         $show_node->field_om_show_aired['und'][0]['value'] = 1;
+>>>>>>> 4a72efc2021ddfe7131de5772a6c96f9c4f5f842
       }
-      node_save($show_node);
-      om_broadcast_schedule_create_airing_node($airing);
     }
   }
   drupal_goto('om_timeslot_scheduler/bulk_process_committed/' . $pid);
