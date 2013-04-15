@@ -656,9 +656,9 @@ function om_timeslot_scheduler_process_commit($pid) {
     // Would have to find a solution that allows pbs to claim fields.
     if (!empty($show_node->field_om_show_broadcast_file[$lang][0]['value'])) {
       $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['value']);
-      
       $meta_data = array_merge((array)$meta_data, (array)$item);
       $result = $controller->create_airing($pbs, $meta_data);
+      dsm($meta_data);
       if (isset($result['ScheduleID'])) {
         $airing = array(
           'title' => $show_node->title,
