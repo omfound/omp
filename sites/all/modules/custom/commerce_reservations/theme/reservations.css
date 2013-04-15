@@ -171,6 +171,7 @@ body.page-reservations #main-content #squeeze{
 
 #block-views-calendar-product-view-block .views-row .small-image{
 	margin: auto;
+  height: 110px;
 }
 
 #block-views-calendar-product-view-block .views-row .title{
