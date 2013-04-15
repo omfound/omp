@@ -137,6 +137,7 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
+            alert('loading calendar');
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
             $('#block-system-main .block-inner .content .no-certification-message').remove();
