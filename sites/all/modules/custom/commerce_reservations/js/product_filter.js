@@ -75,13 +75,11 @@
     }
     //The user has selected a reservable item
     $(item).mousedown(function() {
-      alert('selected an item');
       //show the calendar
       $('.view-reservation-calendar').css('top', '530px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
-      $('.view-reservation-calendar').show();
       $('#reservations-header').fadeIn(1000);
       $('#block-system-main').animate({
         height: '575px'
@@ -139,6 +137,7 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
+            alert('loading calendar');
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
             $('#block-system-main .block-inner .content .no-certification-message').remove();
