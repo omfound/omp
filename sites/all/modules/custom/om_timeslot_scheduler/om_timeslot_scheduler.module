@@ -657,9 +657,9 @@ function om_timeslot_scheduler_process_commit($pid) {
     dsm('made it here');
     dsm($show_node);
     dsm($show_node->field_om_show_broadcast_file[$lang]);
-    if (!empty($show_node->field_om_show_broadcast_file[$lang][0]['value'])) {
+    if (!empty($show_node->field_om_show_broadcast_file[$lang][0]['uri'])) {
       dsm('made it further');
-      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['value']);
+      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
       $meta_data = array_merge((array)$meta_data, (array)$item);
       $result = $controller->create_airing($pbs, $meta_data);
       dsm($meta_data);
