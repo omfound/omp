@@ -141,6 +141,8 @@
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
+            //TEMPORARILY EVERYONE CAN RENT
+            not_cert = 1;
             if (not_cert.length > 0){
               logged_in = $('.logged-in');
               if (logged_in.length > 0){
