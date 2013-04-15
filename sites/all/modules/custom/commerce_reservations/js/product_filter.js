@@ -10,7 +10,7 @@
      	  	});
      	  }
      	  else{
-     	  	//console.log("failure binding on ajax complete");
+     	  	console.log("failure binding on ajax complete");
      	  }
       });
     //attach the preloader for the quantity selector here
