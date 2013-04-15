@@ -30,7 +30,11 @@ abstract class playbackServerController {
   abstract function check_metadata_status($pbs, $metadata = array());
   abstract function update_metadata($pbs, $metadata = array());
   abstract function delete_metadata($pbs, $metadata = array());
-
+  /**
+   * Optional method to handle decoding uris
+   */
+  abstract function metadata_record_from_uri($pbs, $uri) {
+  }
   /**
    * Methods dealing with file transmission.
    */
