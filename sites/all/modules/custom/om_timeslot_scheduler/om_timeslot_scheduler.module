@@ -648,6 +648,8 @@ function om_timeslot_scheduler_process_commit($pid) {
   foreach($cache_items AS $item) {
     $meta_data = array();
     $show_node = node_load($item->show_id);
+    dsm($show_node);
+    die();
     if (isset($show_node->field_om_show_id['und'][0]['value'])) {
       $meta_data = $controller->check_metadata_status($pbs, $show_node->field_om_show_id['und'][0]['value']);
     }
