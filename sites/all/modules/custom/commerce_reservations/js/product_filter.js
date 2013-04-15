@@ -10,7 +10,7 @@
      	  	});
      	  }
      	  else{
-     	  	console.log("failure binding on ajax complete");
+     	  	//console.log("failure binding on ajax complete");
      	  }
       });
     //attach the preloader for the quantity selector here
@@ -24,6 +24,7 @@
     var item = $('#block-views-calendar_product_view-block div.views-row');
     $('.meta').remove();
     //Hide all of our commerce item fields on page load
+    alert('hiding elements');
     $('#block-views-calendar_product_view-block .add-to-cart').hide();
     $('#block-views-calendar_product_view-block .body').hide();
     $('#block-views-calendar_product_view-block .large-image').hide();
