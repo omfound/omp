@@ -654,7 +654,9 @@ function om_timeslot_scheduler_process_commit($pid) {
     $lang = $show_node->language;
     // If a station had more than one type of playback server they would get stuck here
     // Would have to find a solution that allows pbs to claim fields.
+    dsm('made it here');
     if (!empty($show_node->field_om_show_broadcast_file[$lang][0]['value'])) {
+      dsm('made it further');
       $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['value']);
       $meta_data = array_merge((array)$meta_data, (array)$item);
       $result = $controller->create_airing($pbs, $meta_data);
