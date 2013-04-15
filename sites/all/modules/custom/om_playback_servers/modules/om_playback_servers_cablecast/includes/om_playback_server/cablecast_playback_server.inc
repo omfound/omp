@@ -50,7 +50,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     foreach($metadata AS $id) {
       $response = $this->soap_request($pbs, 'GetShowInformation', array('ShowID' => $id));
       if (is_object($response->GetShowInformationResult)) {
-        $shows[] = (array) $response->GetShowInformationResult;
+        $shows[] = (array)$response->GetShowInformationResult;
       }
     }
     if (count($shows) == 1) {
@@ -62,7 +62,16 @@ class cablecastPlaybackServerController extends playbackServerController {
   }
   public function delete_metadata($pbs, $metadata = array()) {
   }
-  
+  /**
+   * Use a uri to return a show record.
+   */
+  public function metadata_record_from_uri($uri) {
+    if (class_exists('cablecastFile')) {
+      $file_controller = new cablecastFile();
+      $record = $file_controller->get_show_record($uri);
+      return (array)$record->GetShowInformationResult;
+    }
+  }
   /**
    * --Methods dealing with files
    */
