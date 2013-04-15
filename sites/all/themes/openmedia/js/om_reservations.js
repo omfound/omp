@@ -185,6 +185,7 @@
                   $('#left-side [id|=edit-quantity]').val(quantity);
                   $('#left-side .add-to-cart .form-item-quantity').show();
                   $('#left-side [id|=edit-quantity]').change(function(){
+                    alert('firing on calendar update');
                     $(".fullcalendar").fullCalendar('removeEvents', function(event){
                       if (event.className == 'overlap'){
                         return true;
