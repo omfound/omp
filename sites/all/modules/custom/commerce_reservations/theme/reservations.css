@@ -24,16 +24,7 @@
 }
 body.page-reservations #main-content #squeeze{
 	margin-right: 0px;
-	width: 575px;
 	float: left;
-}
-.page-reservations #middle-wrapper div.page div.sidebar-second{
-	width: 225px;
-	left: 730px;
-}
-
-.page-reservations #middle-wrapper .sidebar-first .sidebar-first-inner{
-	margin: 0px;
 }
 
 .page-reservations #page-title{
@@ -42,14 +33,12 @@ body.page-reservations #main-content #squeeze{
 }
 .page-reservations #block-system-main{
 	margin-top: 40px;
-	width: 556px;
 }
 
 .view-id-calendar_product_view #top-area{
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
-  width: 545px;
 }
 
 .view-id-calendar_product_view .item{
