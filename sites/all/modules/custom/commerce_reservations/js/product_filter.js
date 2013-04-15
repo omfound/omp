@@ -81,6 +81,7 @@
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
+      $('.view-reservation-calendar').show();
       $('#reservations-header').fadeIn(1000);
       $('#block-system-main').animate({
         height: '575px'
