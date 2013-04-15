@@ -715,6 +715,40 @@ function commerce_reservations_product_type_check($order_id) {
   }
   return FALSE;
 }
+
+/**
+ * Condition callback to check whether or not a line item product should be charged daily
+ */
+function commerce_reservations_charge_by_the_day_check($lid) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+      $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+      if ($product_wrapper->field_charge_by_the_->value() == 'day') {
+	    return TRUE;
+      }
+	}
+	return FALSE;
+}
+
+/**
+ * Condition callback to check whether or not a line item product should be charged hourly
+ */
+function commerce_reservations_charge_by_the_hour_check($lid) {
+	if (is_numeric($lid)) {
+	  $line_item = commerce_line_item_load($lid);
+      $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+	  $product = $line_item_wrapper->commerce_product->value();
+	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+      if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
+	    return TRUE;
+      }
+	}
+	return FALSE;
+}
+
+
 /**
  * Condition callback to check whether or not an reservation is commercial.
  */
