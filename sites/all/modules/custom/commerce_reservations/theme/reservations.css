@@ -47,7 +47,6 @@ body.page-reservations #main-content #squeeze{
 
 #reservations-header{
 	background-color: white;
-	width: 545px;
 	height: 250px;
   -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
@@ -132,7 +131,6 @@ body.page-reservations #main-content #squeeze{
 }
 
 #block-views-calendar-product-view-block .item-area{
-	width: 545px;
 	overflow-x: scroll;
 	white-space: nowrap;
 	height: 150px;
@@ -274,11 +272,6 @@ body.page-reservations #main-content #squeeze{
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
-  width: 545px;
-}
-
-.view-id-reservation_calendar .fullcalendar{
-	width: 545px;
 }
 
 .view-id-reservation_calendar .view-content{
