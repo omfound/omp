@@ -228,10 +228,20 @@ function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
  */
 function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
   $pbs_array = om_playback_servers_get_pbs_by_term($run_info['channel_tid']);
+  watchdog('get_pbs_airings DEBUG', 'before the first foreach');
+  watchdog('get_pbs_airings DEBUG', 'before the first foreach + ' . $pbs_array );
   foreach ($pbs_array AS $pbs) {
+    watchdog('get_pbs_airings DEBUG', 'in the first foreach');
     $controller = om_playback_servers_entity_get_controller($pbs);
+    //dsm($controller);
+    //watchdog('om_broadcast_sync ctrl DEBUG','airings: ' . print_r($controller));
+    //die();
     if (is_object($controller)) {
       $airings = $controller->get_airing($pbs, $run_info);
+      //dsm($airings);
+
+      //watchdog('om_broadcast_sync DEBUG','airings: ' . print_r($airings));
+      //die();
       $airing_array = array();
       // Then we'd do something with the airings...
       foreach ($airings AS $airing) {
