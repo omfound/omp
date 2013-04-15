@@ -137,23 +137,22 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
-            alert('loading calendar');
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
-            $('#block-system-main .block-inner .content .no-certification-message').remove();
+            $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
             if (not_cert.length > 0){
               logged_in = $('.logged-in');
               if (logged_in.length > 0){
-	              $('#block-system-main .block-inner .content').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../class-list">Take a Class!</a></div>');
+	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../class-list">Take a Class!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
               }  else{
-	              $('#block-system-main .block-inner .content').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../personal-membership-plans">Login or Become a Member!</a></div>');
+	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../personal-membership-plans">Login or Become a Member!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
 	            }
 	            allowCommercial = $('#allow_commercial', data);
 	            if (allowCommercial.length > 0){
-		            $('#block-system-main .block-inner .content').append('<div class = "commercial-message"><p>You may also reserve this item as a commercial rental, at the commercial rates.</p><div class = "commercial-button">Commercial Reservation</div></div>');
+		            $('#content #content-inner').append('<div class = "commercial-message"><p>You may also reserve this item as a commercial rental, at the commercial rates.</p><div class = "commercial-button">Commercial Reservation</div></div>');
 		            $('.commercial-button').mousedown(function(){
 		              $('#left-side .field-name-field-commercial-reservation input').attr('checked', 'checked');
 		              $('.no-certification-message').hide();
@@ -407,10 +406,10 @@
                     success : function (data) {
                       $('#leftContent .large-image').removeClass('preloader-active');
                       $preloader.detach();
-                      $('#block-system-main .block-inner .content .no-certification-message').remove();
+                      $('#content #content-inner .no-certification-message').remove();
                       not_cert = $('#not_certified', data);
                       if (not_cert.length > 0){
-	                      $('#block-system-main .block-inner .content').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
+	                      $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
                       } else{
                         $('a.fullcalendar-event-details', data).each(function(index){
                           event = new Object();
@@ -472,10 +471,10 @@
           success : function (data) {
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
-            $('#block-system-main .block-inner .content .no-certification-message').remove();
+            $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
             if (not_cert.length > 0){
-	            $('#block-system-main .block-inner .content').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
+	            $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
             } else{
               $('a.fullcalendar-event-details', data).each(function(index){
                 event = new Object();
