@@ -75,6 +75,7 @@
     }
     //The user has selected a reservable item
     $(item).mousedown(function() {
+      alert('selected an item');
       //show the calendar
       $('.view-reservation-calendar').css('top', '530px');
       $('.view-reservation-calendar').animate({
