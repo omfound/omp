@@ -173,10 +173,6 @@ body.page-reservations #main-content #squeeze{
 	margin: auto;
 }
 
-#block-views-calendar-product-view-block .views-row .small-image img{
-	margin-left: 50px;
-}
-
 #block-views-calendar-product-view-block .views-row .title{
 	color: #676767;
 	font-family: "proxima-nova";
