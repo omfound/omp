@@ -136,41 +136,41 @@
 
 	  });
 
-          $('#left-side [id|=edit-quantity]').change(function(){
-            alert('updating calendar');
-            $(".fullcalendar").fullCalendar('removeEvents', function(event){
-              if (event.className == 'overlap'){
-                return true;
-              }
-            });
-            quantity = $('#selected-product select[id^="edit-quantity"]').val();
-            $.ajax(
-            {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
-              cache : false,
-              success : function (data) {
-	            $('a.fullcalendar-event-details', data).each(function(index){
-                  event = new Object();
-                  event.field = $(this).attr('field');
-                  event.index = $(this).attr('index');
-                  event.eid = $(this).attr('eid');
-                  event.entity_type = $(this).attr('entity_type');
-                  event.title = $(this).attr('title');
-                  event.start = $(this).attr('start');
-                  event.end = $(this).attr('end');
-                  event.url = $(this).attr('href');
-                  event.allDay = ($(this).attr('allDay') === '1');
-                  event.className = 'overlap';
-                  event.editable = ($(this).attr('editable') === '1');
-                  event.color = '#912711';
-                  event.backgroundColor = '#912711';
-                  event.eventBorderColor = '#912711';
-                  event.textColor = '#912711';
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
-                });
-              }
-            });
+    $('#left-side select[id^="edit-quantity"]').change(function(){
+      alert('updating calendar');
+      $(".fullcalendar").fullCalendar('removeEvents', function(event){
+        if (event.className == 'overlap'){
+          return true;
+        }
+      });
+      quantity = $('#selected-product select[id^="edit-quantity"]').val();
+      $.ajax(
+      {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
+        cache : false,
+        success : function (data) {
+       $('a.fullcalendar-event-details', data).each(function(index){
+            event = new Object();
+            event.field = $(this).attr('field');
+            event.index = $(this).attr('index');
+            event.eid = $(this).attr('eid');
+            event.entity_type = $(this).attr('entity_type');
+            event.title = $(this).attr('title');
+            event.start = $(this).attr('start');
+            event.end = $(this).attr('end');
+            event.url = $(this).attr('href');
+            event.allDay = ($(this).attr('allDay') === '1');
+            event.className = 'overlap';
+            event.editable = ($(this).attr('editable') === '1');
+            event.color = '#912711';
+            event.backgroundColor = '#912711';
+            event.eventBorderColor = '#912711';
+            event.textColor = '#912711';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
+        }
+      });
+    });
 
 
     }
