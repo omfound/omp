@@ -33,6 +33,7 @@
     //Hide the calendar and product info box
     $('.view-reservation-calendar').css('height', '0px');
     $('.view-reservation-calendar').css('visibility', 'hidden');
+    $('#content').css('height', 'auto');
     $('#reservations-header').hide();
     $('.view-reservation-calendar').css('top', '-9000px');
     //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
@@ -77,6 +78,7 @@
     $(item).mousedown(function() {
       //show the calendar
       $('.view-reservation-calendar').css('top', '625px');
+      $('#content').css('height', '1300px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
@@ -148,9 +150,11 @@
               if (logged_in.length > 0){
 	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../class-list">Take a Class!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
+                $('#content').css('height', 'auto');
               }  else{
 	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../personal-membership-plans">Login or Become a Member!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
+                $('#content').css('height', 'auto');
 	            }
 	            allowCommercial = $('#allow_commercial', data);
 	            if (allowCommercial.length > 0){
@@ -191,6 +195,7 @@
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                   });
                   $('.view-reservation-calendar').css('visibility', 'visible');
+                  $('#content').css('height', '1300px'); 
                   $('.view-reservation-calendar').animate({
                     opacity: '1'
                   }, 500 );
@@ -235,6 +240,7 @@
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
+              $('#content').css('height', '1300px');
               $('.view-reservation-calendar').animate({
                 opacity: '1'
               }, 500 );
@@ -444,6 +450,7 @@
                           $(".fullcalendar").fullCalendar('renderEvent', event, true);
                         });
                         $('.view-reservation-calendar').css('visibility', 'visible');
+                        $('#content').css('height', '1300px');
                         $('.view-reservation-calendar').animate({
                           height: '395px'
                         }, 500 );
@@ -509,6 +516,7 @@
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
+              $('#content').css('height', '1300px');
               $('.view-reservation-calendar').animate({
                 height: '395px'
               }, 500 ); 
