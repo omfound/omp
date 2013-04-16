@@ -1,5 +1,5 @@
 <?php $checkedout = FALSE;?>
-<?php if ($row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>
+<?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>
   <div class = "reservation-overdue">
 <?php else:?>
   <div class = "reservation">
@@ -21,7 +21,11 @@
     </td>
     <td class = "user-info">
       <?php $user = user_load($fields['uid']->raw);?>
-      <?php print '<a href = "../user/' . $user->uid . '">' . $user->field_user_contact_info['und'][0]['first_name'] . ' ' . $user->field_user_contact_info['und'][0]['last_name'] . '</a></br>';?>
+      <?php $contact_info = profile2_load_by_user($user, 'contact_info'); ?>
+      <?php $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value']; ?>
+      <?php $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value']; ?>
+      <?php $full_name = $first_name.' '.$last_name; ?>
+      <?php print '<a href = "../user/' . $user->uid . '">' . $full_name . '</a></br>';?>
     </td>
     <td class = "order-link">
       <?php print $fields['view_order']->content;?>
