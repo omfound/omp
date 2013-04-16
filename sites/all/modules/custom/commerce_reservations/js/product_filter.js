@@ -309,7 +309,6 @@
                 }
               },
               onShow: function(){
-                console.log($(".qtip-content #edit-quantity").val());
                 //TODO: Find a way to add chosen to form select elements
                 $('.qtip-content [id|=edit-quantity]').val(quantity);
                 $('#pickedDates .start-date-wrapper .form-select').focus(function(){
