@@ -135,7 +135,6 @@
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
-      alert('pid: '+pid+', nid: '+nid);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
@@ -144,8 +143,6 @@
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
-            //TEMPORARILY EVERYONE CAN RENT
-            not_cert = 1;
             if (not_cert.length > 0){
               logged_in = $('.logged-in');
               if (logged_in.length > 0){
@@ -389,7 +386,6 @@
                 });
               },
               beforeHide: function(){
-                alert('firing beforehide');
                 quantity = $('.qtip-contentWrapper [id|=edit-quantity]').val();
                 $('#left-side .add-to-cart').remove();
                 tipContent = this.options.content.text[0].outerHTML;
@@ -417,7 +413,6 @@
                       $preloader.detach();
                       $('#content #content-inner .no-certification-message').remove();
                       not_cert = $('#not_certified', data);
-                      not_cert = 1; //temporary everyone can rent
                       if (not_cert.length > 0){
 	                      $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
                       } else{
@@ -467,7 +462,6 @@
         }
       });
       $('#left-side [id|=edit-quantity]').change(function(){ 
-        alert('testing');
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
             return true;
@@ -484,7 +478,6 @@
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
-            not_cert = 1; //temporary everyone gets perms
             if (not_cert.length > 0){
 	            $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
             } else{
