@@ -655,7 +655,10 @@ function om_timeslot_scheduler_process_commit($pid) {
     // If a station had more than one type of playback server they would get stuck here
     // Would have to find a solution that allows pbs to claim fields.
     if (!empty($show_node->field_om_show_broadcast_file)) {
-      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
+      print '<pre>';
+      print_r(get_class_methods($controller));
+      print '</pre>';
+      //$meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
       print 'we make it this far';
       die(print_r($meta_data, true));
       if (!empty($meta_data)) {
