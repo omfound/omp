@@ -648,7 +648,7 @@ function om_timeslot_scheduler_process_commit($pid) {
   $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
   $pbs = array_shift(om_playback_servers_get_pbs_by_term($run_info[0]->channel_tid));
   $controller = om_playback_servers_entity_get_controller($pbs);
-  die(print_r($pbs, true));
+  die(print_r($run_info[0]->channel_tid, true));
   foreach($cache_items AS $item) {
     $meta_data = array();
     $show_node = node_load($item->show_id);
