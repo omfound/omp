@@ -417,6 +417,8 @@ function calendar_filter($pid, $node, $quantity = 0){
       }
     }
   }
+  //TEMP EVERYONE IS CERTIFIED
+  $is_certified = TRUE;
   if ($is_certified){
 	  $args = array();
     $args[] = $pid;
