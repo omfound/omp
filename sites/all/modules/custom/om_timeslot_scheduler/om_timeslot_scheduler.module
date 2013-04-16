@@ -340,7 +340,6 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
       $run['timeslots'][] = $timeslot;
     }
   }
-
   if (empty($run['timeslots'])) {
     $run['errors'][__FUNCTION__][] = array(
       'error' => 'No timeslots were found for the given date range.',
@@ -583,7 +582,7 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations) 
       }
     }
   }
-  if (empty($results['run']) {
+  if (empty($results['run'])) {
     drupal_set_message(t('There was an error during scheduling resulting in an incomplete process. Please try again.'), $error['severity']);
   }
   else {
