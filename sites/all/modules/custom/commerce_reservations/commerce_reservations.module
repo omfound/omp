@@ -171,7 +171,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#multiple'] = FALSE;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
-      $form['#validate'][] = 'commerce_reservations_testing_submit';
+      $form['#validate'] = array('commerce_reservations_testing_submit');
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
