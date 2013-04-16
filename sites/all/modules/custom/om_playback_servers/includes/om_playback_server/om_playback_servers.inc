@@ -33,8 +33,7 @@ abstract class playbackServerController {
   /**
    * Optional method to handle decoding uris
    */
-  abstract function metadata_record_from_uri($pbs, $uri) {
-  }
+  abstract function metadata_record_from_uri($pbs, $uri);
   /**
    * Methods dealing with file transmission.
    */
