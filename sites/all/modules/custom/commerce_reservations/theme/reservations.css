@@ -81,8 +81,6 @@ body.page-reservations #main-content #squeeze{
 }
 
 #reservations-header #right-side{
-	float: right;
-	width: 280px;
 }
 
 #reservations-header #equipment_img{
@@ -228,7 +226,7 @@ body.page-reservations #main-content #squeeze{
 
 #block-views-calendar-product-view-block #rightContent{
 	margin-top: 25px;
-	padding-right: 15px;
+  padding-left: 20px;
 }
 
 #block-views-calendar-product-view-block #rightContent .title{
