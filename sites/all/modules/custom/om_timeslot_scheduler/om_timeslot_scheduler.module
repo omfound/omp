@@ -583,34 +583,38 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations) 
       }
     }
   }
+  if (empty($results['run']) {
+    drupal_set_message(t('There was an error during scheduling resulting in an incomplete process. Please try again.'), $error['severity']);
+  }
+  else {
+    // Determine what process number this proces will be.
+    $pid = om_timeslot_scheduler_get_pid();
 
-  // Determine what process number this proces will be.
-  $pid = om_timeslot_scheduler_get_pid();
+    // Add a process record.
+    $process_record = new stdClass();
+    $process_record->start = $results['run']['start'];
+    $process_record->end = $results['run']['end'];
+    $process_record->channel_tid = $results['run']['channel_tid'];
+    $process_record->time = $results['run']['end'];
+    $process_record->status = 0;
 
-  // Add a process record.
-  $process_record = new stdClass();
-  $process_record->start = $results['run']['start'];
-  $process_record->end = $results['run']['end'];
-  $process_record->channel_tid = $results['run']['channel_tid'];
-  $process_record->time = $results['run']['end'];
-  $process_record->status = 0;
-  // #TODO replace with drupal_write_record
-  $process = om_timeslot_scheduler_write_record('om_timeslot_scheduler_process', $process_record);
-
-  // Add cache records.
-  foreach ($results['run']['timeslots'] AS $key => $timeslot) {
-    if (!empty($timeslot->schedule)) {
-      foreach ($timeslot->schedule AS $schedule_run) {
-        foreach($schedule_run AS $item) {
-          $cache_item = new stdClass();
-          $cache_item->pid = $pid;
-          $cache_item->start = $item['start'];
-          $cache_item->end = $item['end'];
-          $cache_item->show_id = $item['show']->nid;
-          $cache_item->timeslot_id = $timeslot->nid;
-          $cache_item->time = time();
-          // #TODO replace with drupal_write_record
-          om_timeslot_scheduler_write_record('om_timeslot_scheduler_cache', $cache_item);
+    // #TODO replace with drupal_write_record
+    $process = om_timeslot_scheduler_write_record('om_timeslot_scheduler_process', $process_record);
+    // Add cache records.
+    foreach ($results['run']['timeslots'] AS $key => $timeslot) {
+      if (!empty($timeslot->schedule)) {
+        foreach ($timeslot->schedule AS $schedule_run) {
+          foreach($schedule_run AS $item) {
+            $cache_item = new stdClass();
+            $cache_item->pid = $pid;
+            $cache_item->start = $item['start'];
+            $cache_item->end = $item['end'];
+            $cache_item->show_id = $item['show']->nid;
+            $cache_item->timeslot_id = $timeslot->nid;
+            $cache_item->time = time();
+            // #TODO replace with drupal_write_record
+            om_timeslot_scheduler_write_record('om_timeslot_scheduler_cache', $cache_item);
+          }
         }
       }
     }
