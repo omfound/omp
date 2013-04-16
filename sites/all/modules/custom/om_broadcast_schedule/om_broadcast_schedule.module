@@ -265,23 +265,24 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $context['results']['delete_airings'] = array();
   // We are going to try and match based on schedule id.
   // NB: if there are other pbs types in the future we may need more criteria here.
-  foreach($context['results']['airing_values'] AS $airing) {
-    $matched = FALSE;
-    $query = db_select('field_data_field_om_airing_guid', 'uid');
-    $query->join('taxonomy_index', 'term_node', 'uid.entity_id=term_node.nid');
-    $query->fields('uid', array('entity_id'));
-    $query->condition('field_om_airing_guid_value', $airing['uid'], '=');
-    $query->condition('tid', $context['results']['run_info']['channel_tid'], '=');
-    $result = $query->execute();
-    while($row = $result->fetchAssoc()) {
-      $matched = TRUE;
-      $safe[] = $row['entity_id'];
-    }
-    if ($matched == FALSE) {
-      $context['results']['create_airings'][] = $airing;
+  if (!empty($context['results']['airing_values'])) {
+    foreach($context['results']['airing_values'] AS $airing) {
+      $matched = FALSE;
+      $query = db_select('field_data_field_om_airing_guid', 'uid');
+      $query->join('taxonomy_index', 'term_node', 'uid.entity_id=term_node.nid');
+      $query->fields('uid', array('entity_id'));
+      $query->condition('field_om_airing_guid_value', $airing['uid'], '=');
+      $query->condition('tid', $context['results']['run_info']['channel_tid'], '=');
+      $result = $query->execute();
+      while($row = $result->fetchAssoc()) {
+        $matched = TRUE;
+        $safe[] = $row['entity_id'];
+      }
+      if ($matched == FALSE) {
+        $context['results']['create_airings'][] = $airing;
+      }
     }
   }
-
   // Now select all airings in the current date range and see whether to create/leave alone/delete
 
   $query = db_select('field_data_field_om_airing_dates', 'dates');
