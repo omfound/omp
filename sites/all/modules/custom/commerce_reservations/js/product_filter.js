@@ -135,6 +135,7 @@
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
+      alert('pid: '+pid+', nid: '+nid);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
