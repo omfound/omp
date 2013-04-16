@@ -198,5 +198,7 @@ function om_playback_servers_get_pbs_by_term($channel_tid) {
   while ($row = $result->fetchAssoc()) {
     $pbs_ids[] = $row['pbsid'];
   }
+  print 'here they are: ';
+  die(print_r($pbs_ids, TRUE));
   return entity_get_controller('om_playback_server')->load($pbs_ids);
 }
