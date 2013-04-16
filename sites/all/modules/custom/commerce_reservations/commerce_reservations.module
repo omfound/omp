@@ -171,6 +171,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#multiple'] = FALSE;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
+      $form['#submit'][] = 'commerce_reservations_testing_submit';
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
@@ -186,6 +187,11 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
     }
   }
+}
+
+function commerce_reservations_testing_submit(&$form, $form_state) {
+  dsm($form);
+  dsm($form_state);
 }
 
 //Get the closed dates and times so we can add them to the calendar
