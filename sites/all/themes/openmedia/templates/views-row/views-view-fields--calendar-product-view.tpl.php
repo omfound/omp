@@ -15,7 +15,7 @@
       <label for = "member-cost">(Member)</label>
     </div>
   <?php endif;?>
-  <?php if (!empty($fields['field_commercial_cost']->content && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
+  <?php if (!empty($fields['field_commercial_cost']->content) && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
     <div class = "commercial-cost item-data">
       <?php print $fields['field_commercial_cost']->content;?>
       <label for = "commercial-cost">(Commercial)</label>
