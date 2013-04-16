@@ -464,6 +464,7 @@
           });
         }
       });
+      /**
       $('#left-side [id|=edit-quantity]').change(function(){ 
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
@@ -523,6 +524,7 @@
           }
         });
       });
+      **/
     });
     }
   }
