@@ -397,7 +397,6 @@
                 $('#left-side .add-to-cart .form-submit').hide();
                 $('#left-side [id|=edit-quantity]').val(quantity);
                 $('#left-side .add-to-cart .form-item-quantity').show();
-                /**
                 $('#left-side [id|=edit-quantity]').change(function(){
                   $(".fullcalendar").fullCalendar('removeEvents', function(event){
                     if (event.className == 'overlap'){
@@ -457,14 +456,12 @@
                     }
                   });
                 });
-                **/
                 this.destroy();
               }
             }
           });
         }
       });
-      /**
       $('#left-side [id|=edit-quantity]').change(function(){ 
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
@@ -524,7 +521,6 @@
           }
         });
       });
-      **/
     });
     }
   }
