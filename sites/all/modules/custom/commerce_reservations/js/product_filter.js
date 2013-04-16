@@ -386,6 +386,7 @@
                 });
               },
               beforeHide: function(){
+                alert('closing and updating');
                 quantity = $('.qtip-contentWrapper [id|=edit-quantity]').val();
                 //$('#left-side .add-to-cart').remove();
                 tipContent = this.options.content.text[0].outerHTML;
