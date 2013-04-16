@@ -274,7 +274,7 @@ body.page-reservations #main-content #squeeze{
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
-  line-height: auto;
+  line-height: normal;
 }
 
 .view-id-reservation_calendar div.view-header h3{
