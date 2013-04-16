@@ -163,11 +163,11 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
       $options = array();
       for ($i = $max_quantity; $i > 0; $i--){
-        $options[] = $i;
+        $options[$i] = $i;
       }
       sort($options);
       $form['quantity']['#type'] = 'select';
-      $form['quantity']['#options'] = drupal_map_assoc($options);
+      $form['quantity']['#options'] = $options;
       $form['quantity']['#multiple'] = FALSE;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
