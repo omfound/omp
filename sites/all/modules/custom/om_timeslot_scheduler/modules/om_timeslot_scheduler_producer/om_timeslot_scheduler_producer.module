@@ -452,11 +452,6 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   if (isset($show_node->field_om_show_id['und'][0]['value'])) {
     $meta_data = $controller->check_metadata_status($pbs, $show->field_om_show_id['und'][0]['value']);
   }
-  if (empty($meta_data) && empty($show_node->field_om_show_id['und'][0]['value'])) {
-    $meta_data = $controller->create_metadata($pbs, $show);
-    $show_node->field_om_show_id['und'][0]['value'] = $meta_data['ShowID'];
-    node_save($show);
-  }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
 

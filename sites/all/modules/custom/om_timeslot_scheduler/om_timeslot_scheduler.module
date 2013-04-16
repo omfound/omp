@@ -502,7 +502,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               $next_start = $mini_gap['start'] + 1800;
               // Begin normal scheduling...
               $used = 0;
-              foreach($timeslot->om_timeslot_showlist AS $rank => $show) {
+              foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
+                $show = om_timeslot_scheduler_load_node($show_nid);
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
                 }
@@ -541,7 +542,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $rule = om_timeslot_scheduler_entity_get_rules($rule_name);
                       $branding_list = $rule->executeRule($timeslot);
                     }
-                    foreach($branding_list AS $branding_key => $banding_item) {
+                    foreach($branding_list AS $branding_key => $banding_item_nid) {
+                      //#HERE
+                      $banding_item = om_timeslot_scheduler_load_node($banding_item_nid);
                       $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
                       if ($branding_show_completion <= $mini_gap['end']) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
@@ -1077,4 +1080,45 @@ function om_timeslot_scheduler_commit_schedule_form($form, &$form_state, $pid) {
   );
   $form['#submit'][] = '_om_timeslot_scheduler_process_commit';
   return $form;
+}
+
+/**
+ * Load a node with only bare essential fields required for scheduling
+ *  This way we can circumvent hook_node_xx entirely.
+ *
+ * @param $nid
+ *   int node id
+ *
+ * @return built node object
+ */
+function om_timeslot_scheduler_load_node($nid) {
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
+  $query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
+  $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
+  $query->fields('duration', array('field_om_show_duration_value'));
+  $query->fields('air_count', array('field_om_show_aired_value'));
+  $query->condition('n.nid', $nid, '=');
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  $result = array_shift($result);
+  if (isset($result->field_om_show_duration_value)) {
+    $result->field_om_show_duration = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_show_duration_value
+        )
+      )
+    );
+  }
+  if (isset($result->field_om_show_aired_value)) {
+    $result->field_om_show_aired = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_show_aired_value
+        )
+      )
+    );
+  }
+  return $result;
 }

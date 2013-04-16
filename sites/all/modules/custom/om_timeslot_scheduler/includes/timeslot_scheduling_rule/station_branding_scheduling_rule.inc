@@ -8,7 +8,7 @@ class stationBrandingSchedulingRule extends timeslotSchedulingRule {
     $result = $query->execute();
     
     while($row = $result->fetchAssoc()) {
-      $shows[] = node_load($row['entity_id']);
+      $shows[] = $row['entity_id'];
     }
     shuffle($shows);
     return array_values($shows);

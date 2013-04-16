@@ -29,7 +29,7 @@ class fewestAiredShowsSchedulingRule extends timeslotSchedulingRule {
     }
     asort($shows_by_airings);
     foreach($shows_by_airings AS $nid => $rank) {
-      $shows[] = node_load($nid);
+      $shows[] = $nid;
     }
     return array_values($shows);
   }

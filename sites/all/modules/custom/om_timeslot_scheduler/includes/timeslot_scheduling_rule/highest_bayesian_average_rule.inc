@@ -28,8 +28,7 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
     }
     arsort($vote_results);
     foreach($vote_results AS $nid => $rating) {
-      $node = node_load($nid);
-      $shows[] = $node;
+      $shows[] = $nid;
     }
     return array_values($shows);
   }
