@@ -33,6 +33,7 @@
     //Hide the calendar and product info box
     $('.view-reservation-calendar').css('height', '0px');
     $('.view-reservation-calendar').css('visibility', 'hidden');
+    $('#content').css('height', 'auto');
     $('#reservations-header').hide();
     $('.view-reservation-calendar').css('top', '-9000px');
     //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
@@ -76,13 +77,14 @@
     //The user has selected a reservable item
     $(item).mousedown(function() {
       //show the calendar
-      $('.view-reservation-calendar').css('top', '530px');
+      $('.view-reservation-calendar').css('top', '625px');
+      $('#content').css('height', '1300px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
       $('#reservations-header').fadeIn(1000);
       $('#block-system-main').animate({
-        height: '575px'
+        height: '625px'
       }, 500 );  
       //here we grab the fields from the selected item and move them to the "item info" area on the page
       $(item).removeClass('selected_product');
@@ -148,9 +150,11 @@
               if (logged_in.length > 0){
 	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../class-list">Take a Class!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
+                $('#content').css('height', 'auto');
               }  else{
 	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../personal-membership-plans">Login or Become a Member!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
+                $('#content').css('height', 'auto');
 	            }
 	            allowCommercial = $('#allow_commercial', data);
 	            if (allowCommercial.length > 0){
@@ -191,11 +195,12 @@
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                   });
                   $('.view-reservation-calendar').css('visibility', 'visible');
+                  $('#content').css('height', '1300px'); 
                   $('.view-reservation-calendar').animate({
                     opacity: '1'
                   }, 500 );
                   $('.page-reservations #block-system-main').animate({
-                    height: '575px'
+                    height: '625px'
                   }, 1000 );
                   $('.page-reservations #middle-wrapper').animate({
                     height: '1260px'
@@ -235,11 +240,12 @@
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
+              $('#content').css('height', '1300px');
               $('.view-reservation-calendar').animate({
                 opacity: '1'
               }, 500 );
               $('.page-reservations #block-system-main').animate({
-                height: '575px'
+                height: '625px'
               }, 1000 );
               $('.page-reservations #middle-wrapper').animate({
                 height: '1260px'
@@ -444,6 +450,7 @@
                           $(".fullcalendar").fullCalendar('renderEvent', event, true);
                         });
                         $('.view-reservation-calendar').css('visibility', 'visible');
+                        $('#content').css('height', '1300px');
                         $('.view-reservation-calendar').animate({
                           height: '395px'
                         }, 500 );
@@ -509,6 +516,7 @@
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
+              $('#content').css('height', '1300px');
               $('.view-reservation-calendar').animate({
                 height: '395px'
               }, 500 ); 

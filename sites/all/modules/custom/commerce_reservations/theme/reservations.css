@@ -42,7 +42,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .view-id-calendar_product_view .item{
-	height: 127px;
+	height: 140px;
 }
 
 #reservations-header{
@@ -151,7 +151,7 @@ body.page-reservations #main-content #squeeze{
 
 #block-views-calendar-product-view-block .views-row{
 	width: 172px;
-	height: 125px;
+	height: 135px;
 	margin-left: 10px;
 	background-color: white;
 	display: inline-block;
@@ -171,6 +171,7 @@ body.page-reservations #main-content #squeeze{
 
 #block-views-calendar-product-view-block .views-row .small-image{
 	margin: auto;
+  height: 110px;
 }
 
 #block-views-calendar-product-view-block .views-row .title{
