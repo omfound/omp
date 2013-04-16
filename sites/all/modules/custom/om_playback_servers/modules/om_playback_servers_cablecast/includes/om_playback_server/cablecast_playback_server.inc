@@ -69,9 +69,8 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (class_exists('cablecastFile')) {
       $file_controller = new cablecastFile();
       $record = $file_controller->get_show_record($uri);
-      die(print_r($record, true));
-      if (is_object($record)) {
-        return (array)$record->GetShowInformationResult;
+      if (!empty($record)) {
+        return $record;
       }
     }
     return FALSE;
