@@ -472,6 +472,7 @@ function commerce_reservations_views_post_execute(&$view){
       for ($i = 0; $i < $array_size; $i++){
         unset($view->result[$i]);
       }
+      watchdog('brian', '<pre>'.print_r($overlaps, TRUE).'</pre>');
       if (!empty($overlaps)){
       //loop through and add in overlaps, remove view results
         foreach($overlaps as $index => $reservation){
