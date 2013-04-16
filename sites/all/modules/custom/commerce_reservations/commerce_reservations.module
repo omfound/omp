@@ -175,6 +175,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
+  /**
   if ($form_id == 'views_form_commerce_cart_form_default'){
     $index = 0;
     foreach($form['edit_quantity'] as $quantity_field){
@@ -186,7 +187,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
 	      }
       }
     }
-  }
+  }**/
 }
 
 function commerce_reservations_testing_submit(&$form, $form_state) {
