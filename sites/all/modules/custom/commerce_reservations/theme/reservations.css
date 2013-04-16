@@ -487,7 +487,8 @@ body.page-reservations #main-content #squeeze{
 }
 
 .page-reservations .add-to-cart .form-item{
-	margin-right: 0px;
+  margin-right: .75em;
+  margin-left: 0;
 }
 
 .page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-month,
@@ -496,7 +497,7 @@ body.page-reservations #main-content #squeeze{
 .page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-month,
 .page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-day,
 .page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-year{
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .page-reservations .add-to-cart .date-padding{
