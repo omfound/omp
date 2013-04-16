@@ -110,7 +110,7 @@ body.page-reservations #main-content #squeeze{
 	height: 50px;
 }
 
-#block-views-calendar-product-view-block .res-title-number{
+.view-id-reservation_calendar .res-title-number {
 	display: block;
 	width: 42px;
 	height: 23px;
@@ -122,7 +122,7 @@ body.page-reservations #main-content #squeeze{
 	margin-right: 10px;
 }
 
-#block-views-calendar-product-view-block .res-title{
+.view-id-reservation_calendar .res-title {
 	height: 23px;
 	background-color: #912a1b;
 	color: white;
