@@ -81,6 +81,8 @@ body.page-reservations #main-content #squeeze{
 }
 
 #reservations-header #right-side{
+  float: left;
+  width: 700px;
 }
 
 #reservations-header #equipment_img{
