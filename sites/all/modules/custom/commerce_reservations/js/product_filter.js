@@ -416,6 +416,7 @@
                       $preloader.detach();
                       $('#content #content-inner .no-certification-message').remove();
                       not_cert = $('#not_certified', data);
+                      not_cert = 1; //temporary everyone can rent
                       if (not_cert.length > 0){
 	                      $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p></div>');
                       } else{
