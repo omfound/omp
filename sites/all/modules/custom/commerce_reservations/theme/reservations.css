@@ -41,6 +41,9 @@ body.page-reservations #main-content #squeeze{
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
 }
 
+.view-id-calendar-product_view {
+  width: 750px;
+}
 .view-id-calendar_product_view .item{
 	height: 140px;
 }
