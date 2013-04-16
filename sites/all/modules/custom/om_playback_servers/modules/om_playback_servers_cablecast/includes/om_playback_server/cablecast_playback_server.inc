@@ -67,10 +67,12 @@ class cablecastPlaybackServerController extends playbackServerController {
    */
   public function metadata_record_from_uri($pbs, $uri) {
     if (class_exists('cablecastFile')) {
-      die('we go in here');
       $file_controller = new cablecastFile();
       $record = $file_controller->get_show_record($uri);
-      return (array)$record->GetShowInformationResult;
+      die(print_r($record, true));
+      if (is_object($record)) {
+        return (array)$record->GetShowInformationResult;
+      }
     }
     return FALSE;
   }
