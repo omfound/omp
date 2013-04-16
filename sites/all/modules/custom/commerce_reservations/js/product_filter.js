@@ -135,7 +135,6 @@
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
-      alert('pid: '+pid+', nid: '+nid);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
@@ -387,7 +386,6 @@
                 });
               },
               beforeHide: function(){
-                alert('firing beforehide');
                 quantity = $('.qtip-contentWrapper [id|=edit-quantity]').val();
                 $('#left-side .add-to-cart').remove();
                 tipContent = this.options.content.text[0].outerHTML;
@@ -464,7 +462,6 @@
         }
       });
       $('#left-side [id|=edit-quantity]').change(function(){ 
-        alert('testing');
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
             return true;
