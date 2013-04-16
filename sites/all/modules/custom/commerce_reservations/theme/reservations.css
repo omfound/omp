@@ -441,7 +441,8 @@ body.page-reservations #main-content #squeeze{
 }
 
 .page-reservations .add-to-cart .form-wrapper{
-	margin-top: 0px;
+  margin:0;
+  padding:0;
 }
 
 .page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
