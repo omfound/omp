@@ -171,11 +171,10 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#multiple'] = FALSE;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
-      $form['#validate'] = array('commerce_reservations_testing_submit');
+      $form['#validate'][] = 'commerce_reservations_fix_quantity';
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
-  /**
   if ($form_id == 'views_form_commerce_cart_form_default'){
     $index = 0;
     foreach($form['edit_quantity'] as $quantity_field){
@@ -187,11 +186,14 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
 	      }
       }
     }
-  }**/
+  }
 }
 
-function commerce_reservations_testing_submit(&$form, $form_state) {
-  dsm($form);
+function commerce_reservations_fix_quantity($form, &$form_state) {
+  if (!empty($form_state['input']['quantity']) && is_numeric($form_state['input']['quantity'])) {
+    $form_state['values']['quantity'] = $form_state['input']['quantity'];
+  }
+
   dsm($form_state);
 }
 
