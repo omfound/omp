@@ -189,12 +189,14 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 }
 
+/**
+ * This is a giant hack for quantity problem until I have time
+ * to create a better solution.
+ */
 function commerce_reservations_fix_quantity($form, &$form_state) {
   if (!empty($form_state['input']['quantity']) && is_numeric($form_state['input']['quantity'])) {
     $form_state['values']['quantity'] = $form_state['input']['quantity'];
   }
-
-  dsm($form_state);
 }
 
 //Get the closed dates and times so we can add them to the calendar
