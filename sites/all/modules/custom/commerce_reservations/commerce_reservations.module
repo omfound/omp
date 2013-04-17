@@ -1107,6 +1107,7 @@ function commerce_reservations_commerce_order_status_info(){
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
+  dsm($line_item);
   $order = commerce_order_load($line_item->order_id);
   $user = user_load($order->uid);
   $nid = str_replace('node/', "", $line_item->commerce_display_path['und'][0]['value']);
