@@ -1119,6 +1119,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $product_ids = $product_display->field_crp_product_reference['und'];
   $product_options = array();
   foreach($product_ids as $key => $pid){
+    dsm($pid);
     $product = commerce_product_load($pid);
     $product_sku = $product->sku;
     $product_options[] = $product_sku;
