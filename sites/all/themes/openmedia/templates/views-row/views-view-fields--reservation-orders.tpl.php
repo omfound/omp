@@ -1,5 +1,4 @@
 <?php $checkedout = FALSE;?>
-<?php dsm($fields); ?>
 <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>
   <div class = "reservation-overdue">
 <?php else:?>
@@ -46,7 +45,11 @@
         </div>
       <?php } else{?>
         <div class = "checkout_status_good">
+        <?php if(empty($fields['field_checkout_status']->content)) { ?>
+          <?php print 'Order Completed'; ?>
+        <?php } else { ?>
           <?php print $fields['field_checkout_status']->content;?>
+        <?php } ?>
         </div>
       <?php }?>
       </td>
