@@ -543,7 +543,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $branding_list = $rule->executeRule($timeslot);
                     }
                     foreach($branding_list AS $branding_key => $banding_item_nid) {
-                      //#HERE
                       $banding_item = om_timeslot_scheduler_load_node($banding_item_nid);
                       $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
                       if ($branding_show_completion <= $mini_gap['end']) {

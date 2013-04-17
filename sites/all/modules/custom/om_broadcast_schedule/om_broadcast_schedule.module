@@ -228,20 +228,10 @@ function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
  */
 function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
   $pbs_array = om_playback_servers_get_pbs_by_term($run_info['channel_tid']);
-  watchdog('get_pbs_airings DEBUG', 'before the first foreach');
-  watchdog('get_pbs_airings DEBUG', 'before the first foreach + ' . $pbs_array );
   foreach ($pbs_array AS $pbs) {
-    watchdog('get_pbs_airings DEBUG', 'in the first foreach');
     $controller = om_playback_servers_entity_get_controller($pbs);
-    //dsm($controller);
-    //watchdog('om_broadcast_sync ctrl DEBUG','airings: ' . print_r($controller));
-    //die();
     if (is_object($controller)) {
       $airings = $controller->get_airing($pbs, $run_info);
-      //dsm($airings);
-
-      //watchdog('om_broadcast_sync DEBUG','airings: ' . print_r($airings));
-      //die();
       $airing_array = array();
       // Then we'd do something with the airings...
       foreach ($airings AS $airing) {
@@ -336,18 +326,16 @@ function _om_broadcast_schedule_batch_complete() {
  * @returns node object or false
  */
 function om_broadcast_schedule_create_airing_node($airing) {
-
   $node = new stdClass();
   $node->type = 'om_airing';
   $node->uid = 1;
-  $node->title = $airing['title'] . ' ' . $airing['start'];
+  $node->title = date('Y-m-d h:i:s', $airing['start']);
   $node->field_om_airing_guid['und'][0]['value'] = $airing['uid'];
   $node->field_om_show_id['und'][0]['value'] = $airing['show_id'];
-  $node->field_om_airing_dates['und'][0]['value'] = strtotime($airing['start']);
-  $node->field_om_airing_dates['und'][0]['value2'] = strtotime($airing['end']);
+  $node->field_om_airing_dates['und'][0]['value'] = $airing['start'];
+  $node->field_om_airing_dates['und'][0]['value2'] = $airing['end'];
   $node->field_om_airing_channel['und'][0]['tid'] = $airing['channel_tid'];
-
-  $node = node_save($node);
+  node_save($node);
 
   if (!empty($node->nid)) {
     rules_invoke_event('om_airing_created');
