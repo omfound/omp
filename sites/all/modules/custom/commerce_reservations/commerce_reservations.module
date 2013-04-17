@@ -1107,7 +1107,6 @@ function commerce_reservations_commerce_order_status_info(){
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
-  dsm($line_item);
   $order = commerce_order_load($line_item->order_id);
   $user = user_load($order->uid);
   $nid = str_replace('node/', "", $line_item->commerce_display_path['und'][0]['value']);
@@ -1145,9 +1144,15 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $form['lid'] = array(
     '#markup' => '<p>You are checking out ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
   );
+  if ($line_item->quantity > 1) {
+    $picker_text = 'Which '.$line_item_quantity.' '.$product_display->title.' is the user checking out?';
+  }
+  else {
+    $picker_text = 'Which '.$product_display->title.' is the user checking out?';
+  }
   $form['product_picker'] = array(
     '#type' => 'checkboxes',
-    '#title' => 'Which ' . $product_display->title .  ' is the user checking out?',
+    '#title' => $picker_text,
     '#options' => drupal_map_assoc($product_options),
     '#multiple' => true,
     '#default_value' => 0
