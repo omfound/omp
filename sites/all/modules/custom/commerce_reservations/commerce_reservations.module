@@ -1146,15 +1146,17 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   );
   if ($line_item->quantity > 1) {
     $picker_text = 'Which '.$line_item_quantity.' '.$product_display->title.' is the user checking out?';
+    $picker_multiple = true;
   }
   else {
     $picker_text = 'Which '.$product_display->title.' is the user checking out?';
+    $picker_multiple = false;
   }
   $form['product_picker'] = array(
     '#type' => 'checkboxes',
     '#title' => $picker_text,
     '#options' => drupal_map_assoc($product_options),
-    '#multiple' => true,
+    '#multiple' => $picker_multiple,
     '#default_value' => 0
   );
   $form['accessories'] = array(
