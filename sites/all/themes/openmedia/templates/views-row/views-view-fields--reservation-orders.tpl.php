@@ -42,15 +42,15 @@
       <?php }?>
       </td>
       <td>
-      <?php if ($checkedout){?>
-        <?php print 'Checked Out Product: ' . $fields['commerce_product']->content;?>
-      <?php } else if(!empty($row->field_field_checkout_status[0]['raw']['value']) && row->field_field_checkout_status[0]['raw']['value'] == 'Checked In'){?>
-        <?php print 'Checked In Product: ' . $fields['commerce_product']->content;?>
-      <?php }?>
+      <?php if ($checkedout) { ?>
+        <?php print 'Checked Out Product: ' . $fields['commerce_product']->content; ?>
+      <?php } elseif(!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Checked In') {?>
+        <?php print 'Checked In Product: ' . $fields['commerce_product']->content; ?>
+      <?php } ?>
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Awaiting Checkout'){?>
         <?php print '<a class = "button checkout_button" href = "cr/res_checkout/' . $fields['line_item_id']->raw . '"' . '> Checkout</a>';?>
         <?php $checkedout = FALSE;?>
-      <?php }?>
+      <?php } ?>
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && ($row->field_field_checkout_status[0]['raw']['value'] == 'Checked Out' || $row->field_field_checkout_status[0]['raw']['value'] == 'Overdue')){?>
         <?php print '<a class = "checkin_button" href = "cr/res_checkin/' . $fields['line_item_id']->raw . '"' . '> Check In</a>';?>
         <?php $checkedout = TRUE;?>
