@@ -21,11 +21,13 @@
     </td>
     <td class = "user-info">
       <?php $user = user_load($fields['uid']->raw);?>
-      <?php $contact_info = profile2_load_by_user($user, 'contact_info'); ?>
-      <?php $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value']; ?>
-      <?php $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value']; ?>
-      <?php $full_name = $first_name.' '.$last_name; ?>
-      <?php print '<a href = "../user/' . $user->uid . '">' . $full_name . '</a></br>';?>
+      <?php if ($user->uid > 0) { ?>
+        <?php $contact_info = profile2_load_by_user($user, 'contact_info'); ?>
+        <?php $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value']; ?>
+        <?php $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value']; ?>
+        <?php $full_name = $first_name.' '.$last_name; ?>
+        <?php print '<a href = "../user/' . $user->uid . '">' . $full_name . '</a></br>';?>
+      <?php } ?>
     </td>
     <td class = "order-link">
       <?php print $fields['view_order']->content;?>
