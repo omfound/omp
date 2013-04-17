@@ -1118,8 +1118,9 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $end_date = date('l, F d, Y h:i a', $end_date);
   $product_ids = $product_display->field_crp_product_reference['und'];
   $product_options = array();
+  dsm($product_ids);
   foreach($product_ids as $pid){
-    //$product = commerce_product_load($pid);
+    $product = commerce_product_load($pid);
     $product_sku = $product->sku;
     $product_options[] = $product_sku;
   }
