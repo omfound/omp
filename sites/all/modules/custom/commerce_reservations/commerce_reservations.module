@@ -1145,22 +1145,20 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     '#markup' => '<p>You are checking out ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
   );
   if ($line_item->quantity > 1) {
-    $picker_text = 'Which '.$line_item_quantity.' '.$product_display->title.' is the user checking out?';
-    $picker_multiple = true;
-    $picker_type = 'checkboxes';
+    $form['product_picker'] = array(
+      '#type' => 'checkboxes',
+      '#title' => 'Which '.$line_item_quantity.' '.$product_display->title.' is the user checking out?',
+      '#options' => drupal_map_assoc($product_options),
+    );
   }
   else {
-    $picker_text = 'Which '.$product_display->title.' is the user checking out?';
-    $picker_multiple = false;
-    $picker_type = 'select';
+    $form['product_picker'] = array(
+      '#type' => 'select',
+      '#title' => 'Which '.$product_display->title.' is the user checking out?',
+      '#options' => drupal_map_assoc($product_options),
+      '#default_value' => 0
+    );
   }
-  $form['product_picker'] = array(
-    '#type' => $picker_type,
-    '#title' => $picker_text,
-    '#options' => drupal_map_assoc($product_options),
-    '#multiple' => $picker_multiple,
-    '#default_value' => 0
-  );
   $form['accessories'] = array(
     '#type' => 'checkboxes',
     '#title' => 'Select all accessories the user is checking out.',
