@@ -1145,7 +1145,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     '#markup' => '<p>You are checking out ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
   );
   $form['product_picker'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#title' => 'Which ' . $product_display->title .  ' is the user checking out?',
     '#options' => drupal_map_assoc($product_options),
     '#multiple' => true,
