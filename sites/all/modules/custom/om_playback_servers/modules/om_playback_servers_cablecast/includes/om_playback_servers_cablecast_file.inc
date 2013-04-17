@@ -144,4 +144,31 @@ class cablecastFile {
       return FALSE;
     }
   }
+  /**
+   * Given a uri return a matching entity.
+   */
+  public function get_entity_id_from_uri($uri) {
+     $fields = field_info_fields();
+     foreach ($fields AS $name => $field) {
+       if ($field['type'] == 'cablecast_file_selector') {
+         $table_name = array_keys($field['storage']['details']['sql']['FIELD_LOAD_CURRENT']);
+         $table_name = $table_name[0];
+         $field_name = $field['storage']['details']['sql']['FIELD_LOAD_CURRENT'][$table_name];
+         $field_name = array_values($field_name);
+         $field_name = $field_name[0];
+         if (is_string($table_name) && is_string($field_name)) {
+           $query = db_select($table_name, 't');
+           $query->fields('t', array('entity_id'));
+           $query->condition($field_name, $uri, '=');
+           $resource = $query->execute();
+           $result = $resource->fetchAll();
+           if (!empty($result)) {
+             $result = array_shift($result);
+             return $result->entity_id;
+           }
+         }
+       }
+     }
+     return FALSE;
+  }
 }

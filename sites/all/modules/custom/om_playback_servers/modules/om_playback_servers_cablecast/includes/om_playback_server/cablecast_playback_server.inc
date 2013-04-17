@@ -106,13 +106,17 @@ class cablecastPlaybackServerController extends playbackServerController {
       'CrawlText'   => '', //string</CrawlText>
       'CrawlLength' => 0, //int</CrawlLength>
     );
-    $this->soap_request($pbs, 'AddScheduleEvent', $params);
+    $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
+    if (isset($response->AddScheduleEventResult)) {
+      return array('ScheduleID' => $response->AddScheduleEventResult);
+    }
+    return FALSE;
   }
   public function update_airing($pbs, $schedule_info = array()) {
     
   }
   public function get_airing($pbs, $schedule_info = array()) {
-    if (!empty($schedule_info)) {
+    if (!empty($schedule_info) && class_exists('cablecastFile')) {
       $params = array (
         'ChannelID' => $pbs->output,
         'FromDate' => date("Y-m-d\TH:i:s", $schedule_info['start']),
@@ -125,11 +129,15 @@ class cablecastPlaybackServerController extends playbackServerController {
         if (is_object($request->GetScheduleInformationResult->ScheduleInfo)) {
           $request->GetScheduleInformationResult->ScheduleInfo = array($request->GetScheduleInformationResult->ScheduleInfo);
         }
+        $file_controller = new cablecastFile();
         foreach ($request->GetScheduleInformationResult->ScheduleInfo AS $airing) {
+          $uri = 'cablecast://' . $airing->ShowID;
+          $entity_id = $file_controller->get_entity_id_from_uri($uri);
           $airings[] = array(
             'uid' => $airing->ScheduleID,
-            'start' => $airing->StartTime,
-            'end' => $airing->EndTime
+            'start' => strtotime($airing->StartTime),
+            'end' => strtotime($airing->EndTime),
+            'show_id' => $entity_id
            );
         }
       }
@@ -168,7 +176,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     }
     catch(Exception $e) {
       if (is_object($pbs)) {
-        $message =  'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
+        $message = 'During function ' . $function . 'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
       }
       else {
         $message =  'Cablecast Playback Server: malformed playback server entity: ' . $e->getMessage();
