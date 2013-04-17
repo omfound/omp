@@ -46,7 +46,7 @@
       <?php } else{?>
         <div class = "checkout_status_good">
         <?php if(empty($fields['field_checkout_status']->content)) { ?>
-          <?php print 'Order Completed'; ?>
+          <?php print 'Order Complete, Awaiting Checkout'; ?>
         <?php } else { ?>
           <?php print $fields['field_checkout_status']->content;?>
         <?php } ?>
