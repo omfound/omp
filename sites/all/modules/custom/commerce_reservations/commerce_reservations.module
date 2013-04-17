@@ -842,7 +842,7 @@ function commerce_reservations_rules_action_info() {
         'description' => t('All reservations on this order will have their status changed.'),
       ),
       'reservation_state' => array(
-        'type' => 'list<string>',
+        'type' => 'list<text>',
         'label' => t('Reservation Status'),
         'description' => t('Reservations will be set to this status.'),
         'options list' => 'commerce_reservations_status_options',
