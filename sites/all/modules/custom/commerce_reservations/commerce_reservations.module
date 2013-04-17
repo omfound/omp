@@ -1106,8 +1106,8 @@ function commerce_reservations_commerce_order_status_info(){
 }
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
-  $line_item = commerce_line_item_load($lid);
-  $order = commerce_order_load($line_item->order_id);
+  //$line_item = commerce_line_item_load($lid);
+  //$order = commerce_order_load($line_item->order_id);
   $user = user_load($order->uid);
   $nid = str_replace('node/', "", $line_item->commerce_display_path['und'][0]['value']);
   $product_display = node_load($nid);
@@ -1123,8 +1123,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     $product_sku = $product->sku;
     $product_options[] = $product_sku;
   }
-  //$tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
-  //$tree = taxonomy_get_tree($tax->vid);
+  $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
+  $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
