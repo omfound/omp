@@ -1019,7 +1019,7 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
 }
 
 function commerce_reservations_update_checkout_status($order, $reservation_state) {
-  watchdog('brian', '<pre>'.print_r($reservation_state, TRUE).'</pre>');
+  $reservation_state = reset($reservation_state);
   $line_item_ids = array();
   foreach ($order->commerce_line_items['und'] as $key => $info) {
     $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
