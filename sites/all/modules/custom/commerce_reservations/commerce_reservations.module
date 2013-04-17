@@ -842,7 +842,7 @@ function commerce_reservations_rules_action_info() {
         'description' => t('All reservations on this order will have their status changed.'),
       ),
       'reservation_state' => array(
-        'type' => 'list<integer>',
+        'type' => 'list',
         'label' => t('Reservation Status'),
         'description' => t('Reservations will be set to this status.'),
         'options list' => 'commerce_reservations_status_options',
@@ -1019,7 +1019,7 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
 }
 
 function commerce_reservations_update_checkout_status($order, $reservation_state) {
-  $reservation_state = 'Awaiting Checkout';
+  dsm($reservation_state);
   $line_item_ids = array();
   foreach ($order->commerce_line_items['und'] as $key => $info) {
     $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
