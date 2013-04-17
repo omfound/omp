@@ -1147,7 +1147,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   if ($line_item->quantity > 1) {
     $form['product_picker'] = array(
       '#type' => 'checkboxes',
-      '#title' => 'Which '.$line_item_quantity.' '.$product_display->title.' is the user checking out?',
+      '#title' => 'Which '.$line_item->quantity.' '.$product_display->title.' is the user checking out?',
       '#options' => drupal_map_assoc($product_options),
     );
   }
