@@ -802,9 +802,6 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_email_confirmation' => array(
       'label' => t('Send an email confirmation regarding the reservation order'),
     ),
-    'commerce_reservations_update_checkout_status' => array(
-      'label' => t('Update the checkout status of an item on the order'),
-    ),
   );
 
   // Define the action using a common set of parameters.
@@ -834,7 +831,35 @@ function commerce_reservations_rules_action_info() {
       'group' => t('Commerce Reservations Rules'),
     );
   }
+
+  $actions['commerce_reservations_update_checkout_status'] = array(
+    'label' => t('Set all reservable line items to specific status'),
+    'group' => t('Commerce Reservations Rules'),
+    'parameter' => array(
+      'commerce_order' => array(
+        'type' => 'commerce_order',
+        'label' => t('Commerce Order'),
+        'description' => t('All reservations on this order will have their status changed.'),
+      ),
+      'reservation_state' => array(
+        'type' => 'list<integer>',
+        'label' => t('Reservation Status'),
+        'description' => t('Reservations will be set to this status.'),
+        'options list' => 'commerce_reservations_status_options',
+      ),
+    ),
+  );
+
   return $actions;
+}
+
+function commerce_reservations_status_options () {
+  $states = commerce_reservations_commerce_order_status_info();
+  $options = array();
+  foreach($states as $key => $info) {
+    $options[$info['title']] = $info['title'];
+  } 
+  return $options;
 }
 
 function commerce_reservations_commercial_price_per_hour($line_item, $component_name, $round_mode){
@@ -993,8 +1018,19 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
   drupal_mail('commerce_reservations', 'res_mail', $user->mail, user_preferred_language($user), $params);
 }
 
-function commerce_reservations_update_checkout_status($line_item, $component_name, $round_mode){
-  watchdog('brian', '<pre>'.print_r($line_item, TRUE).'</pre>');
+function commerce_reservations_update_checkout_status($order, $reservation_state) {
+  $line_item_ids = array();
+  foreach ($order->commerce_line_items['und'] as $key => $info) {
+    $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
+  } 
+  $line_items = commerce_line_item_load_multiple($line_item_ids);
+
+  foreach ($line_items as $line_item_id => $line_item) {
+    if ($line_item->type == 'reservable_product') {
+      $line_item->field_checkout_status['und'][0]['value'] = $reservation_state;
+      commerce_line_item_save($line_item);
+    }
+  }
 }
 
 function commerce_reservations_mail($key, &$message, $params){
@@ -1040,6 +1076,11 @@ function commerce_reservations_mail($key, &$message, $params){
 
 function commerce_reservations_commerce_order_status_info(){
   $order_statuses = array();
+  $order_status['awaiting_checkout'] = array(
+    'name' => 'awaiting_checkout',
+    'title' => t('Awaiting Checkout'),
+    'state' => 'completed',
+  );
   $order_statuses['checked_out'] = array(
     'name' => 'checked_out',
     'title' => t('Checked Out'),
@@ -1054,6 +1095,11 @@ function commerce_reservations_commerce_order_status_info(){
     'name' => 'overdue',
     'title' => t('Overdue'),
     'state' => 'completed'
+  );
+  $order_status['no_show'] = array(
+    'name' => 'noshow',
+    'title' => t('No Show'),
+    'state' => 'completed',
   );
   return $order_statuses;
 }
