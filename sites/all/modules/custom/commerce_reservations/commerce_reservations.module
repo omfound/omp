@@ -802,6 +802,9 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_email_confirmation' => array(
       'label' => t('Send an email confirmation regarding the reservation order'),
     ),
+    'commerce_reservations_update_checkout_status' => array(
+      'label' => t('Update the checkout status of an item on the order'),
+    ),
   );
 
   // Define the action using a common set of parameters.
@@ -988,6 +991,10 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
     'order' => $order,
   );
   drupal_mail('commerce_reservations', 'res_mail', $user->mail, user_preferred_language($user), $params);
+}
+
+function commerce_reservations_update_checkout_status($line_item, $component_name, $round_mode){
+  watchdog('brian', '<pre>'.print_r($line_item, TRUE).'</pre>');
 }
 
 function commerce_reservations_mail($key, &$message, $params){
