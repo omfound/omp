@@ -1076,7 +1076,7 @@ function commerce_reservations_mail($key, &$message, $params){
 
 function commerce_reservations_commerce_order_status_info(){
   $order_statuses = array();
-  $order_status['awaiting_checkout'] = array(
+  $order_statuses['awaiting_checkout'] = array(
     'name' => 'awaiting_checkout',
     'title' => t('Awaiting Checkout'),
     'state' => 'completed',
@@ -1096,7 +1096,7 @@ function commerce_reservations_commerce_order_status_info(){
     'title' => t('Overdue'),
     'state' => 'completed'
   );
-  $order_status['no_show'] = array(
+  $order_statuses['no_show'] = array(
     'name' => 'noshow',
     'title' => t('No Show'),
     'state' => 'completed',
