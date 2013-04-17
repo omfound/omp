@@ -1127,6 +1127,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
   foreach ($tree as $term){
+    /**
     $loaded_term = taxonomy_term_load($term->tid);
     if ($loaded_term->field_crp_category == $product_display->field_crp_category){
       $accessories[$loaded_term->tid] = $loaded_term->name;
@@ -1139,6 +1140,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
         }
       }
     }
+    **/
   }
   
   $form['lid'] = array(
