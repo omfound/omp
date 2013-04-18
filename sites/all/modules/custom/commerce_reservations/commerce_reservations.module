@@ -1019,7 +1019,7 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
 }
 
 function commerce_reservations_update_checkout_status($order, $reservation_state) {
-  watchdog('brian', '<pre>'.print_r($reservation_state, TRUE).'</pre>');
+  $reservation_state = reset($reservation_state);
   $line_item_ids = array();
   foreach ($order->commerce_line_items['und'] as $key => $info) {
     $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
@@ -1118,8 +1118,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $end_date = date('l, F d, Y h:i a', $end_date);
   $product_ids = $product_display->field_crp_product_reference['und'];
   $product_options = array();
-  foreach($product_ids as $pid){
-    $product = commerce_product_load($pid);
+  foreach($product_ids as $key => $pid){
+    $product = commerce_product_load($pid['product_id']);
     $product_sku = $product->sku;
     $product_options[] = $product_sku;
   }
@@ -1144,12 +1144,21 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $form['lid'] = array(
     '#markup' => '<p>You are checking out ' . $user->name . "'s reservation for " . $product_display->title . ".</br>" . " From " . $start_date . "</br> To " . $end_date,
   );
-  $form['product_picker'] = array(
-    '#type' => 'select',
-    '#title' => 'Which ' . $product_display->title .  ' is the user checking out?',
-    '#options' => drupal_map_assoc($product_options),
-    '#default_value' => 0
-  );
+  if ($line_item->quantity > 1) {
+    $form['product_picker'] = array(
+      '#type' => 'checkboxes',
+      '#title' => 'Which '.round($line_item->quantity).' '.$product_display->title.' is the user checking out?',
+      '#options' => drupal_map_assoc($product_options),
+    );
+  }
+  else {
+    $form['product_picker'] = array(
+      '#type' => 'select',
+      '#title' => 'Which '.$product_display->title.' is the user checking out?',
+      '#options' => drupal_map_assoc($product_options),
+      '#default_value' => 0
+    );
+  }
   $form['accessories'] = array(
     '#type' => 'checkboxes',
     '#title' => 'Select all accessories the user is checking out.',
