@@ -850,6 +850,18 @@ function commerce_reservations_rules_action_info() {
     ),
   );
 
+  $actions['commerce_reservations_separate_quantity'] = array(
+    'label' => t('Separate line items with quantity > 1 into multiple line items.'),
+    'group' => t('Commerce Reservations Rules'),
+    'parameter' => array(
+      'commerce_order' => array(
+        'type' => 'commerce_order',
+        'label' => t('Commerce Order'),
+        'description' => t('All reservation line items with quantity > 1 will be separated into multiple line items.'),
+      ),
+    ),
+  );
+
   return $actions;
 }
 
@@ -1030,6 +1042,33 @@ function commerce_reservations_update_checkout_status($order, $reservation_state
     if ($line_item->type == 'reservable_product') {
       $line_item->field_checkout_status['und'][0]['value'] = $reservation_state;
       commerce_line_item_save($line_item);
+    }
+  }
+}
+
+function commerce_reservations_separate_quantity($order) {
+  foreach ($order->commerce_line_items['und'] as $key => $info) {
+    $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
+  } 
+  $line_items = commerce_line_item_load_multiple($line_item_ids);
+
+  foreach ($line_items as $line_item_id => $line_item) {
+    if ($line_item->type == 'reservable_product') {
+      if ($line_item->quantity > 1) {
+        $clone_count = $line_item->quantity - 1;
+        $counter = 1;
+        while ($counter <= $clone_count) {
+          $new_line_item = clone $line_item;
+          $new_line_item->line_item_id = null;
+          $new_line_item->is_new = TRUE; 
+          $new_line_item->quantity = 1;
+          commerce_line_item_save($new_line_item);
+          $counter++;
+        }
+
+        $line_item->quantity = 1;
+        commerce_line_item_save($line_item);
+      }
     }
   }
 }
