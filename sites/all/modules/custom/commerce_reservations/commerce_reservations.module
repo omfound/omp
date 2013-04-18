@@ -1047,6 +1047,8 @@ function commerce_reservations_update_checkout_status($order, $reservation_state
 }
 
 function commerce_reservations_separate_quantity($order) {
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+
   foreach ($order->commerce_line_items['und'] as $key => $info) {
     $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
   } 
@@ -1063,11 +1065,13 @@ function commerce_reservations_separate_quantity($order) {
           $new_line_item->is_new = TRUE; 
           $new_line_item->quantity = 1;
           commerce_line_item_save($new_line_item);
+          $order_wrapper->commerce_line_items[] = $new_line_item;
           $counter++;
         }
 
         $line_item->quantity = 1;
         commerce_line_item_save($line_item);
+        commerce_order_save($order);
       }
     }
   }
