@@ -520,17 +520,27 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $temp_start = $next_start;
                   }
                   $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
-                  $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
-                  $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
-                  $used = $rank;
-                  unset($timeslot->om_timeslot_showlist[$rank]);
+                   // Adult hours check
+                  $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
+                  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                  if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
+                    $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
+                    $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    $used = $rank;
+                    unset($timeslot->om_timeslot_showlist[$rank]);
+                  }
                 }
                 // Otherwise shchedule shows < 30 min
                 else if ($show_completion + $spacer <= $mini_gap['end']) {
-                  $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
-                  $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
-                  $used = $rank;
-                  unset($timeslot->om_timeslot_showlist[$rank]);
+                  // Adult hours check
+                  $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
+                  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                  if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
+                    $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
+                    $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
+                    $used = $rank;
+                    unset($timeslot->om_timeslot_showlist[$rank]);
+                  }
                 }
                 // If we are unable to schedule X amount of shows from the rule divert to station branding instead if the option is selected.
                 // @TODO need a config here.
@@ -1094,9 +1104,11 @@ function om_timeslot_scheduler_load_node($nid) {
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
   $query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
+  $query->join('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
   $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
   $query->fields('duration', array('field_om_show_duration_value'));
   $query->fields('air_count', array('field_om_show_aired_value'));
+  $query->fields('rating', array('field_om_rating_tid'));
   $query->condition('n.nid', $nid, '=');
   $resource = $query->execute();
   $result = $resource->fetchAll();
@@ -1119,5 +1131,61 @@ function om_timeslot_scheduler_load_node($nid) {
       )
     );
   }
+  if (isset($result->field_om_rating_tid)) {
+    $result->field_om_rating = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_rating_tid
+        )
+      )
+    );
+  }
   return $result;
+}
+
+/**
+ * Check to see if a rating term is considered adult.
+ *
+ * @param $tid
+ *   int term id
+ *
+ * @return bool
+ */
+function om_timeslot_scheduler_rating_is_adult($tid) {
+  $adult_terms = array('TV-MA');
+  $term = taxonomy_term_load($tid);
+  if (is_object($term)) {
+    if (in_array($term->name, $adult_terms)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check to see if a rating term is considered adult.
+ *
+ * @param $reference_time
+ *   timestamp y-m-d to use for returned dates
+ *
+ * @return array of dates
+ */
+function om_timeslot_scheduler_get_adult_hours($reference_time) {
+  $ref_hour = date('G', $reference_time);
+  // Get start and end times. Then figure out the difference.
+  $start_hours = variable_get('om_timeslot_scheduler_adult_hours_start', 22);
+  $end_hours = variable_get('om_timeslot_scheduler_adult_hours_end', 5);
+  $start_stamp = mktime($start_hours);
+  $end_stamp = mktime($end_hours);
+  if ($end_hours < $start_hours) {
+    $end_stamp += 86400;
+  }
+  if ($ref_hour < $start_hours) {
+    $reference_time -= 86400;
+  }
+  $difference = abs($end_stamp - $start_stamp);
+  // Build actual time from reference
+  $adult_hours['start'] = mktime($start_hours, 0, 0 , date('n', $reference_time), date('j', $reference_time), date('y', $reference_time));
+  $adult_hours['end'] = $adult_hours['start'] + $difference;
+  return $adult_hours;
 }
