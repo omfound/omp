@@ -139,6 +139,7 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
+            console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + 1);
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
