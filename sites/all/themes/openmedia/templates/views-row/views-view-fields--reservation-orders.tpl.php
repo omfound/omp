@@ -79,7 +79,7 @@
               'class' => 'checkin_button',
             ),
           );
-          print l('Check In', 'cr/res-checkin/' . $fields['line_item_id']->raw, $link_options);
+          print l('Check In', 'cr/res_checkin/' . $fields['line_item_id']->raw, $link_options);
         ?>
         <?php $checkedout = TRUE;?>
       <?php }?>
