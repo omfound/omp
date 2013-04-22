@@ -1322,9 +1322,6 @@ function commerce_reservations_line_item_checkin_form_validate($form, &$form_sta
       foreach($missing_items as $tid){
         $loaded_missing_items[] = taxonomy_term_load($tid);
       }
-      $line_item = commerce_line_item_load($line_id);
-      $form['#submit'][]  = 'missing_accessories_confirm_form_submit';
-      $question = 'You are about to check in a reservation that is missing accessories.';
       $description = 'You attempted to check in a reservation that is missing the following accessories:';
       foreach($loaded_missing_items as $item){
         $description .= '<li>' . $item->name . '</li>';
