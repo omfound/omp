@@ -4,9 +4,6 @@
 <?php else:?>
   <div class = "reservation">
 <?php endif;?>
-  <div class="reservation-dates">
-    <?php print $fields['field_reservation_dates']->content;?>
-  </div>
   <table class="reservation-info-table">
   <tr>
   <th class = "item-title">Item</th>
