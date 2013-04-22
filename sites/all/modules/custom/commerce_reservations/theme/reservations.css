@@ -757,7 +757,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .page-administer-reservations .reservation .reservation-dates,
-.page-administer-reservations h3 {
+.page-administer-reservations #content .view-id-reservation_orders h3 {
 	color: #85B740;
   font-weight: bold;
   font-size: 21px;
