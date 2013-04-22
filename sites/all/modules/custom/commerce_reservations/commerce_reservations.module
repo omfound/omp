@@ -1304,12 +1304,12 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $missing_items = array();
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  dsm($form_state);
   foreach ($form_state['input']['accessories'] as $index => $term_id){
     if (!$term_id){
       $missing_items[] = $index;
     }
   }
+  dsm($missing_items);
   $product = $line_item_wrapper->commerce_product->value();
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   $notes = $form_state['values']['item_notes'];
@@ -1325,6 +1325,7 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $product_wrapper->save();
 
   if (sizeof($missing_items) > 0){
+    dsm('missing');
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
 	    if ($index != sizeof($missing_items) - 1){
