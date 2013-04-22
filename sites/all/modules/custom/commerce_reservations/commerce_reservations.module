@@ -1663,7 +1663,7 @@ function commerce_reservations_entity_display_lookup($product_id) {
   $query = new EntityFieldQuery();
   $result = $query
     ->entityCondition('entity_type', 'node', '=')
-    ->entityCondition('bundle', 'class_display', '=')
+    ->entityCondition('bundle', 'reservable_product_display', '=')
     ->fieldCondition('field_crp_product_reference', 'product_id', $product_id, '=')
     ->execute();
 
