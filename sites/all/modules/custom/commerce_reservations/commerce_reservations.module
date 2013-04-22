@@ -1333,8 +1333,13 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
       }
     }
     $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
-    dsm('drupal gotoing');
-    drupal_goto($path);
+
+    //unset destination and pass it along to drupal_goto
+    $link_options = array(
+      'query' => array('destination' => $_REQUEST['destination']),
+    );
+    unset($_REQUEST['destination']);
+    drupal_goto($path, $link_options);
   } else{
     $line_item_wrapper->field_checkout_status->set('Checked In');
     $returned_accessories = array();
