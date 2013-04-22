@@ -64,7 +64,15 @@
         <?php $checkedout = FALSE;?>
       <?php } ?>
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && ($row->field_field_checkout_status[0]['raw']['value'] == 'Checked Out' || $row->field_field_checkout_status[0]['raw']['value'] == 'Overdue')){?>
-        <?php print '<a class = "checkin_button" href = "cr/res_checkin/' . $fields['line_item_id']->raw . '"' . '> Check In</a>';?>
+        <?php
+          $link_options = array(
+            'query' => drupal_get_destination(),
+            'attributes' => array(
+              'class' => 'checkin_button',
+            ),
+          );
+          print l('Check In', 'cr/res-checkin' . $fields['line_item_id']->raw, $link_options);
+        ?>
         <?php $checkedout = TRUE;?>
       <?php }?>
     </td>
