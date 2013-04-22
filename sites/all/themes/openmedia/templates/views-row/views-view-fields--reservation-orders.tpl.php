@@ -67,7 +67,7 @@
               'class' => 'checkout_button',
             ),
           );
-          print l('Check Out', 'cr/res_checkout' . $fields['line_item_id']->raw, $link_options);
+          print l('Check Out', 'cr/res_checkout/' . $fields['line_item_id']->raw, $link_options);
         ?>
         <?php $checkedout = FALSE;?>
       <?php } ?>
@@ -79,7 +79,7 @@
               'class' => 'checkin_button',
             ),
           );
-          print l('Check In', 'cr/res-checkin' . $fields['line_item_id']->raw, $link_options);
+          print l('Check In', 'cr/res-checkin/' . $fields['line_item_id']->raw, $link_options);
         ?>
         <?php $checkedout = TRUE;?>
       <?php }?>
