@@ -1309,7 +1309,6 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
       $missing_items[] = $index;
     }
   }
-  dsm($missing_items);
   $product = $line_item_wrapper->commerce_product->value();
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   $notes = $form_state['values']['item_notes'];
@@ -1325,7 +1324,6 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $product_wrapper->save();
 
   if (sizeof($missing_items) > 0){
-    dsm('missing');
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
 	    if ($index != sizeof($missing_items) - 1){
@@ -1335,6 +1333,7 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
       }
     }
     $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
+    dsm('drupal gotoing');
     drupal_goto($path);
   } else{
     $line_item_wrapper->field_checkout_status->set('Checked In');
