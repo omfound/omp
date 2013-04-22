@@ -1299,16 +1299,34 @@ function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid)
   return $form;
 }
 
-function commerce_reservations_line_item_checkin_form_submit($form, &$form_state){
-  $line_id = $form_state['build_info']['args'][0];
-  $missing_items = array();
-  $line_item = commerce_line_item_load($line_id);
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  foreach ($form_state['input']['accessories'] as $index => $term_id){
-    if (!$term_id){
-      $missing_items[] = $index;
+function commerce_reservations_line_item_checkin_form_validate($form, &$form_state) {
+  if (!empty($form_state['storage']['confirmed_missing'])) {
+    $missing_items = array();
+    foreach ($form_state['input']['accessories'] as $index => $term_id){
+      if (!$term_id){
+        $missing_items[] = $index;
+      }
+    }
+
+    if (sizeof($missing_items) > 0){
+      $missing_items_string = '';
+	    foreach($missing_items as $index => $item_id){
+	      if ($index != sizeof($missing_items) - 1){
+          $missing_items_string .= $item_id . "-";
+        } else {
+	        $missing_items_string .= $item_id;
+        }
+      }
+      form_set_error('accessories', 'You are about to check in a reservation that is missing the following accessories: '.$missing_items_string.' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.');  
+      $form_state['storage']['confirmed_missing'] = true;
     }
   }
+}
+
+function commerce_reservations_line_item_checkin_form_submit($form, &$form_state){
+  $line_id = $form_state['build_info']['args'][0];
+  $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = $line_item_wrapper->commerce_product->value();
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   $notes = $form_state['values']['item_notes'];
@@ -1323,6 +1341,14 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $product_wrapper->field_res_product_status->set($status_values);
   $product_wrapper->save();
 
+  $line_item_wrapper->field_checkout_status->set('Checked In');
+  $returned_accessories = array();
+  foreach($form_state['values']['accessories'] as $item){
+    $returned_accessories[] = $item;
+  }
+  $line_item_wrapper->field_returned_accessories->set($returned_accessories);
+  //$line_item_wrapper->save();
+
   if (sizeof($missing_items) > 0){
     $missing_items_string = '';
 	  foreach($missing_items as $index => $item_id){
@@ -1332,26 +1358,14 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
 	      $missing_items_string .= $item_id;
       }
     }
-    $path = 'cr/missing-accessories-confirm/' . $line_id . "/" . $missing_items_string;
-
-    //unset destination and pass it along to drupal_goto
-    $link_options = array(
-      'query' => array('destination' => $_REQUEST['destination']),
+    $email = variable_get('cr_admin_email');
+    global $language;
+    $params = array(
+      'line_item' => $line_item,
+      'missing_items' => $missing_items_string,
     );
-    unset($_REQUEST['destination']);
-    dsm($path);
-    dsm($link_options);
-    drupal_goto($path, $link_options);
-  } else{
-    $line_item_wrapper->field_checkout_status->set('Checked In');
-    $returned_accessories = array();
-    foreach($form_state['values']['accessories'] as $item){
-      $returned_accessories[] = $item;
-    }
-    $line_item_wrapper->field_returned_accessories->set($returned_accessories);
-    //$line_item_wrapper->save();
-    $form_state['redirect'] = 'administer_reservations';
-  }
+    drupal_mail('commerce_reservations', 'missing_accessories_notice', $email, $language->language, $params);
+  } 
 }
 
 function missing_accessories_confirm($form, &$form_state, $line_id, $missing_items_string){
