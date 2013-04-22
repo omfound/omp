@@ -409,6 +409,7 @@
                   $('#leftContent .large-image').addClass('preloader-active');
                   $.ajax(
                   {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
+                    console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
                     cache : false,
                     success : function (data) {
                       $('#leftContent .large-image').removeClass('preloader-active');
