@@ -443,7 +443,7 @@ function calendar_filter($pid, $node, $quantity = 0){
     $pid_string = implode("+", $pids);
 
     //here we need to get ALL potential pids in product display
-    $args[] = $pids;
+    $args[] = $pid_string;
     $view = views_get_view('reservation_calendar');
     $nid = str_replace('node-', '', $node);
     $view->selected_nid = $nid;
