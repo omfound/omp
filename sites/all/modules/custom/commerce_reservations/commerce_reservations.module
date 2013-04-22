@@ -1026,7 +1026,6 @@ function commerce_reservations_member_price_per_day($line_item, $component_name,
   }
 }
 
-
 function commerce_reservations_email_confirmation($line_item, $component_name, $round_mode){
   $order_id = $line_item->order_id;
   $order = commerce_order_load($order_id);
@@ -1305,6 +1304,7 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
   $missing_items = array();
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  dsm($form_state);
   foreach ($form_state['input']['accessories'] as $index => $term_id){
     if (!$term_id){
       $missing_items[] = $index;
