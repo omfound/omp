@@ -1664,7 +1664,7 @@ function commerce_reservations_entity_display_lookup($product_id) {
   $result = $query
     ->entityCondition('entity_type', 'node', '=')
     ->entityCondition('bundle', 'class_display', '=')
-    ->fieldCondition('field_class_display_class', 'product_id', $product_id, '=')
+    ->fieldCondition('field_crp_product_reference', 'product_id', $product_id, '=')
     ->execute();
 
   foreach($result as $type) {
