@@ -780,7 +780,7 @@ function commerce_reservations_charge_by_the_hour_check($lid) {
  
 function commerce_reservations_commercial_check($line_id){
   $line_item = commerce_line_item_load($line_id);
-  if ($line_item->field_commercial_reservation['und'][0]['value'] == 1){
+  if (!empty($line_item->field_commercial_reservation['und'][0]['value']) && $line_item->field_commercial_reservation['und'][0]['value'] == 1){
 	  return TRUE;
   }
   return FALSE;
@@ -1266,6 +1266,7 @@ function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid)
     }
   }
   $accessories = array();
+  dsm($line_item);
   foreach($line_item->field_accessories['und'] as $term_id){
     $term = taxonomy_term_load($term_id['tid']);
     $accessories[$term->tid] = $term->name;
