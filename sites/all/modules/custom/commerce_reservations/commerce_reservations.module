@@ -459,6 +459,8 @@ function commerce_reservations_views_post_execute(&$view){
       $reservations = array();
       foreach ($view->result as $reservation){
         $quantity = $reservation->_field_data['line_item_id']['entity']->quantity;
+        watchdog('brian', 'ITEM: <pre>'.print_r($reservation, TRUE).'</pre>');
+        watchdog('brian', 'QUANTITY: '.$quantity);
         for ($i = 0; $i < $quantity; $i++){
           if ($i > 0){
             $j = $i + 1;
