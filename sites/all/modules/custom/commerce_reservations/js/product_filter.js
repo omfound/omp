@@ -409,9 +409,9 @@
                   $('#leftContent .large-image').addClass('preloader-active');
                   $.ajax(
                   {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
-                    console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
                     cache : false,
                     success : function (data) {
+                      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
                       $('#leftContent .large-image').removeClass('preloader-active');
                       $preloader.detach();
                       $('#content #content-inner .no-certification-message').remove();
