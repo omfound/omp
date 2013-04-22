@@ -761,6 +761,7 @@ body.page-reservations #main-content #squeeze{
 	color: #85B740;
   font-weight: bold;
   font-size: 21px;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .page-administer-reservations .reservation-overdue .reservation-dates{
