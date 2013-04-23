@@ -1306,8 +1306,10 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
     '#type' => 'submit',
     '#value' => t('Check In')
   );
+  $destination = array('destination' => $_GET['destination']); 
+  $cancel_link = l('Cancel', 'administer_reservations', array('query' => $destination));
   $form['cancel'] = array(
-    '#markup' => '<a href = "../administer_reservations">Cancel</a>'
+    '#markup' => $cancel_link
   );
 
   return $form;
@@ -1327,11 +1329,11 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
   foreach($missing_items as $tid){
     $loaded_missing_items[] = taxonomy_term_load($tid);
   }
-  $description = 'You attempted to check in a reservation that is missing the following accessories:';
+  $description = '<strong>You attempted to check in a reservation that is missing the following accessories:</strong>';
   foreach($loaded_missing_items as $item){
     $description .= '<li>' . $item->name . '</li>';
   }
-  $description .= ' If these accessories are missing please confirm below and the station director will be notified. Otherwise, please check the boxes on the accessories below to indicate they are being returned.';
+  $description .= '<br />If these accessories are missing please confirm below and the station director will be notified. Otherwise, please check the boxes on the accessories below to indicate they are being returned.';
 
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
@@ -1355,8 +1357,10 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
     '#type' => 'submit',
     '#value' => t('Confirm accessories')
   );
+  $destination = array('destination' => $_GET['destination']); 
+  $cancel_link = l('Cancel', 'administer_reservations', array('query' => $destination));
   $form['cancel'] = array(
-    '#markup' => '<a href = "../administer_reservations">Cancel</a>'
+    '#markup' => $cancel_link
   );
   $missing_items = array();
 
