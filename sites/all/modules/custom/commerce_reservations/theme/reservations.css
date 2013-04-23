@@ -857,9 +857,9 @@ body.page-reservations #main-content #squeeze{
 }
 
 /*-----------Line Item View---------*/
-.views-form-commerce-reservations-line-item-view-page .views-label {
+#views-form-commerce-reservations-line-item-view-page .views-label {
   font-weight: bold;
 }
-.views-form-commerce-reservations-line-item-view-page .views-field {
+#views-form-commerce-reservations-line-item-view-page .views-field {
   margin-bottom: 10px;
 }
