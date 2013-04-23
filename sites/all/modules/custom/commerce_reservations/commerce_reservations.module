@@ -1306,8 +1306,7 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
     '#type' => 'submit',
     '#value' => t('Check In')
   );
-  $destination = array('destination' => $_GET['destination']); 
-  $cancel_link = l('Cancel', 'administer_reservations', array('query' => $destination));
+  $cancel_link = l('Cancel', $_GET['destination']);
   $form['cancel'] = array(
     '#markup' => $cancel_link
   );
@@ -1357,8 +1356,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
     '#type' => 'submit',
     '#value' => t('Confirm accessories')
   );
-  $destination = array('destination' => $_GET['destination']); 
-  $cancel_link = l('Cancel', 'administer_reservations', array('query' => $destination));
+  $cancel_link = l('Cancel', $_GET['destination']);
   $form['cancel'] = array(
     '#markup' => $cancel_link
   );
