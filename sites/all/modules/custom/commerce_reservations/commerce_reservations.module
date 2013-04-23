@@ -1306,7 +1306,7 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
     '#type' => 'submit',
     '#value' => t('Check In')
   );
-  $cancel_link = l('Cancel', url_decode(drupal_get_destination()));
+  $cancel_link = l('Cancel', urldecode(drupal_get_destination()));
   $form['cancel'] = array(
     '#markup' => $cancel_link
   );
@@ -1356,7 +1356,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
     '#type' => 'submit',
     '#value' => t('Confirm accessories')
   );
-  $cancel_link = l('Cancel', url_decode(drupal_get_destination()));
+  $cancel_link = l('Cancel', urldecode(drupal_get_destination()));
   $form['cancel'] = array(
     '#markup' => $cancel_link
   );
