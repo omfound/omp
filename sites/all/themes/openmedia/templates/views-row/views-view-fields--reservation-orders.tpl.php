@@ -9,6 +9,7 @@
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order Information</th>
+  <th class="line-item-title">Line Item Detail</th>
   <th class = "checkout-status-title">Checkout Status:</th>
   <th></th>
   </tr>
@@ -34,6 +35,9 @@
     </td>
     <td class = "order-link">
       <?php print $fields['view_order']->content;?>
+    </td>
+    <td class = "line-item-link">
+      <?php print l('View Line Item', 'reservations/line-item/'.$fields['line_item_id']->raw); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
