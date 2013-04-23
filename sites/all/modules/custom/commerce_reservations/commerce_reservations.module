@@ -1238,6 +1238,7 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
+  dsm($form_state);
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
@@ -1289,7 +1290,7 @@ function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid)
     '#title' => 'These are the accessories the user checked out.</br>Please check all accessories the user is returning.',
     '#options' => $accessories,
   );
-  if (!empty($form_state_values['storage']['missing_accessory'])) {
+  if (!empty($form_state['storage']['missing_accessory'])) {
     $missing = 1;
   }
   else {
@@ -1337,7 +1338,7 @@ function commerce_reservations_line_item_checkin_form_validate($form, &$form_sta
         $description .= '<li>' . $item->name . '</li>';
       }
       $description .= ' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.';
-      $form_state_values['storage']['missing_accessory'] = 1;
+      $form_state['storage']['missing_accessory'] = 1;
       form_set_error('accessories', $description);
     }
   }
