@@ -1430,13 +1430,16 @@ function commerce_reservations_line_item_checkin_missing_accessories_text ($miss
 }
 
 function commerce_reservations_line_item_checkin_update_line_item ($line_item_wrapper, $accessories) {
-  dsm($accessories);
   $line_item_wrapper->field_checkout_status->set('Checked In');
   $returned_accessories = array();
-  foreach ($accessories as $item){
-    $returned_accessories[] = $item;
+  foreach ($accessories as $index => $item){
+    if ($item) {
+      $returned_accessories[] = $index;
+    }
   }
-  $line_item_wrapper->field_returned_accessories->set($returned_accessories);
+  if (count($returned_accessories) > 0) {
+    $line_item_wrapper->field_returned_accessories->set($returned_accessories);
+  }
   $line_item_wrapper->save();
 }
 
