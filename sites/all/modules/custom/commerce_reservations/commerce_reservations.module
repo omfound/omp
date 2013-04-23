@@ -1314,7 +1314,8 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
 }
 
 function commerce_reservations_line_item_checkin_missing_accessory_form($form, &$form_state, $lid) {
-  foreach ($form_state['storage']['step1']['accessories'] as $index => $term_id){
+  $selected_items = array();
+  foreach ($form_state['storage']['step1']['accessories'] as $index => $term_id) {
     if (!$term_id){
       $missing_items[] = $index;
     }
@@ -1330,7 +1331,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
   foreach($loaded_missing_items as $item){
     $description .= '<li>' . $item->name . '</li>';
   }
-  $description .= ' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.';
+  $description .= ' If these accessories are missing please confirm below and the station director will be notified. Otherwise, please check the boxes on the accessories below to indicate they are being returned.';
 
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
@@ -1352,7 +1353,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
 
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Confirm missing accessories')
+    '#value' => t('Confirm accessories')
   );
   $form['cancel'] = array(
     '#markup' => '<a href = "../administer_reservations">Cancel</a>'
@@ -1363,7 +1364,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
 }
 
 function commerce_reservations_line_item_checkin_form_submit($form, &$form_state){
-  if ($form_state['stage'] == 'missing_accessory') {
+  if (!empty($form_state['stage']) && $form_state['stage'] == 'missing_accessory') {
     dsm($form_state);
     //need to get missing accessories at this point.
     //$email = variable_get('cr_admin_email');
