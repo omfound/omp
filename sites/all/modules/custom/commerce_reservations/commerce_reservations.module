@@ -1430,6 +1430,7 @@ function commerce_reservations_line_item_checkin_missing_accessories_text ($miss
 }
 
 function commerce_reservations_line_item_checkin_update_line_item ($line_item_wrapper, $accessories) {
+  dsm($accessories);
   $line_item_wrapper->field_checkout_status->set('Checked In');
   $returned_accessories = array();
   foreach ($accessories as $item){
