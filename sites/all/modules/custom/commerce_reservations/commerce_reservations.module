@@ -1381,7 +1381,7 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
       global $language;
       $params = array(
         'line_item' => $line_item,
-        'missing_items' => $missing_text,
+        'missing_items' => $missing,
       );
       drupal_mail('commerce_reservations', 'missing_accessories_notice', $email, $language->language, $params);
     }
@@ -1420,7 +1420,7 @@ function commerce_reservations_line_item_checkin_missing_accessories ($form_acce
 
 function commerce_reservations_line_item_checkin_missing_accessories_text ($missing_accessories) {
   $text = '';
-  foreach($missing_accessories as $tid){
+  foreach ($missing_accessories as $tid){
     $term = taxonomy_term_load($tid);
     $text .= '<li>' . $term->name .'</li>';
   }
