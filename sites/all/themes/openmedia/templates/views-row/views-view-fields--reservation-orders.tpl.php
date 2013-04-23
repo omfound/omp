@@ -34,10 +34,12 @@
       <?php } ?>
     </td>
     <td class = "order-link">
-      <?php print $fields['view_order']->content;?>
+      <?php $link_options = array('query' => drupal_get_destination());?>
+      <?php print l('view', $fields['view_order']->content, $link_options); ?>
     </td>
     <td class = "line-item-link">
-      <?php print l('view', 'administer_reservations/line-item/'.$fields['line_item_id']->raw); ?>
+      <?php $link_options = array('query' => drupal_get_destination());?>
+      <?php print l('view', 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
