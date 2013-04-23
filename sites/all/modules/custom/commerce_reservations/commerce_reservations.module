@@ -1323,22 +1323,16 @@ function commerce_reservations_destination_link($label) {
 
 function commerce_reservations_line_item_checkin_missing_accessory_form($form, &$form_state, $lid) {
   $selected_items = array();
+  $missing_accessories = commerce_reservations_line_item_checkin_missing_accessories ($form_state['storage']['step1']['accessories']);
   foreach ($form_state['storage']['step1']['accessories'] as $index => $term_id) {
-    if (!$term_id){
-      $missing_items[] = $index;
-    }
-    else {
+    if ($term_id){
       $selected_items[] = $term_id;
     }
   }
 
-  foreach($missing_items as $tid){
-    $loaded_missing_items[] = taxonomy_term_load($tid);
-  }
+  $missing_text = commerce_reservations_line_item_checkin_missing_accessories_text ($missing_accessories);
   $description = '<strong>You attempted to check in a reservation that is missing the following accessories:</strong>';
-  foreach($loaded_missing_items as $item){
-    $description .= '<li>' . $item->name . '</li>';
-  }
+  $description .= $missing_text;
   $description .= '<br />If these accessories are missing please confirm below and the station director will be notified. Otherwise, please check the boxes on the accessories below to indicate they are being returned.';
 
   $line_item = commerce_line_item_load($lid);
@@ -1366,66 +1360,95 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
   $form['cancel'] = array(
     '#markup' => commerce_reservations_destination_link('Cancel'),
   );
-  $missing_items = array();
 
   return $form;
 }
 
 function commerce_reservations_line_item_checkin_form_submit($form, &$form_state){
+  //setup entities
+  $line_id = $form_state['build_info']['args'][0];
+  $line_item = commerce_line_item_load($line_id);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $product = $line_item_wrapper->commerce_product->value();
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+
   if (!empty($form_state['stage']) && $form_state['stage'] == 'missing_accessory') {
     dsm($form_state);
-    //need to get missing accessories at this point.
-    //$email = variable_get('cr_admin_email');
-    //global $language;
-    //$params = array(
-      //'line_item' => $line_item,
-      //'missing_items' => $missing_items_string,
-    //);
-    //drupal_mail('commerce_reservations', 'missing_accessories_notice', $email, $language->language, $params);
+    $missing = commerce_reservations_line_item_checkin_missing_accessories ($form_state['values']['accessories']);
+    if ($missing) { 
+      $missing_text = commerce_reservations_line_item_checkin_missing_accessories_text ($missing);
+      $email = variable_get('cr_admin_email');
+      global $language;
+      $params = array(
+        'line_item' => $line_item,
+        'missing_items' => $missing_text,
+      );
+      drupal_mail('commerce_reservations', 'missing_accessories_notice', $email, $language->language, $params);
+    }
+
+    commerce_reservations_line_item_checkin_update_line_item ($form_state, $line_item_wrapper);
   }
   else {
-    $line_id = $form_state['build_info']['args'][0];
-    $line_item = commerce_line_item_load($line_id);
-    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+    commerce_reservations_line_item_checkin_update_product ($form_state, $product_wrapper);
 
-    //Save any product info changes
-    $product = $line_item_wrapper->commerce_product->value();
-    $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-    $notes = $form_state['values']['item_notes'];
-    $index = 0;
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $product_wrapper->field_reservable_product_notes->set($notes);
-    $status_values = array();
-    foreach ($form_state['values']['item_status'] as $value){
-      $status_values[] = $value;
-      $index++;
-    }
-    $product_wrapper->field_res_product_status->set($status_values);
-    $product_wrapper->save();
-
-    $missing_items = array();
-    foreach ($form_state['input']['accessories'] as $index => $term_id){
-      if (!$term_id){
-        $missing_items[] = $index;
-      }
-    }
-
-    //if there are missing items go to next form state for approval
-    if (count($missing_items > 0)) {
+    //if there are missing items go to next form state for confirmation 
+    if (commerce_reservations_line_item_checkin_missing_accessories ($form_state['input']['accessories'])) {
       $form_state['storage']['step1'] = $form_state['values'];
       $form_state['stage'] = 'missing_accessory';
       $form_state['rebuild'] = TRUE;
       return;
     }
 
-    $line_item_wrapper->field_checkout_status->set('Checked In');
-    $returned_accessories = array();
-    foreach($form_state['values']['accessories'] as $item){
-      $returned_accessories[] = $item;
-    }
-    $line_item_wrapper->field_returned_accessories->set($returned_accessories);
-    //$line_item_wrapper->save();
+    commerce_reservations_line_item_checkin_update_line_item ($form_state, $line_item_wrapper);
   }
+}
+
+function commerce_reservations_line_item_checkin_missing_accessories ($form_accessories) {
+  $missing_items = array();
+  foreach ($form_accessories as $index => $term_id){
+    if (!$term_id){
+      $missing_items[] = $index;
+    }
+  }
+
+  if (count($missing_items > 0)) {
+    return $missing_items;
+  }
+
+  return false;
+}
+
+function commerce_reservations_line_item_checkin_missing_accessories_text ($missing_accessories) {
+  foreach($missing_accessories as $tid){
+    $term = taxonomy_term_load($tid);
+    $text .= '<li>' . $term->name .'</li>';
+  }
+
+  return $text;
+}
+
+function commerce_reservations_line_item_checkin_update_line_item ($form_state, $line_item_wrapper) {
+  $line_item_wrapper->field_checkout_status->set('Checked In');
+  $returned_accessories = array();
+  foreach($form_state['values']['accessories'] as $item){
+    $returned_accessories[] = $item;
+  }
+  $line_item_wrapper->field_returned_accessories->set($returned_accessories);
+  dsm('theoretically saved line item');
+  //$line_item_wrapper->save();
+}
+
+function commerce_reservations_line_item_checkin_update_product ($form_state, $product_wrapper) {
+  $notes = $form_state['values']['item_notes'];
+  $index = 0;
+  $product_wrapper->field_reservable_product_notes->set($notes);
+  $status_values = array();
+  foreach ($form_state['values']['item_status'] as $value){
+    $status_values[] = $value;
+    $index++;
+  }
+  $product_wrapper->field_res_product_status->set($status_values);
+  $product_wrapper->save();
 }
 
 function missing_accessories_confirm($form, &$form_state, $line_id, $missing_items_string){
