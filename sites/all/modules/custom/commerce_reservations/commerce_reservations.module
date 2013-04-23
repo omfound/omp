@@ -1419,6 +1419,7 @@ function commerce_reservations_line_item_checkin_missing_accessories ($form_acce
 }
 
 function commerce_reservations_line_item_checkin_missing_accessories_text ($missing_accessories) {
+  $text = '';
   foreach($missing_accessories as $tid){
     $term = taxonomy_term_load($tid);
     $text .= '<li>' . $term->name .'</li>';
