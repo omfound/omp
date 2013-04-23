@@ -1378,6 +1378,7 @@ function commerce_reservations_line_item_checkin_form_submit($form, &$form_state
     if ($missing) { 
       $missing_text = commerce_reservations_line_item_checkin_missing_accessories_text ($missing);
       $email = variable_get('cr_admin_email');
+      dsm($email);
       global $language;
       $params = array(
         'line_item' => $line_item,
