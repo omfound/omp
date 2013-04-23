@@ -1238,11 +1238,11 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
-  if ($form_state['stage'] != 'missing_accessories') {
-    commerce_reservations_line_item_checkin_primary_form($form, $form_state, $lid);
+  if (!empty($form_state['stage']) && $form_state['stage'] != 'missing_accessories') {
+    $form = commerce_reservations_line_item_checkin_primary_form($form, $form_state, $lid);
   }
   else {
-    commerce_reservations_line_item_checkin_missing_accessory_form($form, $form_state, $lid); 
+    $form = commerce_reservations_line_item_checkin_missing_accessory_form($form, $form_state, $lid); 
   }
   return $form;
 }
