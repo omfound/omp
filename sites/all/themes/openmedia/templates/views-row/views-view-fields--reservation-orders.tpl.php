@@ -37,7 +37,7 @@
       <?php print $fields['view_order']->content;?>
     </td>
     <td class = "line-item-link">
-      <?php print l('View Line Item', 'reservations/line-item/'.$fields['line_item_id']->raw); ?>
+      <?php print l('View Line Item', 'administer_reservations/line-item/'.$fields['line_item_id']->raw); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
