@@ -1334,7 +1334,7 @@ function commerce_reservations_line_item_checkin_form_validate($form, &$form_sta
       }
       $description .= ' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.';
       form_set_error('accessories', $description);
-      form_set_value($form['missing_accessory'], array(0 => array('value' => 1)), $form_state);
+      form_set_value($form['missing_accessory'], array(LANGUAGE_NONE => array(0 => array('value' => 1)))), $form_state);
     }
   }
 }
