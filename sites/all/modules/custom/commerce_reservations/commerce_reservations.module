@@ -1306,6 +1306,7 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
     '#type' => 'submit',
     '#value' => t('Check In')
   );
+  dsm($_SERVER['QUERY_STRING']);
   dsm($_REQUEST);
   $destination = drupal_get_destination();
   $cancel_link = l('Cancel', urldecode($destination['destination']));
@@ -1360,6 +1361,7 @@ function commerce_reservations_line_item_checkin_missing_accessory_form($form, &
   );
   $destination = drupal_get_destination();
   dsm($_REQUEST);
+  dsm($_SERVER['QUERY_STRING']);
   $cancel_link = l('Cancel', urldecode($destination['destination']));
   $form['cancel'] = array(
     '#markup' => $cancel_link
