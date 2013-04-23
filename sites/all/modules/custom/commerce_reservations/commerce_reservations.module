@@ -1313,52 +1313,58 @@ function commerce_reservations_line_item_checkin_primary_form($form, &$form_stat
   return $form;
 }
 
-function commerce_reservations_line_item_checkin_missing_accessory_form($form, &$form_state) {
-  dsm($form_state);
+function commerce_reservations_line_item_checkin_missing_accessory_form($form, &$form_state, $lid) {
+  foreach ($form_state['storage']['step1']['accessories'] as $index => $term_id){
+    if (!$term_id){
+      $missing_items[] = $index;
+    }
+    else {
+      $selected_items[] = $term_id;
+    }
+  }
+
+  foreach($missing_items as $tid){
+    $loaded_missing_items[] = taxonomy_term_load($tid);
+  }
+  $description = 'You attempted to check in a reservation that is missing the following accessories:';
+  foreach($loaded_missing_items as $item){
+    $description .= '<li>' . $item->name . '</li>';
+  }
+  $description .= ' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.';
+
+  $line_item = commerce_line_item_load($lid);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $accessories = array();
+  foreach($line_item_wrapper->field_checked_out_accessories->getIterator() as $term_wrapper){
+    $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
+  }
+
+  $form['missing_accessory_warning'] = array( 
+    '#markup' => $description,
+  );
+  
+  $form['accessories'] = array(
+    '#type' => 'checkboxes',
+    '#title' => 'These are the accessories the user checked out.</br>Please check all accessories the user is returning.',
+    '#options' => $accessories,
+    '#default_value' => $selected_items,
+  );
+
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Check In')
+    '#value' => t('Confirm missing accessories')
   );
   $form['cancel'] = array(
     '#markup' => '<a href = "../administer_reservations">Cancel</a>'
   );
-  /**
   $missing_items = array();
-  foreach ($form_state['input']['accessories'] as $index => $term_id){
-    if (!$term_id){
-      $missing_items[] = $index;
-    }
-  }
 
-  if (sizeof($missing_items) > 0) {
-    $missing_items_string = '';
-    foreach($missing_items as $index => $item_id){
-      if ($index != sizeof($missing_items) - 1){
-        $missing_items_string .= $item_id . "-";
-      } else {
-        $missing_items_string .= $item_id;
-      }
-    }
-
-    $missing_items = explode('-', $missing_items_string);
-    foreach($missing_items as $tid){
-      $loaded_missing_items[] = taxonomy_term_load($tid);
-    }
-    $description = 'You attempted to check in a reservation that is missing the following accessories:';
-    foreach($loaded_missing_items as $item){
-      $description .= '<li>' . $item->name . '</li>';
-    }
-    $description .= ' If these accessories are missing resubmit the form and the station director will be notified. Otherwise, please check the boxes on the accessories form to indicate they are being returned.';
-    $form_state['storage']['missing_accessory'] = 1;
-    $form_state['rebuild'] = true;
-      form_set_error('accessories', $description);
-  }
-  **/
   return $form;
 }
 
 function commerce_reservations_line_item_checkin_form_submit($form, &$form_state){
   if ($form_state['stage'] == 'missing_accessory') {
+    dsm($form_state);
     //need to get missing accessories at this point.
     //$email = variable_get('cr_admin_email');
     //global $language;
