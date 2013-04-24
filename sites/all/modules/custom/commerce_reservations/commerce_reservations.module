@@ -765,7 +765,7 @@ function commerce_reservations_rules_condition_info() {
  */
 function commerce_reservations_check_hours($line_item, $operator, $hours) {
   //bail if dates are missing...
-  if (empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']) || empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2']) {
+  if (empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']) || empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2'])) {
     return FALSE;
   }
 
