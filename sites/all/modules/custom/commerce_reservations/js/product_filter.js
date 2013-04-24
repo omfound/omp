@@ -26,6 +26,7 @@
     //Hide all of our commerce item fields on page load
     $('#block-views-calendar-product-view-block .add-to-cart').hide();
     $('#block-views-calendar-product-view-block .body').hide();
+    $('#block-views-calendar-product-view-block .price').hide();
     $('#block-views-calendar-product-view-block .large-image').hide();
     $('#block-views-calendar-product-view-block .nid').hide();
     $('#block-views-calendar-product-view-block .member-cost').hide();
@@ -94,15 +95,14 @@
       itemTitle = $(this).find('.title').clone();
       body = $(this).find('.body').clone();
       addToCart = $(this).find('.add-to-cart').clone();
-      memberPrice = $(this).find('.member-cost').clone();
-      commercialPrice = $(this).find('.commercial-cost').clone();
+      price = $(this).find('.price').clone();
       var nid = $(this).find('.nid .field-content').text();
       leftContent = $('<div id = leftContent></div>');
       rightContent = $('<div id = rightContent></div>');
       $('#leftContent').remove();
       $('#rightContent').remove();
       $(leftContent).append(addToCart).append(itemImage);
-      $(rightContent).append(itemTitle).append(body).append(memberPrice).append(commercialPrice);
+      $(rightContent).append(itemTitle).append(body).append(price);
       $(leftContent).hide();
       $(rightContent).hide();
       $('#left-side').empty();
@@ -112,8 +112,7 @@
       $(leftContent).fadeIn(1000);
       $(rightContent).fadeIn(1000);
       $(body).fadeIn(1000);
-      $(memberPrice).fadeIn(1000);
-      $(commercialPrice).fadeIn(1000);
+      $(price).fadeIn(1000);
       datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
       datesID.attr('id', 'pickedDates');
       $('.form-item-product-id').hide();
