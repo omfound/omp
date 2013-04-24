@@ -9,6 +9,7 @@
     <?php print $fields['body']->content;?>
   </div>
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
+    <?php dsm($fields['field_charge_by_the_']); ?>
     <div class = "price item-data">
       <?php print '<span class="price-label">Price (per hour): </span>' . $fields['commerce_price']->content;?>
     </div>
