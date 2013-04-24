@@ -767,9 +767,7 @@ function commerce_reservations_check_hours($line_item, $operator, $hours) {
   }
 
   //calculate duration of reservation
-  $start = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']);
-  $end = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2']);
-  $total_hours = ($end-$start) / 3600;
+  $total_hours = commerce_reservations_line_item_duration($line_item);
   
   // Make a quantity comparison based on the operator.
   switch ($operator) {
@@ -866,6 +864,12 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_price_per_day' => array(
       'label' => t('Multiply price by day'),
     ),
+    'commerce_reservations_hourly_price_reduction' => array(
+      'label' => t('Reduce price by specified hours'),
+    ),
+    'commerce_reservations_daily_price_reduction' => array(
+      'label' => t('Reduce price by specified days'),
+    ),
   );
 
   // Define the action using a common set of parameters.
@@ -896,6 +900,10 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
+  $actions['commerce_reservations_hourly_price_reduction']['parameter']['hours'] = array(
+    'type' => 'integer',
+    'label' => t('Hours'),
+  ); 
   $actions['commerce_reservations_update_checkout_status'] = array(
     'label' => t('Set all reservable line items to specific status'),
     'group' => t('Commerce Reservations Rules'),
@@ -927,6 +935,44 @@ function commerce_reservations_rules_action_info() {
   );
 
   return $actions;
+}
+
+function commerce_reservations_hourly_price_reduction($line_item, $component_name, $round_mode, $hours) {
+  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  if ($product->type != 'reservable_product') {
+    return;
+  }
+  if ($total_hours = commerce_reservations_line_item_duration($line_item)) { 
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+    $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+
+    if ($hours >= $total_hours) {
+      //reduce to zero cost if the hours provided are great than the order hours
+      $new_price = 0; 
+      $price_difference = $new_price - $unit_price['amount'];
+    }
+    else {
+      $new_price = $unit_price['amount'] - ($hours*$unit_price['amount']);
+      $price_difference = $new_price - $unit_price['amount'];
+    }
+
+    $difference = array(
+      'amount' => $price_difference,
+      'currency_code' => $unit_price['currency_code'],
+      'data' => array(),
+    );
+
+    // Set the amount of the unit price and add the difference as a component.
+    $line_item_wrapper->commerce_unit_price->amount = $new_price;
+    
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
+      $component_name,
+      $difference,
+      TRUE
+    );
+
+  }
 }
 
 function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
@@ -1913,3 +1959,15 @@ function commerce_reservations_entity_display_lookup($product_id) {
   return false;
 }
 
+function commerce_reservations_line_item_duration ($line_item) {  
+  if (empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']) || empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2'])) {
+    return FALSE;
+  }
+
+  //calculate duration of reservation
+  $start = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']);
+  $end = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2']);
+  $total_hours = ($end-$start) / 3600;
+
+  return $total_hours;
+}
