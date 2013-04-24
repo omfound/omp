@@ -14,7 +14,7 @@
     <?php //watchdog('brian', '<pre>'.print_r($fields, TRUE).'</pre>'); ?>
     <?php if (!empty($fields['field_charge_by_the_']->content)) { ?>
       <?php //print $fields['field_charge_by_the_']->content; ?>
-      <pre><?php print_r($fields['field_charge_by_the_'], TRUE); ?></pre>
+      <?php print $fields['field_charge_by_the_']->raw; ?>
     <?php } ?>
     <div class = "price item-data">
       <?php print '<span class="price-label">Price (per hour): </span>' . $fields['commerce_price']->content;?>
