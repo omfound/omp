@@ -246,16 +246,11 @@ body.page-reservations #main-content #squeeze{
 	display: block;
 }
 
-#block-views-calendar-product-view-block #rightContent .member-cost .field-content,
-#block-views-calendar-product-view-block #rightContent .commercial-cost .field-content{
-	font-weight: bold;
-	display: inline;
+#rightContent .price span.price-label {
+  font-weight: bold;  
 }
-
-#block-views-calendar-product-view-block #rightContent .member-cost label,
-#block-views-calendar-product-view-block #rightContent .commercial-cost label{
-	color: #d0ccc3;
-	display: inline;
+#rightContent .price div {
+  display: inline;
 }
 
 .view-id-reservation_calendar{
