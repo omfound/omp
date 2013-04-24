@@ -731,7 +731,64 @@ function commerce_reservations_rules_condition_info() {
       'module' => 'commerce_reservations',
       'group' => t('Commerce Reservations Rules'),
     ),
+    'commerce_reservations_check_hours' => array(
+      'label' => t('Check for a specified number of hours on a reservation'),
+      'parameter' => array(
+        'commerce_line_item' => array(
+          'type' => 'commerce_line_item',
+          'label' => t('Commerce Line Item'),
+        ),
+        'operator' => array(
+          'type' => 'text',
+          'label' => t('Operator'),
+          'description' => t('The comparison operator.'),
+          'optional' => TRUE,
+          'default value' => '=',
+          'options list' => 'commerce_numeric_comparison_operator_options_list',
+          'restriction' => 'input',
+        ),
+        'hours' => array(
+          'type' => 'commerce_price',
+          'label' => t('Hours'),
+          'description' => t('The corresponding price value that should be compared against.'),
+        ),
+      ),
+      'help' => t('This condition checks to see if the duration of a reservation is of a specified length'),
+      'module' => 'commerce_reservations',
+      'group' => t('Commerce Reservations Rules'),
+    ),
   );
+}
+
+/**
+ * Condition callback: compares hours to user entered.
+ */
+function commerce_reservations_check_hours($line_item, $operator, $hours) {
+  //bail if dates are missing...
+  if (empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']) || empty($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2']) {
+    return FALSE;
+  }
+
+  //calculate duration of reservation
+  $start = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value']);
+  $end = strtotime($line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2']);
+  $total_hours = ($end-$start) / 3600;
+  
+  // Make a quantity comparison based on the operator.
+  switch ($operator) {
+    case '<':
+      return $total_hours < $hours;
+    case '<=':
+      return $total_hours <= $hours;
+    case '=':
+      return $total_hours == $hours;
+    case '>=':
+      return $total_hours >= $hours;
+    case '>':
+      return $total_hours > $hours;
+  }
+
+  return FALSE;
 }
 
 /**
