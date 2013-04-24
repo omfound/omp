@@ -1,4 +1,3 @@
-<?php dsm($fields);?>
 <div class = "item">
   <div class = "small-image item-data">
     <?php print $fields['field_image']->content;?>
