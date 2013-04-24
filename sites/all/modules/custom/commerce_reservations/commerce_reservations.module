@@ -696,12 +696,9 @@ function check_view_overlaps(&$view){
 function commerce_reservations_rules_condition_info() {
   return array(
     'commerce_reservations_product_type_check' => array(
-      'label' => t('Line Item is a reservation'),
+      'label' => t('Order contains a reservation'),
       'arguments' => array(
-        'lid' => array(
-          'label' => t('Line Item ID'), 
-          'type' => 'integer'
-        ),
+        'commerce_order' => array('label' => t('Commerce Order'), 'type' => 'commerce_order'),
       ),
       'help' => t('This condition checks to see if this order has a reservation.'),
       'module' => 'commerce_reservations',
@@ -794,9 +791,8 @@ function commerce_reservations_check_hours($line_item, $operator, $hours) {
 /**
  * Condition callback to check whether or not an order contains a reservation. Thanks Leo!
  */
-function commerce_reservations_product_type_check($order_id) {
-  if (is_numeric($order_id)) {
-    $order = commerce_order_load($order_id);
+function commerce_reservations_product_type_check($order) {
+  if ($order) {
     if (!empty($order->commerce_line_items)){
       foreach($order->commerce_line_items['und'] AS $line_item) {
         $line_item = commerce_line_item_load($line_item['line_item_id']);
