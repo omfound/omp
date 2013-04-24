@@ -705,7 +705,7 @@ function commerce_reservations_rules_condition_info() {
       'group' => t('Commerce Reservations Rules'),
     ),
     'commerce_reservations_charge_by_the_day_check' => array(
-      'label' => t('Apply Daily Reservation Pricing'),
+      'label' => t('Check if daily charge line item'),
       'arguments' => array(
         'lid' => array(
           'label' => t('Line Item ID'), 
@@ -717,7 +717,7 @@ function commerce_reservations_rules_condition_info() {
       'group' => t('Commerce Reservations Rules'),
     ),
     'commerce_reservations_charge_by_the_hour_check' => array(
-      'label' => t('Apply Hourly Reservation Pricing'),
+      'label' => t('Check if hourly charge line item'),
       'arguments' => array(
         'lid' => array(
           'label' => t('Line Item Id'),
