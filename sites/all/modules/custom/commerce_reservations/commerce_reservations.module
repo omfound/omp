@@ -914,6 +914,45 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
   }
 }
 
+function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $product = $line_item_wrapper->commerce_product->value();
+  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  //if the product is not a reservable product, duck out
+  if ($product->type != 'reservable_product') {
+    return;
+  }
+  
+  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+  
+  if (property_exists($line_item, "field_reservation_dates")){
+    $date_array = $line_item_wrapper->field_reservation_dates->value();
+    $start = strtotime($date_array["value"]);
+    $end = strtotime($date_array["value2"]);
+    $days_diff = floor(($end - $start) / 86400);
+    if ($days_diff < 1){
+	    $days_diff = 1;
+    }
+    $price_array = $product_wrapper->commerce_price->value();
+    $rate = $price_array['amount'];
+    $updated_price = $days_diff * $rate;
+    $current_amount = $unit_price['amount'];
+    $difference = array(
+      'amount' => $updated_price - $current_amount,
+      'currency_code' => $unit_price['currency_code'],
+      'data' => array(),
+    );
+    // Set the amount of the unit price and add the difference as a component.
+    $line_item_wrapper->commerce_unit_price->amount = $updated_price;
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
+      $component_name,
+      $difference,
+      TRUE
+    );
+  }
+}
+
 function commerce_reservations_status_options () {
   $states = commerce_reservations_commerce_order_status_info();
   $options = array();
