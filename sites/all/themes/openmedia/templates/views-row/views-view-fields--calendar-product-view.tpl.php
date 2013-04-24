@@ -1,6 +1,8 @@
 <div class = "item">
   <div class = "small-image item-data">
-    <?php print $fields['field_image']->content;?>
+    <?php if (!empty($fields['field_image']->content)) { ?>
+      <?php print $fields['field_image']->content;?>
+    <?php } ?>
   </div>
   <div class  = "title item-data">
     <?php print $fields['title']-> content;?>
@@ -11,7 +13,8 @@
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
     <?php //watchdog('brian', '<pre>'.print_r($fields, TRUE).'</pre>'); ?>
     <?php if (!empty($fields['field_charge_by_the_']->content)) { ?>
-      <?php print $fields['field_charge_by_the_']->content; ?>
+      <?php //print $fields['field_charge_by_the_']->content; ?>
+      <pre><?php print_r($fields['field_charge_by_the_'], TRUE); ?></pre>
     <?php } ?>
     <div class = "price item-data">
       <?php print '<span class="price-label">Price (per hour): </span>' . $fields['commerce_price']->content;?>
@@ -30,6 +33,8 @@
     <?php print $fields['nid']->content;?>
   </div>
   <div class="large-image item-data">
-    <?php print $fields['field_image_1']->content;?>
+    <?php if (!empty($fields['field_image_1']->content)) { ?>
+      <?php print $fields['field_image_1']->content;?>
+    <?php } ?>
   </div>
 </div>
