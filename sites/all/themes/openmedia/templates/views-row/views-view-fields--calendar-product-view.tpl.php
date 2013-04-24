@@ -1,6 +1,6 @@
-<?php //dpm($fields);?>
+<?php dsm($fields);?>
 <div class = "item">
-    <div class = "small-image item-data">
+  <div class = "small-image item-data">
     <?php print $fields['field_image']->content;?>
   </div>
   <div class  = "title item-data">
