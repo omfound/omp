@@ -9,7 +9,7 @@
     <?php print $fields['body']->content;?>
   </div>
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
-    <?php watchdog('brian', '<pre>'.print_r($fields['field_charge_by_the_'], TRUE).'</pre>'); ?>
+    <?php watchdog('brian', '<pre>'.print_r($fields, TRUE).'</pre>'); ?>
     <div class = "price item-data">
       <?php print '<span class="price-label">Price (per hour): </span>' . $fields['commerce_price']->content;?>
     </div>
