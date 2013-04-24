@@ -10,7 +10,7 @@
   </div>
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
     <?php //watchdog('brian', '<pre>'.print_r($fields, TRUE).'</pre>'); ?>
-    <?php if (!empty($fields['field_charge_by_the_']->content) { ?>
+    <?php if (!empty($fields['field_charge_by_the_']->content)) { ?>
       <?php print $fields['field_charge_by_the_']->content; ?>
     <?php } ?>
     <div class = "price item-data">
