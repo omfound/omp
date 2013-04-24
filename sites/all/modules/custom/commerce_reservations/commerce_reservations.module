@@ -696,10 +696,10 @@ function check_view_overlaps(&$view){
 function commerce_reservations_rules_condition_info() {
   return array(
     'commerce_reservations_product_type_check' => array(
-      'label' => t('Order has a reservation'),
+      'label' => t('Line Item is a reservation'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item ID'), 
           'type' => 'integer'
         ),
       ),
@@ -707,15 +707,27 @@ function commerce_reservations_rules_condition_info() {
       'module' => 'commerce_reservations',
       'group' => t('Commerce Reservations Rules'),
     ),
-    'commerce_reservations_commercial_check' => array(
-      'label' => t('Reservation is Commercial'),
+    'commerce_reservations_charge_by_the_day_check' => array(
+      'label' => t('Apply Daily Reservation Pricing'),
       'arguments' => array(
-        'order_id' => array(
-          'label' => t('Order Id'), 
+        'lid' => array(
+          'label' => t('Line Item ID'), 
           'type' => 'integer'
         ),
       ),
-      'help' => t('This condition checks to see if this reservation is a commercial reservation.'),
+      'help' => t('This condition checks to see if the line item product should be charged daily.'),
+      'module' => 'commerce_reservations',
+      'group' => t('Commerce Reservations Rules'),
+    ),
+    'commerce_reservations_charge_by_the_hour_check' => array(
+      'label' => t('Apply Hourly Reservation Pricing'),
+      'arguments' => array(
+        'lid' => array(
+          'label' => t('Line Item Id'),
+          'type' => 'integer'
+        ),
+      ),
+      'help' => t('This condition checks to see if the line item product should be charged hourly.'),
       'module' => 'commerce_reservations',
       'group' => t('Commerce Reservations Rules'),
     ),
@@ -795,20 +807,11 @@ function commerce_reservations_rules_action_info() {
 
   // Prepare an array of arithmetical actions for altering prices.
   $action_types = array(
-    'commerce_reservations_commercial_price_per_hour' => array(
-      'label' => t('Multiply commercial price by hour'),
+    'commerce_reservations_price_per_hour' => array(
+      'label' => t('Multiply price by hour'),
     ),
-    'commerce_reservations_member_price_per_hour' => array(
-      'label' => t('Multiply member price by hour'),
-    ),
-    'commerce_reservations_member_price_per_day' => array(
-      'label' => t('Multiply member price by day'),
-    ),
-    'commerce_reservations_commercial_price_per_day' => array(
-      'label' => t('Multiply commercial price by day'),
-    ),
-    'commerce_reservations_email_confirmation' => array(
-      'label' => t('Send an email confirmation regarding the reservation order'),
+    'commerce_reservations_price_per_day' => array(
+      'label' => t('Multiply price by day'),
     ),
   );
 
