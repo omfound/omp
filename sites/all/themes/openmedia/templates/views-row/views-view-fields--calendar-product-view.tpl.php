@@ -8,10 +8,9 @@
   <div class = "body item-data">
     <?php print $fields['body']->content;?>
   </div>
-  <?php if (!empty($fields['field_member_cost']->content) && $fields['field_member_cost']->content != '<div class="field-content"></div>'):?>
-    <div class = "member-cost item-data">
-      <?php print $fields['field_member_cost']->content;?>
-      <label for = "member-cost">(Member)</label>
+  <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
+    <div class = "price item-data">
+      <?php print $fields['commerce_price']->content;?>
     </div>
   <?php endif;?>
   <?php if (!empty($fields['field_commercial_cost']->content) && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
