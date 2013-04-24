@@ -10,7 +10,7 @@
   </div>
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
     <div class = "price item-data">
-      <?php print $fields['commerce_price']->content;?>
+      <?php print '<span class="price-label">Price (per hour): </span>' . $fields['commerce_price']->content;?>
     </div>
   <?php endif;?>
   <?php if (!empty($fields['field_commercial_cost']->content) && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
