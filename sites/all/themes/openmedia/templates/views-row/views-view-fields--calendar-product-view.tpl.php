@@ -8,7 +8,9 @@
     <?php print $fields['title']-> content;?>
   </div>
   <div class = "body item-data">
-    <?php print $fields['body']->content;?>
+    <?php if (!empty($fields['body']->content)) { ?>
+      <?php print $fields['body']->content; ?>
+    <?php } ?>
   </div>
   <?php if (!empty($fields['commerce_price']->content) && $fields['commerce_price']->content != '<div class="field-content"></div>'):?>
     <?php //watchdog('brian', '<pre>'.print_r($fields, TRUE).'</pre>'); ?>
