@@ -378,6 +378,8 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
               '#suffix' => '</li>',
             );
           }
+        } else {
+          watchdog('Didnt fit GAP','spacer is '.$spacer . ' and duration is '. $show->field_om_show_duration['und'][0]['value'] . ' and start and end are ' . $gap['start'] . ' and ' . $gap['end']);
         }
       }
     }
