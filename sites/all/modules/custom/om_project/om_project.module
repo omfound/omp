@@ -420,10 +420,6 @@ function om_project_node_access($node, $op, $account) {
     $user_is_admin = FALSE;
     $user_had_access = FALSE;
     $members = om_project_get_project_members($node->nid);
-    // blantz DEBUG
-    if($members == FALSE) {
-      watchdog('arf arf', 'om_project_get_members returned false');
-    }
     foreach($members AS $member) {
       if ($member->uid == $account->uid) {
         $user_is_member = TRUE;
