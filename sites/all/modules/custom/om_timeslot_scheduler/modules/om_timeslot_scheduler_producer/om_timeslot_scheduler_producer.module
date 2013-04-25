@@ -369,8 +369,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
         if ($gap['start'] + $show->field_om_show_duration['und'][0]['value'] + $spacer <= $gap['end']) {
           $adult_hours = om_timeslot_scheduler_get_adult_hours($gap['start']);
           // BWL DEBUG
-          print "printing adult hours array";
-          print_r($adult_hours);
+          watchdog('ADULT HOURS','<pre>'.print_r($adult_hours).'</pre>');
           // Check for adult content
           if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
             $list_items[] = array(
