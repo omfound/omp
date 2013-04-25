@@ -357,7 +357,8 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   );
 
   // Find out if the show is adult
-  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+  //$is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+  $is_adult = FALSE;
 
   foreach ($dates AS $date => $gaps) {
     // @TODO this section's data is stored poorly. Need to improve the way these are stored.
