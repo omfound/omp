@@ -440,7 +440,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     );
     return $output;
   }
-
+  watchdog('Start Commit','before start record');
   $process_record = new stdClass();
   $process_record->start = $start;
   $process_record->end = $end;
@@ -458,6 +458,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $cache_item->time = time();
   drupal_write_record('om_timeslot_scheduler_cache', $cache_item);
 
+  watchdog('Start Commit','after start record');
   // Commit results
   $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
   $controller = om_playback_servers_entity_get_controller($pbs);
@@ -468,7 +469,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $controller->create_airing($pbs, $meta_data);
 
   om_timeslot_scheduler_process_complete($pid);
-  
+
   $message = t('Summary');
   $summary = t('Your show has been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
   $return = l('Return', 'node/' . $show->nid);
