@@ -41,3 +41,24 @@ function om_cleaner_remove_products($type) {
 
   dsm('Removed '.$counter.' '.$type.' products.');
 }
+
+function om_cleaner_remove_users() {
+  $query = "
+    SELECT uid
+    FROM {users}
+    WHERE uid != 0 AND uid != 1";
+  $results = db_query($query);
+
+  $uids = array();
+  foreach ($results as $uid => $info) {
+    $uids[$result->uid] = $result->uid;
+  }
+
+  $counter = 0;
+  foreach ($uids as $uid => $info) {
+    user_delete($uid);
+    $counter++;
+  }
+  
+  dsm('Removed '.$counter.' user accounts.');
+}
