@@ -411,7 +411,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
-    watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
+    //watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
     if ($process->offsetExists(0) && $process[0]->process_status == 1) {
       watchdog('start commit', 'process status is 1 so already processed is true');
       $already_processed = TRUE;
@@ -421,6 +421,8 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     $already_processed = TRUE;
   }
   if ($already_processed == TRUE) {
+    watchdog('schedule commit', 'already processed section');
+
     $message = t('Summary');
     $summary = t('Your show has already been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
     $return = l('Return', 'node/' . $show->nid);
@@ -444,7 +446,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     );
     return $output;
   }
-  watchdog('Start Commit','before start record');
+  watchdog('Sched Commit','after already_processed check...before start record');
   $process_record = new stdClass();
   $process_record->start = $start;
   $process_record->end = $end;
