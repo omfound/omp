@@ -1,0 +1,15 @@
+<?php
+
+function om_cleaner_remove_nodes($type) {
+  $query = "
+    SELECT nid
+    FROM {node}
+    WHERE node.type = :type";
+  $results = db_query($query, array(':type' => $type));
+
+  $nids = array();
+  foreach ($results as $result) {
+    $nids[$result->nid] = $result->nid;
+  }
+  dsm($nids);
+}
