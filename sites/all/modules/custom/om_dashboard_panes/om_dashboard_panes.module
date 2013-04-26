@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * Implements hook_om_dashboard_panes
+ * Masonry alternates sides left, right, left, right
+ */
+function om_dashboard_panes_om_dashboard_panes() {
+  return array(
+    'profile' => array(
+      'theme' => array(
+        'om_profile_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_profile_pane',
+          'file' => 'theme.inc'
+        )
+      )
+    ),
+    'classes' => array(
+      'theme' => array(
+        'om_classes_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_classes_pane',
+          'file' => 'theme.inc'
+        )
+      )
+    ),
+    'membership' => array(
+      'theme' => array(
+        'om_membership_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_membership_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_membership',
+    ),
+    'class_registrations' => array(
+      'theme' => array(
+        'om_class_registration_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_class_registration_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_classes',
+    ),
+    'reservations' => array(
+      'theme' => array(
+        'om_reservations_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_reservations_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'commerce_reservations'
+    ),
+    'shows' => array(
+      'theme' => array(
+        'om_shows_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_shows_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_show'
+    ),
+  );
+}
+
+function om_dashboard_panes_upcoming_classes($num) {
+  // Include date repeat utiltiy
+  if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exists('date')) {
+    require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
+  }
+  $classes = array();
+  $conditions = array(
+    'type' => 'class'
+  );
+  $products = commerce_product_load_multiple(array(), $conditions);
+  $count = 0;
+  foreach ($products AS $product_id => $product) {
+    $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
+    $final_date = date_repeat_helper_ordered_dates($date_info);
+    if (!empty($final_date[0])) {
+      $classes[] = array(
+        'title' => $product->title,
+        'product_id' => $product->product_id,
+        'date' => $final_date[0]['start']
+      );
+    }
+  }
+  $classes = array_slice($classes, 0, $num);
+  uasort($classes, '_om_dashboard_class_sort');
+  return $classes;
+}
+
+function _om_dashboard_class_sort($a, $b) {
+  if (is_array($a) && isset($a['date']) && is_array($b) && isset($b['date'])) {
+    if ($a['date'] > $b['date']) {
+      return -1;
+    }
+  }
+  return 1;
+}
+
+function om_dashboard_panes_get_users_shows($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $query = db_select('node', 'node');
+  $query->fields('node', array('nid', 'title', 'created'));
+  $query->condition('uid', $user->uid, '=');
+  $query->condition('type', 'om_show', '=');
+  $result = $query->execute();
+  return $result->fetchAll();
+}

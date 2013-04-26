@@ -1,0 +1,11 @@
+name = Open Media Membership
+description = Provides membership features, functionality and administration.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "taxonomy"
+dependencies[] = "commerce"
+dependencies[] = "commerce_product"
+dependencies[] = "rules"
+dependencies[] = "profile2"
+dependencies[] = "profile2_page"
+version = 7.x-1.0

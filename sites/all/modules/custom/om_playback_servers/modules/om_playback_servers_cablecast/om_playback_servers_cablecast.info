@@ -1,0 +1,5 @@
+name = Open Media Playback Servers Cablecast
+description = Provides API integration for Tightrope Cablecast Playback Servers.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "om_playback_servers"

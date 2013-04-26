@@ -1,0 +1,26 @@
+core = "7.x"
+name = "PBCore Custom Names"
+package = "Search and Metadata"
+php = "5.2.4"
+project = "pbcore_custom_names"
+dependencies[] = "features"
+dependencies[] = "list"
+dependencies[] = "views"
+dependencies[] = "pbcore"
+description = "Add fields to PBCore terms and UI to disable and alter term names"
+features[ctools][] = "views:views_default:3.0"
+features[field][] = "taxonomy_term-pbcore_fcc_ratings-field_pbcore_custom_name"
+features[field][] = "taxonomy_term-pbcore_fcc_ratings-field_term_enable"
+features[field][] = "taxonomy_term-pbcore_genres-field_pbcore_custom_name"
+features[field][] = "taxonomy_term-pbcore_genres-field_term_enable"
+features[field][] = "taxonomy_term-pbcore_languages-field_pbcore_custom_name"
+features[field][] = "taxonomy_term-pbcore_languages-field_term_enable"
+features[views_view][] = "pbcore_search_terms"
+
+
+; Information added by drupal.org packaging script on 2012-06-06
+version = "7.x-1.0-beta2"
+core = "7.x"
+project = "pbcore"
+datestamp = "1339001563"
+

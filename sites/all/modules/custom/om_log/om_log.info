@@ -1,0 +1,4 @@
+name = Open Media Log
+description = Provides open media system logging for debugging and analytics.
+core = 7.x
+package = Open Media System

@@ -1,0 +1,84 @@
+<?php
+/**
+ * @file
+ */
+
+include_once('pbcore_custom_names.features.inc');
+
+function pbcore_custom_names_form_alter(&$form, $form_state, $form_id) {
+  
+  //Genres 
+  if (isset($form['field_pbcore_genres'])) {    
+      
+    $newoptions = array();
+    $options = $form['field_pbcore_genres'][LANGUAGE_NONE]['#options'];
+  
+    foreach ($options as $key => $option) {
+    
+      if ($key == '_none') {
+        $newoptions[$key] = $option;
+      }
+
+      $term = taxonomy_term_load($key);
+      
+      if (isset($term->field_term_enable) && $term->field_term_enable) {
+        $name =  isset($term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value']) ? $term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value'] : $option;
+        $newoptions[$key] = $name ;
+      }
+    }
+    
+    asort($newoptions);
+    
+    $form['field_pbcore_genres'][LANGUAGE_NONE]['#options'] = $newoptions;
+  }
+  
+    
+  //Languages
+  if (isset($form['field_pbcore_languages'])) {  
+    $newoptions = array();
+    $options = $form['field_pbcore_languages'][LANGUAGE_NONE]['#options'];
+
+    foreach ($options as $key => $option) {
+      
+      if ($key == '_none') {
+        $newoptions[$key] = $option;
+      }
+
+      $term = taxonomy_term_load($key);
+      
+      if (isset($term->field_term_enable) && $term->field_term_enable) {
+        $name =  isset($term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value']) ? $term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value'] : $option;
+        $newoptions[$key] = $name ;
+      }
+    }
+    
+    asort($newoptions);
+    
+    $form['field_pbcore_languages'][LANGUAGE_NONE]['#options'] = $newoptions;
+  }
+  
+  //Ratings
+  if (isset($form['field_pbcore_fcc_ratings'])) { 
+    $newoptions = array();
+    $options = $form['field_pbcore_fcc_ratings'][LANGUAGE_NONE]['#options'];
+    
+    foreach ($options as $key => $option) {
+    
+      if ($key == '_none') {
+        $newoptions[$key] = $option;
+      }
+
+      $term = taxonomy_term_load($key);
+      
+      if (isset($term->field_term_enable) && $term->field_term_enable) {
+        $name =  isset($term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value']) ? $term->field_pbcore_custom_name[LANGUAGE_NONE][0]['value'] : $option;
+        $newoptions[$key] = $name ;
+      }
+    }
+    
+    asort($newoptions);
+    
+    $form['field_pbcore_fcc_ratings'][LANGUAGE_NONE]['#options'] = $newoptions;
+  }
+
+}

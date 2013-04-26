@@ -1,0 +1,13 @@
+<?php
+
+function alternative_rating_schema() {
+  $schema['alternative_rating'] = array(
+    'fields' => array(
+    	'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    	'score' => array('type' => 'numeric', 'size' => 'normal', 'not null' => TRUE, 'default' => 0, 'precision' => 12, 'scale' => 6),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  return $schema;
+}

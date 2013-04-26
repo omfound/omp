@@ -1,0 +1,405 @@
+<?php
+
+/**
+ * @file
+ * Code for the OM Airing feature.
+ */
+include_once('om_broadcast_schedule.features.inc');
+
+/**
+ * Implements hook_permission
+ */
+function om_broadcast_schedule_permission() {
+  return array(
+    'administer om broadcast schedule' => array(
+      'title' => t('Administer Open Media Broadcast Schedule'),
+      'description' => t('Set up basic schedule syncing cron and manually sync schedule.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_broadcast_schedule_menu() {
+  $items = array();
+  
+  $items['om_broadcast_schedule'] = array(
+    'title' => t('Administer Open Media Broadcast Schedule'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_broadcast_schedule_admin_form'),
+    'access arguments' => array('administer om broadcast schedule'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  
+  $items['om_broadcast_schedule/admin'] = array(
+    'title' => t('Administer Open Media Broadcast Schedule'),
+    'weight' => -1,
+    'type' => MENU_DEFAULT_LOCAL_TASK
+  );
+
+  $items['om_broadcast_schedule/manual_sync'] = array(
+    'title' => t('Manual Sync'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_broadcast_schedule_manual_sync_form'),
+    'access arguments' => array('administer om playback servers'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK
+  );
+  
+  return $items;
+}
+
+/**
+ * Admin form builder
+ */
+function om_broadcast_schedule_admin_form($form, &$form_state) {
+
+  $form['om_broadcast_schedule_cron'] = array(
+    '#type' => 'radios',
+    '#title' => t('OM Broadcast Schedule Cron Job'),
+    '#default_value' => variable_get('om_broadcast_schedule_cron', 0),
+    '#options' => array('Disabled', 'Enabled'),
+    '#description' => t('Whether or not OM Airing should attempt to automatically sync the schedule on Drupal\'s cron.'),
+  );
+
+  $form['om_broadcast_schedule_cron_frequency'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Frequency of Cron'),
+    '#default_value' => variable_get('om_broadcast_schedule_cron_frequency', 3600),
+    '#description' => t('Time between cron jobs in seconds. NB: This value is constrained by your Drupal site\'s cron frequency.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="om_airing_cron"]' => array('value' => 1),
+      ),
+    ),
+  );
+
+  $form['om_broadcast_schedule_update_window'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Days out to update'),
+    '#default_value' => variable_get('om_broadcast_schedule_update_window', 7),
+    '#description' => t('How many days from today should the schedule be updated.'),
+    '#required' => TRUE,
+  );
+
+  $form['om_broadcast_schedule_update_duration'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Duration of update'),
+    '#default_value' => variable_get('om_broadcast_schedule_update_duration', 3600),
+    '#description' => t('Duration of update in seconds.'),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Manual sync form builder
+ */
+function om_broadcast_schedule_manual_sync_form($form, &$form_state) {
+  $voc = om_playback_servers_get_channel_vocabulary();
+  $options = array();
+  foreach ($voc AS $term) {
+    $options[$term->tid] = $term->name;
+  }
+
+  $form['om_broadcast_schedule_channels'] = array(
+    '#type' => 'select',
+    '#title' => t('Channel to Sync'),
+    '#default_value' => variable_get('om_broadcast_schedule_channels', 0),
+    '#options' => $options,
+    '#description' => t('Select a channel to manually sync.'),
+    '#required' => TRUE,
+  );
+
+  $form['om_broadcast_schedule_start'] = array(
+    '#title' => t('Start Date'),
+    '#description' => t('Date and time to begin syncing.'),
+    '#required' => TRUE,
+	  '#type' => 'date_popup',
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d - H:i'
+  );
+
+  $form['om_broadcast_schedule_end'] = array(
+    '#title' => t('End Date'),
+    '#description' => t('Date and time to end scheduling.'),
+    '#required' => TRUE,
+	  '#type' => 'date_popup',
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d - H:i'
+  );
+
+  $form['om_broadcast_schedule_manual_sync_warining'] = array(
+    '#markup' => '<p><strong>Warning:</strong> ' . t('The following action is irreversible and may take a few minutes to execute.') . '</p>',
+  );
+
+  $form['om_broadcast_schedule_manual_sync_submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Sync Schedule',
+  );
+
+  $form['#submit'] = array('om_broadcast_schedule_manual_sync');
+
+  return $form;
+}
+
+/**
+ * Manual sync submit handler - starts a batch process
+ */
+function om_broadcast_schedule_manual_sync($form, &$form_state) {
+
+  $start = strtotime($form_state['values']['om_broadcast_schedule_start']);
+  $end = strtotime($form_state['values']['om_broadcast_schedule_end']);
+  // Setup Batch Process For Manual Sync
+  $function = 'om_broadcast_schedule_sync_schedule';
+  $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end);
+  batch_set($batch);
+}
+
+/**
+ * Sync schedule for a given channel. Uses values from the above admin form. May be run manually or by cron.
+ *   it is set up to run as a batch function.
+ * 
+ * @param $channel_tid
+ *   term id of the channel term to be scheduled
+ *
+ * @param $start
+ *   start timestamp of window to begin updating
+ *
+ * @param $end
+ *   end timestamp of window to begin updating
+ */
+function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
+  // NB: This function will take new airing information and attempt to match it do
+  
+  $steps = om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end);
+  
+  $batch = array(
+    'operations' => $steps,
+    'finished' => '_om_broadcast_schedule_batch_complete',
+  );
+  return $batch;
+}
+
+/**
+ * Utility function to store the neccesary steps for schedule updating.
+ *  This allows other modules to have their own batch processes that include this module's steps.
+ *
+ * @param $channel_tid
+ *   term id of the channel term to be scheduled
+ *
+ * @param $start
+ *   start timestamp of window to begin updating
+ *
+ * @param $end
+ *   end timestamp of window to begin updating
+ *
+ * @returns array of function names/relative arguments.
+ *
+ */
+function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
+  $info = array(
+    'channel_tid' => $channel_tid,
+    'start' => $start,
+    'end' => $end
+  );
+  $steps = array(
+    array('_om_broadcast_schedule_get_pbs_airings', array($info)),
+    array('_om_broadcast_schedule_match_drupal_airings', array()),
+    array('_om_broadcast_schedule_purge_unmatched', array()),
+    array('_om_broadcast_schedule_create_new', array()),
+  );
+  return $steps;
+}
+
+/**
+ *  Step one get airings for this channel from the pbs.
+ * 
+ * @param $channel_tid
+ *   term id of the channel term to be scheduled
+ *
+ * @param $start
+ *   start timestamp of window to begin updating
+ *
+ * @param $end
+ *   end timestamp of window to begin updating
+ */
+function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
+  $pbs_array = om_playback_servers_get_pbs_by_term($run_info['channel_tid']);
+  foreach ($pbs_array AS $pbs) {
+    $controller = om_playback_servers_entity_get_controller($pbs);
+    if (is_object($controller)) {
+      $airings = $controller->get_airing($pbs, $run_info);
+      $airing_array = array();
+      // Then we'd do something with the airings...
+      foreach ($airings AS $airing) {
+        $airing['channel_tid'] = $run_info['channel_tid'];
+        $airing_array[] = $airing;
+      }
+      // $airing_array in context
+      $context['results']['run_info'] = $run_info;
+      $context['results']['airing_values'] = $airing_array;
+    }
+  }
+  $context['message'] = t('Getting Airings From PBS.');
+}
+
+/**
+ * Based on airings pulled from the pbs above queue up airings to add/remove.
+ */
+function _om_broadcast_schedule_match_drupal_airings(&$context) {
+  $safe = array();
+  $context['results']['create_airings'] = array();
+  $context['results']['delete_airings'] = array();
+  // We are going to try and match based on schedule id.
+  // NB: if there are other pbs types in the future we may need more criteria here.
+  if (!empty($context['results']['airing_values'])) {
+    foreach($context['results']['airing_values'] AS $airing) {
+      $matched = FALSE;
+      $query = db_select('field_data_field_om_airing_guid', 'uid');
+      $query->join('taxonomy_index', 'term_node', 'uid.entity_id=term_node.nid');
+      $query->fields('uid', array('entity_id'));
+      $query->condition('field_om_airing_guid_value', $airing['uid'], '=');
+      $query->condition('tid', $context['results']['run_info']['channel_tid'], '=');
+      $result = $query->execute();
+      while($row = $result->fetchAssoc()) {
+        $matched = TRUE;
+        $safe[] = $row['entity_id'];
+      }
+      if ($matched == FALSE) {
+        $context['results']['create_airings'][] = $airing;
+      }
+    }
+  }
+  // Now select all airings in the current date range and see whether to create/leave alone/delete
+
+  $query = db_select('field_data_field_om_airing_dates', 'dates');
+  $query->join('taxonomy_index', 'term_node', 'dates.entity_id=term_node.nid');
+  $query->fields('dates', array('entity_id'));
+  $query->condition('tid', $context['results']['run_info']['channel_tid'], '=');
+  $query->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
+  $query->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
+  $result = $query->execute();
+  while($row = $result->fetchAssoc()) {
+    if (!in_array($row['entity_id'], $safe)) {
+      $context['results']['delete_airings'][] = $row['entity_id'];
+    }
+  }
+
+  $context['message'] = t('Match Airings on Drupal site.');
+}
+
+/**
+ * Remove airings not found on the pbs.
+ */
+function _om_broadcast_schedule_purge_unmatched(&$context) {
+  foreach ($context['results']['delete_airings'] AS $airing) {
+    om_broadcast_schedule_delete_airing_node($airing);
+  }
+  $context['message'] = t('Purge unmatched airing nodes.');
+}
+
+/**
+ * Create airings that were not present on the Drupal side.
+ */
+function _om_broadcast_schedule_create_new(&$context) {
+  foreach ($context['results']['create_airings'] AS $airing) {
+    om_broadcast_schedule_create_airing_node($airing);
+  }
+  $context['message'] = t('Create new airing nodes.');
+}
+
+/**
+ * Completion callback for batch process - not sure if this is needed yet.
+ */
+function _om_broadcast_schedule_batch_complete() {
+}
+
+/**
+ * Utility function to create an airing node.
+ *
+ * @param $airing
+ *  new airing object
+ *
+ * @returns node object or false
+ */
+function om_broadcast_schedule_create_airing_node($airing) {
+  $node = new stdClass();
+  $node->type = 'om_airing';
+  $node->uid = 1;
+  $node->title = date('Y-m-d h:i:s', $airing['start']);
+  $node->field_om_airing_guid['und'][0]['value'] = $airing['uid'];
+  $node->field_om_show_id['und'][0]['value'] = $airing['show_id'];
+  $node->field_om_airing_dates['und'][0]['value'] = $airing['start'];
+  $node->field_om_airing_dates['und'][0]['value2'] = $airing['end'];
+  $node->field_om_airing_channel['und'][0]['tid'] = $airing['channel_tid'];
+  node_save($node);
+
+  if (!empty($node->nid)) {
+    rules_invoke_event('om_airing_created');
+    return $node;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Utility function to update an airing node.
+ *
+ * @param $airing_nid
+ *  airing object id
+ *
+ * @param $values
+ *  new values
+ *
+ * @returns node object or false
+ */
+function om_broadcast_schedule_update_airing_node($airing_nid, $values) {
+  rules_invoke_event('om_airing_updated');
+}
+
+/**
+ * Utility function to delete an airing node.
+ *
+ * @param $airing_nid
+ *  airing object id
+ *
+ * @returns node object or false
+ */
+function om_broadcast_schedule_delete_airing_node($airing_nid) {
+  rules_invoke_event('om_airing_deleted');
+  node_delete($airing_nid);
+}
+
+/**
+ * Implements hook_cron
+ */
+function om_broadcast_schedule_cron() {
+  $cron_status = variable_get('om_airing_cron', 0);
+  if ($cron_status == 1) {
+    $cron_frequency = variable_get('om_airing_cron_frequency', 0);
+    $since_cron = variable_get('om_airing_since_cron', 0) + $cron_frequency;
+    if (time() > $since_cron) {
+      $window = variable_get('om_airing_update_window', 7);
+      $duration = variable_get('om_airing_update_duration', 3600);
+      
+      $start = time() + ($window * 86400);
+      $end = time() + ($window * 86400) + $duration;
+      
+      $voc = om_pbs_get_channel_vocabulary();
+      
+      foreach ($voc AS $term) {
+        $function = 'om_airing_sync_schedule';
+        $batch = $function($term->tid, $start, $end);
+        batch_set($batch);
+        $message = t('Automatically Updated airings for !channel', array('!channel' => $term->name));
+        om_log_create_log_entry('om_airing', 'cron_update', NULL, $severity = 7, $message, array());
+        variable_set('om_airing_since_cron', time());
+        rules_invoke_event('om_airing_cron');
+      }
+    }
+  }
+}
