@@ -334,6 +334,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
       '#suffix' => '</p>',
     )
   );
+  // @TODO this is only grabbing 30 minute timeslots.
   $dates = om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid);
   $date_options = array();
   
@@ -368,8 +369,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
         watchdog('SCHED print GAP','<pre>'.print_r($gap).'</pre>');
         if ($gap['start'] + $show->field_om_show_duration['und'][0]['value'] + $spacer <= $gap['end']) {
           $adult_hours = om_timeslot_scheduler_get_adult_hours($gap['start']);
-          // BWL DEBUG
-          watchdog('ADULT HOURS','<pre>'.print_r($adult_hours).'</pre>');
           // Check for adult content
           if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
             $list_items[] = array(
@@ -409,6 +408,8 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+    // BWL DEBUG
+    watchdog('COMMIT SCHEDULE', '<pre>'.print_r($process).'</pre>');
     if ($process[0]->process_status == 1) {
       $already_processed = TRUE;
     }
