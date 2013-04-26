@@ -410,7 +410,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
     watchdog('COMMIT SCHEDULE', '<pre>'.print_r($process).'</pre>');
-    if ($process[0]->process_status == 1) {
+    if ($process[0] && $process[0]->process_status == 1) {
       $already_processed = TRUE;
     }
   }
