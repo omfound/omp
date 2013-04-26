@@ -867,9 +867,9 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_hourly_price_reduction' => array(
       'label' => t('Reduce price by specified hours'),
     ),
-    'commerce_reservations_daily_price_reduction' => array(
-      'label' => t('Reduce price by specified days'),
-    ),
+    //'commerce_reservations_daily_price_reduction' => array(
+      //'label' => t('Reduce price by specified days'),
+    //),
   );
 
   // Define the action using a common set of parameters.
