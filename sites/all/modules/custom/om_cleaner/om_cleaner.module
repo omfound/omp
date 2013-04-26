@@ -20,3 +20,24 @@ function om_cleaner_remove_nodes($type) {
 
   dsm('Removed '.$counter.' '.$type.' nodes.');
 }
+
+function om_cleaner_remove_products($type) {
+  $query = "
+    SELECT product_id
+    FROM {commerce_product}
+    WHERE type = :type";
+  $results = db_query($query, array(':type' => $type));
+
+  $ids = array();
+  foreach ($results as $result) {
+    $ids[$result->product_id] = $result->product_id;
+  }
+
+  $counter = 0;
+  foreach ($ids as $id => $info) {
+    commerce_product_delete($id);
+    $counter++;
+  }
+
+  dsm('Removed '.$counter.' '.$type.' products.');
+}
