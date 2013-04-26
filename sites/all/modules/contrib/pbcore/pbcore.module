@@ -1,0 +1,205 @@
+<?php
+
+/**
+ * @file
+ * Provide a database of PBCore values with site-wide status to be used with other modules
+ * node is added.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function pbcore_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#pbcore":
+      $output = '<p>' .  t("Enable or disable PBCore elements site-wide.") . '</p>';
+      return $output;
+  }
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function pbcore_menu() {
+  $items = array();
+
+  $items['node/%node/pbcore.xml'] = array(
+    'title' => 'PBCore XML',
+    'description' => 'Export of Node in PBCore',
+    'page callback' => 'pbcore_render_xml',
+    'page arguments' => array(1),
+    'access callback' => 'pbcore_render_xml_access',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['admin/config/search/pbcore'] = array(
+    'title' => 'PBCore Configuration',
+    'description' => 'Overview of PBCore Status',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pbcore_admin_settings'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items['admin/config/search/pbcore/xml'] = array(
+    'title' => 'XML Settings',
+    'description' => 'Configuration options for the XML Exports.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pbcore_admin_settings'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+
+/**
+ * Builds the pbcore_admin_settings admininstration settings form.
+ */
+function pbcore_admin_settings($form, &$form_state) {
+  $form = array();
+  
+  $types = node_type_get_types();
+  foreach ($types as $type => $data) {
+    
+    $form['pbcore_export_' . $type] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Enable PBCore Export for ' . $data->name,
+    '#default_value' => variable_get('pbcore_export_' . $type, 0),
+    '#description' => t(''),
+    );
+  }
+  
+  return system_settings_form($form);
+}
+
+
+/**
+ * Checks content types that configured to allow the nodes be rendered as PBCore xml.
+ */
+function pbcore_render_xml_access($node) {
+  if (variable_get('pbcore_export_' . $node->type, 0)) {
+    return TRUE;
+  }
+}
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function pbcore_form_alter(&$form, $form_state, $form_id) {
+  
+  if ($form['#form_id'] == 'taxonomy_form_term') {
+    if ($form['vocabulary_machine_name']['#value'] == 'pbcore_genres' || $form['vocabulary_machine_name']['#value'] == 'pbcore_ratings' || $form['vocabulary_machine_name']['#value'] == 'pbcore_languages') {
+      $form['name']['#disabled'] = TRUE;
+      $form['name']['#description'] = t('Because this term is part of the PBCore standard, the name of this term cannot be altered. The term name can be override by enabling PBCore Custom Names.  This only changes the term in forms where users would see it.  The original value is still used in the PBCore xml output.');
+    }
+  }  
+}
+
+
+/**
+ * Returns xml with only the settings in pbcore-xml.tpl
+ */
+function pbcore_render_xml($node) {
+  //dsm($node);
+  print theme('pbcore_xml', array('node' => $node));
+}
+
+/**
+ * Implements hook_theme().
+ */
+function pbcore_theme() {
+
+  return array(
+    'pbcore_xml' => array(
+      'template' => 'templates/pbcore-xml',
+      'variables' => array('node' => NULL),
+    ),
+  );
+}
+
+/**
+ * called by cm_checklist module.
+ */
+function pbcore_status(){
+  return 'Installed, but not configured. This modules created a larger number of  genres, ratings, and languages. This module enables you to limit that list to terms that more likely used by your producer community. There is no reason to overwhelm producers with a list of 481 languages when your station only airs content in 3 or 4.  Limit the PBCore lists before enabling Project or Show.';
+}
+
+//THIS FUNCTION WAS REPLACE WITH TPL TO BE MORE FLEXIBLE
+
+/*
+function pbcore_render_xml($node) {
+
+  $output .= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+  $output .= "<PBCoreDescriptionDocument xmlns=\"http://www.pbcore.org/PBCore/PBCoreNamespace.html\"
+ xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+ xsi:schemaLocation=\"http://www.pbcore.org/PBCore/PBCoreNamespace.html http://www.pbcore.org/PBCore/PBCoreSchema.xsd\">\n";
+
+  $output .= " <pbcoreIdentifier>\n";
+  $output .= "   <identifier>" . $node->title . "</identifier>\n";
+  $output .= "   <identifierSource>" . variable_get('site_name', '') . "</identifierSource>\n";
+  $output .= " </pbcoreIdentifier>\n";
+
+  $output .= "  <pbcoreTitle>\n";
+  $output .= "    <title>" . $node->title . "</title>\n";
+
+  $output .= "    <titleType>Clip</titleType>\n";
+  $output .= "  </pbcoreTitle>\n";
+
+  if (module_exists('cm_project')) {
+    $output .= "  <pbcoreTitle>\n";
+    $output .= "    <title>" . $node->og . "</title>\n";
+    $output .= "    <titleType>Project</titleType>\n";
+    $output .= "  </pbcoreTitle>\n";
+  }
+
+  $output .= "  <pbcoreDescription>\n";
+  $output .= "    <description>" . $node->body . "</description>\n";
+  $output .= "    <descriptionType>Abstract</descriptionType>\n";
+  $output .= "  </pbcoreDescription>\n";
+
+
+  foreach ($genres as $genre) {
+    // TODO The taxonomy synonym functionality has been removed.
+    // To replace this functionality, you can add a synonym field to your vocabulary.
+
+    $output .= "  <pbcoreGenre>\n";
+    $output .= "    <genre>" . $genre_synonyms[0] . "</genre>\n";
+    $output .= "    <genreAuthorityUsed>PBMD Project</genreAuthorityUsed>\n";
+    $output .= "  </pbcoreGenre>\n";
+  }
+
+
+  foreach ($ratings as $rating) {
+    if (empty($rating_synonyms)) {
+      continue;
+    }
+    $output .= "  <pbcoreAudienceRating>\n";
+    $output .= "    <audienceRating>" . $rating_synonyms[0] . "</audienceRating>\n";
+    $output .= "  </pbcoreAudienceRating>\n";
+  }
+
+  foreach ($languages as $language) {
+        $language = $language_synonyms[0];
+  }
+
+  $output .= " <pbcoreInstantiation>\n";
+  if ($language) {
+    $output .= "  <language>" . $language . "</language>\n";
+  }
+  $output .= "  <dateCreated>" . $node->published . "</dateCreated>";
+  //TODO etc.
+  $output .= " </pbcoreInstantiation>\n";
+
+
+  $output .= "</PBCoreDescriptionDocument>\n";
+
+  header("Content-type: text/xml");
+  print $output;
+}
+*/

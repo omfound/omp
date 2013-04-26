@@ -1,0 +1,5 @@
+name = Open Media Admin Menu
+description = Provides custom admin menu configurations per role.
+core = 7.x
+package = Open Media System
+php = 5.2.4

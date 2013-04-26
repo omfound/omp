@@ -1,0 +1,6 @@
+name = Commerce Login
+description = Overrides checkout to login users before proceeding.
+core = 7.x
+package = Commerce (contrib)
+version = 7.x-1.0
+project status url = http://omp.omfound.org

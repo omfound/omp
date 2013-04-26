@@ -1,0 +1,4 @@
+name = Open Media Show
+description = Provides show functionality and features for the Open Media System.
+core = 7.x
+package = Open Media System
