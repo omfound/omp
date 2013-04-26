@@ -400,17 +400,18 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
 
 function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $channel_tid, $timeslot_nid, $pid) {
 
-  watchdog('Start Commit','beginning of function');
   // More stuff that should be in the theme layer...
   drupal_set_title('Schedule Your Show');
   $date = date('Y-m-d G:i', $start);
   $channel = taxonomy_term_load($channel_tid);
 
-  watchdog('Start Commit','just loaded the taxonomy_term_load');
+  // commit schedule gets this far
+  //watchdog('Start Commit','just loaded the taxonomy_term_load');
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
+    watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
     if ($process->offsetExists(0) && $process[0]->process_status == 1) {
       $already_processed = TRUE;
     }
