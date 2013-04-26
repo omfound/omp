@@ -50,7 +50,7 @@ function om_cleaner_remove_users() {
   $results = db_query($query);
 
   $uids = array();
-  foreach ($results as $uid => $info) {
+  foreach ($results as $result) {
     $uids[$result->uid] = $result->uid;
   }
 
