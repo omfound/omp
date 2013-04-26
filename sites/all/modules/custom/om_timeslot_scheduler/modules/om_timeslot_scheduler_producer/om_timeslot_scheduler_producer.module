@@ -409,7 +409,6 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
-    watchdog('COMMIT SCHEDULE', '<pre>'.print_r($process).'</pre>');
     if ($process->offsetExists(0) && $process[0]->process_status == 1) {
       $already_processed = TRUE;
     }
@@ -443,7 +442,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   }
 
   $process_record = new stdClass();
-  $process_record->start = $tart;
+  $process_record->start = $start;
   $process_record->end = $end;
   $process_record->channel_tid = $channel_tid;
   $process_record->time = time();
