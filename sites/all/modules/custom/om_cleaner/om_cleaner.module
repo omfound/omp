@@ -11,5 +11,12 @@ function om_cleaner_remove_nodes($type) {
   foreach ($results as $result) {
     $nids[$result->nid] = $result->nid;
   }
-  dsm($nids);
+
+  $counter = 0;
+  foreach ($nids as $nid => $info) {
+    node_delete($nid);
+    $counter++;
+  }
+
+  dsm('Removed '.$counter.' '.$type.' nodes.');
 }
