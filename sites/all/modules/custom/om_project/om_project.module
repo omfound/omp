@@ -420,6 +420,10 @@ function om_project_node_access($node, $op, $account) {
     $user_is_admin = FALSE;
     $user_had_access = FALSE;
     $members = om_project_get_project_members($node->nid);
+    if(!$members) 
+    {
+      watchdog("OM_PROJECT Get Member", "node nid is: ".$node->nid);
+    }
     foreach($members AS $member) {
       if ($member->uid == $account->uid) {
         $user_is_member = TRUE;
