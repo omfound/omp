@@ -745,7 +745,7 @@ function commerce_reservations_rules_condition_info() {
           'restriction' => 'input',
         ),
         'hours' => array(
-          'type' => 'commerce_price',
+          'type' => 'integer',
           'label' => t('Hours'),
           'description' => t('The corresponding price value that should be compared against.'),
         ),
