@@ -476,6 +476,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   }
   else {
     watchdog("commiting schedule no show ID", "<pre>". print_r($show_node->field_om_show_id['und'][0]) . "</pre>");
+  }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
 
