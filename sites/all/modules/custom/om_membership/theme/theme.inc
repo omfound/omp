@@ -180,7 +180,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $variables['cost_row'] = $cost_row;
     $variables['link_row'] = $link_row;
     // Build body
-    $plan_features = om_membership_get_plan_features();
+    $plan_features = om_membership_get_plan_features('group');
     $feature_count = count($plan_features);
     foreach($plan_features AS $key => $plan_term) {
       $last_class = '';
