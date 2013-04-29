@@ -259,15 +259,10 @@ function _om_membership_sort_products_by_price($a, $b) {
 /**
  * Get the plan features voc by name (in case the vid is different).
  */
-function om_membership_get_plan_features($type = 'individual') {
+function om_membership_get_plan_features() {
   $query = db_select('taxonomy_vocabulary', 'voc');
   $query->fields('voc', array('vid'));
-  if ($type == 'individual') {
-    $query->condition('machine_name', 'membership_features', '=');
-  }
-  elseif ($type == 'group') {
-    $query->condition('machine_name', 'group_membership_features', '=');
-  }
+  $query->condition('machine_name', 'membership_features', '=');
   $resource = $query->execute();
   $result = $resource->fetchAll();
   if (isset($result[0]->vid)) {
