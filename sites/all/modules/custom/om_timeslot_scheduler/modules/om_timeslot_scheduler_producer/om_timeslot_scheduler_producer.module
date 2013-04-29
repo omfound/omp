@@ -412,13 +412,13 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
     //watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
-    //if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
-    //  watchdog('start commit', 'process status is 1 so already processed is true');
-    //  $already_processed = TRUE;
-    //}
-    //else {
-    //  watchdog('start commit', 'process status is not 1, in else');
-    //}
+    if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
+      watchdog('start commit', 'process status is 1 so already processed is true');
+      $already_processed = TRUE;
+    }
+    else {
+      watchdog('start commit', 'process status is not 1, in else');
+    }
   }
   else {
     $already_processed = TRUE;
