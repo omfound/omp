@@ -412,13 +412,13 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
     //watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
-    //if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
-    //  watchdog('start commit', 'process status is 1 so already processed is true');
-    //  $already_processed = TRUE;
-    //}
-    //else {
-    //  watchdog('start commit', 'process status is not 1, in else');
-    //}
+    if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
+      watchdog('start commit', 'process status is 1 so already processed is true');
+      $already_processed = TRUE;
+    }
+    else {
+      watchdog('start commit', 'process status is not 1, in else');
+    }
   }
   else {
     $already_processed = TRUE;
@@ -473,6 +473,9 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $controller = om_playback_servers_entity_get_controller($pbs);
   if (isset($show_node->field_om_show_id['und'][0]['value'])) {
     $meta_data = $controller->check_metadata_status($pbs, $show->field_om_show_id['und'][0]['value']);
+  }
+  else {
+    watchdog("commiting schedule no show ID", "<pre>". print_r($show_node->field_om_show_id['und'][0]) . "</pre>");
   }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
