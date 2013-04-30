@@ -73,13 +73,15 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
     // Build body
     $plan_features = om_membership_get_plan_features();
     $feature_count = count($plan_features);
+    $counter = 0;
     foreach($plan_features AS $key => $plan_term) {
-      dsm($plan_features);
       if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid)) {
         $last_class = '';
         if ($key + 1 == $feature_count) {
           $last_class = "last";
         }
+        $counter++;
+        dsm($counter); 
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
           if (om_membership_plan_feature_active($plan, $plan_term->tid)) {
