@@ -366,7 +366,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
     $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
     foreach ($gaps AS $gap_set) {
       foreach ($gap_set AS $gap) {
-        watchdog('SCHED print GAP','<pre>'.print_r($gap).'</pre>');
         if ($gap['start'] + $show->field_om_show_duration['und'][0]['value'] + $spacer <= $gap['end']) {
           $adult_hours = om_timeslot_scheduler_get_adult_hours($gap['start']);
           // Check for adult content
@@ -377,9 +376,10 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
               '#suffix' => '</li>',
             );
           }
-        } else {
-          watchdog('Didnt fit GAP','spacer is '.$spacer . ' and duration is '. $show->field_om_show_duration['und'][0]['value'] . ' and start and end are ' . $gap['start'] . ' and ' . $gap['end']);
         }
+        //else {
+        //  watchdog('Didnt fit GAP','spacer is '.$spacer . ' and duration is '. $show->field_om_show_duration['und'][0]['value'] . ' and start and end are ' . $gap['start'] . ' and ' . $gap['end']);
+        //}
       }
     }
     $date_options['date_options']['value'][] = array(
@@ -405,18 +405,27 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $date = date('Y-m-d G:i', $start);
   $channel = taxonomy_term_load($channel_tid);
 
+  // commit schedule gets this far
+  //watchdog('Start Commit','just loaded the taxonomy_term_load');
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
     // BWL DEBUG
-    if ($process->offsetExists(0) && $process[0]->process_status == 1) {
+    //watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
+    if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
+      watchdog('start commit', 'process status is 1 so already processed is true');
       $already_processed = TRUE;
+    }
+    else {
+      watchdog('start commit', 'process status is not 1, in else');
     }
   }
   else {
     $already_processed = TRUE;
   }
   if ($already_processed == TRUE) {
+    watchdog('schedule commit', 'already processed section');
+
     $message = t('Summary');
     $summary = t('Your show has already been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
     $return = l('Return', 'node/' . $show->nid);
@@ -440,7 +449,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     );
     return $output;
   }
-
+  watchdog('Sched Commit','after already_processed check...before start record');
   $process_record = new stdClass();
   $process_record->start = $start;
   $process_record->end = $end;
@@ -458,17 +467,21 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $cache_item->time = time();
   drupal_write_record('om_timeslot_scheduler_cache', $cache_item);
 
+  watchdog('Start Commit','after start record');
   // Commit results
   $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
   $controller = om_playback_servers_entity_get_controller($pbs);
   if (isset($show_node->field_om_show_id['und'][0]['value'])) {
     $meta_data = $controller->check_metadata_status($pbs, $show->field_om_show_id['und'][0]['value']);
   }
+  else {
+    watchdog("commiting schedule no show ID", "<pre>". print_r($show_node->field_om_show_id['und'][0]) . "</pre>");
+  }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
 
   om_timeslot_scheduler_process_complete($pid);
-  
+
   $message = t('Summary');
   $summary = t('Your show has been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
   $return = l('Return', 'node/' . $show->nid);
