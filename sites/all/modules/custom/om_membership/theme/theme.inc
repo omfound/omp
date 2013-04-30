@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * A few constants for use with plan features
+ */
+define("FEATURE_ACTIVE", 1);
+define("FEATURE_INACTIVE", 2);
+define("FEATURE_INVALID", 3);
+
+
+/**
  * Implements hook_preprocess_HOOK
  */
 function om_membership_preprocess_om_membership_individual_plans_table(&$variables) {
@@ -74,30 +82,18 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
     $plan_features = om_membership_get_plan_features();
     $feature_count = count($plan_features);
     foreach($plan_features AS $key => $plan_term) {
-      $last_class = '';
-      if ($key + 1 == $feature_count) {
+      if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid)) {
+        $last_class = '';
+        if ($key + 1 == $feature_count) {
           $last_class = "last";
         }
-      $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
-      foreach($variables['plans'] AS $plan) {
-        $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
-        if ($plan_meta_wrapper->field_user_type->value() == 0) {
-          $features = $plan_meta_wrapper->field_membership_features->value();
-          if (!empty($features)) {
-            $match = FALSE;
-            foreach ($features AS $feature) {
-               if ($plan_term->tid == $feature->tid) {
-                 $match = TRUE;
-               }
-            }
-            if ($match == TRUE) {
-              $table_rows .= "<td class='feature feature-yes'>Yes</td>";
-            }
-            else {
-              $table_rows .= "<td class='feature feature-no'>No</td>";
-            }
+        $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
+        foreach($variables['plans'] AS $plan) {
+          $feature_status = om_membership_plan_feature_active($plan, $plan_term->tid);
+          if ($feature_status == FEATURE_ACTIVE) {
+            $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
-          else {
+          elseif ($feature_status == FEATURE_INACTIVE) {
             $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
@@ -183,30 +179,19 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $plan_features = om_membership_get_plan_features();
     $feature_count = count($plan_features);
     foreach($plan_features AS $key => $plan_term) {
-      $last_class = '';
-      if ($key + 1 == $feature_count) {
+      if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid, 'group')) {
+        $last_class = '';
+        if ($key + 1 == $feature_count) {
           $last_class = "last";
         }
-      $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
-      foreach($variables['plans'] AS $plan) {
-        $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
-        if ($plan_meta_wrapper->field_user_type->value() == 1) {
-          $features = $plan_meta_wrapper->field_membership_features->value();
-          if (!empty($features)) {
-            $match = FALSE;
-            foreach ($features AS $feature) {
-               if ($plan_term->tid == $feature->tid) {
-                 $match = TRUE;
-               }
-            }
-            if ($match == TRUE) {
-              $table_rows .= "<td class='feature feature-yes'>Yes</td>";
-            }
-            else {
-              $table_rows .= "<td class='feature feature-no'>No</td>";
-            }
+        $feature_exists_in_plan = 0;
+        $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
+        foreach($variables['plans'] AS $plan) {
+          $feature_status = om_membership_plan_feature_active($plan, $plan_term->tid, 'group');
+          if ($feature_status == FEATURE_ACTIVE) {
+            $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
-          else {
+          elseif ($feature_status == FEATURE_INACTIVE) {
             $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
@@ -216,6 +201,39 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   }
   $variables['table_header'] = $table_header;
   $variables['table_rows'] = $table_rows;
+}
+
+function om_membership_plans_feature_active($plans, $feature_tid, $type = 'individual') {
+  foreach($plans as $plan) {
+    $feature_status = om_membership_plan_feature_active($plan, $feature_tid, $type);
+    if ($feature_status == FEATURE_ACTIVE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+function om_membership_plan_feature_active($plan, $feature_tid, $type = 'individual') {
+  if ($type == 'individual') {
+    $user_type = 0;
+  }elseif ($type == 'group') {
+    $user_type = 1;
+  }
+  $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
+  if ($plan_meta_wrapper->field_user_type->value() == $user_type) {
+    $features = $plan_meta_wrapper->field_membership_features->value();
+    if (!empty($features)) {
+      foreach ($features AS $feature) {
+        if ($feature_tid == $feature->tid) {
+          return FEATURE_ACTIVE;
+        }
+      }
+    }
+    return FEATURE_INACTIVE;
+  }
+
+  return FEATURE_INVALID;
 }
 
 /**
