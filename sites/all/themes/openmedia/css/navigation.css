@@ -29,13 +29,17 @@
 
 #block-nice-menus-1 ul li a:focus,
 #block-nice-menus-1 ul li a:hover, 
-#block-nice-menus-1 ul li.over a {
+#block-nice-menus-1 ul li.over a,
+#block-nice-menus-1 ul li.active-trail a
+{
   background-color: #3A93CD;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px #183E57;
 }
 
-#block-nice-menus-1 ul li.over li a {
+#block-nice-menus-1 ul li.over li a,
+#block-nice-menus-1 ul li.active-trail li a
+{
   background-color: #fff;
   color: #000;
   text-shadow: none;
