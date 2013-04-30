@@ -8,6 +8,13 @@ define("FEATURE_INACTIVE", 2);
 define("FEATURE_INVALID", 3);
 
 
+function om_membership_plans_by_weight($a, $b) {
+  if ($a->field_weight[LANGUAGE_NONE][0]['value'] == $b->field_weight[LANGUAGE_NONE][0]['value'] ) {
+    return 0;
+  }
+  return ($a->field_weight[LANGUAGE_NONE][0]['value']  < $b->field_weight[LANGUAGE_NONE][0]['value'] ) ? -1 : 1;
+}
+
 /**
  * Implements hook_preprocess_HOOK
  */
@@ -42,6 +49,7 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
   // Build header, cost row and links
   $table_rows = "";
   if ($variables['plans']) {
+    usort($variables['plans'], "om_membership_plans_by_weight");
     foreach ($variables['plans'] AS $plan) {
       $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
       if ($plan_meta_wrapper->field_user_type->value() == 0) {
@@ -139,6 +147,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $table_rows = "";
   // Build header, cost row and links
   if ($variables['plans']) {
+    usort($variables['plans'], "om_membership_plans_by_weight");
     foreach ($variables['plans'] AS $plan) {
       $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
       if ($plan_meta_wrapper->field_user_type->value() == 1) {
