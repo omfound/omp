@@ -229,13 +229,10 @@ function om_membership_plan_feature_active($plan, $feature_tid, $type = 'individ
           return FEATURE_ACTIVE;
         }
       }
-      return FEATURE_INACTIVE;
     }
+    return FEATURE_INACTIVE;
   }
 
-  dsm($plan);
-  dsm($feature_tid);
-  dsm($user_type);
   return FEATURE_INVALID;
 }
 
