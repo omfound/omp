@@ -251,9 +251,9 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
       '#suffix' => '</p>',
     )
   );
+  $used = array();
   $series_render = array();
   if (!empty($timeslots['series'])) {
-    $used = array();
     $list_items = array();
     foreach($timeslots['series'] AS $series) {
       if (!in_array($series->entity_id ,$used)) {
@@ -358,10 +358,13 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   );
 
   // Find out if the show is adult
-  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
-
+  if (!empty($show->field_om_rating[$show->language])) {
+    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
+  }
+  else {
+    $is_adult = FALSE;
+  }
   foreach ($dates AS $date => $gaps) {
-    // @TODO this section's data is stored poorly. Need to improve the way these are stored.
     $list_items = array();
     $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
     foreach ($gaps AS $gap_set) {
@@ -382,16 +385,32 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
         //}
       }
     }
+    if (!empty($list_items)) {
+      $date_options['date_options']['value'][] = array(
+        'title' => array(
+          '#prefix' => '<h3>',
+          '#markup' => date('Y-m-d', $date),
+          '#suffix' => '</h3>',
+        ),
+        'list' => array(
+          '#prefix' => '<ul>',
+          'list_items' => $list_items,
+          '#suffix' => '</ul>',
+        )
+      );
+    }
+  }
+  if (empty($date_options['date_options']['value'])) {
     $date_options['date_options']['value'][] = array(
       'title' => array(
         '#prefix' => '<h3>',
-        '#markup' => date('Y-m-d', $date),
+        '#markup' => t('No start times available.'),
         '#suffix' => '</h3>',
       ),
-      'list' => array(
-        '#prefix' => '<ul>',
-        'list_items' => $list_items,
-        '#suffix' => '</ul>',
+      'message' => array(
+        '#prefix' => '<p>',
+        '#markup' => t('There were no start times available for your show in the timeslot you selected. Please select another timeslot or contact station personnel for assistance.'),
+        '#suffix' => '</p>',
       )
     );
   }
@@ -399,33 +418,21 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
 }
 
 function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $channel_tid, $timeslot_nid, $pid) {
-
   // More stuff that should be in the theme layer...
   drupal_set_title('Schedule Your Show');
   $date = date('Y-m-d G:i', $start);
   $channel = taxonomy_term_load($channel_tid);
-
-  // commit schedule gets this far
-  //watchdog('Start Commit','just loaded the taxonomy_term_load');
+  $already_processed = FALSE;
+  
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
-    // BWL DEBUG
-    //watchdog('start commit', 'om_timeslot_sche_get_entries called' . print_r($process));
-    if ($process[0]->offsetExists("process_status") && $process[0]->process_status == 1) {
-      watchdog('start commit', 'process status is 1 so already processed is true');
-      $already_processed = TRUE;
-    }
-    else {
-      watchdog('start commit', 'process status is not 1, in else');
-    }
+    $already_processed = !empty($process) && $process[0]->process_status == 1 ? TRUE : FALSE;
   }
   else {
-    $already_processed = TRUE;
+    $already_processed = FALSE;
   }
   if ($already_processed == TRUE) {
-    watchdog('schedule commit', 'already processed section');
-
     $message = t('Summary');
     $summary = t('Your show has already been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
     $return = l('Return', 'node/' . $show->nid);
@@ -449,7 +456,17 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     );
     return $output;
   }
-  watchdog('Sched Commit','after already_processed check...before start record');
+  
+  $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  if (!empty($show->field_om_show_broadcast_file[$show->language])) {
+    $meta_data = $controller->metadata_record_from_uri($pbs, $show->field_om_show_broadcast_file[$show->language][0]['uri']);
+  }
+  else {
+    throw new Exception('This show was not found on playback server: ' . $pbs->name);
+    return;
+  }
+  
   $process_record = new stdClass();
   $process_record->start = $start;
   $process_record->end = $end;
@@ -467,16 +484,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   $cache_item->time = time();
   drupal_write_record('om_timeslot_scheduler_cache', $cache_item);
 
-  watchdog('Start Commit','after start record');
   // Commit results
-  $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
-  $controller = om_playback_servers_entity_get_controller($pbs);
-  if (isset($show_node->field_om_show_id['und'][0]['value'])) {
-    $meta_data = $controller->check_metadata_status($pbs, $show->field_om_show_id['und'][0]['value']);
-  }
-  else {
-    watchdog("commiting schedule no show ID", "<pre>". print_r($show_node->field_om_show_id['und'][0]) . "</pre>");
-  }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
 
@@ -587,7 +595,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
       if ($gap['end'] - $gap['start'] > 1800) {
         // Figure out how many half hours are in this gap.
         $half_hours = 0;
-        if (date('i', $gap['start']) !== 00) {
+        if (date('i', $gap['start']) !== "00") {
           $start = $gap['start'];
           $seconds_to_next = -($gap['start'] % 1800) + 1800;
           $gap_parts[0] = array(
@@ -601,18 +609,9 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
           // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
           if ($i + 1800 <=  $gap['end']) {
             $gap_parts[$half_hours]['start'] = $i;
-            $gap_parts[$half_hours]['end'] = $i + 1800;
-            $half_hours++;
+            $gap_parts[$half_hours]['end'] = $process_end;
+            $half_hours ++;
           }
-        }
-        // If there is overhang on (i.e. 45 min slot) make sure to make an extra gap (15 min gap)
-        if ($gap['start'] + ($half_hours * 1800) < $gap['end']) {
-          $gap_parts[$half_hours]['start'] = $gap['start'] + ($half_hours * 1800);
-          $gap_parts[$half_hours]['end'] = $process_end;
-        }
-        else{
-          // If there is no overhang adjust for possible trailer.
-          $gap_parts[$half_hours - 1]['end'] = $process_end;
         }
       }
       else {
@@ -623,6 +622,6 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
       $gap_parts[0]['start'] = $process_start;
       $output[$dates['field_om_timeslot_date_value']][] = $gap_parts;
     }
-  }
+  }// End While
   return $output;
 }

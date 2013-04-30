@@ -215,6 +215,7 @@ function om_membership_add_membership_and_transfer($pid) {
     }
   }
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
+    watchdog('brian', 'Pid to add: '.$pid);
     // Add membershipt to cart.
     commerce_cart_product_add_by_id($pid, 1);
   }
