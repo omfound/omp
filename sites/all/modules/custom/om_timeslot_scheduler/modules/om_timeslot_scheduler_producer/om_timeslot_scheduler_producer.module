@@ -587,9 +587,9 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   $output = array();
   // Get Gaps -- Unfortunately some of this is repeat from ots. Not sure how to abstract mini gap making yet.
   while($dates = $result->fetchAssoc()) {
-    dsm($dates);
     $output[$dates['field_om_timeslot_date_value']] = array();
     $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
+    dsm($gaps);
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
