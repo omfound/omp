@@ -62,14 +62,15 @@ class cablecastFile {
       $controller = om_playback_servers_entity_get_controller($this->pbs);
       $result = $controller->get_digital_files($this->pbs);
       if (!empty($result->GetDigitalFilesResult->DigitalFileInfo)) {
-	$digital_files = $result->GetDigitalFilesResult->DigitalFileInfo;
-	if (!$digital_files->ID) {
+        $digital_files = $result->GetDigitalFilesResult->DigitalFileInfo;
+        if (is_object($digital_files) && !empty($digital_files->ID)) {
           foreach ($digital_files AS $file) {
             $this->orphaned_files[$file->ID] = $file->FileName;
           }
-	}else{
-	  $this->orphaned_files[$digital_files->ID] = $digital_files->FileName;
-	}
+        }
+        else{
+          $this->orphaned_files[$digital_files->ID] = $digital_files->FileName;
+        }
       }
     }
     return $this->orphaned_files;
