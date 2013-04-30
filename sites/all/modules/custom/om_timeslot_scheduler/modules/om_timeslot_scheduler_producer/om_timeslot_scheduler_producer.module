@@ -336,7 +336,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   );
   // @TODO this is only grabbing 30 minute timeslots.
   $dates = om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid);
-  dsm($dates);
   $date_options = array();
   
   $query = db_select('node', 'n');
@@ -588,6 +587,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   $output = array();
   // Get Gaps -- Unfortunately some of this is repeat from ots. Not sure how to abstract mini gap making yet.
   while($dates = $result->fetchAssoc()) {
+    dsm($dates);
     $output[$dates['field_om_timeslot_date_value']] = array();
     $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
     foreach($gaps AS $gap) {
@@ -610,7 +610,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
           // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
           if ($i + 1800 <=  $gap['end']) {
             $gap_parts[$half_hours]['start'] = $i;
-            $gap_parts[$half_hours]['end'] = $i + 1800;
+            $gap_parts[$half_hours]['end'] = $process_end;
             $half_hours++;
           }
         }
