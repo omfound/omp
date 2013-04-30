@@ -204,6 +204,8 @@ function om_membership_plans_feature_active($plans, $feature_tid) {
 }
 
 function om_membership_plan_feature_active($plan, $feature_tid) {
+  dsm($plan);
+  dsm($feature_tid);
   $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
   if ($plan_meta_wrapper->field_user_type->value() == 1) {
     $features = $plan_meta_wrapper->field_membership_features->value();
