@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * A few constants for use with plan features
+ */
+define("FEATURE_ACTIVE", 1);
+define("FEATURE_INACTIVE", 2);
+define("FEATURE_INVALID", 3);
+
+
+/**
  * Implements hook_preprocess_HOOK
  */
 function om_membership_preprocess_om_membership_individual_plans_table(&$variables) {
@@ -81,11 +89,12 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         }
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
-          if (om_membership_plan_feature_active($plan, $plan_term->tid)) {
-            //$table_rows .= "<td class='feature feature-yes'>Yes</td>";
+          $feature_status = om_membership_plan_feature_active($plan, $plan_term->tid);
+          if ($feature_status == FEATURE_ACTIVE) {
+            $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
-          else {
-            //$table_rows .= "<td class='feature feature-no'>No</td>";
+          elseif ($feature_status == FEATURE_INACTIVE) {
+            $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
       }
@@ -178,10 +187,11 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
         $feature_exists_in_plan = 0;
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
-          if (om_membership_plan_feature_active($plan, $plan_term->tid, 'group')) {
+          $feature_status = om_membership_plan_feature_active($plan, $plan_term->tid, 'group');
+          if ($feature_status == FEATURE_ACTIVE) {
             $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
-          else {
+          elseif ($feature_status == FEATURE_INACTIVE) {
             $table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
@@ -195,7 +205,8 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
 
 function om_membership_plans_feature_active($plans, $feature_tid, $type = 'individual') {
   foreach($plans as $plan) {
-    if (om_membership_plan_feature_active($plan, $feature_tid, $type)) {
+    $feature_status = om_membership_plan_feature_active($plan, $feature_tid, $type);
+    if ($feature_status == FEATURE_ACTIVE) {
       return TRUE;
     }
   }
@@ -215,13 +226,14 @@ function om_membership_plan_feature_active($plan, $feature_tid, $type = 'individ
     if (!empty($features)) {
       foreach ($features AS $feature) {
         if ($feature_tid == $feature->tid) {
-          return TRUE;
+          return FEATURE_ACTIVE;
         }
       }
+      return FEATURE_INACTIVE;
     }
   }
 
-  return FALSE;
+  return FEATURE_INVALID;
 }
 
 /**
