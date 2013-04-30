@@ -424,22 +424,15 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   drupal_set_title('Schedule Your Show');
   $date = date('Y-m-d G:i', $start);
   $channel = taxonomy_term_load($channel_tid);
-
-  // commit schedule gets this far
+  $already_processed = FALSE;
+  
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
-    dsm($process);
-    if ($process[0]->process_status == 1) {
-      watchdog('start commit', 'process status is 1 so already processed is true');
-      $already_processed = TRUE;
-    }
-    else {
-      watchdog('start commit', 'process status is not 1, in else');
-    }
+    $already_processed = $process[0]->process_status == 1 ? TRUE : FALSE;
   }
   else {
-    $already_processed = TRUE;
+    $already_processed = FALSE;
   }
   if ($already_processed == TRUE) {
     watchdog('schedule commit', 'already processed section');
@@ -467,6 +460,16 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
     );
     return $output;
   }
+  
+  $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  if (!empty($show_node->field_om_show_broadcast_file[$show_node->language])) {
+    $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$show_node->language][0]['uri']);
+  }
+  else {
+    throw new Exception('This show was not found on playback server: ' . $pbs->name);
+  }
+  
   watchdog('Sched Commit','after already_processed check...before start record');
   $process_record = new stdClass();
   $process_record->start = $start;
@@ -487,14 +490,6 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   watchdog('Start Commit','after start record');
   // Commit results
-  $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
-  $controller = om_playback_servers_entity_get_controller($pbs);
-  if (isset($show_node->field_om_show_id['und'][0]['value'])) {
-    $meta_data = $controller->check_metadata_status($pbs, $show->field_om_show_id['und'][0]['value']);
-  }
-  else {
-    watchdog("commiting schedule no show ID", "<pre>". print_r($show_node->field_om_show_id['und'][0]) . "</pre>");
-  }
   $meta_data['start'] = $start;
   $controller->create_airing($pbs, $meta_data);
 
