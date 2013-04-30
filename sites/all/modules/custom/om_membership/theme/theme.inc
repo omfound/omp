@@ -212,12 +212,14 @@ function om_membership_plan_feature_active($plan, $feature_tid) {
     if (!empty($features)) {
       foreach ($features AS $feature) {
         if ($feature_tid == $feature->tid) {
+          dsm('exists');
           return TRUE;
         }
       }
     }
   }
 
+  dsm('does not exist');
   return FALSE;
 }
 
