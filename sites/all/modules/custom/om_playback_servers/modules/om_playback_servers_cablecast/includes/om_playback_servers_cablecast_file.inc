@@ -63,12 +63,12 @@ class cablecastFile {
       $result = $controller->get_digital_files($this->pbs);
       if (!empty($result->GetDigitalFilesResult->DigitalFileInfo)) {
         $digital_files = $result->GetDigitalFilesResult->DigitalFileInfo;
-        if (is_object($digital_files) && !empty($digital_files->ID)) {
+        if (is_array($digital_files)) {
           foreach ($digital_files AS $file) {
             $this->orphaned_files[$file->ID] = $file->FileName;
           }
         }
-        else{
+        else {
           $this->orphaned_files[$digital_files->ID] = $digital_files->FileName;
         }
       }
