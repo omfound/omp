@@ -382,16 +382,32 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
         //}
       }
     }
+    if (!empty($list_items)) {
+      $date_options['date_options']['value'][] = array(
+        'title' => array(
+          '#prefix' => '<h3>',
+          '#markup' => date('Y-m-d', $date),
+          '#suffix' => '</h3>',
+        ),
+        'list' => array(
+          '#prefix' => '<ul>',
+          'list_items' => $list_items,
+          '#suffix' => '</ul>',
+        )
+      );
+    }
+  }
+  if (empty($date_options['date_options']['value'])) {
     $date_options['date_options']['value'][] = array(
       'title' => array(
         '#prefix' => '<h3>',
-        '#markup' => date('Y-m-d', $date),
+        '#markup' => t('No start times available.'),
         '#suffix' => '</h3>',
       ),
-      'list' => array(
-        '#prefix' => '<ul>',
-        'list_items' => $list_items,
-        '#suffix' => '</ul>',
+      'message' => array(
+        '#prefix' => '<p>',
+        '#markup' => t('There were no start times available for your show in the timeslot you selected. Please select another timeslot or contact station personnel for assistance.'),
+        '#suffix' => '</p>',
       )
     );
   }
