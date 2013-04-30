@@ -1188,6 +1188,7 @@ function commerce_cart_product_add_by_id($product_id, $quantity = 1, $combine = 
 
   // If the specified product exists...
   if ($product = commerce_product_load($product_id)) {
+    watchdog('brian', 'Adding member product to cart');
     // Create a new product line item for it.
     $line_item = commerce_product_line_item_new($product, $quantity);
 
@@ -1199,6 +1200,7 @@ function commerce_cart_product_add_by_id($product_id, $quantity = 1, $combine = 
     return commerce_cart_product_add($uid, $line_item, $combine);
   }
 
+  watchdog('brian', 'Could not load product to add');
   return FALSE;
 }
 
