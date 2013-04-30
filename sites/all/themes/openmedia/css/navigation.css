@@ -35,6 +35,12 @@
   text-shadow: 1px 1px 1px #183E57;
 }
 
+#block-nice-menus-1 ul li li a {
+  background-color: #fff;
+  color: #000;
+  text-shadow: none;
+}
+
 /** Admin Menu **/
 #admin-menu {
   text-shadow: none;
