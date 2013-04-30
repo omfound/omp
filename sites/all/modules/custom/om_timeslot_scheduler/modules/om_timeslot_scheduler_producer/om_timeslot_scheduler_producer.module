@@ -420,7 +420,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
 }
 
 function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $channel_tid, $timeslot_nid, $pid) {
-  dsm($pid);
   // More stuff that should be in the theme layer...
   drupal_set_title('Schedule Your Show');
   $date = date('Y-m-d G:i', $start);
@@ -430,6 +429,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+    dsm($process);
     if ($process[0]->process_status == 1) {
       watchdog('start commit', 'process status is 1 so already processed is true');
       $already_processed = TRUE;
