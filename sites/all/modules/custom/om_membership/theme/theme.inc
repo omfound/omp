@@ -209,7 +209,7 @@ function om_membership_plan_feature_active($plan, $feature_tid) {
     $features = $plan_meta_wrapper->field_membership_features->value();
     if (!empty($features)) {
       foreach ($features AS $feature) {
-        if ($plan_term->tid == $feature->tid) {
+        if ($feature_tid == $feature->tid) {
           return TRUE;
         }
       }
