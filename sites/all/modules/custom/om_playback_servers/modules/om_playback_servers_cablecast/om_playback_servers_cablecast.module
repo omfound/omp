@@ -89,7 +89,7 @@ function om_playback_servers_cablecast_file_ia_url($uri) {
 
 /**
  * Get shows with a broadcast uri, but no vod file and check ia to see if there is
- *   a vod resource available yet. If so, update node.
+ *   a vod resource available yet. If so, update node. Also update show duration.
  */
 function om_playback_servers_cablecast_update_vod_field() {
   $query = db_select('field_data_field_om_show_video', 'vod_files');
@@ -107,12 +107,22 @@ function om_playback_servers_cablecast_update_vod_field() {
     if (class_exists('cablecastFile')) {
       $cablecast_file_controller = new cablecastFile();
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
-      if (!empty($url)) {
+      $metadata = get_show_record($result['field_om_show_broadcast_file_uri']);
+      if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
-        $node->field_om_show_video = array(
+        if (!empty($url)) {
+          $node->field_om_show_video = array(
+            $node->language => array(
+              0 => array(
+                'value' => $url
+              )
+            )
+          );
+        }
+        $node->field_om_show_duration = array(
           $node->language => array(
             0 => array(
-              'value' => $url
+              'value' => $metadata['TotalSeconds']
             )
           )
         );
