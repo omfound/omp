@@ -251,9 +251,9 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
       '#suffix' => '</p>',
     )
   );
+  $used = array();
   $series_render = array();
   if (!empty($timeslots['series'])) {
-    $used = array();
     $list_items = array();
     foreach($timeslots['series'] AS $series) {
       if (!in_array($series->entity_id ,$used)) {
