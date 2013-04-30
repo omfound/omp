@@ -54,6 +54,8 @@
 .section-membership #content th,
 .section-membership #content td.feature {
   width: 94px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .section-membership td.feature-no  {
