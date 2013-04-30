@@ -170,7 +170,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
     $plan_features = om_membership_get_plan_features();
     $feature_count = count($plan_features);
     foreach($plan_features AS $key => $plan_term) {
-      if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid)) {
+      if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid, 'group')) {
         $last_class = '';
         if ($key + 1 == $feature_count) {
           $last_class = "last";
@@ -178,7 +178,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
         $feature_exists_in_plan = 0;
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
-          if (om_membership_plan_feature_active($plan, $plan_term->tid)) {
+          if (om_membership_plan_feature_active($plan, $plan_term->tid, 'group')) {
             $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
           else {
@@ -193,7 +193,7 @@ function om_membership_preprocess_om_membership_org_plans_table(&$variables) {
   $variables['table_rows'] = $table_rows;
 }
 
-function om_membership_plans_feature_active($plans, $feature_tid) {
+function om_membership_plans_feature_active($plans, $feature_tid, $type = 'individual') {
   foreach($plans as $plan) {
     if (om_membership_plan_feature_active($plan, $feature_tid)) {
       return TRUE;
@@ -203,23 +203,24 @@ function om_membership_plans_feature_active($plans, $feature_tid) {
   return FALSE;
 }
 
-function om_membership_plan_feature_active($plan, $feature_tid) {
-  dsm($plan);
-  dsm($feature_tid);
+function om_membership_plan_feature_active($plan, $feature_tid, $type = 'individual') {
+  if ($type == 'individual') {
+    $user_type = 0;
+  }elseif ($type == 'group') {
+    $user_type = 1;
+  }
   $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
-  if ($plan_meta_wrapper->field_user_type->value() == 1) {
+  if ($plan_meta_wrapper->field_user_type->value() == $user_type) {
     $features = $plan_meta_wrapper->field_membership_features->value();
     if (!empty($features)) {
       foreach ($features AS $feature) {
         if ($feature_tid == $feature->tid) {
-          dsm('exists');
           return TRUE;
         }
       }
     }
   }
 
-  dsm('does not exist');
   return FALSE;
 }
 
