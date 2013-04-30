@@ -82,10 +82,10 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
           if (om_membership_plan_feature_active($plan, $plan_term->tid)) {
-            $table_rows .= "<td class='feature feature-yes'>Yes</td>";
+            //$table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
           else {
-            $table_rows .= "<td class='feature feature-no'>No</td>";
+            //$table_rows .= "<td class='feature feature-no'>No</td>";
           }
         }
       }
