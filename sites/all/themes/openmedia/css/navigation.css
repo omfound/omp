@@ -40,6 +40,12 @@
   color: #000;
   text-shadow: none;
 }
+#block-nice-menus-1 ul li.over li a:focus,
+#block-nice-menus-1 ul li.over li a:hover { 
+  background-color: #3A93CD;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 1px #183E57;
+}
 
 /** Admin Menu **/
 #admin-menu {
