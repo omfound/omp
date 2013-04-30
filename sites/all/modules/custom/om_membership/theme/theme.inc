@@ -96,10 +96,6 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
           elseif ($feature_status == FEATURE_INACTIVE) {
             $table_rows .= "<td class='feature feature-no'>No</td>";
           }
-          elseif ($feature_status == FEATURE_INVALID) {
-            dsm($plan);
-            dsm($plan_term);
-          }
         }
       }
       $table_rows .= '</tr>';
@@ -237,6 +233,9 @@ function om_membership_plan_feature_active($plan, $feature_tid, $type = 'individ
     }
   }
 
+  dsm($plan);
+  dsm($feature_tid);
+  dsm($user_type);
   return FEATURE_INVALID;
 }
 
