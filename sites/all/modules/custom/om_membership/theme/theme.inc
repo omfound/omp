@@ -90,14 +90,15 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         $table_rows .= '<tr><td class="plan-feature ' . $last_class . '">' . $plan_term->name . '</td>';
         foreach($variables['plans'] AS $plan) {
           $feature_status = om_membership_plan_feature_active($plan, $plan_term->tid);
-          dsm($plan);
-          dsm($plan_term->tid);
-          dsm($feature_status);
           if ($feature_status == FEATURE_ACTIVE) {
             $table_rows .= "<td class='feature feature-yes'>Yes</td>";
           }
           elseif ($feature_status == FEATURE_INACTIVE) {
             $table_rows .= "<td class='feature feature-no'>No</td>";
+          }
+          elseif ($feature_status == FEATURE_INVALID) {
+            dsm($plan);
+            dsm($plan_term);
           }
         }
       }
