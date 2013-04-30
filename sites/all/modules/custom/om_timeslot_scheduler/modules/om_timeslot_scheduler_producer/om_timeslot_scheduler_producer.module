@@ -420,6 +420,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
 }
 
 function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $channel_tid, $timeslot_nid, $pid) {
+  dsm($show);
   // More stuff that should be in the theme layer...
   drupal_set_title('Schedule Your Show');
   $date = date('Y-m-d G:i', $start);
