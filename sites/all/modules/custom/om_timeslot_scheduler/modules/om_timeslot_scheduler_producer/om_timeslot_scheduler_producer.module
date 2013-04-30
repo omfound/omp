@@ -461,7 +461,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   
   $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
   $controller = om_playback_servers_entity_get_controller($pbs);
-  if (!empty($show_node->field_om_show_broadcast_file[$show_node->language])) {
+  if (!empty($show->field_om_show_broadcast_file[$show_node->language])) {
     $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$show_node->language][0]['uri']);
   }
   else {
