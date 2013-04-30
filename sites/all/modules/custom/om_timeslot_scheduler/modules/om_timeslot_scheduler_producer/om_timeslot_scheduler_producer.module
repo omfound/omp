@@ -429,14 +429,13 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   // Lock this schedule run to the current process.
   if (isset($pid)) {
     $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+    dsm($pocess);
     $already_processed = $process[0]->process_status == 1 ? TRUE : FALSE;
   }
   else {
     $already_processed = FALSE;
   }
   if ($already_processed == TRUE) {
-    watchdog('schedule commit', 'already processed section');
-
     $message = t('Summary');
     $summary = t('Your show has already been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
     $return = l('Return', 'node/' . $show->nid);
@@ -468,6 +467,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
   }
   else {
     throw new Exception('This show was not found on playback server: ' . $pbs->name);
+    return;
   }
   
   watchdog('Sched Commit','after already_processed check...before start record');
