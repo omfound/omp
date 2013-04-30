@@ -592,10 +592,10 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
+      dsm($process_end);
       if ($gap['end'] - $gap['start'] > 1800) {
         // Figure out how many half hours are in this gap.
         $half_hours = 0;
-        $gap['start'] = 1367745305;
         if (date('i', $gap['start']) !== "00") {
           dsm('in here now');
           dsm($gap['start']);
