@@ -1,12 +1,12 @@
 /** Main Menu **/
-#block-system-main-menu ul li {
+#block-nice-menus-1 ul li {
   list-style: none;
   float: left;
   margin-right: 5px;
 }
 
-#block-system-main-menu ul li a:link,
-#block-system-main-menu ul li a:visited {
+#block-nice-menus-1 ul li a:link,
+#block-nice-menus-1 ul li a:visited {
   background: white;
   color: #373737;
   font-size: 14px;
@@ -21,8 +21,8 @@
   transition: background 0.7s linear;
 }
 
-#block-system-main-menu ul li a:focus,
-#block-system-main-menu ul li a:hover {
+#block-nice-menus-1 ul li a:focus,
+#block-nice-menus-1 ul li a:hover {
   background-color: #3A93CD;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px #183E57;
