@@ -589,7 +589,6 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   while($dates = $result->fetchAssoc()) {
     $output[$dates['field_om_timeslot_date_value']] = array();
     $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
-    dsm($gaps);
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
@@ -606,6 +605,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
           $gap['start'] += $seconds_to_next;
           $half_hours++;
         }
+        dsm($half_hours);
         for ($i = $gap['start']; $i <= $gap['end']; $i += 1800) {
           // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
           if ($i + 1800 <=  $gap['end']) {
