@@ -74,8 +74,8 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
     $plan_features = om_membership_get_plan_features();
     $feature_count = count($plan_features);
     foreach($plan_features AS $key => $plan_term) {
+      dsm($plan_features);
       if (om_membership_plans_feature_active($variables['plans'], $plan_term->tid)) {
-        dsm($plan_term->name);
         $last_class = '';
         if ($key + 1 == $feature_count) {
           $last_class = "last";
