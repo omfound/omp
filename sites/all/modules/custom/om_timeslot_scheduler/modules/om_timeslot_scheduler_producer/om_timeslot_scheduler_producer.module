@@ -592,13 +592,10 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
-      dsm($process_end);
       if ($gap['end'] - $gap['start'] > 1800) {
         // Figure out how many half hours are in this gap.
         $half_hours = 0;
         if (date('i', $gap['start']) !== "00") {
-          dsm('in here now');
-          dsm($gap['start']);
           $start = $gap['start'];
           $seconds_to_next = -($gap['start'] % 1800) + 1800;
           $gap_parts[0] = array(
@@ -609,6 +606,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
           $half_hours++;
         }
         for ($i = $gap['start']; $i <= $gap['end']; $i += 1800) {
+          dsm($process_end);
           // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
           if ($i + 1800 <=  $gap['end']) {
             $gap_parts[$half_hours]['start'] = $i;
