@@ -1058,7 +1058,6 @@ function commerce_cart_product_add($uid, $line_item, $combine = TRUE) {
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 
   if (is_null($line_item_wrapper->commerce_unit_price->value())) {
-    watchdog('brian', 'null price');
     return FALSE;
   }
 
@@ -1154,7 +1153,6 @@ function commerce_cart_product_add($uid, $line_item, $combine = TRUE) {
   rules_invoke_all('commerce_cart_product_add', $order, $product, $quantity, $line_item);
 
   // Return the line item.
-  watchdog('brian', 'success <pre>'.print_r($line_item, TRUE).'</pre>');
   return $line_item;
 }
 
