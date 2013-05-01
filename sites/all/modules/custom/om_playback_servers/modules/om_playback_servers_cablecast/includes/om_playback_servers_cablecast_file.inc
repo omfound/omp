@@ -102,6 +102,7 @@ class cablecastFile {
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
+        dsm($field);
         if ($field->Name == 'Archive-URL') {
            $status = 'Complete';
         }
