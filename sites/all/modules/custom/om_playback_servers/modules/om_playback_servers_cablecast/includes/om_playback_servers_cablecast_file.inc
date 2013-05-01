@@ -101,8 +101,8 @@ class cablecastFile {
     $meta_data = $this->get_show_record($uri);
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
+      dsm($meta_data);
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
-        dsm($field);
         if ($field->Name == 'Archive-URL') {
            $status = 'Complete';
         }
