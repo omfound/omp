@@ -157,10 +157,6 @@ function om_theme_assets_action_item_content() {
 
 function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-show-grid-page') {
-    dsm($_GET['sort_by']);
-    dsm($_GET['sort_order']);
-    dsm($form_state['input']['sort_order']);
-    dsm($form_state['input']['sort_by']);
     if (empty($_GET['sort_by']) && empty($_GET['sort_order'])) {
       $form_state['input']['sort_by'] = 'value';
       $form_state['input']['sort_order'] = 'DESC';
