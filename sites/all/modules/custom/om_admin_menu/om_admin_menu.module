@@ -105,7 +105,7 @@ function om_admin_menu_role_access($roles) {
   global $user;
   
   foreach($roles as $role) {
-    if(in_array($role, $user->roles)) {
+    if(in_array($role, $user->roles) || in_array('administrator', $user->roles)) {
       return TRUE;
     } 
   }
