@@ -2,6 +2,7 @@
 class highestBayesianAverageRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
     $shows = array();
+    $last_two_months = time() - (3600 * 30 * 2);
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
@@ -18,8 +19,18 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
         $rating_query->condition('nid', $nids['nid'], '=');
         $rating_result = $rating_query->execute();
         $rating_value = $rating_result->fetchAll();
+        $airing_query = db_select('field_data_field_om_show_id', 'airings');
+        $airing_query->join('field_data_field_om_airing_dates', 'dates', 'airing.entity_id=dates.entity_id');
+        $airing_query->fields('airings', array('entity_id'));
+        $airing_query->condition('field_om_show_id_value', $nids['nid'], '=');
+        $airing_query->condition('field_om_airing_dates_value', $last_two_months, '>=');
+        $airing_resource = $airing_query->execute();
+        $airing_count = $airing_resource->rowCount();
+        if (!is_numeric($airing_count)) {
+          $airing_count = 0;
+        }
         if (isset($rating_value[0]->score)) {
-          $vote_results[$nids['nid']] = $rating_value[0]->score;
+          $vote_results[$nids['nid']] = $rating_value[0]->score - (.02 * $airing_count);
         }
         else {
           $vote_results[$nids['nid']] = 0;
