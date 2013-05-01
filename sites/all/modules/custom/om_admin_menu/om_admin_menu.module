@@ -65,6 +65,28 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'reports/members',
   );
+
+  //Content Administrators
+  $content['menu']['content'] = array(
+    '#title' => t('Manage content'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'admin/content',
+  );
+  $content['menu']['content']['add_page'] = array(
+    '#title' => t('Add Page'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/page',
+  );
+  $content['menu']['content']['add_form'] = array(
+    '#title' => t('Add Form'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/webform',
+  );
+  $content['menu']['content']['add_news'] = array(
+    '#title' => t('Add News'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/news',
+  );
 }
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
