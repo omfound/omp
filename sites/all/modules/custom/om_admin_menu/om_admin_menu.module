@@ -43,10 +43,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   $content['menu']['classes'] = array(
     '#title' => t('Manage classes'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
-    '#href' => 'admin/commerce/products/list',
-    '#options' => array(
-      'query' => array('sku' => '', 'type' => 'class'),
-    ),
+    '#href' => 'reports/class-registrations',
   );
   $content['menu']['classes']['add'] = array(
     '#title' => t('Add Class'),
