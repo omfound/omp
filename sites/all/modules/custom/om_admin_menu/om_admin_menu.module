@@ -7,6 +7,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Dashboard'),
     '#access' => om_admin_menu_role_access(array('authenticated user')),
     '#href' => 'dashboard',
+    '#weight' => -50,
 	);
   $content['menu']['shows'] = array(
     '#title' => t('Shows'),
