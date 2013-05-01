@@ -7,9 +7,10 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Dashboard'),
     '#access' => om_admin_menu_role_access(array('authenticated user')),
     '#href' => 'dashboard',
+    '#weight' => -50,
 	);
   $content['menu']['shows'] = array(
-    '#title' => t('Manage Shows'),
+    '#title' => t('Shows'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/shows',
   );
@@ -41,7 +42,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 
   //Class Administrators
   $content['menu']['classes'] = array(
-    '#title' => t('Manage classes'),
+    '#title' => t('Classes'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'admin/commerce/products/list',
     '#options' => array(
@@ -61,14 +62,14 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 
   //Membership Administrators
   $content['menu']['membership'] = array(
-    '#title' => t('Manage memberships'),
+    '#title' => t('Memberships'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'reports/members',
   );
 
   //Content Administrators
   $content['menu']['content'] = array(
-    '#title' => t('Manage content'),
+    '#title' => t('Content'),
     '#access' => om_admin_menu_role_access(array('Content Administrator')),
     '#href' => 'admin/content',
   );
@@ -86,6 +87,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Add News'),
     '#access' => om_admin_menu_role_access(array('Content Administrator')),
     '#href' => 'node/add/news',
+  );
+  $content['menu']['content']['navigation'] = array(
+    '#title' => t('Edit Menu'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'admin/structure/menu/manage/main-menu',
   );
 }
 
