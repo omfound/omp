@@ -42,17 +42,17 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   //Class Administrators
   $content['menu']['classes'] = array(
     '#title' => t('Manage classes'),
-    '#access' => om_admin_menu_role_access('Administer Classes'),
+    '#access' => om_admin_menu_role_access(array('Administer Classes')),
     '#href' => 'admin/commerce/products/list?sku=&type=class',
   );
   $content['menu']['classes']['add'] = array(
     '#title' => t('Add Class'),
-    '#access' => om_admin_menu_role_access('Administer Classes'),
+    '#access' => om_admin_menu_role_access(array('Administer Classes')),
     '#href' => 'admin/commerce/products/add/class',
   );
   $content['menu']['classes']['registrations'] = array(
     '#title' => t('Manage registrations'),
-    '#access' => om_admin_menu_role_access('Administer Classes'),
+    '#access' => om_admin_menu_role_access(array('Administer Classes')),
     '#href' => 'admin/commerce/registrations/all',
   );
 }
