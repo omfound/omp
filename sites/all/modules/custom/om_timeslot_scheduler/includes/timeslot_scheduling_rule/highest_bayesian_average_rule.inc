@@ -13,14 +13,13 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
     $result = $query->execute();
     $vote_results = array();
     while($nids = $result->fetchAssoc()) {
-        $rating_query = db_select('votingapi_cache', 'votes');
-        $rating_query->fields('votes', array('value'));
-        $rating_query->condition('function', 'bayesian_average', '=');
-        $rating_query->condition('entity_id', $nids['nid'], '=');
+        $rating_query = db_select('alternative_rating', 'votes');
+        $rating_query->fields('votes', array('score'));
+        $rating_query->condition('nid', $nids['nid'], '=');
         $rating_result = $rating_query->execute();
         $rating_value = $rating_result->fetchAll();
-        if (isset($rating_value[0]->value)) {
-          $vote_results[$nids['nid']] = $rating_value[0]->value;
+        if (isset($rating_value[0]->score)) {
+          $vote_results[$nids['nid']] = $rating_value[0]->score;
         }
         else {
           $vote_results[$nids['nid']] = 0;
