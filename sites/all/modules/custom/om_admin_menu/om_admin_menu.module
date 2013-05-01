@@ -56,7 +56,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   $content['menu']['classes']['registrations'] = array(
     '#title' => t('Manage registrations'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
-    '#href' => 'admin/commerce/registrations/all',
+    '#href' => 'reports/class-registrations',
   );
 }
 
