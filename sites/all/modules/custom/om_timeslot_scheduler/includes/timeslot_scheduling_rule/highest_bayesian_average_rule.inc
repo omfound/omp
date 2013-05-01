@@ -20,7 +20,7 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
         $rating_result = $rating_query->execute();
         $rating_value = $rating_result->fetchAll();
         $airing_query = db_select('field_data_field_om_show_id', 'airings');
-        $airing_query->join('field_data_field_om_airing_dates', 'dates', 'airing.entity_id=dates.entity_id');
+        $airing_query->join('field_data_field_om_airing_dates', 'dates', 'airings.entity_id=dates.entity_id');
         $airing_query->fields('airings', array('entity_id'));
         $airing_query->condition('field_om_show_id_value', $nids['nid'], '=');
         $airing_query->condition('field_om_airing_dates_value', $last_two_months, '>=');
