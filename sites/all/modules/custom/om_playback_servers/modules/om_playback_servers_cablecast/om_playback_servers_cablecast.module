@@ -107,7 +107,7 @@ function om_playback_servers_cablecast_update_vod_field() {
     if (class_exists('cablecastFile')) {
       $cablecast_file_controller = new cablecastFile();
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
-      $metadata = get_show_record($result['field_om_show_broadcast_file_uri']);
+      $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
         if (!empty($url)) {
