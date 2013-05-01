@@ -45,7 +45,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'admin/commerce/products/list',
     '#options' => array(
-      'query' => array('sku' => '&', 'type' => 'class'),
+      'query' => array('sku' => '', 'type' => 'class'),
     ),
   );
   $content['menu']['classes']['add'] = array(
