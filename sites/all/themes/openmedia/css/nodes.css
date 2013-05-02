@@ -297,7 +297,7 @@
 
 #bayesian-score .score {
   float: left;
-  width: 112px;
+  width: auto;
 }
 
 #vote-summary {
