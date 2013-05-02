@@ -103,7 +103,7 @@ class cablecastFile {
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
       // NB: Account for inconsistant returns
-      if (empty($meta_data['CustomFields']->CustomField[0])) {
+      if (is_object($meta_data['CustomFields']->CustomField)) {
         $meta_data['CustomFields']->CustomField = array($meta_data['CustomFields']->CustomField);
       }
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
