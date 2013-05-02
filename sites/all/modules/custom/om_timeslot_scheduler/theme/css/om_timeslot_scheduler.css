@@ -30,3 +30,7 @@
   float: left;
   margin-right: 5px;
 }
+div.timeslot-theme-wrapper ul {
+  text-shadow: none;
+  color: #222222;
+}
