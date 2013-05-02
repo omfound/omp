@@ -88,7 +88,6 @@ class cablecastFile {
       if (!empty($meta_data->CreateNewShowRecordResult) && is_numeric($meta_data->CreateNewShowRecordResult)) {
         $new_file_name = $meta_data->CreateNewShowRecordResult . $files[$file_id];
         $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
-        dsm($meta_data);
         $options = array('ID' => $file_id, 'NewName' => $new_file_name);
         $controller->rename_file($this->pbs, $options);
         return 'cablecast://' . $meta_data->CreateNewShowRecordResult;
@@ -103,7 +102,10 @@ class cablecastFile {
     $meta_data = $this->get_show_record($uri);
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
-      // NB: $meta_data is changing return format, once Media Sherpa is working need to test this!
+      // NB: Account for inconsistant returns
+      if (empty($meta_data['CustomFields']->CustomField[0])) {
+        $meta_data['CustomFields']->CustomField = array($meta_data['CustomFields']->CustomField);
+      }
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
         if ($field->Name == 'Archive-URL') {
            $status = 'Complete';
