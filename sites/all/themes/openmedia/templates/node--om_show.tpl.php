@@ -55,6 +55,9 @@
             <?php print $vote_summary; ?>
           <?php } ?>
           <?php print $vote_widget; ?>
+          <?php if (!empty($bayesian_score)): ?>
+            <?php print $bayesian_score; ?>
+          <?php endif; ?>
         </div>
     </div>
     <div class="divider">
