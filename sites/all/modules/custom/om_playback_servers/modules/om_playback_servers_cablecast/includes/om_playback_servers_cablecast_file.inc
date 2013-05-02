@@ -101,7 +101,8 @@ class cablecastFile {
     $meta_data = $this->get_show_record($uri);
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
-    // NB: $meta_data is changing return format, once Media Sherpa is working need to test this!
+      dsm($meta_data);
+      // NB: $meta_data is changing return format, once Media Sherpa is working need to test this!
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
         if ($field->Name == 'Archive-URL') {
            $status = 'Complete';
