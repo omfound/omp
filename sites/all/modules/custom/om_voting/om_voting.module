@@ -14,7 +14,7 @@ function om_voting_menu() {
   );
   if (module_exists('advanced_help')) {
     $items['admin/advanced_help/openmedia/voting'] = array(
-      'title' => t('OM Voting Help'),
+      'title' => t('Open Media Voting System Help'),
       'page callback' => 'om_project_index_page',
       'access arguments' => array('view advanced help index'),
       'type' => MENU_NORMAL_ITEM
