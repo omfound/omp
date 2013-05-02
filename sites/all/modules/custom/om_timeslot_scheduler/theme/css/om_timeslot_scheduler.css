@@ -30,3 +30,9 @@
   float: left;
   margin-right: 5px;
 }
+div.timeslot-theme-wrapper ul li a {
+  text-shadow: none;
+}
+div.timeslot-theme-wrapper ul li {
+  color: #222222;
+}
