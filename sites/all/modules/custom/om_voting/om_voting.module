@@ -12,8 +12,30 @@ function om_voting_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK
   );
-
+  if (module_exists('advanced_help')) {
+    $items['admin/advanced_help/openmedia/voting'] = array(
+      'title' => t('OM Voting Help'),
+      'page callback' => 'om_project_index_page',
+      'access arguments' => array('view advanced help index'),
+      'type' => MENU_NORMAL_ITEM
+    );
+  }
   return $items;
+}
+
+/**
+ * Advanced help helper function.
+ * @returns themed help page.
+ */
+function om_voting_index_page() {
+  $output = theme('advanced_help_topic',
+    array(
+      'module' => 'om_voting',
+      'topic' => 'about-om-voting',
+    )
+  );
+  $output .= '&nbsp;' . t('Help resources for voting system on the site.');
+  return $output;
 }
 
 function om_voting_postmark_inbound () {
