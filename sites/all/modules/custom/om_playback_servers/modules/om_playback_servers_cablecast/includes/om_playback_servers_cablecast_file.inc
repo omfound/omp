@@ -88,7 +88,7 @@ class cablecastFile {
       if (!empty($meta_data->CreateNewShowRecordResult) && is_numeric($meta_data->CreateNewShowRecordResult)) {
         $new_file_name = $meta_data->CreateNewShowRecordResult . $files[$file_id];
         $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
-        dsm($new_file_name);
+        dsm($meta_data);
         $options = array('ID' => $file_id, 'NewName' => $new_file_name);
         $controller->rename_file($this->pbs, $options);
         return 'cablecast://' . $meta_data->CreateNewShowRecordResult;
