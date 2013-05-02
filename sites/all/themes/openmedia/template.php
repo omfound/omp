@@ -204,6 +204,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
     }
     $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
   }
+  $bayesian_score = alternative_rating_show_average($variables['node']->nid);
+  dsm($bayesian_score);
   $learn = l('Learn More About Voting', '<front>');
   $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. !link', array('!link' => $learn));
   // Node right.
