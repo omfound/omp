@@ -3,7 +3,7 @@
 
 <?php $schedule_link = l('Schedule', 'om_timeslot_scheduler/schedule/' . $row->nid . '/' . $start . '/' . $end); ?>
 
-<?php $content = '<ul><li>' . date('G:i A', $start) . '</li><li>' . date('G:i A', $end) . '</li><li>' . $fields['title']->content . '</li><li>' . $schedule_link . '</li></ul>'; ?>
+<?php $content = '<ul><li>' . date('g:i A', $start) . '</li><li>' . date('g:i A', $end) . '</li><li>' . $fields['title']->content . '</li><li>' . $schedule_link . '</li></ul>'; ?>
 
 <?php
   $hex = om_timeslot_scheduler_get_theme_color_from_timeslot($row->nid);
