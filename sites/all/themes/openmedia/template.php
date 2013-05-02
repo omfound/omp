@@ -205,7 +205,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
   }
   if (function_exists('alternative_rating_show_average')) {
-    $bayesian_score = alternative_rating_show_average($variables['node']->nid);
+    $bayesian_score = round(alternative_rating_show_average($variables['node']->nid), 2);
     $help = theme('advanced_help_topic', 
       array(
         'module' => 'om_voting',
