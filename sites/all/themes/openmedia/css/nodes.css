@@ -295,6 +295,11 @@
   float: left;
 }
 
+#bayesian-score .score {
+  float: left;
+  width: 112px;
+}
+
 #vote-summary {
   width: 45px;
   font-weight: bold;
