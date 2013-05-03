@@ -574,7 +574,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
  *   If there are errors the script will not continue to the commit phase.
  *   Params are standard for batch completion callback.
  */
-function _om_timeslot_scheduler_batch_complete($success, $results, $operations) {
+function _om_timeslot_scheduler_batch_complete($success, $results, $operations, $return_pid = FALSE) {
   if (!empty($results['run']['errors'])) {
     foreach($results['run']['errors'] AS $fn => $error_set) {
       foreach ($error_set AS $error) {
@@ -622,7 +622,12 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations) 
       }
     }
   }
-  drupal_goto('om_timeslot_scheduler/bulk_process_complete/' . $pid);
+  if ($return_pid == TRUE) {
+    return $pid;
+  }
+  else {
+    drupal_goto('om_timeslot_scheduler/bulk_process_complete/' . $pid);
+  }
 }
 
 /**
