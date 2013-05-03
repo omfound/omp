@@ -39,8 +39,11 @@ class cablecastFile {
     $controller = om_playback_servers_entity_get_controller($this->pbs);
     $options = array('RestrictToOrphanedFiles' => FALSE, 'RestrictToShowID' => $show_id);
     $file = $controller->get_digital_files($this->pbs, $options);
-    if (!empty($file->GetDigitalFilesResult->DigitalFileInfo)) {
-      $file_name = $file->GetDigitalFilesResult->DigitalFileInfo->FileName;
+    if (is_object($file->GetDigitalFilesResult->DigitalFileInfo)) {
+      $file->GetDigitalFilesResult->DigitalFileInfo = array($file->GetDigitalFilesResult->DigitalFileInfo);
+    }
+    foreach ($file->GetDigitalFilesResult->DigitalFileInfo AS $file_object) {
+      $file_name = $file_object->FileName;
       $file_name = str_replace($show_id, '', $file_name);
       return $file_name;
     }
@@ -101,7 +104,10 @@ class cablecastFile {
     $meta_data = $this->get_show_record($uri);
     $status = '';
     if (!empty($meta_data) && !empty($meta_data['CustomFields']->CustomField)) {
-    // NB: $meta_data is changing return format, once Media Sherpa is working need to test this!
+      // NB: Account for inconsistant returns
+      if (is_object($meta_data['CustomFields']->CustomField)) {
+        $meta_data['CustomFields']->CustomField = array($meta_data['CustomFields']->CustomField);
+      }
       foreach ($meta_data['CustomFields']->CustomField AS $field) {
         if ($field->Name == 'Archive-URL') {
            $status = 'Complete';
