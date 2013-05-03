@@ -253,7 +253,7 @@ function om_timeslot_scheduler_schedule_timeslot($timeslot_nid, $start, $end) {
       )
     );
   }
-  om_timeslot_scheduler_schedule_window($channel_tid, $start, $end, FALSE, FALSE, FALSE);
+  om_timeslot_scheduler_schedule_window($channel_tid, $start, $end);
   return array();
 }
 
@@ -276,25 +276,19 @@ function om_timeslot_scheduler_schedule_timeslot($timeslot_nid, $start, $end) {
  * @param $bulk_operation
  *  boolean whether or not this is a bulk operation
  */
-function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end, $bulk_operation = FALSE, $submit = TRUE) {
+function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
   // Otherwise start the process.
   $run = array(
     'channel_tid' => $channel_tid,
     'start' => $start,
     'end' => $end,
-    'bulk_operation' => $bulk_operation,
     'timeslots' => array(),
     'errors' => array()
   );
   $function = '_om_timeslot_scheduler_schedule_window';
   $batch = $function($run);
-  $pid = batch_set($batch);
-  if ($submit == FALSE) {
-    batch_process('om_timeslot_scheduler', $url = 'batch', $redirect_callback = 'drupal_goto');
-  }
-  if (!empty($pid)) {
-    return $pid;
-  }
+  batch_set($batch);
+  batch_process('om_timeslot_scheduler', $url = 'batch', $redirect_callback = 'drupal_goto');
 }
 
 /**
@@ -338,7 +332,7 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
 
   while($row = $result->fetchAssoc()) {
     $timeslot = node_load($row['entity_id']);
-    $is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot, $run['bulk_operation']);
+    $is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
     if ($is_available) {
       $run['timeslots'][] = $timeslot;
     }
@@ -628,12 +622,7 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations) 
       }
     }
   }
-  if ($run_info['bulk_operation'] == TRUE) {
-    return $pid;
-  }
-  else {
-    drupal_goto('om_timeslot_scheduler/bulk_process_complete/' . $pid);
-  }
+  drupal_goto('om_timeslot_scheduler/bulk_process_complete/' . $pid);
 }
 
 /**
@@ -661,7 +650,7 @@ function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
 /**
  * Commit the schedule and move the user to the completion page.
  */
-function om_timeslot_scheduler_process_commit($pid) {
+function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
   $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
   $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
   $pbs = array_shift(om_playback_servers_get_pbs_by_term($run_info[0]->channel_tid));
@@ -698,7 +687,9 @@ function om_timeslot_scheduler_process_commit($pid) {
       }
     }
   }
-  drupal_goto('om_timeslot_scheduler/bulk_process_committed/' . $pid);
+  if ($redirect == TRUE) {
+    drupal_goto('om_timeslot_scheduler/bulk_process_committed/' . $pid);
+  }
 }
 
 /**
@@ -731,25 +722,15 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
 
 /**
  * Determine whether or not a timeslot is eligible for scheduling in this run.
- *   If this is a bulk process make sure the timeslot has bulk schedule flag.
- *   If this is a producer process make sure the timeslot has the producer flag.
- *   Then make sure the producer is cleared to schedule into this timeslot (i.e. this timeslot
- *   represents their series or a compatable theme)
  *
  * @param $timeslot
  *   standard node object for the timeslot in question.
  *
- * @param $batch_process
- *   boolean whether or not this is a bulk process
- *
  * @returns boolean
  */
-function om_timeslot_scheduler_is_eligible_timeslot($timeslot, $bulk_process) {
-  if ($bulk_process && $timeslot->field_om_timeslot_automation['und'][0]['value']) {
+function om_timeslot_scheduler_is_eligible_timeslot($timeslot) {
+  if ($timeslot->field_om_timeslot_automation['und'][0]['value']) {
     return TRUE;
-  }
-  else if (!$bulk_process && $timeslot->field_om_timeslot_producer['und'][0]['value']) {
-    // Will need to see if the user is eligible for this ts.
   }
   return FALSE;
 }
