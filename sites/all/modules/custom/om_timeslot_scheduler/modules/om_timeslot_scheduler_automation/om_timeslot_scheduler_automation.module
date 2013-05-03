@@ -1,4 +1,7 @@
 <?php
+/**
+ * Alter the scheduling form and add autoscheduling config on.
+ */
 function om_timeslot_scheduler_automation_form_om_timeslot_scheduler_admin_form_alter(&$form, &$form_state, $form_id) {
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_automation_info'] = array(
     '#type' => 'fieldset',
@@ -56,4 +59,51 @@ function om_timeslot_scheduler_automation_form_om_timeslot_scheduler_admin_form_
     '#required' => TRUE,
     '#weight' => 6,
   );
+}
+
+/**
+ * Loop through all the channels marked for automation and schedule each one.
+ */
+function om_timeslot_scheduler_automation_run_scheduling_jobs() {
+  $channels = variable_get('om_timeslot_scheduler_automation_channels', '');
+  if (!empty($channels)) {
+    foreach ($channels AS $tid => $name) {
+      $start = time() + (variable_get('om_timeslot_scheduler_automation_cron_window', 7) * 86400);
+      $end = $start + variable_get('om_timeslot_scheduler_automation_cron_duration', 3600);
+      $run = array(
+        'channel_tid' => $tid,
+        'start' => $start,
+        'end' => $end,
+        'timeslots' => array(),
+        'errors' => array()
+      );
+      // perform airing update steps.
+      $context = array();
+      _om_broadcast_schedule_get_pbs_airings($run, $context);
+      _om_broadcast_schedule_match_drupal_airings($context);
+      _om_broadcast_schedule_purge_unmatched($context);
+      _om_broadcast_schedule_create_new($context);
+      // reset context and perform scheduling steps.
+      $context = array();
+      _om_timeslot_scheduler_get_timeslots($run, $context);
+      _om_timeslot_scheduler_implement_rules($context);
+      _om_timeslot_scheduler_get_gaps($context);
+      _om_timeslot_scheduler_build_schedule($context);
+      $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), TRUE);
+      om_timeslot_scheduler_process_commit($pid, FALSE);
+      watchdog('om_timeslot_scheduler_automation', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
+    }
+  }
+}
+
+/**
+ * Implements hook_cron
+ */
+function om_timeslot_scheduler_automation_cron() {
+  $seconds_between_jobs = variable_get('om_timeslot_scheduler_automation_cron_frequency', 3600);
+  $last_cron = variable_get('om_timeslot_scheduler_automation_last_cron', time() - ($seconds_between_jobs + 1));
+  if ($last_cron + $seconds_between_jobs < time()) {
+    om_timeslot_scheduler_automation_run_scheduling_jobs();
+    variable_set('om_timeslot_scheduler_automation_last_cron', time());
+  }
 }
