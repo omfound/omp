@@ -572,7 +572,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
  *   After this step if the commit flag is set the schedule will go to pbs commit handler.
  *   If the commit flag is not set pass the data along to the preview theme.
  *   If there are errors the script will not continue to the commit phase.
- *   Params are standard for batch completion callback.
+ *   Params are standard for batch completion callback with the exception of return pid.
+ *     @param return pid for use in non-batch calls of the function to return pid.
  */
 function _om_timeslot_scheduler_batch_complete($success, $results, $operations, $return_pid = FALSE) {
   if (!empty($results['run']['errors'])) {
