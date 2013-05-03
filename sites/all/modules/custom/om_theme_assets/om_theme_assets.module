@@ -165,7 +165,6 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function om_theme_assets_views_query_alter(&$view, &$query) {
-  dsm($view->name);
   if ($view->name == 'show_grid') {
     dsm($query);
   }
