@@ -32,7 +32,7 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
       $item->start = $schedule_item->start;
       $item->end = $schedule_item->end;
       dsm($timeslot->nid);
-      dsm($item);
+      dsm(date("H:i:s", $item->start));
       $variables['schedule_results'][$timeslot->nid]['shows'][] = $item;
     }
     $form = drupal_get_form('om_timeslot_scheduler_commit_schedule_form', arg(2));
