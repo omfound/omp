@@ -31,3 +31,42 @@ function internet_archive_item_from_file_url($url) {
 
   return false;
 }
+
+
+/**
+ * Super small class to get all derivatives from a an item.
+ *   @TODO should be replace by a less taxing method of retrieval.
+ */
+class internetArchiveDerivativeHandler {
+  private $url_stem;
+  public $item;
+  public function __construct() {
+    $this->url_stem = "http://archive.org/details";
+    $this->ch = curl_init();
+    curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
+  }
+  public function set_item(string $item) {
+    $this->item = $item;
+  }
+  public function get_item() {
+    return $this->item;
+  }
+  public function get_derivatives() {
+    $derivatives = $this->make_curl_request();
+    return drupal_json_decode($derivatives);
+  }
+  private function make_curl_request() {
+    $complete_path = $this->url_stem . '/' . $this->item;
+    curl_setopt($this->ch, CURLOPT_URL, $complete_path);
+    $output = curl_exec($this->ch);
+    $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+    curl_close($this->ch);
+    if ($response > 300) {
+      $message = "internetArchiveDerivativeHandler::make_curl_request received a bad response from archive.org";
+      throw new Exception($message);
+    }
+    else {
+      return $output;
+    }
+  }
+}
