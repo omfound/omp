@@ -59,8 +59,8 @@ class internetArchiveDerivativeHandler {
   }
   public function get_derivatives() {
     $derivatives = $this->make_curl_request();
-    $this->derivatives = $derivatives;
-    return drupal_json_decode($this->derivatives);
+    $this->derivatives = drupal_json_decode($derivatives);
+    return $this->derivatives;
   }
   public function get_derivative($extension) {
     if (strpos($extension, '.') === FALSE) {
@@ -69,7 +69,6 @@ class internetArchiveDerivativeHandler {
     if (empty($this->derivatives)) {
       $this->get_derivatives();
     }
-    dsm($this->derivatives['files']);
     if (isset($this->derivatives['files'])) {
       foreach ($this->derivatives['files'] AS $key => $derivative) {
         if (is_numeric(strpos($key, $extension))) {
