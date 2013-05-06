@@ -17,10 +17,10 @@
               <?php print date('n-d (D)', $show->start); ?>
             </td>
             <td>
-              <?php print date('h:i:s', $show->start); ?>
+              <?php print date('H:i:s', $show->start); ?>
             </td>
             <td>
-              <?php print date('h:i:s', $show->end); ?>
+              <?php print date('H:i:s', $show->end); ?>
             </td>
             <td>
               <?php print $show->end - $show->start; ?>
