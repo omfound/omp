@@ -113,7 +113,7 @@ function om_playback_servers_cablecast_update_vod_field() {
         $ia_handler = new internetArchiveDerivativeHandler();
         $ia_handler->set_item($item);
         $derivatives = $ia_handler->get_derivatives();
-        $derivatives = array($item => drupal_json_encode($derivatives));
+        $derivatives = drupal_json_encode(array($item => $derivatives));
         $mp4 = $ia_handler->get_derivative('mp4');
       }
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
