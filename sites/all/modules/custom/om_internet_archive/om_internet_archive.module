@@ -45,7 +45,7 @@ class internetArchiveDerivativeHandler {
     $this->ch = curl_init();
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
   }
-  public function set_item(string $item) {
+  public function set_item($item) {
     $this->item = $item;
   }
   public function get_item() {
@@ -53,7 +53,8 @@ class internetArchiveDerivativeHandler {
   }
   public function get_derivatives() {
     $derivatives = $this->make_curl_request();
-    return drupal_json_decode($derivatives);
+    $this->derivatives = $derivatives;
+    return drupal_json_decode($this->derivatives);
   }
   private function make_curl_request() {
     $complete_path = $this->url_stem . '/' . $this->item;
