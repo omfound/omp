@@ -330,6 +330,7 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
+  watchdog("In Ur Batch Scheduler", (string) $query);
 
   while($row = $result->fetchAssoc()) {
     $timeslot = node_load($row['entity_id']);
