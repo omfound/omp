@@ -299,7 +299,8 @@ function _om_timeslot_scheduler_schedule_window($run) {
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
   //$steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
-  $steps[] = array('_om_timeslot_scheduler_get_timeslots', $run);
+  dpm(array($run));
+  $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
   $steps[] = array('_om_timeslot_scheduler_build_schedule', array());
