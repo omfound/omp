@@ -57,7 +57,8 @@ class internetArchiveDerivativeHandler {
     return drupal_json_decode($this->derivatives);
   }
   private function make_curl_request() {
-    $complete_path = $this->url_stem . '/' . $this->item;
+    $complete_path = $this->url_stem . '/' . $this->item . '?output=json';
+    dsm($complete_path);
     curl_setopt($this->ch, CURLOPT_URL, $complete_path);
     $output = curl_exec($this->ch);
     $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
