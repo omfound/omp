@@ -299,7 +299,6 @@ function _om_timeslot_scheduler_schedule_window($run) {
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
   //$steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
-  dpm(array($run));
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
@@ -322,7 +321,6 @@ function _om_timeslot_scheduler_schedule_window($run) {
  *  array standard context reference provided by batch process
  */
 function _om_timeslot_scheduler_get_timeslots($run, &$context) {
-  dpm($run);
   $context['message'] = t('Gathering relevant timeslots.');
   $query = db_select('field_data_field_om_timeslot_date', 'date');
   $query->fields('date', array('entity_id'));
@@ -332,7 +330,6 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
-  watchdog("In Ur Batch Scheduler", dpq($query));
 
   while($row = $result->fetchAssoc()) {
     $timeslot = node_load($row['entity_id']);
