@@ -575,7 +575,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
  *   Params are standard for batch completion callback with the exception of return pid.
  *     @param return pid for use in non-batch calls of the function to return pid.
  */
-function _om_timeslot_scheduler_batch_complete($success, $results, $operations, $return_pid = FALSE) {
+function _om_timeslot_scheduler_batch_complete($success, $results, $operations, $duration, $return_pid = FALSE) {
   if (!empty($results['run']['errors'])) {
     foreach($results['run']['errors'] AS $fn => $error_set) {
       foreach ($error_set AS $error) {
@@ -650,7 +650,7 @@ function om_timeslot_scheduler_process_complete_page($pid) {
  */
 function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
   $pid = $form_state['values']['om_timeslot_scheduler_commit_schedule_pid'];
-  om_timeslot_scheduler_process_commit($pid);
+  om_timeslot_scheduler_process_commit($pid, TRUE);
 }
 
 /**
