@@ -36,6 +36,12 @@ function internet_archive_item_from_file_url($url) {
 /**
  * Super small class to get all derivatives from a an item.
  *   @TODO should be replace by a less taxing method of retrieval.
+ * @public set_item
+ * @public get_item
+ * @public get_derivative(extension)
+ *   Get a single derivative by extension. Caches result so multiple uses per request are ok
+ * @public get_derivatives
+ *   Get all derivatives.
  */
 class internetArchiveDerivativeHandler {
   private $url_stem;
