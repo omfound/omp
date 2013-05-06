@@ -89,7 +89,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       _om_timeslot_scheduler_implement_rules($context);
       _om_timeslot_scheduler_get_gaps($context);
       _om_timeslot_scheduler_build_schedule($context);
-      $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), TRUE);
+      $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), '', TRUE);
       om_timeslot_scheduler_process_commit($pid, FALSE);
       watchdog('om_timeslot_scheduler_automation', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
     }
