@@ -69,6 +69,7 @@ class internetArchiveDerivativeHandler {
     if (empty($this->derivatives)) {
       $this->get_derivatives();
     }
+    dsm($this->derivatives['files']);
     if (isset($this->derivatives['files'])) {
       foreach ($this->derivatives['files'] AS $key => $derivative) {
         if (is_numeric(strpos($key, $extension))) {
