@@ -627,6 +627,7 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations, 
       }
     }
   }
+  dsm("AND RETURN PID IS: " . $return_pid);
   if ($return_pid == TRUE) {
     return $pid;
   }
@@ -654,7 +655,7 @@ function om_timeslot_scheduler_process_complete_page($pid) {
  */
 function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
   $pid = $form_state['values']['om_timeslot_scheduler_commit_schedule_pid'];
-  om_timeslot_scheduler_process_commit($pid);
+  om_timeslot_scheduler_process_commit($pid, TRUE);
 }
 
 /**
