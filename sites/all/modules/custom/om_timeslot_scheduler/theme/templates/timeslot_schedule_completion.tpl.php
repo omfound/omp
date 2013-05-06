@@ -12,7 +12,7 @@
           <th>Show Title</th>
         </thead>
         <?php foreach($result['shows'] AS $show): ?>
-        <?php print $result->start; ?>
+        <?php print $show->start; ?>
         <br/>
           <tr>
             <td>
