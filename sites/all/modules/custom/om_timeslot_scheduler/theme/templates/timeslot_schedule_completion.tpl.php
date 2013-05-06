@@ -2,6 +2,7 @@
   <p><?php print $variables['message']; ?></p>
   <?php if (isset($variables['schedule_results'])): ?>
     <?php foreach ($variables['schedule_results'] AS $result): ?>
+        <?php dsm($result); ?>
       <table>
         <caption><?php print l($result['timeslot']->title, 'node/' . $result['timeslot']->nid); ?></caption>
         <thead>
@@ -12,7 +13,6 @@
           <th>Show Title</th>
         </thead>
         <?php foreach($result['shows'] AS $show): ?>
-        <?php print $show->start; ?>
         <br/>
           <tr>
             <td>
