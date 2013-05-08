@@ -519,6 +519,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                     $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                     $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    $next_start = $process_start;
                     $used = $rank;
                     unset($timeslot->om_timeslot_showlist[$rank]);
                   }
