@@ -20,21 +20,21 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
   if (!empty($variables['schedule_content'])) {
     $variables['message'] = t('The following schedule was generated for !dates on channel !channel.', array('!dates' => $dates, '!channel' => $channel));
     $variables['schedule_results'] = array();
-    dsm($variables['schedule_content']);
     foreach ($variables['schedule_content'] AS $schedule_item) {
-      if (empty($timeslot) || $timeslot->nid != $schedule_item->timeslot_id) {
+      if (empty($variables['schedule_results'][$schedule_item->timeslot_id])) {
         $timeslot = node_load($schedule_item->timeslot_id);
-        $variables['schedule_results'][$timeslot->nid]['timeslot'] = $timeslot;
-        if (empty($variables['schedule_results'][$timeslot->nid]['shows'])) {
-          $variables['schedule_results'][$timeslot->nid]['shows'] = array();
-        }
+        $variables['schedule_results'][$schedule_item->timeslot_id] = array()
+        $variables['schedule_results'][$schedule_item->timeslot_id]['timeslot'] = $timeslot;
+        $variables['schedule_results'][$schedule_item->timeslot_id]['shows'] = array();
       }
+      unset($item);
       $item = node_load($schedule_item->show_id);
-      $item->start = $schedule_item->start;
-      $item->end = $schedule_item->end;
-      $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
+      if (is_object($item)) {
+        $item->start = $schedule_item->start;
+        $item->end = $schedule_item->end;
+        $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
+      }
     }
-    dsm($variables['schedule_results']);
     $form = drupal_get_form('om_timeslot_scheduler_commit_schedule_form', arg(2));
     $form = drupal_render($form);
     $variables['commit_form'] = $form;
