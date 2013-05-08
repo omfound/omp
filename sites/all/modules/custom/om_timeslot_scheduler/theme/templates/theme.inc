@@ -27,9 +27,8 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
         $variables['schedule_results'][$schedule_item->timeslot_id]['timeslot'] = $timeslot;
         $variables['schedule_results'][$schedule_item->timeslot_id]['shows'] = array();
       }
-      unset($item);
       $item = node_load($schedule_item->show_id);
-      if (is_object($item) && empty($item->start)) {
+      if (empty($item->start)) {
         $item->start = $schedule_item->start;
         $item->end = $schedule_item->end;
         $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
