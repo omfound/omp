@@ -20,6 +20,7 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
   if (!empty($variables['schedule_content'])) {
     $variables['message'] = t('The following schedule was generated for !dates on channel !channel.', array('!dates' => $dates, '!channel' => $channel));
     $variables['schedule_results'] = array();
+    dsm($variables['schedule_content']);
     foreach ($variables['schedule_content'] AS $schedule_item) {
       if (empty($timeslot) || $timeslot->nid != $schedule_item->timeslot_id) {
         $timeslot = node_load($schedule_item->timeslot_id);
