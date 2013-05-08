@@ -89,7 +89,6 @@ class internetArchiveDerivativeHandler {
         return $output;
       }
     }
-    $message = "internetArchiveDerivativeHandler::make_curl_request no item set.";
-    throw new Exception($message);
+    return FALSE;
   }
 }
