@@ -73,6 +73,7 @@ class internetArchiveDerivativeHandler {
     return FALSE;
   }
   private function make_curl_request() {
+    dsm($this->item);
     if (!empty($this->item)) {
       $complete_path = $this->item . '?output=json';
       dsm($complete_path);
@@ -87,6 +88,7 @@ class internetArchiveDerivativeHandler {
         throw new Exception($message);
       }
       else {
+        dsm($output);
         return $output;
       }
     }
