@@ -502,6 +502,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
                 // If a show is longer than 30 min allow it an opportunity to be scheduled.
+                dsm($show_completion);
                 if ($show_completion + $spacer <= $gap['end'] && $show->field_om_show_duration['und'][0]['value'] > 1800) {
                   $temp_start = 0;
                   $temp_end = 0;
