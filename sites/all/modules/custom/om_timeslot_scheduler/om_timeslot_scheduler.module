@@ -485,11 +485,11 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }
             // Always modify the start to be $process_start in case there is a leader.
             $gap_parts[0]['start'] = $process_start;
-            dsm($gap_parts);
             foreach($gap_parts AS $gap_key => $mini_gap) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
               if (isset($process_start) && $process_start > $mini_gap['start']) {
+                dsm('this happens' . $mini_gap['start']);
                 continue;
               }
               $process_start = $mini_gap['start'];
