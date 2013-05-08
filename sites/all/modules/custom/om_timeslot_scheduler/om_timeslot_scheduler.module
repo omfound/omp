@@ -512,7 +512,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   else {
                     $temp_start = $next_start;
                   }
-                  dsm($temp_start);
+                  dsm($process_start % 1800);
                   $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                    // Adult hours check
                   $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
