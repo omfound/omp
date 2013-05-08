@@ -1,4 +1,3 @@
-        <?php dsm($variables['schedule_results'][47]); ?>
 <div id="schedule-results">
   <p><?php print $variables['message']; ?></p>
   <?php if (isset($variables['schedule_results'])): ?>
