@@ -78,6 +78,7 @@ class internetArchiveDerivativeHandler {
   }
   private function make_curl_request() {
     $complete_path = $this->url_stem . '/' . $this->item . '?output=json';
+    dsm($complete_path);
     $this->ch = curl_init();
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($this->ch, CURLOPT_URL, $complete_path);
