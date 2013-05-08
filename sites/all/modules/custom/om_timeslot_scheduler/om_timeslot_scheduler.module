@@ -506,13 +506,15 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   $temp_start = 0;
                   $temp_end = 0;
                   // If this is not the first thing in a 30 min gap, start this show at the next 30 min. gap.
-                  if ($process_start % 1800 == 0) {
+/*
+                  if ($process_start % 1800 != 0) {
                     $temp_start = $process_start;
                   }
                   else {
                     $temp_start = $next_start;
                   }
-                  dsm($process_start % 1800);
+*/
+                  dsm($temp_start);
                   $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                    // Adult hours check
                   $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
