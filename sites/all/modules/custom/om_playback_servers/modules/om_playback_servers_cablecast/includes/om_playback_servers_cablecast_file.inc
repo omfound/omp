@@ -129,6 +129,7 @@ class cablecastFile {
    **/
   public function get_ia_url($uri) {
     $meta_data = $this->get_show_record($uri);
+    dsm($meta_data);
     if (!empty($meta_data) && !empty($meta_data['CustomFields'])) {
       // NB: Account for inconsistant returns
       if (is_object($meta_data['CustomFields']->CustomField)) {
@@ -140,7 +141,7 @@ class cablecastFile {
         }
       }
     }
-    return false;
+    return FALSE;
   }
   /**
    * Return the show record
