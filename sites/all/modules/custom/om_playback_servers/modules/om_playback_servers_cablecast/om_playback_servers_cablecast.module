@@ -109,6 +109,7 @@ function om_playback_servers_cablecast_update_vod_field() {
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
       $item = str_replace("http://www.archive.org/download/", '', $url);
       $item = rtrim($item, '/');
+      dsm($url);
       dsm($item);
       if (class_exists('internetArchiveDerivativeHandler')) {
         $ia_handler = new internetArchiveDerivativeHandler();
