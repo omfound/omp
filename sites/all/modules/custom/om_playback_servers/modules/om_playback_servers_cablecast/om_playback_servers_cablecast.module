@@ -107,10 +107,8 @@ function om_playback_servers_cablecast_update_vod_field() {
     if (class_exists('cablecastFile')) {
       $cablecast_file_controller = new cablecastFile();
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
-      $item = substr($item, strripos($item, '/'), strlen($item));
+      $item = substr($url, strripos($url, '/'), strlen($url));
       $item = rtrim($item, '/');
-      dsm($url);
-      dsm($item);
       if (class_exists('internetArchiveDerivativeHandler') && !empty($item)) {
         $ia_handler = new internetArchiveDerivativeHandler();
         $ia_handler->set_item($item);
