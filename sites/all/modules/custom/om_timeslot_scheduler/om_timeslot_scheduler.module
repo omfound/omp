@@ -489,7 +489,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
               if (isset($process_start) && $process_start > $mini_gap['start']) {
-                dsm('this happens: ' . $process_start . ' '  . $mini_gap['start']);
                 continue;
               }
               $process_start = $mini_gap['start'];
@@ -525,7 +524,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   }
                 }
                 // Otherwise shchedule shows < 30 min
-                else if ($show_completion + $spacer <= $mini_gap['end']) {
+                else if ($show_completion + $spacer <= $gap['end']) {
                   // Adult hours check
                   $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                   $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
