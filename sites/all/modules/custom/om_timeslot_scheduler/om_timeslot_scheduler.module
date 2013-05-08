@@ -493,6 +493,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               }
               $process_start = $mini_gap['start'];
               $next_start = $mini_gap['start'] + 1800;
+              dsm($process_start);
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
@@ -502,7 +503,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
                 // If a show is longer than 30 min allow it an opportunity to be scheduled.
-                dsm($show_completion);
                 if ($show_completion + $spacer <= $gap['end'] && $show->field_om_show_duration['und'][0]['value'] > 1800) {
                   $temp_start = 0;
                   $temp_end = 0;
@@ -525,7 +525,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   }
                 }
                 // Otherwise shchedule shows < 30 min
-                else if ($show_completion + $spacer <= $gap['end']) {
+                else if ($show_completion + $spacer <= $mini_gap['end']) {
                   // Adult hours check
                   $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                   $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
