@@ -489,7 +489,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
               if (isset($process_start) && $process_start > $mini_gap['start']) {
-                dsm('this happens' . $mini_gap['start']);
+                dsm('this happens: ' . $process_start . ' '  . $mini_gap['start']);
                 continue;
               }
               $process_start = $mini_gap['start'];
