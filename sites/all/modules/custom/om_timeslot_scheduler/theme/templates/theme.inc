@@ -33,6 +33,7 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
       $item->end = $schedule_item->end;
       $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
     }
+    dsm($variables['schedule_results']);
     $form = drupal_get_form('om_timeslot_scheduler_commit_schedule_form', arg(2));
     $form = drupal_render($form);
     $variables['commit_form'] = $form;

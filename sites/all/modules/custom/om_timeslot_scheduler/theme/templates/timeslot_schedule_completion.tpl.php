@@ -12,7 +12,6 @@
           <th>Show Title</th>
         </thead>
         <?php foreach($result['shows'] AS $show): ?>
-        <br/>
           <tr>
             <td>
               <?php print date('n-d (D)', $show->start); ?>
