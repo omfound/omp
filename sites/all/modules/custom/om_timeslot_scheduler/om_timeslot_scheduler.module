@@ -504,11 +504,11 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
-          if ($timeslot->nid == 29261) {
-              dsm('completion: ' . $show_completion);
-            }
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
+          if ($timeslot->nid == 29261) {
+              dsm('we make it here! ');
+            }
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
                   if ($show->field_om_show_duration['und'][0]['value'] > 1800) {
                     $temp_start = 0;
@@ -523,6 +523,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       if ($show_completion + $spacer > $gap['end']) {
                         continue;
                       }
+                    }
+                    if ($timeslot->nid == 29261) {
+                      dsm('we make it past 521! ');
                     }
                     $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
@@ -541,6 +544,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   else {
                     if ($show_completion + $spacer > $mini_gap['end']) {
                       continue;
+                    }
+                    if ($timeslot->nid == 29261) {
+                      dsm('we make it past 543! ');
                     }
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
