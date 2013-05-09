@@ -383,11 +383,11 @@ function _om_timeslot_scheduler_implement_rules(&$context) {
 function _om_timeslot_scheduler_get_gaps(&$context) {
   $context['message'] = t('Finding gaps in timeslots.');
   $run = $context['results']['run'];
-  $gap_set = array();
   if (empty($run['timeslots'])) {
     return;
   }
   foreach ($run['timeslots'] AS $key => $timeslot) {
+    $gap_set = array();
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach ($timeslot->field_om_timeslot_date['und'] AS $date) {
         // Get the time range for appropriate dates as a timeslot an hold many date repeats.
@@ -397,7 +397,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
       }
     }
     $timeslot->gaps = $gap_set;
-    dsm($timeslot);
     $run['timeslots'][$key] = $timeslot;
   }
 }
