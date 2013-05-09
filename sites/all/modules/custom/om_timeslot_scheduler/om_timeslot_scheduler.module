@@ -528,6 +528,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   }
                   // Otherwise shchedule shows < 30 min
                   else {
+                    if ($show_completion + $spacer > $mini_gap['end']) {
+                      continue;
+                    }
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
