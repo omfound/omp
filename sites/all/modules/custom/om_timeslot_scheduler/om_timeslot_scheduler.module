@@ -513,6 +513,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     }
                     else {
                       $temp_start = $next_start;
+                      $show_completion = $temp_start + $show->field_om_show_duration['und'][0]['value'];
+                      if ($show_completion + $spacer > $gap['end']) {
+                        continue;
+                      }
                     }
                     $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
@@ -521,6 +525,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                       $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                       $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                      $process_start = ($process_start - ($process_start % 1800)) + 1800;
                       $next_start = $process_start;
                       $used = $rank;
                       unset($timeslot->om_timeslot_showlist[$rank]);
@@ -528,6 +533,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   }
                   // Otherwise shchedule shows < 30 min
                   else {
+                    if ($show_completion + $spacer > $mini_gap['end']) {
+                      continue;
+                    }
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
