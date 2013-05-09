@@ -501,7 +501,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
-                dsm($show->nid .' ' . $process_start);
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
@@ -514,6 +513,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     }
                     else {
                       $temp_start = $next_start;
+                      $show_completion = $temp_start + $show->field_om_show_duration['und'][0]['value'];
+                      if ($show_completion + $spacer > $gap['end']) {
+                        continue;
+                      }
                     }
                     $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
