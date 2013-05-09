@@ -498,7 +498,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               }
               $process_start = $mini_gap['start'];
               // @TODO if this is first gap it could be less than 30 minutes
-              $next_start = $mini_gap['start'] + 1800;
+              // use seconds_to_end to find next_start
+              //$next_start = $mini_gap['start'] + 1800;
+              $next_start = ($process_start - ($process_start % 1800)) + 1800;
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
