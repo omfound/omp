@@ -298,6 +298,7 @@ function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
+  //$steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
@@ -500,38 +501,42 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
-                // If a show is longer than 30 min allow it an opportunity to be scheduled.
-                if ($show_completion + $spacer <= $gap['end'] && $show->field_om_show_duration['und'][0]['value'] > 1800) {
-                  $temp_start = 0;
-                  $temp_end = 0;
-                  // If this is not the first thing in a 30 min gap, start this show at the next 30 min. gap.
-                  if ($process_start % 1800 != 0) {
-                    $temp_start = $process_start;
+                // If a show is less than the end of the gap
+                if ($show_completion + $spacer <= $gap['end']) {
+                  // If a show is longer than 30 min allow it an opportunity to be scheduled.
+                  if ($show->field_om_show_duration['und'][0]['value'] > 1800) {
+                    $temp_start = 0;
+                    $temp_end = 0;
+                    // If this is not the first thing in a 30 min gap, start this show at the next 30 min. gap.
+                    if ($process_start % 1800 == 0) {
+                      $temp_start = $process_start;
+                    }
+                    else {
+                      $temp_start = $next_start;
+                    }
+                    $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    // Adult hours check
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
+                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
+                      $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                      $next_start = $process_start;
+                      $used = $rank;
+                      unset($timeslot->om_timeslot_showlist[$rank]);
+                    }
                   }
+                  // Otherwise shchedule shows < 30 min
                   else {
-                    $temp_start = $next_start;
-                  }
-                  $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
-                   // Adult hours check
-                  $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
-                  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
-                  if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
-                    $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
-                    $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
-                    $used = $rank;
-                    unset($timeslot->om_timeslot_showlist[$rank]);
-                  }
-                }
-                // Otherwise shchedule shows < 30 min
-                else if ($show_completion + $spacer <= $mini_gap['end']) {
-                  // Adult hours check
-                  $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
-                  $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
-                  if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
-                    $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
-                    $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
-                    $used = $rank;
-                    unset($timeslot->om_timeslot_showlist[$rank]);
+                    // Adult hours check
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
+                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
+                      $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
+                      $used = $rank;
+                      unset($timeslot->om_timeslot_showlist[$rank]);
+                    }
                   }
                 }
                 // If we are unable to schedule X amount of shows from the rule divert to station branding instead if the option is selected.

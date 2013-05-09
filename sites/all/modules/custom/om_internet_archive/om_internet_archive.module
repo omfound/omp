@@ -44,12 +44,9 @@ function internet_archive_item_from_file_url($url) {
  *   Get all derivatives.
  */
 class internetArchiveDerivativeHandler {
-  private $url_stem;
   public $item;
   public function __construct() {
     $this->url_stem = "http://archive.org/details";
-    $this->ch = curl_init();
-    curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
   }
   public function set_item($item) {
     $this->item = $item;
@@ -72,7 +69,7 @@ class internetArchiveDerivativeHandler {
     if (isset($this->derivatives['files'])) {
       foreach ($this->derivatives['files'] AS $key => $derivative) {
         if (is_numeric(strpos($key, $extension))) {
-          return "http://archive.org/download/" . $this->item . '/' . $key;
+          return "http://archive.org/download" . $this->item . $key;
         }
       }
     }
@@ -80,6 +77,8 @@ class internetArchiveDerivativeHandler {
   }
   private function make_curl_request() {
     $complete_path = $this->url_stem . '/' . $this->item . '?output=json';
+    $this->ch = curl_init();
+    curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($this->ch, CURLOPT_URL, $complete_path);
     $output = curl_exec($this->ch);
     $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
