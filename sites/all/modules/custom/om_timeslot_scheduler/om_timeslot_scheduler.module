@@ -423,6 +423,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             // $process_start is the place holder for moving forward.
             $process_start = $gap['start'];
             $process_end = $gap['end'];
+            // START Section 1: Set up Leaders and Trailers for Time Slot
             // If this gap is the beginning of a timeslot and there is a leader value schedule the leader
             if ($gap['start'] == $date['value'] && isset($timeslot->field_om_timeslot_leader['und'][0]['nid'])) {
               $show = node_load($timeslot->field_om_timeslot_leader['und'][0]['nid']);
@@ -445,8 +446,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($start, $gap['end'], $show);
               }
             }
+            // End Section 1
             // Begin normal scheduling.
             // If the gap is > 30 min in length
+            // START Section 2: Break Long Gaps into Smaller 30 min gaps
             $gap_parts = array();
             if ($gap['end'] - $gap['start'] > 1800) {
               // Figure out how many half hours are in this gap.
@@ -485,6 +488,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }
             // Always modify the start to be $process_start in case there is a leader.
             $gap_parts[0]['start'] = $process_start;
+            // END Section 2 break gap into smaller gaps
+            // START Section 3 Schedule Assembly
             foreach($gap_parts AS $gap_key => $mini_gap) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
@@ -492,6 +497,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 continue;
               }
               $process_start = $mini_gap['start'];
+              // @TODO if this is first gap it could be less than 30 minutes
               $next_start = $mini_gap['start'] + 1800;
               // Begin normal scheduling...
               $used = 0;
@@ -504,6 +510,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
+                  // START Section 3.1: Schedule Show gt 30m
                   if ($show->field_om_show_duration['und'][0]['value'] > 1800) {
                     $temp_start = 0;
                     $temp_end = 0;
@@ -531,6 +538,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       unset($timeslot->om_timeslot_showlist[$rank]);
                     }
                   }
+                  // START Section 3.2: Schedule Show lt 30m
                   // Otherwise shchedule shows < 30 min
                   else {
                     if ($show_completion + $spacer > $mini_gap['end']) {
@@ -548,6 +556,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   }
                 }
                 // If we are unable to schedule X amount of shows from the rule divert to station branding instead if the option is selected.
+                // START Section 3.3 station branding
                 // @TODO need a config here.
                 if ($rank - $used > 8 && variable_get('om_timeslot_scheduler_branding', 0)) {
                   $rule_name = variable_get('om_timeslot_scheduler_branding_rule', 'station_branding_scheduling_rule');
