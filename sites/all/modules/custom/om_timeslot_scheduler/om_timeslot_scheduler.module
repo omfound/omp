@@ -416,6 +416,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
+            if ($timeslot->nid == 29261) {
+              dsm($timeslot);
+            }
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
         if ($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) {
@@ -485,9 +488,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }
             // Always modify the start to be $process_start in case there is a leader.
             $gap_parts[0]['start'] = $process_start;
-            if ($timeslot->nid == 29261) {
-              dsm($gap_parts);
-            }
             foreach($gap_parts AS $gap_key => $mini_gap) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
