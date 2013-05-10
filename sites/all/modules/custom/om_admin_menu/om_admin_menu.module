@@ -93,6 +93,61 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Content Administrator')),
     '#href' => 'admin/structure/menu/manage/main-menu',
   );
+
+  //Reservations Administrators
+  $content['menu']['reservations'] = array(
+    '#title' => t('Reservations'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'administer_reservations',
+  );
+  $content['menu']['reservations']['view_products'] = array(
+    '#title' => t('View Reservation Products'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/products/list',
+      '#options' => array(
+        'query' => array('sku' => '', 'type' => 'reservable-product'),
+      ),
+  );
+  $content['menu']['reservations']['add_product'] = array(
+    '#title' => t('Add Reservation Product'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/products/add/reservable-product',
+  );
+  $content['menu']['reservations']['view_product_displays'] = array(
+    '#title' => t('Add Reservation Display'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'node/add/reservable-product-display',
+  );
+  $content['menu']['reservations']['certifications'] = array(
+    '#title' => t('Manage Certifications'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/certifications',
+  );
+  $content['menu']['reservations']['categories'] = array(
+    '#title' => t('Manage Categories'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/product_categories',
+  );
+  $content['menu']['reservations']['categories'] = array(
+    '#title' => t('Manage Categories'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/product_categories',
+  );
+  $content['menu']['reservations']['productterms'] = array(
+    '#title' => t('Manage Product Terms'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/reservable_product',
+  );
+  $content['menu']['reservations']['accessories'] = array(
+    '#title' => t('Manage Accessories'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/reservable_product_accessories',
+  );
+  $content['menu']['reservations']['configuration'] = array(
+    '#title' => t('Reservations Settings'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/cr/settings',
+  );
 }
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
