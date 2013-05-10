@@ -50,17 +50,4 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
 
 abstract class timeslotSchedulingRule {
   abstract function executeRule($timeslot);
-  public function validateShow($show) {
-    if (is_object($show)) {
-      // if a show has a file
-      if (empty($show->field_om_show_broadcast_file['und'][0]['uri'])) {
-        return FALSE;
-      }
-      if (empty($show->field_om_show_duration['und'][0]['value'])) {
-        return FALSE;
-      }
-      // has the right license
-      return TRUE;
-    }
-  }
 }

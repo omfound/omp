@@ -628,7 +628,6 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations, 
 
     // #TODO replace with drupal_write_record
     $process = om_timeslot_scheduler_write_record('om_timeslot_scheduler_process', $process_record);
-    dsm($results['run']['timeslots']);
     // Add cache records.
     foreach ($results['run']['timeslots'] AS $key => $timeslot) {
       if (!empty($timeslot->schedule)) {
