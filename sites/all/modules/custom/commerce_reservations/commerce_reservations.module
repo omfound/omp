@@ -8,6 +8,18 @@
 include_once('commerce_reservations.features.inc');
 
 /*
+ * Implements hook_permission()
+ */
+function commerce_reservations_permission() {
+  return array(
+    'administer commerce reservations' => array(
+      'title' => t('Administer commerce reservations'),
+      'description' => t('Access configuration settings for commerce reservations'),
+    ),
+  );
+}
+
+/*
  * Implements hook_form_FORM_ID_alter()
  */
 
@@ -130,14 +142,14 @@ function commerce_reservations_menu(){
   $items['admin/commerce/cr/settings'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_settings_form'),
-    'access arguments' => array('administer content'),
+    'access arguments' => array('administer commerce reservations'),
     'title' => t('Commerce Reservations Settings'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['cr/missing-accessories-confirm/%/%'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('missing_accessories_confirm', 2, 3),
-    'access arguments' => array('administer content'),
+    'access arguments' => array('administer commerce reservations'),
     'type' => MENU_CALLBACK,
   );
   $items['closed_times'] = array(
