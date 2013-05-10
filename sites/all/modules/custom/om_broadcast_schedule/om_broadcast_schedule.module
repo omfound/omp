@@ -287,7 +287,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
   }
-
+  dsm($context['results']);
   $context['message'] = t('Match Airings on Drupal site.');
 }
 
