@@ -528,7 +528,7 @@ function om_broadcast_schedule_airing_node_save(stdClass $node) {
 /**
  * Clone of node_delete_multiple without hooks
  */
-function om_broadcast_schedule_airing_node_delete_multiple($nids); {
+function om_broadcast_schedule_airing_node_delete_multiple($nids) {
   if (is_numeric($nids)) {
     $nids = array($nids);
   }
