@@ -282,6 +282,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $query->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
   $query->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
   $result = $query->execute();
+  dpq($query);
   while($row = $result->fetchAssoc()) {
     if (!in_array($row['entity_id'], $safe)) {
       $context['results']['delete_airings'][] = $row['entity_id'];
