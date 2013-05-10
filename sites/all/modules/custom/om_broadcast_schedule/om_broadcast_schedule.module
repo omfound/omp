@@ -259,10 +259,10 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
     foreach($context['results']['airing_values'] AS $airing) {
       $matched = FALSE;
       $query = db_select('field_data_field_om_airing_guid', 'uid');
-      $query->join('taxonomy_index', 'term_node', 'uid.entity_id=term_node.nid');
+      $query->join('field_data_field_om_airing_channel', 'airing_channel', 'uid.entity_id=airing_channel.entity_id');
       $query->fields('uid', array('entity_id'));
       $query->condition('field_om_airing_guid_value', $airing['uid'], '=');
-      $query->condition('tid', $context['results']['run_info']['channel_tid'], '=');
+      $query->condition('field_om_airing_channel_tid', $context['results']['run_info']['channel_tid'], '=');
       $result = $query->execute();
       while($row = $result->fetchAssoc()) {
         $matched = TRUE;
@@ -282,13 +282,11 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $query->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
   $query->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
   $result = $query->execute();
-  dpq($query);
   while($row = $result->fetchAssoc()) {
     if (!in_array($row['entity_id'], $safe)) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
   }
-  dsm($context['results']);
   $context['message'] = t('Match Airings on Drupal site.');
 }
 
