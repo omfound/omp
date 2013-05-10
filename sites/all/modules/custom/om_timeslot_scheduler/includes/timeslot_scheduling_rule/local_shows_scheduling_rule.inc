@@ -6,7 +6,7 @@ class localShowsSchedulingRule extends timeslotSchedulingRule {
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
     // These two lines specific to Local Show Rule.
-    $query->join('field_data_field_om_locally_produced', 'local', 'local.entity=n.nid');
+    $query->join('field_data_field_om_locally_produced', 'local', 'local.entity_id=n.nid');
     $query->condition('field_om_locally_produced_value', 1, '=');
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
