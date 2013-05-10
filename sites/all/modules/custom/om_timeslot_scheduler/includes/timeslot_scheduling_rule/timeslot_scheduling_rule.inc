@@ -45,6 +45,17 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
+    'locally_produced_shows_scheduling_rule' => array(
+      'title' => t('Locally Produced Station Content'),
+      'description' => t("Selects only shows marked as locally produced content."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'local_shows_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'localShowsSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
   );
 }
 
