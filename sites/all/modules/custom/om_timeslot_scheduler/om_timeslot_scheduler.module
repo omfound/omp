@@ -416,6 +416,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
+    $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
         if ($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) {
@@ -583,7 +584,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }// end foreach micro gap
           }// end foreach gap
           // Reset rule -- call previous step again.
-          _om_timeslot_scheduler_implement_rules($context);
+          if ($timeslot_schedule_change <= count($timeslot->schedule)) {
+            _om_timeslot_scheduler_implement_rules($context);
+          }
+          $timeslot_schedule_change = count($timeslot->schedule);
         }// end if we should use this range
       }// end foreach date range in timeslots
     }// end if this ts has a showlist
