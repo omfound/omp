@@ -1,11 +1,13 @@
 <?php
-class fewestAiredShowsSchedulingRule extends timeslotSchedulingRule {
+class localShowsSchedulingRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
     $shows = array();
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
-    $query->join('field_data_field_om_show_broadcast_file', 'file', 'file.entity_id=n.nid');
+    // These two lines specific to Local Show Rule.
+    $query->join('field_data_field_om_locally_produced', 'local', 'local.entity_id=n.nid');
+    $query->condition('field_om_locally_produced_value', 1, '=');
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
       $query->join('field_data_field_om_theme', 'theme', 'theme.entity_id=n.nid');

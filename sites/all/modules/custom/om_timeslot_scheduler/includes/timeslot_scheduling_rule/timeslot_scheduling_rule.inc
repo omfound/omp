@@ -45,22 +45,20 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
+    'locally_produced_shows_scheduling_rule' => array(
+      'title' => t('Locally Produced Station Content'),
+      'description' => t("Selects only shows marked as locally produced content."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'local_shows_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'localShowsSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
   );
 }
 
 abstract class timeslotSchedulingRule {
   abstract function executeRule($timeslot);
-  public function validateShow($show) {
-    if (is_object($show)) {
-      // if a show has a file
-      if (empty($show->field_om_show_broadcast_file['und'][0]['uri'])) {
-        return FALSE;
-      }
-      if (empty($show->field_om_show_duration['und'][0]['value'])) {
-        return FALSE;
-      }
-      // has the right license
-      return TRUE;
-    }
-  }
 }
