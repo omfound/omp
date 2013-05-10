@@ -180,3 +180,12 @@ function om_admin_menu_paid_memberships() {
 
   return $paid_memberships;
 }
+
+function om_admin_menu_menu_alter(&$items) {
+  // Grant those with "edit terms in [vid]" permission access to list the terms
+  // and add new ones, per vocabulary.
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access callback'] = 'taxonomy_term_edit_access';
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access arguments'] = array(3);
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access callback'] = 'taxonomy_term_edit_access';
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access arguments'] = array(3);
+}
