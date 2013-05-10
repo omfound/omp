@@ -106,6 +106,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       'CrawlText'   => '', //string</CrawlText>
       'CrawlLength' => 0, //int</CrawlLength>
     );
+    dsm($params);
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {
       return array('ScheduleID' => $response->AddScheduleEventResult);
