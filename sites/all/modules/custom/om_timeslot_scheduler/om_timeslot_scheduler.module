@@ -397,7 +397,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
       }
     }
     $timeslot->gaps = $gap_set;
-    dsm($gap_set);
     $run['timeslots'][$key] = $timeslot;
   }
 }
@@ -804,31 +803,31 @@ function om_timeslot_scheduler_render_timeslot_rule($timeslot) {
 function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   // Get normal airings
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
-  $query->join('taxonomy_index', 'term_node', 'airing_dates.entity_id=term_node.nid');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->fields('airing_dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->condition('field_om_airing_dates_value', $start, '>=');
   $query->condition('field_om_airing_dates_value2', $end, '<=');
-  $query->condition('tid', $channel_tid, '=');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
   $result = $query->execute();
   $normal = $result->fetchAll();
 
   // Get airings that intrude on the front of the timeslot
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
-  $query->join('taxonomy_index', 'term_node', 'airing_dates.entity_id=term_node.nid');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->condition('field_om_airing_dates_value', $start, '<=');
   $query->condition('field_om_airing_dates_value2', $start, '>');
-  $query->condition('tid', $channel_tid, '=');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
   $result = $query->execute();
   $intruding = $result->fetchAll();
   
   // Get airings that extrude from the end of the timeslot
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
-  $query->join('taxonomy_index', 'term_node', 'airing_dates.entity_id=term_node.nid');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->condition('field_om_airing_dates_value', $end, '<=');
   $query->condition('field_om_airing_dates_value2', $end, '>');
-  $query->condition('tid', $channel_tid, '=');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
   $result = $query->execute();
   $extruding = $result->fetchAll();
   
