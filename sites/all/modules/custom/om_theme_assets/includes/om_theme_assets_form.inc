@@ -12,8 +12,6 @@ function om_theme_assets_admin_form() {
   /**
    * Main banner
    */
-  $form['main_banner_fieldset'] = $fieldset;
-  $form['main_banner_fieldset']['#title'] = t('Main Banner Image');
   $form['main_banner_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Main Banner Image'),
@@ -22,6 +20,8 @@ function om_theme_assets_admin_form() {
   $form['main_banner_help'] = array(
     '#markup' => t('The site\'s main banner image, which links back to the home page. It should be 980px by 200px')
   );
+  $form['main_banner_fieldset'] = $fieldset;
+  $form['main_banner_fieldset']['#title'] = t('Main Banner Image');
   $form['main_banner_fieldset']['theme_banner'] = array(
     '#title' => t('Main Banner'),
     '#type' => 'managed_file',
@@ -31,8 +31,6 @@ function om_theme_assets_admin_form() {
   /**
    * Calls to action
    */
-  $form['call_to_action_fieldset'] = $fieldset;
-  $form['call_to_action_fieldset']['#title'] = t('Call to Action Images');
   $form['call_to_action_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Call to Action Images'),
@@ -41,6 +39,8 @@ function om_theme_assets_admin_form() {
   $form['call_to_action_help'] = array(
     '#markup' => t('Call to action images are the three large images on the front page. These images should drive your users to important pages on your site. Each image upload below is paired with a url. Url should be a valid internal Drupal path like node/471 or about-us. They should be as close as possible to 300px by 190px.')
   );
+  $form['call_to_action_fieldset'] = $fieldset;
+  $form['call_to_action_fieldset']['#title'] = t('Call to Action Images');
   $form['call_to_action_fieldset']['call_to_action_1'] = array(
     '#title' => t('Call to Action 1'),
     '#type' => 'managed_file',
@@ -80,8 +80,6 @@ function om_theme_assets_admin_form() {
   /**
    * Info Tags
    */
-  $form['info_tags_fieldset'] = $fieldset;
-  $form['info_tags_fieldset']['#title'] = t('Info Tags');
   $form['info_tags_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Info Tags'),
@@ -90,6 +88,8 @@ function om_theme_assets_admin_form() {
   $form['info_tags_help'] = array(
     '#markup' => t('Info tags are shorter smaller calls to actions that appear on every page. They should be very concise and to the point. Each info tag is grouped into a highlight, label, link and url. The highlight must be extremely short 1-3 characters like a channel number or "GO". The label is the bold text that appears right of the highlight. The link is the text for the link that goes below the label. The url should be a valid path where the item sends users.')
   );
+  $form['info_tags_fieldset'] = $fieldset;
+  $form['info_tags_fieldset']['#title'] = t('Info Tags');
   $form['info_tags_fieldset']['info_tags_highlight_1'] = array(
     '#title' => t('Info Tag Highlight 1'),
     '#type' => 'textfield',
