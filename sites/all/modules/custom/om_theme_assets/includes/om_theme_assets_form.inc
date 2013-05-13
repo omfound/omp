@@ -14,10 +14,12 @@ function om_theme_assets_admin_form() {
   );
   $form['theme_banner'] = array(
     '#title' => t('Main Banner'),
-    '#description' => t('Main banner image should be 980px by 200px'),
     '#type' => 'managed_file',
     '#default_value' => variable_get('theme_banner', ''),
     '#upload_location' => 'public://theme_assets/',
+  );
+  $form['main_banner_divider'] = array(
+    '#markup' => '<div class="divider"><div class="inner"></div></div>'
   );
   /**
    * Calls to action
@@ -62,6 +64,9 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 3'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_3', ''),
+  );
+  $form['main_banner_divider'] = array(
+    '#markup' => '<div class="divider"><div class="inner"></div></div>'
   );
   return system_settings_form($form);
 }
