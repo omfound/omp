@@ -125,35 +125,41 @@ function om_theme_assets_callout_block_content() {
   $cta_1_fid = variable_get('call_to_action_1', FALSE);
   if (is_numeric($cta_1_fid)) {
     $cta_1_file = file_load($cta_1_fid);
-    $cta_1_image = image_style_url('300x', $cta_1_file->uri);
-    $output[] = array(
-      'admin_title' => 'Callout Block 1',
-      'block_title' => variable_get('call_to_action_title_1', ''),
-      'image_path' => $cta_1_image,
-      'url' => variable_get('call_to_action_url_1', '')
-    );
+    if (is_object($cta_1_file)) {
+      $cta_1_image = image_style_url('300x', $cta_1_file->uri);
+      $output[] = array(
+        'admin_title' => 'Callout Block 1',
+        'block_title' => variable_get('call_to_action_title_1', ''),
+        'image_path' => $cta_1_image,
+        'url' => variable_get('call_to_action_url_1', '')
+      );
+    }
   }
   $cta_2_fid = variable_get('call_to_action_2', FALSE);
   if (is_numeric($cta_2_fid)) {
     $cta_2_file = file_load($cta_2_fid);
+    if (is_object($cta_2_file)) {
     $cta_2_image = image_style_url('300x', $cta_2_file->uri);
-    $output[] = array(
-      'admin_title' => 'Callout Block 2',
-      'block_title' => variable_get('call_to_action_title_2', ''),
-      'image_path' => $cta_2_image,
-      'url' => variable_get('call_to_action_url_2', '')
-    );
+      $output[] = array(
+        'admin_title' => 'Callout Block 2',
+        'block_title' => variable_get('call_to_action_title_2', ''),
+        'image_path' => $cta_2_image,
+        'url' => variable_get('call_to_action_url_2', '')
+      );
+    }
   }
   $cta_3_fid = variable_get('call_to_action_3', FALSE);
   if (is_numeric($cta_3_fid)) {
     $cta_3_file = file_load($cta_3_fid);
-    $cta_3_image = image_style_url('300x', $cta_3_file->uri);
-    $output[] = array(
-      'admin_title' => 'Callout Block 3',
-      'block_title' => variable_get('call_to_action_title_3', ''),
-      'image_path' => $cta_2_image,
-      'url' => variable_get('call_to_action_url_3', '')
-    );
+    if (is_object($cta_3_fid)) {
+      $cta_3_image = image_style_url('300x', $cta_3_file->uri);
+      $output[] = array(
+        'admin_title' => 'Callout Block 3',
+        'block_title' => variable_get('call_to_action_title_3', ''),
+        'image_path' => $cta_2_image,
+        'url' => variable_get('call_to_action_url_3', '')
+      );
+    }
   }
   return $output;
 }
