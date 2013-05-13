@@ -25,7 +25,8 @@ function om_theme_assets_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_theme_assets_admin_form'),
     'access arguments' => array('manage theme assets'),
-    'file' => 'includes/om_theme_assets_form.inc'
+    'file' => 'includes/om_theme_assets_form.inc',
+    'type' => MENU_NORMAL_ITEM
   );
   return $items;
 }
