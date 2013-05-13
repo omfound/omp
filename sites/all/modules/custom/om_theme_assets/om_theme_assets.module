@@ -170,11 +170,10 @@ function om_theme_assets_callout_block_content() {
  * Helper function to return action items.
  */
 function om_theme_assets_action_item_content() {
-  $theme_path = drupal_get_path('theme', 'openmedia');
-  global $base_path;
   $output = array();
   for ($i = 1; $i <= 4; $i ++ ) {
     $highlight = variable_get('info_tags_highlight_' . $i, '');
+    dsm($highlight);
     if (!empty($highlight)) {
       $ouput[] = array(
         'admin_title' => 'Action Item Block ' . $i,
