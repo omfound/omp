@@ -1892,6 +1892,10 @@ function drupal_get_title() {
  *   The updated title of the current page.
  */
 function drupal_set_title($title = NULL, $output = CHECK_PLAIN) {
+  if($title == 'View/Update') {
+    watchdog('brian', $title);
+    watchdog('brian', '<pre>'.print_r(debug_backtrace()).'</pre>');
+  }
   $stored_title = &drupal_static(__FUNCTION__);
 
   if (isset($title)) {
