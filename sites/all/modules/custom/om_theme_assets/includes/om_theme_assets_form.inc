@@ -198,13 +198,13 @@ function om_theme_assets_admin_form() {
   );
   $form['social_network_buttons_fieldset'] = $fieldset;
   $form['social_network_buttons_fieldset']['#title'] = t('Social Media');
-  $form['social_network_buttons_fieldset']['facebook'] =  array(
+  $form['social_network_buttons_fieldset']['facebook_url'] =  array(
     '#title' => t('Facebook'),
     '#description' => t('Facebook url like http://www.facebook.com/pages/Open-Media-Foundation/209082215492?fref=ts'),
     '#type' => 'textfield',
     '#default_value' => variable_get('facebook_url', ''),
   );
-  $form['social_network_buttons_fieldset']['twitter'] =  array(
+  $form['social_network_buttons_fieldset']['twitter_url'] =  array(
     '#title' => t('Twitter'),
     '#description' => t('Twitter url like http://twitter.com/OMFoundation'),
     '#type' => 'textfield',
