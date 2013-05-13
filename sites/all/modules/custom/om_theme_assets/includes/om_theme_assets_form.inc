@@ -195,7 +195,36 @@ function om_theme_assets_admin_form() {
     '#type' => 'textfield',
     '#default_value' => variable_get('twitter_url', ''),
   );
-  
+  /**
+   * Adding admin section
+   */
+  if (user_access('admin omp theme')) {
+    $form['admin_theme_omp_header'] = array(
+      '#prefix' => '<h2>',
+      '#markup' => t('Open Media Theme Administration'),
+      '#suffix' => '</h2>'
+    );
+    $form['admin_theme_omp_help'] = array(
+      '#markup' => t('Various theme settings like color scheme. Colors should be valid hexadecimal values with "#" symbols.')
+    );
+    $form['admin_theme_omp_fieldset'] = $fieldset;
+    $form['admin_theme_omp_fieldset']['#title'] = t('Admin OMP Theme');
+    $form['admin_theme_omp_fieldset']['color_primary'] = array(
+      '#title' => t('Primary Theme Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('color_primary', ''),
+    );
+    $form['admin_theme_omp_fieldset']['color_secondary'] = array(
+      '#title' => t('Secondary Theme Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('color_secondary', ''),
+    );
+    $form['admin_theme_omp_fieldset']['color_tertiary'] = array(
+      '#title' => t('Tertiary Theme Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('color_tertiary', ''),
+    );
+  }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
 }
