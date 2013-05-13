@@ -65,7 +65,7 @@ function om_theme_assets_admin_form() {
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_3', ''),
   );
-  $form['main_banner_divider'] = array(
+  $form['call_to_action_divider'] = array(
     '#markup' => '<div class="divider"><div class="inner"></div></div>'
   );
   return system_settings_form($form);
