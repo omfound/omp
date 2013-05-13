@@ -1,5 +1,36 @@
 <?php
 /**
+ * Implements hook_permission
+ */
+function om_theme_assets_permission() {
+  return array(
+    'manage theme assets' => array(
+      'title' => t('Upload and modify assets for the OMP theme.'),
+      'description' => t('Allows users to upload and delete files and manage text/url configuration for OMP theme assets.'),
+    ),
+    'admin omp theme' => array(
+      'title' => t('Administer the OMP theme'),
+      'description' => t('Allows users to change the color scheme and manage other low level functionality of the OMP theme.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_theme_assets_menu() {
+  $items = array();
+  $items['om_theme_assets'] = array(
+    'title' => t('Administer Open Media Theme Assets'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_theme_assets_admin_form'),
+    'access arguments' => array('manage theme assets'),
+    'file' => 'includes/om_theme_assets_form.inc'
+  );
+  return $items;
+}
+
+/**
  * Implements hook_block_info
  */
 function om_theme_assets_block_info() {
