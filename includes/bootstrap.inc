@@ -1893,10 +1893,8 @@ function drupal_get_title() {
  */
 function drupal_set_title($title = NULL, $output = CHECK_PLAIN) {
   if($title == 'View/Update') {
-    print 'title: '.$title.'<br />';
-    print '<pre>';
-    print_r(debug_backtrace());
-    print '</pre>';
+    watchdog('brian', $title);
+    watchdog('brian', '<pre>'.print_r(debug_backtrace()).'</pre>');
   }
   $stored_title = &drupal_static(__FUNCTION__);
 
