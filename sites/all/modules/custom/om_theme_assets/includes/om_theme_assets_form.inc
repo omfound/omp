@@ -2,8 +2,17 @@
 
 function om_theme_assets_admin_form() {
   /**
+   * Fieldset factory
+   */
+  $fieldset = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE
+  );
+  /**
    * Main banner
    */
+  $form['main_banner_fieldset'] = $fieldset;
   $form['main_banner_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Main Banner Image'),
@@ -12,7 +21,7 @@ function om_theme_assets_admin_form() {
   $form['main_banner_help'] = array(
     '#markup' => t('The site\'s main banner image, which links back to the home page. It should be 980px by 200px')
   );
-  $form['theme_banner'] = array(
+  $form['main_banner_fieldset']['theme_banner'] = array(
     '#title' => t('Main Banner'),
     '#type' => 'managed_file',
     '#default_value' => variable_get('theme_banner', ''),
@@ -24,45 +33,46 @@ function om_theme_assets_admin_form() {
   /**
    * Calls to action
    */
+  $form['call_to_action_fieldset'] = $fieldset;
   $form['call_to_action_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Call to Action Images'),
     '#suffix' => '</h2>'
   );
   $form['call_to_action_help'] = array(
-    '#markup' => t('Call to action images are the three large images on the front page. These images should drive your users to important pages on your site. Each image upload below is paired with a url. They should be as close as possible to 300px by 190px.')
+    '#markup' => t('Call to action images are the three large images on the front page. These images should drive your users to important pages on your site. Each image upload below is paired with a url. Url should be a valid internal Drupal path like node/471 or about-us. They should be as close as possible to 300px by 190px.')
   );
-  $form['call_to_action_1'] = array(
+  $form['call_to_action_fieldset']['call_to_action_1'] = array(
     '#title' => t('Call to Action 1'),
     '#type' => 'managed_file',
     '#default_value' => variable_get('call_to_action_1', ''),
     '#upload_location' => 'public://theme_assets/',
   );
-  $form['call_to_action_url_1'] = array(
+  $form['call_to_action_fieldset']['call_to_action_url_1'] = array(
     '#title' => t('Call to Action URL 1'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_1', ''),
     '#element_validate' => array('_om_theme_assets_url_validate'),
   );
-  $form['call_to_action_2'] = array(
+  $form['call_to_action_fieldset']['call_to_action_2'] = array(
     '#title' => t('Call to Action 2'),
     '#type' => 'managed_file',
     '#default_value' => variable_get('call_to_action_2', ''),
     '#upload_location' => 'public://theme_assets/',
   );
-  $form['call_to_action_url_2'] = array(
+  $form['call_to_action_fieldset']['call_to_action_url_2'] = array(
     '#title' => t('Call to Action URL 2'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_2', ''),
     '#element_validate' => array('_om_theme_assets_url_validate'),
   );
-  $form['call_to_action_3'] = array(
+  $form['call_to_action_fieldset']['call_to_action_3'] = array(
     '#title' => t('Call to Action 3'),
     '#type' => 'managed_file',
     '#default_value' => variable_get('call_to_action_3', ''),
     '#upload_location' => 'public://theme_assets/',
   );
-  $form['call_to_action_url_3'] = array(
+  $form['call_to_action_fieldset']['call_to_action_url_3'] = array(
     '#title' => t('Call to Action URL 3'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_3', ''),
@@ -70,6 +80,98 @@ function om_theme_assets_admin_form() {
   );
   $form['call_to_action_divider'] = array(
     '#markup' => '<div class="divider"><div class="inner"></div></div>'
+  );
+  /**
+   * Info Tags
+   */
+  $form['info_tags_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Info Tags'),
+    '#suffix' => '</h2>'
+  );
+  $form['info_tags_help'] = array(
+    '#markup' => t('Info tags are shorter smaller calls to actions that appear on every page. They should be very concise and to the point. Each info tag is grouped into a highlight, label, link and url. The highlight must be extremely short 1-3 characters like a channel number or "GO". The label is the bold text that appears right of the highlight. The link is the text for the link that goes below the label. The url should be a valid path where the item sends users.')
+  );
+  $form['info_tags_fieldset'] = $fieldset;
+  $form['info_tags_fieldset']['info_tags_highlight_1'] = array(
+    '#title' => t('Info Tag Highlight 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_highlight_1', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_label_1'] = array(
+    '#title' => t('Info Tag Label 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_label_1', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_link_1'] = array(
+    '#title' => t('Info Tag Link Text 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_link_1', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_url_1'] = array(
+    '#title' => t('Info Tag URL 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_url_1', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_highlight_2'] = array(
+    '#title' => t('Info Tag Highlight 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_highlight_2', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_label_2'] = array(
+    '#title' => t('Info Tag Label 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_label_2', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_link_2'] = array(
+    '#title' => t('Info Tag Link Text 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_link_2', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_url_2'] = array(
+    '#title' => t('Info Tag URL 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_url_2', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_highlight_3'] = array(
+    '#title' => t('Info Tag Highlight 3'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_highlight_3', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_label_3'] = array(
+    '#title' => t('Info Tag Label 3'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_label_3', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_link_3'] = array(
+    '#title' => t('Info Tag Link Text 3'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_link_3', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_url_3'] = array(
+    '#title' => t('Info Tag URL 3'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_url_3', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_highlight_4'] = array(
+    '#title' => t('Info Tag Highlight 4'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_highlight_4', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_label_4'] = array(
+    '#title' => t('Info Tag Label 4'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_label_4', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_link_4'] = array(
+    '#title' => t('Info Tag Link Text 4'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_link_4', ''),
+  );
+  $form['info_tags_fieldset']['info_tags_url_4'] = array(
+    '#title' => t('Info Tag URL 4'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('info_tags_url_4', ''),
   );
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
@@ -93,6 +195,18 @@ function _om_theme_assets_url_validate($element, &$form_state) {
   }
 }
 
+/** 
+ * Submit handler for saving files.
+ */
 function om_theme_assets_admin_form_submit(&$form, &$form_state) {
-  
+  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3');
+  foreach ($file_elements AS $file_field) {
+    if (!empty($form_state['values'][$file_field])) {
+      global $user;
+      $file = file_load($form_state['values'][$file_field]);
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      file_usage_add($file, 'om_theme_assets', $file_field, $user->uid);
+    }
+  }
 }
