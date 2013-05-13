@@ -42,7 +42,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 1'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_1', ''),
-    '#element_validate' => '_om_theme_assets_url_validate',
+    '#element_validate' => array('_om_theme_assets_url_validate'),
   );
   $form['call_to_action_2'] = array(
     '#title' => t('Call to Action 2'),
@@ -54,7 +54,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 2'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_2', ''),
-    '#element_validate' => '_om_theme_assets_url_validate',
+    '#element_validate' => array('_om_theme_assets_url_validate'),
   );
   $form['call_to_action_3'] = array(
     '#title' => t('Call to Action 3'),
@@ -66,7 +66,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 3'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_3', ''),
-    '#element_validate' => '_om_theme_assets_url_validate',
+    '#element_validate' => array('_om_theme_assets_url_validate'),
   );
   $form['call_to_action_divider'] = array(
     '#markup' => '<div class="divider"><div class="inner"></div></div>'
