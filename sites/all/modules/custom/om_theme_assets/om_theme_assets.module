@@ -81,7 +81,7 @@ function om_theme_assets_block_view($delta = "") {
   }
   if (is_numeric(stripos($delta, 'om_callout_block_'))) {
     $index = str_replace('om_callout_block_', '', $delta);
-    dsm($index);
+    dsm( $callout_blocks[$index]);
     $callout_blocks = om_theme_assets_callout_block_content();
     if (!empty($callout_blocks[$index])) {
       $options = array('block_info' => $callout_blocks[$index]);
