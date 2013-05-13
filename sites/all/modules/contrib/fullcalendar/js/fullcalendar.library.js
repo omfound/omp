@@ -31,10 +31,6 @@ Drupal.fullcalendar.fullcalendar = function (dom_id) {
     }
   }
 
-  this.$options.disableResizing = false;
-
-  console.log(this.$options);
-
   this.$calendar.find('.fullcalendar').once().fullCalendar(this.$options);
 
   $(this.$calendar).delegate('.fullcalendar-status-close', 'click', function () {
