@@ -56,6 +56,17 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
+    'spanish_language_shows_scheduling_rule' => array(
+      'title' => t('Spanish Language Content'),
+      'description' => t("Selects only shows marked as spanish language content."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'spanish_language_shows_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'spanishLanguageShowsSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
   );
 }
 
