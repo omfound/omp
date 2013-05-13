@@ -173,8 +173,8 @@ function om_theme_assets_action_item_content() {
   $output = array();
   for ($i = 1; $i <= 4; $i ++ ) {
     $highlight = variable_get('info_tags_highlight_' . $i, '');
-    dsm($highlight);
     if (!empty($highlight)) {
+      dsm('we make it here');
       $ouput[] = array(
         'admin_title' => 'Action Item Block ' . $i,
         'bubble_text' => $highlight,
