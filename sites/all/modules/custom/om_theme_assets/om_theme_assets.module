@@ -179,7 +179,7 @@ function om_theme_assets_action_item_content() {
         'bubble_text' => $highlight,
         'black_text' => variable_get('info_tags_label_' . $i, ''),
         'blue_text' => variable_get('info_tags_link_' . $i, ''),
-        'url' => variable_get('info_tags_link_' . $i, ''),
+        'url' => variable_get('info_tags_url_' . $i, ''),
         'position' => '',
       );
     }
