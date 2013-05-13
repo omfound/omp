@@ -3539,7 +3539,7 @@ function AgendaView(element, calendar, viewName) {
 					var d1 = cellDate(origCell);
           //HACK: BRIAN: Disable select drag
 					//var d2 = cellDate(cell);
-          var d2 = cellDate(origcell);
+          var d2 = cellDate(origCell);
 					dates = [
 						d1,
 						addMinutes(cloneDate(d1), opt('slotMinutes')),
