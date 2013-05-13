@@ -122,7 +122,7 @@ function om_theme_assets_callout_block_content() {
   $output = array();
   $theme_path = drupal_get_path('theme', 'openmedia');
   global $base_path;
-  $cta_1_fid = variable_get('call_to_action_1', '');
+  $cta_1_fid = variable_get('call_to_action_1', FALSE);
   if (is_numeric($cta_1_fid)) {
     $cta_1_file = file_load($cta_1_fid);
     $cta_1_image = image_style_url('300x', $cta_1_file->uri);
@@ -133,7 +133,7 @@ function om_theme_assets_callout_block_content() {
       'url' => variable_get('call_to_action_url_1', '')
     );
   }
-  $cta_2_fid = variable_get('call_to_action_2', '');
+  $cta_2_fid = variable_get('call_to_action_2', FALSE);
   if (is_numeric($cta_2_fid)) {
     $cta_2_file = file_load($cta_2_fid);
     $cta_2_image = image_style_url('300x', $cta_2_file->uri);
@@ -144,7 +144,7 @@ function om_theme_assets_callout_block_content() {
       'url' => variable_get('call_to_action_url_2', '')
     );
   }
-  $cta_3_fid = variable_get('call_to_action_3', '');
+  $cta_3_fid = variable_get('call_to_action_3', FALSE);
   if (is_numeric($cta_3_fid)) {
     $cta_3_file = file_load($cta_3_fid);
     $cta_3_image = image_style_url('300x', $cta_3_file->uri);
