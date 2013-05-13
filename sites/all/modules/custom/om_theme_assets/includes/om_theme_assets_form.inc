@@ -84,7 +84,7 @@ function _om_theme_assets_url_validate($element, &$form_state) {
       $message = t('!name must be an internal path (i.e. Drupal path like about-us or node/371).', array('!name' => $element['#title']));
       form_error($element, $message);
     }
-    $item_alias = drupal_get_path_alias($element['#value']);
+    $item_alias = drupal_get_normal_path($element['#value']);
     $item = menu_get_item($item_alias);
     if (empty($item)) {
       $message = t('!name must be a valid internal path (i.e. Drupal path like about-us or node/371).', array('!name' => $element['#title']));
