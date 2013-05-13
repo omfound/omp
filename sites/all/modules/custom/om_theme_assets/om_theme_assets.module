@@ -74,8 +74,10 @@ function om_theme_assets_block_view($delta = "") {
       // Glom all action items into one block.
       $blocks['content'] = '';
       $action_items = om_theme_assets_action_item_content();
-      foreach ($action_items AS $action_item) {
-        $blocks['content'] .= theme('om_action_item', $action_item);
+      if (!empty($action_items)) {
+        foreach ($action_items AS $action_item) {
+          $blocks['content'] .= theme('om_action_item', $action_item);
+        }
       }
       break;
   }
@@ -166,7 +168,6 @@ function om_theme_assets_callout_block_content() {
 
 /**
  * Helper function to return action items.
- *   @todo make these editable from the ui.
  */
 function om_theme_assets_action_item_content() {
   $theme_path = drupal_get_path('theme', 'openmedia');
@@ -190,6 +191,7 @@ function om_theme_assets_action_item_content() {
   if (!empty($output)) {
     $output[count($output) - 1]['position'] = 'last';
   }
+  dsm($output);
   return $output;
 }
 
