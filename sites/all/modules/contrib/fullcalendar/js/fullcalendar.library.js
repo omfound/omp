@@ -31,8 +31,8 @@ Drupal.fullcalendar.fullcalendar = function (dom_id) {
     }
   }
 
-  console.log(this.$options);
   this.$options.eventResize = false;
+  console.log(this.$options);
 
   this.$calendar.find('.fullcalendar').once().fullCalendar(this.$options);
 
