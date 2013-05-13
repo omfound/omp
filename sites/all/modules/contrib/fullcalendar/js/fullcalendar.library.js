@@ -14,7 +14,6 @@ Drupal.fullCalendar = Drupal.fullcalendar;
 
 Drupal.fullcalendar.fullcalendar = function (dom_id) {
   this.dom_id = dom_id;
-  alert(dom_id);
   this.$calendar = $(dom_id);
   this.$options = {};
   this.navigate = false;
@@ -31,6 +30,10 @@ Drupal.fullcalendar.fullcalendar = function (dom_id) {
       $.extend(this.$options, $plugins[$plugin].options(this, Drupal.settings.fullcalendar[this.dom_id]));
     }
   }
+
+  this.$options.disableResizing = false;
+
+  console.log(this.$options);
 
   this.$calendar.find('.fullcalendar').once().fullCalendar(this.$options);
 
