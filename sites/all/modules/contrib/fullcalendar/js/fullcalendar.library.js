@@ -14,7 +14,6 @@ Drupal.fullCalendar = Drupal.fullcalendar;
 
 Drupal.fullcalendar.fullcalendar = function (dom_id) {
   this.dom_id = dom_id;
-  alert(dom_id);
   this.$calendar = $(dom_id);
   this.$options = {};
   this.navigate = false;
