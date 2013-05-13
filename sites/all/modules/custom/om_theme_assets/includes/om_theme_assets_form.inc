@@ -276,4 +276,5 @@ function om_theme_assets_admin_form_submit(&$form, &$form_state) {
       file_usage_add($file, 'om_theme_assets', $file_field, $user->uid);
     }
   }
+  cache_clear_all(NULL, 'cache_block', '*');
 }
