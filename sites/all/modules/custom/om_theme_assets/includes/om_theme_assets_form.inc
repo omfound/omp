@@ -13,6 +13,7 @@ function om_theme_assets_admin_form() {
    * Main banner
    */
   $form['main_banner_fieldset'] = $fieldset;
+  $form['main_banner_fieldset']['#title'] = t('Main Banner Image');
   $form['main_banner_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Main Banner Image'),
@@ -27,13 +28,11 @@ function om_theme_assets_admin_form() {
     '#default_value' => variable_get('theme_banner', ''),
     '#upload_location' => 'public://theme_assets/',
   );
-  $form['main_banner_divider'] = array(
-    '#markup' => '<div class="divider"><div class="inner"></div></div>'
-  );
   /**
    * Calls to action
    */
   $form['call_to_action_fieldset'] = $fieldset;
+  $form['call_to_action_fieldset']['#title'] = t('Call to Action Images');
   $form['call_to_action_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Call to Action Images'),
@@ -78,12 +77,11 @@ function om_theme_assets_admin_form() {
     '#default_value' => variable_get('call_to_action_url_3', ''),
     '#element_validate' => array('_om_theme_assets_url_validate'),
   );
-  $form['call_to_action_divider'] = array(
-    '#markup' => '<div class="divider"><div class="inner"></div></div>'
-  );
   /**
    * Info Tags
    */
+  $form['info_tags_fieldset'] = $fieldset;
+  $form['info_tags_fieldset']['#title'] = t('Info Tags');
   $form['info_tags_header'] = array(
     '#prefix' => '<h2>',
     '#markup' => t('Info Tags'),
@@ -92,7 +90,6 @@ function om_theme_assets_admin_form() {
   $form['info_tags_help'] = array(
     '#markup' => t('Info tags are shorter smaller calls to actions that appear on every page. They should be very concise and to the point. Each info tag is grouped into a highlight, label, link and url. The highlight must be extremely short 1-3 characters like a channel number or "GO". The label is the bold text that appears right of the highlight. The link is the text for the link that goes below the label. The url should be a valid path where the item sends users.')
   );
-  $form['info_tags_fieldset'] = $fieldset;
   $form['info_tags_fieldset']['info_tags_highlight_1'] = array(
     '#title' => t('Info Tag Highlight 1'),
     '#type' => 'textfield',
