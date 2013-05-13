@@ -122,8 +122,6 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
  */
 function om_theme_assets_callout_block_content() {
   $output = array();
-  $theme_path = drupal_get_path('theme', 'openmedia');
-  global $base_path;
   $cta_1_fid = variable_get('call_to_action_1', FALSE);
   if (is_numeric($cta_1_fid)) {
     $cta_1_file = file_load($cta_1_fid);
