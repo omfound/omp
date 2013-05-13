@@ -174,8 +174,7 @@ function om_theme_assets_action_item_content() {
   for ($i = 1; $i <= 4; $i ++ ) {
     $highlight = variable_get('info_tags_highlight_' . $i, '');
     if (!empty($highlight)) {
-      dsm('we make it here');
-      $ouput[] = array(
+      $output[] = array(
         'admin_title' => 'Action Item Block ' . $i,
         'bubble_text' => $highlight,
         'black_text' => variable_get('info_tags_label_' . $i, ''),
@@ -190,7 +189,6 @@ function om_theme_assets_action_item_content() {
   if (!empty($output)) {
     $output[count($output) - 1]['position'] = 'last';
   }
-  dsm($output);
   return $output;
 }
 
