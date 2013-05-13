@@ -5012,7 +5012,8 @@ function SelectionManager() {
 	
 	function reportSelection(startDate, endDate, allDay, ev) {
 		selected = true;
-		trigger('select', null, startDate, endDate, allDay, ev);
+		//trigger('select', null, startDate, endDate, allDay, ev);
+    trigger('select', null, startDate, startDate, allDay, ev);
 	}
 	
 	
