@@ -85,17 +85,7 @@ function om_theme_assets_block_view($delta = "") {
       }
       break;
     case 'om_main_banner':
-      $banner_fid = variable_get('theme_banner', FALSE);
-      if (is_numeric($banner_fid)) {
-        $banner_file = file_load($banner_fid);
-        if (is_object($banner_file)) {
-          $stream_wrapper = file_stream_wrapper_get_instance_by_uri($banner_file->uri);
-          $banner_url = $stream_wrapper->getExternalUrl();
-          $image = "<image src='$banner_url' title='home' alt='main site banner with station's logo' />";
-          $options = array('html' => TRUE);
-          $blocks['content'] = l($image, '<front>', $options);
-        }
-      }
+      $blocks['content'] = om_theme_assets_main_banner();
       break;
   }
   if (is_numeric(stripos($delta, 'om_callout_block_'))) {
@@ -208,6 +198,21 @@ function om_theme_assets_action_item_content() {
     $output[count($output) - 1]['position'] = 'last';
   }
   return $output;
+}
+
+function om_theme_assets_main_banner() {
+  $banner_fid = variable_get('theme_banner', FALSE);
+  if (is_numeric($banner_fid)) {
+    $banner_file = file_load($banner_fid);
+    if (is_object($banner_file)) {
+      $stream_wrapper = file_stream_wrapper_get_instance_by_uri($banner_file->uri);
+      $banner_url = $stream_wrapper->getExternalUrl();
+      $image = "<image src='$banner_url' title='home' alt='main site banner with station's logo' />";
+      $options = array('html' => TRUE);
+      return l($image, '<front>', $options);
+    }
+  }
+  return '';
 }
 
 function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
