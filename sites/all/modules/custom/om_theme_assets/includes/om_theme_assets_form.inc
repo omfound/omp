@@ -170,6 +170,32 @@ function om_theme_assets_admin_form() {
     '#type' => 'textfield',
     '#default_value' => variable_get('info_tags_url_4', ''),
   );
+  /** 
+   * Social Network Buttons
+   */
+  $form['social_network_buttons_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Social Media'),
+    '#suffix' => '</h2>'
+  );
+  $form['social_network_buttons_help'] = array(
+    '#markup' => t('Urls to various social media network sites. Leave blank to hide any network.')
+  );
+  $form['social_network_buttons_fieldset'] = $fieldset;
+  $form['social_network_buttons_fieldset']['#title'] = t('Social Media');
+  $form['social_network_buttons_fieldset']['facebook'] =  array(
+    '#title' => t('Facebook'),
+    '#description' => t('Facebook url like http://www.facebook.com/pages/Open-Media-Foundation/209082215492?fref=ts'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('facebook_url', ''),
+  );
+  $form['social_network_buttons_fieldset']['twitter'] =  array(
+    '#title' => t('Twitter'),
+    '#description' => t('Twitter url like http://twitter.com/OMFoundation'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('twitter_url', ''),
+  );
+  
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
 }
