@@ -91,7 +91,9 @@ function om_theme_assets_block_view($delta = "") {
         if (is_object($banner_file)) {
           $stream_wrapper = file_stream_wrapper_get_instance_by_uri($banner_file->uri);
           $banner_url = $stream_wrapper->getExternalUrl();
-          $blocks['content'] = "<image src='$banner_url' title='home' alt='main site banner with station's logo' />";
+          $image = "<image src='$banner_url' title='home' alt='main site banner with station's logo' />";
+          $options = array('html' => TRUE);
+          $blocks['content'] = l($image, '<front>', $options);
         }
       }
       break;
