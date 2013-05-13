@@ -7,6 +7,7 @@
 Drupal.fullcalendar.plugins.commerce_reservations = {
   options: function (fullcalendar, settings) {
     var options = {}; 
+    options.disableResizing = true;
     options.eventClick = function(event){
       return false;
     }  
