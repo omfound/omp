@@ -42,6 +42,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 1'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_1', ''),
+    '#element_validate' => '_om_theme_assets_url_validate',
   );
   $form['call_to_action_2'] = array(
     '#title' => t('Call to Action 2'),
@@ -53,6 +54,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 2'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_2', ''),
+    '#element_validate' => '_om_theme_assets_url_validate',
   );
   $form['call_to_action_3'] = array(
     '#title' => t('Call to Action 3'),
@@ -64,9 +66,31 @@ function om_theme_assets_admin_form() {
     '#title' => t('Call to Action URL 3'),
     '#type' => 'textfield',
     '#default_value' => variable_get('call_to_action_url_3', ''),
+    '#element_validate' => '_om_theme_assets_url_validate',
   );
   $form['call_to_action_divider'] = array(
     '#markup' => '<div class="divider"><div class="inner"></div></div>'
   );
+  $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
+}
+
+/** 
+ * Validate an above url to be both valid and internal.
+ */
+function _om_theme_assets_url_validate($element, &$form_state) {
+  if (isset($element['#value'])) {
+    if (url_is_external($element['#value'])) {
+      $message = t('!name must be an internal path (i.e. Drupal path like about-us or node/371).', array('!name' => $element['#title']));
+      form_error($element, $message);
+    }
+    if (empty(menu_get_item($element['#value'])) {
+      $message = t('!name must be a valid internal path (i.e. Drupal path like about-us or node/371).', array('!name' => $element['#title']));
+      form_error($element, $message);
+    }
+  }
+}
+
+function om_theme_assets_admin_form_submit(&$form, &$form_state) {
+  
 }
