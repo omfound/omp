@@ -79,7 +79,7 @@ function om_theme_assets_admin_form() {
  * Validate an above url to be both valid and internal.
  */
 function _om_theme_assets_url_validate($element, &$form_state) {
-  if (isset($element['#value'])) {
+  if (!empty($element['#value'])) {
     if (url_is_external($element['#value'])) {
       $message = t('!name must be an internal path (i.e. Drupal path like about-us or node/371).', array('!name' => $element['#title']));
       form_error($element, $message);
