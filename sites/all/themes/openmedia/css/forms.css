@@ -220,6 +220,10 @@ body.front div.views-widget div.form-type-textfield input {
 #om-theme-assets-admin-form .form-item-call-to-action-url-1,
 #om-theme-assets-admin-form .form-item-call-to-action-url-2,
 #om-theme-assets-admin-form .form-item-call-to-action-url-3,
-#om-theme-assets-admin-form .form-item-call-to-action-url-4 {
-  margin-bottom: 20px;
+#om-theme-assets-admin-form .form-item-call-to-action-url-4,
+#om-theme-assets-admin-form .form-item-info-tags-url-1,
+#om-theme-assets-admin-form .form-item-info-tags-url-2,
+#om-theme-assets-admin-form .form-item-info-tags-url-3,
+#om-theme-assets-admin-form .form-item-info-tags-url-4 {
+  margin-bottom: 35px;
 }
