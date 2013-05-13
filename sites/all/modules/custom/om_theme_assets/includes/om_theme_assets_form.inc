@@ -37,7 +37,7 @@ function om_theme_assets_admin_form() {
     '#suffix' => '</h2>'
   );
   $form['call_to_action_help'] = array(
-    '#markup' => t('Call to action images are the three large images on the front page. These images should drive your users to important pages on your site. Each image upload below is paired with a url. Url should be a valid internal Drupal path like node/471 or about-us. They should be as close as possible to 300px by 190px.')
+    '#markup' => t('Call to action images are the three large images on the front page. These images should drive your users to important pages on your site. Each image upload below is paired with a title and url. Title should be a short phrase to go with the call to action. Url should be a valid internal Drupal path like node/471 or about-us. They should be as close as possible to 300px by 190px.')
   );
   $form['call_to_action_fieldset'] = $fieldset;
   $form['call_to_action_fieldset']['#title'] = t('Call to Action Images');
@@ -46,6 +46,11 @@ function om_theme_assets_admin_form() {
     '#type' => 'managed_file',
     '#default_value' => variable_get('call_to_action_1', ''),
     '#upload_location' => 'public://theme_assets/',
+  );
+  $form['call_to_action_fieldset']['call_to_action_title_1'] = array(
+    '#title' => t('Call to Action Title 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('call_to_action_title_1', ''),
   );
   $form['call_to_action_fieldset']['call_to_action_url_1'] = array(
     '#title' => t('Call to Action URL 1'),
@@ -59,6 +64,11 @@ function om_theme_assets_admin_form() {
     '#default_value' => variable_get('call_to_action_2', ''),
     '#upload_location' => 'public://theme_assets/',
   );
+  $form['call_to_action_fieldset']['call_to_action_title_2'] = array(
+    '#title' => t('Call to Action Title 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('call_to_action_title_2', ''),
+  );
   $form['call_to_action_fieldset']['call_to_action_url_2'] = array(
     '#title' => t('Call to Action URL 2'),
     '#type' => 'textfield',
@@ -70,6 +80,11 @@ function om_theme_assets_admin_form() {
     '#type' => 'managed_file',
     '#default_value' => variable_get('call_to_action_3', ''),
     '#upload_location' => 'public://theme_assets/',
+  );
+  $form['call_to_action_fieldset']['call_to_action_title_3'] = array(
+    '#title' => t('Call to Action Title 3'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('call_to_action_title_3', ''),
   );
   $form['call_to_action_fieldset']['call_to_action_url_3'] = array(
     '#title' => t('Call to Action URL 3'),
@@ -261,4 +276,5 @@ function om_theme_assets_admin_form_submit(&$form, &$form_state) {
       file_usage_add($file, 'om_theme_assets', $file_field, $user->uid);
     }
   }
+  cache_clear_all(NULL, 'cache_block', '*');
 }
