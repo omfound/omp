@@ -50,7 +50,7 @@ function om_theme_assets_admin_form() {
   $form['call_to_action_fieldset']['call_to_action_title_1'] = array(
     '#title' => t('Call to Action Title 1'),
     '#type' => 'textfield',
-    '#element_validate' => array('_om_theme_assets_url_validate'),
+    '#default_value' => variable_get('call_to_action_title_1', ''),
   );
   $form['call_to_action_fieldset']['call_to_action_url_1'] = array(
     '#title' => t('Call to Action URL 1'),
