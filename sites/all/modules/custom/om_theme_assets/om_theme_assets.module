@@ -158,7 +158,7 @@ function om_theme_assets_callout_block_content() {
       $output[] = array(
         'admin_title' => 'Callout Block 3',
         'block_title' => variable_get('call_to_action_title_3', ''),
-        'image_path' => $cta_2_image,
+        'image_path' => $cta_3_image,
         'url' => variable_get('call_to_action_url_3', '')
       );
     }
