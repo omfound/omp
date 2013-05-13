@@ -14,6 +14,25 @@ function openmedia_preprocess_page(&$variables) {
     $options['group'] = JS_DEFAULT;
     drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-grid.js', $options);
   }
+
+  //Fix titles on user pages, otherwise broken due to
+  //multiple links to user pages in user nav
+  if (arg(0) == 'user') {
+    switch(arg(1)) {
+      case NULL:
+        if (!user_is_logged_in()) drupal_set_title(t('Log in'));
+        break;
+      case 'register':
+        drupal_set_title(t('Register'));
+        break;
+      case 'password':
+        drupal_set_title(t('Request new password'));
+        break;
+      case 'login':
+        drupal_set_title(t('Log in'));
+        break;
+    }
+  }
 }
 
 /**
