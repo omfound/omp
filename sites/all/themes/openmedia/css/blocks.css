@@ -94,7 +94,7 @@
 #block-om-theme-assets-om-callout-block-2 h3 a:visited {
   *color: #000000;
   color: rgba(0, 0, 0, .85);
-  text-shadow: 1px 1px 1px #EFEFEF, 0 0 0 #DCD5C3, -1px -1px -1px #DCD5C3;
+  text-shadow: 1px 1px 1px rgba(239, 239, 239, .75), 0 0 0 rgba(220, 213, 195, .75), -1px -1px -1px rgba(220, 213, 195, .75);
   text-decoration: none;
 }
 

@@ -414,7 +414,7 @@ body.page-reservations fieldset {
 }
 .no-certification-message a:hover,
 .commercial-message .commercial-button:hover{
-	text-shadow: 0 0 10px #FFFFFF;
+	text-shadow: 0 0 10px rgba(255, 255, 255, .75);
 	background:#acf4f9);
 	border: 1px solid #acf4f9;	
 	-webkit-transition: All 0.7s ease;
