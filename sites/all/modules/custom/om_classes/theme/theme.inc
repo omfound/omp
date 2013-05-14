@@ -64,7 +64,7 @@ function om_classes_preprocess_om_classes_user_registrations_simple(&$variables)
 
       $rows[] = array( 
         l($registration->product->title, 'node/'.commerce_autodisplay_entity_display_lookup($registration->entity_id)),
-        date("F j, Y, g:i a", $start_date),
+        $start_date,
       );
     }
 
