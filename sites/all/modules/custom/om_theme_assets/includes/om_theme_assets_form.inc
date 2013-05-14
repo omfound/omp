@@ -224,20 +224,52 @@ function om_theme_assets_admin_form() {
     );
     $form['admin_theme_omp_fieldset'] = $fieldset;
     $form['admin_theme_omp_fieldset']['#title'] = t('Admin OMP Theme');
-    $form['admin_theme_omp_fieldset']['color_primary'] = array(
-      '#title' => t('Primary Theme Color'),
+    $form['admin_theme_omp_fieldset']['main_nav_background'] = array(
+      '#title' => t('Main Navigation Background'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('color_primary', ''),
+      '#default_value' => variable_get('main_nav_background', ''),
     );
-    $form['admin_theme_omp_fieldset']['color_secondary'] = array(
-      '#title' => t('Secondary Theme Color'),
+    $form['admin_theme_omp_fieldset']['main_nav_color'] = array(
+      '#title' => t('Main Menu Text Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('color_secondary', ''),
+      '#default_value' => variable_get('main_nav_color', ''),
     );
-    $form['admin_theme_omp_fieldset']['color_tertiary'] = array(
-      '#title' => t('Tertiary Theme Color'),
+    $form['admin_theme_omp_fieldset']['main_nav_color_hover'] = array(
+      '#title' => t('Main Menu Text Color Hover'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('color_tertiary', ''),
+      '#default_value' => variable_get('main_nav_color_hover', ''),
+    );
+    $form['admin_theme_omp_fieldset']['main_nav_color_dropdown_background'] = array(
+      '#title' => t('Main Menu Drop Down Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('main_nav_color_dropdown_background', ''),
+    );
+    $form['admin_theme_omp_fieldset']['main_nav_color_dropdown_color'] = array(
+      '#title' => t('Main Menu Drop Down Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('main_nav_color_dropdown_color', ''),
+    );
+    $form['main_banner_fieldset']['background_texture'] = array(
+      '#title' => t('Background Texture Tile'),
+      '#description' => t('Repeating background image. Should be as small as possible.'),
+      '#type' => 'managed_file',
+      '#default_value' => variable_get('background_texture', ''),
+      '#upload_location' => 'public://theme_assets/',
+    );
+    $form['admin_theme_omp_fieldset']['background_color'] = array(
+      '#title' => t('Solid Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('background_color', ''),
+    );
+    $form['admin_theme_omp_fieldset']['title_color'] = array(
+      '#title' => t('Title Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('title_color', ''),
+    );
+    $form['admin_theme_omp_fieldset']['info_tag_background'] = array(
+      '#title' => t('Info Tag Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('info_tag_background', ''),
     );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
@@ -266,7 +298,7 @@ function _om_theme_assets_url_validate($element, &$form_state) {
  * Submit handler for saving files.
  */
 function om_theme_assets_admin_form_submit(&$form, &$form_state) {
-  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3');
+  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3', 'background_texture');
   foreach ($file_elements AS $file_field) {
     if (!empty($form_state['values'][$file_field])) {
       global $user;
