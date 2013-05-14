@@ -93,7 +93,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Content Administrator')),
     '#href' => 'admin/structure/menu/manage/main-menu',
   );
-  $content['menu']['content'] = array(
+  $content['menu']['content']['theme_assets'] = array(
     '#title' => t('Admin Theme Assets'),
     '#access' => om_admin_menu_role_access(array('Content Administrator')),
     '#href' => 'om_theme_assets',
