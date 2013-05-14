@@ -7,7 +7,7 @@ class spanishLanguageShowsSchedulingRule extends timeslotSchedulingRule {
     $query->condition('type', 'om_show', '=');
     // These two lines specific to Spanish Language rule.
     $query->join('field_revision_field_om_language', 'omlang', 'omlang.entity_id=n.nid');
-    // 1307 == spanish language in PBCORE database.
+    // 1307 == spanish language in languages taxonomy
     $query->condition('field_om_language_tid', 1307, '=');
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
