@@ -18,7 +18,7 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   color: #333333;
   font-size: 12px;
-  text-shadow: 1px 1px 1px #EFEFEF;
+  text-shadow: 1px 1px 1px rgba(239, 239, 239, .75);
 }
 
 .red,
