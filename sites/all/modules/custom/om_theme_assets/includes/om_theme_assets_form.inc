@@ -239,6 +239,11 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_color_hover', ''),
     );
+    $form['admin_theme_omp_fieldset']['main_nav_background_hover'] = array(
+      '#title' => t('Main Menu Background Color Hover'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('main_nav_background_hover', ''),
+    );
     $form['admin_theme_omp_fieldset']['main_nav_color_dropdown_background'] = array(
       '#title' => t('Main Menu Drop Down Background Color'),
       '#type' => 'textfield',
@@ -309,4 +314,5 @@ function om_theme_assets_admin_form_submit(&$form, &$form_state) {
     }
   }
   cache_clear_all(NULL, 'cache_block', '*');
+  om_theme_assets_build_dynamic_css();
 }
