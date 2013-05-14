@@ -122,6 +122,10 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
     'om_action_item' => array(
       'path' => $path . '/theme',
       'template' => 'om_action_item'
+    ),
+    'om_theme_dynamic_css' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_theme_dynamic_css'
     )
   );
 }
@@ -222,4 +226,14 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
       $form_state['input']['sort_order'] = 'DESC';
     }
   }
+}
+
+function om_theme_assets_build_dynamic_css() {
+  global $user;
+  $css = theme('om_theme_dynamic_css');
+  $destination = 'public://theme_assets/om_theme_dynamic_css.css';
+  $file = file_save_data($css, $destination, FILE_EXISTS_REPLACE);
+  $file->status = FILE_STATUS_PERMANENT;
+  file_save($file);
+  file_usage_add($file, 'om_theme_assets', $file_field, $user->uid);
 }

@@ -46,10 +46,41 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   $variables['links'] = $links;
 }
 
+/**
+ * Implements hook_preprocess_HOOK
+ */
 function om_theme_assets_preprocess_om_callout_block(&$variables) {
   if (!empty($variables['block_info'])) {
      $variables['block_title'] = '<h3>' . l($variables['block_info']['block_title'], $variables['block_info']['url']) . '</h3>';
      $options = array('html' => TRUE);
      $variables['block_image'] = l('<img src="' . $variables['block_info']['image_path'] . '" />', $variables['block_info']['url'], $options);
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
+  $variables['main_nav_background'] = variable_get('main_nav_background', '');
+  $variables['main_nav_color'] = variable_get('main_nav_color', '');
+  $variables['main_nav_color_hover'] = variable_get('main_nav_color_hover', '');
+  $variables['main_nav_background_hover'] = variable_get('main_nav_background_hover', '');
+  
+  $variables['main_nav_color_dropdown_background'] = variable_get('main_nav_color_dropdown_background', '');
+  $variables['main_nav_color_dropdown_color'] = variable_get('main_nav_color_dropdown_color', '');
+
+  $texture_fid = variable_get('background_texture', '');
+  if (is_numeric($texture_fid)) {
+    $texture_file = file_load($texture_fid);
+    if (is_object($texture_file)) {
+      $stream_wrapper = file_stream_wrapper_get_instance_by_uri($texture_file->uri);
+      $variables['background_texture'] = $stream_wrapper->getExternalUrl();
+    }
+  }
+
+  $variables['background_color'] = variable_get('background_color', '');
+  
+  $variables['title_color'] = variable_get('title_color', '');
+  
+  $variables['info_tag_background'] = variable_get('info_tag_background', '');
 }
