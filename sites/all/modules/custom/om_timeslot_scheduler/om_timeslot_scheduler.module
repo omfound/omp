@@ -489,7 +489,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }
             // Always modify the start to be $process_start in case there is a leader.
             $gap_parts[0]['start'] = $process_start;
-            dsm($process_start);
             // END Section 2 break gap into smaller gaps
             // START Section 3 Schedule Assembly
             foreach($gap_parts AS $gap_key => $mini_gap) {
