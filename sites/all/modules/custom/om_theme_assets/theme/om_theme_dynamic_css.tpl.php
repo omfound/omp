@@ -57,7 +57,6 @@
     background-color: <?php print $main_nav_dropdown_background_hover; ?>;
   }
 <?php endif; ?>
-
 <?php if (!empty($background_texture)): ?>
   html body {
     background: transparent url(<?php print $background_texture; ?>) top left repeat;
@@ -81,6 +80,6 @@
   }
   .action-item a:link .blue-text,
   .action-item a:visited .blue-text {
-    color: <?php print $info_tag_color; ?>
+    color: <?php print $info_tag_color; ?>;
   }
 <?php endif; ?>
