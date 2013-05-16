@@ -123,7 +123,7 @@
           }
 	      });
       } 
-    }
+    },
     //End addDateToCalendar function
     
     //Start updateDatePicker
@@ -146,7 +146,7 @@
           justDetached = false;
         }
       }
-    }
+    },
 
     showCalendar:function() {
       $('.view-reservation-calendar').css('top', '625px');
@@ -158,14 +158,14 @@
       $('#block-system-main').animate({
         height: '625px'
       }, 500 );  
-    }
+    },
     hideCalendar:function() {
       $('.view-reservation-calendar').css('height', '0px');
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#content').css('height', 'auto');
       $('#reservations-header').hide();
       $('.view-reservation-calendar').css('top', '-9000px');
-    }
+    },
 
     hideItemFields:function() {
       $('#block-views-calendar-product-view-block .add-to-cart').hide();
@@ -175,13 +175,13 @@
       $('#block-views-calendar-product-view-block .nid').hide();
       $('#block-views-calendar-product-view-block .member-cost').hide();
       $('#block-views-calendar-product-view-block .commercial-cost').hide();
-    }
+    },
 
     Reservation:function(startDate, endDate, quantity) {
       this.startDate = startDate;
       this.endDate = endDate;
       this.quantity = quantity;
-    }
+    },
 
     CalendarLoadClosures:function() {
       //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
@@ -204,7 +204,7 @@
         });
         $('body').data('closeTimesLoaded', true);
       }
-    }
+    },
 
     CalendarReloadItem(nid, pid, quantity) {
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
@@ -328,7 +328,7 @@
             }
           }
       });      
-    }
+    },
 
     moveItemToQuantity:function($item) {
       $item.removeClass('selected_product');
@@ -368,7 +368,7 @@
       if (typeof pid == 'undefined'){
         pid = $('#left-side select[name="product_id"]').val();
       }
-    } 
+    },
     
     moveItemToDetails:function() {
       view = $('.fullcalendar').fullCalendar('getView');
@@ -399,7 +399,7 @@
         }).change(Drupal.behaviors.product_filter.addDateToCalendar);
         $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
       }
-    }
+    },
 
     CalendarEvent:function(title, start, end) {
       this.title = title;
@@ -412,22 +412,22 @@
       this.backgroundColor = '#912711';
       this.eventBorderColor = '#912711';
       this.textColor = '#912711';
-    }
+    },
     ClosedDay:function(title, start, end) {
       this.base = CalendarEvent;
       this.base(title, start, end);
 
       this.allDay = true;
       this.classname = 'closed-all-day';
-    }
-    ClosedDay.prototype = new CalendarEvent;
+    },
+    ClosedDay.prototype = new CalendarEvent,
     ClosedTime:function(title, start, end) {
       this.base = CalendarEvent;
       this.base(title, start, end);
 
       this.classname = 'closed-time';
-    }
-    ClosedTime.prototype = new CalendarEvent;
+    },
+    ClosedTime.prototype = new CalendarEvent,
 
   }
 }(jQuery));
