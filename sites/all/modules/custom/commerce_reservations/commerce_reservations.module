@@ -203,7 +203,9 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
   }
 
-  dsm($form_id);
+  if ($form_id == 'views_exposed_form') {
+    dsm($form); 
+  }
 }
 
 /**
