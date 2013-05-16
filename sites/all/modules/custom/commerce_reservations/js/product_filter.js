@@ -206,7 +206,7 @@
       }
     },
 
-    CalendarReloadItem(nid, pid, quantity) {
+    CalendarReloadItem:function(nid, pid, quantity) {
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
