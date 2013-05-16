@@ -125,7 +125,8 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
     ),
     'om_theme_dynamic_css' => array(
       'path' => $path . '/theme',
-      'template' => 'om_theme_dynamic_css'
+      'template' => 'om_theme_dynamic_css',
+      'file' => 'theme.inc'
     )
   );
 }
