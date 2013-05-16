@@ -58,12 +58,12 @@
   }
 <?php endif; ?>
 
-<?php if (isset($background_texture)): ?>
+<?php if (!empty($background_texture)): ?>
   html body {
     background: transparent url(<?php print $background_texture; ?>) top left repeat;
   }
 <?php endif; ?>
-<?php if (isset($background_color)): ?>
+<?php if (!empty($background_color)): ?>
   body.front #main {
     background-color: <?php print $background_color; ?>;
   }
