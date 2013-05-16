@@ -138,7 +138,6 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
-            console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + 1);
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
@@ -312,9 +311,9 @@
                 $('.qtip-content [id|=edit-quantity]').val(quantity);
                 $('#pickedDates .start-date-wrapper .form-select').focus(function(){
 	                previousStart = $(this).val();
-                }).change(Drupal.behaviors.product_filter.addDateToCalendar(previousStart));
+                }).change(Drupal.behaviors.product_filter.addDateToCalendar);
 
-                $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar(previousStart));
+                $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
               },
               beforeHide: function(){
                 quantity = $('.qtip-contentWrapper [id|=edit-quantity]').val();
@@ -456,7 +455,8 @@
     });
     },
 
-    addDateToCalendar:function(previousStart) {
+    addDateToCalendar:function() {
+      previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
       startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
       //fullcalendar select option is expecting a 0 based month array
