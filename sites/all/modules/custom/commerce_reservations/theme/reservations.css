@@ -864,3 +864,16 @@ body.page-reservations #main-content #squeeze{
 .view-commerce-reservations-line-item-view .form-actions { 
   display: none; 
 } 
+
+/** date picker **/
+.view-reservation-caledar div.view-content {
+  float: left;
+  width: 742px;
+}
+.view-reservation-calendar div.view-footer {
+  float: left;
+  width: 100px;
+  border: 1px solid red;
+}
+
+/** end date picker **/

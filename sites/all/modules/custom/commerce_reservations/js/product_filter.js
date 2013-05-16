@@ -247,6 +247,7 @@
               $('.page-reservations #middle-wrapper').animate({
                 height: '1260px'
               }, 1000 );
+              //probably fire here
             }
           }
       });      
@@ -458,6 +459,7 @@
     });
     },
 
+    //start addDateToCalendar function
     addDateToCalendar:function() {
       previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
@@ -501,6 +503,7 @@
 	      });
       } 
     }
+    //End addDateToCalendar function
 
   }
 }(jQuery));
