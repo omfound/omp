@@ -91,7 +91,7 @@ class cablecastFile {
       $entity->field_om_show_duration = array(
         $entity->language => array(
           0 => array(
-            'value' => $file->LengthInSeconds;
+            'value' => $file->LengthInSeconds
           )
         )
       );
