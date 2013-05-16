@@ -57,3 +57,9 @@
     background-color: <?php print $main_nav_dropdown_background_hover; ?>;
   }
 <?php endif; ?>
+
+<?php if (isset($background_texture)): ?>
+  html body {
+    background: transparent url(<?php print $background_texture; ?>) top left repeat;
+  }
+<?php $endif; ?>
