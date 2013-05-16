@@ -872,8 +872,8 @@ body.page-reservations #main-content #squeeze{
 }
 .view-reservation-calendar div.view-footer {
   float: left;
-  width: 100px;
-  height: 100px;
-  border: 1px solid red;
+  width: 218px;
+  margin-left: 5px;
+  height: 440px;
 }
 /** end date picker **/
