@@ -203,16 +203,14 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
   }
 
+  //set default reservation date and time to last reservation in cart if available
   if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
       if ($last_reservation = commerce_reservations_last_cart_reservation($order)) {
         $form['line_item_fields']['field_reservation_dates'][LANGUAGE_NONE][0]['#default_value'] = $last_reservation->field_reservation_dates[LANGUAGE_NONE][0];
-        dsm($last_reservation);
       }
     } 
-    //BRIAN HERE 
-    dsm($form);
   }
 }
 
