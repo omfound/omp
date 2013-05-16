@@ -326,3 +326,19 @@ function om_theme_assets_admin_form_submit(&$form, &$form_state) {
   cache_clear_all(NULL, 'cache_block', '*');
   om_theme_assets_build_dynamic_css();
 }
+
+function om_theme_assets_hex_to_rgba($hex) {
+  $hex = str_replace("#", "", $hex);
+  if(strlen($hex) == 3) {
+    $r = hexdec(substr($hex,0,1).substr($hex,0,1));
+    $g = hexdec(substr($hex,1,1).substr($hex,1,1));
+    $b = hexdec(substr($hex,2,1).substr($hex,2,1));
+  }
+  else {
+   $r = hexdec(substr($hex,0,2));
+   $g = hexdec(substr($hex,2,2));
+   $b = hexdec(substr($hex,4,2));
+  }
+  $rgba = array($r, $g, $b, '.75');
+  return implode(",", $rgba); // returns the rgb values separated by commas
+}

@@ -79,8 +79,10 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
       $variables['background_texture'] = $stream_wrapper->getExternalUrl();
     }
   }
-
-  $variables['background_color'] = variable_get('background_color', '');
+  $hex_color = variable_get('background_color', '');
+  if (!empty($hex_color)) {
+    $variables['background_color'] = om_theme_assets_hex_to_rgba($hex_color);
+  }
   
   $variables['title_color'] = variable_get('title_color', '');
   

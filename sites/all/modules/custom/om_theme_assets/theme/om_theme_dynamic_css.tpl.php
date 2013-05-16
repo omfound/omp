@@ -63,3 +63,8 @@
     background: transparent url(<?php print $background_texture; ?>) top left repeat;
   }
 <?php endif; ?>
+<?php if (isset($background_color)): ?>
+  body.front #main {
+    background-color: <?php print $background_color; ?>;
+  }
+<?php endif; ?>
