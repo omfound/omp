@@ -1,5 +1,5 @@
 <?php
-class leastAiredShowInProjectSchedulingRule extends timeslotSchedulingRule {
+class newestEpisodeInProjectSchedulingRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
     $shows = array();
     $query = db_select('node', 'n');
