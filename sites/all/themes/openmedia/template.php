@@ -15,7 +15,7 @@ function openmedia_preprocess_page(&$variables) {
     drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-grid.js', $options);
   }
 
-  if (file_exists('/sites/default/files/theme_assets/om_theme_dynamic_css.css')) {
+  if (file_exists('sites/default/files/theme_assets/om_theme_dynamic_css.css')) {
     $css_options = array('type' => 'file', 'group' => CSS_THEME);
     drupal_add_css('sites/default/files/theme_assets/om_theme_dynamic_css.css', $css_options);
   }
