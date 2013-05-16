@@ -255,10 +255,10 @@ body.page-reservations #main-content #squeeze{
 
 .view-id-reservation_calendar{
 	position: absolute;
-  width: 741px;
 }
 
 .view-id-reservation_calendar div.view-header{
+  width: 741px;
 	background-color: white;
 	color: #5d5d5f;
 	text-shadow: none;
@@ -868,7 +868,7 @@ body.page-reservations #main-content #squeeze{
 /** date picker **/
 .view-reservation-calendar div.view-content {
   float: left;
-  width: 742px;
+  width: 741px;
 }
 .view-reservation-calendar div.view-footer {
   float: left;
@@ -876,5 +876,4 @@ body.page-reservations #main-content #squeeze{
   height: 100px;
   border: 1px solid red;
 }
-
 /** end date picker **/
