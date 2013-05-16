@@ -875,5 +875,9 @@ body.page-reservations #main-content #squeeze{
   width: 218px;
   margin-left: 5px;
   height: 440px;
+  background-color: #fff;
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
 }
 /** end date picker **/
