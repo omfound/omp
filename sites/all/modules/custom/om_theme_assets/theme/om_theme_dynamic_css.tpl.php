@@ -68,3 +68,10 @@
     background-color: rgba(<?php print $background_color; ?>);
   }
 <?php endif; ?>
+<?php if (!empty($title_color)): ?>
+  #page #content h1
+  #page #content h2
+  #page #content h3 {
+    color: <?php print $title_color; ?>
+  }
+<?php endif; ?>
