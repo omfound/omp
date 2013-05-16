@@ -89,6 +89,17 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
+    'least_aired_shows_spanish_scheduling_rule' => array(
+      'title' => t('Least Aired Shows from Unique Project Spanish'),
+      'description' => t("Selects the newest episodes in a project using the episode field."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'newest_episode_in_project_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'newestEpisodeInProjectSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
   );
 }
 
