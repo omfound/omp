@@ -1,5 +1,5 @@
 <?php if (!empty($main_nav_background)): ?>
-  body .block-nice-menus {
+  body #header {
     background-color: <?php print $main_nav_background; ?>;
   }
 <?php endif; ?>
