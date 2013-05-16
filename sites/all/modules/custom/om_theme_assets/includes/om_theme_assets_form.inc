@@ -244,16 +244,19 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_background_hover', ''),
     );
-    $form['admin_theme_omp_fieldset']['main_nav_color_dropdown_background'] = array(
-      '#title' => t('Main Menu Drop Down Background Color'),
-      '#type' => 'textfield',
-      '#default_value' => variable_get('main_nav_color_dropdown_background', ''),
-    );
-    $form['admin_theme_omp_fieldset']['main_nav_color_dropdown_color'] = array(
+    
+    $form['admin_theme_omp_fieldset']['main_nav_dropdown_color'] = array(
       '#title' => t('Main Menu Drop Down Background Color'),
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_color_dropdown_color', ''),
     );
+    $form['admin_theme_omp_fieldset']['main_nav_dropdown_background'] = array(
+      '#title' => t('Main Menu Drop Down Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('main_nav_dropdown_background', ''),
+    );
+
+    
     $form['main_banner_fieldset']['background_texture'] = array(
       '#title' => t('Background Texture Tile'),
       '#description' => t('Repeating background image. Should be as small as possible.'),

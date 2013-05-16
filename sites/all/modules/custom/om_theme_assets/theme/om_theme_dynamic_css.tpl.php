@@ -25,19 +25,19 @@
     background-color: <?php print $main_nav_background_hover; ?>;
   }
 <?php endif; ?>
-<?php if (!empty($main_nav_color_dropdown_color)): ?>
-body .block-nice-menus ul li.over li a:link,
-body .block-nice-menus ul li.over li a:visited,
-body .block-nice-menus ul li.active-trail li a:link,
-body .block-nice-menus ul li.active-trail li a:visited {
-  color: <?php print $main_nav_color_dropdown_color; ?>;
-}
+<?php if (!empty($main_nav_dropdown_color)): ?>
+  body .block-nice-menus ul li.over li a:link,
+  body .block-nice-menus ul li.over li a:visited,
+  body .block-nice-menus ul li.active-trail li a:link,
+  body .block-nice-menus ul li.active-trail li a:visited {
+    color: <?php print $main_nav_dropdown_color; ?>;
+  }
 <?php endif; ?>
-<?php if (!empty($main_nav_color_dropdown_background)): ?>
-body .block-nice-menus ul li.over li a:link,
-body .block-nice-menus ul li.over li a:visited,
-body .block-nice-menus ul li.active-trail li a:link,
-body .block-nice-menus ul li.active-trail li a:visited {
-  background-color: <?php print $main_nav_color_dropdown_background; ?>;
-}
+<?php if (!empty($main_nav_dropdown_background)): ?>
+  body .block-nice-menus ul li.over li a:link,
+  body .block-nice-menus ul li.over li a:visited,
+  body .block-nice-menus ul li.active-trail li a:link,
+  body .block-nice-menus ul li.active-trail li a:visited {
+    background-color: <?php print $main_nav_dropdown_background; ?>;
+  }
 <?php endif; ?>
