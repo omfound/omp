@@ -25,3 +25,15 @@
     background-color: <?php print $main_nav_background_hover; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($main_nav_color_dropdown_color)): ?>
+.block-nice-menus ul li.over li a,
+.block-nice-menus ul li.active-trail li a {
+  color: <?php print $main_nav_color_dropdown_color; ?>;
+}
+<?php endif; ?>
+<?php if (!empty($main_nav_color_dropdown_background)): ?>
+.block-nice-menus ul li.over li a,
+.block-nice-menus ul li.active-trail li a {
+  background-color: <?php print $main_nav_color_dropdown_background; ?>;
+}
+<?php endif; ?>
