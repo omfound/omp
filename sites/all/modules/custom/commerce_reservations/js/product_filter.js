@@ -138,7 +138,6 @@
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + 1,
           cache : false,
           success : function (data) {
-            console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + 1);
             $('#leftContent .large-image').removeClass('preloader-active');
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
@@ -309,7 +308,6 @@
                 }
               },
               onShow: function(){
-                console.log('fail');
                 $('.qtip-content [id|=edit-quantity]').val(quantity);
                 $('#pickedDates .start-date-wrapper .form-select').focus(function(){
 	                previousStart = $(this).val();
@@ -487,7 +485,8 @@
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
-      console.log('its horrible');
+      console.log(startParse);
+      console.log(endParse);
       if (startParse < endParse){
         $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
       } else{
