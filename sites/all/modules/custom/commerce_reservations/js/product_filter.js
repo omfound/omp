@@ -269,6 +269,8 @@
             justDetached = false;
           }
           $('.fullcalendar').qtip({
+          $('#block-views-calendar-product-view-block div.views-row').qtip({
+          //$('.fullcalendar').qtip({
             content: dateFields,
             show: {
               when: {event: 'mouseup'}, 
