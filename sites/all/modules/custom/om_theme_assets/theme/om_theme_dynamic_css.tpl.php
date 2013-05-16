@@ -75,13 +75,6 @@
     color: <?php print $title_color; ?>;
   }
 <?php endif; ?>
-<?php if (!empty($title_color)): ?>
-  #page #content h1,
-  #page #content h2,
-  #page #content h3 {
-    color: <?php print $title_color; ?>;
-  }
-<?php endif; ?>
 <?php if (!empty($info_tag_color)): ?>
   body .action-item .blue-bubble {
     background-color: <?php print $info_tag_color; ?>;
