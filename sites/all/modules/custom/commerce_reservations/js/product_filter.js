@@ -309,6 +309,7 @@
                 }
               },
               onShow: function(){
+                console.log('fail');
                 $('.qtip-content [id|=edit-quantity]').val(quantity);
                 $('#pickedDates .start-date-wrapper .form-select').focus(function(){
 	                previousStart = $(this).val();
