@@ -222,7 +222,7 @@ function commerce_reservations_last_cart_reservation($order) {
         $line_item = commerce_line_item_load($line_item['line_item_id']);
         $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
         if ($product->type == 'reservable_product') {
-          $last_reservation = $product;
+          $last_reservation = $line_item;
         }
       }
     }
