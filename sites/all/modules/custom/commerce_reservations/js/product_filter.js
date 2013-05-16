@@ -454,9 +454,9 @@
         });
       });
     });
-    }
+    },
 
-    function addDateToCalendar(previousStart) {
+    addDateToCalendar:function(previousStart) {
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
       startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
       //fullcalendar select option is expecting a 0 based month array
