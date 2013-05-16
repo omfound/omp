@@ -247,7 +247,7 @@ function om_theme_assets_admin_form() {
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_color'] = array(
       '#title' => t('Main Menu Drop Down Text Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('main_nav_color_dropdown_color', ''),
+      '#default_value' => variable_get('main_nav_dropdown_color', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_background'] = array(
       '#title' => t('Main Menu Drop Down Background Color'),
