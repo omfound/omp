@@ -207,6 +207,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
       if ($last_reservation = commerce_reservations_last_cart_reservation($order)) {
+        $form['line_item_fields']['field_reservation_dates']['LANGUAGE_NONE'][0]['#default_value'] = $last_reservation['field_reservation_dates']['LANGUAGE_NONE'][0];
         dsm($last_reservation);
       }
     } 
