@@ -62,4 +62,4 @@
   html body {
     background: transparent url(<?php print $background_texture; ?>) top left repeat;
   }
-<?php $endif; ?>
+<?php endif; ?>
