@@ -455,8 +455,8 @@
     });
     },
 
-    addDateToCalendar:function(previousStart) {
-      alert('Changing dates');
+    addDateToCalendar:function() {
+      previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
       startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
       //fullcalendar select option is expecting a 0 based month array
@@ -485,8 +485,6 @@
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
-      console.log(startParse);
-      console.log(endParse);
       if (startParse < endParse){
         $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
       } else{
