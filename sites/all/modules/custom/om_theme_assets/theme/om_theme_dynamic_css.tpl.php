@@ -26,18 +26,18 @@
   }
 <?php endif; ?>
 <?php if (!empty($main_nav_color_dropdown_color)): ?>
-.block-nice-menus ul li.over li a:link,
-.block-nice-menus ul li.over li a:visited,
-.block-nice-menus ul li.active-trail li a:link,
-.block-nice-menus ul li.active-trail li a:visited {
+body .block-nice-menus ul li.over li a:link,
+body .block-nice-menus ul li.over li a:visited,
+body .block-nice-menus ul li.active-trail li a:link,
+body .block-nice-menus ul li.active-trail li a:visited {
   color: <?php print $main_nav_color_dropdown_color; ?>;
 }
 <?php endif; ?>
 <?php if (!empty($main_nav_color_dropdown_background)): ?>
-.block-nice-menus ul li.over li a:link,
-.block-nice-menus ul li.over li a:visited,
-.block-nice-menus ul li.active-trail li a:link,
-.block-nice-menus ul li.active-trail li a:visited {
+body .block-nice-menus ul li.over li a:link,
+body .block-nice-menus ul li.over li a:visited,
+body .block-nice-menus ul li.active-trail li a:link,
+body .block-nice-menus ul li.active-trail li a:visited {
   background-color: <?php print $main_nav_color_dropdown_background; ?>;
 }
 <?php endif; ?>
