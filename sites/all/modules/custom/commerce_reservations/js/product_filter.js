@@ -486,8 +486,7 @@
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
-      console.log(startParse);
-      console.log(endParse);
+      console.log('its horrible');
       if (startParse < endParse){
         $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
       } else{
