@@ -866,13 +866,14 @@ body.page-reservations #main-content #squeeze{
 } 
 
 /** date picker **/
-.view-reservation-caledar div.view-content {
+.view-reservation-calendar div.view-content {
   float: left;
   width: 742px;
 }
 .view-reservation-calendar div.view-footer {
   float: left;
   width: 100px;
+  height: 100px;
   border: 1px solid red;
 }
 
