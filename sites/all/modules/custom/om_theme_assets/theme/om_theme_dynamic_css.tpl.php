@@ -41,3 +41,30 @@
     background-color: <?php print $main_nav_dropdown_background; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($main_nav_dropdown_color_hover)): ?>
+  body .block-nice-menus ul li.over li a:focus,
+  body .block-nice-menus ul li.over li a:hover,
+  body .block-nice-menus ul li.active-trail li a:focus,
+  body .block-nice-menus ul li.active-trail li a:hover {
+    color: <?php print $main_nav_dropdown_color_hover; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($main_nav_dropdown_background_hover)): ?>
+  body .block-nice-menus ul li.over li a:focus,
+  body .block-nice-menus ul li.over li a:hover,
+  body .block-nice-menus ul li.active-trail li a:focus,
+  body .block-nice-menus ul li.active-trail li a:hover {
+    background-color: <?php print $main_nav_dropdown_background_hover; ?>;
+  }
+<?php endif; ?>
+
+<?php if (isset($background_texture)): ?>
+  html body {
+    background: transparent url(<?php print $background_texture; ?>) top left repeat;
+  }
+<?php endif; ?>
+<?php if (isset($background_color)): ?>
+  body.front #main {
+    background-color: <?php print $background_color; ?>;
+  }
+<?php endif; ?>
