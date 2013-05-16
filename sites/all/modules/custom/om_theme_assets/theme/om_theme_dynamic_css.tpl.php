@@ -65,6 +65,6 @@
 <?php endif; ?>
 <?php if (!empty($background_color)): ?>
   body.front #main {
-    background-color: <?php print $background_color; ?>;
+    background-color: rgba(<?php print $background_color; ?>);
   }
 <?php endif; ?>
