@@ -311,9 +311,9 @@
                 $('.qtip-content [id|=edit-quantity]').val(quantity);
                 $('#pickedDates .start-date-wrapper .form-select').focus(function(){
 	                previousStart = $(this).val();
-                }).change(Drupal.behaviors.product_filter.addDateToCalendar());
+                }).change(Drupal.behaviors.product_filter.addDateToCalendar);
 
-                $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar());
+                $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
               },
               beforeHide: function(){
                 quantity = $('.qtip-contentWrapper [id|=edit-quantity]').val();
