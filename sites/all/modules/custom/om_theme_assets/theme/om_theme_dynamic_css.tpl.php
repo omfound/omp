@@ -1,11 +1,11 @@
 <?php if (!empty($main_nav_background)): ?>
-  body #header {
+  body .block-nice-menus {
     background-color: <?php print $main_nav_background; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($main_nav_color)): ?>
-  body #header a:link,
-  body #header a:visited {
+  body .block-nice-menus a:link,
+  body .block-nice-menus a:visited {
     color: <?php print $main_nav_color; ?>;
   }
 <?php endif; ?>
