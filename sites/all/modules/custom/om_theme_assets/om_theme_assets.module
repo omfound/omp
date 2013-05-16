@@ -236,5 +236,6 @@ function om_theme_assets_build_dynamic_css() {
   $file = file_save_data($css, $destination, FILE_EXISTS_REPLACE);
   $file->status = FILE_STATUS_PERMANENT;
   file_save($file);
+  dsm($file);
   file_usage_add($file, 'om_theme_assets', 'om_theme_dynamic_css', $user->uid);
 }
