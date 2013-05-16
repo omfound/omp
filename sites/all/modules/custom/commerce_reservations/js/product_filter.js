@@ -268,11 +268,13 @@
             dateFields = $(tipContent).detach();
             justDetached = false;
           }
-          //$('.fullcalendar').qtip({
-          $('#block-views-calendar-product-view-block div.views-row').qtip({
+          $('.fullcalendar').qtip({
             content: dateFields,
             show: {
-              when: {event: 'mouseup'}, 
+              when: {
+                target: $('#block-views-calendar-product-view-block div.views-row'),
+                event: 'mouseup'
+              }, 
               effect: {type: 'fade', length: 200}
             },
             position: {
