@@ -281,10 +281,10 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('title_color', ''),
     );
-    $form['admin_theme_omp_fieldset']['info_tag_background'] = array(
-      '#title' => t('Info Tag Background Color'),
+    $form['admin_theme_omp_fieldset']['info_tag_color'] = array(
+      '#title' => t('Info Tag Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('info_tag_background', ''),
+      '#default_value' => variable_get('info_tag_color', ''),
     );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';

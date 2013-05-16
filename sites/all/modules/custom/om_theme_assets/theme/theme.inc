@@ -86,5 +86,5 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   
   $variables['title_color'] = variable_get('title_color', '');
   
-  $variables['info_tag_background'] = variable_get('info_tag_background', '');
+  $variables['info_tag_color'] = variable_get('info_tag_color', '');
 }
