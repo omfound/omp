@@ -202,6 +202,8 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
     }
   }
+
+  dsm($form_id);
 }
 
 /**
