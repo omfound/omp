@@ -255,10 +255,10 @@ body.page-reservations #main-content #squeeze{
 
 .view-id-reservation_calendar{
 	position: absolute;
-  width: 741px;
 }
 
 .view-id-reservation_calendar div.view-header{
+  width: 741px;
 	background-color: white;
 	color: #5d5d5f;
 	text-shadow: none;
@@ -864,3 +864,21 @@ body.page-reservations #main-content #squeeze{
 .view-commerce-reservations-line-item-view .form-actions { 
   display: none; 
 } 
+
+/** date picker **/
+.view-reservation-calendar div.view-content {
+  float: left;
+  width: 741px;
+}
+.view-reservation-calendar div.view-footer {
+  float: left;
+  width: 208px;
+  margin-left: 5px;
+  height: 440px;
+  padding: 5px;
+  background-color: #fff;
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+}
+/** end date picker **/

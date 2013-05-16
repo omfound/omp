@@ -39,13 +39,15 @@ class cablecastFile {
     $controller = om_playback_servers_entity_get_controller($this->pbs);
     $options = array('RestrictToOrphanedFiles' => FALSE, 'RestrictToShowID' => $show_id);
     $file = $controller->get_digital_files($this->pbs, $options);
-    if (is_object($file->GetDigitalFilesResult->DigitalFileInfo)) {
-      $file->GetDigitalFilesResult->DigitalFileInfo = array($file->GetDigitalFilesResult->DigitalFileInfo);
-    }
-    foreach ($file->GetDigitalFilesResult->DigitalFileInfo AS $file_object) {
-      $file_name = $file_object->FileName;
-      $file_name = str_replace($show_id, '', $file_name);
-      return $file_name;
+    if (!empty($file->GetDigitalFilesResult)) {
+      if (is_object($file->GetDigitalFilesResult->DigitalFileInfo)) {
+        $file->GetDigitalFilesResult->DigitalFileInfo = array($file->GetDigitalFilesResult->DigitalFileInfo);
+      }
+      foreach ($file->GetDigitalFilesResult->DigitalFileInfo AS $file_object) {
+        $file_name = $file_object->FileName;
+        $file_name = str_replace($show_id, '', $file_name);
+        return $file_name;
+      }
     }
     return FALSE;
   }
@@ -83,12 +85,21 @@ class cablecastFile {
    * Then return the uri.
    **/
   public function build_uri($entity, $file_id) {
-    $files = $this->get_orphaned_files();
-    if (!empty($files) && !empty($files[$file_id])) {
-      $controller = om_playback_servers_entity_get_controller($this->pbs);
+    $controller = om_playback_servers_entity_get_controller($this->pbs);
+    $files = $controller->get_digital_files($this->pbs);
+    
+    if (!empty($result->GetDigitalFilesResult->DigitalFileInfo) && !empty($result->GetDigitalFilesResult->DigitalFileInfo[$file_id])) {
+      $file = $result->GetDigitalFilesResult->DigitalFileInfo[$file_id];
+      $entity->field_om_show_duration = array(
+        $entity->language => array(
+          0 => array(
+            'value' => $file->LengthInSeconds
+          )
+        )
+      );
       $meta_data = $controller->create_metadata($this->pbs, $entity);
       if (!empty($meta_data->CreateNewShowRecordResult) && is_numeric($meta_data->CreateNewShowRecordResult)) {
-        $new_file_name = $meta_data->CreateNewShowRecordResult . $files[$file_id];
+        $new_file_name = $meta_data->CreateNewShowRecordResult . $file->FileName;
         $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
         $options = array('ID' => $file_id, 'NewName' => $new_file_name);
         $controller->rename_file($this->pbs, $options);

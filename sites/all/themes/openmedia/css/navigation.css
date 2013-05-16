@@ -11,8 +11,8 @@
   margin-right: 5px;
 }
 
-#block-nice-menus-1 ul li a:link,
-#block-nice-menus-1 ul li a:visited {
+.block-nice-menus a:link,
+.block-nice-menus a:visited {
   background: white;
   color: #373737;
   font-size: 14px;
@@ -27,25 +27,24 @@
   transition: background 0.1s linear;
 }
 
-#block-nice-menus-1 ul li a:focus,
-#block-nice-menus-1 ul li a:hover, 
-#block-nice-menus-1 ul li.over a,
-#block-nice-menus-1 ul li.active-trail a
-{
+.block-nice-menus a:focus,
+.block-nice-menus a:hover,
+.block-nice-menus li.over a,
+.block-nice-menus li.active-trail a {
   background-color: #3A93CD;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px rgba(24, 62, 87, .75);
 }
 
-#block-nice-menus-1 ul li.over li a,
-#block-nice-menus-1 ul li.active-trail li a
-{
+.block-nice-menus ul li.over li a,
+.block-nice-menus ul li.active-trail li a {
   background-color: #fff;
   color: #000;
   text-shadow: none;
 }
-#block-nice-menus-1 ul li.over li a:focus,
-#block-nice-menus-1 ul li.over li a:hover { 
+
+.block-nice-menus ul li.over li a:focus,
+.block-nice-menus ul li.over li a:hover { 
   background-color: #3A93CD;
   color: #FFFFFF;
   text-shadow: 1px 1px 1px rgba(24, 62, 87, .75);
