@@ -1,6 +1,7 @@
 <?php 
 
 function om_theme_assets_admin_form() {
+  om_theme_assets_build_dynamic_css();
   /**
    * Fieldset factory
    */
@@ -247,7 +248,7 @@ function om_theme_assets_admin_form() {
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_color'] = array(
       '#title' => t('Main Menu Drop Down Text Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('main_nav_color_dropdown_color', ''),
+      '#default_value' => variable_get('main_nav_dropdown_color', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_background'] = array(
       '#title' => t('Main Menu Drop Down Background Color'),
@@ -281,10 +282,10 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('title_color', ''),
     );
-    $form['admin_theme_omp_fieldset']['info_tag_background'] = array(
-      '#title' => t('Info Tag Background Color'),
+    $form['admin_theme_omp_fieldset']['info_tag_color'] = array(
+      '#title' => t('Info Tag Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('info_tag_background', ''),
+      '#default_value' => variable_get('info_tag_color', ''),
     );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
@@ -323,6 +324,4 @@ function om_theme_assets_admin_form_submit(&$form, &$form_state) {
       file_usage_add($file, 'om_theme_assets', $file_field, $user->uid);
     }
   }
-  cache_clear_all(NULL, 'cache_block', '*');
-  om_theme_assets_build_dynamic_css();
 }

@@ -1,5 +1,5 @@
 <?php if (!empty($main_nav_background)): ?>
-  body .block-nice-menus {
+  body #header {
     background-color: <?php print $main_nav_background; ?>;
   }
 <?php endif; ?>
@@ -57,7 +57,6 @@
     background-color: <?php print $main_nav_dropdown_background_hover; ?>;
   }
 <?php endif; ?>
-
 <?php if (!empty($background_texture)): ?>
   html body {
     background: transparent url(<?php print $background_texture; ?>) top left repeat;
@@ -69,9 +68,18 @@
   }
 <?php endif; ?>
 <?php if (!empty($title_color)): ?>
-  #page #content h1
-  #page #content h2
+  #page #content h1,
+  #page #content h2,
   #page #content h3 {
     color: <?php print $title_color; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($info_tag_color)): ?>
+  body .action-item .blue-bubble {
+    background-color: <?php print $info_tag_color; ?>;
+  }
+  .action-item a:link .blue-text,
+  .action-item a:visited .blue-text {
+    color: <?php print $info_tag_color; ?>;
   }
 <?php endif; ?>

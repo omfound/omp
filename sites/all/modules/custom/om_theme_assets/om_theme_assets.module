@@ -232,11 +232,20 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
 function om_theme_assets_build_dynamic_css() {
   global $user;
   $css = theme('om_theme_dynamic_css');
-  $destination = 'public://theme_assets/om_theme_dynamic_css.css';
-  $file = file_save_data($css, $destination, FILE_EXISTS_REPLACE);
-  $file->status = FILE_STATUS_PERMANENT;
-  file_save($file);
-  file_usage_add($file, 'om_theme_assets', 'om_theme_dynamic_css', $user->uid);
+  if (!empty($css)) {
+    $destination = 'public://theme_assets/om_theme_dynamic_css.css';
+    $file = file_save_data($css, $destination, FILE_EXISTS_REPLACE);
+    $file->status = FILE_STATUS_PERMANENT;
+    file_save($file);
+    file_usage_add($file, 'om_theme_assets', 'om_theme_dynamic_css', $user->uid);
+  }
+  else {
+   $file = file_load_multiple($fids = array(), $conditions = array('filename' => 'om_theme_dynamic_css.css'));
+   if (!empty($file)) {
+     $file = array_shift($file);
+     file_delete($file, TRUE);
+   }
+  }
 }
 
 
