@@ -203,7 +203,9 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
   }
 
-  dsm($form);
+  if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
+    dsm($form);
+  }
 }
 
 /**
