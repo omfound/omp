@@ -41,3 +41,19 @@
     background-color: <?php print $main_nav_dropdown_background; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($main_nav_dropdown_color_hover)): ?>
+  body .block-nice-menus ul li.over li a:link,
+  body .block-nice-menus ul li.over li a:visited,
+  body .block-nice-menus ul li.active-trail li a:link,
+  body .block-nice-menus ul li.active-trail li a:visited {
+    color: <?php print $main_nav_dropdown_color_hover; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($main_nav_dropdown_background_hover)): ?>
+  body .block-nice-menus ul li.over li a:link,
+  body .block-nice-menus ul li.over li a:visited,
+  body .block-nice-menus ul li.active-trail li a:link,
+  body .block-nice-menus ul li.active-trail li a:visited {
+    background-color: <?php print $main_nav_dropdown_background_hover; ?>;
+  }
+<?php endif; ?>
