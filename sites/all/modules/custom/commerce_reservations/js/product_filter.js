@@ -2,6 +2,9 @@
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
 
+    ClosedDay.prototype = new CalendarEvent,
+    ClosedTime.prototype = new CalendarEvent,
+
     //watch for reservation item list reloads and bind appropriate
     //action to each cart form item
     $(".view-calendar-product-view").ajaxComplete(function(event, XMLHttpRequest, ajaxOptions) {
@@ -420,14 +423,12 @@
       this.allDay = true;
       this.classname = 'closed-all-day';
     },
-    ClosedDay.prototype = new CalendarEvent,
     ClosedTime:function(title, start, end) {
       this.base = CalendarEvent;
       this.base(title, start, end);
 
       this.classname = 'closed-time';
     },
-    ClosedTime.prototype = new CalendarEvent,
 
   }
 }(jQuery));
