@@ -872,9 +872,10 @@ body.page-reservations #main-content #squeeze{
 }
 .view-reservation-calendar div.view-footer {
   float: left;
-  width: 218px;
+  width: 208px;
   margin-left: 5px;
   height: 440px;
+  padding: 5px;
   background-color: #fff;
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
