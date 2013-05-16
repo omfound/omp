@@ -17,7 +17,11 @@
 <?php endif; ?>
 <?php if (!empty($main_nav_background_hover)): ?>
   body #header a:focus,
-  body #header a:hover {
+  body #header a:hover,
+  body #header a:focus,
+  body #header a:hover,
+  body #header li.over a,
+  body #header li.active-trail a {
     background-color: <?php print $main_nav_background_hover; ?>;
   }
 <?php endif; ?>
