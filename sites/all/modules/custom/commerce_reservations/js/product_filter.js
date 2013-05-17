@@ -201,14 +201,12 @@ Drupal.cr = Drupal.cr || {};
                   eventModel = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
                   event = eventModel.createEvent();
                   dom_id: this.dom_id;
-                  console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
                 $('div.closed-time', data).each(function(index){
                   eventModel = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   event = eventModel.createEvent();
                   dom_id: this.dom_id;
-                  console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
               }
