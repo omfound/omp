@@ -42,6 +42,7 @@ Drupal.cr = Drupal.cr || {};
     Drupal.behaviors.product_filter.hideCalendar();
 
     //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
+    //duplicate code handles this
     Drupal.behaviors.product_filter.CalendarLoadClosures(basePath);
 
     //The user has selected a reservable item
@@ -65,9 +66,12 @@ Drupal.cr = Drupal.cr || {};
       });
       Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
 
+      //Populate details pane and calendar with defaults
+      Drupal.behaviors.product_filter.moveItemToDetails();
+      Drupal.behaviors.product_filter.addDateToCalendar();
+
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
-        Drupal.behaviors.product_filter.moveItemToDetails();
         //deleted a bunch of stuff from here, may need to bring some back
       });
 
@@ -197,12 +201,13 @@ Drupal.cr = Drupal.cr || {};
                 $('div.closed_dates', data).each(function(index){
                   event = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
                   dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
+                  $(".fullcalendar").fullCalendar('renderEvent', event);
                 });
                 $('div.closed-time', data).each(function(index){
-                  event = new Drupal.cr.closedTime('closed time', $(this).attr('date'), $(this).attr('date'));
+                  event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
+                  console.log(event);
+                  $(".fullcalendar").fullCalendar('renderEvent', event);
                 });
               }
         });

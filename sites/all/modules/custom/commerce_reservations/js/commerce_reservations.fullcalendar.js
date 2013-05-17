@@ -27,6 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
+        /**
         var basePath = Drupal.settings.basePath;
 	      $.ajax(
         {url : basePath + 'closed_times/',
@@ -44,9 +45,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               event.eventBorderColor = '#56a4da';
               event.textColor = 'white';
               dom_id: this.dom_id;
-              $(".fullcalendar").fullCalendar('renderEvent', event, true);
+              $(".fullcalendar").fullCalendar('renderEvent', event, false);
             });
           }
+          **/
     });
 
       }
@@ -55,12 +57,15 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.selectHelper = true;
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
+      dateInvalid = false;
       if (!allDay){
         dontCheck = false;
         today = new Date();
         if (start < today){
-	        $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot make a reservation in the past.<p>', false);
+          $('.date-status').html('<p class = "error">You cannot make a reservation in the past.<p>');
 	        dontCheck = true;
+          $('.view-footer .form-submit').hide();
+          dateInvalid = true;
         }
         var array = $('.fullcalendar').fullCalendar('clientEvents');
         if (array.length >= 1 && dontCheck == false){
@@ -68,7 +73,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //Check for overlaps
             if (array[i].className == 'overlap'){
               if(!(array[i].start >= end || array[i].end <= start)){
-                $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.', false);
+                $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
+                $('.view-footer .form-submit').hide();
+                dateInvalid = true;
               }
             }
             //Check for closed days
@@ -76,22 +83,30 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               if (array[i].start.getDate() == start.getDate()){
                 if (array[i].start.getMonth() == start.getMonth()){
                   if (array[i].start.getYear() == start.getYear()){
-                    $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>', false);
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                    $('.view-footer .form-submit').hide();
+                    dateInvalid = true;
                   }
                 }
               }
               if (array[i].start.getDate() == end.getDate()){
                 if (array[i].start.getMonth() == end.getMonth()){
                   if (array[i].start.getYear() == start.getYear()){
-                    $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select an end time during studio hours.</p>', false);
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                    $('.view-footer .form-submit').hide();
+                    dateInvalid = true;
                   }   
                 }
               }
             } else if (array[i].className == 'closed-time'){
               if (start >= array[i].start && start < array[i].end){
-                $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                $('.view-footer .form-submit').hide();
+                dateInvalid = true;
               } else if(end >= array[i].start && end < array[i].end){
-                $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                $('.view-footer .form-submit').hide();
+                dateInvalid = true;
               }
             }
           }
@@ -139,6 +154,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         $('#pickedDates .end-date-wrapper .date-hour .form-select').val(endHour);
         $('#pickedDates .end-date-wrapper .date-minute .form-select').val(endMinutes);
         $('#pickedDates .end-date-wrapper .date-ampm .form-select').val(ampm);
+        if (!dateInvalid) {
+          $('.date-status').html('');
+          $('.view-footer .form-submit').show();
+        }
       }
     };
     return options;
