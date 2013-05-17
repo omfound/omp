@@ -27,6 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
+        /**
         var basePath = Drupal.settings.basePath;
 	      $.ajax(
         {url : basePath + 'closed_times/',
@@ -47,6 +48,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               $(".fullcalendar").fullCalendar('renderEvent', event, false);
             });
           }
+          **/
     });
 
       }

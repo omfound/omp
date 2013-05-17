@@ -43,7 +43,7 @@ Drupal.cr = Drupal.cr || {};
 
     //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
     //duplicate code handles this
-    //Drupal.behaviors.product_filter.CalendarLoadClosures(basePath);
+    Drupal.behaviors.product_filter.CalendarLoadClosures(basePath);
 
     //The user has selected a reservable item
     $(item).mousedown(function() {
@@ -206,6 +206,7 @@ Drupal.cr = Drupal.cr || {};
                 $('div.closed-time', data).each(function(index){
                   event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   dom_id: this.dom_id;
+                  console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event);
                 });
               }
