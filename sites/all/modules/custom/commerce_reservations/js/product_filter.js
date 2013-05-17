@@ -71,7 +71,7 @@ Drupal.cr = Drupal.cr || {};
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
-        Drupal.behaviors.product_filter.moveItemToDetails();
+        //Drupal.behaviors.product_filter.moveItemToDetails();
         //deleted a bunch of stuff from here, may need to bring some back
       });
 
