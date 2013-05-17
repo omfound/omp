@@ -35,10 +35,11 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
           });
         });
 
+        /**
         for (var key in currentEvents) {
           console.log(key);
           console.log(currentEvents[key]);
-        }
+        }**/
         console.log(currentEvents);
         //console.log($('.fullcalendar').fullCalendar('clientEvents'));
         //if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
