@@ -1,9 +1,35 @@
 (function ($)  {
   Drupal.behaviors.product_filter = {
+    CalendarEvent:function(title, start, end) {
+      this.title = title;
+      this.start = start;
+      this.end = end;
+      
+      this.allDay = false;
+      this.classname = '';
+      this.color = '#912711';
+      this.backgroundColor = '#912711';
+      this.eventBorderColor = '#912711';
+      this.textColor = '#912711';
+    },
+    ClosedDay:function(title, start, end) {
+      this.base = CalendarEvent;
+      this.base(title, start, end);
+
+      this.allDay = true;
+      this.classname = 'closed-all-day';
+    },
+    ClosedTime:function(title, start, end) {
+      this.base = CalendarEvent;
+      this.base(title, start, end);
+
+      this.classname = 'closed-time';
+    },
+
     attach: function (context, settings) {
 
-    ClosedDay.prototype = new CalendarEvent,
-    ClosedTime.prototype = new CalendarEvent,
+    ClosedDay.prototype = new CalendarEvent;
+    ClosedTime.prototype = new CalendarEvent;
 
     //watch for reservation item list reloads and bind appropriate
     //action to each cart form item
@@ -402,33 +428,6 @@
         }).change(Drupal.behaviors.product_filter.addDateToCalendar);
         $('#pickedDates .end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
       }
-    },
-
-    CalendarEvent:function(title, start, end) {
-      this.title = title;
-      this.start = start;
-      this.end = end;
-      
-      this.allDay = false;
-      this.classname = '';
-      this.color = '#912711';
-      this.backgroundColor = '#912711';
-      this.eventBorderColor = '#912711';
-      this.textColor = '#912711';
-    },
-    ClosedDay:function(title, start, end) {
-      this.base = CalendarEvent;
-      this.base(title, start, end);
-
-      this.allDay = true;
-      this.classname = 'closed-all-day';
-    },
-    ClosedTime:function(title, start, end) {
-      this.base = CalendarEvent;
-      this.base(title, start, end);
-
-      this.classname = 'closed-time';
-    },
-
+    }
   }
 }(jQuery));
