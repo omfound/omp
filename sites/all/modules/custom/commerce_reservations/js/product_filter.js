@@ -395,7 +395,8 @@ Drupal.cr = Drupal.cr || {};
         }
 
         //Move dateFields into the details div
-        $('.qtip-content [id|=edit-quantity]').val(quantity);
+        $('.date-details').html(dateFields);
+        $('.date-details [id|=edit-quantity]').val(quantity);
 
         //update calendar on change events
         $('#pickedDates .start-date-wrapper .form-select').focus(function(){
