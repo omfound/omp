@@ -1,5 +1,5 @@
 <?php
-class leastAiredShowsSpanishSchedulingRule extends timeslotSchedulingRule {
+class leastAiredShowsWithLanguageSchedulingRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
     $shows = array();
     $query = db_select('node', 'n');
