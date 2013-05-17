@@ -216,7 +216,7 @@ Drupal.cr = Drupal.cr || {};
       $('#leftContent .large-image').addClass('preloader-active');
 
       $.ajax(
-        {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + itemquantity,
+        {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
           success : function (data) {
             $('#leftContent .large-image').removeClass('preloader-active');
