@@ -27,7 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
-        if ($('.fullcalendar').fullCalendar('clientEvents').length < 1) {
+        if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
           var basePath = Drupal.settings.basePath;
 	        $.ajax(
           {url : basePath + 'closed_times/',
