@@ -8,7 +8,10 @@ class spanishLanguageShowsSchedulingRule extends timeslotSchedulingRule {
     // These two lines specific to Spanish Language rule.
     $query->join('field_revision_field_om_language', 'omlang', 'omlang.entity_id=n.nid');
     // 1307 == spanish language in languages taxonomy
-    $query->condition('field_om_language_tid', 1307, '=');
+    $terms = getSpanishTaxonomyTerms();
+    if($terms) {
+      $query->condition('field_om_language_tid', $terms, 'in');
+    }
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
       $query->join('field_data_field_om_theme', 'theme', 'theme.entity_id=n.nid');
@@ -36,5 +39,23 @@ class spanishLanguageShowsSchedulingRule extends timeslotSchedulingRule {
       $shows[] = $nid;
     }
     return array_values($shows);
+  }
+
+  public function getSpanishTaxonomyTerms() {
+    $query = db_select('taxonomy_term_data', 'term_data');
+    $query->fields('term_data', array('tid'));
+    $query->condition('name', 'Spanish', '=');
+    $resource = $query->execute();
+    $result = $resource->fetchAll();
+    if (!empty($result)) {
+      $tids = array();
+      foreach ($result as $obj) {
+        $tids[] = $obj->tid; 
+      }
+      return $tids;
+    }
+    else {
+      return FALSE;
+    }
   }
 }
