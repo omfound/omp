@@ -29,9 +29,18 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       } else if(view.name == 'agendaWeek'){
         closedSet = false;
         currentEvents = $('.fullcalendar').fullCalendar('clientEvents');
+        $(currentEvents).each(function(index) {
+          $(this).each(function(index) {
+            console.log($(this));
+          });
+        });
+
+        /**
         for (var key in currentEvents) {
+          console.log(key);
           console.log(currentEvents[key]);
-        }
+        }**/
+        console.log(currentEvents);
         //console.log($('.fullcalendar').fullCalendar('clientEvents'));
         //if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
           var basePath = Drupal.settings.basePath;
