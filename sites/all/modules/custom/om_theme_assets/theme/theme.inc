@@ -61,8 +61,9 @@ function om_theme_assets_preprocess_om_callout_block(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
-  $variables['main_nav_background'] = variable_get('main_nav_background', '');
+  $variables['main_nav_bar_background'] = variable_get('main_nav_bar_background', '');
   $variables['main_nav_color'] = variable_get('main_nav_color', '');
+  $variables['main_nav_background'] = variable_get('main_nav_background', '');
   $variables['main_nav_color_hover'] = variable_get('main_nav_color_hover', '');
   $variables['main_nav_background_hover'] = variable_get('main_nav_background_hover', '');
 
