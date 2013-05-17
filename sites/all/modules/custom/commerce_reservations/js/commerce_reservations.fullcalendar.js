@@ -32,7 +32,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         for (var ii = 0; ii <= allEvents.length-1; ii++) {
           console.log(allEvents[ii]);
         }
-        console.log(currentEvents);
+        console.log(allEvents);
         //console.log($('.fullcalendar').fullCalendar('clientEvents'));
         //if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
           var basePath = Drupal.settings.basePath;
