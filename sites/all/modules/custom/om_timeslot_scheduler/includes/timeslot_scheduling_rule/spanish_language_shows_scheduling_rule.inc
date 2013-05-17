@@ -8,7 +8,7 @@ class spanishLanguageShowsSchedulingRule extends timeslotSchedulingRule {
     // These two lines specific to Spanish Language rule.
     $query->join('field_revision_field_om_language', 'omlang', 'omlang.entity_id=n.nid');
     // 1307 == spanish language in languages taxonomy
-    $terms = getSpanishTaxonomyTerms();
+    $terms = $this->getSpanishTaxonomyTerms();
     if($terms) {
       $query->condition('field_om_language_tid', $terms, 'in');
     }
