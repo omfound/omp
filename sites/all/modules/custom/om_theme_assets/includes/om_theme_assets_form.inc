@@ -256,12 +256,12 @@ function om_theme_assets_admin_form() {
       '#default_value' => variable_get('main_nav_dropdown_background', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_color_hover'] = array(
-      '#title' => t('Main Menu Drop Down Text Color'),
+      '#title' => t('Main Menu Drop Down Text Color Hover'),
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_dropdown_color_hover', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_dropdown_background_hover'] = array(
-      '#title' => t('Main Menu Drop Down Background Color'),
+      '#title' => t('Main Menu Drop Down Background Color Hover'),
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_dropdown_background_hover', ''),
     );
