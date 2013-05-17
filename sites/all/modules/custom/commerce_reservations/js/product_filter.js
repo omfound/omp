@@ -63,7 +63,7 @@ Drupal.cr = Drupal.cr || {};
           return true;
         }
       });
-      Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1);
+      Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -79,7 +79,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         quantity = $('#left-side [id|=edit-quantity]').val();
-        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity);
+        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
       });
     });
     },
@@ -210,7 +210,7 @@ Drupal.cr = Drupal.cr || {};
       }
     },
 
-    CalendarReloadItem:function(nid, pid, quantity) {
+    CalendarReloadItem:function(nid, pid, quantity, basePath) {
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
