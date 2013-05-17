@@ -30,6 +30,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         closedSet = false;
         currentEvents = $('.fullcalendar').fullCalendar('clientEvents');
         for (key in currentEvents) {
+          console.log(key);
           console.log(currentEvents[key]);
         }
         console.log(currentEvents);
