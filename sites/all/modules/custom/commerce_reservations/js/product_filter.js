@@ -1,3 +1,7 @@
+
+// Registers the commerce reservations namespace.
+Drupal.cr = Drupal.cr || {};
+
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
