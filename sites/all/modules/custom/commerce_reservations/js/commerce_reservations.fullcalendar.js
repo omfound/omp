@@ -27,30 +27,30 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
-        console.log($('.fullcalendar').fullCalendar('clientEvents').length);
-        var basePath = Drupal.settings.basePath;
-	      $.ajax(
-        {url : basePath + 'closed_times/',
-          cache : false,
-          success : function (data) {
-            $('div.closed-time', data).each(function(index){
-              event = new Object();
-              event.title = 'closed time';
-              event.start = $(this).attr('start');
-              event.end = $(this).attr('end');
-              event.allDay = false;
-              event.className = 'closed-time';
-              event.color = '#56a4da';
-              event.backgroundColor = '#ac3d33';
-              event.eventBorderColor = '#56a4da';
-              event.textColor = 'white';
-              dom_id: this.dom_id;
+        if ($('.fullcalendar').fullCalendar('clientEvents').length < 1) {
+          var basePath = Drupal.settings.basePath;
+	        $.ajax(
+          {url : basePath + 'closed_times/',
+            cache : false,
+            success : function (data) {
+              $('div.closed-time', data).each(function(index){
+                event = new Object();
+                event.title = 'closed time';
+                event.start = $(this).attr('start');
+                event.end = $(this).attr('end');
+                event.allDay = false;
+                event.className = 'closed-time';
+                event.color = '#56a4da';
+                event.backgroundColor = '#ac3d33';
+                event.eventBorderColor = '#56a4da';
+                event.textColor = 'white';
+                dom_id: this.dom_id;
               $(".fullcalendar").fullCalendar('renderEvent', event, false);
             });
           }
-    });
-
+        });
       }
+    }
     }
     options.selectable = true;
     options.selectHelper = true;
