@@ -55,6 +55,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.selectHelper = true;
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
+      $('.fullcalendar').fullCalendar('removeEvents');
       dateInvalid = false;
       if (!allDay){
         dontCheck = false;
