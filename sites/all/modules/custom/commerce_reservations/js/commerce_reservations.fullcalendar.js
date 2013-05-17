@@ -69,7 +69,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             if (array[i].className == 'overlap'){
               if(!(array[i].start >= end || array[i].end <= start)){
                 $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
-                return false;
+                $('.view-footer .form-type-select').hide();
               }
             }
             //Check for closed days
@@ -78,7 +78,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 if (array[i].start.getMonth() == start.getMonth()){
                   if (array[i].start.getYear() == start.getYear()){
                     $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
-                    return false;
+                    $('.view-footer .form-type-select').hide();
                   }
                 }
               }
@@ -86,17 +86,17 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 if (array[i].start.getMonth() == end.getMonth()){
                   if (array[i].start.getYear() == start.getYear()){
                     $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
-                    return false;
+                    $('.view-footer .form-type-select').hide();
                   }   
                 }
               }
             } else if (array[i].className == 'closed-time'){
               if (start >= array[i].start && start < array[i].end){
                 $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
-                return false;
+                $('.view-footer .form-type-select').hide();
               } else if(end >= array[i].start && end < array[i].end){
                 $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
-                return false;
+                $('.view-footer .form-type-select').hide();
               }
             }
           }
@@ -145,6 +145,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         $('#pickedDates .end-date-wrapper .date-minute .form-select').val(endMinutes);
         $('#pickedDates .end-date-wrapper .date-ampm .form-select').val(ampm);
         $('.date-status').html('');
+        $('.view-footer .form-type-select').hide();
       }
     };
     return options;
