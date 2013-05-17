@@ -198,13 +198,15 @@ Drupal.cr = Drupal.cr || {};
               cache : false,
               success : function (data) {
                 $('div.closed_dates', data).each(function(index){
-                  event = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
+                  eventModel = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
+                  event = eventModel.createEvent();
                   dom_id: this.dom_id;
                   console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
                 $('div.closed-time', data).each(function(index){
-                  event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
+                  eventModel = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
+                  event = eventModel.createEvent();
                   dom_id: this.dom_id;
                   console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
@@ -424,6 +426,19 @@ Drupal.cr = Drupal.cr || {};
     this.backgroundColor = '#912711';
     this.eventBorderColor = '#912711';
     this.textColor = '#912711';
+  }
+  Drupal.cr.calendarEvent.prototype.createEvent = function() {
+    event = new Object();
+    event.title = this.title;
+    event.start = this.start;
+    event.end = this.end
+    event.allDay = this.allDay;
+    event.classname = this.classname;
+    event.color = this.color;
+    event.backgroundColor = this.backgroundColor;
+    event.eventBorderColor = this.eventBorderColor;
+    event.textColor = this.textColor;
+    return event;
   }
   Drupal.cr.closedDay = function(title, start, end) {
     this.base = Drupal.cr.calendarEvent;
