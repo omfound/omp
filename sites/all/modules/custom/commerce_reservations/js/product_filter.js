@@ -204,7 +204,7 @@ Drupal.cr = Drupal.cr || {};
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
                 $('div.closed-time', data).each(function(index){
-                  event = new Drupal.cr.closedTime('closed time', $(this).attr('date'), $(this).attr('date'));
+                  event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   dom_id: this.dom_id;
                   console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
