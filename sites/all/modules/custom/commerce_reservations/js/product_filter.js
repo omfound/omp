@@ -65,8 +65,9 @@ Drupal.cr = Drupal.cr || {};
       });
       Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
 
-      //Populate details pane
+      //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
+      Drupal.behaviors.product_filter.addDateToCalendar();
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
