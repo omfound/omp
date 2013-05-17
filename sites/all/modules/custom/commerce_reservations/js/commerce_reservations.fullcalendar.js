@@ -145,7 +145,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         $('#pickedDates .end-date-wrapper .date-minute .form-select').val(endMinutes);
         $('#pickedDates .end-date-wrapper .date-ampm .form-select').val(ampm);
         $('.date-status').html('');
-        $('.view-footer .form-type-select').hide();
+        $('.view-footer .form-type-select').show();
       }
     };
     return options;
