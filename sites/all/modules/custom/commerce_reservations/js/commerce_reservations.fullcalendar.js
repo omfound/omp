@@ -62,6 +62,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (start < today){
           $('.date-status').html('<p class = "error">You cannot make a reservation in the past.<p>');
 	        dontCheck = true;
+          $('.view-footer .form-submit').hide();
           dateInvalid = true;
         }
         var array = $('.fullcalendar').fullCalendar('clientEvents');
