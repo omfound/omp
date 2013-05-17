@@ -42,7 +42,7 @@ Drupal.cr = Drupal.cr || {};
     Drupal.behaviors.product_filter.hideCalendar();
 
     //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
-    Drupal.behaviors.product_filter.CalendarLoadClosures();
+    Drupal.behaviors.product_filter.CalendarLoadClosures(basePath);
 
     //The user has selected a reservable item
     $(item).mousedown(function() {
@@ -187,7 +187,7 @@ Drupal.cr = Drupal.cr || {};
       this.quantity = quantity;
     },
 
-    CalendarLoadClosures:function() {
+    CalendarLoadClosures:function(basePath) {
       //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
       if (!$('body').data('closeTimesLoaded')) {
         $.ajax(
