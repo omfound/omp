@@ -47,7 +47,7 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
     ),
     'locally_produced_shows_scheduling_rule' => array(
       'title' => t('Locally Produced Station Content'),
-      'description' => t("Selects only shows marked as locally produced content."),
+      'description' => t("Selects only shows marked as locally produced content. Prioritizes least aired content."),
       'type' => 'timeslot_scheduling_rule',
       'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
       'file' => 'local_shows_scheduling_rule.inc',
@@ -56,14 +56,47 @@ function om_timeslot_scheduler_om_timeslot_scheduler_timeslot_scheduling_rule() 
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
-    'spanish_language_shows_scheduling_rule' => array(
-      'title' => t('Spanish Language Content'),
-      'description' => t("Selects only shows marked as spanish language content."),
+    'produced_at_station_scheduling_rule' => array(
+      'title' => t('Shows Produced at Station'),
+      'description' => t("Selects shows produced at your station. Prioritizes least aired content."),
       'type' => 'timeslot_scheduling_rule',
       'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
-      'file' => 'spanish_language_shows_scheduling_rule.inc',
+      'file' => 'produced_at_station_scheduling_rule.inc',
       'timeslot_scheduling_rule' => array(
-        'class' => 'spanishLanguageShowsSchedulingRule',
+        'class' => 'producedAtStationSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
+    'least_aired_show_in_project_scheduling_rule' => array(
+      'title' => t('Least Aired Show in Project'),
+      'description' => t("Selects least aired content, while constraining results to the current timeslot's project."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'least_aired_show_in_project_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'leastAiredShowInProjectSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
+    'newest_episode_in_project_scheduling_rule' => array(
+      'title' => t('Newest Episode in Project'),
+      'description' => t("Selects the newest episodes in a project using the episode field."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'newest_episode_in_project_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'newestEpisodeInProjectSchedulingRule',
+        'parent' => 'timeslotSchedulingRule',
+      ),
+    ),
+    'least_aired_shows_spanish_scheduling_rule' => array(
+      'title' => t('Least Aired Shows from Unique Project Spanish'),
+      'description' => t("Selects the newest episodes in a project using the episode field."),
+      'type' => 'timeslot_scheduling_rule',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/includes/timeslot_scheduling_rule',
+      'file' => 'newest_episode_in_project_scheduling_rule.inc',
+      'timeslot_scheduling_rule' => array(
+        'class' => 'newestEpisodeInProjectSchedulingRule',
         'parent' => 'timeslotSchedulingRule',
       ),
     ),
