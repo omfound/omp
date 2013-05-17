@@ -65,6 +65,9 @@ Drupal.cr = Drupal.cr || {};
       });
       Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
 
+      //Populate details pane
+      Drupal.behaviors.product_filter.moveItemToDetails();
+
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
         Drupal.behaviors.product_filter.moveItemToDetails();
