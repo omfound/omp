@@ -60,7 +60,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         dontCheck = false;
         today = new Date();
         if (start < today){
-	        $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot make a reservation in the past.<p>', false);
+          $('.date-status').html('<p class = "error">You cannot make a reservation in the past.<p>');
 	        dontCheck = true;
           dateInvalid = true;
         }
