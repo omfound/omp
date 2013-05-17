@@ -27,6 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
+        console.log($('.fullcalendar').fullCalendar('clientEvents').length);
         if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
           var basePath = Drupal.settings.basePath;
 	        $.ajax(
