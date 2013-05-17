@@ -1,35 +1,6 @@
 (function ($)  {
   Drupal.behaviors.product_filter = {
-    CalendarEvent:function(title, start, end) {
-      this.title = title;
-      this.start = start;
-      this.end = end;
-      
-      this.allDay = false;
-      this.classname = '';
-      this.color = '#912711';
-      this.backgroundColor = '#912711';
-      this.eventBorderColor = '#912711';
-      this.textColor = '#912711';
-    },
-    ClosedDay:function(title, start, end) {
-      this.base = CalendarEvent;
-      this.base(title, start, end);
-
-      this.allDay = true;
-      this.classname = 'closed-all-day';
-    },
-    ClosedTime:function(title, start, end) {
-      this.base = CalendarEvent;
-      this.base(title, start, end);
-
-      this.classname = 'closed-time';
-    },
-
     attach: function (context, settings) {
-
-    ClosedDay.prototype = new CalendarEvent;
-    ClosedTime.prototype = new CalendarEvent;
 
     //watch for reservation item list reloads and bind appropriate
     //action to each cart form item
@@ -220,12 +191,12 @@
               cache : false,
               success : function (data) {
                 $('div.closed_dates', data).each(function(index){
-                  event = new ClosedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
+                  event = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
                   dom_id: this.dom_id;
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
                 $('div.closed-time', data).each(function(index){
-                  event = new ClosedTime('closed time', $(this).attr('date'), $(this).attr('date'));
+                  event = new Drupal.cr.closedTime('closed time', $(this).attr('date'), $(this).attr('date'));
                   dom_id: this.dom_id;
                   $(".fullcalendar").fullCalendar('renderEvent', event, true);
                 });
@@ -430,4 +401,33 @@
       }
     }
   }
+
+  //here fixing model
+  Drupal.cr.calendarEvent = function(title, start, end) {
+    this.title = title;
+    this.start = start;
+    this.end = end;
+    
+    this.allDay = false;
+    this.classname = '';
+    this.color = '#912711';
+    this.backgroundColor = '#912711';
+    this.eventBorderColor = '#912711';
+    this.textColor = '#912711';
+  }
+  Drupal.cr.closedDay = function(title, start, end) {
+    this.base = Drupal.cr.calendarEvent;
+    this.base(title, start, end);
+
+    this.allDay = true;
+    this.classname = 'closed-all-day';
+  }
+  Drupal.cr.closedDay.prototype = new Drupal.cr.calendarEvent;
+  Drupal.cr.closedTime = function(title, start, end) {
+    this.base = Drupal.cr.calendarEvent;
+    this.base(title, start, end);
+
+    this.classname = 'closed-time';
+  }
+  Drupal.cr.closedTime.prototype = new Drupal.cr.calendarEvent;
 }(jQuery));
