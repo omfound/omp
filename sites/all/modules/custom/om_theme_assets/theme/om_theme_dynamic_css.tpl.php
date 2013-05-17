@@ -1,12 +1,18 @@
-<?php if (!empty($main_nav_background)): ?>
+<?php if (!empty($main_nav_bar_background)): ?>
   body #header {
-    background-color: <?php print $main_nav_background; ?>;
+    background-color: <?php print $main_nav_bar_background; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($main_nav_color)): ?>
   body .block-nice-menus a:link,
   body .block-nice-menus a:visited {
     color: <?php print $main_nav_color; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($main_nav_background)): ?>
+  body .block-nice-menus a:link,
+  body .block-nice-menus a:visited {
+    background-color: <?php print $main_nav_background; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($main_nav_color_hover)): ?>

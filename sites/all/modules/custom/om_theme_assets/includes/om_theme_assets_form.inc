@@ -225,15 +225,20 @@ function om_theme_assets_admin_form() {
     );
     $form['admin_theme_omp_fieldset'] = $fieldset;
     $form['admin_theme_omp_fieldset']['#title'] = t('Admin OMP Theme');
-    $form['admin_theme_omp_fieldset']['main_nav_background'] = array(
-      '#title' => t('Main Navigation Background'),
+    $form['admin_theme_omp_fieldset']['main_nav_bar_background'] = array(
+      '#title' => t('Navbar Background Color'),
       '#type' => 'textfield',
-      '#default_value' => variable_get('main_nav_background', ''),
+      '#default_value' => variable_get('main_nav_bar_background', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_color'] = array(
       '#title' => t('Main Menu Text Color'),
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_color', ''),
+    );
+    $form['admin_theme_omp_fieldset']['main_nav_background'] = array(
+      '#title' => t('Main Menu Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('main_nav_background', ''),
     );
     $form['admin_theme_omp_fieldset']['main_nav_color_hover'] = array(
       '#title' => t('Main Menu Text Color Hover'),
