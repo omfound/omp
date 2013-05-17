@@ -200,12 +200,12 @@ Drupal.cr = Drupal.cr || {};
                 $('div.closed_dates', data).each(function(index){
                   event = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
                   dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event);
+                  //$(".fullcalendar").fullCalendar('renderEvent', event);
                 });
                 $('div.closed-time', data).each(function(index){
                   event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event);
+                  //$(".fullcalendar").fullCalendar('renderEvent', event);
                 });
               }
         });
