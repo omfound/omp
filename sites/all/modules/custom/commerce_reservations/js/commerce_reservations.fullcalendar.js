@@ -29,8 +29,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       } else if(view.name == 'agendaWeek'){
         closedSet = false;
         currentEvents = $('.fullcalendar').fullCalendar('clientEvents');
-        $(currentEvents).each(function(index) {
-          $(this).each(function(index) {
+        $.each(currentEvents, function(index) {
+          $.each(function(index) {
             console.log($(this));
           });
         });
