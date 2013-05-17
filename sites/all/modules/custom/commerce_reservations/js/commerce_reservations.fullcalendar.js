@@ -68,7 +68,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //Check for overlaps
             if (array[i].className == 'overlap'){
               if(!(array[i].start >= end || array[i].end <= start)){
-                $('.fullcalendar').qtip('api').updateContent('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.', false);
+                $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
               }
             }
             //Check for closed days
