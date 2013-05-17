@@ -63,7 +63,7 @@ Drupal.cr = Drupal.cr || {};
           return true;
         }
       });
-      CalendarReloadItem(nid, pid, 1);
+      Drupal.behaviours.product_filter.CalendarReloadItem(nid, pid, 1);
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -79,7 +79,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         quantity = $('#left-side [id|=edit-quantity]').val();
-        CalendarReloadItem(nid, pid, quantity);
+        Drupal.behaviours.product_filter.CalendarReloadItem(nid, pid, quantity);
       });
     });
     },
