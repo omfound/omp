@@ -27,6 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
+        console.log(view);
         var basePath = Drupal.settings.basePath;
 	      $.ajax(
         {url : basePath + 'closed_times/',
@@ -55,7 +56,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.selectHelper = true;
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
-      $('.fullcalendar').fullCalendar('removeEvents');
       dateInvalid = false;
       if (!allDay){
         dontCheck = false;
