@@ -28,14 +28,23 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       });
       } else if(view.name == 'agendaWeek'){
         closedSet = false;
-        allEvents = $('.fullcalendar').fullCalendar('clientEvents');
+        
+      $('.fullcalendar').fullCalendar({ 
+        loading:function(isLoading,view){
+          if (!isLoading) {
+            console.log($('.fullcalendar').fullCalendar('clientEvents').length);
+          }
+        },
+      });
+      /**
+        allEvents = $('.fullcalendar').fullCalendar({'clientEvents');
         for (var ii = 0; ii <= 10; ii++) {
           console.log(allEvents[ii]);
         }
         console.log(allEvents);
         for (var ii = 0; ii <= allEvents.length-1; ii++) {
           console.log(allEvents[ii]);
-        }
+        }**/
         //console.log($('.fullcalendar').fullCalendar('clientEvents'));
         //if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
           var basePath = Drupal.settings.basePath;
