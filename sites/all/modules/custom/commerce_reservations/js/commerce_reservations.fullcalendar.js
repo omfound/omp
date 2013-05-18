@@ -34,7 +34,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
           if (!isLoading) {
             console.log($('.fullcalendar').fullCalendar('clientEvents').length);
           }
-        },
+        }
       });
       /**
         allEvents = $('.fullcalendar').fullCalendar({'clientEvents');
