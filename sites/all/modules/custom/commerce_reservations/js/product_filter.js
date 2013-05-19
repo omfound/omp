@@ -245,7 +245,7 @@ Drupal.cr = Drupal.cr || {};
             if (not_cert.length > 0){
               logged_in = $('.logged-in');
               if (logged_in.length > 0){
-	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../class-list">Take a Class!</a></div>');
+	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../classes">Take a Class!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
                 $('#content').css('height', 'auto');
               }  else{
