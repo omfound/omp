@@ -306,7 +306,8 @@ Drupal.cr = Drupal.cr || {};
                 event.index = $(this).attr('index');
                 event.eid = $(this).attr('eid');
                 event.entity_type = $(this).attr('entity_type');
-                event.title = $(this).attr('title');
+                //event.title = $(this).attr('title');
+                event.title = 'Reserved';
                 event.start = $(this).attr('start');
                 event.end = $(this).attr('end');
                 event.url = $(this).attr('href');
@@ -341,7 +342,6 @@ Drupal.cr = Drupal.cr || {};
               $('.page-reservations #middle-wrapper').animate({
                 height: '1260px'
               }, 1000 );
-              //probably fire here
             }
           }
       });      
