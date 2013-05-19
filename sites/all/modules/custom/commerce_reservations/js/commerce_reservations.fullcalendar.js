@@ -27,15 +27,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
-        
-      /**
-      $('.fullcalendar').fullCalendar({ 
-        loading:function(isLoading,view){
-          if (!isLoading) {
-            console.log($('.fullcalendar').fullCalendar('clientEvents').length);
-          }
-        }
-      });**/
+        //check if closed times have already been added
         closedSet = false;
         allEvents = $('.fullcalendar').fullCalendar('clientEvents');
         for (var ii = 0; ii <= 10; ii++) {
@@ -43,14 +35,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             if (allEvents[ii].hasOwnProperty('title')) {
               if (allEvents[ii].title == 'closed time') {
                 closedSet = true;
-                console.log(allEvents[ii]);
               }
             }
           }
         }
-        console.log(allEvents);
-        //console.log($('.fullcalendar').fullCalendar('clientEvents'));
-        //if (!$('.fullcalendar').fullCalendar('clientEvents').length) {
         if (!closedSet) {
           var basePath = Drupal.settings.basePath;
 	        $.ajax(
