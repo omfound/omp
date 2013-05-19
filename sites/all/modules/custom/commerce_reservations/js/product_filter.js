@@ -249,7 +249,7 @@ Drupal.cr = Drupal.cr || {};
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
                 $('#content').css('height', 'auto');
               }  else{
-	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../personal-membership-plans">Login or Become a Member!</a></div>');
+	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member.</p><a href = "../membership">Login or Become a Member!</a></div>');
 	              $('.view-reservation-calendar').css('visibility', 'hidden');
                 $('#content').css('height', 'auto');
 	            }
