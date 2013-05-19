@@ -352,10 +352,6 @@ body.page-reservations #main-content #squeeze{
 .view-id-reservation_calendar .fc-button-today .fc-button-inner{
 	height: 35px;
 	width: 70px;
-	border: none;
-	background-color: #b4d270;
-	box-shadow: inset -2px -1px 15px rgba(125, 128, 125, 0.64);
-	color: white;
 }
 
 .view-id-reservation_calendar .fc-button-agendaWeek .fc-button-inner .fc-button-content,
