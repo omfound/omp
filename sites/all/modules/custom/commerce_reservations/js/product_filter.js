@@ -307,7 +307,8 @@ Drupal.cr = Drupal.cr || {};
                 event.eid = $(this).attr('eid');
                 event.entity_type = $(this).attr('entity_type');
                 //event.title = $(this).attr('title');
-                event.title = $(this).attr('title');
+                //event.title = $(this).attr('title');
+                event.title = 'Reserved';
                 event.start = $(this).attr('start');
                 event.end = $(this).attr('end');
                 event.url = $(this).attr('href');
@@ -327,7 +328,7 @@ Drupal.cr = Drupal.cr || {};
                 event.backgroundColor = '#912711';
                 }
                 event.eventBorderColor = '#912711';
-                event.textColor = '#912711';
+                event.textColor = '#fff';
                 dom_id: this.dom_id;
                 $(".fullcalendar").fullCalendar('renderEvent', event, true);
               });
