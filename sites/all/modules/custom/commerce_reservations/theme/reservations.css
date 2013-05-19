@@ -900,5 +900,9 @@ body.page-reservations #main-content #squeeze{
 
 .not-front #content .view-reservation-calendar div.view-footer .date-status p {
   margin: 0;
+  font-weight: bold;
+  background-color: #FFFFCC;
+  padding: 5px;
+  margin-top: 5px;
 }
 /** end date picker **/
