@@ -385,7 +385,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .view-id-reservation_calendar .fc-select-helper{
-	background-color: #acbdc4;
+	background-color: #85B740;
 	opacity: 1 !important;
 }
 
@@ -426,7 +426,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 #pickedDates legend{
-	background-color: #adbec5;
+	background-color: #85B740;
   padding: 3px 10px 3px 10px;
 }
 
@@ -449,8 +449,9 @@ body.page-reservations #main-content #squeeze{
 	font-family: "proxima-nova";
 	font-size: 18px;
 	width: 230px;
-	background-color: #adbec5;
-	color: #3d2d37;
+	background-color: #85B740;
+	color: #fff;
+  text-shadow: none;
 }
 
 .page-reservations .add-to-cart div.fieldset-wrapper{
