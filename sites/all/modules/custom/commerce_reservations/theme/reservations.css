@@ -311,8 +311,10 @@ body.page-reservations #main-content #squeeze{
 }
 
 .view-id-reservation_calendar .fc-header-title{
-	float: left;
-	height: 38px;
+}
+
+.view-id-reservation_calendar .fc-header-center {
+  padding-top: 5px;
 }
 
 .view-id-reservation_calendar .fc-header-title h2{
