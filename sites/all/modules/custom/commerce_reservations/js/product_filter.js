@@ -65,7 +65,11 @@ Drupal.cr = Drupal.cr || {};
       });
 
       //Initialize calendar events
-      Drupal.behaviors.product_filter.initializeCalendarEvents(nid, pid, 1, basePath);
+      Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
+      $(".fullcalendar").ajaxStop(function() {
+        Drupal.behaviors.product_filter.addDateToCalendar();
+        $(this).unbind("ajaxStop");
+      });
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
@@ -90,16 +94,6 @@ Drupal.cr = Drupal.cr || {};
       });
     });
     },
-
-    //start ininitializeCalendarEvents function
-    initializeCalendarEvents:function(nid, pid, quantity, basePath) {
-      $.when(
-        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath)
-      ).then(function() {
-        Drupal.behaviors.product_filter.addDateToCalendar();
-      });
-    },
-    //end initializeCalendarEvents function
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
