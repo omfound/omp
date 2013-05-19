@@ -256,10 +256,12 @@ body.page-reservations #main-content #squeeze{
 	display: block;
 }
 
-#rightContent .price span.price-label {
+#rightContent .price span.price-label, 
+#rightContent .certifications span.certifications-label {
   font-weight: bold;  
 }
-#rightContent .price div {
+#rightContent .price div, 
+#rightContent .certifications div {
   display: inline;
 }
 
