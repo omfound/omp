@@ -83,6 +83,7 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer [id|=edit-quantity]').change(function(){ 
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
+            alert('removing');
             return true;
           }
         });
