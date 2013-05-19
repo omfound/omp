@@ -64,7 +64,7 @@ Drupal.cr = Drupal.cr || {};
         }
       });
 
-      //Initialize calendar events
+      //Initialize calendar events, wait for closures to add default
       Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
       $(".fullcalendar").ajaxStop(function() {
         Drupal.behaviors.product_filter.addDateToCalendar();
@@ -73,9 +73,6 @@ Drupal.cr = Drupal.cr || {};
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
-
-      //setTimeout(Drupal.behaviors.product_filter.addDateToCalendar, 2000);
-      //Drupal.behaviors.product_filter.addDateToCalendar();
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -97,7 +94,6 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
-      alert('adding date'); 
       previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
       startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
