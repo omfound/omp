@@ -165,14 +165,14 @@ Drupal.cr = Drupal.cr || {};
     },
 
     showCalendar:function() {
-      $('.view-reservation-calendar').css('top', '600px');
+      $('.view-reservation-calendar').css('top', '975px');
       $('#content').css('height', '1300px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 500 );
       $('#reservations-header').fadeIn(1000);
       $('#block-system-main').animate({
-        height: '600px'
+        height: '975px'
       }, 500 );  
     },
     hideCalendar:function() {
@@ -291,7 +291,7 @@ Drupal.cr = Drupal.cr || {};
                     opacity: '1'
                   }, 500 );
                   $('.page-reservations #block-system-main').animate({
-                    height: '600px'
+                    height: '975px'
                   }, 1000 );
                   $('.page-reservations #middle-wrapper').animate({
                     height: '1260px'
@@ -338,7 +338,7 @@ Drupal.cr = Drupal.cr || {};
                 opacity: '1'
               }, 500 );
               $('.page-reservations #block-system-main').animate({
-                height: '600px'
+                height: '975px'
               }, 1000 );
               $('.page-reservations #middle-wrapper').animate({
                 height: '1260px'

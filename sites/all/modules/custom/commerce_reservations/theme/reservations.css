@@ -264,7 +264,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .view-id-reservation_calendar{
-	position: absolute;
+	position: relative;
 }
 
 .view-id-reservation_calendar div.view-header{
