@@ -77,14 +77,12 @@ Drupal.cr = Drupal.cr || {};
 
       //The user has changed the quantity
       $('.view-footer [id|=edit-quantity]').change(function(){ 
-        alert('changing quantity');
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
             return true;
           }
         });
         quantity = $('.view-footer [id|=edit-quantity]').val();
-        alert('quantity: '+quantity);
         Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
       });
     });
@@ -402,8 +400,8 @@ Drupal.cr = Drupal.cr || {};
         }
 
         //Move dateFields into the details div
-        $('.date-details').html(dateFields);
         $('.date-details [id|=edit-quantity]').val(quantity);
+        $('.date-details').html(dateFields);
 
         //update calendar on change events
         $('#pickedDates .start-date-wrapper .form-select').focus(function(){
