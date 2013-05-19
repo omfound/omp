@@ -39,10 +39,12 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         closedSet = false;
         allEvents = $('.fullcalendar').fullCalendar('clientEvents');
         for (var ii = 0; ii <= 10; ii++) {
-          if (allEvents[ii].hasOwnProperty('title')) {
-            if (allEvents[ii].title == 'closed time') {
-              closedSet = true;
-              console.log(allEvents[ii]);
+          if (typeof allEvents[ii] != 'undefined') {
+            if (allEvents[ii].hasOwnProperty('title')) {
+              if (allEvents[ii].title == 'closed time') {
+                closedSet = true;
+                console.log(allEvents[ii]);
+              }
             }
           }
         }
