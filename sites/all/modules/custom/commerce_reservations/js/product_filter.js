@@ -94,7 +94,7 @@ Drupal.cr = Drupal.cr || {};
     //start ininitializeCalendarEvents function
     initializeCalendarEvents:function(nid, pid, 1, basePath) {
       $.when(
-        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath)
+        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
       ).then(function() {
         Drupal.behaviors.product_filter.addDateToCalendar();
       });
