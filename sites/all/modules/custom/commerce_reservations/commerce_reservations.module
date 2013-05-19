@@ -193,7 +193,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   if ($form_id == 'views_form_commerce_cart_form_default'){
     $index = 0;
     foreach($form['edit_quantity'] as $quantity_field){
-      dsm($form['edit_quantity']);
       if (isset($quantity_field['#line_item_id'])){
 	      $line_item = commerce_line_item_load($form['edit_quantity'][0]['#line_item_id']);
 	      if ($line_item->type == 'reservable_product'){
@@ -207,6 +206,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   //set default reservation date and time to last reservation in cart if available
   if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
     global $user;
+    dsm($form['line_item_fields']);
     if ($order = commerce_cart_order_load($user->uid)) {
       if ($last_reservation = commerce_reservations_last_cart_reservation($order)) {
         if (strtotime($last_reservation->field_reservation_dates[LANGUAGE_NONE][0]['value']) > time()) {
