@@ -130,7 +130,6 @@ body.page-reservations #main-content #squeeze{
 .view-id-reservation_calendar .res-title,
 #block-views-calendar-product-view-block .res-title {
 	height: 23px;
-	padding-top: 7px;
   font-size: 1.5em;
   font-weight: bold;
   background-color: #D0CBC3;
@@ -267,7 +266,7 @@ body.page-reservations #main-content #squeeze{
 	background-color: white;
 	color: #5d5d5f;
 	text-shadow: none;
-	height: 115px;
+	height: 80px;
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
