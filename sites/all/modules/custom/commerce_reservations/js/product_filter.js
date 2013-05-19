@@ -84,6 +84,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         quantity = $('.view-footer [id|=edit-quantity]').val();
+        alert('quantity: '+quantity);
         Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
       });
     });
