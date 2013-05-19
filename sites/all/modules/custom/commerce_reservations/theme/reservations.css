@@ -129,6 +129,8 @@ body.page-reservations #main-content #squeeze{
 
 .view-id-reservation_calendar .res-title,
 #block-views-calendar-product-view-block .res-title {
+  padding-top: 7px;
+  padding-bottom: 7px;
 	height: 23px;
   font-size: 1.5em;
   font-weight: bold;
