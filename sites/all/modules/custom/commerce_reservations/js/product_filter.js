@@ -68,6 +68,7 @@ Drupal.cr = Drupal.cr || {};
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
+      alert('bet this happens before closures');
       Drupal.behaviors.product_filter.addDateToCalendar();
 
       //The user has selected a time on the calendar
