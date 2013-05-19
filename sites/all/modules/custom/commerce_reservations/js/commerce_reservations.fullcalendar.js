@@ -171,7 +171,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       }
     };
-    Drupal.behaviors.product_filter.addDateToCalendar();
     return options;
   }
 };
