@@ -33,7 +33,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         for (var ii = 0; ii <= 10; ii++) {
           if (typeof allEvents[ii] != 'undefined') {
             if (allEvents[ii].hasOwnProperty('title')) {
-              if (allEvents[ii].title == 'closed time') {
+              if (allEvents[ii].title == 'Closed') {
                 closedSet = true;
               }
             }
@@ -47,7 +47,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             success : function (data) {
               $('div.closed-time', data).each(function(index){
                 event = new Object();
-                event.title = 'closed time';
+                event.title = 'Closed';
                 event.start = $(this).attr('start');
                 event.end = $(this).attr('end');
                 event.allDay = false;
