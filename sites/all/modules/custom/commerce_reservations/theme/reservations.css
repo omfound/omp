@@ -268,7 +268,7 @@ body.page-reservations #main-content #squeeze{
 	background-color: white;
 	color: #5d5d5f;
 	text-shadow: none;
-	height: 80px;
+	height: 105px;
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
