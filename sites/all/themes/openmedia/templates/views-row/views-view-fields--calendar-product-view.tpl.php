@@ -1,4 +1,3 @@
-<?php dsm($fields); ?>
 <div class = "item">
   <div class = "small-image item-data">
     <?php if (!empty($fields['field_image']->content)) { ?>
