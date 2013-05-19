@@ -63,7 +63,7 @@ Drupal.cr = Drupal.cr || {};
           return true;
         }
       });
-      $.when(
+      $(".fullcalendar").when(
         Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath)
       ).then(function() {
         Drupal.behaviors.product_filter.addDateToCalendar();
