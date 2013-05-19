@@ -464,6 +464,7 @@ function commerce_reservations_get_closed_times(){
 function calendar_filter($pid, $node, $quantity = 0){
   global $user;
   $account = user_load($user->uid);
+  dsm($account);
   $product = commerce_product_load($pid);
   $is_certified = TRUE;
   if ($product->field_certifications_required['und']){

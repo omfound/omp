@@ -165,6 +165,8 @@ Drupal.cr = Drupal.cr || {};
     },
 
     showCalendar:function() {
+      //nasty to hack to get position because currently calendar is being absolutely
+      //positioned beneath the rest of the view elements..
       var reviewPosition = $('#block-views-calendar-product-view-block').position();
       var calendarTop = reviewPosition.top + 550;
       var calendarPosition = calendarTop+'px';
