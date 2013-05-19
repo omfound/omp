@@ -68,6 +68,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.selectHelper = true;
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
+      alert('firing select');
       dateInvalid = false;
       if (!allDay){
         dontCheck = false;
