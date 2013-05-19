@@ -700,12 +700,13 @@ body.page-reservations #main-content #squeeze{
   text-shadow: none;
   font-size: 1.2em;
 }
-
 .no-certification-message p, 
 .commercial-message p{
 }
 
 .no-certification-message a,
+.no-certification-message a:link,
+.no-certification-message a:visited,
 .commercial-message .commercial-button{
 	font-family:  Helvetica, Arial,sans-serif;
 	font-size: 12px;
