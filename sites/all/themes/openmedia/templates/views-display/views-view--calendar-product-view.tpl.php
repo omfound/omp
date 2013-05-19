@@ -48,7 +48,7 @@
   <div id = reservations-header>
     <?php if ($user->uid):?>
       <div class = "res-title-number">2</div>
-      <div class = "res-title">Select Quantity</div>
+      <div class = "res-title">Review</div>
     <?php else:?>
       <div class = "res-title-number"></div>
       <div class = "res-title">Equipment Details</div>
@@ -57,7 +57,7 @@
       <img id = "equipment_img" src = "/sites/all/modules/commerce_reservations/theme/images/equipment.jpg" width = "150" height="100">
     </div>
     <div id = "right-side">
-      <p>What goes in here before we select an item??  Only Crystal knows!</p>
+      <p></p>
   </div>
   <?php if ($attachment_after): ?>
     <div class="attachment attachment-after">
