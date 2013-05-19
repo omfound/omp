@@ -171,11 +171,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       }
     };
-    return options;
-  },
-  attach: function (context, settings) {
-    alert('firing comres attach');
     Drupal.behaviors.product_filter.addDateToCalendar();
+    return options;
   }
 };
 
