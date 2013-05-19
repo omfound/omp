@@ -466,23 +466,15 @@ function calendar_filter($pid, $node, $quantity = 0){
   $account = user_load($user->uid);
   $product = commerce_product_load($pid);
   $is_certified = TRUE;
-  dsm($account->roles);
-  dsm($product->field_certifications_required['und']);
   if ($product->field_certifications_required['und']){
-    $is_certified = FALSE;
     foreach($product->field_certifications_required['und'] as $product_cert){
-      foreach($account->roles as $account_cert){
-        if ($product_cert == $account_cert){
-	        $is_certified = TRUE;
-	        break;
-        } else{
-	        $is_certified = FALSE;
-        }
+      if (array_key_exists($product_cert['rid'], $account->roles)) {
+	      $is_certified = FALSE;
+	      break;
       }
     }
   }
-  //TEMP EVERYONE IS CERTIFIED
-  $is_certified = TRUE;
+
   if ($is_certified){
 	  $args = array();
     $display_nid = commerce_reservations_entity_display_lookup($pid);
@@ -500,7 +492,7 @@ function calendar_filter($pid, $node, $quantity = 0){
     $view->quantity = $quantity;
     $display = $view -> preview('page_1', $args);
     print $display;
-  } else{
+  } else {
     print '<div><div id = "not_certified"></div></div>';
     $allow_commercial = variable_get('cr_allow_commercial', 0);
     if ($allow_commercial == 1){
