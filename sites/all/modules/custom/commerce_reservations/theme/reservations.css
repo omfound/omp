@@ -368,10 +368,6 @@ body.page-reservations #main-content #squeeze{
 
 .view-id-reservation_calendar .fc-state-active .fc-button-inner,
 .view-id-reservation_calendar .fc-state-disabled .fc-button-inner{
-  border: none;
-  color: white;
-  background-color: #91be3d;
-  box-shadow: inset 4px 6px 5px rgba(55, 104, 47, 0.61);
 }
 
 .view-id-reservation_calendar .fc-header-space{
