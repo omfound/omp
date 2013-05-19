@@ -67,7 +67,9 @@ Drupal.cr = Drupal.cr || {};
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
-      Drupal.behaviors.product_filter.addDateToCalendar();
+
+      setTimeout(Drupal.behaviors.product_filter.addDateToCalendar, 2000);
+      //Drupal.behaviors.product_filter.addDateToCalendar();
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
