@@ -6,6 +6,7 @@
 
 Drupal.fullcalendar.plugins.commerce_reservations = {
   options: function (fullcalendar, settings) {
+    alert('firing res options');
     var options = {}; 
     options.disableResizing = true;
     options.eventClick = function(event){
@@ -68,7 +69,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.selectHelper = true;
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
-      alert('firing select');
       dateInvalid = false;
       if (!allDay){
         dontCheck = false;
@@ -85,7 +85,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //Check for overlaps
             if (array[i].className == 'overlap'){
               if(!(array[i].start >= end || array[i].end <= start)){
-                alert('overlap detected');
                 $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
                 $('.view-footer .form-submit').hide();
                 dateInvalid = true;

@@ -5,7 +5,7 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-
+    alert('firing product filter');
     //watch for reservation item list reloads and bind appropriate
     //action to each cart form item
     $(".view-calendar-product-view").ajaxComplete(function(event, XMLHttpRequest, ajaxOptions) {
