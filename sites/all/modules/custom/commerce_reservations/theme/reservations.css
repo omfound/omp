@@ -882,4 +882,9 @@ body.page-reservations #main-content #squeeze{
 .view-reservation-calendar div.view-footer .date-details {
   padding: 4px;
 }
+.view-reservation-calendar div.view-footer .date-status {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+}
 /** end date picker **/
