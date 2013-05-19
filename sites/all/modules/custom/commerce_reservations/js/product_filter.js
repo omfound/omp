@@ -166,7 +166,7 @@ Drupal.cr = Drupal.cr || {};
 
     showCalendar:function() {
       var reviewPosition = $('#block-views-calendar-product-view-block').position();
-      var calendarTop = reviewPosition.top + 600;
+      var calendarTop = reviewPosition.top + 550;
       var calendarPosition = calendarTop+'px';
       $('.view-reservation-calendar').css('top', calendarPosition);
       $('#content').css('height', '1300px');
