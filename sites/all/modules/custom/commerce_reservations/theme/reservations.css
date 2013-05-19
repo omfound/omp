@@ -394,6 +394,7 @@ body.page-reservations #main-content #squeeze{
 .view-id-reservation_calendar .fc-event-time,
 .view-id-reservation_calendar .fc-event-title{
 	text-shadow: none;
+  font-size: 1.3em;
 }
 
 .view-id-reservation_calendar .fc-event-bg{
