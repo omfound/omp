@@ -165,7 +165,7 @@ Drupal.cr = Drupal.cr || {};
     },
 
     showCalendar:function() {
-      var reviewPosition = $('.view-calendar-product-view').position();
+      var reviewPosition = $('#block-views-calendar-product-view-block').position();
       var calendarTop = reviewPosition.top + 600;
       var calendarPosition = calendarTop+'px';
       $('.view-reservation-calendar').css('top', calendarPosition);
