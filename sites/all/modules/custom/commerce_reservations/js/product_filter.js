@@ -76,7 +76,7 @@ Drupal.cr = Drupal.cr || {};
       });
 
       //The user has changed the quantity
-      $('#left-side [id|=edit-quantity]').change(function(){ 
+      $('.view-footer [id|=edit-quantity]').change(function(){ 
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
             return true;
