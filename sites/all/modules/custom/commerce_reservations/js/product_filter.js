@@ -77,6 +77,7 @@ Drupal.cr = Drupal.cr || {};
 
       //The user has changed the quantity
       $('.view-footer [id|=edit-quantity]').change(function(){ 
+        alert('changing quantity');
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'overlap'){
             return true;
