@@ -6,7 +6,6 @@
 
 Drupal.fullcalendar.plugins.commerce_reservations = {
   options: function (fullcalendar, settings) {
-    alert('firing res options');
     var options = {}; 
     options.disableResizing = true;
     options.eventClick = function(event){
@@ -173,6 +172,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       }
     };
     return options;
+  },
+  attach: function (context, settings) {
+    Drupal.behaviors.product_filter.addDateToCalendar();
   }
 };
 
@@ -198,4 +200,6 @@ function addZero(time){
   }
   return time;
 }
+
+
 

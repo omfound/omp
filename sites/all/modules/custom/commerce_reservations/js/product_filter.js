@@ -5,7 +5,6 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-    alert('firing product filter');
     //watch for reservation item list reloads and bind appropriate
     //action to each cart form item
     $(".view-calendar-product-view").ajaxComplete(function(event, XMLHttpRequest, ajaxOptions) {
@@ -68,7 +67,7 @@ Drupal.cr = Drupal.cr || {};
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
-      Drupal.behaviors.product_filter.addDateToCalendar();
+      //Drupal.behaviors.product_filter.addDateToCalendar();
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -90,6 +89,7 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
+      alert('adding date'); 
       previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
       startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
       startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
