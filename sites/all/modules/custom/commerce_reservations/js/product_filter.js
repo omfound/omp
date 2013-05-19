@@ -400,7 +400,7 @@ Drupal.cr = Drupal.cr || {};
         }
 
         //Move dateFields into the details div
-        $('.date-details [id|=edit-quantity]').val(quantity);
+        //$('.date-details [id|=edit-quantity]').val(quantity);
         $('.date-details').html(dateFields);
 
         //update calendar on change events
