@@ -82,12 +82,16 @@ Drupal.cr = Drupal.cr || {};
       //The user has changed the quantity
       $('.view-footer [id|=edit-quantity]').change(function(){ 
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
-          if (event.className != 'closed-time'){
+          if (event.className == 'overlap'){
             return true;
           }
         });
         quantity = $('.view-footer [id|=edit-quantity]').val();
         Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
+        $(".fullcalendar").ajaxStop(function() {
+          Drupal.behaviors.product_filter.addDateToCalendar();
+          $(this).unbind("ajaxStop");
+        });
       });
     });
     },
