@@ -184,6 +184,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#type'] = 'select';
       $form['quantity']['#options'] = drupal_map_assoc($options);
       $form['quantity']['#multiple'] = FALSE;
+      $form['quantity']['#weight'] = 0;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
@@ -206,7 +207,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   //set default reservation date and time to last reservation in cart if available
   if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
     //set quantity weight to appear above other items
-    $form['line_item_fields']['field_reservation_dates']['#weight'] = 50;
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
       if ($last_reservation = commerce_reservations_last_cart_reservation($order)) {
