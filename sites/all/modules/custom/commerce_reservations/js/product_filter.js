@@ -83,7 +83,7 @@ Drupal.cr = Drupal.cr || {};
             return true;
           }
         });
-        quantity = $('#left-side [id|=edit-quantity]').val();
+        quantity = $('.view-footer [id|=edit-quantity]').val();
         Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
       });
     });
