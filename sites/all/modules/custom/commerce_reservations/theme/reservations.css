@@ -130,9 +130,9 @@ body.page-reservations #main-content #squeeze{
 .view-id-reservation_calendar .res-title,
 #block-views-calendar-product-view-block .res-title {
 	height: 23px;
-	background-color: #912a1b;
-	color: white;
 	padding-top: 7px;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 #block-views-calendar-product-view-block .item-area{
