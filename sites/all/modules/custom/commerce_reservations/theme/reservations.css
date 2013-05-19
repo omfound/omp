@@ -693,7 +693,8 @@ body.page-reservations #main-content #squeeze{
   box-shadow: 2px 2px 10px grey;
   padding-left: 20px;
   margin-bottom: 15px;
-  height: 45px;
+  margin-top: 20px;
+  height: 25px;
 }
 
 .no-certification-message p, 
