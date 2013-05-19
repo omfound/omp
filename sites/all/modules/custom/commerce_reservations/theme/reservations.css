@@ -689,16 +689,15 @@ body.page-reservations #main-content #squeeze{
 	min-height: 23px;
   background-color: #912A1B;
   color: white;
-  width: 535px;
-  padding-top: 7px;
+  padding: 20px;
   box-shadow: 2px 2px 10px grey;
   padding-left: 20px;
   margin-bottom: 15px;
+  height: 45px;
 }
 
 .no-certification-message p, 
 .commercial-message p{
-	width: 300px;
 }
 
 .no-certification-message a,
