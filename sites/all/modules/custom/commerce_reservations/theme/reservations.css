@@ -71,6 +71,10 @@ body.page-reservations #main-content #squeeze{
 	margin-right: 10px;
 	font-weight: bold;
 }
+.view-footer .form-item-quantity label {
+  float: left;
+  padding-right: 10px;
+}
 
 #reservations-header #left-side .form-item, .form-actions{
   padding-bottom: 1px;
