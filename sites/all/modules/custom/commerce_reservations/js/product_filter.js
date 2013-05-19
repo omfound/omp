@@ -382,7 +382,6 @@ Drupal.cr = Drupal.cr || {};
     moveItemToDetails:function() {
       view = $('.fullcalendar').fullCalendar('getView');
       if (view.name == 'agendaWeek'){
-        quantity = $('#left-side [id|=edit-quantity]').val();
         dateFields = new Object();
         $('.form-item-quantity').hide();
         $('#leftContent .large-image').addClass('no-quantity');
@@ -400,7 +399,6 @@ Drupal.cr = Drupal.cr || {};
         }
 
         //Move dateFields into the details div
-        //$('.date-details [id|=edit-quantity]').val(quantity);
         $('.date-details').html(dateFields);
 
         //update calendar on change events

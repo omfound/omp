@@ -193,6 +193,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   if ($form_id == 'views_form_commerce_cart_form_default'){
     $index = 0;
     foreach($form['edit_quantity'] as $quantity_field){
+      dsm($form['edit_quantity']);
       if (isset($quantity_field['#line_item_id'])){
 	      $line_item = commerce_line_item_load($form['edit_quantity'][0]['#line_item_id']);
 	      if ($line_item->type == 'reservable_product'){
