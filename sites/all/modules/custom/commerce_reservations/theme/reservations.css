@@ -894,7 +894,7 @@ body.page-reservations #main-content #squeeze{
   margin: 0;
 }
 
-.view-reservation-calendar div.view-footer .date-status p {
+.not-front #content .view-reservation-calendar div.view-footer .date-status p {
   margin: 0;
 }
 /** end date picker **/
