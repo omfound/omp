@@ -40,7 +40,7 @@
 
 .block-nice-menus ul li.over li a,
 .block-nice-menus ul li.active-trail li a {
-  border-radius: none;
+  border-radius: 0px;
   background-color: #fff;
   color: #000;
   text-shadow: none;
