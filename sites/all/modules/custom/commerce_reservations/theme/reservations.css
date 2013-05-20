@@ -906,6 +906,7 @@ body.page-reservations #main-content #squeeze{
 }
 .view-reservation-calendar div.view-footer select option {
   padding: 0px;
+  margin: 0px;
 }
 
 .not-front #content .view-reservation-calendar div.view-footer .date-status p {
