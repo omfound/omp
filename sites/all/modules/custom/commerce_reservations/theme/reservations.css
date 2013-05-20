@@ -453,7 +453,7 @@ body.page-reservations #main-content #squeeze{
 .page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value-ampm,
 .page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-ampm {
   position:relative;
-  top: -3px;
+  line-height: 1.2em;
 }
 
 .page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
