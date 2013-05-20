@@ -904,7 +904,7 @@ body.page-reservations #main-content #squeeze{
   padding-right: 10px;
   margin: 0;
 }
-.view-reservation-calendar div.view-footer select {
+.view-reservation-calendar div.view-footer select option {
   padding: 0px;
 }
 
