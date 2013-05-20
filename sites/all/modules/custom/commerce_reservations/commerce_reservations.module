@@ -426,11 +426,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
 }
 
 function commerce_reservations_format_calendar_date($date_string) {
-  //$date_string = str_replace(' pm', 'pm', $date_string);
-  //$date_string = str_replace(' am', 'am', $date_string);
-  print 'DATE: '.$date_string.'<br />';
   $clean_date = date('Y-m-d H:i:s', strtotime($date_string));
-  print 'CONV: '.$clean_date.'<br />';
   return $clean_date;
 }
 
