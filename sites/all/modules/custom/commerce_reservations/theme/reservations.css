@@ -147,6 +147,7 @@ body.page-reservations #main-content #squeeze{
 	height: 155px;
 	margin-bottom: 25px;
 	background-color: white;
+  width: 100%;
 }
 
 #block-views-calendar-product-view-block .item-area::-webkit-scrollbar{
