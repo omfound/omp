@@ -48,8 +48,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               $('div.closed-time', data).each(function(index){
                 event = new Object();
                 event.title = 'Closed';
-                event.start = $(this).attr('start');
-                event.end = $(this).attr('end');
+                startDate = new Date($(this).attr('start'));
+                event.start = startDate.getTime();
+                endDate = new Date($(this).attr('end'));
+                event.end = endDate.getTime();
                 event.allDay = false;
                 event.className = 'closed-time';
                 event.color = '#56a4da';
