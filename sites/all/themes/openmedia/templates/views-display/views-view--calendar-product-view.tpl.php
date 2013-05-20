@@ -11,13 +11,8 @@
     </div>
   <?php endif; ?>
     <div id = "top-area">
-  <?php if ($user->uid):?>
     <div class = "res-title-number">1</div>
     <div class = "res-title">Choose Equipment</div>
-  <?php else:?>
-    <div class = "res-title-number"></div>
-    <div class = "res-title">Equipment Inventory</div>
-  <?php endif;?>
     <?php if ($exposed): ?>
       <div class="view-filters">
         <?php print $exposed; ?>
@@ -46,13 +41,8 @@
     </div>
   </div>
   <div id = reservations-header>
-    <?php if ($user->uid):?>
       <div class = "res-title-number">2</div>
       <div class = "res-title">Review</div>
-    <?php else:?>
-      <div class = "res-title-number"></div>
-      <div class = "res-title">Equipment Details</div>
-    <?php endif;?>
     <div id = "left-side">
       <img id = "equipment_img" src = "/sites/all/modules/commerce_reservations/theme/images/equipment.jpg" width = "150" height="100">
     </div>
