@@ -323,14 +323,28 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
+            unset($start_date);
+            unset($end_date);
             if ($value2){
               $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', 6);
-              print '<div class = "closed-time" start = "' . $array2[$index] . ' ' . $value2['closed'] . '" ' . 'end = "' . $date . ' ' . $value['open'] . '"></div>';
+              $start_date = $array2[$index] . ' ' . $value2['closed'];
+              $end_date = $date . ' ' . $value['open'];
+              $start_date = date('Y-m-d H:i:s', $start_date);
+              $end_date = date('Y-m-d H:i:s', $end_date);
+              print '<div class = "closed-time" start = "' . $start_date . '" ' . 'end = "' . $end_date . '"></div>';
             } else{
-              print '<div class = "closed-time" start = "' . $date . ' 12:00 am" end = "' . $date . ' ' . $value['open'] . '"></div>';
+              $start_date = $date . ' 12:00 am';
+              $end_date = $date . ' ' . $value['open'];
+              $start_date = date('Y-m-d H:i:s', $start_date);
+              $end_date = date('Y-m-d H:i:s', $end_date);
+              print '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
             }
             if (!$value3){
-              print '<div class = "closed-time" start = "' . $date . ' ' . $value['closed'] . '" end = "' . $date . ' 11:59 pm"></div>';
+              $start_date = $date . ' ' . $value['closed'];
+              $end_date = $date . ' 11:59 pm';
+              $start_date = date('Y-m-d H:i:s', $start_date);
+              $end_date = date('Y-m-d H:i:s', $end_date);
+              print '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
             }
           }
           break;
