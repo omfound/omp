@@ -1,9 +1,11 @@
 /** Main Menu **/
 #block-nice-menus-1 ul.nice-menu li {
   border: none;
+  background: transparent;
 }
 #block-nice-menus-1 ul.nice-menu ul {
-  margin-top: 12px; 
+  margin-top: 18px; 
+  border: none;
 }
 #block-nice-menus-1 ul li {
   list-style: none;
@@ -38,6 +40,7 @@
 
 .block-nice-menus ul li.over li a,
 .block-nice-menus ul li.active-trail li a {
+  border-radius: none;
   background-color: #fff;
   color: #000;
   text-shadow: none;
