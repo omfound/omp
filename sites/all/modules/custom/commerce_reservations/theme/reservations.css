@@ -511,7 +511,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .page-reservations .add-to-cart div.fieldset-wrapper{
-	padding: 8px;
+  padding: 8px 0 8px 8px;
 }
 
 .page-reservations .add-to-cart .form-type-date-select label{
