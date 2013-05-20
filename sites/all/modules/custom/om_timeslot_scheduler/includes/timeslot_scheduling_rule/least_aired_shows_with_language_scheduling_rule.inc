@@ -6,12 +6,11 @@ class leastAiredShowsWithLanguageSchedulingRule extends timeslotSchedulingRule {
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
     $query->join('field_data_field_om_show_broadcast_file', 'file', 'file.entity_id=n.nid');
-    $spanish_term = $this->getSpanishTaxonomyTerm();
-    if (!empty($spanish_term)) {
-      return array();
+    $language = $timeslot->field_om_language[$timeslot->language][0]['tid'];
+    if (!empty($language)) {
+      $query->join('field_data_field_om_language', 'language', 'language.entity_id=n.nid');
+      $query->condition('field_om_language_tid', $language, '=');
     }
-    $query->join('field_data_field_om_language', 'language', 'language.entity_id=n.nid');
-    $query->condition('field_om_language_tid', $spanish_term, '=');
     $query->condition('bundle', 'om_show', '='); 
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
@@ -40,18 +39,5 @@ class leastAiredShowsWithLanguageSchedulingRule extends timeslotSchedulingRule {
       $shows[] = $nid;
     }
     return array_values($shows);
-  }
-  public function getSpanishTaxonomyTerm() {
-    $query = db_select('taxonomy_term_data', 'term_data');
-    $query->fields('term_data', array('tid'));
-    $query->condition('name', 'Spanish', '=');
-    $resource = $query->execute();
-    $result = $resource->fetchAll();
-    if (!empty($result)) {
-      return $result[0]->tid;
-    }
-    else {
-      return FALSE;
-    }
   }
 }
