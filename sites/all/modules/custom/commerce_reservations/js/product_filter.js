@@ -135,6 +135,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
+        $('.fullcalendar').fullCalendar('select', event.start, event.end, false);
       } else{
 	      $(this).val(previousStart);
 	      $(this).qtip({
