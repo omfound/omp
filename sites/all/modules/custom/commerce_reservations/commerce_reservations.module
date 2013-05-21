@@ -983,7 +983,7 @@ function commerce_reservations_hourly_price_reduction($line_item, $component_nam
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      $new_price = $unit_price['amount'] - ($hours*$unit_price['amount']);
+      $new_price = $unit_price['amount'] - ($hours*$product->commerce_price['und'][0]['amount']);
       $price_difference = $new_price - $unit_price['amount'];
     }
     drupal_set_message('price diff: '.$price_difference);
