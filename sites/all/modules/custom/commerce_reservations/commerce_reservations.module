@@ -25,7 +25,7 @@ function commerce_reservations_permission() {
 
 function commerce_reservations_form_commerce_product_ui_product_form_alter(&$form, &$form_state, $form_id){
   if (isset($form['field_crp_product_title'])) {
-    if ($form['field_crp_product_title']['und']['#bundle'] == 'reservable_product'){
+    if ($form['field_crp_product_title']['und']['#bundle'] == 'reservable_product') {
       $form['title']['#value'] = 'ant';
       $form['title']['#type'] = 'value';
       $form['title']['#required'] = FALSE;
@@ -959,16 +959,44 @@ function commerce_reservations_rules_action_info() {
   return $actions;
 }
 
+function commerce_reservations_hours_days($start, $end) {
+  $hours_diff = floor(($end - $start) / 3600);
+  if ($hours_diff < 1){
+    $hours = 1;
+  }else{
+    $hours = $hours_diff;
+  }
+  if ($hours_diff >= 24) {
+    $days = floor($hours_diff/24) 
+    $remainder_hours = floor($hours_diff - ($days*24));
+  }else{
+    $days = 1;
+    $remainder_hours = 0;
+  }
+
+  $hours_days = array(
+    'hours' => $hours,
+    'days' => $days,
+    'remainder_hours' => $remainder_hours,
+  );
+
+  return $hours_days;
+}
+
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
     return;
   }
 
-  if ($total_hours = commerce_reservations_line_item_duration($line_item)) { 
+  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
+  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+  $hours_days = commerce_reservations_hours_days($start, $end);
+
+  if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-    $hours = $product->field_hours_days_free_for_member['und'][0]['value'];
+    $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
 
     if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
       $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
@@ -978,14 +1006,20 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       return;
     }
 
-    if ($hours >= $total_hours) {
+    //if more than 1 day, discount by 1 day
+    if ($free_hours >= $hours_days['hours']) {
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      $new_price = $unit_price['amount'] - ($hours*$hourly_rate);
-      $price_difference = $new_price - $unit_price['amount'];
+      if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+        $new_price = $unit_price['amount'] - ($hours*$hourly_rate);
+        $price_difference = $new_price - $unit_price['amount'];
+      }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+        $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+        $price_difference = $new_price - $unit_price['amount'];
+      }
     }
     $difference = array(
       'amount' => $price_difference,
@@ -1019,12 +1053,9 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
   if (property_exists($line_item, "field_reservation_dates")){
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_diff = floor(($end - $start) / 3600);
-    if ($hours_diff < 1){
-	    $hours_diff = 1;
-    }
+    $hours_days = commerce_reservations_hours_days($start, $end);
     $rate = $product->commerce_price['und'][0]['amount'];
-    $updated_price = $hours_diff * $rate;
+    $updated_price = $hours_days['hours'] * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
@@ -1057,12 +1088,21 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
   if (property_exists($line_item, "field_reservation_dates")){
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_diff = floor(($end - $start) / 3600);
-    if ($hours_diff < 1){
-	    $hours_diff = 1;
+    $hours_days = commerce_reservations_hours_days($start, $end);
+    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    $day_rate = $product->commerce_price['und'][0]['amount'];
+    
+    $day_cost = $hours_days['days']*$day_rate;
+    if ($hours_days['hours'] > 24) {
+      $hour_cost = $hours_days['remainder_hours'];
     }
-    $rate = $product->commerce_price['und'][0]['amount'] / 8; 
-    $updated_price = $hours_diff * $rate;
+
+    if (!empty($hour_cost)) {
+      $updated_price = $day_cost + $hour_cost;
+    }else{
+      $updated_price = $day_cost;
+    }
+
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
