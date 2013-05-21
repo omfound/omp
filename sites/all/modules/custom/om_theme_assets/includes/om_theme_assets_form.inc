@@ -270,6 +270,12 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_dropdown_background_hover', ''),
     );
+    $form['admin_theme_omp_fieldset']['site_link_color'] = array(
+      '#title' => t('Site Link Color'),
+      '#description' => t('The small menu in the header.'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('site_link_color', ''),
+    );
     $form['admin_theme_omp_fieldset']['background_texture'] = array(
       '#title' => t('Background Texture Tile'),
       '#description' => t('Repeating background image. Should be as small as possible.'),
