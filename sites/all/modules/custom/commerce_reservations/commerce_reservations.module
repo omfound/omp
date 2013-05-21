@@ -893,12 +893,9 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_price_per_day' => array(
       'label' => t('Multiply price by day'),
     ),
-    'commerce_reservations_hourly_price_reduction' => array(
-      'label' => t('Reduce price by specified hours'),
+    'commerce_reservations_price_reduction' => array(
+      'label' => t('Reduce price by days or hours specified on product'),
     ),
-    //'commerce_reservations_daily_price_reduction' => array(
-      //'label' => t('Reduce price by specified days'),
-    //),
   );
 
   // Define the action using a common set of parameters.
@@ -962,23 +959,31 @@ function commerce_reservations_rules_action_info() {
   return $actions;
 }
 
-function commerce_reservations_hourly_price_reduction($line_item, $component_name, $round_mode) {
+function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
     return;
-  }elseif (!$hours = $product->field_hours_days_free_for_member['und'][0]['value']) {
-    return;  
   }
+
   if ($total_hours = commerce_reservations_line_item_duration($line_item)) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+
+    if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+      $hourly_rate = $product->commerce_price['und'][0]['amount'];
+    }else {
+      return;
+    }
+
     if ($hours >= $total_hours) {
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      $new_price = $unit_price['amount'] - ($hours*$product->commerce_price['und'][0]['amount']);
+      $new_price = $unit_price['amount'] - ($hours*$hourly_rate);
       $price_difference = $new_price - $unit_price['amount'];
     }
     $difference = array(
