@@ -989,6 +989,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     return;
   }
 
+  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
+    return;
+  }
   $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
   $hours_days = commerce_reservations_hours_days($start, $end);
