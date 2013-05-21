@@ -129,7 +129,7 @@ Drupal.cr = Drupal.cr || {};
       endParse = Date.parse(endDate);
       if (startParse < endParse){
         event = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
-        alert('rendering event');
+        console.log(event);
         $('.fullcalendar').fullCalendar('renderEvent', event, true);
         //$('.fullcalendar').fullCalendar('select', startDate, endDate, false);
       } else{
