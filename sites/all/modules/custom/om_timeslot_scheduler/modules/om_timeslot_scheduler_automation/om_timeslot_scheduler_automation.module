@@ -65,8 +65,8 @@ function om_timeslot_scheduler_automation_menu() {
   $items = array();
   $items['automation/test'] = array(
     'page callback' => '_om_timeslot_scheduler_automation_test',
-    'access argument' => array('perform scheduling tasks'),
-    'type' => PAGE_CALLBACK
+    'access arguments' => array('perform scheduling tasks'),
+    'type' => MENU_CALLBACK
   );
   return $items;
 }
