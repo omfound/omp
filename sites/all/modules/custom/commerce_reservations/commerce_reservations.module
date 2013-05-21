@@ -962,7 +962,6 @@ function commerce_reservations_rules_action_info() {
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
-    drupal_set_message('dqed');
     return;
   }
 
@@ -1047,35 +1046,34 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
 }
 
 function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $product = $line_item_wrapper->commerce_product->value();
-  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-  //if the product is not a reservable product, duck out
+  
+  //First check to make sure the product is a reservable product
+  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if ($product->type != 'reservable_product') {
     return;
   }
-  
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
-    $date_array = $line_item_wrapper->field_reservation_dates->value();
-    $start = strtotime($date_array["value"]);
-    $end = strtotime($date_array["value2"]);
-    $days_diff = floor(($end - $start) / 86400);
-    if ($days_diff < 1){
-	    $days_diff = 1;
+    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
+    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+    $hours_diff = floor(($end - $start) / 3600);
+    if ($hours_diff < 1){
+	    $hours_diff = 1;
     }
-    $price_array = $product_wrapper->commerce_price->value();
-    $rate = $price_array['amount'];
-    $updated_price = $days_diff * $rate;
+    $rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    $updated_price = $hours_diff * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
+   
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
+    
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
