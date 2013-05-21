@@ -189,14 +189,24 @@ class cablecastPlaybackServerController extends playbackServerController {
     $duration = 0;
     $lang = $file->language;
     
-    
-    
+    $available_formats = variable_get('cablecast_available_formats_' . $pbs->pbsid, array());
+    if (empty($available_formats)) {
+      $all_formats = $this->get_formats($pbs);
+      if (!empty($all_formats)) {
+        foreach ($all_formats->GetFormatsResult->Format AS $format) {
+          if ($format->Name == 'SD Digital File' || $format->Name == 'HD Digital File') {
+            $available_formats[$format->Name] = $format->FormatID;
+          }
+        }
+      }
+      variable_set('cablecast_available_formats_' . $pbs->pbsid, $available_formats);
+    }
     if (isset($file->field_om_show_media_format[$lang][0]['value'])) {
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'hd') {
-        $format = 1;
+        $format = $available_formats['HD Digital File'];
       }
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'sd') {
-        $format = 2;
+        $format = $available_formats['SD Digital File'];
       }
     }
     if (isset($file->field_om_show_duration[$lang][0]['value'])) {
@@ -212,11 +222,6 @@ class cablecastPlaybackServerController extends playbackServerController {
       ),
     );
   }
-  
-  public function test_formats($pbs) {
-    return $this->get_formats($pbs);
-  }
-  
   /**
    * Get a list of all formats from the pbs location.
    */
