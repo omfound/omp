@@ -964,6 +964,8 @@ function commerce_reservations_rules_action_info() {
 
 function commerce_reservations_hourly_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  drupal_set_message('reducing');
+  drupal_set_message('<pre>'.print_r($product, TRUE).'</pre>');
   if ($product->type != 'reservable_product') {
     return;
   }elseif (!$hours = $product->field_hours_days_free_for_member['und']['value']) {
