@@ -64,11 +64,11 @@
   }
 <?php endif; ?>
 <?php if (!empty($site_links_color)): ?>
-  #block-om-theme-assets-om-site-links,
+  #block-om-theme-assets-om-site-links ul li,
   #block-om-theme-assets-om-site-links ul li a:link,
   #block-om-theme-assets-om-site-links ul li a:visited {
     text-shadow: none;
-    color: <?php print $site_links_color; ?>
+    color: <?php print $site_links_color; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($background_texture)): ?>
