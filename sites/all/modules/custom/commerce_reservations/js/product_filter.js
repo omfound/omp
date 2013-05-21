@@ -128,13 +128,13 @@ Drupal.cr = Drupal.cr || {};
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
-        //selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
-        //$(".fullcalendar").fullCalendar('removeEvents', function(event){
-          //if (event.className == 'selected-time'){
-            //return true;
-          //}
-        //});
-        //$('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
+        selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
+        $(".fullcalendar").fullCalendar('removeEvents', function(event){
+          if (event.className == 'selected-time'){
+            return true;
+          }
+        });
+        $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
         $('.fullcalendar').fullCalendar('select', event.start, event.end, false);
       } else{
 	      $(this).val(previousStart);
