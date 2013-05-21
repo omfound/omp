@@ -184,7 +184,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       throw new Exception($message);
     }
   }
-  public function create_reel($pbs, $file) {
+  private function create_reel($pbs, $file) {
     $format = 0;
     $duration = 0;
     $lang = $file->language;
