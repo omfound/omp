@@ -298,7 +298,6 @@ function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
-  //$steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
@@ -321,12 +320,24 @@ function _om_timeslot_scheduler_schedule_window($run) {
  *  array standard context reference provided by batch process
  */
 function _om_timeslot_scheduler_get_timeslots($run, &$context) {
-  $context['message'] = t('Gathering relevant timeslots.');
+ $context['message'] = t('Gathering relevant timeslots.');
   $query = db_select('field_data_field_om_timeslot_date', 'date');
   $query->fields('date', array('entity_id'));
   $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
-  $query->condition('field_om_timeslot_date_value', $run['start'], '>=');
-  $query->condition('field_om_timeslot_date_value2', $run['end'], '<=');
+    $and_1 = db_and();
+    $and_1->condition('field_om_timeslot_date_value', $run['start'], '>=');
+    $and_1->condition('field_om_timeslot_date_value2', $run['end'], '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_timeslot_date_value', $run['start'], '<=');
+    $and_2->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_timeslot_date_value', $run['end'], '<=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '>=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+  $query->condition($or);
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
