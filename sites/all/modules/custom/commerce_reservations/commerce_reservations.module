@@ -1003,9 +1003,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     drupal_set_message('free hours: '.$free_hours);
 
     if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-      $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+      $hourly_rate = ($product->commerce_price['und'][0]['amount'] / 8)*100; 
     }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-      $hourly_rate = $product->commerce_price['und'][0]['amount'];
+      $hourly_rate = $product->commerce_price['und'][0]['amount']*100;
     }else {
       return;
     }
