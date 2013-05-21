@@ -147,6 +147,7 @@ body.page-reservations #main-content #squeeze{
 	height: 155px;
 	margin-bottom: 25px;
 	background-color: white;
+  width: 100%;
 }
 
 #block-views-calendar-product-view-block .item-area::-webkit-scrollbar{
@@ -166,7 +167,6 @@ body.page-reservations #main-content #squeeze{
 	height: 135px;
 	margin-left: 10px;
 	background-color: white;
-	display: inline-block;
 	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
@@ -453,7 +453,8 @@ body.page-reservations #main-content #squeeze{
 .page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value-ampm,
 .page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-ampm {
   position:relative;
-  top: -3px;
+  line-height: 1.2em;
+  padding-top: 10px;
 }
 
 .page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
@@ -511,7 +512,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .page-reservations .add-to-cart div.fieldset-wrapper{
-	padding: 8px;
+  padding: 8px 0 8px 8px;
 }
 
 .page-reservations .add-to-cart .form-type-date-select label{
@@ -884,15 +885,18 @@ body.page-reservations #main-content #squeeze{
   width: 741px;
 }
 .view-reservation-calendar div.view-footer {
+  margin-left: 10px;
+  margin-top: -105px;
+  height: 535px;
   float: left;
   width: 208px;
-  margin-left: 5px;
   background-color: #FFF;
   box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
   -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
   padding-bottom: 7px;
 }
+
 .view-reservation-calendar div.view-footer .date-details {
   padding: 4px;
 }
@@ -900,6 +904,10 @@ body.page-reservations #main-content #squeeze{
   padding-left: 10px;
   padding-right: 10px;
   margin: 0;
+}
+.view-reservation-calendar div.view-footer select option {
+  padding: 0px;
+  margin: 0px;
 }
 
 .not-front #content .view-reservation-calendar div.view-footer .date-status p {
