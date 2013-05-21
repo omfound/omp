@@ -961,7 +961,9 @@ function commerce_reservations_rules_action_info() {
 
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  drupal_set_message('<pre>'.print_r($product, TRUE).'</pre>');
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+    drupal_set_message('dqed');
     return;
   }
 
@@ -976,6 +978,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     }else {
       return;
     }
+    drupal_set_message($hourly_rate);
 
     if ($hours >= $total_hours) {
       //reduce to zero cost if the hours provided are great than the order hours
