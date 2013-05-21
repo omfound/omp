@@ -128,7 +128,9 @@ Drupal.cr = Drupal.cr || {};
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
-        $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
+        selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
+        $('.fullcalendar').fullCalendar('removeEvents', Drupal.cr.removeSelectionEvents);
+        $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
       } else{
 	      $(this).val(previousStart);
 	      $(this).qtip({
@@ -141,6 +143,14 @@ Drupal.cr = Drupal.cr || {};
       } 
     },
     //End addDateToCalendar function
+
+    //start removeEventByClass function
+    removeSelectionEvents:function(event) {
+      console.log('removing events...');
+      console.log(event);
+      return "selected-time" === event.className;
+    },
+    //End removeEventByClass function
     
     //Start updateDatePicker
     updateDatePicker:function() {
@@ -435,7 +445,7 @@ Drupal.cr = Drupal.cr || {};
     this.end = end;
     
     this.allDay = false;
-    this.classname = '';
+    this.className = '';
     this.color = '#912711';
     this.backgroundColor = '#912711';
     this.eventBorderColor = '#912711';
@@ -446,14 +456,23 @@ Drupal.cr = Drupal.cr || {};
     this.base(title, start, end);
 
     this.allDay = true;
-    this.classname = 'closed-all-day';
+    this.className = 'closed-all-day';
   }
   Drupal.cr.closedDay.prototype = new Drupal.cr.calendarEvent;
   Drupal.cr.closedTime = function(title, start, end) {
     this.base = Drupal.cr.calendarEvent;
     this.base(title, start, end);
 
-    this.classname = 'closed-time';
+    this.className = 'closed-time';
   }
   Drupal.cr.closedTime.prototype = new Drupal.cr.calendarEvent;
+  Drupal.cr.selectedTime = function(title, start, end) {
+    this.base = Drupal.cr.calendarEvent;
+    this.base(title, start, end);
+    this.className = 'selected-time';
+    this.backgroundColor = '#85B740';
+    this.eventBorderColor = '#85B740';
+    this.textColor = '#000';
+  }
+  Drupal.cr.selectedTime.prototype = new Drupal.cr.calendarEvent;
 }(jQuery));
