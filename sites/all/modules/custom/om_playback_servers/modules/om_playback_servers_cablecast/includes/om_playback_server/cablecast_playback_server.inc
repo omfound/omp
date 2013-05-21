@@ -193,7 +193,9 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (empty($available_formats)) {
       $all_formats = $this->get_formats($pbs);
       if (!empty($all_formats)) {
+        dsm($all_formats);
         foreach ($all_formats->GetFormatsResult->Format AS $format) {
+          dsm($format);
           if ($format->Name == 'SD Digital File' || $format->Name == 'HD Digital File') {
             $available_formats[$format->Name] = $format->FormatID;
           }
@@ -201,6 +203,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       }
       variable_set('cablecast_available_formats_' . $pbs->pbsid, $available_formats);
     }
+    dsm($file);
     if (isset($file->field_om_show_media_format[$lang][0]['value'])) {
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'hd') {
         $format = $available_formats['HD Digital File'];
