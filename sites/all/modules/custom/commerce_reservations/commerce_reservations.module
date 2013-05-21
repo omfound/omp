@@ -967,7 +967,7 @@ function commerce_reservations_hours_days($start, $end) {
     $hours = $hours_diff;
   }
   if ($hours_diff >= 24) {
-    $days = floor($hours_diff/24) 
+    $days = floor($hours_diff/24); 
     $remainder_hours = floor($hours_diff - ($days*24));
   }else{
     $days = 1;
