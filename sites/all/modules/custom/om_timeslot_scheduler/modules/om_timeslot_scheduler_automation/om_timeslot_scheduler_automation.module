@@ -61,15 +61,30 @@ function om_timeslot_scheduler_automation_form_om_timeslot_scheduler_admin_form_
   );
 }
 
+function om_timeslot_scheduler_automation_menu() {
+  $items = array();
+  $items['automation/test'] = array(
+    'page callback' => '_om_timeslot_scheduler_automation_test',
+    'access argument' => array('perform scheduling tasks'),
+    'type' => PAGE_CALLBACK
+  );
+  return $items;
+}
+
+function _om_timeslot_scheduler_automation_test() {
+  om_timeslot_scheduler_automation_run_scheduling_jobs();
+  return array();
+}
+
 /**
  * Loop through all the channels marked for automation and schedule each one.
  */
 function om_timeslot_scheduler_automation_run_scheduling_jobs() {
   $channels = variable_get('om_timeslot_scheduler_automation_channels', '');
   if (!empty($channels)) {
+    $start = time() + (variable_get('om_timeslot_scheduler_automation_cron_window', 7) * 86400);
+    $end = $start + variable_get('om_timeslot_scheduler_automation_cron_duration', 3600);
     foreach ($channels AS $tid => $name) {
-      $start = time() + (variable_get('om_timeslot_scheduler_automation_cron_window', 7) * 86400);
-      $end = $start + variable_get('om_timeslot_scheduler_automation_cron_duration', 3600);
       $run = array(
         'channel_tid' => $tid,
         'start' => $start,
@@ -102,8 +117,8 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
 function om_timeslot_scheduler_automation_cron() {
   $seconds_between_jobs = variable_get('om_timeslot_scheduler_automation_cron_frequency', 3600);
   $last_cron = variable_get('om_timeslot_scheduler_automation_last_cron', time() - ($seconds_between_jobs + 1));
-  //if ($last_cron + $seconds_between_jobs < time()) {
+  if ($last_cron + $seconds_between_jobs < time()) {
     om_timeslot_scheduler_automation_run_scheduling_jobs();
     variable_set('om_timeslot_scheduler_automation_last_cron', time());
-  //}
+  }
 }
