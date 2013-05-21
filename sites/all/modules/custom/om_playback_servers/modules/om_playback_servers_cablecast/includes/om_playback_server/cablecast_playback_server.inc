@@ -188,6 +188,9 @@ class cablecastPlaybackServerController extends playbackServerController {
     $format = 0;
     $duration = 0;
     $lang = $file->language;
+    
+    
+    
     if (isset($file->field_om_show_media_format[$lang][0]['value'])) {
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'hd') {
         $format = 1;
@@ -208,6 +211,10 @@ class cablecastPlaybackServerController extends playbackServerController {
         'Chapter'=> 0, //int</Chapter>
       ),
     );
+  }
+  
+  public function test_formats($pbs) {
+    return $this->get_formats($pbs);
   }
   
   /**
