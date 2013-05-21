@@ -77,7 +77,6 @@ Drupal.cr = Drupal.cr || {};
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
         //deleted a bunch of stuff from here, may need to bring some back
-        alert('selection on calendar');
       });
 
       //The user has changed the quantity
@@ -136,7 +135,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
-        $('.fullcalendar').fullCalendar('select', event.start, event.end, false);
+        $('.fullcalendar').fullCalendar('select', selectionEvent.start, selectionEvent.end, false);
       } else{
 	      $(this).val(previousStart);
 	      $(this).qtip({
