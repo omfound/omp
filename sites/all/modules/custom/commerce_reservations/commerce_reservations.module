@@ -1018,6 +1018,8 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     }
     else {
       if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+        drupal_set_message('unit price: '.$unit_price['amount']);
+        drupal_set_message('hourly rate: '.$hourly_rate);
         $new_price = $unit_price['amount'] - (($hours_days['hours'] - $free_hours)*$hourly_rate);
         $price_difference = $new_price - $unit_price['amount'];
       }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
