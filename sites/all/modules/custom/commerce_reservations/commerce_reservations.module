@@ -1046,6 +1046,56 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
 }
 
+//BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
+function commerce_reservations_discount_day($line_item, $component_name, $round_mode){
+  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+    return;
+  }
+
+  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
+    return;
+  }
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
+  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+  $current_date = $start;
+  $deduct_hours = 0;
+  while($current_date < $end) {
+    $day = date('l', $current_date); 
+    if ($day == 'Sunday' || $day == 'Monday') {
+      $deduct_days = $deduct_days + 1;
+    }
+    $current_date = $current_date + (24*60*60);
+  }
+  if ($deduct_days > 0) {
+    if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+      $new_price = $unit_price['amount'] - ($deduct_hours * 24 * $product->commerce_price['und'][0]['amount']);
+    }
+    elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
+    }
+    $price_difference = $new_price - $unit_price['amount'];
+  }
+
+  $difference = array(
+    'amount' => $price_difference,
+    'currency_code' => $unit_price['currency_code'],
+    'data' => array(),
+  );
+
+  // Set the amount of the unit price and add the difference as a component.
+  $line_item_wrapper->commerce_unit_price->amount = $new_price;
+  
+  $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+    $line_item_wrapper->commerce_unit_price->value(),
+    $component_name,
+    $difference,
+    TRUE
+  );
+}
+
 function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
   
   //First check to make sure the product is a reservable product
