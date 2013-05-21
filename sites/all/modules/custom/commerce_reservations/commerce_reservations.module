@@ -972,7 +972,7 @@ function commerce_reservations_hourly_price_reduction($line_item, $component_nam
     return;
   }
   if ($total_hours = commerce_reservations_line_item_duration($line_item)) { 
-    dsm('total hours: '.$total_hours);
+    drupal_set_message('total hours: '.$total_hours);
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
 
@@ -985,7 +985,7 @@ function commerce_reservations_hourly_price_reduction($line_item, $component_nam
       $new_price = $unit_price['amount'] - ($hours*$unit_price['amount']);
       $price_difference = $new_price - $unit_price['amount'];
     }
-    dsm('price diff: '.$price_difference);
+    drupal_set_message('price diff: '.$price_difference);
     $difference = array(
       'amount' => $price_difference,
       'currency_code' => $unit_price['currency_code'],
