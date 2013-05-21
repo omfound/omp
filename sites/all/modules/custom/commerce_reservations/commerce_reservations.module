@@ -1027,7 +1027,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         }else{
           $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
           drupal_set_message('unit price: '.$unit_price['amount']);
-          drupal_set_message('product price: '.$product->commerce_price['und'][0]['amount'];
+          drupal_set_message('product price: '.$product->commerce_price['und'][0]['amount']);
         }
         $price_difference = $new_price - $unit_price['amount'];
       }
