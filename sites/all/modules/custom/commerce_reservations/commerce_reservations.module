@@ -323,7 +323,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 6); 
           }
           break;
         case 'Monday':
@@ -335,7 +335,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 0); 
           }
           break;
         case 'Tuesday':
@@ -347,7 +347,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 1); 
           }
           break;
         case 'Wednesday':
@@ -359,7 +359,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 2); 
           }
           break;
         case 'Thursday':
@@ -371,7 +371,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
         case 'Friday':
@@ -383,7 +383,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 4); 
           }
           break;
         case 'Saturday':
@@ -395,7 +395,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 5); 
           }
           break;
       }
@@ -404,10 +404,10 @@ function commerce_reservations_get_closed_times(){
   print '</div>'; 
 }
 
-function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3) {
+function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
-    $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', 6);
+    $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
     $output .= '<div class = "closed-time" start = "' . $start_date . '" ' . 'end = "' . $end_date . '"></div>';
@@ -426,12 +426,11 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
 }
 
 function commerce_reservations_format_calendar_date($date_string) {
-  print 'INPUT: '.$date_string."\n";
+  //HERE DATES ARE ALL MESSED UP
   $current_timezone = date_default_timezone_get();
   date_default_timezone_set('UTC');
   $clean_date = date('Y-m-d H:i:s', strtotime($date_string));
   date_default_timezone_set($current_timezone);
-  print 'OUTPUT: '.$clean_date."\n";
   return $clean_date;
 }
 
@@ -461,11 +460,24 @@ function calendar_filter($pid, $node, $quantity = 0){
 
     //here we need to get ALL potential pids in product display
     $args[] = $pid_string;
+
+    //load reservations as user as 1 to circumvent line item access
+    global $user;
+    $original_user = $user;
+    $old_state = drupal_save_session();
+    drupal_save_session(FALSE);
+    $user = user_load(1);
+
     $view = views_get_view('reservation_calendar');
     $nid = str_replace('node-', '', $node);
     $view->selected_nid = $nid;
     $view->quantity = $quantity;
     $display = $view -> preview('page_1', $args);
+
+    $user = $original_user;
+    drupal_save_session($old_state);
+    //back to normal user at this point
+
     print $display;
   } else {
     print '<div><div id = "not_certified"></div></div>';
