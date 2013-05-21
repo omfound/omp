@@ -193,9 +193,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (empty($available_formats)) {
       $all_formats = $this->get_formats($pbs);
       if (!empty($all_formats)) {
-        dsm($all_formats);
         foreach ($all_formats->GetFormatsResult->Format AS $possible_format) {
-          dsm($format);
           if ($possible_format->Name == 'SD Digital File' || $possible_format->Name == 'HD Digital File') {
             $available_formats[$possible_format->Name] = $possible_format->FormatID;
           }
