@@ -146,6 +146,7 @@ Drupal.cr = Drupal.cr || {};
 
     //start removeEventByClass function
     removeSelectionEvents:function(event) {
+      console.log('removing events...');
       console.log(event);
       return "selected-time" === event.className;
     },
