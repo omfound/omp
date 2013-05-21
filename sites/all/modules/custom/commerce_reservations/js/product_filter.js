@@ -462,6 +462,7 @@ Drupal.cr = Drupal.cr || {};
   Drupal.cr.closedTime.prototype = new Drupal.cr.calendarEvent;
   Drupal.cr.selectedTime = function(title, start, end) {
     this.base = Drupal.cr.calendarEvent;
+    this.base(title, start, end);
     this.classname = 'selected-time';
     this.backgroundColor = '#85B740';
     this.eventBorderColor = '#85B740';
