@@ -401,7 +401,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach ($timeslot->field_om_timeslot_date['und'] AS $date) {
         // Get the time range for appropriate dates as a timeslot an hold many date repeats.
-        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] >= $run['end'] && $date['value2'] <= $run['end'])) {
+        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
          $gap_set[$date['value']] = om_timeslot_scheduler_get_gaps($run['channel_tid'], $date['value'], $date['value2']);
         }
       }
