@@ -393,8 +393,11 @@ body.page-reservations #main-content #squeeze{
 }
 
 .view-id-reservation_calendar .fc-select-helper{
+  display: none;
+  /**
 	background-color: #85B740;
 	opacity: 1 !important;
+  **/
 }
 
 .view-id-reservation_calendar .fc-event-time,
