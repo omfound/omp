@@ -128,6 +128,8 @@ Drupal.cr = Drupal.cr || {};
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
+        console.log(startDate);
+        console.log(endDate);
         event = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
         console.log(event);
         $('.fullcalendar').fullCalendar('renderEvent', event, true);
