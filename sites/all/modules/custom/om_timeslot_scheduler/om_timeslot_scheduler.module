@@ -348,7 +348,6 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
       $run['timeslots'][] = $timeslot;
     }
   }
-  dsm($run['timeslots']);
   if (empty($run['timeslots'])) {
     $run['errors'][__FUNCTION__][] = array(
       'error' => 'No timeslots were found for the given date range.',
@@ -407,6 +406,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
         }
       }
     }
+    dsm($pag_set);
     $timeslot->gaps = $gap_set;
     $run['timeslots'][$key] = $timeslot;
   }
