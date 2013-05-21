@@ -977,7 +977,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     }else {
       return;
     }
-    drupal_set_message($hourly_rate);
 
     if ($hours >= $total_hours) {
       //reduce to zero cost if the hours provided are great than the order hours
