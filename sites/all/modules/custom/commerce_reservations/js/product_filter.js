@@ -128,7 +128,9 @@ Drupal.cr = Drupal.cr || {};
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
-        $('.fullcalendar').fullCalendar('select', startDate, endDate, false);
+        event = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
+        $('.fullcalendar').fullCalendar('renderEvent', event, true);
+        //$('.fullcalendar').fullCalendar('select', startDate, endDate, false);
       } else{
 	      $(this).val(previousStart);
 	      $(this).qtip({
@@ -456,4 +458,12 @@ Drupal.cr = Drupal.cr || {};
     this.classname = 'closed-time';
   }
   Drupal.cr.closedTime.prototype = new Drupal.cr.calendarEvent;
+  Drupal.cr.selectedTime = function(title, start, end) {
+    this.base = Drupal.cr.calendarEvent;
+    this.classname = 'selected-time';
+    this.backgroundColor = '#85B740';
+    this.eventBorderColor = '#85B740';
+    this.textColor = '#000';
+  }
+  Drupal.cr.selectedTime.prototype = new Drupal.cr.calendarEvent;
 }(jQuery));
