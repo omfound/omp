@@ -231,7 +231,7 @@ function commerce_reservations_last_cart_reservation($order) {
     }
   }
 
-  if ($last_reservation) {
+  if (!empty($last_reservation)) {
     return $last_reservation;
   }
   else {
