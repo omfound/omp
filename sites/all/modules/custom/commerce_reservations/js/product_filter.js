@@ -128,9 +128,9 @@ Drupal.cr = Drupal.cr || {};
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
-        event = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
+        selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
         $('.fullcalendar').fullCalendar('removeEvents', Drupal.cr.removeSelectionEvents);
-        $('.fullcalendar').fullCalendar('renderEvent', event, true);
+        $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
       } else{
 	      $(this).val(previousStart);
 	      $(this).qtip({
