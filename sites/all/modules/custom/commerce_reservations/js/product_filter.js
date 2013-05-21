@@ -129,7 +129,11 @@ Drupal.cr = Drupal.cr || {};
       endParse = Date.parse(endDate);
       if (startParse < endParse){
         selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
-        $('.fullcalendar').fullCalendar('removeEvents', Drupal.cr.removeSelectionEvents);
+        $(".fullcalendar").fullCalendar('removeEvents', function(event){
+          if (event.className == 'selected-time'){
+            return true;
+          }
+        });
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
       } else{
 	      $(this).val(previousStart);
@@ -144,14 +148,6 @@ Drupal.cr = Drupal.cr || {};
     },
     //End addDateToCalendar function
 
-    //start removeEventByClass function
-    removeSelectionEvents:function(event) {
-      console.log('removing events...');
-      console.log(event);
-      return "selected-time" === event.className;
-    },
-    //End removeEventByClass function
-    
     //Start updateDatePicker
     updateDatePicker:function() {
       view = $('.fullcalendar').fullCalendar('getView');
