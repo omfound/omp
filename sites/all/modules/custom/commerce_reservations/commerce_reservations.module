@@ -1105,7 +1105,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     
     $day_cost = $hours_days['days']*$day_rate;
     if ($hours_days['hours'] > 24) {
-      $hour_cost = $hours_days['remainder_hours'];
+      $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
     }
 
     if (!empty($hour_cost)) {
