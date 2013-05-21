@@ -137,7 +137,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
 	        startMinutes = "00";
         }
         
-        /**
         $('#pickedDates .start-date-wrapper .date-month .form-select').val(startMonth);
         $('#pickedDates .start-date-wrapper .date-day .form-select').val(startDate);
         $('#pickedDates .start-date-wrapper .date-year .form-select').val(startYear);
@@ -166,7 +165,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         $('#pickedDates .end-date-wrapper .date-hour .form-select').val(endHour);
         $('#pickedDates .end-date-wrapper .date-minute .form-select').val(endMinutes);
         $('#pickedDates .end-date-wrapper .date-ampm .form-select').val(ampm);
-        **/
+
         //HERE we remove previously selected times and unselect
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
           if (event.className == 'selected-time'){
@@ -184,7 +183,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         selectionEvent.backgroundColor = '#85B740';
         selectionEvent.eventBorderColor = '#85B740';
         selectionEvent.textColor = '#000';
-        $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
+        //$('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
 
         if (!dateInvalid) {
           $('.date-status').html('');
