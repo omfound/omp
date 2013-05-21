@@ -975,6 +975,7 @@ function commerce_reservations_hourly_price_reduction($line_item, $component_nam
     drupal_set_message('total hours: '.$total_hours);
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+    drupal_set_message('orig price: '.$unit_price['amount']);
 
     if ($hours >= $total_hours) {
       //reduce to zero cost if the hours provided are great than the order hours
