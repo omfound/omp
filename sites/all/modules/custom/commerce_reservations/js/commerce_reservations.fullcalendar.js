@@ -183,7 +183,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         selectionEvent.backgroundColor = '#85B740';
         selectionEvent.eventBorderColor = '#85B740';
         selectionEvent.textColor = '#000';
-        //$('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
+        $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
 
         if (!dateInvalid) {
           $('.date-status').html('');
