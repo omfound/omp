@@ -1158,6 +1158,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
     $hours_days = commerce_reservations_hours_days($start, $end);
+    drupal_set_message('<pre>'.print_r($hours_days, TRUE).'</pre>');
     $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
     $day_rate = $product->commerce_price['und'][0]['amount'];
     
