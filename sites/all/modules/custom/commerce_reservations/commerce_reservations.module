@@ -1478,6 +1478,7 @@ function commerce_reservations_commerce_order_status_info(){
 }
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
+  //BRIAN HERE
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
@@ -1486,7 +1487,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $account_wrapper = entity_metadata_wrapper('user', $account);
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
-  $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
+  //$product_display_wrapper = entity_metadata_wrapper('node', $product_display);
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
