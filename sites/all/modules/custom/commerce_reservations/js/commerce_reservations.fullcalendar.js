@@ -46,10 +46,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             cache : false,
             success : function (data) {
               Drupal.behaviors.product_filter.showCalendar();
-              setTimeout(function(){
-                alert('waiting');
-              },4000);
-
               $('div.closed-time', data).each(function(index){
                 event = new Object();
                 event.title = 'Closed';
