@@ -896,6 +896,9 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_price_reduction' => array(
       'label' => t('Reduce price by days or hours specified on product'),
     ),
+    'commerce_reservations_discount_by_day' => array(
+      'label' => t('Remove days from reservations cost calculation'),
+    ),
   );
 
   // Define the action using a common set of parameters.
@@ -926,6 +929,10 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
+  $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
+    'type' => 'string',
+    'label' => t('Day'),
+  ); 
   $actions['commerce_reservations_update_checkout_status'] = array(
     'label' => t('Set all reservable line items to specific status'),
     'group' => t('Commerce Reservations Rules'),
@@ -1047,7 +1054,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
 }
 
 //BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
-function commerce_reservations_discount_day($line_item, $component_name, $round_mode){
+function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
     return;
@@ -1063,8 +1070,8 @@ function commerce_reservations_discount_day($line_item, $component_name, $round_
   $current_date = $start;
   $deduct_hours = 0;
   while($current_date < $end) {
-    $day = date('l', $current_date); 
-    if ($day == 'Sunday' || $day == 'Monday') {
+    $res_day = date('l', $current_date); 
+    if ($res_day == $day) {
       $deduct_days = $deduct_days + 1;
     }
     $current_date = $current_date + (24*60*60);
