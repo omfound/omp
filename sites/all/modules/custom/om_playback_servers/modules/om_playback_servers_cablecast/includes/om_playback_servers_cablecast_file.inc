@@ -89,7 +89,7 @@ class cablecastFile {
     $result = $controller->get_digital_files($this->pbs);
     if (!empty($result->GetDigitalFilesResult->DigitalFileInfo)) {
       foreach ($result->GetDigitalFilesResult->DigitalFileInfo AS $possible_file) {
-        if ($file_id == $possible_file) {
+        if ($file_id == $possible_file->ID) {
           $file = $possible_file;
           continue;
         }
