@@ -45,7 +45,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
           {url : basePath + 'closed_times/',
             cache : false,
             success : function (data) {
-              setTimeout('Drupal.behaviors.product_filter.showCalendar()',3000);
+              setTimeout(Drupal.behaviors.product_filter.showCalendar,5000);
 
               $('div.closed-time', data).each(function(index){
                 event = new Object();
