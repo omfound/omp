@@ -86,7 +86,7 @@ class cablecastFile {
    **/
   public function build_uri($entity, $file_id) {
     $controller = om_playback_servers_entity_get_controller($this->pbs);
-    $files = $controller->get_digital_files($this->pbs);
+    $result = $controller->get_digital_files($this->pbs);
     dsm('we make it here');
     if (!empty($result->GetDigitalFilesResult->DigitalFileInfo) && !empty($result->GetDigitalFilesResult->DigitalFileInfo[$file_id])) {
       $file = $result->GetDigitalFilesResult->DigitalFileInfo[$file_id];
