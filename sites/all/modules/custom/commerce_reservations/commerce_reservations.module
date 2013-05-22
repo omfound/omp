@@ -1076,6 +1076,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"].' UTC');
   $current_date = $start;
   $deduct_hours = 0;
+  drupal_set_message('set day: '.$day);
   while($current_date < $end) {
     $res_day = strtolower(date('l', $current_date)); 
     drupal_set_message('day: '.$res_day);
