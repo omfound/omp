@@ -103,7 +103,7 @@ class cablecastFile {
           )
         );
         $meta_data = $controller->create_metadata($this->pbs, $entity);
-        dsm($meta_data);
+        dsm($entity);
         if (!empty($meta_data->CreateNewShowRecordResult) && is_numeric($meta_data->CreateNewShowRecordResult)) {
           $new_file_name = $meta_data->CreateNewShowRecordResult . $file->FileName;
           $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
