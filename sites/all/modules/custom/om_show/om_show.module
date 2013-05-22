@@ -105,7 +105,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
        foreach($om_show_meta_entities AS $field) {
-         $value_array = $project->{$field}[$project->language][0];
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
          if (!empty($value_array)) {
            foreach($value_array AS $value) {
              unset($form_state['input'][$field][$project->language]);
@@ -114,7 +114,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
          }
        }
        foreach($om_show_project_info AS $field) {
-         $value_array = $project->{$field}[$project->language][0];
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
          if (!empty($value_array)) {
            foreach($value_array AS $value) {
              unset($form_state['input'][$field][$project->language]);
