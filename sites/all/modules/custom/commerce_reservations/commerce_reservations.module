@@ -970,8 +970,6 @@ function commerce_reservations_rules_action_info() {
 }
 
 function commerce_reservations_hours_days($start, $end) {
-  drupal_set_message('start: '.$start);
-  drupal_set_message('end: '.$end);
   $hours_diff = floor(($end - $start) / 3600);
   if ($hours_diff < 1){
     $hours = 1;
@@ -1076,10 +1074,8 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"].' UTC');
   $current_date = $start;
   $deduct_hours = 0;
-  drupal_set_message('set day: '.$day);
   while($current_date < $end) {
     $res_day = strtolower(date('l', $current_date)); 
-    drupal_set_message('day: '.$res_day);
     if ($res_day == $day) {
       $deduct_days = $deduct_days + 1;
     }
@@ -1093,10 +1089,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
       $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
     }
     if ($new_price < 0) { $new_price = 0; }
-    drupal_set_message('new price: '.$new_price);
-    drupal_set_message('unit: '.$unit_price['amount']);
     $price_difference = $new_price - $unit_price['amount'];
-    drupal_set_message('price diff: '.$price_difference);
 
     $difference = array(
       'amount' => $price_difference,
@@ -1165,7 +1158,6 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
     $hours_days = commerce_reservations_hours_days($start, $end);
-    drupal_set_message('<pre>'.print_r($hours_days, TRUE).'</pre>');
     $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
     $day_rate = $product->commerce_price['und'][0]['amount'];
     
