@@ -105,17 +105,21 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
        foreach($om_show_meta_entities AS $field) {
-         $value_array = $project->{$field}['und'][0];
-         foreach($value_array AS $value) {
-             unset($form_state['input'][$field]['und']);
-             $form['om_show_metadata'][$field]['und']['#default_value'] = $value;
+         $value_array = $project->{$field}[$project->language][0];
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form['om_show_metadata'][$field][$project->language]['#default_value'] = $value;
+           }
          }
        }
        foreach($om_show_project_info AS $field) {
-         $value_array = $project->{$field}['und'][0];
-         foreach($value_array AS $value) {
-             unset($form_state['input'][$field]['und']);
-             $form[$field]['und'][0]['value']['#default_value'] = $value;
+         $value_array = $project->{$field}[$project->language][0];
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form[$field][$project->language][0]['value']['#default_value'] = $value;
+           }
          }
        }
      }
