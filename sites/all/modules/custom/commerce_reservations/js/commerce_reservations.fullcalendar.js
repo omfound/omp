@@ -57,7 +57,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.eventBorderColor = '#56a4da';
                 event.textColor = 'white';
                 dom_id: this.dom_id;
-                console.log(event.start);
+                console.log(event.start+' - '+event.end);
               $(".fullcalendar").fullCalendar('renderEvent', event, false);
             });
           }
