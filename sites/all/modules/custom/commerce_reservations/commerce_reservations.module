@@ -1495,14 +1495,14 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     $product_sku = $product_wrapper->sku->value();
     $product_options[] = $product_sku;
   }
-  print 'exit now 3';
-  return;
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
     $term_wrapper = entity_metadata_wrapper('taxonomy_term', $loaded_term);
+  print 'exit now 4';
+  return;
     if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
       $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
     }
