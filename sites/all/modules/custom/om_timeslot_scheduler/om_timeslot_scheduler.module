@@ -594,10 +594,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }// end foreach micro gap
           }// end foreach gap
           // Reset rule -- call previous step again.
-          if ($timeslot_schedule_change <= count($timeslot->schedule)) {
-            _om_timeslot_scheduler_implement_rules($context);
-          }
-          $timeslot_schedule_change = count($timeslot->schedule);
+          //if ($timeslot_schedule_change <= count($timeslot->schedule)) {
+          //  _om_timeslot_scheduler_implement_rules($context);
+          //}
+          //$timeslot_schedule_change = count($timeslot->schedule);
         }// end if we should use this range
       }// end foreach date range in timeslots
     }// end if this ts has a showlist
