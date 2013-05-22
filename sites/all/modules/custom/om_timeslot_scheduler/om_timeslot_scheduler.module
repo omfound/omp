@@ -341,7 +341,6 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
-
   while($row = $result->fetchAssoc()) {
     $timeslot = node_load($row['entity_id']);
     $is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
@@ -402,7 +401,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach ($timeslot->field_om_timeslot_date['und'] AS $date) {
         // Get the time range for appropriate dates as a timeslot an hold many date repeats.
-        if ($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) {
+        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
          $gap_set[$date['value']] = om_timeslot_scheduler_get_gaps($run['channel_tid'], $date['value'], $date['value2']);
         }
       }
@@ -430,7 +429,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
-        if ($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) {
+        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
           foreach($timeslot->gaps[$date['value']] AS $gap) {
             // $process_start is the place holder for moving forward.
             $process_start = $gap['start'];
@@ -774,7 +773,7 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
  * @returns boolean
  */
 function om_timeslot_scheduler_is_eligible_timeslot($timeslot) {
-  if ($timeslot->field_om_timeslot_automation['und'][0]['value']) {
+  if ($timeslot->field_om_timeslot_automation[$timeslot->language][0]['value']) {
     return TRUE;
   }
   return FALSE;
