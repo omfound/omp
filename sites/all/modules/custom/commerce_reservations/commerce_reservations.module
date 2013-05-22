@@ -1073,7 +1073,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   $current_timezone = date_default_timezone_get();
   date_default_timezone_set('UTC');
   while($current_date < $end) {
-    $res_day = date('l', $current_date); 
+    $res_day = strtolower(date('l', $current_date)); 
     drupal_set_message('res day: '.$res_day);
     if ($res_day == $day) {
       $deduct_days = $deduct_days + 1;
