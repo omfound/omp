@@ -46,6 +46,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             cache : false,
             success : function (data) {
               Drupal.behaviors.product_filter.showCalendar();
+              counter = 0;
               $('div.closed-time', data).each(function(index){
                 event = new Object();
                 event.title = 'Closed';
@@ -60,8 +61,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.eventBorderColor = '#56a4da';
                 event.textColor = 'white';
                 dom_id: this.dom_id;
-                alert(event.start+' - '+event.end);
-                $(".fullcalendar").fullCalendar('renderEvent', event, false);
+                counter = counter + 1;
+                if (counter < 20) {
+                  $(".fullcalendar").fullCalendar('renderEvent', event, false);
+                }
             });
           }
         });
