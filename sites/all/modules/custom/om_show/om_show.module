@@ -81,60 +81,55 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     }
   }
   // Auto population of metadata/contact info from project
-  $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
-  $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
-  
-  $form['om_show_metadata'] = array(
-    '#title' => t('Show Metadata'),
-    //'#description' => t('Metadata fields for this show.'),
-    '#type' => 'fieldset',
-    '#collapsible' => FALSE,
-    '#weight' => 1.5 ,
-    '#prefix' => '<div class = "show_metadata"',
-    '#suffix' => '</div>', 
-  );
+     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
+     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
+     
+    $form['om_show_metadata'] = array(
+       '#title' => t('Show Metadata'),
+       //'#description' => t('Metadata fields for this show.'),
+       '#type' => 'fieldset',
+       '#collapsible' => FALSE,
+       '#weight' => 1.5 ,
+       '#prefix' => '<div class = "show_metadata"',
+       '#suffix' => '</div>', 
+     );
 
-  // move metadata to fieldset
-  foreach ($om_show_meta_entities AS $field) {
-    $form['om_show_metadata'][$field] = $form[$field];
-    unset($form[$field]);
-  }
-  $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
+     // move metadata to fieldset
+     foreach ($om_show_meta_entities AS $field) {
+       $form['om_show_metadata'][$field] = $form[$field];
+       unset($form[$field]);
+     }
+     $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
 
-  // If there is a value for project try and load in meta values.
-  if (isset($key) && arg(2) != 'edit') {
-    $project = node_load($key);
-    foreach($om_show_meta_entities AS $field) {
-      $value_array = $project->{$field}['und'][0];
-      foreach($value_array AS $value) {
-          unset($form_state['input'][$field]['und']);
-          $form['om_show_metadata'][$field]['und']['#default_value'] = $value;
-      }
+     // If there is a value for project try and load in meta values.
+     if (isset($key) && arg(2) != 'edit') {
+       $project = node_load($key);
+       foreach($om_show_meta_entities AS $field) {
+         $value_array = $project->{$field}['und'][0];
+         foreach($value_array AS $value) {
+             unset($form_state['input'][$field]['und']);
+             $form['om_show_metadata'][$field]['und']['#default_value'] = $value;
+         }
+       }
+       foreach($om_show_project_info AS $field) {
+         $value_array = $project->{$field}['und'][0];
+         foreach($value_array AS $value) {
+             unset($form_state['input'][$field]['und']);
+             $form[$field]['und'][0]['value']['#default_value'] = $value;
+         }
+       }
+     }
+    
+    // Only provide ajax if we are on node add screen.
+    if (arg(2) != 'edit') {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
+      $form['field_om_show_project']['und']['#ajax'] = array(
+        'callback' => 'om_show_reload',
+        'wrapper' => 'om-show-node-form',
+        'event' => 'change',
+      );
     }
-    foreach($om_show_project_info AS $field) {
-      $value_array = $project->{$field}['und'][0];
-      foreach($value_array AS $value) {
-          unset($form_state['input'][$field]['und']);
-          $form[$field]['und'][0]['value']['#default_value'] = $value;
-      }
+    else {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
     }
-  }
-  
-  // Only provide ajax if we are on node add screen.
-  f (arg(2) != 'edit') {
-   $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
-   $form['field_om_show_project']['und']['#ajax'] = array(
-     'callback' => 'om_show_reload',
-     'wrapper' => 'om-show-node-form',
-     'event' => 'change',
-   );
-  
-  lse {
-   $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
-  
-}
-
-function om_show_reload($form, $form_state) {
-  // We just need to return the form here so that the form is re-rendered.
-  return $form;
 }
