@@ -227,7 +227,6 @@ Drupal.cr = Drupal.cr || {};
                 $('div.closed-time', data).each(function(index){
                   event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
                   dom_id: this.dom_id;
-                  console.log(event);
                   $(".fullcalendar").fullCalendar('renderEvent', event);
                 });
               }
@@ -241,7 +240,6 @@ Drupal.cr = Drupal.cr || {};
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
 
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
