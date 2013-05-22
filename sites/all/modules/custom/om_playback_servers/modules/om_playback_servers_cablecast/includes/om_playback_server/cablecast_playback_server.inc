@@ -225,7 +225,7 @@ class cablecastPlaybackServerController extends playbackServerController {
   /**
    * Get a list of all formats from the pbs location.
    */
-  private function get_formats($pbs) {
+  public function get_formats($pbs) {
     return $this->soap_request($pbs, 'GetFormats', array('LocationID' => $pbs->location_id));
   }
   
