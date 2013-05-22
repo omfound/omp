@@ -413,15 +413,19 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
+    //GIANT hack need to find problem later 5/22 10:00 pm to 8/21 2:00pm
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" ' . 'end = "' . $end_date . '"></div>';
   } else{
     $start_date = commerce_reservations_format_calendar_date($date . ' 12:00 am');
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
   if (!$value3){
     $start_date = commerce_reservations_format_calendar_date($date . ' ' . $value['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' 11:59 pm');
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
 
@@ -429,10 +433,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
 }
 
 function commerce_reservations_format_calendar_date($date_string) {
-  $timezone = date_default_timezone_get();
-  date_default_timezone_set('UTC');
   $clean_date = date('Y-m-d H:i:s', strtotime($date_string));
-  date_default_timezone_set($timezone);
   return $clean_date;
 }
 
@@ -1162,7 +1163,11 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     
     $day_cost = $hours_days['days']*$day_rate;
     if ($hours_days['hours'] > 24) {
-      $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
+      if ($hours_days['remainder_hours'] < 8) {
+        $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
+      }else{
+        $hour_cost = $day_rate;
+      }
     }
 
     if (!empty($hour_cost)) {

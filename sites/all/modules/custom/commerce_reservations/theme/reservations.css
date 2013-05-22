@@ -163,6 +163,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 #block-views-calendar-product-view-block .views-row{
+  display: inline-block;
 	width: 172px;
 	height: 135px;
 	margin-left: 10px;
