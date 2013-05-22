@@ -64,6 +64,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 if (counter < 28) {
                   $(".fullcalendar").fullCalendar('renderEvent', event, false);
                 }
+                if (counter == 28) {
+                  alert(event.start+' - '+event.end);
+                }
             });
           }
         });
