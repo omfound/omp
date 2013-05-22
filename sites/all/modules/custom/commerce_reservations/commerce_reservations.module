@@ -1500,6 +1500,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $accessories = array();
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
+    drupal_set_message('<pre>'.print_r($loaded_term, TRUE).'</pre>');
     /**
     $term_wrapper = entity_metadata_wrapper('taxonomy_term', $loaded_term);
     if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
