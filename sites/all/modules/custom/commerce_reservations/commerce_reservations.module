@@ -1482,13 +1482,13 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
-  print 'exit now';
-  return;
   $account = user_load($order_wrapper->uid->value());
   $account_wrapper = entity_metadata_wrapper('user', $account);
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
+  print 'exit now';
+  return;
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
