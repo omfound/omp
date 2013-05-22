@@ -371,6 +371,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
+            print 'VALUE: <pre>'.print_r($value, TRUE)."</pre>\n";
             print 'VALUE2: <pre>'.print_r($value2, TRUE)."</pre>\n";
             print 'VALUE3: <pre>'.print_r($value3, TRUE)."</pre>\n";
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
