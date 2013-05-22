@@ -930,7 +930,7 @@ function commerce_reservations_rules_action_info() {
   }
 
   $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
-    'type' => 'string',
+    'type' => 'text',
     'label' => t('Day'),
   ); 
   $actions['commerce_reservations_update_checkout_status'] = array(
