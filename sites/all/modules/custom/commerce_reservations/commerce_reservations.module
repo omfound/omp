@@ -1096,6 +1096,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
     drupal_set_message('new price: '.$new_price);
     drupal_set_message('unit: '.$unit_price['amount']);
     $price_difference = $new_price - $unit_price['amount'];
+    drupal_set_message('price diff: '.$price_difference);
 
     $difference = array(
       'amount' => $price_difference,
