@@ -1056,6 +1056,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
 //BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
 function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
   $day = strtolower($day);
+  drupal_set_message('day: '.$day);
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
     return;
@@ -1072,6 +1073,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   $deduct_hours = 0;
   while($current_date < $end) {
     $res_day = date('l', $current_date); 
+    drupal_set_message('res day: '.$res_day);
     if ($res_day == $day) {
       $deduct_days = $deduct_days + 1;
     }
