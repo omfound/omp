@@ -1087,23 +1087,23 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
       $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
     }
     $price_difference = $new_price - $unit_price['amount'];
-  }
 
-  $difference = array(
-    'amount' => $price_difference,
-    'currency_code' => $unit_price['currency_code'],
-    'data' => array(),
-  );
+    $difference = array(
+      'amount' => $price_difference,
+      'currency_code' => $unit_price['currency_code'],
+      'data' => array(),
+    );
 
-  // Set the amount of the unit price and add the difference as a component.
-  $line_item_wrapper->commerce_unit_price->amount = $new_price;
+    // Set the amount of the unit price and add the difference as a component.
+    $line_item_wrapper->commerce_unit_price->amount = $new_price;
   
-  $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-    $line_item_wrapper->commerce_unit_price->value(),
-    $component_name,
-    $difference,
-    TRUE
-  );
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
+      $component_name,
+      $difference,
+      TRUE
+    );
+  }
 }
 
 function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
