@@ -61,7 +61,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.textColor = 'white';
                 dom_id: this.dom_id;
                 counter = counter + 1;
-                if (counter < 27) {
+                if (counter < 28) {
                   $(".fullcalendar").fullCalendar('renderEvent', event, false);
                 }
             });
