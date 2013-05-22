@@ -426,10 +426,8 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
 }
 
 function commerce_reservations_format_calendar_date($date_string) {
-  $current_timezone = date_default_timezone_get();
-  date_default_timezone_set('UTC');
+  $date_string = $date_string.' UTC';
   $clean_date = date('Y-m-d H:i:s', strtotime($date_string));
-  date_default_timezone_set($current_timezone);
   return $clean_date;
 }
 
