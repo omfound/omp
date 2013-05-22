@@ -970,6 +970,8 @@ function commerce_reservations_rules_action_info() {
 }
 
 function commerce_reservations_hours_days($start, $end) {
+  drupal_set_message('start: '.$start);
+  drupal_set_message('end: '.$end);
   $hours_diff = floor(($end - $start) / 3600);
   if ($hours_diff < 1){
     $hours = 1;
