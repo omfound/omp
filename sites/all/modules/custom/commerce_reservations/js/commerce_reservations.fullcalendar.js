@@ -59,8 +59,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.eventBorderColor = '#56a4da';
                 event.textColor = 'white';
                 dom_id: this.dom_id;
-                if (event.start == '2013-05-23 22:00:00' && event.end == '2013-05-24 14:00:00') {
-                  alert('its our date');
+                if (event.start.indexOf('2013-05-23 22:00:00') !== -1 && event.end.indexOf('2013-05-24 14:00:00') !== -1) {
+                  alert('date to add');
                   $(".fullcalendar").fullCalendar('renderEvent', event, false);
                 }
             });
