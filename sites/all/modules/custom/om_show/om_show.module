@@ -133,3 +133,8 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
     }
 }
+
+function om_show_reload($form, $form_state) {
+  // We just need to return the form here so that the form is re-rendered.
+  return $form;
+}
