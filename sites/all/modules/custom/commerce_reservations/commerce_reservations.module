@@ -1487,8 +1487,6 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
-  print 'exit now';
-  return;
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
@@ -1497,6 +1495,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     $product_sku = $product_wrapper->sku->value();
     $product_options[] = $product_sku;
   }
+  print 'exit now 3';
+  return;
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
