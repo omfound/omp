@@ -1057,7 +1057,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
 }
 
-//BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
 function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
   $day = strtolower($day);
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
@@ -1506,8 +1505,10 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     }
     if ($loaded_term->field_reservable_product){
       foreach($term_wrapper->field_reservable_product->getIterator() as $product_term_wrapper){
-        if ($product_term_wrapper->name->value() == $product_display_wrapper->title->value()){
-          $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
+        if (method_exists($product_term_wrapper, 'name') && method_exists($product_display_wrapper, 'title')) {
+          if ($product_term_wrapper->name->value() == $product_display_wrapper->title->value()){
+            $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
+          }
         }
       }
     }
@@ -1522,11 +1523,13 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     '#options' => drupal_map_assoc($product_options),
     '#default_value' => 0
   );
-  $form['accessories'] = array(
-    '#type' => 'checkboxes',
-    '#title' => 'Select all accessories the user is checking out.',
-    '#options' => $accessories,
-  );
+  if (count($accessories) > 0) {
+    $form['accessories'] = array(
+      '#type' => 'checkboxes',
+      '#title' => 'Select all accessories the user is checking out.',
+      '#options' => $accessories,
+    );
+  }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Checkout')
