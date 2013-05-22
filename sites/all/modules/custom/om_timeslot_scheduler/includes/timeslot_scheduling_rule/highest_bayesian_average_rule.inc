@@ -2,7 +2,7 @@
 class highestBayesianAverageRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
     $shows = array();
-    $last_two_months = time() - (3600 * 30 * 2);
+    $last_two_months = time() - (3600 * 30 * 6);
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');

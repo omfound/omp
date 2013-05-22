@@ -25,7 +25,7 @@ function commerce_reservations_permission() {
 
 function commerce_reservations_form_commerce_product_ui_product_form_alter(&$form, &$form_state, $form_id){
   if (isset($form['field_crp_product_title'])) {
-    if ($form['field_crp_product_title']['und']['#bundle'] == 'reservable_product'){
+    if ($form['field_crp_product_title']['und']['#bundle'] == 'reservable_product') {
       $form['title']['#value'] = 'ant';
       $form['title']['#type'] = 'value';
       $form['title']['#required'] = FALSE;
@@ -371,6 +371,9 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
+            //print 'VALUE: <pre>'.print_r($value, TRUE)."</pre>\n";
+            //print 'VALUE2: <pre>'.print_r($value2, TRUE)."</pre>\n";
+            //print 'VALUE3: <pre>'.print_r($value3, TRUE)."</pre>\n";
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
@@ -410,15 +413,19 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
+    //GIANT hack need to find problem later 5/22 10:00 pm to 8/21 2:00pm
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" ' . 'end = "' . $end_date . '"></div>';
   } else{
     $start_date = commerce_reservations_format_calendar_date($date . ' 12:00 am');
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
   if (!$value3){
     $start_date = commerce_reservations_format_calendar_date($date . ' ' . $value['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' 11:59 pm');
+    if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
 
@@ -426,11 +433,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
 }
 
 function commerce_reservations_format_calendar_date($date_string) {
-  //HERE DATES ARE ALL MESSED UP
-  $current_timezone = date_default_timezone_get();
-  date_default_timezone_set('UTC');
   $clean_date = date('Y-m-d H:i:s', strtotime($date_string));
-  date_default_timezone_set($current_timezone);
   return $clean_date;
 }
 
@@ -859,7 +862,7 @@ function commerce_reservations_charge_by_the_hour_check($lid) {
 	  $product = $line_item_wrapper->commerce_product->value();
 	  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
       if ($product_wrapper->field_charge_by_the_->value() == 'hour') {
-	    return TRUE;
+	      return TRUE;
       }
 	}
 	return FALSE;
@@ -893,12 +896,12 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_price_per_day' => array(
       'label' => t('Multiply price by day'),
     ),
-    'commerce_reservations_hourly_price_reduction' => array(
-      'label' => t('Reduce price by specified hours'),
+    'commerce_reservations_price_reduction' => array(
+      'label' => t('Reduce price by days or hours specified on product'),
     ),
-    //'commerce_reservations_daily_price_reduction' => array(
-      //'label' => t('Reduce price by specified days'),
-    //),
+    'commerce_reservations_discount_by_day' => array(
+      'label' => t('Remove days from reservations cost calculation'),
+    ),
   );
 
   // Define the action using a common set of parameters.
@@ -929,9 +932,9 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
-  $actions['commerce_reservations_hourly_price_reduction']['parameter']['hours'] = array(
-    'type' => 'integer',
-    'label' => t('Hours'),
+  $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
+    'type' => 'text',
+    'label' => t('Day'),
   ); 
   $actions['commerce_reservations_update_checkout_status'] = array(
     'label' => t('Set all reservable line items to specific status'),
@@ -966,25 +969,75 @@ function commerce_reservations_rules_action_info() {
   return $actions;
 }
 
-function commerce_reservations_hourly_price_reduction($line_item, $component_name, $round_mode, $hours) {
+function commerce_reservations_hours_days($start, $end) {
+  $hours_diff = floor(($end - $start) / 3600);
+  if ($hours_diff < 1){
+    $hours = 1;
+  }else{
+    $hours = $hours_diff;
+  }
+  if ($hours_diff >= 24) {
+    $days = floor($hours_diff/24); 
+    $remainder_hours = floor($hours_diff - ($days*24));
+  }else{
+    $days = 1;
+    $remainder_hours = 0;
+  }
+
+  $hours_days = array(
+    'hours' => $hours,
+    'days' => $days,
+    'remainder_hours' => $remainder_hours,
+  );
+
+  return $hours_days;
+}
+
+function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
     return;
   }
-  if ($total_hours = commerce_reservations_line_item_duration($line_item)) { 
+
+  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
+    return;
+  }
+  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
+  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+  $hours_days = commerce_reservations_hours_days($start, $end);
+  if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+    $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
 
-    if ($hours >= $total_hours) {
+    if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+      $hourly_rate = $product->commerce_price['und'][0]['amount'];
+    }else {
+      return;
+    }
+
+    //if more than 1 day, discount by 1 day
+    if ($free_hours >= $hours_days['hours']) {
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      $new_price = $unit_price['amount'] - ($hours*$unit_price['amount']);
-      $price_difference = $new_price - $unit_price['amount'];
+      if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+        $new_price = $unit_price['amount'] - ($free_hours*$hourly_rate);
+        $price_difference = $new_price - $unit_price['amount'];
+      }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+        if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
+          $new_price = 0;
+        }else{
+          $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+        }
+        if ($new_price < 0) { $new_price = 0; }
+        $price_difference = $new_price - $unit_price['amount'];
+      }
     }
-
     $difference = array(
       'amount' => $price_difference,
       'currency_code' => $unit_price['currency_code'],
@@ -1004,6 +1057,58 @@ function commerce_reservations_hourly_price_reduction($line_item, $component_nam
   }
 }
 
+//BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
+function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
+  $day = strtolower($day);
+  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+    return;
+  }
+
+  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
+    return;
+  }
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
+  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"].' UTC');
+  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"].' UTC');
+  $current_date = $start;
+  $deduct_hours = 0;
+  while($current_date < $end) {
+    $res_day = strtolower(date('l', $current_date)); 
+    if ($res_day == $day) {
+      $deduct_days = $deduct_days + 1;
+    }
+    $current_date = $current_date + (24*60*60);
+  }
+  if ($deduct_days > 0) {
+    if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+      $new_price = $unit_price['amount'] - ($deduct_hours * 24 * $product->commerce_price['und'][0]['amount']);
+    }
+    elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
+    }
+    if ($new_price < 0) { $new_price = 0; }
+    $price_difference = $new_price - $unit_price['amount'];
+
+    $difference = array(
+      'amount' => $price_difference,
+      'currency_code' => $unit_price['currency_code'],
+      'data' => array(),
+    );
+
+    // Set the amount of the unit price and add the difference as a component.
+    $line_item_wrapper->commerce_unit_price->amount = $new_price;
+  
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(),
+      $component_name,
+      $difference,
+      TRUE
+    );
+  }
+}
+
 function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
   
   //First check to make sure the product is a reservable product
@@ -1017,12 +1122,9 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
   if (property_exists($line_item, "field_reservation_dates")){
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_diff = floor(($end - $start) / 3600);
-    if ($hours_diff < 1){
-	    $hours_diff = 1;
-    }
+    $hours_days = commerce_reservations_hours_days($start, $end);
     $rate = $product->commerce_price['und'][0]['amount'];
-    $updated_price = $hours_diff * $rate;
+    $updated_price = $hours_days['hours'] * $rate;
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
@@ -1043,35 +1145,47 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
 }
 
 function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $product = $line_item_wrapper->commerce_product->value();
-  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-  //if the product is not a reservable product, duck out
+  
+  //First check to make sure the product is a reservable product
+  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if ($product->type != 'reservable_product') {
     return;
   }
-  
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
   
   if (property_exists($line_item, "field_reservation_dates")){
-    $date_array = $line_item_wrapper->field_reservation_dates->value();
-    $start = strtotime($date_array["value"]);
-    $end = strtotime($date_array["value2"]);
-    $days_diff = floor(($end - $start) / 86400);
-    if ($days_diff < 1){
-	    $days_diff = 1;
+    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
+    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+    $hours_days = commerce_reservations_hours_days($start, $end);
+    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    $day_rate = $product->commerce_price['und'][0]['amount'];
+    
+    $day_cost = $hours_days['days']*$day_rate;
+    if ($hours_days['hours'] > 24) {
+      if ($hours_days['remainder_hours'] < 8) {
+        $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
+      }else{
+        $hour_cost = $day_rate;
+      }
     }
-    $price_array = $product_wrapper->commerce_price->value();
-    $rate = $price_array['amount'];
-    $updated_price = $days_diff * $rate;
+
+    if (!empty($hour_cost)) {
+      $updated_price = $day_cost + $hour_cost;
+    }else{
+      $updated_price = $day_cost;
+    }
+
     $current_amount = $unit_price['amount'];
     $difference = array(
       'amount' => $updated_price - $current_amount,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
+   
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
+    
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
