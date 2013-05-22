@@ -359,6 +359,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
+            print 'ZE WEDNESDAYS: '.$date."\n";
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 2); 
           }
           break;
@@ -421,8 +422,6 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     $end_date = commerce_reservations_format_calendar_date($date . ' 11:59 pm');
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
-  print 'START: '.$start_date."\n";
-  print 'END: '.$end_date."\n";
 
   return $output;
 }
