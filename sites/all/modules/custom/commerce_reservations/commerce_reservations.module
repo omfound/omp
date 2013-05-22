@@ -1078,6 +1078,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   $deduct_hours = 0;
   while($current_date < $end) {
     $res_day = strtolower(date('l', $current_date)); 
+    drupal_set_message('day: '.$res_day);
     if ($res_day == $day) {
       $deduct_days = $deduct_days + 1;
     }
