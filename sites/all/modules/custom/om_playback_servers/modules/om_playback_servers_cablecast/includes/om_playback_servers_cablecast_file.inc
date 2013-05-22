@@ -94,6 +94,7 @@ class cablecastFile {
           continue;
         }
       }
+      dsm($file);
       if (!empty($file)) {
         $entity->field_om_show_duration = array(
           $entity->language => array(
