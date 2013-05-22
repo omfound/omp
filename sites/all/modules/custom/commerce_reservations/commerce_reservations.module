@@ -1057,7 +1057,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
 }
 
-//BRIAN WAS HERE, just need to add Day select to a new rule and replace sunday monday with it here.
 function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
   $day = strtolower($day);
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
@@ -1487,7 +1486,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $account_wrapper = entity_metadata_wrapper('user', $account);
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
   $product_display = node_load($nid);
-  //$product_display_wrapper = entity_metadata_wrapper('node', $product_display);
+  $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
@@ -1496,8 +1495,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     $product_sku = $product_wrapper->sku->value();
     $product_options[] = $product_sku;
   }
-  $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
-  $tree = taxonomy_get_tree($tax->vid);
+  //$tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
+  //$tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
