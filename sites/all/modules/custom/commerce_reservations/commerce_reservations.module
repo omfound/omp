@@ -1478,9 +1478,10 @@ function commerce_reservations_commerce_order_status_info(){
 }
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
-  print 'testing';
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  print 'exit now';
+  return;
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $account = user_load($order_wrapper->uid->value());
