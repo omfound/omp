@@ -230,9 +230,9 @@ $databases = array (
 $databases['legacy']['default'] = array(
   'driver' => 'mysql',
   'database' => 'dom_prod', // this is the name used to define the SOURCE_DATABASE constant above
-  'username' => 'openmedia',
-  'password' => 'LNMGvMMarnGJwZDA',
-  'host' => 'localhost',
+  'username' => 'migration',
+  'password' => 'ftysdG8dwnKhWwfH',
+  'host' => 'http://129.19.150.4',
   'prefix' => '',
 );
 
