@@ -34,9 +34,6 @@
       <label for = "commercial-cost">(Commercial)</label>
     </div>
   <?php endif;?>
-  <div class="add-to-cart item-data">
-    <?php print $fields['field_crp_product_reference']->content;?>
-  </div>
   <div class="nid item-data">
     <?php print $fields['nid']->content;?>
   </div>
