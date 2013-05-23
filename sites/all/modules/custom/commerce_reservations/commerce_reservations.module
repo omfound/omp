@@ -171,7 +171,8 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
     if ($form['line_item_fields']['#bundle'] == 'reservable_product'){
-      dsm($form);
+      $display = commerce_autodisplay_entity_display_lookup($form['product_id']['#value']);
+      dsm($display);
       if (array_key_exists('#options', $form['product_id'])){
         $max_quantity = sizeof($form['product_id']['#options']);
       } else{
