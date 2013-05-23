@@ -427,11 +427,11 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
-    schedule_benchmark('timeslots ' . $timeslot->nid);
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
         if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
+          schedule_benchmark('timeslots ' . $timeslot->nid);
           foreach($timeslot->gaps[$date['value']] AS $gap) {
             // $process_start is the place holder for moving forward.
             $process_start = $gap['start'];
