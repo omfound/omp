@@ -111,6 +111,7 @@ Drupal.cr = Drupal.cr || {};
     //start updateFormProduct function
     updateFormProduct:function($add_to_cart, newPid) {
       cartUrl = 'cr/product_form/'+newPid;
+      var basePath = Drupal.settings.basePath;
       $.ajax({
           url : basePath + cartUrl,
           cache : false,
