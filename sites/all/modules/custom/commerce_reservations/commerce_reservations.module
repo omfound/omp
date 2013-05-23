@@ -2117,3 +2117,31 @@ function commerce_reservations_line_item_duration ($line_item) {
 
   return $total_hours;
 }
+
+function commerce_reservations_add_to_cart_form () {
+  //grab a reservable product id
+  $query = "SELECT product_id FROM product WHERE type = :type LIMIT 1";
+  $product_id = db_query($query, array(':type' => 'reservable_product'))->fetchField();
+
+  if (!empty($product_id)) {
+    $product = commerce_product_load($this->get_value($values, 'product_id'));
+    if (!empty($product)) {
+      $default_quantity = 1;
+      $line_item_type = 'reservable_product';
+      $product_ids = array($product_id);
+
+      // Build the line item we'll pass to the Add to Cart form.
+      $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
+
+      // Generate a form ID for this add to cart form.
+      $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
+
+      // Build the Add to Cart form using the prepared values.
+      $form = drupal_get_form($form_id, $line_item, true, array());
+
+      return drupal_render($form);
+    }
+  }
+
+  return false;
+}
