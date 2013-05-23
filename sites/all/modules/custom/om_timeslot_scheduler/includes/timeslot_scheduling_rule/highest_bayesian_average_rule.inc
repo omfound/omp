@@ -1,7 +1,7 @@
 <?php
 class highestBayesianAverageRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
-    $this->shows = drupal_static(__CLASS__);
+    $this->shows = &drupal_static(__CLASS__);
     if (empty($this->shows)) {
     $shows = array();
     $last_two_months = time() - (3600 * 30 * 6);
