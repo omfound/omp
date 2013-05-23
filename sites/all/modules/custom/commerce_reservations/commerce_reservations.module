@@ -2155,5 +2155,5 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
     }
   }
 
-  return false;
+  print '';
 }
