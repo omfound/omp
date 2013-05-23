@@ -174,7 +174,8 @@ function commerce_reservations_menu(){
 function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   $my_form_id = substr($form_id, 0, 30);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
-    dsm($form_state);
+    //we have to cache as it is being loaded via ajax
+    $form_state['cache'] = TRUE;
   /*
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
