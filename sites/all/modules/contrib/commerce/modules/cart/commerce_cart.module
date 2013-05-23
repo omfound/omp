@@ -1457,6 +1457,7 @@ function commerce_cart_add_to_cart_form($form, &$form_state, $line_item, $show_q
   // Retrieve the array of product IDs from the line item's context data array.
   $product_ids = array();
 
+  dsm($line_item);
   // If the product IDs setting tells us to use entity values...
   if ($line_item->data['context']['product_ids'] == 'entity' &&
     is_array($line_item->data['context']['entity'])) {
