@@ -2152,9 +2152,15 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
       // Build the Add to Cart form using the prepared values.
+      $form = array();
+      $form_state = array();
+      $args = func_get_args();
+      // Remove $form_id from the arguments.
+      array_shift($args);
+      $form_state['build_info']['args'] = $args;
       $form_state['cache'] = true;
-      $form = drupal_get_form($form_id, $line_item, false, array());
-      //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
+      //$form = drupal_get_form($form_id, $line_item, false, array());
+      $form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
       print drupal_render($form);
     }
