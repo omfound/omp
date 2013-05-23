@@ -57,7 +57,7 @@ Drupal.cr = Drupal.cr || {};
 
       //update the calendar with closed times for selected item
       var nid = $(this).find('.nid .field-content').text();
-      var pid = $('#left-side input[name="product_id"]').val();
+      var pid = $(this).find('.pid .field-content').text(); 
       if (typeof pid == 'undefined'){
         pid = $('#left-side select[name="product_id"]').val();
       }
