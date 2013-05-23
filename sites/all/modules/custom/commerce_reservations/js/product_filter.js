@@ -109,7 +109,7 @@ Drupal.cr = Drupal.cr || {};
       currentPid = pidMatch[1];
       zePile = zePile.replace(currentPid, newPid);
       $add_to_cart.html(zePile);
-    }
+    },
     //end updateFormProduct function
 
     //start addDateToCalendar function
