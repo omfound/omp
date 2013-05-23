@@ -110,12 +110,23 @@ Drupal.cr = Drupal.cr || {};
 
     //start updateFormProduct function
     updateFormProduct:function($add_to_cart, newPid) {
+      cartUrl = 'cr/product_form/'+newPid;
+      $.ajax(
+        {url : basePath + cartUrl,
+          cache : false,
+          success : function (data) {
+              add_to_cart.html(data);
+          });
+        }
+      });
+      /**
       zePile = $add_to_cart.html();
       pidMatch = zePile.match('commerce_cart_add_to_cart_form_(.*)">'); 
       currentPid = pidMatch[1];
       regzor = new RegExp(currentPid, "g");
       zePile = zePile.replace(regzor, newPid);
       $add_to_cart.html(zePile);
+      **/
     },
     //end updateFormProduct function
 
