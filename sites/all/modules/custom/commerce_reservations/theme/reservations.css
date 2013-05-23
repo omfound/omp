@@ -444,7 +444,9 @@ body.page-reservations #main-content #squeeze{
 	border-width: 0px 0px !important; 
 }
 
-#pickedDates legend{
+#pickedDates legend,
+.pickedDates legend
+{
 	background-color: #85B740;
   padding: 3px 10px 3px 10px;
 }
@@ -521,17 +523,6 @@ body.page-reservations #main-content #squeeze{
 
 .page-reservations .add-to-cart .form-type-date-select label{
 	font-weight: bold;
-}
-
-.page-reservations .add-to-cart .form-type-date-select label[for^=edit-line-item-fields-field-reservation-dates-und-0-value2--]{
-	color: #912a1b;
-	background-color: #f4f4f4;
-	padding: 10px;
-	margin-bottom: 10px;
-	font-weight: bold;
-	text-transform: capitalize;
-	position: relative;
-	left: -10px;
 }
 
 .qtip-tip{

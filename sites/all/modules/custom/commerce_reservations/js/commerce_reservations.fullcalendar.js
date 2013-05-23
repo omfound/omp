@@ -138,12 +138,12 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
 	        startMinutes = "00";
         }
         
-        $('#pickedDates .start-date-wrapper .date-month .form-select').val(startMonth);
-        $('#pickedDates .start-date-wrapper .date-day .form-select').val(startDate);
-        $('#pickedDates .start-date-wrapper .date-year .form-select').val(startYear);
-        $('#pickedDates .start-date-wrapper .date-hour .form-select').val(startHour);
-        $('#pickedDates .start-date-wrapper .date-minute .form-select').val(startMinutes);
-        $('#pickedDates .start-date-wrapper .date-ampm .form-select').val(ampm);
+        $('.start-date-wrapper .date-month .form-select').val(startMonth);
+        $('.start-date-wrapper .date-day .form-select').val(startDate);
+        $('.start-date-wrapper .date-year .form-select').val(startYear);
+        $('.start-date-wrapper .date-hour .form-select').val(startHour);
+        $('.start-date-wrapper .date-minute .form-select').val(startMinutes);
+        $('.start-date-wrapper .date-ampm .form-select').val(ampm);
         
         endMonth = end.getMonth() + 1;
         endDate = end.getDate();
@@ -160,12 +160,12 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
 	        endMinutes = "00";
         }
         
-        $('#pickedDates .end-date-wrapper .date-month .form-select').val(endMonth);
-        $('#pickedDates .end-date-wrapper .date-day .form-select').val(endDate);
-        $('#pickedDates .end-date-wrapper .date-year .form-select').val(endYear);
-        $('#pickedDates .end-date-wrapper .date-hour .form-select').val(endHour);
-        $('#pickedDates .end-date-wrapper .date-minute .form-select').val(endMinutes);
-        $('#pickedDates .end-date-wrapper .date-ampm .form-select').val(ampm);
+        $('.end-date-wrapper .date-month .form-select').val(endMonth);
+        $('.end-date-wrapper .date-day .form-select').val(endDate);
+        $('.end-date-wrapper .date-year .form-select').val(endYear);
+        $('.end-date-wrapper .date-hour .form-select').val(endHour);
+        $('.end-date-wrapper .date-minute .form-select').val(endMinutes);
+        $('.end-date-wrapper .date-ampm .form-select').val(ampm);
 
         //HERE we remove previously selected times and unselect
         $(".fullcalendar").fullCalendar('removeEvents', function(event){

@@ -1,3 +1,9 @@
+<?php if (isset($page['add_to_cart_form'])) { ?>
+  <div id="commerce-reservations-cart" class="pickedDates add-to-cart" style="display: none;">
+    <?php print $page['add_to_cart_form']; ?>
+  </div>
+<?php } ?>
+
 <div id="page">
   <header id="header" role="banner">
     <div id="header-inner" class="clearfix">
