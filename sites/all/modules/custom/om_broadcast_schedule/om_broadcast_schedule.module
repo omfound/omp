@@ -274,7 +274,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
     }
   }
   // Now select all airings in the current date range and see whether to create/leave alone/delete
-
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
   $query->fields('dates', array('entity_id'));

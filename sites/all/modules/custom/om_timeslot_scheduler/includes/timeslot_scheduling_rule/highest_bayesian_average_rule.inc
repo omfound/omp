@@ -1,6 +1,8 @@
 <?php
 class highestBayesianAverageRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
+    $this->shows = drupal_static(__CLASS__);
+    if (empty($this->shows)) {
     $shows = array();
     $last_two_months = time() - (3600 * 30 * 6);
     $query = db_select('node', 'n');
@@ -41,6 +43,8 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
     foreach($vote_results AS $nid => $rating) {
       $shows[] = $nid;
     }
-    return array_values($shows);
+    $this->shows = array_values($shows);
+    }
+    return $this->shows;
   }
 }
