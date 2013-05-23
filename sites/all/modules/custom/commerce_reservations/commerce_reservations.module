@@ -175,7 +175,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   $my_form_id = substr($form_id, 0, 30);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
     //we have to cache as it is being loaded via ajax
-    $form_state['cache'] = TRUE;
   /*
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
@@ -2153,7 +2152,8 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
       // Build the Add to Cart form using the prepared values.
-      $form = drupal_get_form($form_id, $line_item, false, array());
+      $form_state['cache'] = true;
+      $form = commerce_cart_add_to_cart_form($form, &$form_state, $line_item, $show_quantity = FALSE, $context = array());
 
       print drupal_render($form);
     }
