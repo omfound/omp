@@ -115,8 +115,10 @@ Drupal.cr = Drupal.cr || {};
       currentPid = pidMatch[1];
       alert('currentPid: '+currentPid);
       alert('newPid: '+newPid);
-      zePile = zePile.replace(currentPid, newPid);
+      regzor = new RegExp(zePile, "g");
+      zePile = zePile.replace(regzor, newPid);
       console.log(zePile);
+
       $add_to_cart.html(zePile);
     },
     //end updateFormProduct function
