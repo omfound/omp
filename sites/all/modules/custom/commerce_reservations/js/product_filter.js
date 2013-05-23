@@ -113,9 +113,7 @@ Drupal.cr = Drupal.cr || {};
           cache : false,
           success : function (data) {
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
-            $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">');
-            $('.view-reservation-calendar .view-footer #date-picker .date-details').append(data);
-            $('.view-reservation-calendar .view-footer #date-picker .date-details').append('</div>');
+            $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
           }
       });
     },
