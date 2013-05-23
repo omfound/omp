@@ -139,8 +139,18 @@ Drupal.cr = Drupal.cr || {};
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
       }              
       endMinutes = $('.end-date-wrapper .date-minute .form-select').val();
+      console.log(startYear);
+      console.log(startMonth);
+      console.log(startDay);
+      console.log(startHour);
+      console.log(startMinutes);
       startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
+      console.log(endYear);
+      console.log(endMonth);
+      console.log(endDay);
+      console.log(endHour);
+      console.log(endMinutes);
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
