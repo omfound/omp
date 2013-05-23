@@ -113,6 +113,8 @@ Drupal.cr = Drupal.cr || {};
       zePile = $add_to_cart.html();
       pidMatch = zePile.match('commerce_cart_add_to_cart_form_(.*)">'); 
       currentPid = pidMatch[1];
+      alert('currentPid: '.currentPid);
+      alert('newPid: '.newPid);
       zePile = zePile.replace(currentPid, newPid);
       $add_to_cart.html(zePile);
     },
