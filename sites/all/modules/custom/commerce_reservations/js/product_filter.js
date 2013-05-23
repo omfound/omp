@@ -116,6 +116,7 @@ Drupal.cr = Drupal.cr || {};
       alert('currentPid: '+currentPid);
       alert('newPid: '+newPid);
       zePile = zePile.replace(currentPid, newPid);
+      console.log(zePile);
       $add_to_cart.html(zePile);
     },
     //end updateFormProduct function
