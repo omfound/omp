@@ -77,6 +77,8 @@ Drupal.cr = Drupal.cr || {};
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
       $add_to_cart.show();
+      newPid = $(this).find('.pid .field-content').text();
+      Drupal.behaviors.product_filter.updateFormProduct($add_to_cart, newPid);
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -99,6 +101,16 @@ Drupal.cr = Drupal.cr || {};
       });
     });
     },
+
+    //start updateFormProduct function
+    updateFormProduct:function($add_to_cart, newPid) {
+      zePile = $add_to_cart.html();
+      pidMatch = zePile.match('commerce_cart_add_to_cart_form_(.*)">'); 
+      currentPid = pidMatch[1];
+      zePile = zePile.replace(currentPid, newPid);
+      $add_to_cart.html(zePile);
+    }
+    //end updateFormProduct function
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
