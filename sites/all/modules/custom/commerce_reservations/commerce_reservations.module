@@ -2150,7 +2150,7 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
       // Generate a form ID for this add to cart form.
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
-      $form = commerce_reservations_build_form($form_id);
+      $form = commerce_reservations_build_form($form_id, $line_item, false, array());
       //$form = drupal_build_form($form_id, $form_state);
       //$form = drupal_get_form($form_id, $line_item, false, array());
       //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
