@@ -279,8 +279,20 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
   $query->fields('dates', array('entity_id'));
   $query->condition('field_om_airing_channel_tid', $context['results']['run_info']['channel_tid'], '=');
-  $query->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
-  $query->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
+    $and_1 = db_and();
+    $and_1->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
+    $and_1->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
+    $and_2->condition('field_om_airing_dates_value2', $context['results']['run_info']['start'], '<=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_airing_dates_value', $context['results']['run_info']['end'], '>=');
+    $and_3->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+  $query->condition($or);
   $result = $query->execute();
   while($row = $result->fetchAssoc()) {
     if (!in_array($row['entity_id'], $safe)) {
