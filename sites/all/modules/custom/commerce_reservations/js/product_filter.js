@@ -76,30 +76,9 @@ Drupal.cr = Drupal.cr || {};
       newPid = $(this).find('.pid .field-content').text();
       Drupal.behaviors.product_filter.updateFormProduct(newPid);
 
-      //The user has changed the dates on the date picker
-      $('.start-date-wrapper .form-select').focus(function(){
-        previousStart = $(this).val();
-      }).change(Drupal.behaviors.product_filter.addDateToCalendar);
-      $('.end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
-
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
         //deleted a bunch of stuff from here, may need to bring some back
-      });
-
-      //The user has changed the quantity
-      $('.view-footer [id|=edit-quantity]').change(function(){ 
-        $(".fullcalendar").fullCalendar('removeEvents', function(event){
-          if (event.className == 'overlap'){
-            return true;
-          }
-        });
-        quantity = $('.view-footer [id|=edit-quantity]').val();
-        Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
-        $(".fullcalendar").ajaxStop(function() {
-          Drupal.behaviors.product_filter.addDateToCalendar();
-          $(this).unbind("ajaxStop");
-        });
       });
     });
     },
@@ -114,6 +93,27 @@ Drupal.cr = Drupal.cr || {};
           success : function (data) {
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
+
+            //The user has changed the dates on the date picker
+            $('.start-date-wrapper .form-select').focus(function(){
+              previousStart = $(this).val();
+            }).change(Drupal.behaviors.product_filter.addDateToCalendar);
+            $('.end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
+
+            //The user has changed the quantity
+            $('.view-footer [id|=edit-quantity]').change(function(){ 
+              $(".fullcalendar").fullCalendar('removeEvents', function(event){
+                if (event.className == 'overlap'){
+                  return true;
+                }
+              });
+              quantity = $('.view-footer [id|=edit-quantity]').val();
+              Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
+              $(".fullcalendar").ajaxStop(function() {
+                Drupal.behaviors.product_filter.addDateToCalendar();
+                $(this).unbind("ajaxStop");
+              });
+            });
           }
       });
     },
@@ -263,7 +263,6 @@ Drupal.cr = Drupal.cr || {};
       $('#left-side .form-item-quantity').append($preloader);
       $('#leftContent .large-image').addClass('preloader-active');
 
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
