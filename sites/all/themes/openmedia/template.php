@@ -38,6 +38,10 @@ function openmedia_preprocess_page(&$variables) {
         break;
     }
   }
+
+  if (arg(0) == 'reservations') {
+    $variables['page']['add_to_cart_form'] = commerce_reservations_add_to_cart_form();
+  }
 }
 
 /**
