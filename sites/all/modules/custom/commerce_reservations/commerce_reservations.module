@@ -248,6 +248,7 @@ function commerce_reservations_last_cart_reservation($order) {
  * to create a better solution.
  */
 function commerce_reservations_fix_quantity($form, &$form_state) {
+  dsm($form);
   if (!empty($form_state['input']['quantity']) && is_numeric($form_state['input']['quantity'])) {
     $form_state['values']['quantity'] = $form_state['input']['quantity'];
   }
