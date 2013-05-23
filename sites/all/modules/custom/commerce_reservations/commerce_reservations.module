@@ -2132,12 +2132,13 @@ function commerce_reservations_add_to_cart_form () {
 
       // Build the line item we'll pass to the Add to Cart form.
       $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
+      $line_item->data['context']['product_ids'] = $product_ids;
 
       // Generate a form ID for this add to cart form.
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
       // Build the Add to Cart form using the prepared values.
-      $form = drupal_get_form($form_id, $line_item, true, array());
+      $form = drupal_get_form($form_id, $line_item, false, array());
 
       return drupal_render($form);
     }
