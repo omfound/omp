@@ -75,7 +75,7 @@ Drupal.cr = Drupal.cr || {};
       });
 
       //Populate details pane and calendar with defaults
-      Drupal.behaviors.product_filter.moveItemToDetails();
+      //Drupal.behaviors.product_filter.moveItemToDetails();
       $add_to_cart.show();
       newPid = $(this).find('.pid .field-content').text();
       Drupal.behaviors.product_filter.updateFormProduct($add_to_cart, newPid);
