@@ -2120,7 +2120,7 @@ function commerce_reservations_line_item_duration ($line_item) {
 
 function commerce_reservations_add_to_cart_form () {
   //grab a reservable product id
-  $query = "SELECT product_id FROM product WHERE type = :type LIMIT 1";
+  $query = "SELECT product_id FROM {commerce_product} WHERE type = :type LIMIT 1";
   $product_id = db_query($query, array(':type' => 'reservable_product'))->fetchField();
 
   if (!empty($product_id)) {
