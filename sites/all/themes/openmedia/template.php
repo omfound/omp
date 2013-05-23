@@ -38,6 +38,10 @@ function openmedia_preprocess_page(&$variables) {
         break;
     }
   }
+
+  if (arg(0) == 'reservations') {
+    $variables['add_to_cart_form'] = commerce_reservations_add_to_cart_form();
+  }
 }
 
 /**
@@ -507,7 +511,6 @@ function openmedia_commerce_registration_order($variables) {
 function openmedia_preprocess_views_view_unformatted($vars) {
   switch($vars['view']->name) {
     case 'calendar_product_view':
-      dsm($vars);
       //drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
       //drupal_add_css(path_to_theme() . '/css/reservations.css');
       break;
