@@ -2130,7 +2130,6 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null) {
-  dsm('product id: '.$product_id);
   //grab a reservable product id
   if (empty($product_id)) {
     $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
@@ -2151,14 +2150,8 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
       // Generate a form ID for this add to cart form.
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
-      // Build the Add to Cart form using the prepared values.
-      $form_state = array();
-      $args = func_get_args();
-      // Remove $form_id from the arguments.
-      array_shift($args);
-      $form_state['build_info']['args'] = $args;
-      $form_state['cache'] = true;
-      $form = drupal_build_form($form_id, $form_state);
+      $form = commerce_reservations_build_form($form_id);
+      //$form = drupal_build_form($form_id, $form_state);
       //$form = drupal_get_form($form_id, $line_item, false, array());
       //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
@@ -2167,4 +2160,15 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
   }
 
   print '';
+}
+
+function commerce_reservations_build_form($form_id) {
+ $form_state = array();
+ $args = func_get_args();
+ // Remove $form_id from the arguments.
+ array_shift($args);
+ $form_state['build_info']['args'] = $args;
+ $form_state['cache'] = true;
+
+ return drupal_build_form($form_id, $form_state);
 }
