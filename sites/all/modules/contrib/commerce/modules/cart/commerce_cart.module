@@ -1444,9 +1444,6 @@ function commerce_cart_forms($form_id, $args) {
  *   The form array.
  */
 function commerce_cart_add_to_cart_form($form, &$form_state, $line_item, $show_quantity = FALSE, $context = array()) {
-  dsm($form);
-  dsm($form_state);
-  dsm('testing');
   global $user;
 
   // Store the context in the form state for use during AJAX refreshes.
