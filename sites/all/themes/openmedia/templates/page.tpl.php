@@ -1,6 +1,5 @@
-<?php dsm($page); ?>
 <?php if (isset($page['add_to_cart_form'])) { ?>
-  <div id="commerce-reservations-cart">
+  <div id="commerce-reservations-cart" style="display: none;">
     <?php print $page['add_to_cart_form']; ?>
   </div>
 <?php } ?>
