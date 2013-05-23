@@ -194,6 +194,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#options'] = drupal_map_assoc($options);
       $form['quantity']['#multiple'] = FALSE;
       $form['quantity']['#weight'] = 0;
+      $form['quantity']['#title'] = 'QUANTITY';
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
