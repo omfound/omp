@@ -111,13 +111,12 @@ Drupal.cr = Drupal.cr || {};
     //start updateFormProduct function
     updateFormProduct:function($add_to_cart, newPid) {
       cartUrl = 'cr/product_form/'+newPid;
-      $.ajax(
-        {url : basePath + cartUrl,
+      $.ajax({
+          url : basePath + cartUrl,
           cache : false,
           success : function (data) {
-              add_to_cart.html(data);
-          });
-        }
+            add_to_cart.html(data);
+          }
       });
       /**
       zePile = $add_to_cart.html();
