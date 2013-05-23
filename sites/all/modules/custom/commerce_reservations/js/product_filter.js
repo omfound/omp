@@ -35,7 +35,7 @@ Drupal.cr = Drupal.cr || {};
     $('.meta').remove();
 
     $add_to_cart = $('#commerce-reservations-cart').detach();
-    $('.view-reservation-calendar .view-footer').attach($add_to_cart);
+    $('.view-reservation-calendar .view-footer').append($add_to_cart);
 
     //Hide all of our commerce item fields on page load
     Drupal.behaviors.product_filter.hideItemFields();
