@@ -120,7 +120,6 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
-      alert('changing dates');
       previousStart = $('.start-date-wrapper .form-select').val();
       startYear = $('.start-date-wrapper .date-year .form-select').val();
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
@@ -146,18 +145,8 @@ Drupal.cr = Drupal.cr || {};
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
       }              
       endMinutes = $('.end-date-wrapper .date-minute .form-select').val();
-      console.log(startYear);
-      console.log(startMonth);
-      console.log(startDay);
-      console.log(startHour);
-      console.log(startMinutes);
       startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
-      console.log(endYear);
-      console.log(endMonth);
-      console.log(endDay);
-      console.log(endHour);
-      console.log(endMinutes);
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
       if (startParse < endParse){
@@ -458,7 +447,6 @@ Drupal.cr = Drupal.cr || {};
         //$('.date-details').html(dateFields);
 
         //update calendar on change events
-        alert('adding change events');
         $('.start-date-wrapper .form-select').focus(function(){
           previousStart = $(this).val();
         }).change(Drupal.behaviors.product_filter.addDateToCalendar);
