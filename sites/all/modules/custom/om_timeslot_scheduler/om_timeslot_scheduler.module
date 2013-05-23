@@ -418,6 +418,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
+  
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
   if (empty($run['timeslots'])) {
@@ -426,6 +427,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
+    schedule_benchmark('timeslots ' . $timeslot->nid);
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
@@ -437,7 +439,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             // START Section 1: Set up Leaders and Trailers for Time Slot
             // If this gap is the beginning of a timeslot and there is a leader value schedule the leader
             if ($gap['start'] == $date['value'] && isset($timeslot->field_om_timeslot_leader['und'][0]['nid'])) {
-              $show = node_load($timeslot->field_om_timeslot_leader['und'][0]['nid']);
+              $show = om_timeslot_scheduler_load_node($timeslot->field_om_timeslot_leader['und'][0]['nid']);
               $end = $gap['start'] + $show->field_om_show_duration['und'][0]['value'];
               if ($end <= $gap['end']) {
                 // revise the gap
@@ -448,7 +450,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             }
             // If this gap goes to the end of the timeslot, include the trailer.
             if ($gap['end'] == $date['value2'] && isset($timeslot->field_om_timeslot_trailer['und'][0]['nid'])) {
-              $show = node_load($timeslot->field_om_timeslot_trailer['und'][0]['nid']);
+              $show = om_timeslot_scheduler_load_node($timeslot->field_om_timeslot_trailer['und'][0]['nid']);
               $start = $gap['end'] - $show->field_om_show_duration['und'][0]['value'];
               if ($start >= $gap['start']) {
                 // revise the gap
@@ -603,6 +605,16 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
   }// end foreach timeslot
+}
+
+function schedule_benchmark($flag) {
+  $schedule_benchmark = &drupal_static(__FUNCTION__);
+  if (empty($schedule_benchmark)) {
+    $schedule_benchmark = microtime(TRUE);
+  }
+  $ret = microtime(TRUE) - $schedule_benchmark;
+  dsm($flag . ': ' . $ret);
+  return $ret;
 }
 
 /**
@@ -789,10 +801,10 @@ function om_timeslot_scheduler_is_eligible_timeslot($timeslot) {
  * @returns array list of shows or empty if the rule returns nothing or no rules are found.
  */
 function om_timeslot_scheduler_render_timeslot_rule($timeslot) {
-  $rule_name = $timeslot->field_om_timeslot_rule['und'][0]['value'];
-  if (!empty($rule_name)) {
+  $rule_name = $timeslot->field_om_timeslot_rule[$timeslot->language][0]['value'];
+  //if (empty($rule_name)) {
     // use channel or default rule
-  }
+  //}
   $rule = om_timeslot_scheduler_entity_get_rules($rule_name);
   if (is_object($rule)) {
     return $rule->executeRule($timeslot);
