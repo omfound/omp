@@ -112,17 +112,12 @@ Drupal.cr = Drupal.cr || {};
           url : basePath + cartUrl,
           cache : false,
           success : function (data) {
-            $('.view-reservation-calendar .view-footer').append(data);
+            $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
+            $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart" style="display: none;">');
+            $('.view-reservation-calendar .view-footer #date-picker .date-details').append(data);
+            $('.view-reservation-calendar .view-footer #date-picker .date-details').append('</div>');
           }
       });
-      /**
-      zePile = $add_to_cart.html();
-      pidMatch = zePile.match('commerce_cart_add_to_cart_form_(.*)">'); 
-      currentPid = pidMatch[1];
-      regzor = new RegExp(currentPid, "g");
-      zePile = zePile.replace(regzor, newPid);
-      $add_to_cart.html(zePile);
-      **/
     },
     //end updateFormProduct function
 
