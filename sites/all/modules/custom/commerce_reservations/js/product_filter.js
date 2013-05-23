@@ -74,7 +74,7 @@ Drupal.cr = Drupal.cr || {};
       //Populate details pane and calendar with defaults
       //Drupal.behaviors.product_filter.moveItemToDetails();
       newPid = $(this).find('.pid .field-content').text();
-      Drupal.behaviors.product_filter.updateFormProduct($add_to_cart, newPid);
+      Drupal.behaviors.product_filter.updateFormProduct(newPid);
 
       //The user has changed the dates on the date picker
       $('.start-date-wrapper .form-select').focus(function(){
@@ -105,16 +105,14 @@ Drupal.cr = Drupal.cr || {};
     },
 
     //start updateFormProduct function
-    updateFormProduct:function($add_to_cart, newPid) {
+    updateFormProduct:function(newPid) {
       cartUrl = 'cr/product_form/'+newPid;
       var basePath = Drupal.settings.basePath;
       $.ajax({
           url : basePath + cartUrl,
           cache : false,
           success : function (data) {
-            console.log(data);
-            $add_to_cart.html(data);
-            $('.view-reservation-calendar .view-footer').append($add_to_cart);
+            $('.view-reservation-calendar .view-footer').append(data);
           }
       });
       /**
