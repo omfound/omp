@@ -80,6 +80,12 @@ Drupal.cr = Drupal.cr || {};
       newPid = $(this).find('.pid .field-content').text();
       Drupal.behaviors.product_filter.updateFormProduct($add_to_cart, newPid);
 
+      //The user has changed the dates on the date picker
+      $('.start-date-wrapper .form-select').focus(function(){
+        previousStart = $(this).val();
+      }).change(Drupal.behaviors.product_filter.addDateToCalendar);
+      $('.end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
+
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
         //deleted a bunch of stuff from here, may need to bring some back
