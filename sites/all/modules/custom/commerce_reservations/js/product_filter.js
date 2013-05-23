@@ -432,11 +432,11 @@ Drupal.cr = Drupal.cr || {};
     moveItemToDetails:function() {
       view = $('.fullcalendar').fullCalendar('getView');
       if (view.name == 'agendaWeek'){
-        dateFields = new Object();
-        $('.form-item-quantity').hide();
-        $('#leftContent .large-image').addClass('no-quantity');
-        $('#left-side .add-to-cart [id|=edit-line-item-fields]').show();
-        $('#left-side .form-submit').show();
+        //dateFields = new Object();
+        //$('.form-item-quantity').hide();
+        //$('#leftContent .large-image').addClass('no-quantity');
+        //$('#left-side .add-to-cart [id|=edit-line-item-fields]').show();
+        //$('#left-side .form-submit').show();
 
         //Make sure the user hasn't tried to select multiple days and lost the add to cart form
         if ($('#left-side .add-to-cart').is('*')){
@@ -449,7 +449,7 @@ Drupal.cr = Drupal.cr || {};
         }
 
         //Move dateFields into the details div
-        $('.date-details').html(dateFields);
+        //$('.date-details').html(dateFields);
 
         //update calendar on change events
         $('.start-date-wrapper .form-select').focus(function(){
