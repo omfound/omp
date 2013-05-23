@@ -233,6 +233,7 @@ $databases['legacy']['default'] = array(
   'username' => 'migration',
   'password' => 'ftysdG8dwnKhWwfH',
   'host' => 'http://129.19.150.4',
+  'port' => '3306',
   'prefix' => '',
 );
 
