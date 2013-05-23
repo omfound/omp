@@ -114,31 +114,31 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
-      previousStart = $('#pickedDates .start-date-wrapper .form-select').val();
-      startYear = $('#pickedDates .start-date-wrapper .date-year .form-select').val();
-      startMonth = $('#pickedDates .start-date-wrapper .date-month .form-select').val();
+      previousStart = $('.start-date-wrapper .form-select').val();
+      startYear = $('.start-date-wrapper .date-year .form-select').val();
+      startMonth = $('.start-date-wrapper .date-month .form-select').val();
       //fullcalendar select option is expecting a 0 based month array
       startMonth = parseInt(startMonth) - 1;
-      startDay = $('#pickedDates .start-date-wrapper .date-day .form-select').val();
-      if ($('#pickedDates .start-date-wrapper .date-ampm .form-select').val() == 'pm'){
-        startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+      startDay = $('.start-date-wrapper .date-day .form-select').val();
+      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+        startHour = $('.start-date-wrapper .date-hour .form-select').val();
         startHour = parseInt(startHour) + 12;
       } else{
-        startHour = $('#pickedDates .start-date-wrapper .date-hour .form-select').val();
+        startHour = $('.start-date-wrapper .date-hour .form-select').val();
       }
-      startMinutes = $('#pickedDates .start-date-wrapper .date-minute .form-select').val();
-      endYear = $('#pickedDates .end-date-wrapper .date-year .form-select').val();
-      endMonth = $('#pickedDates .end-date-wrapper .date-month .form-select').val();
+      startMinutes = $('.start-date-wrapper .date-minute .form-select').val();
+      endYear = $('.end-date-wrapper .date-year .form-select').val();
+      endMonth = $('.end-date-wrapper .date-month .form-select').val();
       //fullcalendar select option is expecting a 0 based month array
       endMonth = parseInt(endMonth) - 1;
-      endDay = $('#pickedDates .end-date-wrapper .date-day .form-select').val();
-      if ($('#pickedDates .end-date-wrapper .date-ampm .form-select').val() == 'pm'){
-        endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+      endDay = $('.end-date-wrapper .date-day .form-select').val();
+      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+        endHour = $('.end-date-wrapper .date-hour .form-select').val();
         endHour = parseInt(endHour) + 12;
       } else{
-        endHour = $('#pickedDates .end-date-wrapper .date-hour .form-select').val();
+        endHour = $('.end-date-wrapper .date-hour .form-select').val();
       }              
-      endMinutes = $('#pickedDates .end-date-wrapper .date-minute .form-select').val();
+      endMinutes = $('.end-date-wrapper .date-minute .form-select').val();
       startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
       startParse = Date.parse(startDate);
