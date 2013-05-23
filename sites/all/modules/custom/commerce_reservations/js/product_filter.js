@@ -452,6 +452,7 @@ Drupal.cr = Drupal.cr || {};
         //$('.date-details').html(dateFields);
 
         //update calendar on change events
+        alert('adding change events');
         $('.start-date-wrapper .form-select').focus(function(){
           previousStart = $(this).val();
         }).change(Drupal.behaviors.product_filter.addDateToCalendar);
