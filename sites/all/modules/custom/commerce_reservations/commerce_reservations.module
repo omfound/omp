@@ -2161,14 +2161,6 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
         'human_name' => 'Reservation Calendar Page',
       );
 
-      // Build the Add to Cart form using the prepared values.
-      $form = drupal_get_form($form_id, $line_item, $this->options['show_quantity'], array());
-
-      return drupal_render($form);
-    }
-  }
-}
-
       // Generate a form ID for this add to cart form.
       $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
