@@ -114,6 +114,7 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
+      alert('changing dates');
       previousStart = $('.start-date-wrapper .form-select').val();
       startYear = $('.start-date-wrapper .date-year .form-select').val();
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
