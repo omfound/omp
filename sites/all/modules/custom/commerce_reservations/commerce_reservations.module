@@ -160,6 +160,26 @@ function commerce_reservations_menu(){
   return $items;
 }
 
+
+function commerce_reservations_entity_display_lookup($product_id) {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node', '=')
+    ->entityCondition('bundle', 'reservable_product_display', '=')
+    ->fieldCondition('field_crp_product_reference', 'product_id', $product_id, '=')
+    ->execute();
+
+  foreach($result as $type) {
+    foreach($type as $key => $info) {
+      if($info->nid) {
+        return $info->nid;
+      }
+    } 
+  }
+
+  return false;
+}
+
 /*
  *  Implements hook_form_alter
  */
@@ -171,7 +191,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
     if ($form['line_item_fields']['#bundle'] == 'reservable_product'){
-      $display = commerce_autodisplay_entity_display_lookup($form['product_id']['#value']);
+      $display = commerce_reservations_entity_display_lookup($form['product_id']['#value']);
       dsm($display);
       if (array_key_exists('#options', $form['product_id'])){
         $max_quantity = sizeof($form['product_id']['#options']);
