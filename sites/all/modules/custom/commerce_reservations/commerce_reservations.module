@@ -157,6 +157,12 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/product_form/%'] = array(
+    'page callback' => 'commerce_reservations_add_to_cart_form',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 
@@ -190,7 +196,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#weight'] = 0;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
-      $form['#submit'][] = 'commerce_reservations_debug_submit';
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
     }
   }
@@ -220,11 +225,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
     } 
   }
-}
-
-function commerce_reservations_debug_submit($form, &$form_state) {
-  dsm($form);
-  dsm($form_state);
 }
 
 function commerce_reservations_last_cart_reservation($order) {
@@ -2127,10 +2127,12 @@ function commerce_reservations_line_item_duration ($line_item) {
   return $total_hours;
 }
 
-function commerce_reservations_add_to_cart_form () {
+function commerce_reservations_add_to_cart_form ($product_id = null) {
   //grab a reservable product id
-  $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
-  $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
+  if (empty($product_id)) {
+    $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
+    $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
+  }
 
   if (!empty($product_id)) {
     $product = commerce_product_load($product_id);
@@ -2149,7 +2151,7 @@ function commerce_reservations_add_to_cart_form () {
       // Build the Add to Cart form using the prepared values.
       $form = drupal_get_form($form_id, $line_item, false, array());
 
-      return drupal_render($form);
+      print drupal_render($form);
     }
   }
 
