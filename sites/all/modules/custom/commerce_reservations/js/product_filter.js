@@ -115,7 +115,7 @@ Drupal.cr = Drupal.cr || {};
       currentPid = pidMatch[1];
       alert('currentPid: '+currentPid);
       alert('newPid: '+newPid);
-      regzor = new RegExp(zePile, "g");
+      regzor = new RegExp(currentPid, "g");
       zePile = zePile.replace(regzor, newPid);
       console.log(zePile);
 
