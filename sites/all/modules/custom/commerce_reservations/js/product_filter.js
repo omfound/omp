@@ -116,6 +116,7 @@ Drupal.cr = Drupal.cr || {};
           url : basePath + cartUrl,
           cache : false,
           success : function (data) {
+            console.log(data);
             $add_to_cart.html(data);
           }
       });
