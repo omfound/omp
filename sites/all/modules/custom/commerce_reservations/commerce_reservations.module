@@ -174,11 +174,10 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     if ($form['line_item_fields']['#bundle'] == 'reservable_product'){
       $display = commerce_reservations_entity_display_lookup($form['product_id']['#value']);
       $display_node = node_load($display);
-      dsm($display_node);
-      if (array_key_exists('#options', $form['product_id'])){
-        $max_quantity = sizeof($form['product_id']['#options']);
-      } else{
-	      $max_quantity = 1;
+      if (!empty($display_node->field_crp_product_reference['und'])) {
+        $max_quantity = count($display_node->field_crp_product_reference['und']);
+      }else{
+        $max_quantity = 1;
       }
       $options = array();
       for ($i = $max_quantity; $i > 0; $i--){
