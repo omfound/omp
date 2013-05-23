@@ -111,6 +111,7 @@ Drupal.cr = Drupal.cr || {};
     //start updateFormProduct function
     updateFormProduct:function($add_to_cart, newPid) {
       zePile = $add_to_cart.html();
+      console.log(zePile);
       pidMatch = zePile.match('commerce_cart_add_to_cart_form_(.*)">'); 
       currentPid = pidMatch[1];
       alert('currentPid: '.currentPid);
