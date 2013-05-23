@@ -161,25 +161,6 @@ function commerce_reservations_menu(){
 }
 
 
-function commerce_reservations_entity_display_lookup($product_id) {
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'node', '=')
-    ->entityCondition('bundle', 'reservable_product_display', '=')
-    ->fieldCondition('field_crp_product_reference', 'product_id', $product_id, '=')
-    ->execute();
-
-  foreach($result as $type) {
-    foreach($type as $key => $info) {
-      if($info->nid) {
-        return $info->nid;
-      }
-    } 
-  }
-
-  return false;
-}
-
 /*
  *  Implements hook_form_alter
  */
