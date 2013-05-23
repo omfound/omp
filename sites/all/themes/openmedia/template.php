@@ -39,6 +39,7 @@ function openmedia_preprocess_page(&$variables) {
     }
   }
 
+  dsm(arg(0));
   if (arg(0) == 'reservations') {
     $variables['add_to_cart_form'] = commerce_reservations_add_to_cart_form();
   }
