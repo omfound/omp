@@ -34,6 +34,9 @@ Drupal.cr = Drupal.cr || {};
     var item = $('#block-views-calendar-product-view-block div.views-row');
     $('.meta').remove();
 
+    $add_to_cart = $('#commerce-reservations-cart').detach();
+    $('.view-reservation-calendar .view-footer').attach($add_to_cart);
+
     //Hide all of our commerce item fields on page load
     Drupal.behaviors.product_filter.hideItemFields();
 
@@ -73,6 +76,7 @@ Drupal.cr = Drupal.cr || {};
 
       //Populate details pane and calendar with defaults
       Drupal.behaviors.product_filter.moveItemToDetails();
+      $add_to_cart_form.show();
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
