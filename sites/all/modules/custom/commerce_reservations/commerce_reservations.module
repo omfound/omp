@@ -167,6 +167,7 @@ function commerce_reservations_menu(){
 function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   $my_form_id = substr($form_id, 0, 30);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
+    dsm('firing commerce form');
   /*
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
@@ -206,7 +207,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
 
   //set default reservation date and time to last reservation in cart if available
   if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
-    dsm('firing cart form');
     //set quantity weight to appear above other items
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
