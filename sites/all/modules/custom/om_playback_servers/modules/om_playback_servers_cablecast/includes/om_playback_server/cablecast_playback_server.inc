@@ -215,7 +215,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     return array(
       'NewReel' => array(
         'FormatID'=> $format, //int</FormatID>
-        'CueSeconds'=> $duration , //int</LengthSeconds>
+        'CueSeconds'=> (int)$duration , //int</LengthSeconds>
         'LengthSeconds'=> 0 , //int</LengthSeconds>
         'Title'=> 0, //int</Title>
         'Chapter'=> 0, //int</Chapter>
