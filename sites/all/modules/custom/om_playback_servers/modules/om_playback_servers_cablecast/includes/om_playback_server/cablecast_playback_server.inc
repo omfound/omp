@@ -212,7 +212,6 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (isset($file->field_om_show_duration[$lang][0]['value'])) {
       $duration = $file->field_om_show_duration[$lang][0]['value'];
     }
-    dsm($duration);
     return array(
       'NewReel' => array(
         'FormatID'=> $format, //int</FormatID>
