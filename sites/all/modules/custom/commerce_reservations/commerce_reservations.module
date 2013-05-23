@@ -190,6 +190,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#weight'] = 0;
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
+      $form['#submit'][] = 'commerce_reservations_debug_submit';
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
     }
   }
@@ -221,6 +222,11 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 }
 
+function commerce_reservations_debug_submit($form, &$form_state) {
+  dsm($form);
+  dsm($form_state);
+}
+
 function commerce_reservations_last_cart_reservation($order) {
   if ($order) {
     if (!empty($order->commerce_line_items)) {
@@ -248,7 +254,6 @@ function commerce_reservations_last_cart_reservation($order) {
  * to create a better solution.
  */
 function commerce_reservations_fix_quantity($form, &$form_state) {
-  dsm($form);
   if (!empty($form_state['input']['quantity']) && is_numeric($form_state['input']['quantity'])) {
     $form_state['values']['quantity'] = $form_state['input']['quantity'];
   }
