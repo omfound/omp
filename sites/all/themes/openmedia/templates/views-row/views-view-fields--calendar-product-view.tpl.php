@@ -40,6 +40,9 @@
   <div class="nid item-data">
     <?php print $fields['nid']->content;?>
   </div>
+  <div class="pid item-data">
+    <?php print $fields['product_id']->content;?>
+  </div>
   <div class="large-image item-data">
     <?php if (!empty($fields['field_image_1']->content)) { ?>
       <?php print $fields['field_image_1']->content;?>
