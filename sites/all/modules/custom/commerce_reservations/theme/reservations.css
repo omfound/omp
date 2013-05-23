@@ -912,4 +912,7 @@ body.page-reservations #main-content #squeeze{
   padding: 5px;
   margin-top: 5px;
 }
+.pid {
+  display: none;
+}
 /** end date picker **/
