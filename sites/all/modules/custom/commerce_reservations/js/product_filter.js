@@ -199,11 +199,14 @@ Drupal.cr = Drupal.cr || {};
       }, 500 );  
     },
     hideCalendar:function() {
+      $('.view-reservation-calendar').hide();
+      /**
       $('.view-reservation-calendar').css('height', '0px');
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#content').css('height', 'auto');
       $('#reservations-header').hide();
       $('.view-reservation-calendar').css('top', '-9000px');
+      **/
     },
 
     hideItemFields:function() {
@@ -213,6 +216,7 @@ Drupal.cr = Drupal.cr || {};
       $('#block-views-calendar-product-view-block .certifications').hide();
       $('#block-views-calendar-product-view-block .large-image').hide();
       $('#block-views-calendar-product-view-block .nid').hide();
+      $('#block-views-calendar-product-view-block .pid').hide();
       $('#block-views-calendar-product-view-block .member-cost').hide();
       $('#block-views-calendar-product-view-block .commercial-cost').hide();
     },
