@@ -106,8 +106,8 @@ $logourl = theme_get_setting('logo_path', '');
           <tfoot>
             <tr class="<?php echo $even_odd; ?>">
               <th>Total</th>
-              <td><?php echo money_format('%(#10n', $comcral_cost_total) ?></td>
-              <td><?php echo money_format('%(#10n', $member_cost_total) ?></td>
+              <td><?php echo //money_format('%(#10n', $comcral_cost_total) ?></td>
+              <td><?php echo //money_format('%(#10n', $member_cost_total) ?></td>
             </tr>
           <tfoot>
         </table>
