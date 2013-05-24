@@ -190,7 +190,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
    *  Here we will grab the number of products tied to the product display, and use that as the quantity.  We need the quantity to have      	 *	a number to check against in the reservations system.
    */
     if ($form['line_item_fields']['#bundle'] == 'reservable_product'){
-      $form['#action'] = '/cr/cart_add';
       $display = commerce_reservations_entity_display_lookup($form['product_id']['#value']);
       $display_node = node_load($display);
       if (!empty($display_node->field_crp_product_reference['und'])) {
@@ -2182,7 +2181,9 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
       //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
       if ($render) {
-        print drupal_render($form);
+        $rendered = drupal_render($form);
+        $rendered = str_replace('/reservations', '/cr/cart_add');
+        print $rendered;
       }
     }
   }
