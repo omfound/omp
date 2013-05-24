@@ -719,7 +719,6 @@ function drupal_form_submit($form_id, &$form_state) {
  *   'args' component of the array.
  */
 function drupal_retrieve_form($form_id, &$form_state) {
-  dsm('retrieving form: '.$form_id);
   $forms = &drupal_static(__FUNCTION__);
 
   // Record the $form_id.
