@@ -1,7 +1,6 @@
 <?php 
 global $base_path;
 $logourl = theme_get_setting('logo_path', '');
-dsm($order);
 ?>
   <html>
     <head>
@@ -17,7 +16,7 @@ dsm($order);
         <h2><?php print variable_get('site_name', ''); ?> Equipment Rental Contract</h2>
 <?php print variable_get('cr_contract_header','');
         ?>
-        Order Date: <?php print date_format_date($order->created, "long") . '<br />'; ?>
+        Order Date: <?php print date("F j, Y, g:i a", $order->created) . '<br />'; ?>
         Name: <?php print $username ?><br />
         Email: <?php print $email ?><br />
         Phone: <?php print $phone ?><br />
