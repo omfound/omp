@@ -112,7 +112,7 @@ function cr_printable_contract($order_id) {
 
   $items = array();
   foreach ($order->commerce_line_items['und'] as $key => $info) {
-    $items[$info->line_item_id] = commerce_line_item_load($info->line_item_id);
+    $items[$info['line_item_id']] = commerce_line_item_load($info['line_item_id']);
   }
 
   //$timezone = $node->field_cr_date[0]['timezone'];
