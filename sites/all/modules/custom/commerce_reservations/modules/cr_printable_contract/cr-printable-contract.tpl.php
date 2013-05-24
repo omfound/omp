@@ -43,6 +43,10 @@ $logourl = theme_get_setting('logo_path', '');
   $member_cost_total = 0;
 
   $even_odd = 'even';
+  print '<pre>';
+  print_r($items);
+  print '</pre>';
+  /**
   foreach ($items as $item) {
 
     $item_node = node_load($item['cr_placeholder_nid']);
@@ -96,7 +100,7 @@ $logourl = theme_get_setting('logo_path', '');
     $even_odd = ($even_odd == 'even') ? 'odd' : 'even';
   }
   // foreach
-
+  **/
   ?>
           </tbody>
           <tfoot>

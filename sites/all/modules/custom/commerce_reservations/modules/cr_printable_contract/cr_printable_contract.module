@@ -101,49 +101,36 @@ function cr_printable_contract($order_id) {
   print '<pre>';
   print_r($order);
   print '</pre>';
-  /**
   setlocale(LC_MONETARY, 'en_US');
 
-  $user     = user_load($node->uid);
+  $user     = user_load($order->uid);
   $username = $user->name;
   $email    = $user->mail;
-  if (module_exists('civicrm')) {
-    
-    civicrm_initialize(TRUE);
-    global $civicrm_root;
-    //include_once($civicrm_root .'/api/UFGroup.php');
-    //$userID = crm_uf_get_match_id($user->uid);
-    
-    require_once $civicrm_root . '/CRM/Core/BAO/UFMatch.php';
-    $userID = CRM_Core_BAO_UFMatch::getContactId( $user->uid );
-    
-    $cg = array('contact_id' => $userID);
-    include_once($civicrm_root .'/api/v2/Contact.php');
-    $ob = civicrm_contact_get($cg);
-    //print '<pre>';
-    //print_r($ob);
-    //print '</pre>';
-    $username = $ob[$userID]['display_name'];
-    //print $username;
-    $phone = $ob[$userID]['phone'];
+
+  $contact_info = profile2_load_by_user($user, 'contact_info'); 
+  $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+  $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
+  $username = $first_name.' '.$last_name;
+  $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
+
+  $items = array();
+  foreach ($order->commerce_line_items['und'] as $key => $info) {
+    $items[$info->line_item_id] = commerce_line_item_load($info->line_item_id);
   }
 
-  $items = $node->cr_reservation_items;
+  //$timezone = $node->field_cr_date[0]['timezone'];
+  //$timezone_db = $node->field_cr_date[0]['timezone_db'];
+  //$start_date = date_make_date($node->field_cr_date[0]['value'], $timezone_db);
+  //$end_date = date_make_date($node->field_cr_date[0]['value2'], $timezone_db);
+  //date_timezone_set($start_date, timezone_open($timezone));
+  //date_timezone_set($end_date, timezone_open($timezone));
 
-  $timezone = $node->field_cr_date[0]['timezone'];
-  $timezone_db = $node->field_cr_date[0]['timezone_db'];
-  $start_date = date_make_date($node->field_cr_date[0]['value'], $timezone_db);
-  $end_date = date_make_date($node->field_cr_date[0]['value2'], $timezone_db);
-  date_timezone_set($start_date, timezone_open($timezone));
-  date_timezone_set($end_date, timezone_open($timezone));
-
-  $hours = round((intval(date_format($end_date,"U")) - intval(date_format($start_date,"U"))) / 3600, 2);
+  //$hours = round((intval(date_format($end_date,"U")) - intval(date_format($start_date,"U"))) / 3600, 2);
 
   
   $html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone, $items);
   
   print $html;
-  **/
 }
 // cr_printable_contract
 
