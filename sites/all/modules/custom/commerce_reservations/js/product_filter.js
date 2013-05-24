@@ -239,39 +239,13 @@ Drupal.cr = Drupal.cr || {};
 		              $('#left-side .field-name-field-commercial-reservation input').attr('checked', 'checked');
 		              $('.no-certification-message').hide();
 		              $('.commercial-message').hide();
-			            $('.form-item-quantity').show();
                   $('a.fullcalendar-event-details', data).each(function(index){
-                  event = new Object();
-                  event.field = $(this).attr('field');
-                  event.index = $(this).attr('index');
-                  event.eid = $(this).attr('eid');
-                  event.entity_type = $(this).attr('entity_type');
-                  event.title = $(this).attr('title');
-                  event.start = $(this).attr('start');
-                  event.end = $(this).attr('end');
-                  event.url = $(this).attr('href');
-                  if ($(this).children('span').hasClass('closed-date')){
-                    event.allDay = true;
-                    event.className = 'closed-all-day';
-                  } else{
-                    event.allDay = ($(this).attr('allDay') === '1');
-                    event.className = 'overlap';
-                  }
-                  event.editable = ($(this).attr('editable') === '1');
-                  event.color = '#912711';
-                  if ($(this).children('span').hasClass('closed-hours')){
-                    event.backgroundColor = '#2B6893';
-                    event.className = 'closed-hours';
-                  } else {
-                  event.backgroundColor = '#912711';
-                  }
-                  event.eventBorderColor = '#912711';
-                  event.textColor = '#912711';
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event, true);
+                    reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
+                    dom_id: this.dom_id;
+                  $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
                   });
                   $('.view-reservation-calendar').css('visibility', 'visible');
-                  $('#content').css('height', '1300px'); 
+                  //$('#content').css('height', '1300px'); 
                   $('.view-reservation-calendar').animate({
                     opacity: '1'
                   }, 500 );
@@ -284,44 +258,13 @@ Drupal.cr = Drupal.cr || {};
 		            });
 	            }
             } else{
-              $('.form-item-quantity').show();
               $('a.fullcalendar-event-details', data).each(function(index){
                 reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
-                /**
-                event = new Object();
-                event.field = $(this).attr('field');
-                event.index = $(this).attr('index');
-                event.eid = $(this).attr('eid');
-                event.entity_type = $(this).attr('entity_type');
-                //event.title = $(this).attr('title');
-                //event.title = $(this).attr('title');
-                event.title = 'Reserved';
-                event.start = $(this).attr('start');
-                event.end = $(this).attr('end');
-                event.url = $(this).attr('href');
-                if ($(this).children('span').hasClass('closed-date')){
-                  event.allDay = true;
-                  event.className = 'closed-all-day';
-                } else{
-                  event.allDay = ($(this).attr('allDay') === '1');
-                  event.className = 'overlap';
-                }
-                event.editable = ($(this).attr('editable') === '1');
-                event.color = '#912711';
-                if ($(this).children('span').hasClass('closed-hours')){
-                  event.backgroundColor = '#2B6893';
-                  event.className = 'closed-hours';
-                } else {
-                event.backgroundColor = '#912711';
-                }
-                event.eventBorderColor = '#912711';
-                event.textColor = '#fff';
-                **/
                 dom_id: this.dom_id;
                 $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
-              $('#content').css('height', '1300px');
+              //$('#content').css('height', '1300px');
               $('.view-reservation-calendar').animate({
                 opacity: '1'
               }, 500 );
