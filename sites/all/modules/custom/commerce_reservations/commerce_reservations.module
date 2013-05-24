@@ -2135,7 +2135,6 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
-  if(!$_POST['product_id']) {
 
     //grab a reservable product id
     if (empty($product_id)) {
@@ -2170,10 +2169,13 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
         //$form = drupal_get_form($form_id, $line_item, false, array());
         //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
-        if ($render) {
+        if ($render && empty($_POST['product_id'])) {
           $rendered = drupal_render($form);
           print $rendered;
           //print substr($rendered, 0, 300);
+        }
+        if ($_POST['product_id']) {
+          drupal_goto('reservations');
         }
       }
     }
@@ -2181,7 +2183,6 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
     if ($render) {
       print '';
     }
-  }
 }
 
 function commerce_reservations_build_form($form_id) {
