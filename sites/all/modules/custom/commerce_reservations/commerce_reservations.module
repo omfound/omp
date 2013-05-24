@@ -203,6 +203,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
+      $form['actions']['submit']['#submit'][] = 'commerce_reservations_redirect_add';
       $form_state['redirect'] = 'reservations';
     }
   }
@@ -233,6 +234,10 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     } 
   }
 }
+
+function commerce_reservations_redirect_add($form, &$form_state) {
+  $form_state['redirect'] = 'reservations';
+} 
 
 function commerce_reservations_last_cart_reservation($order) {
   if ($order) {
