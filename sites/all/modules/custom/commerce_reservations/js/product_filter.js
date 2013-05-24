@@ -74,7 +74,7 @@ Drupal.cr = Drupal.cr || {};
       //Populate details pane and calendar with defaults
       //Drupal.behaviors.product_filter.moveItemToDetails();
       newPid = $(this).find('.pid .field-content').text();
-      Drupal.behaviors.product_filter.updateFormProduct(newPid);
+      Drupal.behaviors.product_filter.updateFormProduct(newPid, nid, pid);
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -109,8 +109,6 @@ Drupal.cr = Drupal.cr || {};
                 }
               });
               quantity = $('.view-footer [id|=edit-quantity]').val();
-              var nid = $(this).find('.nid .field-content').text();
-              var pid = $(this).find('.pid .field-content').text(); 
               Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
               $(".fullcalendar").ajaxStop(function() {
                 Drupal.behaviors.product_filter.addDateToCalendar();
