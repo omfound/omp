@@ -14,12 +14,7 @@ global $base_path;
            <img src="<?php print $base_path ?><?php print $logourl ?>">
         <?php } ?>
         <h2><?php print variable_get('site_name', ''); ?> Equipment Rental Contract</h2>
-        <?php if (module_exists('token')) { 
-          print token_replace(variable_get('cr_contract_header', ''), 'node', $node);
-        }
-        else {
-          print variable_get('cr_contract_header','');
-        }
+<?php print variable_get('cr_contract_header','');
         ?>
         Start: <?php print date_format_date($start_date,"long") . '<br />'; ?>
         Returned by: <?php print date_format_date($end_date,"long") . '<br />'; ?>
