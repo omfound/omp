@@ -736,9 +736,6 @@ body.page-reservations #main-content #squeeze{
 .page-administer-reservations .views-row-last .reservation {
   border-bottom: 1px dashed grey;
 }
-.not-front .page-administer-reservations .view-content h3 {
-  margin-top: 10px;
-}
 
 .page-administer-reservations .reservation-overdue{
 	padding: 10px;
@@ -753,6 +750,7 @@ body.page-reservations #main-content #squeeze{
   font-weight: bold;
   font-size: 21px;
   font-family: Helvetica, Arial, sans-serif;
+  margin-top: 15px;
 }
 
 .page-administer-reservations .reservation-overdue .reservation-dates{
