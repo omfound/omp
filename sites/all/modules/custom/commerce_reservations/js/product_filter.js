@@ -185,6 +185,8 @@ Drupal.cr = Drupal.cr || {};
       $(".fc-agenda-allday .fc-agenda-axis").html('');
 
       //activate preloader on quantity form
+      alert('activating preloader');
+      console.log($preloader);
       $('.views-footer .form-item-quantity').append($preloader);
       $('.views-footer .date-details').addClass('preloader-active');
 
