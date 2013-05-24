@@ -2135,53 +2135,52 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
-  if($_POST['product_id']) {
-    return;
-  }
+  if(!$_POST['product_id']) {
 
-  //grab a reservable product id
-  if (empty($product_id)) {
-    $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
-    $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
-  }
+    //grab a reservable product id
+    if (empty($product_id)) {
+      $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
+      $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
+    }
 
-  if (!empty($product_id)) {
-    $product = commerce_product_load($product_id);
-    if (!empty($product)) {
-      $default_quantity = 1;
-      $line_item_type = 'reservable_product';
-      $product_ids = array($product_id);
+    if (!empty($product_id)) {
+      $product = commerce_product_load($product_id);
+      if (!empty($product)) {
+        $default_quantity = 1;
+        $line_item_type = 'reservable_product';
+        $product_ids = array($product_id);
 
-      // Build the line item we'll pass to the Add to Cart form.
-      $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
-      $line_item->data['context']['product_ids'] = $product_ids;
-      $line_item->data['context']['display_path'] = 'reservations';
+        // Build the line item we'll pass to the Add to Cart form.
+        $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
+        $line_item->data['context']['product_ids'] = $product_ids;
+        $line_item->data['context']['display_path'] = 'reservations';
 
-      // Store the View data in the context data array as well.
-      $line_item->data['context']['view'] = array(
-        'view_name' => 'reservation_calendar',
-        'display_name' => 'page_1',
-        'human_name' => 'Reservation Calendar Page',
-      );
+        // Store the View data in the context data array as well.
+        $line_item->data['context']['view'] = array(
+          'view_name' => 'reservation_calendar',
+          'display_name' => 'page_1',
+          'human_name' => 'Reservation Calendar Page',
+        );
 
-      // Generate a form ID for this add to cart form.
-      $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
+        // Generate a form ID for this add to cart form.
+        $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
-      $form = commerce_reservations_build_form($form_id, $line_item, false, array());
-      //$form = drupal_build_form($form_id, $form_state);
-      //$form = drupal_get_form($form_id, $line_item, false, array());
-      //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
+        $form = commerce_reservations_build_form($form_id, $line_item, false, array());
+        //$form = drupal_build_form($form_id, $form_state);
+        //$form = drupal_get_form($form_id, $line_item, false, array());
+        //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
-      if ($render) {
-        $rendered = drupal_render($form);
-        print $rendered;
-        //print substr($rendered, 0, 300);
+        if ($render) {
+          $rendered = drupal_render($form);
+          print $rendered;
+          //print substr($rendered, 0, 300);
+        }
       }
     }
-  }
 
-  if ($render) {
-    print '';
+    if ($render) {
+      print '';
+    }
   }
 }
 
