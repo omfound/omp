@@ -26,10 +26,6 @@ Drupal.cr = Drupal.cr || {};
     //Hide the calendar and product info box
     Drupal.behaviors.product_filter.hideCalendar();
 
-    //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
-    //duplicate code handles this
-    //Drupal.behaviors.product_filter.CalendarLoadClosures(basePath);
-
     //The user has selected a reservable item
     $(item).mousedown(function() {
       //show the calendar
@@ -201,6 +197,7 @@ Drupal.cr = Drupal.cr || {};
     hideCalendar:function() {
       $('.view-reservation-calendar').hide();
       $('#reservations-header').hide();
+      $('#content').css('height', 'auto');
 
       /**
       $('.view-reservation-calendar').css('height', '0px');
@@ -227,29 +224,6 @@ Drupal.cr = Drupal.cr || {};
       this.startDate = startDate;
       this.endDate = endDate;
       this.quantity = quantity;
-    },
-
-    CalendarLoadClosures:function(basePath) {
-      //get all of the closed times from the commerce reservations settings variables and load them onto the calendar
-      if (!$('body').data('closeTimesLoaded')) {
-        $.ajax(
-            {url : basePath + 'closed_times/',
-              cache : false,
-              success : function (data) {
-                $('div.closed_dates', data).each(function(index){
-                  event = new Drupal.cr.closedDay('closed date', $(this).attr('date'), $(this).attr('date')); 
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event);
-                });
-                $('div.closed-time', data).each(function(index){
-                  event = new Drupal.cr.closedTime('closed time', $(this).attr('start'), $(this).attr('end'));
-                  dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', event);
-                });
-              }
-        });
-        $('body').data('closeTimesLoaded', true);
-      }
     },
 
     CalendarReloadItem:function(nid, pid, quantity, basePath) {
