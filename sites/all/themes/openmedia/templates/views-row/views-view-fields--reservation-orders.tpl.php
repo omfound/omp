@@ -86,7 +86,7 @@
         ?>
         <?php $checkedout = TRUE;?>
       <?php } ?>
-      <?php print '<br />'.l('Printable Contract', 'cr/contract/'.$fields['order_id']->raw); ?>
+      <?php print l('Printable Contract', 'cr/contract/'.$fields['order_id']->raw); ?>
     </td>
   </table>
 </div>
