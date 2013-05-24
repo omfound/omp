@@ -352,7 +352,6 @@ Drupal.cr = Drupal.cr || {};
 
       //clone relevent details from item
       itemImage = $item.find('.large-image').clone();
-      $(itemImage).show();
       itemTitle = $item.find('.title').clone();
       body = $item.find('.body').clone();
       price = $item.find('.price').clone();
@@ -362,7 +361,9 @@ Drupal.cr = Drupal.cr || {};
       leftContent = $('<div id = leftContent></div>');
       rightContent = $('<div id = rightContent></div>');
       $(leftContent).append(itemImage).hide();
+      $(leftContent).children().show();
       $(rightContent).append(itemTitle).append(body).append(price).append(certifications).hide();
+      $(rightContent).children().show();
       $('#left-side').empty().append(leftContent);
       $('#right-side').empty().append(rightContent);;
       $(leftContent).fadeIn(200);
