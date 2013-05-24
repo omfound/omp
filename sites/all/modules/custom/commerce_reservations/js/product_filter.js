@@ -286,7 +286,7 @@ Drupal.cr = Drupal.cr || {};
             } else{
               $('.form-item-quantity').show();
               $('a.fullcalendar-event-details', data).each(function(index){
-                reservedEvent = new Drupal.cr.reservedTime('Current Selection', startDate, endDate, $(this));
+                reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
                 /**
                 event = new Object();
                 event.field = $(this).attr('field');
@@ -451,9 +451,6 @@ Drupal.cr = Drupal.cr || {};
     this.index = $reservation.attr('index');
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
-    this.title = $reservation.attr('title');
-    this.start = $reservation.attr('start');
-    this.end = $reservation.attr('end');
     this.url = $reservation.attr('href');
     this.className = 'overlap';
     this.editable = true;
