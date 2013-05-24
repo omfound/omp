@@ -26,8 +26,8 @@ $logourl = theme_get_setting('logo_path', '');
           <thead>
             <tr>
               <th>Item</th>
-              <th>Start Date</th>
-              <th>End Date</th>
+              <th>Checkout Date</th>
+              <th>Return Date</th>
               <th>Cost</th>
             </tr>
           </thead>
