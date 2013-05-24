@@ -352,7 +352,7 @@ Drupal.cr = Drupal.cr || {};
 
       //clone relevent details from item
       itemImage = $item.find('.large-image').clone();
-      //$(itemImage).show();
+      $(itemImage).show();
       itemTitle = $item.find('.title').clone();
       body = $item.find('.body').clone();
       price = $item.find('.price').clone();
