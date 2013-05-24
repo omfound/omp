@@ -250,7 +250,7 @@ Drupal.cr = Drupal.cr || {};
 		            });
 	            }
             } else{
-              Drupal.behaviours.product_filter.addReservations(data);
+              Drupal.behaviors.product_filter.addReservations(data);
               /**
               $('a.fullcalendar-event-details', data).each(function(index){
                 reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
