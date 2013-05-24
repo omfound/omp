@@ -12,7 +12,7 @@ Drupal.cr = Drupal.cr || {};
       result = response.search(/"status": false/i);
       if(result == -1){
       	$("form.commerce-add-to-cart").each(function(){
-      		$(this).attr("action",window.location.pathname);
+      		//$(this).attr("action",window.location.pathname);
       	});
       }
       else{
@@ -94,7 +94,7 @@ Drupal.cr = Drupal.cr || {};
             console.log(data);
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
-            $('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
+            //$('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
 
             //The user has changed the dates on the date picker
             $('.start-date-wrapper .form-select').focus(function(){
@@ -116,7 +116,7 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
-            $('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
+            //$('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
           }
       });
     },
