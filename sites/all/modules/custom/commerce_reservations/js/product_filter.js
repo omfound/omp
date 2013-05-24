@@ -9,6 +9,8 @@ Drupal.cr = Drupal.cr || {};
       //quantity preloader
       $preloader = $('<img class = "preloader"/>');
       $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
+      $('.views-footer .form-item-quantity').append($preloader);
+      $('.views-footer .form-item-quantity img').hide();
 
       //basepath to site
       var basePath = Drupal.settings.basePath;
@@ -187,7 +189,7 @@ Drupal.cr = Drupal.cr || {};
       //activate preloader on quantity form
       alert('activating preloader');
       console.log($preloader);
-      $('.views-footer .form-item-quantity').append($preloader);
+      $('.views-footer .form-item-quantity img').show();
       $('.views-footer .date-details').addClass('preloader-active');
 
       //load item reservations
@@ -196,7 +198,8 @@ Drupal.cr = Drupal.cr || {};
           cache : false,
           success : function (data) {
             $('.views-footer .date-details').removeClass('preloader-active');
-            $preloader.detach();
+            $('.views-footer .form-item-quantity img').hide();
+
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
             if (not_cert.length > 0){
