@@ -2147,6 +2147,7 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
+  dsm($_POST);
   //grab a reservable product id
   if (empty($product_id)) {
     $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
