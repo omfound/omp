@@ -40,9 +40,17 @@ function cr_printable_contract_theme() {
     'cr_printable_contract' => array(
       'template' => 'cr-printable-contract',
       'path' => "$path/",
-      'arguments' => array('start_date' => NULL, 'end_date' => NULL, 'hours' => NULL, 'username' => NULL, 'email' => NULL, 'phone' => NULL, 'items' => NULL),
-      ),
-    );
+      'variables' => array(
+        'start_date' => NULL,
+        'end_date' => NULL,
+        'hours' => NULL,
+        'username' => NULL,
+        'email' => NULL,
+        'phone' => NULL,
+        'items' => NULL, 
+      ), 
+    ),
+  );
 }
 
 /**
@@ -128,7 +136,16 @@ function cr_printable_contract($order_id) {
   $end_date = time();
   $hours = 10; 
   //$html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone, $items);
-  $html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone);
+  $html = theme('cr_printable_contract', array(
+    'start_date' => $start_date, 
+    'end_date' => $end_date, 
+    'hours' => $hours, 
+    'username' => $username, 
+    'email' => $email, 
+    'phone' => $phone,
+    'items' => $items,
+    )
+  );
   
   print $html;
 }
