@@ -36,15 +36,14 @@ dsm($items);
   <?php
   $even_odd = 'even';
   foreach ($items as $item) {
-    dsm($item);
     $cost = money_format('%(#10n', $item->commerce_total['und'][0]['amount']/100);
     $rate = money_format('%(#10n', ($item->product->commerce_price['und'][0]['amount']/100)).' / '.$item->product->field_charge_by_the_['und'][0]['value'];
     $title = $item->product->title;
   ?>
   <tr class="<?php print $even_odd; ?>">
     <td><div><?php print $title.$rate; ?></div></td>
-    <td><?php print date("F j, Y, g:i a", $item->field_reservation_dates['und'][0]['value']); ?></td>
-    <td><?php print date("F j, Y, g:i a", $item->field_reservation_dates['und'][0]['value2']); ?></td>
+    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value'])); ?></td>
+    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value2'])); ?></td>
     <td><?php echo $cost; ?></td>
   </tr>
   <?php
