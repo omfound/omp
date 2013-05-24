@@ -52,7 +52,7 @@ dsm($order);
   <tfoot>
     <tr class="<?php echo $even_odd; ?>">
       <th>Total</th>
-      <td>99<?php //echo money_format('%(#10n', $comcral_cost_total) ?></td>
+      <td><?php echo money_format('%(#10n', ($order->commerce_order_total['und'][0]['amount']/100)) ?></td>
     </tr>
   <tfoot>
 </table>
