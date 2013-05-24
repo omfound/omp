@@ -54,6 +54,7 @@ dsm($items);
   <tfoot>
     <tr class="<?php echo $even_odd; ?>">
       <th>Total</th>
+      <td><td>
       <td><?php echo money_format('%(#10n', ($order->commerce_order_total['und'][0]['amount']/100)) ?></td>
     </tr>
   <tfoot>
