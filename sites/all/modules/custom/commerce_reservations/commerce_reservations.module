@@ -46,7 +46,6 @@ function commerce_reservations_taxonomy_title(&$form, &$form_state){
 function commerce_reservations_init(){
   $path = drupal_get_path('module', 'commerce_reservations');
   if (arg(0) == 'reservations'){
-    drupal_add_js($path . '/js/jquery.qtip-1.0.0-rc3.min.js', 'file');
     drupal_add_js($path . '/js/commerce_reservations.fullcalendar.js', array('type' => 'file', 'weight' => 1));
     drupal_add_js($path . '/js/product_filter.js', array('type' => 'file', 'weight' => 2));
     drupal_add_css($path . '/theme/reservations.css');
@@ -2167,18 +2166,10 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
         $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
         $form = commerce_reservations_build_form($form_id, $line_item, false, array());
-        //$form = drupal_build_form($form_id, $form_state);
-        //$form = drupal_get_form($form_id, $line_item, false, array());
-        //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
         if ($render && empty($_POST['product_id'])) {
           $rendered = drupal_render($form);
           print $rendered;
-          //print substr($rendered, 0, 300);
-        }
-        if (!empty($_POST['product_id'])) {
-          dsm('off to res');
-          drupal_goto('reservations');
         }
       }
     }
@@ -2197,13 +2188,4 @@ function commerce_reservations_build_form($form_id) {
  $form_state['cache'] = true;
 
  return drupal_build_form($form_id, $form_state);
-}
-
-function commerce_reservations_build_all_product_forms() {
-  $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status";
-  $results = db_query($query, array(':type' => 'reservable_product', ':status' => 1));
-
-  foreach ($results as $product) {
-    commerce_reservations_add_to_cart_form($product->product_id, false);
-  }
 }
