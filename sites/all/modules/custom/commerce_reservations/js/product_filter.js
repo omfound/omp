@@ -109,6 +109,8 @@ Drupal.cr = Drupal.cr || {};
                 }
               });
               quantity = $('.view-footer [id|=edit-quantity]').val();
+              var nid = $(this).find('.nid .field-content').text();
+              var pid = $(this).find('.pid .field-content').text(); 
               Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
               $(".fullcalendar").ajaxStop(function() {
                 Drupal.behaviors.product_filter.addDateToCalendar();
