@@ -38,10 +38,10 @@ Drupal.cr = Drupal.cr || {};
       var nid = $(this).find('.nid .field-content').text();
       var pid = $(this).find('.pid .field-content').text(); 
 
-      //Add any closures to calendar
+      //Add existing reservations for this item to calendar
       Drupal.behaviors.product_filter.calendarReloadItem(nid, pid, 1, basePath);
 
-      //After closures, add any reservations for selected item
+      //Render the current selection based on date picker values
       $(".fullcalendar").ajaxStop(function() {
         Drupal.behaviors.product_filter.addDateToCalendar();
         $(this).unbind("ajaxStop");
@@ -99,10 +99,10 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateToCalendar function
     addDateToCalendar:function() {
+      //get start date values from date picker
       previousStart = $('.start-date-wrapper .form-select').val();
       startYear = $('.start-date-wrapper .date-year .form-select').val();
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
-      //fullcalendar select option is expecting a 0 based month array
       startMonth = parseInt(startMonth) - 1;
       startDay = $('.start-date-wrapper .date-day .form-select').val();
       if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm'){
@@ -112,9 +112,10 @@ Drupal.cr = Drupal.cr || {};
         startHour = $('.start-date-wrapper .date-hour .form-select').val();
       }
       startMinutes = $('.start-date-wrapper .date-minute .form-select').val();
+
+      //get end date values from date picker
       endYear = $('.end-date-wrapper .date-year .form-select').val();
       endMonth = $('.end-date-wrapper .date-month .form-select').val();
-      //fullcalendar select option is expecting a 0 based month array
       endMonth = parseInt(endMonth) - 1;
       endDay = $('.end-date-wrapper .date-day .form-select').val();
       if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm'){
@@ -124,10 +125,13 @@ Drupal.cr = Drupal.cr || {};
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
       }              
       endMinutes = $('.end-date-wrapper .date-minute .form-select').val();
+
       startDate = new Date(startYear, startMonth, startDay, startHour, startMinutes, '00', '00');
       endDate = new Date(endYear, endMonth, endDay, endHour, endMinutes, '00', '00');
       startParse = Date.parse(startDate);
       endParse = Date.parse(endDate);
+
+      //check validity of selection and add to calendar
       if (startParse < endParse){
         selectionEvent = new Drupal.cr.selectedTime('Current Selection', startDate, endDate);
         $(".fullcalendar").fullCalendar('removeEvents', function(event){
@@ -138,14 +142,7 @@ Drupal.cr = Drupal.cr || {};
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
         $('.fullcalendar').fullCalendar('select', selectionEvent.start, selectionEvent.end, false);
       } else{
-	      $(this).val(previousStart);
-	      $(this).qtip({
-		      content: "Please pick a date and time that is before your end date and time.",
-		      show: {
-            when: {event: 'mouseup'}, 
-            effect: {type: 'fade', length: 200}
-          }
-	      });
+        $('.date-status').html('<p class="error">Please pick a date and time that is before your end date and time.</p>');
       } 
     },
     //End addDateToCalendar function
@@ -239,28 +236,11 @@ Drupal.cr = Drupal.cr || {};
 		              $('#left-side .field-name-field-commercial-reservation input').attr('checked', 'checked');
 		              $('.no-certification-message').hide();
 		              $('.commercial-message').hide();
-                  $('a.fullcalendar-event-details', data).each(function(index){
-                    reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
-                    dom_id: this.dom_id;
-                    $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
-                  });
-                  $('.view-reservation-calendar').css('visibility', 'visible');
-                  $('#content').css('height', '1300px'); 
-                  $('.view-reservation-calendar').fadeIn(200);
+                  Drupal.behaviors.product_filter.addReservations(data);
 		            });
 	            }
             } else{
               Drupal.behaviors.product_filter.addReservations(data);
-              /**
-              $('a.fullcalendar-event-details', data).each(function(index){
-                reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
-                dom_id: this.dom_id;
-                $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
-              });
-              $('.view-reservation-calendar').css('visibility', 'visible');
-              $('#content').css('height', '1300px');
-              $('.view-reservation-calendar').fadeIn(200);
-              **/
             }
           }
       });      
