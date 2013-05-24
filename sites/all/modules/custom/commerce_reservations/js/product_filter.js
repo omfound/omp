@@ -198,8 +198,8 @@ Drupal.cr = Drupal.cr || {};
       //$('.view-reservation-calendar').hide();
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#reservations-header').hide();
-      $('#content').css('height', 'auto');
-      $('.view-reservation-calendar').css('top', '-9000px');
+      //$('#content').css('height', 'auto');
+      //$('.view-reservation-calendar').css('top', '-9000px');
 
       /**
       $('.view-reservation-calendar').css('height', '0px');
