@@ -8,7 +8,7 @@ Drupal.cr = Drupal.cr || {};
 
       //quantity preloader
       $preloader = $('<img class = "preloader"/>');
-      $preloader.attr('src', 'sites/all/modules/commerce_reservations/js/images/ajax-loader.gif');
+      $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
 
       //basepath to site
       var basePath = Drupal.settings.basePath;
