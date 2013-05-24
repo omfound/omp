@@ -42,6 +42,7 @@ function cr_printable_contract_theme() {
       'path' => "$path/",
       'variables' => array(
         'order_date' => NULL,
+        'order' => NULL,
         'hours' => NULL,
         'username' => NULL,
         'email' => NULL,
@@ -136,6 +137,7 @@ function cr_printable_contract($order_id) {
   $hours = 10; 
   $html = theme('cr_printable_contract', array(
     'order_date' => $order_date,
+    'order' => $order,
     'hours' => $hours, 
     'username' => $username, 
     'email' => $email, 

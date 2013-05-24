@@ -1,6 +1,7 @@
 <?php 
 global $base_path;
 $logourl = theme_get_setting('logo_path', '');
+dsm($order);
 ?>
   <html>
     <head>
@@ -32,9 +33,6 @@ $logourl = theme_get_setting('logo_path', '');
           <tbody>
   <?php
   $even_odd = 'even';
-  print '<pre>';
-  print_r($items);
-  print '</pre>';
   foreach ($items as $item) {
     $cost = money_format('%(#10n', $item->commerce_total['und'][0]['amount']/100);
     $rate = money_format('%(#10n', ($item->product->commerce_price['und'][0]['amount']/100)).' / '.$item->product->field_charge_by_the_['und'][0]['value'];
