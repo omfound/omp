@@ -212,10 +212,14 @@ Drupal.cr = Drupal.cr || {};
         }
       });
 
-      //$(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
+      //remove confusing all day label
+      $(".fc-agenda-allday .fc-agenda-axis").html('');
+
+      //activate preloader on quantity form
       $('.views-footer .form-item-quantity').append($preloader);
       $('.views-footer .date-details').addClass('preloader-active');
 
+      //load item reservations
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
@@ -225,16 +229,9 @@ Drupal.cr = Drupal.cr || {};
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
             if (not_cert.length > 0){
-              logged_in = $('.logged-in');
-              if (logged_in.length > 0){
-	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../classes">Take a Class!</a></div>');
-	              $('.view-reservation-calendar').css('visibility', 'hidden');
-                $('#content').css('height', 'auto');
-              }  else{
-	              $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member. To reserve equipment please login or signup as a member.</p><a href = "../membership">Login or Become a Member!</a></div>');
-	              $('.view-reservation-calendar').css('visibility', 'hidden');
-                $('#content').css('height', 'auto');
-	            }
+              //Hide calendar and display appropriate certificate message
+              Drupal.behaviors.product_filter.notCertifiedMessage();
+
 	            allowCommercial = $('#allow_commercial', data);
 	            if (allowCommercial.length > 0){
 		            $('#content #content-inner').append('<div class = "commercial-message"><p>You may also reserve this item as a commercial rental, at the commercial rates.</p><div class = "commercial-button">Commercial Reservation</div></div>');
@@ -336,33 +333,42 @@ Drupal.cr = Drupal.cr || {};
       });      
     },
 
+    notCertifiedMessage:function() {
+      logged_in = $('.logged-in');
+      if (logged_in.length > 0){
+        $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../classes">Take a Class!</a></div>');
+        $('.view-reservation-calendar').css('visibility', 'hidden');
+        $('#content').css('height', 'auto');
+      }  else{
+        $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member. To reserve equipment please login or signup as a member.</p><a href = "../membership">Login or Become a Member!</a></div>');
+        $('.view-reservation-calendar').css('visibility', 'hidden');
+        $('#content').css('height', 'auto');
+      }
+    },
     moveItemToQuantity:function($item) {
+      //mark item as selected 
       $item.removeClass('selected_product');
       $item.addClass('selected_product');
+
+      //clone relevent details from item
       itemImage = $item.find('.large-image').clone();
-      $(itemImage).show();
+      //$(itemImage).show();
       itemTitle = $item.find('.title').clone();
       body = $item.find('.body').clone();
-      addToCart = $item.find('.add-to-cart').clone();
       price = $item.find('.price').clone();
       certifications = $item.find('.certifications').clone();
+
+      //build left and right panes of item detail panel
       leftContent = $('<div id = leftContent></div>');
       rightContent = $('<div id = rightContent></div>');
-      $('#leftContent').remove();
-      $('#rightContent').remove();
-      $(leftContent).append(addToCart).append(itemImage);
-      $(rightContent).append(itemTitle).append(body).append(price).append(certifications);
-      $(leftContent).hide();
-      $(rightContent).hide();
-      $('#left-side').empty();
-      $('#left-side').append(leftContent);
-      $('#right-side').empty();
-      $('#right-side').append(rightContent);
-      $(leftContent).fadeIn(1000);
-      $(rightContent).fadeIn(1000);
-      $(body).fadeIn(1000);
-      $(price).fadeIn(1000);
-      $(certifications).fadeIn(1000);
+      $(leftContent).append(addToCart).append(itemImage).hide();
+      $(rightContent).append(itemTitle).append(body).append(price).append(certifications).hide();
+      $('#left-side').empty().append(leftContent);
+      $('#right-side').empty().append(rightContent);;
+      $(leftContent).fadeIn(200);
+      $(rightContent).fadeIn(200);
+
+      /**
       datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
       datesID.attr('id', 'pickedDates');
       $('.form-item-product-id').hide();
@@ -375,7 +381,7 @@ Drupal.cr = Drupal.cr || {};
       var pid = $('#left-side input[name="product_id"]').val();
       if (typeof pid == 'undefined'){
         pid = $('#left-side select[name="product_id"]').val();
-      }
+      }**/
     },
     
     moveItemToDetails:function() {
