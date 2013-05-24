@@ -171,13 +171,6 @@ function commerce_reservations_menu(){
   return $items;
 }
 
-
-function commerce_reservations_cart_submission() {
-  dsm($_POST);
-  dsm('testing');
-  return;
-}
-
 /*
  *  Implements hook_form_alter
  */
@@ -209,7 +202,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#title'] = 'QUANTITY';
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
-      $form['#submit'][] = 'commerce_reservations_debug_submit';
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
     }
   }
@@ -239,11 +231,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
     } 
   }
-}
-
-function commerce_reservations_debug_submit($form, &$form_state) {
-  //dsm('submitted form');
-  //dsm($form_state);
 }
 
 function commerce_reservations_last_cart_reservation($order) {
@@ -2147,7 +2134,9 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
-  dsm($_POST);
+  if($_POST['product_id']) {
+    drupal_goto('reservations');
+  }
   //grab a reservable product id
   if (empty($product_id)) {
     $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
