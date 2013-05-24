@@ -16,8 +16,7 @@ $logourl = theme_get_setting('logo_path', '');
         <h2><?php print variable_get('site_name', ''); ?> Equipment Rental Contract</h2>
 <?php print variable_get('cr_contract_header','');
         ?>
-        Start: <?php print date_format_date($start_date,"long") . '<br />'; ?>
-        Returned by: <?php print date_format_date($end_date,"long") . '<br />'; ?>
+        Order Date: <?php print date_format_date($order_date, "long") . '<br />'; ?>
         Name: <?php print $username ?><br />
         Email: <?php print $email ?><br />
         Phone: <?php print $phone ?><br />

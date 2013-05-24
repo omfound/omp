@@ -41,8 +41,7 @@ function cr_printable_contract_theme() {
       'template' => 'cr-printable-contract',
       'path' => "$path/",
       'variables' => array(
-        'start_date' => NULL,
-        'end_date' => NULL,
+        'order_date' => NULL,
         'hours' => NULL,
         'username' => NULL,
         'email' => NULL,
@@ -132,13 +131,10 @@ function cr_printable_contract($order_id) {
 
   //$hours = round((intval(date_format($end_date,"U")) - intval(date_format($start_date,"U"))) / 3600, 2);
 
-  $start_date = time();
-  $end_date = time();
+  $order_date = $order->created;
   $hours = 10; 
-  //$html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone, $items);
   $html = theme('cr_printable_contract', array(
-    'start_date' => $start_date, 
-    'end_date' => $end_date, 
+    'order_date' => $order_date,
     'hours' => $hours, 
     'username' => $username, 
     'email' => $email, 
