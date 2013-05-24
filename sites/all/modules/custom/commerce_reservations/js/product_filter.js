@@ -6,55 +6,49 @@ Drupal.cr = Drupal.cr || {};
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
 
-    //quantity preloader
-    $preloader = $('<img class = "preloader"/>');
-    $preloader.attr('src', 'sites/all/modules/commerce_reservations/js/images/ajax-loader.gif');
+      //quantity preloader
+      $preloader = $('<img class = "preloader"/>');
+      $preloader.attr('src', 'sites/all/modules/commerce_reservations/js/images/ajax-loader.gif');
 
-    //basepath to site
-    var basePath = Drupal.settings.basePath;
-    if (basePath == "/"){
-	    basePath = '';
-    }
+      //basepath to site
+      var basePath = Drupal.settings.basePath;
+      if (basePath == "/"){
+        basePath = '';
+      }
 
-    tipContent = new Object();
-    var item = $('#block-views-calendar-product-view-block div.views-row');
-    //$('.meta').remove();
+      //clickable reservation items
+      var item = $('#block-views-calendar-product-view-block div.views-row');
 
-    //Hide all of our commerce item fields on page load
-    Drupal.behaviors.product_filter.hideItemFields();
+      //Hide all of our commerce item fields on page load
+      Drupal.behaviors.product_filter.hideItemFields();
 
-    //Hide the calendar and product info box
-    Drupal.behaviors.product_filter.hideCalendar();
+      //Hide the calendar and product info box
+      Drupal.behaviors.product_filter.hideCalendar();
 
-    //The user has selected a reservable item
-    $(item).mousedown(function() {
-      //show the calendar
-      Drupal.behaviors.product_filter.showCalendar();
+      //The user has selected a reservable item
+      $(item).mousedown(function() {
+        //show the calendar
+        Drupal.behaviors.product_filter.showCalendar();
 
-      //grab the fields from the selected item and move them to the quantity pane
-      Drupal.behaviors.product_filter.moveItemToQuantity($(this));
+        //grab the fields from the selected item and move them to the quantity pane
+        Drupal.behaviors.product_filter.moveItemToQuantity($(this));
 
-      //nid & pid of selected item
-      var nid = $(this).find('.nid .field-content').text();
-      var pid = $(this).find('.pid .field-content').text(); 
+        //nid & pid of selected item
+        var nid = $(this).find('.nid .field-content').text();
+        var pid = $(this).find('.pid .field-content').text(); 
 
-      //Add existing reservations for this item to calendar
-      Drupal.behaviors.product_filter.calendarReloadItem(nid, pid, 1, basePath);
+        //Add existing reservations for this item to calendar
+        Drupal.behaviors.product_filter.calendarReloadItem(nid, pid, 1, basePath);
 
-      //Render the current selection based on date picker values
-      $(".fullcalendar").ajaxStop(function() {
-        Drupal.behaviors.product_filter.addDateToCalendar();
-        $(this).unbind("ajaxStop");
+        //Render the current selection based on date picker values
+        $(".fullcalendar").ajaxStop(function() {
+          Drupal.behaviors.product_filter.addDateToCalendar();
+          $(this).unbind("ajaxStop");
+        });
+
+        //Populate details pane and calendar with defaults
+        Drupal.behaviors.product_filter.updateFormProduct(pid, nid);
       });
-
-      //Populate details pane and calendar with defaults
-      Drupal.behaviors.product_filter.updateFormProduct(pid, nid);
-
-      //The user has selected a time on the calendar
-      $('.fullcalendar .fc-content').unbind().mouseup(function(){
-        //deleted a bunch of stuff from here, may need to bring some back
-      });
-    });
     },
 
     //start updateFormProduct function
@@ -144,28 +138,7 @@ Drupal.cr = Drupal.cr || {};
     },
     //End addDateToCalendar function
 
-    //Start updateDatePicker
-    updateDatePicker:function() {
-      view = $('.fullcalendar').fullCalendar('getView');
-      if (view.name == 'agendaWeek') {
-        quantity = $('#left-side [id|=edit-quantity]').val();
-        dateFields = new Object();
-        $('.form-item-quantity').hide();
-        $('#leftContent .large-image').addClass('no-quantity');
-        $('#left-side .add-to-cart [id|=edit-line-item-fields]').show();
-        $('#left-side .form-submit').show();
-        //Make sure the user hasn't tried to select multiple days and lost the add to cart form
-        if ($('#left-side .add-to-cart').is('*')){
-          dateFields = $('#left-side .add-to-cart').detach();
-          var justDetached = true;
-        } else if (!justDetached){
-          addToCart = $(tipContent).find('.add-to-cart');
-          dateFields = $(tipContent).detach();
-          justDetached = false;
-        }
-      }
-    },
-
+    //start showCalendar function
     showCalendar:function() {
       //nasty to hack to get position because currently calendar is being absolutely
       //positioned beneath the rest of the view elements..
@@ -176,10 +149,16 @@ Drupal.cr = Drupal.cr || {};
       $('.view-reservation-calendar').fadeIn(200);
       $('#reservations-header').fadeIn(200);
     },
+    //end showCalendar function
+
+    //start hideCalendar function
     hideCalendar:function() {
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#reservations-header').hide();
     },
+    //end hideCalendar function
+
+    //start hideItemFields function
     hideItemFields:function() {
       $('#block-views-calendar-product-view-block .add-to-cart').hide();
       $('#block-views-calendar-product-view-block .body').hide();
@@ -191,13 +170,9 @@ Drupal.cr = Drupal.cr || {};
       $('#block-views-calendar-product-view-block .member-cost').hide();
       $('#block-views-calendar-product-view-block .commercial-cost').hide();
     },
+    //end hideItemFields function
 
-    Reservation:function(startDate, endDate, quantity) {
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.quantity = quantity;
-    },
-
+    //start calendarReloadItem function
     calendarReloadItem:function(nid, pid, quantity, basePath) {
       //remove all current events from calendar
       $(".fullcalendar").fullCalendar('removeEvents', function(event){
@@ -242,7 +217,9 @@ Drupal.cr = Drupal.cr || {};
           }
       });      
     },
+    //end calendarReloadItem function
 
+    //start addReservations function
     addReservations:function(data) {
       $('a.fullcalendar-event-details', data).each(function(index){
         reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
@@ -253,6 +230,9 @@ Drupal.cr = Drupal.cr || {};
       $('#content').css('height', '1300px');
       $('.view-reservation-calendar').fadeIn(200);
     },
+    //end addReservations function
+
+    //start notCertifiedMessage function
     notCertifiedMessage:function() {
       logged_in = $('.logged-in');
       if (logged_in.length > 0){
@@ -265,6 +245,9 @@ Drupal.cr = Drupal.cr || {};
         $('#content').css('height', 'auto');
       }
     },
+    //end notCertifiedMessage function
+
+    //start moveItemToQuantity function
     moveItemToQuantity:function($item) {
       //mark item as selected 
       $item.removeClass('selected_product');
@@ -288,39 +271,11 @@ Drupal.cr = Drupal.cr || {};
       $('#right-side').empty().append(rightContent);;
       $(leftContent).fadeIn(200);
       $(rightContent).fadeIn(200);
-    },
-    moveItemToDetails:function() {
-      view = $('.fullcalendar').fullCalendar('getView');
-      if (view.name == 'agendaWeek'){
-        //dateFields = new Object();
-        //$('.form-item-quantity').hide();
-        //$('#leftContent .large-image').addClass('no-quantity');
-        //$('#left-side .add-to-cart [id|=edit-line-item-fields]').show();
-        //$('#left-side .form-submit').show();
-
-        //Make sure the user hasn't tried to select multiple days and lost the add to cart form
-        if ($('#left-side .add-to-cart').is('*')){
-          dateFields = $('#left-side .add-to-cart').detach();
-          var justDetached = true;
-        } else if (!justDetached){
-          addToCart = $(tipContent).find('.add-to-cart');
-          dateFields = $(tipContent).detach();
-          justDetached = false;
-        }
-
-        //Move dateFields into the details div
-        //$('.date-details').html(dateFields);
-
-        //update calendar on change events
-        $('.start-date-wrapper .form-select').focus(function(){
-          previousStart = $(this).val();
-        }).change(Drupal.behaviors.product_filter.addDateToCalendar);
-        $('.end-date-wrapper .form-select').change(Drupal.behaviors.product_filter.addDateToCalendar);
-      }
     }
+    //end moveItemToQuantity function
   }
 
-  //here fixing model
+  //Full Calendar Event Models
   Drupal.cr.calendarEvent = function(title, start, end) {
     this.title = title;
     this.start = start;
@@ -363,7 +318,6 @@ Drupal.cr = Drupal.cr || {};
     this.className = 'overlap';
     this.backgroundColor = '#912711';
     this.eventBorderColor = '#912711';
-    //this.textColor = '#912711';
     this.textColor = '#fff';
     this.field = $reservation.attr('field'); 
     this.index = $reservation.attr('index');
