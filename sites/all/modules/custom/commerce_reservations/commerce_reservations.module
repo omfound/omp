@@ -221,7 +221,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 
   //set default reservation date and time to last reservation in cart if available
-  if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
+  if (strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
     //set quantity weight to appear above other items
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
