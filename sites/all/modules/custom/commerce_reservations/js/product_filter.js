@@ -18,7 +18,7 @@ Drupal.cr = Drupal.cr || {};
 
     tipContent = new Object();
     var item = $('#block-views-calendar-product-view-block div.views-row');
-    $('.meta').remove();
+    //$('.meta').remove();
 
     //Hide all of our commerce item fields on page load
     Drupal.behaviors.product_filter.hideItemFields();
@@ -34,20 +34,14 @@ Drupal.cr = Drupal.cr || {};
       //grab the fields from the selected item and move them to the quantity pane
       Drupal.behaviors.product_filter.moveItemToQuantity($(this));
 
-      //update the calendar with closed times for selected item
+      //nid & pid of selected item
       var nid = $(this).find('.nid .field-content').text();
       var pid = $(this).find('.pid .field-content').text(); 
-      if (typeof pid == 'undefined'){
-        pid = $('#left-side select[name="product_id"]').val();
-      }
-      $(".fullcalendar").fullCalendar('removeEvents', function(event){
-        if (event.className == 'overlap'){
-          return true;
-        }
-      });
 
-      //Initialize calendar events, wait for closures to add default
-      Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, 1, basePath);
+      //Add any closures to calendar
+      Drupal.behaviors.product_filter.calendarReloadItem(nid, pid, 1, basePath);
+
+      //After closures, add any reservations for selected item
       $(".fullcalendar").ajaxStop(function() {
         Drupal.behaviors.product_filter.addDateToCalendar();
         $(this).unbind("ajaxStop");
@@ -91,7 +85,7 @@ Drupal.cr = Drupal.cr || {};
                 }
               });
               quantity = $('.view-footer [id|=edit-quantity]').val();
-              Drupal.behaviors.product_filter.CalendarReloadItem(nid, pid, quantity, basePath);
+              Drupal.behaviors.product_filter.calendarReloadItem(nid, pid, quantity, basePath);
               $(".fullcalendar").ajaxStop(function() {
                 Drupal.behaviors.product_filter.addDateToCalendar();
                 $(this).unbind("ajaxStop");
@@ -186,18 +180,12 @@ Drupal.cr = Drupal.cr || {};
       var calendarPosition = calendarTop+'px';
       $('.view-reservation-calendar').css('top', calendarPosition);
       $('.view-reservation-calendar').fadeIn(200);
-      /**
-      $('.view-reservation-calendar').animate({
-          opacity: '0.3'
-        }, 200 );
-        **/
       $('#reservations-header').fadeIn(200);
     },
     hideCalendar:function() {
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#reservations-header').hide();
     },
-
     hideItemFields:function() {
       $('#block-views-calendar-product-view-block .add-to-cart').hide();
       $('#block-views-calendar-product-view-block .body').hide();
@@ -216,8 +204,15 @@ Drupal.cr = Drupal.cr || {};
       this.quantity = quantity;
     },
 
-    CalendarReloadItem:function(nid, pid, quantity, basePath) {
-      $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
+    calendarReloadItem:function(nid, pid, quantity, basePath) {
+      //remove all current events from calendar
+      $(".fullcalendar").fullCalendar('removeEvents', function(event){
+        if (event.className == 'overlap'){
+          return true;
+        }
+      });
+
+      //$(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
       $('.views-footer .form-item-quantity').append($preloader);
       $('.views-footer .date-details').addClass('preloader-active');
 
