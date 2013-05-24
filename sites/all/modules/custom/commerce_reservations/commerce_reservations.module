@@ -203,8 +203,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
-      $form['actions']['submit']['#submit'][] = 'commerce_reservations_redirect_add';
-      $form_state['redirect'] = 'reservations';
+      $form['#submit'][] = 'commerce_reservations_redirect_add';
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
