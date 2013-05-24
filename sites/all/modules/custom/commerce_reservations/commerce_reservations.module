@@ -2135,7 +2135,7 @@ function commerce_reservations_line_item_duration ($line_item) {
   return $total_hours;
 }
 
-function commerce_reservations_add_to_cart_form ($product_id = null) {
+function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
   //grab a reservable product id
   if (empty($product_id)) {
     $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
@@ -2169,11 +2169,15 @@ function commerce_reservations_add_to_cart_form ($product_id = null) {
       //$form = drupal_get_form($form_id, $line_item, false, array());
       //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
-      print drupal_render($form);
+      if ($render) {
+        print drupal_render($form);
+      }
     }
   }
 
-  print '';
+  if ($render) {
+    print '';
+  }
 }
 
 function commerce_reservations_build_form($form_id) {
@@ -2185,4 +2189,13 @@ function commerce_reservations_build_form($form_id) {
  $form_state['cache'] = true;
 
  return drupal_build_form($form_id, $form_state);
+}
+
+function commerce_reservations_build_all_product_forms() {
+  $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status";
+  $results = db_query($query, array(':type' => 'reservable_product', ':status' => 1));
+
+  foreach ($results as $product) {
+    commerce_reservations_add_to_cart_form($product->product_id, false);
+  }
 }
