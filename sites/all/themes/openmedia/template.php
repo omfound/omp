@@ -39,9 +39,6 @@ function openmedia_preprocess_page(&$variables) {
     }
   }
 
-  if (arg(0) == 'reservations') {
-    commerce_reservations_build_all_product_forms();
-  }
 }
 
 /**

@@ -12,7 +12,7 @@ Drupal.cr = Drupal.cr || {};
       result = response.search(/"status": false/i);
       if(result == -1){
       	$("form.commerce-add-to-cart").each(function(){
-      		$(this).attr("action",window.location.pathname);
+      		//$(this).attr("action",window.location.pathname);
       	});
       }
       else{
@@ -74,7 +74,7 @@ Drupal.cr = Drupal.cr || {};
       //Populate details pane and calendar with defaults
       //Drupal.behaviors.product_filter.moveItemToDetails();
       newPid = $(this).find('.pid .field-content').text();
-      Drupal.behaviors.product_filter.updateFormProduct(newPid);
+      Drupal.behaviors.product_filter.updateFormProduct(newPid, nid, pid);
 
       //The user has selected a time on the calendar
       $('.fullcalendar .fc-content').unbind().mouseup(function(){
@@ -84,7 +84,7 @@ Drupal.cr = Drupal.cr || {};
     },
 
     //start updateFormProduct function
-    updateFormProduct:function(newPid) {
+    updateFormProduct:function(newPid, nid, pid) {
       cartUrl = 'cr/product_form/'+newPid;
       var basePath = Drupal.settings.basePath;
       $.ajax({
@@ -93,6 +93,7 @@ Drupal.cr = Drupal.cr || {};
           success : function (data) {
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
+            //$('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
 
             //The user has changed the dates on the date picker
             $('.start-date-wrapper .form-select').focus(function(){
@@ -114,6 +115,7 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
+            //$('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
           }
       });
     },

@@ -163,9 +163,13 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/product_add'] = array(
+    'page callback' => 'commerce_reservations_cart_submission',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
-
 
 /*
  *  Implements hook_form_alter
@@ -198,8 +202,8 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#title'] = 'QUANTITY';
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Rent This Item'; 
-      $form['#submit'][] = 'commerce_reservations_debug_submit';
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
+      $form['#submit'][] = 'commerce_reservations_redirect_add';
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
@@ -217,7 +221,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 
   //set default reservation date and time to last reservation in cart if available
-  if (arg(0) == 'reservations' && strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
+  if (strpos($form_id, 'commerce_cart_add_to_cart_form') !== false) {
     //set quantity weight to appear above other items
     global $user;
     if ($order = commerce_cart_order_load($user->uid)) {
@@ -230,10 +234,9 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 }
 
-function commerce_reservations_debug_submit($form, &$form_state) {
-  //dsm('submitted form');
-  //dsm($form_state);
-}
+function commerce_reservations_redirect_add($form, &$form_state) {
+  $form_state['redirect'] = 'reservations';
+} 
 
 function commerce_reservations_last_cart_reservation($order) {
   if ($order) {
@@ -1097,7 +1100,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
     }
     $current_date = $current_date + (24*60*60);
   }
-  if ($deduct_days > 0) {
+  if (!empty($deduct_days) && $deduct_days > 0) {
     if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
       $new_price = $unit_price['amount'] - ($deduct_hours * 24 * $product->commerce_price['und'][0]['amount']);
     }
@@ -2136,48 +2139,53 @@ function commerce_reservations_line_item_duration ($line_item) {
 }
 
 function commerce_reservations_add_to_cart_form ($product_id = null, $render = true) {
-  //grab a reservable product id
-  if (empty($product_id)) {
-    $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
-    $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
-  }
+    if (empty($product_id)) {
+      $query = "SELECT product_id FROM {commerce_product} WHERE type = :type AND status = :status LIMIT 1";
+      $product_id = db_query($query, array(':type' => 'reservable_product', ':status' => 1))->fetchField();
+    }
 
-  if (!empty($product_id)) {
-    $product = commerce_product_load($product_id);
-    if (!empty($product)) {
-      $default_quantity = 1;
-      $line_item_type = 'reservable_product';
-      $product_ids = array($product_id);
+    if (!empty($product_id)) {
+      $product = commerce_product_load($product_id);
+      if (!empty($product)) {
+        $default_quantity = 1;
+        $line_item_type = 'reservable_product';
+        $product_ids = array($product_id);
 
-      // Build the line item we'll pass to the Add to Cart form.
-      $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
-      $line_item->data['context']['product_ids'] = $product_ids;
-      $line_item->data['context']['display_path'] = 'reservations';
+        // Build the line item we'll pass to the Add to Cart form.
+        $line_item = commerce_product_line_item_new($product, $default_quantity, 0, array(), $line_item_type);
+        $line_item->data['context']['product_ids'] = $product_ids;
+        $line_item->data['context']['display_path'] = 'reservations';
 
-      // Store the View data in the context data array as well.
-      $line_item->data['context']['view'] = array(
-        'view_name' => 'reservation_calendar',
-        'display_name' => 'page_1',
-        'human_name' => 'Reservation Calendar Page',
-      );
+        // Store the View data in the context data array as well.
+        $line_item->data['context']['view'] = array(
+          'view_name' => 'reservation_calendar',
+          'display_name' => 'page_1',
+          'human_name' => 'Reservation Calendar Page',
+        );
 
-      // Generate a form ID for this add to cart form.
-      $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
+        // Generate a form ID for this add to cart form.
+        $form_id = commerce_cart_add_to_cart_form_id($product_ids, $default_quantity);
 
-      $form = commerce_reservations_build_form($form_id, $line_item, false, array());
-      //$form = drupal_build_form($form_id, $form_state);
-      //$form = drupal_get_form($form_id, $line_item, false, array());
-      //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
+        $form = commerce_reservations_build_form($form_id, $line_item, false, array());
+        //$form = drupal_build_form($form_id, $form_state);
+        //$form = drupal_get_form($form_id, $line_item, false, array());
+        //$form = commerce_cart_add_to_cart_form($form, $form_state, $line_item, $show_quantity = FALSE, $context = array());
 
-      if ($render) {
-        print drupal_render($form);
+        if ($render && empty($_POST['product_id'])) {
+          $rendered = drupal_render($form);
+          print $rendered;
+          //print substr($rendered, 0, 300);
+        }
+        if (!empty($_POST['product_id'])) {
+          dsm('off to res');
+          drupal_goto('reservations');
+        }
       }
     }
-  }
 
-  if ($render) {
-    print '';
-  }
+    if ($render) {
+      print '';
+    }
 }
 
 function commerce_reservations_build_form($form_id) {
