@@ -286,6 +286,8 @@ Drupal.cr = Drupal.cr || {};
             } else{
               $('.form-item-quantity').show();
               $('a.fullcalendar-event-details', data).each(function(index){
+                reservedEvent = new Drupal.cr.reservedTime('Current Selection', startDate, endDate, $(this));
+                /**
                 event = new Object();
                 event.field = $(this).attr('field');
                 event.index = $(this).attr('index');
@@ -314,8 +316,9 @@ Drupal.cr = Drupal.cr || {};
                 }
                 event.eventBorderColor = '#912711';
                 event.textColor = '#fff';
+                **/
                 dom_id: this.dom_id;
-                $(".fullcalendar").fullCalendar('renderEvent', event, true);
+                $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
               });
               $('.view-reservation-calendar').css('visibility', 'visible');
               $('#content').css('height', '1300px');
@@ -368,23 +371,7 @@ Drupal.cr = Drupal.cr || {};
       $('#right-side').empty().append(rightContent);;
       $(leftContent).fadeIn(200);
       $(rightContent).fadeIn(200);
-
-      /**
-      datesID = $('#left-side').find('[id|=edit-line-item-fields-field-reservation-dates]');
-      datesID.attr('id', 'pickedDates');
-      $('.form-item-product-id').hide();
-      $('#left-side .add-to-cart [id|=edit-line-item-fields]').hide();
-      $('.form-item-quantity label').remove();
-      $('<label for="quantity">QUANTITY</label>').insertBefore('.form-item-quantity .form-select');
-      $('.form-item-quantity').hide();
-      $('#left-side .form-submit').hide();
-      $('#left-side .add-to-cart').show();
-      var pid = $('#left-side input[name="product_id"]').val();
-      if (typeof pid == 'undefined'){
-        pid = $('#left-side select[name="product_id"]').val();
-      }**/
     },
-    
     moveItemToDetails:function() {
       view = $('.fullcalendar').fullCalendar('getView');
       if (view.name == 'agendaWeek'){
@@ -453,4 +440,24 @@ Drupal.cr = Drupal.cr || {};
     this.textColor = '#000';
   }
   Drupal.cr.selectedTime.prototype = new Drupal.cr.calendarEvent;
+  Drupal.cr.reservedTime = function(title, start, end, $reservation) {
+    this.base = Drupal.cr.calendarEvent;
+    this.base(title, start, end);
+    this.className = 'overlap';
+    this.backgroundColor = '#912711';
+    this.eventBorderColor = '#912711';
+    this.textColor = '#912711';
+    this.field = $reservation.attr('field'); 
+    this.index = $reservation.attr('index');
+    this.eid = $reservation.attr('eid');
+    this.entity_type = $reservation.attr('entity_type');
+    this.title = $reservation.attr('title');
+    this.start = $reservation.attr('start');
+    this.end = $reservation.attr('end');
+    this.url = $reservation.attr('href');
+    this.className = 'overlap';
+    this.editable = true;
+    this.color = '#912711';
+  }
+  Drupal.cr.reservedTime.prototype = new Drupal.cr.calendarEvent;
 }(jQuery));
