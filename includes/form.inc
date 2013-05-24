@@ -300,7 +300,6 @@ function drupal_get_form($form_id) {
  * @see drupal_redirect_form()
  */
 function drupal_build_form($form_id, &$form_state) {
-  dsm('calling build form: '.$form_id);
   // Ensure some defaults; if already set they will not be overridden.
   $form_state += form_state_defaults();
 
@@ -720,6 +719,7 @@ function drupal_form_submit($form_id, &$form_state) {
  *   'args' component of the array.
  */
 function drupal_retrieve_form($form_id, &$form_state) {
+  dsm('retrieving form: '.$form_id);
   $forms = &drupal_static(__FUNCTION__);
 
   // Record the $form_id.
