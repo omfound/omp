@@ -1,6 +1,7 @@
 <?php 
 global $base_path;
 $logourl = theme_get_setting('logo_path', '');
+dsm($items);
 ?>
   <html>
     <head>
