@@ -6,12 +6,6 @@ Drupal.cr = Drupal.cr || {};
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
 
-      //quantity preloader
-      $preloader = $('<img class = "preloader"/>');
-      $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
-      $('.views-footer .form-item-quantity').append($preloader);
-      $('.views-footer .form-item-quantity img').hide();
-
       //basepath to site
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
@@ -64,6 +58,12 @@ Drupal.cr = Drupal.cr || {};
             //populate date picker with new product form
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
+
+            //add quantity change preloader
+            $preloader = $('<img class = "preloader"/>');
+            $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
+            $('.views-footer .form-item-quantity').append($preloader);
+            $('.views-footer .form-item-quantity img').hide();
 
             //Update calendar selections when values in date picker are changed
             $('.start-date-wrapper .form-select').focus(function(){
@@ -187,8 +187,6 @@ Drupal.cr = Drupal.cr || {};
       $(".fc-agenda-allday .fc-agenda-axis").html('');
 
       //activate preloader on quantity form
-      alert('activating preloader');
-      console.log($preloader);
       $('.views-footer .form-item-quantity img').show();
       $('.views-footer .date-details').addClass('preloader-active');
 
