@@ -41,8 +41,8 @@ $logourl = theme_get_setting('logo_path', '');
   ?>
   <tr class="<?php print $even_odd; ?>">
     <td><div><?php print $title.$rate; ?></div></td>
-    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value'])); ?></td>
-    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value2'])); ?></td>
+    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value'].' UTC')); ?></td>
+    <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value2'].' UTC')); ?></td>
     <td><?php echo $cost; ?></td>
   </tr>
   <?php
