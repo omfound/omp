@@ -185,15 +185,13 @@ Drupal.cr = Drupal.cr || {};
       var calendarTop = reviewPosition.top + 550;
       var calendarPosition = calendarTop+'px';
       $('.view-reservation-calendar').css('top', calendarPosition);
-      //$('#content').css('height', '1300px');
+      $('.view-reservation-calendar').fadeIn(200);
+      /**
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
         }, 200 );
+        **/
       $('#reservations-header').fadeIn(200);
-      /**
-      $('#block-system-main').animate({
-        height: '600px'
-      }, 200 );**/  
     },
     hideCalendar:function() {
       $('.view-reservation-calendar').css('visibility', 'hidden');
