@@ -35,7 +35,7 @@
     </td>
     <td class = "order-link">
       <?php $link_options = array('query' => drupal_get_destination());?>
-      <?php print l('view', $fields['view_order']->content, $link_options); ?>
+      <?php print $fields['view_order']->content; ?>
     </td>
     <td class = "line-item-link">
       <?php $link_options = array('query' => drupal_get_destination());?>
@@ -85,7 +85,8 @@
           print l('Check In', 'cr/res_checkin/' . $fields['line_item_id']->raw, $link_options);
         ?>
         <?php $checkedout = TRUE;?>
-      <?php }?>
+      <?php } ?>
+      <?php print l('Printable Contract', 'cr/contract/'.$fields['order_id']->raw); ?>
     </td>
   </table>
 </div>
