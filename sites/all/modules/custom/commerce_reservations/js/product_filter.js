@@ -91,7 +91,7 @@ Drupal.cr = Drupal.cr || {};
           url : basePath + cartUrl,
           cache : false,
           success : function (data) {
-            data = data.replace('/reservations', '/cr/cart_add');
+            data = data.replace('reservations', '/cr/cart_add');
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
 
