@@ -36,6 +36,7 @@ dsm($items);
   <?php
   $even_odd = 'even';
   foreach ($items as $item) {
+    dsm($item);
     $cost = money_format('%(#10n', $item->commerce_total['und'][0]['amount']/100);
     $rate = money_format('%(#10n', ($item->product->commerce_price['und'][0]['amount']/100)).' / '.$item->product->field_charge_by_the_['und'][0]['value'];
     $title = $item->product->title;
