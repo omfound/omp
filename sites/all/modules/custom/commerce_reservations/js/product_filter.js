@@ -185,29 +185,19 @@ Drupal.cr = Drupal.cr || {};
       var calendarTop = reviewPosition.top + 550;
       var calendarPosition = calendarTop+'px';
       $('.view-reservation-calendar').css('top', calendarPosition);
-      $('#content').css('height', '1300px');
+      //$('#content').css('height', '1300px');
       $('.view-reservation-calendar').animate({
           opacity: '0.3'
-        }, 500 );
-      $('#reservations-header').fadeIn(1000);
+        }, 200 );
+      $('#reservations-header').fadeIn(200);
+      /**
       $('#block-system-main').animate({
         height: '600px'
-      }, 500 );  
+      }, 200 );**/  
     },
     hideCalendar:function() {
-      //$('.view-reservation-calendar').hide();
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#reservations-header').hide();
-      //$('#content').css('height', 'auto');
-      //$('.view-reservation-calendar').css('top', '-9000px');
-
-      /**
-      $('.view-reservation-calendar').css('height', '0px');
-      $('.view-reservation-calendar').css('visibility', 'hidden');
-      $('#content').css('height', 'auto');
-      $('#reservations-header').hide();
-      $('.view-reservation-calendar').css('top', '-9000px');
-      **/
     },
 
     hideItemFields:function() {
