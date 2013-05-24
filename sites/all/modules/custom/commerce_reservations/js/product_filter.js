@@ -92,9 +92,9 @@ Drupal.cr = Drupal.cr || {};
           cache : false,
           success : function (data) {
             console.log(data);
-            data = data.replace('reservations', '/cr/cart_add');
             $('.view-reservation-calendar .view-footer #date-picker .date-details').empty();
             $('.view-reservation-calendar .view-footer #date-picker .date-details').append('<div id="commerce-reservations-cart" class="pickedDates add-to-cart">'+data+'</div>');
+            $('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
 
             //The user has changed the dates on the date picker
             $('.start-date-wrapper .form-select').focus(function(){
