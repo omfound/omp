@@ -218,6 +218,3 @@ function addZero(time){
   }
   return time;
 }
-
-
-
