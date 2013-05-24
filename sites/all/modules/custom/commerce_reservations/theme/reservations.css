@@ -421,29 +421,6 @@ body.page-reservations #main-content #squeeze{
 	height: 35px;
 }
 
-.page-reservations .qtip-borderTop{
-	height: 0px !important;
-	margin-left: 0px !important;
-}
-
-.page-reservations .qtip-wrapper{
-	-moz-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /* Firefox */
-  -webkit-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
-  box-shadow: 3px 3px 10px rgba(0,0,0,0.5); /*CSS3 */
-}
-
-.page-reservations .qtip-content{
-	padding: 0px !important;
-}
-
-.page-reservations .qtip-content p{
-	margin: 5px;
-}
-
-.page-reservations .qtip-contentWrapper{
-	border-width: 0px 0px !important; 
-}
-
 #pickedDates legend,
 .pickedDates legend
 {
