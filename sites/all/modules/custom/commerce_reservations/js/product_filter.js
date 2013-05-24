@@ -242,22 +242,16 @@ Drupal.cr = Drupal.cr || {};
                   $('a.fullcalendar-event-details', data).each(function(index){
                     reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
                     dom_id: this.dom_id;
-                  $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
+                    $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
                   });
                   $('.view-reservation-calendar').css('visibility', 'visible');
                   $('#content').css('height', '1300px'); 
-                  $('.view-reservation-calendar').animate({
-                    opacity: '1'
-                  }, 500 );
-                  $('.page-reservations #block-system-main').animate({
-                    height: '600px'
-                  }, 1000 );
-                  $('.page-reservations #middle-wrapper').animate({
-                    height: '1260px'
-                  }, 1000 );
+                  $('.view-reservation-calendar').fadeIn(200);
 		            });
 	            }
             } else{
+              Drupal.behaviours.product_filter.addReservations(data);
+              /**
               $('a.fullcalendar-event-details', data).each(function(index){
                 reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
                 dom_id: this.dom_id;
@@ -266,18 +260,22 @@ Drupal.cr = Drupal.cr || {};
               $('.view-reservation-calendar').css('visibility', 'visible');
               $('#content').css('height', '1300px');
               $('.view-reservation-calendar').fadeIn(200);
-              /**
-              $('.page-reservations #block-system-main').animate({
-                height: '600px'
-              }, 1000 );
-              $('.page-reservations #middle-wrapper').animate({
-                height: '1260px'
-              }, 1000 );**/
+              **/
             }
           }
       });      
     },
 
+    addReservations:function(data) {
+      $('a.fullcalendar-event-details', data).each(function(index){
+        reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
+        dom_id: this.dom_id;
+        $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
+      });
+      $('.view-reservation-calendar').css('visibility', 'visible');
+      $('#content').css('height', '1300px');
+      $('.view-reservation-calendar').fadeIn(200);
+    },
     notCertifiedMessage:function() {
       logged_in = $('.logged-in');
       if (logged_in.length > 0){
