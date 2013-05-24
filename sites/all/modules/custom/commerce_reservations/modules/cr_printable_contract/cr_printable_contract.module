@@ -127,7 +127,8 @@ function cr_printable_contract($order_id) {
   $start_date = time();
   $end_date = time();
   $hours = 10; 
-  $html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone, $items);
+  //$html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone, $items);
+  $html = theme('cr_printable_contract', $start_date, $end_date, $hours, $username, $email, $phone);
   
   print $html;
 }
