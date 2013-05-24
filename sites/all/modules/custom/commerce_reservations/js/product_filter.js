@@ -116,6 +116,7 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
+            $('.view-reservation-calendar .view-footer #date-picker .date-details .commerce-add-to-cart').attr('action', '/cr/cart_add');
           }
       });
     },
