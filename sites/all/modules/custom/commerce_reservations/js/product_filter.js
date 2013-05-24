@@ -361,7 +361,7 @@ Drupal.cr = Drupal.cr || {};
       //build left and right panes of item detail panel
       leftContent = $('<div id = leftContent></div>');
       rightContent = $('<div id = rightContent></div>');
-      $(leftContent).append(addToCart).append(itemImage);
+      $(leftContent).append(itemImage);
       $(leftContent).hide();
       $(rightContent).append(itemTitle).append(body).append(price).append(certifications);
       $(rightContent).hide();
