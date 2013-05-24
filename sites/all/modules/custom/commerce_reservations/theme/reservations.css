@@ -736,7 +736,7 @@ body.page-reservations #main-content #squeeze{
 .page-administer-reservations .views-row-last .reservation {
   border-bottom: 1px dashed grey;
 }
-.not-front #content .page-administer-reservations .view-content h3 {
+.not-front .page-administer-reservations .view-content h3 {
   margin-top: 10px;
 }
 
