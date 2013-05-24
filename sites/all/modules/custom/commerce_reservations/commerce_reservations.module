@@ -2182,7 +2182,7 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
 
       if ($render) {
         $rendered = drupal_render($form);
-        $rendered = str_replace('/reservations', '/cr/cart_add');
+        $rendered = str_replace('/reservations', '/cr/cart_add', $rendered);
         print $rendered;
       }
     }
