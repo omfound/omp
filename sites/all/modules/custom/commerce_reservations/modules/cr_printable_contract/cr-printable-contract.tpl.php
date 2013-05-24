@@ -27,6 +27,8 @@ dsm($items);
           <thead>
             <tr>
               <th>Item</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Cost</th>
             </tr>
           </thead>
@@ -39,9 +41,9 @@ dsm($items);
     $title = $item->product->title;
   ?>
   <tr class="<?php print $even_odd; ?>">
-    <td>
-       <div><?php print $title.$rate; ?> </div>
-    </td>
+    <td><div><?php print $title.$rate; ?></div></td>
+    <td><?php print date("F j, Y, g:i a", $item->field_reservation_dates['und'][0]['value']); ?></td>
+    <td><?php print date("F j, Y, g:i a", $item->field_reservation_dates['und'][0]['value2']); ?></td>
     <td><?php echo $cost; ?></td>
   </tr>
   <?php
