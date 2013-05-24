@@ -200,6 +200,8 @@ Drupal.cr = Drupal.cr || {};
     },
     hideCalendar:function() {
       $('.view-reservation-calendar').hide();
+      $('#reservations-header').hide();
+
       /**
       $('.view-reservation-calendar').css('height', '0px');
       $('.view-reservation-calendar').css('visibility', 'hidden');
