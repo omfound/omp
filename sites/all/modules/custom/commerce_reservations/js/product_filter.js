@@ -62,8 +62,8 @@ Drupal.cr = Drupal.cr || {};
             //add quantity change preloader
             $preloader = $('<img class = "preloader"/>');
             $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
-            $('.views-footer .form-item-quantity').append($preloader);
-            $('.views-footer .form-item-quantity img').hide();
+            $('.view-footer .form-item-quantity').append($preloader);
+            $('.view-footer .form-item-quantity img').hide();
 
             //Update calendar selections when values in date picker are changed
             $('.start-date-wrapper .form-select').focus(function(){
@@ -187,16 +187,16 @@ Drupal.cr = Drupal.cr || {};
       $(".fc-agenda-allday .fc-agenda-axis").html('');
 
       //activate preloader on quantity form
-      $('.views-footer .form-item-quantity img').show();
-      $('.views-footer .date-details').addClass('preloader-active');
+      $('.view-footer .form-item-quantity img').show();
+      $('.view-footer .date-details').addClass('preloader-active');
 
       //load item reservations
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
           success : function (data) {
-            $('.views-footer .date-details').removeClass('preloader-active');
-            $('.views-footer .form-item-quantity img').hide();
+            $('.view-footer .date-details').removeClass('preloader-active');
+            $('.view-footer .form-item-quantity img').hide();
 
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
