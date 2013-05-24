@@ -57,21 +57,11 @@ dsm($order);
   <tfoot>
 </table>
 <div id="boilerplate">
-  <?php 
-  if (module_exists('token')) { 
-    echo token_replace(variable_get('cr_contract_boilerplate', ''), 'node', $node); 
-  }else{ 
-    echo variable_get('cr_contract_boilerplate',''); 
-  }?> 
+  <?php echo variable_get('cr_contract_boilerplate',''); ?> 
 </div>
 
 <div id="footer">
-  <?php 
-  if (module_exists('token')) { 
-    echo token_replace(variable_get('cr_contract_footer', ''), 'node', $node); 
-  }else{ 
-    echo variable_get('cr_contract_footer',''); 
-  }?>
+  <?php echo variable_get('cr_contract_footer',''); ?>
 </div>
 </div>
 </body>
