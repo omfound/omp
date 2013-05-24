@@ -300,6 +300,7 @@ function drupal_get_form($form_id) {
  * @see drupal_redirect_form()
  */
 function drupal_build_form($form_id, &$form_state) {
+  dsm('calling build form: '.$form_id);
   // Ensure some defaults; if already set they will not be overridden.
   $form_state += form_state_defaults();
 
@@ -819,8 +820,6 @@ function drupal_retrieve_form($form_id, &$form_state) {
  *   data, is also accumulated here.
  */
 function drupal_process_form($form_id, &$form, &$form_state) {
-  dsm('processing');
-  dsm($form_state);
   $form_state['values'] = array();
 
   // With $_GET, these forms are always submitted if requested.
