@@ -5,20 +5,6 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-    //watch for reservation item list reloads and bind appropriate
-    //action to each cart form item
-    $(".view-calendar-product-view").ajaxComplete(function(event, XMLHttpRequest, ajaxOptions) {
-      response = XMLHttpRequest.responseText;
-      result = response.search(/"status": false/i);
-      if(result == -1){
-      	$("form.commerce-add-to-cart").each(function(){
-      		//$(this).attr("action",window.location.pathname);
-      	});
-      }
-      else{
-      	//console.log("failure binding on ajax complete");
-      }
-    });
 
     //quantity preloader
     $preloader = $('<img class = "preloader"/>');
@@ -262,14 +248,14 @@ Drupal.cr = Drupal.cr || {};
 
     CalendarReloadItem:function(nid, pid, quantity, basePath) {
       $(".fc-agenda-allday .fc-agenda-axis").html('Closed</br>Days');
-      $('#left-side .form-item-quantity').append($preloader);
-      $('#leftContent .large-image').addClass('preloader-active');
+      $('.views-footer .form-item-quantity').append($preloader);
+      $('.views-footer .date-details').addClass('preloader-active');
 
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
           success : function (data) {
-            $('#leftContent .large-image').removeClass('preloader-active');
+            $('.views-footer .date-details').removeClass('preloader-active');
             $preloader.detach();
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
