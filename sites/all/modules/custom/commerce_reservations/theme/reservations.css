@@ -726,14 +726,14 @@ body.page-reservations #main-content #squeeze{
 .page-administer-reservations .reservation{
   padding: 10px;
   background: white;
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
+  border-left: 1px dashed grey;
+  border-right: 1px dashed grey;
 }
 .page-administer-reservations .views-row-first .reservation {
-  border-top: 1px solid grey;
+  border-top: 1px dashed grey;
 }
 .page-administer-reservations .views-row-last .reservation {
-  border-bottom: 1px solid grey;
+  border-bottom: 1px dashed grey;
 }
 .page-administer-reservations .view-content h3 {
   margin-top: 10px;
