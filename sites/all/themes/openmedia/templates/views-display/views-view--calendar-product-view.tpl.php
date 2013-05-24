@@ -44,7 +44,7 @@
       <div class = "res-title-number">2</div>
       <div class = "res-title">Review</div>
     <div id = "left-side">
-      <img id = "equipment_img" src = "/sites/all/modules/commerce_reservations/theme/images/equipment.jpg" width = "150" height="100">
+      <img id = "equipment_img" src = "/sites/all/modules/custom/commerce_reservations/theme/images/equipment.jpg" width = "150" height="100">
     </div>
     <div id = "right-side">
       <p></p>
