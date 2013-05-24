@@ -98,9 +98,6 @@ function cr_printable_contract_admin_settings() {
 
 function cr_printable_contract($order_id) {
   $order = commerce_order_load($order_id);
-  print '<pre>';
-  print_r($order);
-  print '</pre>';
   setlocale(LC_MONETARY, 'en_US');
 
   $user     = user_load($order->uid);
