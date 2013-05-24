@@ -84,7 +84,7 @@ Drupal.cr = Drupal.cr || {};
     },
 
     //start updateFormProduct function
-    updateFormProduct:function(newPid) {
+    updateFormProduct:function(newPid, nid, pid) {
       cartUrl = 'cr/product_form/'+newPid;
       var basePath = Drupal.settings.basePath;
       $.ajax({
