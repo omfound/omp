@@ -220,6 +220,7 @@ function om_theme_assets_main_banner() {
   return '';
 }
 
+/*
 function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-show-grid-page') {
     if (empty($_GET['sort_by']) && empty($_GET['sort_order'])) {
@@ -228,6 +229,7 @@ function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 }
+*/
 
 function om_theme_assets_build_dynamic_css() {
   global $user;
