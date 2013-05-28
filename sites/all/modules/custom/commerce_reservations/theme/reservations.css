@@ -421,29 +421,6 @@ body.page-reservations #main-content #squeeze{
 	height: 35px;
 }
 
-.page-reservations .qtip-borderTop{
-	height: 0px !important;
-	margin-left: 0px !important;
-}
-
-.page-reservations .qtip-wrapper{
-	-moz-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /* Firefox */
-  -webkit-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
-  box-shadow: 3px 3px 10px rgba(0,0,0,0.5); /*CSS3 */
-}
-
-.page-reservations .qtip-content{
-	padding: 0px !important;
-}
-
-.page-reservations .qtip-content p{
-	margin: 5px;
-}
-
-.page-reservations .qtip-contentWrapper{
-	border-width: 0px 0px !important; 
-}
-
 #pickedDates legend,
 .pickedDates legend
 {
@@ -749,8 +726,15 @@ body.page-reservations #main-content #squeeze{
 .page-administer-reservations .reservation{
   padding: 10px;
   background: white;
-  box-shadow: 2px 2px 10px grey;
-  margin-bottom: 15px;
+  border-left: 1px dashed grey;
+  border-right: 1px dashed grey;
+  border-bottom: 1px dashed blue;
+}
+.page-administer-reservations .views-row-first .reservation {
+  border-top: 1px dashed grey;
+}
+.page-administer-reservations .views-row-last .reservation {
+  border-bottom: 1px dashed grey;
 }
 
 .page-administer-reservations .reservation-overdue{
@@ -766,6 +750,7 @@ body.page-reservations #main-content #squeeze{
   font-weight: bold;
   font-size: 21px;
   font-family: Helvetica, Arial, sans-serif;
+  margin-top: 15px;
 }
 
 .page-administer-reservations .reservation-overdue .reservation-dates{
