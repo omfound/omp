@@ -418,7 +418,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
-  schedule_benchmark('setting start');
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
   if (empty($run['timeslots'])) {
@@ -431,7 +430,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
         if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
-          schedule_benchmark('timeslots ' . $timeslot->nid);
           foreach($timeslot->gaps[$date['value']] AS $gap) {
             // $process_start is the place holder for moving forward.
             $process_start = $gap['start'];
@@ -605,16 +603,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
   }// end foreach timeslot
-}
-
-function schedule_benchmark($flag) {
-  $schedule_benchmark = &drupal_static(__FUNCTION__);
-  if (empty($schedule_benchmark)) {
-    $schedule_benchmark = microtime(TRUE);
-  }
-  $ret = microtime(TRUE) - $schedule_benchmark;
-  dsm($flag . ': ' . $ret);
-  return $ret;
 }
 
 /**
