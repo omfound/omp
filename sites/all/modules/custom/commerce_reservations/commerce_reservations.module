@@ -1503,7 +1503,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $account = user_load($order_wrapper->uid->value());
   $account_wrapper = entity_metadata_wrapper('user', $account);
   print '<pre>';
-  print_r($line_item_wrapper);
+  print_r($line_item);
   print '</pre>';
   print '<br />account loaded';
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
