@@ -1496,12 +1496,10 @@ function commerce_reservations_commerce_order_status_info(){
 }
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
-  print 'starting';
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
-  print '<br />past order load';
   $account = user_load($order_wrapper->uid->value());
   $account_wrapper = entity_metadata_wrapper('user', $account);
   print '<br />account loaded';
@@ -1512,10 +1510,10 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
   $product_options = array();
-  foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
-    $product_sku = $product_wrapper->sku->value();
-    $product_options[] = $product_sku;
-  }
+  //foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
+    //$product_sku = $product_wrapper->sku->value();
+    //$product_options[] = $product_sku;
+  //}
   print '<br />off to tax';
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
