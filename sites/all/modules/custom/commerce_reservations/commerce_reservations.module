@@ -1519,6 +1519,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
     $term_wrapper = entity_metadata_wrapper('taxonomy_term', $loaded_term);
+    print 'testing';
     //if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
       //$accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
     //}
