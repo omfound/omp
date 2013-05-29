@@ -22,6 +22,9 @@
 .page-reservations div#main-content.page table.h1-wrapper td{
 	height: 101px;
 }
+.page-reservations div.status {
+  background-color: #FFFFCC;
+}
 body.page-reservations #main-content #squeeze{
 	margin-right: 0px;
 	float: left;
