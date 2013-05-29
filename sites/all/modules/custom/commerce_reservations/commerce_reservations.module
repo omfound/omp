@@ -1502,15 +1502,9 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $account = user_load($order_wrapper->uid->value());
   $account_wrapper = entity_metadata_wrapper('user', $account);
-  print '<pre>';
-  print_r($line_item);
-  print '</pre>';
-  print '<br />account loaded';
-  $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
-  print '<br />path: '.$line_item_wrapper->commerce_display_path->value();
-  $product_display = node_load($nid);
+  $display_nid = commerce_reservations_entity_display_lookup($line_item->commerce_product['und'][0]['product_id']); 
+  $product_display = node_load($display_nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
-  print '<br />past product display';
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
@@ -1525,10 +1519,9 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   foreach ($tree as $term){
     $loaded_term = taxonomy_term_load($term->tid);
     $term_wrapper = entity_metadata_wrapper('taxonomy_term', $loaded_term);
-    print 'testing';
-    //if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
-      //$accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
-    //}
+    if ($term_wrapper->field_crp_category->value() == $product_display_wrapper->field_crp_category->value()){
+      $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
+    }
     if ($loaded_term->field_reservable_product){
       foreach($term_wrapper->field_reservable_product->getIterator() as $product_term_wrapper){
         if (method_exists($product_term_wrapper, 'name') && method_exists($product_display_wrapper, 'title')) {
