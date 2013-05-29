@@ -1504,7 +1504,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $account_wrapper = entity_metadata_wrapper('user', $account);
   print '<br />account loaded';
   $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
-  print '<br />zenid: '.$nid;
+  print '<br />path: '.$line_item_wrapper->commerce_display_path->value();
   $product_display = node_load($nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
   print '<br />past product display';
