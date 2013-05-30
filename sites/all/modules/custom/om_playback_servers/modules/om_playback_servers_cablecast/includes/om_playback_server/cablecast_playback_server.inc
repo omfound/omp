@@ -39,7 +39,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         );
       }
       dsm($params);
-      //return $this->soap_request($pbs, 'CreateNewShowRecord', $params);
+      return $this->soap_request($pbs, 'CreateNewShowRecord', $params);
     }
   }
   public function check_metadata_status($pbs, $metadata = array()) {
