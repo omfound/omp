@@ -194,7 +194,6 @@ class cablecastPlaybackServerController extends playbackServerController {
         $format = variable_get('cablecast_hd_format_id_' . $pbs->pbsid, NULL);
       }
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'sd') {
-         dsm('cablecast_sd_format_id_' . $pbs->pbsid);
         $format = variable_get('cablecast_sd_format_id_' . $pbs->pbsid, NULL);
       }
     }
