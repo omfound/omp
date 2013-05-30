@@ -195,7 +195,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       }
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'sd') {
          dsm('cablecast_sd_format_id_' . $pbs->pbsid);
-        $format = variable_set('cablecast_sd_format_id_' . $pbs->pbsid, NULL);
+        $format = variable_get('cablecast_sd_format_id_' . $pbs->pbsid, NULL);
       }
     }
     if (isset($file->field_om_show_duration[$lang][0]['value'])) {
