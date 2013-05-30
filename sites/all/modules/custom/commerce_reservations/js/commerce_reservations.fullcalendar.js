@@ -70,6 +70,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     options.unselectAuto = false;
     options.select = function(start, end, allDay) {
       dateInvalid = false;
+      dateDiff = Math.abs(end - start);
+      dateDiffHours = dateDiff / (1000*60*60);
+      alert('hours: '+dateDiffHours);
+
       if (!allDay){
         dontCheck = false;
         today = new Date();

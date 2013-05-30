@@ -1502,8 +1502,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $account = user_load($order_wrapper->uid->value());
   $account_wrapper = entity_metadata_wrapper('user', $account);
-  $nid = str_replace('node/', "", $line_item_wrapper->commerce_display_path->value());
-  $product_display = node_load($nid);
+  $display_nid = commerce_reservations_entity_display_lookup($line_item->commerce_product['und'][0]['product_id']); 
+  $product_display = node_load($display_nid);
   $product_display_wrapper = entity_metadata_wrapper('node', $product_display);
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
