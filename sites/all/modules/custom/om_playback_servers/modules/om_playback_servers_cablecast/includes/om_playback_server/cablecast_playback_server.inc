@@ -189,25 +189,13 @@ class cablecastPlaybackServerController extends playbackServerController {
     $format = 0;
     $duration = 0;
     $lang = $file->language;
-    
-    $available_formats = variable_get('cablecast_available_formats_' . $pbs->pbsid, array());
-    if (empty($available_formats)) {
-      $all_formats = $this->get_formats($pbs);
-      if (!empty($all_formats)) {
-        foreach ($all_formats->GetFormatsResult->Format AS $possible_format) {
-          if ($possible_format->Name == 'SD Digital File' || $possible_format->Name == 'HD Digital File') {
-            $available_formats[$possible_format->Name] = $possible_format->FormatID;
-          }
-        }
-      }
-      variable_set('cablecast_available_formats_' . $pbs->pbsid, $available_formats);
-    }
+    // @TODO #LK These formats should be stored on the pbs entity
     if (isset($file->field_om_show_media_format[$lang][0]['value'])) {
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'hd') {
-        $format = $available_formats['HD Digital File'];
+        $format = variable_get('cablecast_hd_format_id_' . $pbs->pbsid, NULL);
       }
       if ($file->field_om_show_media_format[$lang][0]['value'] == 'sd') {
-        $format = $available_formats['SD Digital File'];
+        $format = variable_set('cablecast_sd_format_id_' . $pbs->pbsid, NULL);
       }
     }
     if (isset($file->field_om_show_duration[$lang][0]['value'])) {
@@ -215,7 +203,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     }
     return array(
       'NewReel' => array(
-        'FormatID'=> 2, //int</FormatID>
+        'FormatID'=> $format, //int</FormatID>
         'CueSeconds'=> 0 , //int</LengthSeconds>
         'LengthSeconds'=> (int)$duration, //int</LengthSeconds>
         'Title'=> 0, //int</Title>
