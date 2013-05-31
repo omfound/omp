@@ -12,6 +12,7 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
       $result = db_query($query, array(':showid' => $parts[1], ':type' => 'om_show'));
       if ($new_nid = $result->fetchField()) {
         $path = drupal_get_path_alias('node/'.$new_nid);
+        drupal_goto($path);
       }
     }
   }
