@@ -1,0 +1,9 @@
+<?php
+
+function om_redirector_url_inbound_alter(&$path, $original_path, $path_language) {
+  global $user;
+  if($user->uid == 1) {
+    dsm($original_path);
+    dsm($_SERVER);
+  }
+}
