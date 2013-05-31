@@ -11,7 +11,7 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
           FROM {field_data_field_old_show_id} 
           WHERE field_old_show_id_value = :showid
           AND bundle = :type";
-        $result = db_query($query, array(':showid' => $parts[1], 'bundle' => 'om_show'));
+        $result = db_query($query, array(':showid' => $parts[1], ':type' => 'om_show'));
         if ($new_nid = $result->fetchField()) {
           dsm('redirecting to path: '.drupal_get_path_alias('node/'.$new_nid));
           $path = drupal_get_path_alias('node/'.$new_nid);
