@@ -184,6 +184,8 @@ function om_admin_menu_admin_menu_output_alter(&$content) {
     unset($content['menu']['admin/commerce']);
     unset($content['menu']['admin/help']);
     unset($content['menu']['admin/index']);
+    unset($content['menu']['admin/content']);
+    unset($content['menu']['admin/structure']);
   }
 }
 
