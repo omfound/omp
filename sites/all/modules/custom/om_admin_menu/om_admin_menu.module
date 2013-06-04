@@ -180,6 +180,7 @@ function om_admin_menu_admin_menu_output_alter(&$content) {
   global $user;
   if (!in_array('administrator', $user->roles) && $user->uid != 1) {
     unset($content['menu']['node/add']);
+    unset($content['menu']['admin/config']);
   }
 }
 
