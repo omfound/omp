@@ -82,6 +82,7 @@ function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $
         '#empty_option' => '- Select a File -',
         '#empty_value' => 'none',
         '#required' => $element['#required'],
+        '#description' => $element['#description'],
       );
     }
     else {
