@@ -20,7 +20,7 @@ function commerce_coupon_pct_order_rules_action_info() {
       'commerce_order' => array(
         'type' => 'commerce_order',
         'label' => t('Commerce Order'),
-      )
+      ),
       'coupon' => array(
         'type' => 'commerce_coupon',
         'label' => t('Coupon'),
