@@ -60,6 +60,7 @@ function commerce_coupon_pct_order_default_rules_configuration() {
       ))
       ->action('commerce_coupon_pct_order_apply_to_product_line_item', array(
         'line_item:select' => 'commerce-line-item',
+        'order:select' => 'commerce-order',
         'coupon:select' => 'list-coupon',
         'component_name:select' => 'list-coupon:price-component-name',
         'round_mode' => COMMERCE_ROUND_HALF_UP,
