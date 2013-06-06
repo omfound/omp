@@ -1186,11 +1186,9 @@ function om_timeslot_scheduler_load_show_nodes() {
         );
       }
     }
-    dsm($result);
-    return;
     $all_shows[$result->nid] = $result;
   }
-  dsm($all_shows);
+  dsm($all_shows[21931]);
   if (!empty($all_shows)) {
     return $all_shows;
   }
