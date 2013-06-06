@@ -1,0 +1,4 @@
+name = Open Media Dashboard
+description = Provides dashboard interface, endpoints and api for the Open Media Project.
+core = 7.x
+package = Open Media System

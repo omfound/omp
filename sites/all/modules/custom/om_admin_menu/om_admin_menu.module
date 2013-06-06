@@ -1,0 +1,223 @@
+<?php
+
+
+function om_admin_menu_admin_menu_output_build(&$content) {
+  $paid_memberships = om_admin_menu_paid_memberships();
+  $content['menu']['dashboard'] = array(
+    '#title' => t('Dashboard'),
+    '#access' => om_admin_menu_role_access(array('authenticated user')),
+    '#href' => 'dashboard',
+    '#weight' => -50,
+	);
+  $content['menu']['shows'] = array(
+    '#title' => t('Shows'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/shows',
+  );
+  $content['menu']['shows']['view'] = array(
+    '#title' => t('View Shows'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/shows',
+  );
+	$content['menu']['shows']['add'] = array(
+    '#title' => t('Submit new show'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'node/add/om-show',
+	);
+  $content['menu']['projects'] = array(
+    '#title' => t('Manage Projects'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/projects',
+  );
+  $content['menu']['projects']['view'] = array(
+    '#title' => t('View Projects'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'user/projects',
+  );
+  $content['menu']['projects']['add'] = array(
+    '#title' => t('Submit new project'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'node/add/om-project',
+  );
+
+  //Class Administrators
+  $content['menu']['classes'] = array(
+    '#title' => t('Classes'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/commerce/products/list',
+    '#options' => array(
+      'query' => array('sku' => '', 'type' => 'class'),
+    ),
+  );
+  $content['menu']['classes']['add'] = array(
+    '#title' => t('Add Class'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/commerce/products/add/class',
+  );
+  $content['menu']['classes']['registrations'] = array(
+    '#title' => t('Manage registrations'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'reports/class-registrations',
+  );
+
+  //Membership Administrators
+  $content['menu']['membership'] = array(
+    '#title' => t('Memberships'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'reports/members',
+  );
+
+  //Content Administrators
+  $content['menu']['content'] = array(
+    '#title' => t('Content'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'admin/content',
+  );
+  $content['menu']['content']['add_page'] = array(
+    '#title' => t('Add Page'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/page',
+  );
+  $content['menu']['content']['add_form'] = array(
+    '#title' => t('Add Form'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/webform',
+  );
+  $content['menu']['content']['add_news'] = array(
+    '#title' => t('Add News'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'node/add/news',
+  );
+  $content['menu']['content']['navigation'] = array(
+    '#title' => t('Edit Menu'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'admin/structure/menu/manage/main-menu',
+  );
+  $content['menu']['content']['theme_assets'] = array(
+    '#title' => t('Admin Theme Assets'),
+    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#href' => 'om_theme_assets',
+  );
+  //Reservations Administrators
+  $content['menu']['reservations'] = array(
+    '#title' => t('Reservations'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'administer_reservations',
+  );
+  $content['menu']['reservations']['view_products'] = array(
+    '#title' => t('View Reservation Products'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/products/list',
+      '#options' => array(
+        'query' => array('sku' => '', 'type' => 'reservable_product'),
+      ),
+  );
+  $content['menu']['reservations']['add_product'] = array(
+    '#title' => t('Add Reservation Product'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/products/add/reservable-product',
+  );
+  $content['menu']['reservations']['view_product_displays'] = array(
+    '#title' => t('Add Reservation Display'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'node/add/reservable-product-display',
+  );
+  $content['menu']['reservations']['certifications'] = array(
+    '#title' => t('Manage Certifications'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/certifications',
+  );
+  $content['menu']['reservations']['categories'] = array(
+    '#title' => t('Manage Categories'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/product_categories',
+  );
+  $content['menu']['reservations']['locations'] = array(
+    '#title' => t('Manage Equipment Locations'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/equipment_locations',
+  );
+  $content['menu']['reservations']['productterms'] = array(
+    '#title' => t('Manage Product Terms'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/reservable_product',
+  );
+  $content['menu']['reservations']['accessories'] = array(
+    '#title' => t('Manage Accessories'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/structure/taxonomy/reservable_product_accessories',
+  );
+  $content['menu']['reservations']['configuration'] = array(
+    '#title' => t('Reservations Settings'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/cr/settings',
+  );
+
+  //Scheduling Administrators
+  $content['menu']['scheduling'] = array(
+    '#title' => t('Scheduling Settings'),
+    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#href' => 'om_playback_servers',
+  );
+  $content['menu']['scheduling']['servers'] = array(
+    '#title' => t('Playback Servers'),
+    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#href' => 'om_playback_servers',
+  );
+  $content['menu']['scheduling']['schedule'] = array(
+    '#title' => t('Broadcast Synchronization'),
+    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#href' => 'om_broadcast_schedule',
+  );
+  $content['menu']['scheduling']['timeslots'] = array(
+    '#title' => t('Timeslots'),
+    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#href' => 'om_timeslot_schedule',
+  );
+}
+
+function om_admin_menu_admin_menu_output_alter(&$content) {
+  global $user;
+  if (!in_array('administrator', $user->roles) && $user->uid != 1) {
+    unset($content['menu']['node/add']);
+    unset($content['menu']['admin/config']);
+    unset($content['menu']['admin/commerce']);
+    unset($content['menu']['admin/help']);
+    unset($content['menu']['admin/index']);
+    unset($content['menu']['admin/content']);
+    unset($content['menu']['admin/structure']);
+  }
+}
+
+function om_admin_menu_role_access($roles) {
+  global $user;
+  
+  foreach($roles as $role) {
+    if(in_array($role, $user->roles)) {
+      return TRUE;
+    } 
+  }
+  return FALSE;
+}
+
+function om_admin_menu_paid_memberships() {
+  $paid_memberships = array(
+		'Programming Membership',
+		'Field Producer Membership', 
+		'Editor Membership', 
+		'Studio Producer Membership', 
+		'Unlimited Membership', 
+		'Organizational or Group Membership'
+	);
+
+  return $paid_memberships;
+}
+
+function om_admin_menu_menu_alter(&$items) {
+  // Grant those with "edit terms in [vid]" permission access to list the terms
+  // and add new ones, per vocabulary.
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access callback'] = 'taxonomy_term_edit_access';
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access arguments'] = array(3);
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access callback'] = 'taxonomy_term_edit_access';
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access arguments'] = array(3);
+}

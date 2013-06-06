@@ -1,0 +1,148 @@
+<?php
+
+// define the source database
+define("SOURCE_DATABASE", 'dom_prod');
+define("CIVI_DATABASE", 'dom_civi_prod');
+// All users who have signed into account after this date will be migrated.
+$cutoff = new DateTime("2012-01-01");
+define("USER_MIGRATION_CUTOFF",$cutoff->getTimestamp());
+/**
+ * You must implement hook_migrate_api(), setting the API level to 2, for
+ * your migration classes to be recognized by the Migrate module.
+ */
+function om_migration_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'migrations' => array(
+      'OM_USER' => array('class_name' => 'omUserMigration'),
+      'OM_USER2' => array('class_name' => 'omUserWithProjectMigration'),
+      'OM_USER3' => array('class_name' => 'omUserWithMembershipMigration'),
+      'OM_USER4' => array('class_name' => 'omUserWithCertificationMigration'),
+      'om_project' => array('class_name' => 'omProjectMigration'),
+      'OM_SHOW' => array('class_name' => 'omShowMigration'),
+    ),
+  );
+
+  return $api;
+}
+
+//function om_migration_role_product_relationships() {
+//  return array(
+//    // programming membership
+//    5 => 1,
+//    // field
+//    6 => 3,
+//    // studio
+//    8 => 4,
+//    // unlimited
+//    9 => 5,
+//    // organizational
+//    10 => 6,
+//  );
+//}
+
+function om_migration_civi_product_relationships() {
+  return array(
+    // programming membership
+    4 => 1,
+    // field
+    6 => 3,
+    // studio
+    7 => 4,
+    // editor to unlimited
+    8 => 5,
+    // unlimited
+    9 => 5,
+    // organizational np
+    10 => 6,
+    // organiztional
+    12 => 6,
+  );
+}
+
+function om_migration_role_product_relationships() {
+  return array(
+    // programming membership
+    1 => 5,
+    // field
+    3 => 6,
+    // studio
+    4 => 8,
+    // unlimited
+    5 => 9,
+    // organizational
+    6 => 10,
+  );
+}
+
+function om_migration_update_cablecast_files() {
+  $query = db_select('field_data_field_om_show_playback_server_id', 'pbsid');
+  $query->fields('pbsid', array('entity_id', 'field_om_show_playback_server_id_value'));
+  $resource = $query->execute();
+  while($result = $resource->fetchObject()) {
+    if (!empty($result->entity_id) && !empty($result->field_om_show_playback_server_id_value)) {
+      $new_record = new stdClass();
+      $new_record->entity_type = 'node';
+      $new_record->bundle = 'om_show';
+      $new_record->deleted = 0;
+      $new_record->entity_id = $result->entity_id;
+      $new_record->revision_id = $result->entity_id;
+      $new_record->language = 'und';
+      $new_record->delta = 0;
+      $new_record->field_om_show_broadcast_file_uri = 'cablecast://' . $result->field_om_show_playback_server_id_value;
+      drupal_write_record('field_data_field_om_show_broadcast_file', $new_record);
+    }
+  }
+}
+
+function om_migration_update_geofield() {
+  $query = db_select('field_data_field_old_lat', 'lat');
+  $query->join('field_data_field_old_lon', 'lon', 'lat.entity_id=lon.entity_id');
+  $query->fields('lat', array('entity_id', 'field_old_lat_value'));
+  $query->fields('lon', array('field_old_lon_value'));
+  $resource = $query->execute();
+  while($result = $resource->fetchObject()) {
+    if (!empty($result->field_old_lat_value)) {
+      $node = node_load($result->entity_id);
+      $node->field_om_show_geofield = array(
+        $node->language => array(
+          0 => array(
+            'lat' => $result->field_old_lat_value,
+            'lon' => $result->field_old_lon_value,
+            'geo_type' => 'point',
+            'wkt' => 'POINT (' . $result->field_old_lon_value .' ' . $result->field_old_lat_value . ')'
+          )
+        )
+      );
+      node_save($node);
+    }
+  }
+  return array();
+}
+
+function om_migration_update_voting() {
+  $query = Database::getConnection('default', 'legacy')->select('votingapi_vote','vote');
+  $query->fields('vote', array('content_id', 'value', 'timestamp', 'vote_source', 'uid'));
+  $query->condition('content_type', 'node', '=');
+  $query->condition('value_type', 'percent', '=');
+  $resource = $query->execute();
+  while ($result = $resource->fetchObject()) {
+    $query = Database::getConnection('default', 'default')->select('field_data_field_old_show_id','old_nid');
+    $query->fields('old_nid', array('entity_id'));
+    $query->condition('field_old_show_id_value', $result->content_id, '=');
+    $resource_old_nid = $query->execute();
+    while($result_old_nid = $resource_old_nid->fetchObject()) {
+      $vote = new StdClass();
+      $vote->entity_id = $result_old_nid->entity_id;
+      $vote->revision_id = $result_old_nid->entity_id;
+      $vote->entity_type = 'node';
+      $vote->value_type = 'percent';
+      $vote->value = $result->value;
+      $vote->timestamp = $result->timestamp;
+      $vote->vote_source = $result->vote_source;
+      $vote->uid = $result->uid;
+      drupal_write_record('votingapi_vote', $vote);
+    }
+  }
+  return array();
+}

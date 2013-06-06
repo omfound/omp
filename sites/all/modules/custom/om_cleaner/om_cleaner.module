@@ -1,0 +1,64 @@
+<?php
+
+function om_cleaner_remove_nodes($type) {
+  $query = "
+    SELECT nid
+    FROM {node}
+    WHERE node.type = :type";
+  $results = db_query($query, array(':type' => $type));
+
+  $nids = array();
+  foreach ($results as $result) {
+    $nids[$result->nid] = $result->nid;
+  }
+
+  $counter = 0;
+  foreach ($nids as $nid => $info) {
+    node_delete($nid);
+    $counter++;
+  }
+
+  dsm('Removed '.$counter.' '.$type.' nodes.');
+}
+
+function om_cleaner_remove_products($type) {
+  $query = "
+    SELECT product_id
+    FROM {commerce_product}
+    WHERE type = :type";
+  $results = db_query($query, array(':type' => $type));
+
+  $ids = array();
+  foreach ($results as $result) {
+    $ids[$result->product_id] = $result->product_id;
+  }
+
+  $counter = 0;
+  foreach ($ids as $id => $info) {
+    commerce_product_delete($id);
+    $counter++;
+  }
+
+  dsm('Removed '.$counter.' '.$type.' products.');
+}
+
+function om_cleaner_remove_users() {
+  $query = "
+    SELECT uid
+    FROM {users}
+    WHERE uid != 0 AND uid != 1";
+  $results = db_query($query);
+
+  $uids = array();
+  foreach ($results as $result) {
+    $uids[$result->uid] = $result->uid;
+  }
+
+  $counter = 0;
+  foreach ($uids as $uid => $info) {
+    user_delete($uid);
+    $counter++;
+  }
+  
+  dsm('Removed '.$counter.' user accounts.');
+}

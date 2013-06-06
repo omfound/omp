@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_om_pbs_om_playback_server
+ */
+function om_playback_servers_test_om_playback_servers_om_playback_server() {
+  return array(
+    'test_pbs' => array(
+      'title' => t('Test PBS'),
+      'description' => t('Provides a dummy PBS.'),
+      'type' => 'om_playback_server',
+      'path' => drupal_get_path('module', 'om_playback_servers_test') . '/includes/om_playback_server',
+      'file' => 'test_playback_server.inc',
+      'playback_server' => array(
+        'class' => 'testPlaybackServerController',
+        'parent' => 'playbackServerController',
+      ),
+    )
+  );
+}

@@ -1,0 +1,1219 @@
+<?php
+
+require_once(drupal_get_path('module', 'om_timeslot_scheduler').'/includes/timeslot_scheduling_rule/timeslot_scheduling_rule.inc');
+require_once(drupal_get_path('module', 'om_timeslot_scheduler').'/includes/om_timeslot_scheduler.admin.inc');
+
+include_once('om_timeslot_scheduler.features.inc');
+
+/**
+ * Implements hook_permission
+ */
+function om_timeslot_scheduler_permission() {
+  return array(
+    'access scheduling calendar' => array(
+      'title' => t('Access Scheduling Calendar'),
+      'description' => t('Access scheduling calendar page.'),
+    ),
+    'perform scheduling tasks' => array(
+      'title' => t('Perform Scheduling Tasks'),
+      'description' => t('Preview and commit bulk scheduling operations.'),
+    ),
+    'administer om timeslot scheduler' => array(
+      'title' => t('Administer Open Media Timeslot Scheduler'),
+      'description' => t('Access administration pages for Open Media Timeslot Scheduler'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_timeslot_scheduler_menu() {
+
+  $items = array();
+
+  $items['om_timeslot_scheduler'] = array(
+    'title' => t('Scheduling'),
+    'page callback' => 'om_timeslot_scheduler_calendar_page',
+    'page arguments' => array(1),
+    'access arguments' => array('access scheduling calendar'),
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['om_timeslot_scheduler/calendar'] = array(
+    'title' => t('Scheduling'),
+    'weight' => -1,
+    'type' => MENU_DEFAULT_LOCAL_TASK
+  );
+
+  $items['om_timeslot_scheduler/schedule'] = array(
+    'title' => t('Schedule Timeslot'),
+    'page callback' => 'om_timeslot_scheduler_schedule_timeslot',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('perform scheduling tasks'),
+    'weight' => 5,
+    'type' => MENU_CALLBACK
+  );
+
+  $items['om_timeslot_scheduler/bulk'] = array(
+    'title' => t('Bulk Scheduling'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_timeslot_scheduler_bulk_schedule_form'),
+    'access arguments' => array('perform scheduling tasks'),
+    'weight' => 4,
+    'type' => MENU_LOCAL_TASK
+  );
+
+  $items['om_timeslot_scheduler/bulk_process_complete'] = array(
+    'title' => t('Administer Scheduling'),
+    'page callback' => 'om_timeslot_scheduler_process_complete_page',
+    'page arguments' => array(2),
+    'access arguments' => array('perform scheduling tasks'),
+    'type' => MENU_CALLBACK
+  );
+
+  $items['om_timeslot_scheduler/bulk_process_committed'] = array(
+    'title' => t('Administer Scheduling'),
+    'page callback' => 'om_timeslot_scheduler_process_committed',
+    'page arguments' => array(2),
+    'access arguments' => array('perform scheduling tasks'),
+    'type' => MENU_CALLBACK
+  );
+
+  $items['om_timeslot_scheduler/producer_process_complete'] = array(
+    'title' => t('Administer Scheduling'),
+    'page callback' => 'om_timeslot_scheduler_process_complete_page',
+    'page arguments' => array(2),
+    'access arguments' => array('perform scheduling tasks'),
+    'type' => MENU_CALLBACK
+  );
+
+  $items['om_timeslot_scheduler/admin'] = array(
+    'title' => t('Administer Scheduling'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_timeslot_scheduler_admin_form'),
+    'access arguments' => array('administer om timeslot scheduler'),
+    'weight' => 5,
+    'type' => MENU_LOCAL_TASK
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_block_info
+ */
+function om_timeslot_scheduler_block_info() {
+  $blocks = array();
+  $blocks['theme_key'] = array(
+    'info' => t('Schedule Themes'),
+  );
+  $blocks['timeslot_node_block'] = array(
+    'info' => t('Create a Timeslot Block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view
+ */
+function om_timeslot_scheduler_block_view($delta = 0) {
+  $blocks = array();
+  if ($delta == 'theme_key') {
+    $blocks['subject'] = t('Schedule Themes');
+    $blocks['content'] = array(
+      '#theme' => 'theme_key',
+    );
+  }
+  if ($delta == 'timeslot_node_block') {
+    $blocks['subject'] = t('Create a Timeslot');
+    $blocks['content'] = array(
+      '#theme' => 'timeslot_node_form',
+    );
+  }
+  return $blocks;
+}
+
+/**
+ * Menu callback to create the calendar page.
+ */
+function om_timeslot_scheduler_calendar_page($channel = NULL) {
+  drupal_add_css(drupal_get_path('module', 'om_timeslot_scheduler') . '/theme/css/om_timeslot_scheduler.css');
+  
+  if (user_access('perform scheduling tasks')) {
+    $can_admin = TRUE;
+  }
+  else {
+    $can_admin = FALSE;
+  }
+
+  $render = array();
+
+  return $render;
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter
+ */
+function om_timeslot_scheduler_form_om_timeslot_event_node_form_alter(&$form, &$form_state, $form_id) {
+  $rules = om_timeslot_scheduler_entity_get_rules();
+  foreach ($rules AS $machine_name => $rule) {
+    $options[$machine_name] = $rule['title'];
+  }
+  $form['field_om_timeslot_rule']['und']['#options'] += $options;
+  
+  // For the create timeslot block
+  if (arg(0) == 'om_timeslot_scheduler') {
+    $form['#action'] .= '?destination=om_timeslot_scheduler';
+  }
+}
+
+
+/**
+ * Implements form_views_exposed_form_alter
+ */
+function om_timeslot_scheduler_form_views_exposed_form_alter(&$form, &$form_state) {
+  if (stripos($form['#id'], 'views-exposed-form-om-timeslot-scheduler-calendar-block-1') !== FALSE) {
+    $channels = array();
+    $voc = om_playback_servers_get_channel_vocabulary();
+    foreach ($voc AS $channel) {
+      $first_channel = $channel->tid;
+    }
+    if ($form_state['input']['field_om_timeslot_channel_tid'] == 'All') {
+      $form_state['input']['field_om_timeslot_channel_tid'] = $first_channel;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function om_timeslot_scheduler_theme() {
+  return array(
+    'views_view_fields__om_timeslot_scheduler_calendar__block_1' => array(
+      'variables' => array('view' => NULL, 'options' => NULL, 'row' => NULL),
+      'template' => 'views-view-fields--om-timeslot-scheduler-calendar--block-1',
+      'base hook' => 'views_view_fields',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/theme/templates',
+    ),
+    'theme_key' => array(
+      'variables' => array('view' => NULL, 'options' => NULL, 'row' => NULL),
+      'template' => 'om_timeslot_scheduler_theme_key',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/theme/templates',
+    ),
+    'timeslot_node_form' => array(
+      'variables' => array('view' => NULL, 'options' => NULL, 'row' => NULL),
+      'template' => 'om_timeslot_scheduler_node_block',
+      'file' => 'theme.inc',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/theme/templates',
+    ),
+    'timeslot_schedule_completion' => array(
+      'variables' => array('run_info', 'schedule_content' => NULL),
+      'template' => 'timeslot_schedule_completion',
+      'file' => 'theme.inc',
+      'path' => drupal_get_path('module', 'om_timeslot_scheduler') . '/theme/templates',
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_type()
+ */
+function om_timeslot_scheduler_ctools_plugin_type() {
+  return array(
+    'timeslot_scheduling_rule' => array(
+      'cache' => FALSE,
+      'use hooks' => TRUE,
+      'classes' => array('timeslotSchedulingRule'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_directory
+ */
+function om_timeslot_scheduler_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'om_timeslot_scheduler' && !empty($plugin)) {
+    return "includes/$plugin";
+  }
+}
+
+function om_timeslot_scheduler_schedule_timeslot($timeslot_nid, $start, $end) {
+  $node = node_load($timeslot_nid);
+  $channel_tid = $node->field_om_timeslot_channel['und'][0]['tid'];
+  // If we are scheduling into the past.
+  if ($start < time()) {
+    $return = l('Return', 'om_timeslot_scheduler');
+    return array(
+      'no past scheduling' => array(
+        '#prefix' => '<p>',
+        '#markup' => t('You cannot schedule into the past. !return to scheduling.', array('!return' => $return)),
+        '#suffix' => '</p>'
+      )
+    );
+  }
+  om_timeslot_scheduler_schedule_window($channel_tid, $start, $end);
+  return array();
+}
+
+/**
+ * Utility functions
+ */
+
+/**
+ * Utility function to schedule a window of time. Begins a batch process.
+ *
+ * @param $channel_tid
+ *   tid of the channel term on which we want to schedule
+ *
+ * @param $start
+ *   start timestamp
+ *
+ * @param $end
+ *   end timestamp
+ *
+ * @param $bulk_operation
+ *  boolean whether or not this is a bulk operation
+ */
+function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
+  // Otherwise start the process.
+  $run = array(
+    'channel_tid' => $channel_tid,
+    'start' => $start,
+    'end' => $end,
+    'timeslots' => array(),
+    'errors' => array()
+  );
+  $function = '_om_timeslot_scheduler_schedule_window';
+  $batch = $function($run);
+  batch_set($batch);
+  batch_process('om_timeslot_scheduler', $url = 'batch', $redirect_callback = 'drupal_goto');
+}
+
+/**
+ * Utility function to set up the scheduling batch_process.
+ */
+function _om_timeslot_scheduler_schedule_window($run) {
+  // Get steps for updating airings from om_broadcast_schedule.
+  $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
+  // Add scheduling steps.
+  $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
+  $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
+  $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
+  $steps[] = array('_om_timeslot_scheduler_build_schedule', array());
+  $batch = array(
+    'operations' => $steps,
+    'finished' => '_om_timeslot_scheduler_batch_complete',
+  );
+  return $batch;
+}
+
+/**
+ * Utility function to get timeslots that fall in the correct time range.
+ *   After getting relevant timeslots verify that they are valid for this run.
+ *
+ * @param $run
+ *  array that contains start, end, channel_tid and bulk_operation flag at minimum
+ *
+ * @param $context
+ *  array standard context reference provided by batch process
+ */
+function _om_timeslot_scheduler_get_timeslots($run, &$context) {
+ $context['message'] = t('Gathering relevant timeslots.');
+  $query = db_select('field_data_field_om_timeslot_date', 'date');
+  $query->fields('date', array('entity_id'));
+  $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
+    $and_1 = db_and();
+    $and_1->condition('field_om_timeslot_date_value', $run['start'], '>=');
+    $and_1->condition('field_om_timeslot_date_value2', $run['end'], '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_timeslot_date_value', $run['start'], '<=');
+    $and_2->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_timeslot_date_value', $run['end'], '<=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '>=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+  $query->condition($or);
+  $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
+  $query->orderBy('field_om_timeslot_date_value', 'ASC');
+  $result = $query->execute();
+  while($row = $result->fetchAssoc()) {
+    $timeslot = node_load($row['entity_id']);
+    $is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
+    if ($is_available) {
+      $run['timeslots'][] = $timeslot;
+    }
+  }
+  if (empty($run['timeslots'])) {
+    $run['errors'][__FUNCTION__][] = array(
+      'error' => 'No timeslots were found for the given date range.',
+      'severity' => 'warning',
+    );
+  }
+  $context['results']['run'] = $run;
+}
+
+/**
+ * If eligible timeslots have been found. Execute a rule for each one if this is a bulk operation.
+ *
+ * @param $context
+ *  array standard context reference provided by batch process. Now includes run information from prior steps.
+ */
+function _om_timeslot_scheduler_implement_rules(&$context) {
+  $context['message'] = t('Gathering show data.');
+  $run = $context['results']['run'];
+  if (empty($run['timeslots'])) {
+    return;
+  }
+  foreach($run['timeslots'] AS $key => $timeslot) {
+    $shows = om_timeslot_scheduler_render_timeslot_rule($timeslot);
+    if (is_array($shows) && !empty($shows)) {
+      $run['timeslots'][$key]->om_timeslot_showlist = $shows;
+    }
+    else {
+      $run['errors'][__FUNCTION__][] = array(
+        'error' => 'No shows were available for the timeslot: ' . l($timeslot->title, 'node/' . $timeslot->nid),
+        'severity' => 'warning',
+      );
+    }
+  }
+  $context['results']['run'] = $run;
+}
+
+/**
+ * If eligible timeslots have been found. Execute a rule for each one if this is a bulk operation.
+ *
+ * @param $context
+ *  array standard context reference provided by batch process. Now includes run information from prior steps.
+ */
+function _om_timeslot_scheduler_get_gaps(&$context) {
+  $context['message'] = t('Finding gaps in timeslots.');
+  $run = $context['results']['run'];
+  if (empty($run['timeslots'])) {
+    return;
+  }
+  foreach ($run['timeslots'] AS $key => $timeslot) {
+    $gap_set = array();
+    if (!empty($timeslot->om_timeslot_showlist)) {
+      foreach ($timeslot->field_om_timeslot_date['und'] AS $date) {
+        // Get the time range for appropriate dates as a timeslot an hold many date repeats.
+        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
+         $gap_set[$date['value']] = om_timeslot_scheduler_get_gaps($run['channel_tid'], $date['value'], $date['value2']);
+        }
+      }
+    }
+    $timeslot->gaps = $gap_set;
+    $run['timeslots'][$key] = $timeslot;
+  }
+}
+
+/**
+ * After having gathered the airings, gaps, and shows for each timeslot assemble a schedule.
+ *
+ * @param $context
+ *  array standard context reference provided by batch process. Now includes run information from prior steps.
+ */
+function _om_timeslot_scheduler_build_schedule(&$context) {
+  $context['message'] = t('Assembling a schedule.');
+  $run = $context['results']['run'];
+  if (empty($run['timeslots'])) {
+    return;
+  }
+  $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
+  $schedule = array();
+  foreach ($run['timeslots'] AS $key => $timeslot) {
+    $timeslot_schedule_change = 0;
+    if (!empty($timeslot->om_timeslot_showlist)) {
+      foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
+        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
+          foreach($timeslot->gaps[$date['value']] AS $gap) {
+            // $process_start is the place holder for moving forward.
+            $process_start = $gap['start'];
+            $process_end = $gap['end'];
+            // START Section 1: Set up Leaders and Trailers for Time Slot
+            // If this gap is the beginning of a timeslot and there is a leader value schedule the leader
+            if ($gap['start'] == $date['value'] && isset($timeslot->field_om_timeslot_leader['und'][0]['nid'])) {
+              $show = om_timeslot_scheduler_load_node($timeslot->field_om_timeslot_leader['und'][0]['nid']);
+              $end = $gap['start'] + $show->field_om_show_duration['und'][0]['value'];
+              if ($end <= $gap['end']) {
+                // revise the gap
+                $process_start = $end;
+                // add to schedule list.
+                $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($gap['start'], $end, $show);
+              }
+            }
+            // If this gap goes to the end of the timeslot, include the trailer.
+            if ($gap['end'] == $date['value2'] && isset($timeslot->field_om_timeslot_trailer['und'][0]['nid'])) {
+              $show = om_timeslot_scheduler_load_node($timeslot->field_om_timeslot_trailer['und'][0]['nid']);
+              $start = $gap['end'] - $show->field_om_show_duration['und'][0]['value'];
+              if ($start >= $gap['start']) {
+                // revise the gap
+                $process_end = $start;
+                // add to schedule list
+                $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($start, $gap['end'], $show);
+              }
+            }
+            // End Section 1
+            // Begin normal scheduling.
+            // If the gap is > 30 min in length
+            // START Section 2: Break Long Gaps into Smaller 30 min gaps
+            $gap_parts = array();
+            if ($gap['end'] - $gap['start'] > 1800) {
+              // Figure out how many half hours are in this gap.
+              $half_hours = 0;
+              if (date('i', $gap['start']) !== 00) {
+                $start = $gap['start'];
+                $seconds_to_next = -($gap['start'] % 1800) + 1800;
+                $gap_parts[0] = array(
+                  'start' => $start ,
+                  'end' => $start + $seconds_to_next,
+                );
+                $gap['start'] += $seconds_to_next;
+                $half_hours++;
+              }
+              for ($i = $gap['start']; $i <= $gap['end']; $i += 1800) {
+                // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
+                if ($i + 1800 <=  $gap['end']) {
+                  $gap_parts[$half_hours]['start'] = $i;
+                  $gap_parts[$half_hours]['end'] = $i + 1800;
+                  $half_hours++;
+                }
+              }
+              // If there is overhang on (i.e. 45 min slot) make sure to make an extra gap (15 min gap)
+              if ($gap['start'] + ($half_hours * 1800) < $gap['end']) {
+                $gap_parts[$half_hours]['start'] = $gap['start'] + ($half_hours * 1800);
+                $gap_parts[$half_hours]['end'] = $process_end;
+              }
+              else{
+                // If there is no overhang adjust for possible trailer.
+                $gap_parts[$half_hours - 1]['end'] = $process_end;
+              }
+            }
+            else {
+              // If the gap is < 30 min just use the gap in the new gap array.
+              $gap_parts[0]['end'] = $process_end;
+            }
+            // Always modify the start to be $process_start in case there is a leader.
+            $gap_parts[0]['start'] = $process_start;
+            // END Section 2 break gap into smaller gaps
+            // START Section 3 Schedule Assembly
+            foreach($gap_parts AS $gap_key => $mini_gap) {
+              // This loop allows for scheduling of shows that are larger than a single mini gap.
+              // If this has happened we need to skip all mini gaps until we are in the clear again.
+              if (isset($process_start) && $process_start > $mini_gap['start']) {
+                continue;
+              }
+              $process_start = $mini_gap['start'];
+              // @TODO if this is first gap it could be less than 30 minutes
+              // use seconds_to_end to find next_start
+              //$next_start = $mini_gap['start'] + 1800;
+              $next_start = ($process_start - ($process_start % 1800)) + 1800;
+              // Begin normal scheduling...
+              $used = 0;
+              foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
+                $show = om_timeslot_scheduler_load_node($show_nid);
+                if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
+                  continue;
+                }
+                $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+                // If a show is less than the end of the gap
+                if ($show_completion + $spacer <= $gap['end']) {
+                  // If a show is longer than 30 min allow it an opportunity to be scheduled.
+                  // START Section 3.1: Schedule Show gt 30m
+                  if ($show->field_om_show_duration['und'][0]['value'] > 1800) {
+                    $temp_start = 0;
+                    $temp_end = 0;
+                    // If this is not the first thing in a 30 min gap, start this show at the next 30 min. gap.
+                    if ($process_start % 1800 == 0) {
+                      $temp_start = $process_start;
+                    }
+                    else {
+                      $temp_start = $next_start;
+                      $show_completion = $temp_start + $show->field_om_show_duration['und'][0]['value'];
+                      if ($show_completion + $spacer > $gap['end']) {
+                        continue;
+                      }
+                    }
+                    $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    // Adult hours check
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
+                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
+                      $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                      $process_start = ($process_start - ($process_start % 1800)) + 1800;
+                      $next_start = $process_start;
+                      $used = $rank;
+                      unset($timeslot->om_timeslot_showlist[$rank]);
+                    }
+                  }
+                  // START Section 3.2: Schedule Show lt 30m
+                  // Otherwise shchedule shows < 30 min
+                  else {
+                    if ($show_completion + $spacer > $mini_gap['end']) {
+                      continue;
+                    }
+                    // Adult hours check
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
+                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
+                      $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
+                      $used = $rank;
+                      unset($timeslot->om_timeslot_showlist[$rank]);
+                    }
+                  }
+                }
+                // If we are unable to schedule X amount of shows from the rule divert to station branding instead if the option is selected.
+                // START Section 3.3 station branding
+                // @TODO need a config here.
+                if ($rank - $used > 8 && variable_get('om_timeslot_scheduler_branding', 0)) {
+                  $rule_name = variable_get('om_timeslot_scheduler_branding_rule', 'station_branding_scheduling_rule');
+                  if (!empty($rule_name)) {
+                    if (!isset($branding_list)) {
+                      // gather branding shows.
+                      $rule = om_timeslot_scheduler_entity_get_rules($rule_name);
+                      $branding_list = $rule->executeRule($timeslot);
+                    }
+                    foreach($branding_list AS $branding_key => $banding_item_nid) {
+                      $banding_item = om_timeslot_scheduler_load_node($banding_item_nid);
+                      $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
+                      if ($branding_show_completion <= $mini_gap['end']) {
+                        $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
+                        $process_start += $banding_item->field_om_show_duration['und'][0]['value'];
+                        unset($branding_list[$branding_key]);
+                      }
+                    }
+                  }
+                }// end if execute branding rule
+              }// end foreach om_timeslot_showlist
+            }// end foreach micro gap
+          }// end foreach gap
+          // Reset rule -- call previous step again.
+          //if ($timeslot_schedule_change <= count($timeslot->schedule)) {
+          //  _om_timeslot_scheduler_implement_rules($context);
+          //}
+          //$timeslot_schedule_change = count($timeslot->schedule);
+        }// end if we should use this range
+      }// end foreach date range in timeslots
+    }// end if this ts has a showlist
+    $run['timeslots'][$key] = $timeslot;
+  }// end foreach timeslot
+}
+
+/**
+ * Completion callback for schedule bulk process.
+ *   After this step if the commit flag is set the schedule will go to pbs commit handler.
+ *   If the commit flag is not set pass the data along to the preview theme.
+ *   If there are errors the script will not continue to the commit phase.
+ *   Params are standard for batch completion callback with the exception of return pid.
+ *     @param return pid for use in non-batch calls of the function to return pid.
+ */
+function _om_timeslot_scheduler_batch_complete($success, $results, $operations, $duration, $return_pid = FALSE) {
+  if (!empty($results['run']['errors'])) {
+    foreach($results['run']['errors'] AS $fn => $error_set) {
+      foreach ($error_set AS $error) {
+        $message = $fn . ' generated error: ' . $error['error'];
+        drupal_set_message(t($message), $error['severity']);
+        if ($error['severity'] == 'error') {
+          return;
+        }
+      }
+    }
+  }
+  if (empty($results['run'])) {
+    drupal_set_message(t('There was an error during scheduling resulting in an incomplete process. Please try again.'), $error['severity']);
+  }
+  else {
+    // Determine what process number this proces will be.
+    $pid = om_timeslot_scheduler_get_pid();
+
+    // Add a process record.
+    $process_record = new stdClass();
+    $process_record->start = $results['run']['start'];
+    $process_record->end = $results['run']['end'];
+    $process_record->channel_tid = $results['run']['channel_tid'];
+    $process_record->time = $results['run']['end'];
+    $process_record->status = 0;
+
+    // #TODO replace with drupal_write_record
+    $process = om_timeslot_scheduler_write_record('om_timeslot_scheduler_process', $process_record);
+    // Add cache records.
+    foreach ($results['run']['timeslots'] AS $key => $timeslot) {
+      if (!empty($timeslot->schedule)) {
+        foreach ($timeslot->schedule AS $schedule_run) {
+          foreach($schedule_run AS $item) {
+            $cache_item = new stdClass();
+            $cache_item->pid = $pid;
+            $cache_item->start = $item['start'];
+            $cache_item->end = $item['end'];
+            $cache_item->show_id = $item['show']->nid;
+            $cache_item->timeslot_id = $timeslot->nid;
+            $cache_item->time = time();
+            // #TODO replace with drupal_write_record
+            om_timeslot_scheduler_write_record('om_timeslot_scheduler_cache', $cache_item);
+          }
+        }
+      }
+    }
+  }
+  if ($return_pid == TRUE) {
+    return $pid;
+  }
+  else {
+    drupal_goto('om_timeslot_scheduler/bulk_process_complete/' . $pid);
+  }
+}
+
+/**
+ * Create schedule review page.
+ */
+function om_timeslot_scheduler_process_complete_page($pid) {
+  $cache_items = array();
+  $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+  if ($run_info[0]->process_status == 1) {
+    $message = t('Warning this schedule has already been committed!');
+    drupal_set_message($message, 'warning');
+  }
+  $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
+  return theme('timeslot_schedule_completion', array('run_info' => $run_info[0],'schedule_content' => $cache_items));
+}
+
+/**
+ * Submit handler for tiny commit form.
+ */
+function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
+  $pid = $form_state['values']['om_timeslot_scheduler_commit_schedule_pid'];
+  om_timeslot_scheduler_process_commit($pid, TRUE);
+}
+
+/**
+ * Commit the schedule and move the user to the completion page.
+ */
+function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
+  $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+  $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
+  $pbs = array_shift(om_playback_servers_get_pbs_by_term($run_info[0]->channel_tid));
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  foreach($cache_items AS $item) {
+    $meta_data = array();
+    $show_node = node_load($item->show_id);
+    $lang = $show_node->language;
+    // If a station had more than one type of playback server they would get stuck here
+    // Would have to find a solution that allows pbs to claim fields.
+    if (!empty($show_node->field_om_show_broadcast_file)) {
+      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
+      if (!empty($meta_data)) {
+        $meta_data = array_merge((array)$meta_data, (array)$item);
+        $result = $controller->create_airing($pbs, $meta_data);
+        if (isset($result['ScheduleID'])) {
+          $airing = array(
+            'title' => $show_node->title,
+            'start' => $item->start,
+            'end' => $item->end,
+            'channel_tid' => $run_info[0]->channel_tid,
+            'show_id' => $show_node->nid,
+            'uid' => $result['ScheduleID'],
+          );
+          if (isset($show_node->field_om_show_aired[$lang][0]['value'])) {
+            $show_node->field_om_show_aired[$lang][0]['value'] ++;
+          }
+           else {
+            $show_node->field_om_show_aired[$lang][0]['value'] = 1;
+          }
+          node_save($show_node);
+          om_broadcast_schedule_create_airing_node($airing);
+        }
+      }
+    }
+  }
+  if ($redirect == TRUE) {
+    drupal_goto('om_timeslot_scheduler/bulk_process_committed/' . $pid);
+  }
+}
+
+/**
+ * Mark the process as completed and give the final response message
+ */
+function om_timeslot_scheduler_process_committed($pid) {
+  om_timeslot_scheduler_process_complete($pid);
+  $return = l('Return', 'om_timeslot_scheduler');
+  $response = array(
+    'schedule comitted' => array(
+      '#prefix' => '<p>',
+      '#markup' => t('Your schedule has been committed. !return to scheduling.', array('!return' => $return)),
+      '#suffix' => '</p>'
+    )
+  );
+  return $response;
+}
+
+/**
+ * Return a properly keyed array for the schedule list.
+ */
+function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
+  return array(
+    'start' => $start,
+    'end' => $end,
+    'duration' => $end - $start,
+    'show' => $show
+  );
+}
+
+/**
+ * Determine whether or not a timeslot is eligible for scheduling in this run.
+ *
+ * @param $timeslot
+ *   standard node object for the timeslot in question.
+ *
+ * @returns boolean
+ */
+function om_timeslot_scheduler_is_eligible_timeslot($timeslot) {
+  if ($timeslot->field_om_timeslot_automation[$timeslot->language][0]['value']) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Go through the order of operations to find an applicable rule for this timeslot.
+ *  Start on timeslot, then check for channel or system rule.
+ *
+ * @param $timeslot
+ *   standard node object for the timeslot in question.
+ *
+ * @returns array list of shows or empty if the rule returns nothing or no rules are found.
+ */
+function om_timeslot_scheduler_render_timeslot_rule($timeslot) {
+  $rule_name = $timeslot->field_om_timeslot_rule[$timeslot->language][0]['value'];
+  //if (empty($rule_name)) {
+    // use channel or default rule
+  //}
+  $rule = om_timeslot_scheduler_entity_get_rules($rule_name);
+  if (is_object($rule)) {
+    return $rule->executeRule($timeslot);
+  }
+  return array();
+}
+
+/**
+ * Find all gaps for the given time range and channel.
+ *
+ * @param $start
+ *   start timestamp
+ *
+ * @param $end
+ *   end timestamp
+ *
+ * @param $channel_tid
+ *   tid of the channel term on which we want to schedule
+ *
+ * @returns array list of gaps.
+ */
+function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
+  // Get normal airings
+  $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->fields('airing_dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->condition('field_om_airing_dates_value', $start, '>=');
+  $query->condition('field_om_airing_dates_value2', $end, '<=');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
+  $result = $query->execute();
+  $normal = $result->fetchAll();
+
+  // Get airings that intrude on the front of the timeslot
+  $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->condition('field_om_airing_dates_value', $start, '<=');
+  $query->condition('field_om_airing_dates_value2', $start, '>');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
+  $result = $query->execute();
+  $intruding = $result->fetchAll();
+  
+  // Get airings that extrude from the end of the timeslot
+  $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->condition('field_om_airing_dates_value', $end, '<=');
+  $query->condition('field_om_airing_dates_value2', $end, '>');
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
+  $result = $query->execute();
+  $extruding = $result->fetchAll();
+  
+  // Gather all airings into one array.
+  $airings = array();
+  array_walk($normal, '_om_timeslot_scheduler_merge_array', array(&$airings));
+  array_walk($intruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
+  array_walk($extruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
+
+  $gaps = array();
+  $gaps[] = array(
+    'start' => $start,
+    'end' => $end,
+    // Duration is just here for debugging purpose
+    'duration' => $end - $start,
+  );
+  // Find the gaps: first the easy case -- no airings
+  if (empty($airings)) {
+    return $gaps;
+  }
+  else {
+    // Loop through airings.. for each airing loop through and sculpt gaps accordingly.
+    foreach($airings AS $airing) {
+      array_walk($gaps, '_om_timeslot_scheduler_handle_gaps', array('start' => $airing->field_om_airing_dates_value, 'end' => $airing->field_om_airing_dates_value2, 'gaps' => &$gaps));
+    }
+    return $gaps;
+  }
+}
+
+/**
+ * Helper function to merge numeric arrays that are all 0 indexed without overiding values.
+ *
+ * @param $val
+ *   reference to the current airing
+ *
+ * @param $key
+ *   pointer to current item in the array
+ *
+ * @param $data
+ *   array that contains a reference to the airing array.
+ */
+function _om_timeslot_scheduler_merge_array($val, $key, &$data) {
+  $data[0][] = $val;
+}
+
+/**
+ * Helper function that gets called on every gap in the gaps array for every airing in a given time range.
+ *   Each time through the loop &$gaps array gets sculpted to reflect the current airing item.
+ *   NB: helps to remember that $val start and end is always the gap, data start and end is always the airing.
+ *
+ * @param $val
+ *   reference to the current gap.
+ *
+ * @param $key
+ *   pointer to current array item.
+ *
+ * @param $data
+ *   array that must contain airing start, airing end and a reference to the gaps array.
+ */
+function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
+  // If an airing is in the middle of a gap split the gap creating two new gaps.
+  if ($val['start'] < $data['start'] && $val['end'] > $data['end']) {
+    // Destroy original...
+    unset($data['gaps'][$key]);
+    // Split this gap into two gaps.
+    $data['gaps'][$key] = array(
+      'start' => $val['start'],
+      'end' => $data['start'],
+      'duration' => $data['start'] - $val['start']
+    );
+    $data['gaps'][$key + 1] = array(
+      'start' => $data['end'],
+      'end' => $val['end'],
+      'duration' => $val['end'] - $data['end']
+    );
+  }
+  // If an airing is at the beginning of a gap trim the gap.
+  if ($val['start'] == $data['start'] && $val['end'] > $data['end']) {
+    // Destroy original...
+    unset($data['gaps'][$key]);
+    // Create new
+    $data['gaps'][$key] = array(
+      'start' => $data['end'],
+      'end' => $val['end'],
+      'duration' => $val['end'] - $data['end']
+    );
+  }
+  // If an airing is at the end of the timeslot trim the gap.
+  if ($val['end'] == $data['end'] && $val['start'] < $data['start']) {
+    unset($data['gaps'][$key]);
+    $data['gaps'][$key] = array(
+      'start' => $val['start'],
+      'end' => $data['start'],
+      'duration' => $data['start'] - $val['start']
+    );
+  }
+}
+
+/**
+ * Utility function get all rule plguins or a specific rule plugin if a name is given.
+ */
+function om_timeslot_scheduler_entity_get_rules($rule_name = NULL) {
+  if (empty($rule_name)) {
+    ctools_include('plugins');
+    $plugins = ctools_get_plugins('om_timeslot_scheduler', 'timeslot_scheduling_rule');
+    unset($plugins['om_timeslot_scheduler_base_rule']);
+    return $plugins;
+  }
+  else {
+    $plugins = om_timeslot_scheduler_entity_get_rules();
+    $plugin_info = ctools_plugin_get_info('om_timeslot_scheduler', 'timeslot_scheduling_rule');
+    ctools_plugin_load_includes($plugin_info);
+    require_once($plugins[$rule_name]['path'] . '/' . $plugins[$rule_name]['file']);
+    $controller = new $plugins[$rule_name]['timeslot_scheduling_rule']['class'];
+    return $controller;
+  }
+}
+
+/**
+ * Utilty function given a timeslot theme nid return a hex.
+ */
+function om_timeslot_scheduler_get_theme_color_from_timeslot($timeslot_nid) {
+  $voc = om_timeslot_scheduler_get_theme_vocabulary();
+  if (empty($voc[0]->vid)) {
+    return FALSE;
+  }
+  // How do we know that this tid is going to be a theme by default?
+  $query = db_select('taxonomy_index', 'term_node');
+  $query->join('taxonomy_term_data', 'term_data', 'term_node.tid = term_data.tid');
+  $query->fields('term_node', array('tid'));
+  $query->condition('nid', $timeslot_nid, '=');
+  $query->condition('term_data.vid', $voc[0]->vid, '=');
+  $result = $query->execute();
+  $tid = $result->fetchAssoc();
+  $hex = om_timeslot_scheduler_get_theme_color($tid['tid']);
+  if (isset($hex)) {
+    return $hex;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Utilty function given a timeslot tid return a hex.
+ */
+function om_timeslot_scheduler_get_theme_color($theme_tid) {
+  $query = db_select('field_data_field_om_timeslot_theme_color', 'color');
+  $query->fields('color', array('field_om_timeslot_theme_color_value'));
+  $query->condition('entity_id', $theme_tid, '=');
+  $result = $query->execute();
+  $hex = $result->fetchAssoc();
+  if (isset($hex['field_om_timeslot_theme_color_value'])) {
+    return $hex['field_om_timeslot_theme_color_value'];
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Utilty function get theme vocabulary.
+ */
+function om_timeslot_scheduler_get_theme_vocabulary() {
+  $query = db_select('taxonomy_vocabulary', 'voc');
+  $query->fields('voc', array('vid'));
+  $query->condition('machine_name', 'themes', '=');
+  $result = $query->execute();
+  $vid = $result->fetchAssoc();
+  if (!empty($vid['vid'])) {
+    return taxonomy_get_tree($vid['vid']);
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Utility function to get the time ranges of given timeslot.
+ */
+function om_timeslot_scheduler_get_current_dates($timeslot_nid, $start, $end) {
+  $query = db_select('taxonomy_vocabulary', 'voc');
+}
+
+/**
+ * Utilty function to get the next available pid
+ */
+function om_timeslot_scheduler_get_pid() {
+  $query = db_select('om_timeslot_scheduler_process', 'process');
+  $query->fields('process', array('pid'));
+  $query->orderBy('pid', 'DESC');
+  $query->range(0, 1);
+  $result = $query->execute();
+  $pid = $result->fetchAll();
+  if (isset($pid[0]->pid) && $pid[0]->pid >= 0) {
+    return $pid[0]->pid + 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+/**
+ * Utility function write an entry to the process or cache table -- #TODO this seems dumb should remove.
+ */
+function om_timeslot_scheduler_write_record($table, $record) {
+  return drupal_write_record($table, $record);
+}
+
+/**
+ * Utility function read an entry from the cache table.
+ */
+function om_timeslot_scheduler_get_entries($pid, $table) {
+  $query = db_select($table, 'cache');
+  $query->fields('cache');
+  $query->condition('pid', $pid, '=');
+  $query->orderBy('start', 'ASC');
+  $result = $query->execute();
+  $rows = $result->fetchAll();
+  if (!empty($rows)) {
+    return $rows;
+  }
+  return array();
+}
+
+/**
+ * Utility function to mark a scheduling process as complete.
+ *
+ * @param $pid
+ *   process id
+ */
+function om_timeslot_scheduler_process_complete($pid) {
+  $query = db_update('om_timeslot_scheduler_process');
+  $query->fields(array('process_status' => 1));
+  $query->condition('pid', $pid, '=');
+  $query->execute();
+}
+
+/**
+ * Utility function delete cache entry.
+ *
+ * @param $pid
+ *   process id
+ */
+function om_timeslot_scheduler_delete_cache_items($pid) {
+}
+
+/**
+ * Form builder for commit button form.
+ *
+ * @param $form
+ *   Standard form array
+ *
+ * @param $form_state
+ *   Standard form_state array
+ *
+ * @param $form_state
+ *   Process id
+ *
+ * @return built form array
+ */
+function om_timeslot_scheduler_commit_schedule_form($form, &$form_state, $pid) {
+  $form = array();
+  $form['om_timeslot_scheduler_commit_schedule_pid'] = array(
+    '#type' => 'hidden',
+    '#value' => $pid
+  );
+  $link = l('Cancel', 'om_timeslot_scheduler');
+  $form['om_timeslot_scheduler_commit_schedule_submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Commit Schedule',
+    '#suffix' => t('or !link', array('!link' => $link)),
+  );
+  $form['#submit'][] = '_om_timeslot_scheduler_process_commit';
+  return $form;
+}
+
+/**
+ * Load a node with only bare essential fields required for scheduling
+ *  This way we can circumvent hook_node_xx entirely.
+ *
+ * @param $nid
+ *   int node id
+ *
+ * @return built node object
+ */
+function om_timeslot_scheduler_load_node($nid) {
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
+  $query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
+  $query->join('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
+  $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
+  $query->fields('duration', array('field_om_show_duration_value'));
+  $query->fields('air_count', array('field_om_show_aired_value'));
+  $query->fields('rating', array('field_om_rating_tid'));
+  $query->condition('n.nid', $nid, '=');
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  $result = array_shift($result);
+  if (isset($result->field_om_show_duration_value)) {
+    $result->field_om_show_duration = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_show_duration_value
+        )
+      )
+    );
+  }
+  if (isset($result->field_om_show_aired_value)) {
+    $result->field_om_show_aired = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_show_aired_value
+        )
+      )
+    );
+  }
+  if (isset($result->field_om_rating_tid)) {
+    $result->field_om_rating = array(
+      $result->language => array(
+        0 => array(
+          'value' => $result->field_om_rating_tid
+        )
+      )
+    );
+  }
+  return $result;
+}
+
+/**
+ * Check to see if a rating term is considered adult.
+ *
+ * @param $tid
+ *   int term id
+ *
+ * @return bool
+ */
+function om_timeslot_scheduler_rating_is_adult($tid) {
+  $adult_terms = array('TV-MA');
+  $term = taxonomy_term_load($tid);
+  if (is_object($term)) {
+    if (in_array($term->name, $adult_terms)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check to see if a rating term is considered adult.
+ *
+ * @param $reference_time
+ *   timestamp y-m-d to use for returned dates
+ *
+ * @return array of dates
+ */
+function om_timeslot_scheduler_get_adult_hours($reference_time) {
+  $ref_hour = date('G', $reference_time);
+  // Get start and end times. Then figure out the difference.
+  $start_hours = variable_get('om_timeslot_scheduler_adult_hours_start', 22);
+  $end_hours = variable_get('om_timeslot_scheduler_adult_hours_end', 5);
+  $start_stamp = mktime($start_hours);
+  $end_stamp = mktime($end_hours);
+  if ($end_hours < $start_hours) {
+    $end_stamp += 86400;
+  }
+  if ($ref_hour < $start_hours) {
+    $reference_time -= 86400;
+  }
+  $difference = abs($end_stamp - $start_stamp);
+  // Build actual time from reference
+  $adult_hours['start'] = mktime($start_hours, 0, 0 , date('n', $reference_time), date('j', $reference_time), date('y', $reference_time));
+  $adult_hours['end'] = $adult_hours['start'] + $difference;
+  return $adult_hours;
+}

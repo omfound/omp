@@ -1,0 +1,7 @@
+name = Commerce Registration Fixes 
+description = Collection of improvements to the commerce registration module.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce
+dependencies[] = commerce_registration

@@ -1,0 +1,10 @@
+name = Open Media Playback Servers
+description = Provides playback server entity administration as well as programatic interface for playback server interaction
+core = 7.x
+package = "Open Media System"
+dependencies[] = "ctools"
+dependencies[] = "entity"
+dependencies[] = "features"
+dependencies[] = "taxonomy"
+version = 7.x-1.0
+features[taxonomy][] = tags

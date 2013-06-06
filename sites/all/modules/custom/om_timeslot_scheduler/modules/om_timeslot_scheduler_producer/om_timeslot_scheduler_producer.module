@@ -1,0 +1,627 @@
+<?php
+
+/**
+ * Implements hook_permission
+ */
+function om_timeslot_scheduler_producer_permission() {
+  return array(
+    'schedule own shows' => array(
+      'title' => t('Schedule Own Shows'),
+      'description' => t('Schedule own shows through scheduling tab on show.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_timeslot_scheduler_producer_menu() {
+  $items = array();
+
+  $items['node/%node/schedule'] = array(
+    'title' => 'Schedule Your Show',
+    'page callback' => 'om_timeslot_scheduler_producer_schedule',
+    'page arguments' => array(1),
+    'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['show/%node/update_airings'] = array(
+    'title' => 'Schedule Your Show',
+    'page callback' => '_om_timeslot_scheduler_update_airings',
+    'page arguments' => array(1, 3),
+    'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['show/%node/timeslots'] = array(
+    'title' => 'Schedule Your Show',
+    'page callback' => '_om_timeslot_scheduler_producer_timeslots',
+    'page arguments' => array(1, 3, 4),
+    'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['show/%node/timeslot-dates'] = array(
+    'title' => 'Schedule Your Show',
+    'page callback' => '_om_timeslot_scheduler_producer_timeslot_dates',
+    'page arguments' => array(1, 3, 4),
+    'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['show/%node/commit-schedule'] = array(
+    'title' => 'Schedule Your Show',
+    'page callback' => '_om_timeslot_scheduler_producer_commit_schedule',
+    'page arguments' => array(1, 3, 4, 5, 6, 7),
+    'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_alter(&$form, &$form_state, $form_id) {
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Producer Scheduling'),
+    '#weight' => 3,
+  );
+
+  $channels = array();
+  $voc = om_playback_servers_get_channel_vocabulary();
+  foreach ($voc AS $channel) {
+    $channels[$channel->tid] = $channel->name;
+  }
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_channels'] = array(
+    '#title' => t('Producer Scheduled Channels'),
+    '#description' => 'Select the channels on which producers can schedule.',
+    '#type' => 'select',
+    '#options' => $channels,
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_channels', ''),
+    '#multiple' => TRUE,
+    '#weight' => 3,
+  );
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_airings'] = array(
+    '#title' => t('Number of Producer Schedulings'),
+    '#description' => 'Enter the number of times a producer may schedule their show. <em>Enter 0 for unlimited.</em>',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_airings', 1),
+    '#multiple' => TRUE,
+    '#weight' => 3,
+  );
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_themes'] = array(
+    '#title' => t('Producers Access Theme Timeslots'),
+    '#description' => 'Can producers schedule into blocks that share their show\'s theme in addition to series timeslots?',
+    '#type' => 'radios',
+    '#options' => array('Disabled', 'Enabled'),
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_themes', 1),
+    '#weight' => 4,
+  );
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_range'] = array(
+    '#title' => t('Producer Scheduled Range'),
+    '#description' => 'How many weeks out should producers be able to schedule?',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_range', 3),
+    '#weight' => 4,
+  );
+  
+}
+
+/**
+ * Custom access check for the self scheduling tab.
+ */ 
+function om_timeslot_scheduler_producer_tab_access() {
+  if (user_access('schedule own shows') || user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
+    $airings_per_show = variable_get('om_timeslot_scheduler_producer_airings', 1);
+    $node = node_load(arg(1));
+    if ($node->type != 'om_show') {
+      return FALSE;
+    }
+    if ($airings_per_show == 0) {
+      return TRUE;
+    }
+    if (empty($node->field_om_show_aired['und'][0]['value']) || $node->field_om_show_aired['und'][0]['value'] < $airings_per_show) {
+      return TRUE;
+    }
+  }
+}
+
+/**
+ * Helper function to take user through scheduling process.
+ */
+function om_timeslot_scheduler_producer_schedule($node) {
+  $channels = variable_get('om_timeslot_scheduler_producer_channels', NULL);
+  if ($channels == NULL) {
+    $message = t('Your station\'s website is not set up for producer scheduling. Please contact your station personnel.');
+    $render = array(
+      'no_channel_response' => array(
+        '#prefix' => '<p>',
+        '#markup' => $message,
+        '#suffix' => '</p>',
+      ),
+    );
+    return $render;
+  }
+
+  $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
+  $form_render = drupal_render($form);
+    $render = array(
+      'no_channel_response' => array(
+        '#prefix' => '<p>',
+        '#markup' => $form_render,
+        '#suffix' => '</p>',
+      ),
+    );
+  return $render;
+}
+/**
+ * Build a basic channel selector form for producers here.
+ */
+function om_timeslot_scheduler_producer_channel_form($form, $form_state, $channels) {
+  $options = array();
+  foreach ($channels AS $tid) {
+    $query = db_select('taxonomy_term_data', 'term');
+    $query->fields('term', array('name'));
+    $query->condition('tid', $tid, '=');
+    $result = $query->execute();
+    while($row = $result->fetchAssoc()) {
+      $options[$tid] = $row['name'];
+    }
+  }
+  $message = t('Confirm channel to schedule on.');
+  $form['om_timeslot_scheduler_producer_channel_form_step'] = array(
+    '#prefix' => '<p>',
+    '#markup' => '<em>Step 1 of 4</em> - ' . $message,
+    '#suffix' => '</p>',
+  );
+  if (count($options) > 1) {
+    $form['om_timeslot_scheduler_producer_channel_form_tid'] = array(
+      '#title' => t('Select a Channel'),
+      '#description' => t('Choose which channel you would like to schedule on.'),
+      '#options' => $options,
+      '#type' => 'select'
+    );
+  }
+  else {
+    foreach($options AS $tid => $name) {
+    $form['om_timeslot_scheduler_producer_channel_form_tid'] = array(
+      '#value' => $tid,
+      '#type' => 'hidden'
+    );
+      $form['om_timeslot_scheduler_producer_channel_form_message'] = array(
+        '#prefix' => '<p>',
+        '#markup' => t('Schedule onto channel: !channel', array('!channel' => $name)),
+        '#suffix' => '</p>',
+      );
+    }
+  }
+  $form['om_timeslot_scheduler_producer_channel_form_sumbit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Confirm'),
+  );
+  
+  $form['#submit'] = array('om_timeslot_scheduler_producer_channel_form_submit');
+  
+  return $form;
+}
+
+/**
+ * Submit handler for the above form.
+ */
+function om_timeslot_scheduler_producer_channel_form_submit($form, $form_state) {
+  drupal_goto('show/' . arg(1) . '/update_airings/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
+}
+
+/**
+ * After selecting a channel do a schedule update between now and the range producers are allowed to schedule.
+ */
+function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
+  $start = time();
+  $end = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
+  $function = 'om_broadcast_schedule_sync_schedule';
+  $batch = $function($channel_tid, $start, $end);
+  batch_set($batch);
+  batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');
+}
+
+/**
+ * Helper function to take the output of om_timeslot_scheduler_producer_timeslots
+ *   and turn it into a usable page.
+ */
+function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
+  $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
+  // Not sure why but this page title gets set to 'home'
+  drupal_set_title('Schedule Your Show');
+  // @TODO move these steps to theme function.
+  $message = t('Choose a timeslot and find dates.');
+  $steps_message = array(
+    'steps_message' => array(
+      '#prefix' => '<p>',
+      '#markup' => '<em>Step 2 of 4</em> - ' . $message,
+      '#suffix' => '</p>',
+    )
+  );
+  $used = array();
+  $series_render = array();
+  if (!empty($timeslots['series'])) {
+    $list_items = array();
+    foreach($timeslots['series'] AS $series) {
+      if (!in_array($series->entity_id ,$used)) {
+        $list_items[] = array(
+          '#prefix' => '<li>',
+            '#markup' => $series->title . ' -- ' . l('Find Dates', 'show/' . $show->nid . '/timeslot-dates/' . $series->entity_id . '/' . $channel_tid),
+          '#suffix' => '</li>',
+        );
+        $used[] = $series->entity_id;
+      }
+    }
+    $series_render = array(
+      'series_list' => array(
+         'title' => array(
+           '#prefix' => '<h2>',
+           '#markup' => 'Series Timeslots For Your Show',
+           '#suffix' => '</h2>',
+         ),
+         'list' => array(
+           '#prefix' => '<ul>',
+            'value' => $list_items,
+           '#suffix' => '</ul>',
+         )
+      )
+    );
+  }
+  $theme_render = array();
+  if (!empty($timeslots['theme'])) {
+    $list_items = array();
+    foreach($timeslots['theme'] AS $key => $theme) {
+      if (!in_array($theme->entity_id, $used)) {
+        $list_items[] = array(
+          '#prefix' => '<li>',
+          '#markup' => $theme->title . ' -- ' . l('Find Dates', 'show/' . $show->nid . '/timeslot-dates/' . $theme->entity_id . '/' . $channel_tid),
+          '#suffix' => '</li>',
+        );
+        $used[] = $theme->entity_id;
+      }
+    }
+    $theme_render = array(
+      'theme_list' => array(
+         'title' => array(
+           '#prefix' => '<h2>',
+           '#markup' => 'Theme Timeslots For Your Show',
+           '#suffix' => '</h2>',
+         ),
+         'list' => array(
+           '#prefix' => '<ul>',
+            'value' => $list_items,
+           '#suffix' => '</ul>',
+         )
+      )
+    );
+  }
+  if (empty($series_render) && empty($theme_render)) {
+    $back = l('Back', 'node/' . $show->nid);
+    $steps_message['empty message'] = array(
+      '#prefix' => '<p>',
+      '#markup' => t('There are no timeslots available for your show. Please contact station personel. !back to your show page.', array('!back' => $back)),
+      '#suffix' => '</p>'
+    );
+  }
+  return array_merge($steps_message, $series_render, $theme_render);;
+}
+
+/**
+ * Produce date interface.
+ */
+function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $channel_tid) {
+  $pid = om_timeslot_scheduler_get_pid();
+  // Not sure why but this page title gets set to 'home'
+  drupal_set_title('Schedule Your Show');
+  $message = t('Select an air date/time.');
+  $steps_message = array(
+    'steps_message' => array(
+      '#prefix' => '<p>',
+      '#markup' => '<em>Step 3 of 4</em> - ' . $message,
+      '#suffix' => '</p>',
+    )
+  );
+  // @TODO this is only grabbing 30 minute timeslots.
+  $dates = om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid);
+  $date_options = array();
+  
+  $query = db_select('node', 'n');
+  $query->fields('n', array('title'));
+  $query->condition('nid', $timeslot_nid, '=');
+  $result = $query->execute();
+  $title = $result->fetchAll();
+
+  $date_options = array(
+    'header' => array(
+      '#prefix' => '<p>',
+      '#markup' => 'Start Times Available For ' . $title[0]->title,
+      '#suffix' => '</p>',
+    ),
+    'date_options' => array(
+      '#prefix' => '<div>',
+      'value' => array(),
+      '#suffix' => '</div>',
+    ),
+  );
+
+  // Find out if the show is adult
+  if (!empty($show->field_om_rating[$show->language])) {
+    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
+  }
+  else {
+    $is_adult = FALSE;
+  }
+  foreach ($dates AS $date => $gaps) {
+    $list_items = array();
+    $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
+    foreach ($gaps AS $gap_set) {
+      foreach ($gap_set AS $gap) {
+        if ($gap['start'] + $show->field_om_show_duration['und'][0]['value'] + $spacer <= $gap['end']) {
+          $adult_hours = om_timeslot_scheduler_get_adult_hours($gap['start']);
+          // Check for adult content
+          if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
+            $list_items[] = array(
+              '#prefix' => '<li>',
+              '#markup' => l(date('h:i:s',  $gap['start']), 'show/' . $show->nid . '/commit-schedule/' . $gap['start'] . '/' . $gap['end'] . '/' . $channel_tid . '/'. $timeslot_nid .'/' . $pid),
+              '#suffix' => '</li>',
+            );
+          }
+        }
+        //else {
+        //  watchdog('Didnt fit GAP','spacer is '.$spacer . ' and duration is '. $show->field_om_show_duration['und'][0]['value'] . ' and start and end are ' . $gap['start'] . ' and ' . $gap['end']);
+        //}
+      }
+    }
+    if (!empty($list_items)) {
+      $date_options['date_options']['value'][] = array(
+        'title' => array(
+          '#prefix' => '<h3>',
+          '#markup' => date('Y-m-d', $date),
+          '#suffix' => '</h3>',
+        ),
+        'list' => array(
+          '#prefix' => '<ul>',
+          'list_items' => $list_items,
+          '#suffix' => '</ul>',
+        )
+      );
+    }
+  }
+  if (empty($date_options['date_options']['value'])) {
+    $date_options['date_options']['value'][] = array(
+      'title' => array(
+        '#prefix' => '<h3>',
+        '#markup' => t('No start times available.'),
+        '#suffix' => '</h3>',
+      ),
+      'message' => array(
+        '#prefix' => '<p>',
+        '#markup' => t('There were no start times available for your show in the timeslot you selected. Please select another timeslot or contact station personnel for assistance.'),
+        '#suffix' => '</p>',
+      )
+    );
+  }
+  return array_merge($steps_message, $date_options);
+}
+
+function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $channel_tid, $timeslot_nid, $pid) {
+  // More stuff that should be in the theme layer...
+  drupal_set_title('Schedule Your Show');
+  $date = date('Y-m-d G:i', $start);
+  $channel = taxonomy_term_load($channel_tid);
+  $already_processed = FALSE;
+  
+  // Lock this schedule run to the current process.
+  if (isset($pid)) {
+    $process = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
+    $already_processed = !empty($process) && $process[0]->process_status == 1 ? TRUE : FALSE;
+  }
+  else {
+    $already_processed = FALSE;
+  }
+  if ($already_processed == TRUE) {
+    $message = t('Summary');
+    $summary = t('Your show has already been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
+    $return = l('Return', 'node/' . $show->nid);
+    $return_message = t('!return to your show.', array('!return' => $return));
+    $output = array(
+      'steps_message' => array(
+        '#prefix' => '<p>',
+        '#markup' => '<em>Step 4 of 4</em> - ' . $message,
+        '#suffix' => '</p>',
+      ),
+      'summary_message' => array(
+        '#prefix' => '<p>',
+        '#markup' => $summary,
+        '#suffix' => '</p>',
+      ),
+      'return_to_show' => array(
+        '#prefix' => '<p>',
+        '#markup' => $return_message,
+        '#suffix' => '</p>',
+      )
+    );
+    return $output;
+  }
+  
+  $pbs = array_shift(om_playback_servers_get_pbs_by_term($channel_tid));
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  if (!empty($show->field_om_show_broadcast_file[$show->language])) {
+    $meta_data = $controller->metadata_record_from_uri($pbs, $show->field_om_show_broadcast_file[$show->language][0]['uri']);
+  }
+  else {
+    throw new Exception('This show was not found on playback server: ' . $pbs->name);
+    return;
+  }
+  
+  $process_record = new stdClass();
+  $process_record->start = $start;
+  $process_record->end = $end;
+  $process_record->channel_tid = $channel_tid;
+  $process_record->time = time();
+  $process_record->status = 0;
+  drupal_write_record('om_timeslot_scheduler_process', $process_record);
+
+  $cache_item = new stdClass();
+  $cache_item->pid = $pid;
+  $cache_item->start = $start;
+  $cache_item->end = $end;
+  $cache_item->show_id = $show->nid;
+  $cache_item->timeslot_id = $timeslot_nid;
+  $cache_item->time = time();
+  drupal_write_record('om_timeslot_scheduler_cache', $cache_item);
+
+  // Commit results
+  $meta_data['start'] = $start;
+  $controller->create_airing($pbs, $meta_data);
+
+  om_timeslot_scheduler_process_complete($pid);
+
+  $message = t('Summary');
+  $summary = t('Your show has been scheduled for !date on channel !channel', array('!date' => $date, '!channel' => $channel->name));
+  $return = l('Return', 'node/' . $show->nid);
+  $return_message = t('!return to your show.', array('!return' => $return));
+  $output = array(
+    'steps_message' => array(
+      '#prefix' => '<p>',
+      '#markup' => '<em>Step 4 of 4</em> - ' . $message,
+      '#suffix' => '</p>',
+    ),
+    'summary_message' => array(
+      '#prefix' => '<p>',
+      '#markup' => $summary,
+      '#suffix' => '</p>',
+    ),
+    'return_to_show' => array(
+      '#prefix' => '<p>',
+      '#markup' => $return_message,
+      '#suffix' => '</p>',
+    )
+  );
+  return $output;
+}
+
+/** Utility Functions **/
+
+/**
+ * Get all valid timeslots a show should be able to schedule into.
+ */
+function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
+  $weeks_out = variable_get('om_timeslot_scheduler_producer_range', 3);
+  $start = time();
+  $end = time() + ($weeks_out * 604800);
+
+  $series = array();
+  $themes = array();
+
+  // @TODO Change field_om_theme_tax to real field
+  $project_nid = $show->field_om_show_project['und'][0]['nid'];
+
+  // This show's series slots. field_om_timeslot_project
+  $query = db_select('field_data_field_om_timeslot_date', 'date');
+  $query->fields('date', array('entity_id', 'field_om_timeslot_date_value', 'field_om_timeslot_date_value2'));
+  $query->fields('n', array('title'));
+  $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
+  $query->join('field_data_field_om_timeslot_project', 'series', 'date.entity_id=series.entity_id');
+  $query->join('node', 'n', 'date.entity_id=n.nid');
+  $query->condition('field_om_timeslot_date_value', $start, '>=');
+  $query->condition('field_om_timeslot_date_value2', $end, '<=');
+  $query->condition('field_om_timeslot_channel_tid', $channel_tid, '=');
+  $query->condition('field_om_timeslot_project_nid', $project_nid, '=');
+  $result = $query->execute();
+  $series = $result->fetchAll();
+
+  if (isset($show->field_om_theme['und'][0]['tid'])) {
+    $project_theme = $show->field_om_theme['und'][0]['tid'];
+    // Shows with same theme.
+    if (variable_get('om_timeslot_scheduler_producer_themes', 1)) {
+      $query = db_select('field_data_field_om_timeslot_date', 'date');
+      $query->fields('date', array('entity_id', 'field_om_timeslot_date_value', 'field_om_timeslot_date_value2'));
+      $query->fields('n', array('title'));
+      $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
+      $query->join('field_data_field_om_timeslot_theme', 'theme', 'date.entity_id=theme.entity_id');
+      $query->join('node', 'n', 'date.entity_id=n.nid');
+      $query->condition('field_om_timeslot_date_value', $start, '>=');
+      $query->condition('field_om_timeslot_date_value2', $end, '<=');
+      $query->condition('field_om_timeslot_channel_tid', $channel_tid, '=');
+      $query->condition('field_om_timeslot_theme_tid', $project_theme, '=');
+      $result = $query->execute();
+      $themes = $result->fetchAll();
+    }
+  }
+  $timeslots = array(
+    'series' => $series,
+    'theme' => $themes,
+  );
+  return $timeslots;
+}
+
+/**
+ * Get timelot dates
+ */
+function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
+  $range = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
+  $query = db_select('field_data_field_om_timeslot_date', 'date');
+  $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
+  $query->fields('date', array('entity_id', 'field_om_timeslot_date_value', 'field_om_timeslot_date_value2'));
+  $query->fields('channel', array('field_om_timeslot_channel_tid'));
+  $query->condition('date.entity_id', $timeslot_nid, '=');
+  $query->condition('field_om_timeslot_date_value', time(), '>');
+  $query->condition('field_om_timeslot_date_value2', $range, '<');
+  $query->orderBy('field_om_timeslot_date_value', 'ASC');
+  $result = $query->execute();
+  $gaps = array();
+  $output = array();
+  // Get Gaps -- Unfortunately some of this is repeat from ots. Not sure how to abstract mini gap making yet.
+  while($dates = $result->fetchAssoc()) {
+    $output[$dates['field_om_timeslot_date_value']] = array();
+    $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
+    foreach($gaps AS $gap) {
+      $process_start = $gap['start'];
+      $process_end = $gap['end'];
+      if ($gap['end'] - $gap['start'] > 1800) {
+        // Figure out how many half hours are in this gap.
+        $half_hours = 0;
+        if (date('i', $gap['start']) !== "00") {
+          $start = $gap['start'];
+          $seconds_to_next = -($gap['start'] % 1800) + 1800;
+          $gap_parts[0] = array(
+            'start' => $start ,
+            'end' => $start + $seconds_to_next,
+          );
+          $gap['start'] += $seconds_to_next;
+          $half_hours++;
+        }
+        for ($i = $gap['start']; $i <= $gap['end']; $i += 1800) {
+          // divide gap into 30 min sub gaps, keeping track of how many 30 min segments we've gone through.
+          if ($i + 1800 <=  $gap['end']) {
+            $gap_parts[$half_hours]['start'] = $i;
+            $gap_parts[$half_hours]['end'] = $process_end;
+            $half_hours ++;
+          }
+        }
+      }
+      else {
+        // If the gap is < 30 min just use the gap in the new gap array.
+        $gap_parts[0]['end'] = $process_end;
+      }
+      // Always modify the start to be $process_start in case there is a leader.
+      $gap_parts[0]['start'] = $process_start;
+      $output[$dates['field_om_timeslot_date_value']][] = $gap_parts;
+    }
+  }// End While
+  return $output;
+}

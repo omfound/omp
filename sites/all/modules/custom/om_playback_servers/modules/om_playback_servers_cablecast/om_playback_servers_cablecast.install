@@ -1,0 +1,11 @@
+<?php
+
+function om_playback_servers_cablecast_field_schema($field) {
+  $columns = array(
+    'uri' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+  );
+  return array(
+    'columns' => $columns,
+    'indexes' => array(),
+  );
+}

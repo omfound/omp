@@ -1,0 +1,146 @@
+<?php
+/**
+ * Implementation of hook_permission().
+ */
+
+function om_show_permission() {
+  return array(
+    'administer show' => array(
+      'title' => t('Administer OM Show'), 
+      'description' => t('Administer OMP functionality for the show interface.'),
+    )
+  );
+}
+
+/**
+ * Implements hook_views_query_alter
+ */
+function om_show_views_query_alter(&$view, &$query) {
+  if ($view->name == 'user_projects' && user_access('administer show')) {
+    if (isset($query->where[0])) {
+      unset($query->where[0]);
+    }
+  }
+}
+
+function om_show_migrate_flash() {
+  db_set_active('legacy');
+  $query = "
+    SELECT content_type_om_show.nid, files.filepath FROM content_type_om_show
+    JOIN files ON files.fid = content_type_om_show.field_om_show_flash_fid";
+  $results = db_query($query);
+  $flash_files = array();
+  foreach ($results as $result) {
+    $flash_files[$result->nid] = $result->filepath;
+  }
+  db_set_active('default');
+
+  $query = "
+    SELECT node.nid, field_data_field_om_show_video.field_om_show_video_value, field_data_field_old_show_id.field_old_show_id_value
+    FROM {node}
+    JOIN {field_data_field_om_show_video} ON field_data_field_om_show_video.entity_id = node.nid
+    JOIN {field_data_field_old_show_id} ON field_data_field_old_show_id.entity_id = node.nid
+    WHERE field_data_field_om_show_video.field_om_show_video_value = '' AND node.type = 'om_show'";
+  $results = db_query($query);
+  $shows_without_video = array();
+  foreach($results as $result) {
+    $shows_without_video[$result->field_old_show_id_value] = $result->nid;
+  }
+
+  $update_shows = array();
+  foreach ($shows_without_video as $old_nid => $new_nid) {
+    if (!empty($flash_files[$old_nid])) {
+      $update_shows[$new_nid] = $flash_files[$old_nid];
+    }
+  }
+
+  $update_count = 0;
+  foreach($update_shows as $new_nid => $flash_file) {
+    $updated = db_update('field_data_field_om_show_video')
+      ->fields(array(
+        'field_om_show_video_value' => $flash_file,
+      ))
+      ->condition('field_data_field_om_show_video.entity_id', $new_nid, '=')
+      ->execute();
+    $update_count++;
+  }
+
+  drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
+}
+
+/**
+ * Implements hook_form_form_id_alter
+ */
+function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('administer show')) {
+    $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
+    foreach ($functional_fields AS $field) {
+      if (!empty($form[$field])) {
+        $form[$field]['#type'] = 'hidden';
+      }
+    }
+  }
+/*
+  // Auto population of metadata/contact info from project
+     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
+     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
+     
+    $form['om_show_metadata'] = array(
+       '#title' => t('Show Metadata'),
+       //'#description' => t('Metadata fields for this show.'),
+       '#type' => 'fieldset',
+       '#collapsible' => FALSE,
+       '#weight' => 1.5 ,
+       '#prefix' => '<div class = "show_metadata"',
+       '#suffix' => '</div>', 
+     );
+
+     // move metadata to fieldset
+     foreach ($om_show_meta_entities AS $field) {
+       $form['om_show_metadata'][$field] = $form[$field];
+       unset($form[$field]);
+     }
+     $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
+
+     // If there is a value for project try and load in meta values.
+     if (isset($key) && arg(2) != 'edit') {
+       $project = node_load($key);
+       foreach($om_show_meta_entities AS $field) {
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form['om_show_metadata'][$field][$project->language]['#default_value'] = $value;
+           }
+         }
+       }
+       foreach($om_show_project_info AS $field) {
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form[$field][$project->language][0]['value']['#default_value'] = $value;
+           }
+         }
+       }
+     }
+    
+    // Only provide ajax if we are on node add screen.
+    if (arg(2) != 'edit') {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
+      $form['field_om_show_project']['und']['#ajax'] = array(
+        'callback' => 'om_show_reload',
+        'wrapper' => 'om-show-node-form',
+        'event' => 'change',
+      );
+    }
+    else {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
+    }
+*/
+}
+
+function om_show_reload($form, $form_state) {
+  // We just need to return the form here so that the form is re-rendered.
+  return $form;
+}
