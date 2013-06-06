@@ -516,8 +516,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
-              $load = get_server_load();
-              dsm($load);
               $memory = memory_get_usage();
               dsm($memory);
                 $show = om_timeslot_scheduler_load_node($show_nid);
