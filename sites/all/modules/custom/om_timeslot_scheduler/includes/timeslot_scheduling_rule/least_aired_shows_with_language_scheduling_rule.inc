@@ -11,7 +11,6 @@ class leastAiredShowsWithLanguageSchedulingRule extends timeslotSchedulingRule {
       $query->join('field_data_field_om_language', 'language', 'language.entity_id=n.nid');
       $query->condition('field_om_language_tid', $language, '=');
     }
-    $query->condition('bundle', 'om_show', '='); 
     // If the timeslot being scheduled has a theme make sure shows share the theme.
     if (isset($timeslot->field_om_timeslot_theme['und'][0]['tid'])) {
       $query->join('field_data_field_om_theme', 'theme', 'theme.entity_id=n.nid');
