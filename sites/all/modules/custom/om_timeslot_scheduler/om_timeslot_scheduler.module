@@ -903,7 +903,8 @@ function _om_timeslot_scheduler_merge_array($val, $key, &$data) {
  */
 function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
   // If an airing is in the middle of a gap split the gap creating two new gaps.
-  if ($val['start'] < $data['start'] && $val['end'] > $data['end']) {
+  // @NB #LK we have set an arbitrary 3 minute minimum gap size to improve performance.
+  if ($val['start'] < $data['start'] && $val['end'] > $data['end'] && $data['start'] - $val['start'] > 180) {
     // Destroy original...
     unset($data['gaps'][$key]);
     // Split this gap into two gaps.
@@ -919,7 +920,7 @@ function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
     );
   }
   // If an airing is at the beginning of a gap trim the gap.
-  if ($val['start'] == $data['start'] && $val['end'] > $data['end']) {
+  if ($val['start'] == $data['start'] && $val['end'] > $data['end'] && $data['start'] - $val['start'] > 180) {
     // Destroy original...
     unset($data['gaps'][$key]);
     // Create new
@@ -930,7 +931,7 @@ function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
     );
   }
   // If an airing is at the end of the timeslot trim the gap.
-  if ($val['end'] == $data['end'] && $val['start'] < $data['start']) {
+  if ($val['end'] == $data['end'] && $val['start'] < $data['start'] && $data['start'] - $val['start'] > 180) {
     unset($data['gaps'][$key]);
     $data['gaps'][$key] = array(
       'start' => $val['start'],
