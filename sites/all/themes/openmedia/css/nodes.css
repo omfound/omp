@@ -328,6 +328,12 @@ body.page-node-add-om-project .form-item label
   float: left;
   margin-right: 10px;
 }
+body.page-node-add-om-show .form-type-textarea label,
+body.page-node-add-om-project .form-type-textarea label {
+  float: none;
+  margin-right: 0;
+}
+
 body.page-node-add-om-show .form-item label.option,
 body.page-node-add-om-project .form-item label.option
 {
