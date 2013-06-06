@@ -438,6 +438,8 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
+  $epic_start = time();
+  $epic_duration = 0;
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
   if (empty($run['timeslots'])) {
@@ -535,12 +537,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
-              //$memory = memory_get_usage();
-              //dsm($memory);
-              if (empty($testoid)) {
-                $testoid = 0;
-              }
-              $testoid ++;
+                $epic_duration += (time() - $epic_start);
                 $show = om_timeslot_scheduler_load_show_node($show_nid);
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
@@ -629,7 +626,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
   }// end foreach timeslot
-                dsm($testoid);
+  dsm("here it is" . $epic_duration);
 }
 
 /**
