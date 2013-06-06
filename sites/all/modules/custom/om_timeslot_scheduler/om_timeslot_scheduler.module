@@ -1144,7 +1144,6 @@ function om_timeslot_scheduler_commit_schedule_form($form, &$form_state, $pid) {
  * @return built node object
  */
 function om_timeslot_scheduler_load_show_node($nid) {
-/*
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
   //$query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
@@ -1185,9 +1184,8 @@ function om_timeslot_scheduler_load_show_node($nid) {
         )
       );
     }
-    return $result;
+    return FALSE;
   }
-  */
   return FALSE;
 }
 
