@@ -537,7 +537,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
-                $epic_duration += (time() - $epic_start);
+                $epic_duration += (time() - ($epic_start + $epic_duration));
                 $show = om_timeslot_scheduler_load_show_node($show_nid);
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
@@ -626,7 +626,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
   }// end foreach timeslot
-  dsm("here it is" . $epic_duration);
+  dsm("here it is " . $epic_duration);
 }
 
 /**
