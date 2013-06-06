@@ -1156,35 +1156,38 @@ function om_timeslot_scheduler_load_show_node($nid) {
   $query->condition('n.nid', $nid, '=');
   $resource = $query->execute();
   $result = $resource->fetchAll();
-  $result = array_shift($result);
-  if (isset($result->field_om_show_duration_value)) {
-    $result->field_om_show_duration = array(
-      $result->language => array(
-        0 => array(
-          'value' => $result->field_om_show_duration_value
+  if (!empty($result)) {
+    $result = array_shift($result);
+    if (isset($result->field_om_show_duration_value)) {
+      $result->field_om_show_duration = array(
+        $result->language => array(
+          0 => array(
+            'value' => $result->field_om_show_duration_value
+          )
         )
-      )
-    );
-  }
-  if (isset($result->field_om_show_aired_value)) {
-    $result->field_om_show_aired = array(
-      $result->language => array(
-        0 => array(
-          'value' => $result->field_om_show_aired_value
+      );
+    }
+    if (isset($result->field_om_show_aired_value)) {
+      $result->field_om_show_aired = array(
+        $result->language => array(
+          0 => array(
+            'value' => $result->field_om_show_aired_value
+          )
         )
-      )
-    );
-  }
-  if (isset($result->field_om_rating_tid)) {
-    $result->field_om_rating = array(
-      $result->language => array(
-        0 => array(
-          'value' => $result->field_om_rating_tid
+      );
+    }
+    if (isset($result->field_om_rating_tid)) {
+      $result->field_om_rating = array(
+        $result->language => array(
+          0 => array(
+            'value' => $result->field_om_rating_tid
+          )
         )
-      )
-    );
+      );
+    }
+    return $result;
   }
-  return $result;
+  return FALSE;
 }
 
 function om_timeslot_scheduler_load_timeslot_event_node($nid) {
