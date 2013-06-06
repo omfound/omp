@@ -388,6 +388,7 @@ function _om_timeslot_scheduler_implement_rules(&$context) {
   if (empty($run['timeslots'])) {
     return;
   }
+  dsm($run['timeslots']);
   foreach($run['timeslots'] AS $key => $timeslot) {
     $shows = om_timeslot_scheduler_render_timeslot_rule($timeslot);
     if (is_array($shows) && !empty($shows)) {
