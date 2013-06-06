@@ -320,7 +320,8 @@ function _om_timeslot_scheduler_schedule_window($run) {
  *  array standard context reference provided by batch process
  */
 function _om_timeslot_scheduler_get_timeslots($run, &$context) {
- $context['message'] = t('Gathering relevant timeslots.');
+  variable_set('om_timeslot_scheduler_run_time', time());
+  $context['message'] = t('Gathering relevant timeslots.');
   $query = db_select('field_data_field_om_timeslot_date', 'date');
   $query->fields('date', array('entity_id'));
   $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
@@ -673,6 +674,8 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations, 
  * Create schedule review page.
  */
 function om_timeslot_scheduler_process_complete_page($pid) {
+  $start = variable_get('om_timeslot_scheduler_run_time');
+  dsm('Run Duration: ' . time() - $start);
   $cache_items = array();
   $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
   if ($run_info[0]->process_status == 1) {
