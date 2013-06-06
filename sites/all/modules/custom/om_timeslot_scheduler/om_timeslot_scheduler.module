@@ -347,17 +347,24 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   while($row = $result->fetchAssoc()) {
     // Custom node load for timeslot events.
     $timeslot = om_timeslot_scheduler_load_timeslot_event_node($row['entity_id']);
-    //$is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
     if (!empty($timeslot)) {
-      $timeslot->field_om_timeslot_date = array(
-        $timeslot->language => array(
-          0 => array(
-            'value' => $row['field_om_timeslot_date_value'],
-            'value2' => $row['field_om_timeslot_date_value2']
+      if (empty($run['timeslots'][$timeslot->nid])) {
+        $timeslot->field_om_timeslot_date = array(
+          $timeslot->language => array(
+            0 => array(
+              'value' => $row['field_om_timeslot_date_value'],
+              'value2' => $row['field_om_timeslot_date_value2']
+            )
           )
-        )
-      );
-      $run['timeslots'][] = $timeslot;
+        );
+        $run['timeslots'][$timeslot->nid] = $timeslot;
+      }
+      else {
+        $run['timeslots'][$timeslot->nid]->field_om_timeslot_date[$timeslot->language][] = array(
+          'value' => $row['field_om_timeslot_date_value'],
+          'value2' => $row['field_om_timeslot_date_value2']
+        );
+      }
     }
   }
   if (empty($run['timeslots'])) {
@@ -783,21 +790,6 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
     'duration' => $end - $start,
     'show' => $show
   );
-}
-
-/**
- * Determine whether or not a timeslot is eligible for scheduling in this run.
- *
- * @param $timeslot
- *   standard node object for the timeslot in question.
- *
- * @returns boolean
- */
-function om_timeslot_scheduler_is_eligible_timeslot($timeslot) {
-  if (!empty($timeslot) && $timeslot->field_om_timeslot_automation[$timeslot->language][0]['value']) {
-    return TRUE;
-  }
-  return FALSE;
 }
 
 /**
