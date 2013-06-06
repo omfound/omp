@@ -957,7 +957,6 @@ function om_timeslot_scheduler_entity_get_rules($rule_name = NULL) {
     return $plugins;
   }
   else {
-    dsm($rule_name);
     $plugins = om_timeslot_scheduler_entity_get_rules();
     $plugin_info = ctools_plugin_get_info('om_timeslot_scheduler', 'timeslot_scheduling_rule');
     ctools_plugin_load_includes($plugin_info);
