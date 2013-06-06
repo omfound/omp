@@ -1186,8 +1186,8 @@ function om_timeslot_scheduler_load_show_node($nid) {
       );
     }
     return $result;
-*/
   }
+  */
   return FALSE;
 }
 
