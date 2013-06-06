@@ -1236,7 +1236,7 @@ function om_timeslot_scheduler_load_timeslot_event_node($nid) {
     }
     $timeslot->field_om_timeslot_rule = $field_structure;
     $timeslot->field_om_timeslot_rule[$result->language][0]['value'] = $result->field_om_timeslot_rule_value;
-    return $result;
+    return $timeslot;
   }
   return FALSE;
 }
