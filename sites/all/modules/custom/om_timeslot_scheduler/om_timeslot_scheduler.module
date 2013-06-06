@@ -438,8 +438,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
-  $epic_start = time();
-  $epic_duration = 0;
+  $loop_duration = 0;
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
   if (empty($run['timeslots'])) {
@@ -537,7 +536,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               // Begin normal scheduling...
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
-                $epic_duration += (time() - ($epic_start + $epic_duration));
+                $loop_start = time();
                 $show = om_timeslot_scheduler_load_show_node($show_nid);
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
@@ -613,6 +612,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     }
                   }
                 }// end if execute branding rule
+                $loop_duration += (time() - $loop_start);
               }// end foreach om_timeslot_showlist
             }// end foreach micro gap
           }// end foreach gap
@@ -626,7 +626,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
   }// end foreach timeslot
-  dsm("here it is " . $epic_duration);
+  dsm("loop duration: " . $loop_duration);
 }
 
 /**
