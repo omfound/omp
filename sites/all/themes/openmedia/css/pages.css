@@ -332,3 +332,7 @@ body.front h2.block-title {
   margin-top: 76px;
   margin-bottom: 0;
 }
+
+.hidden-form {
+  display: none;
+}

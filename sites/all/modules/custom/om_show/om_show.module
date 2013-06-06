@@ -1,8 +1,26 @@
 <?php
+
+/**
+ * Implementation of hook_menu()
+ */
+function om_show_menu() {
+  $items = array();
+
+  $items['admin/config/om/show'] = array(
+    'title' => 'Show Configuration',
+    'description' => 'Configuration for show options',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_show_admin_form'),
+    'access arguments' => array('administer show'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
 /**
  * Implementation of hook_permission().
  */
-
 function om_show_permission() {
   return array(
     'administer show' => array(
@@ -10,6 +28,16 @@ function om_show_permission() {
       'description' => t('Administer OMP functionality for the show interface.'),
     )
   );
+}
+
+function om_show_admin_form($form, &$form_state) {
+  $form['om_show_allow_web_input'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show the web url input on om show forms?'),
+    '#default_value' => variable_get('om_show_allow_web_input', 0),
+  );
+
+  return system_settings_form($form);
 }
 
 /**
@@ -76,7 +104,12 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
     foreach ($functional_fields AS $field) {
       if (!empty($form[$field])) {
-        $form[$field]['#type'] = 'hidden';
+        if ($field != 'field_om_show_video') {
+          $form[$field]['#type'] = 'hidden';
+        }
+        elseif (!variable_get('om_show_allow_web_input', false)) {
+          $form[$field]['#type'] = 'hidden';
+        }
       }
     }
   }
