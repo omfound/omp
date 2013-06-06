@@ -1222,15 +1222,15 @@ function om_timeslot_scheduler_load_timeslot_event_node($nid) {
       $timeslot->field_om_language = $field_structure;
       $timeslot->field_om_language[$result->language][0]['tid'] = $result->field_om_language_tid;
     }
-    if (!empty($result->project)) {
+    if (!empty($result->field_om_timeslot_project_nid)) {
       $timeslot->field_om_timeslot_project = $field_structure;
       $timeslot->field_om_timeslot_project[$result->language][0]['nid'] = $result->field_om_timeslot_project_nid;
     }
-    if (!empty($result->leader)) {
+    if (!empty($result->field_om_timeslot_leader_nid)) {
       $timeslot->field_om_timeslot_leader = $field_structure;
       $timeslot->field_om_timeslot_leader[$result->language][0]['nid'] = $result->field_om_timeslot_leader_nid;
     }
-    if (!empty($result->trailer)) {
+    if (!empty($result->field_om_timeslot_trailer_nid)) {
       $timeslot->field_om_timeslot_trailer = $field_structure;
       $timeslot->field_om_timeslot_trailer[$result->language][0]['nid'] = $result->field_om_timeslot_trailer_nid;
     }
