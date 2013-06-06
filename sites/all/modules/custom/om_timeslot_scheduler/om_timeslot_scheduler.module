@@ -1158,7 +1158,6 @@ function om_timeslot_scheduler_load_show_nodes() {
   $resource = $query->execute();
   while ($result = $resource->fetchObject()) {
     if (!empty($result)) {
-      $result = array_shift($result);
       if (isset($result->field_om_show_duration_value)) {
         $result->field_om_show_duration = array(
           $result->language => array(
