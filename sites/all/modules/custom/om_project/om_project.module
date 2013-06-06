@@ -137,7 +137,7 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
     
     $form['om_show_metadata'] = array(
       '#title' => t('Metadata'),
-      '#description' => t('These settings will trickle down to submitted shows (but you can override them if necessary).'),
+      '#description' => t('These settings will trickle down to submitted shows (but you can override them if necessary). Shows produced by members using station equipment default to a ').l('BY-NC-SA Creative Commons License.','http://creativecommons.org/licenses/by-nc-sa/3.0/us/').'.',
       '#type' => 'fieldset',
       '#collapsible' => FALSE,
       '#weight' => 3 ,

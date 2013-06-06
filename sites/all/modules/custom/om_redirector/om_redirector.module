@@ -1,0 +1,19 @@
+<?php
+
+function om_redirector_url_inbound_alter(&$path, $original_path, $path_language) {
+  if (strpos($_SERVER['HTTP_REFERER'], 'archive.org') !== false) {
+    $parts = explode('/', $original_path);
+    if (is_numeric($parts[1])) {
+      $query = "
+        SELECT entity_id
+        FROM {field_data_field_old_show_id} 
+        WHERE field_old_show_id_value = :showid
+        AND bundle = :type";
+      $result = db_query($query, array(':showid' => $parts[1], ':type' => 'om_show'));
+      if ($new_nid = $result->fetchField()) {
+        $path = drupal_get_path_alias('node/'.$new_nid);
+        drupal_goto($path);
+      }
+    }
+  }
+}

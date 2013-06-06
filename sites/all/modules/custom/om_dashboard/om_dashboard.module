@@ -168,3 +168,12 @@ function om_dashboard_get_panes() {
   }
   return $panes;
 }
+
+function om_dashboard_user_login(&$edit, $account) {
+  $redirection = 'dashboard';
+  
+  if (empty($_GET['destination']) && !is_null($redirection) && (!isset($_POST['form_id']) || $_POST['form_id'] != 'user_pass_reset')) {
+    $edit['redirect'] = $redirection;
+  }
+
+}
