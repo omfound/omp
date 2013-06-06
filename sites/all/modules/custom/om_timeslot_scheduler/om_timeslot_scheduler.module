@@ -538,6 +538,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
                 $loop_start = time();
                 //$show = om_timeslot_scheduler_load_show_node($show_nid);
+                $show = new stdClass();
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   $loop_duration += (time() - $loop_start);
                   continue;
