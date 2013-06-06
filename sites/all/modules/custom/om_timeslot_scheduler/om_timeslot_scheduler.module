@@ -1147,11 +1147,11 @@ function om_timeslot_scheduler_load_show_node($nid) {
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
   //$query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
-  $query->join('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
+  //$query->join('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
   $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
   $query->fields('duration', array('field_om_show_duration_value'));
   //$query->fields('air_count', array('field_om_show_aired_value'));
-  $query->fields('rating', array('field_om_rating_tid'));
+  //$query->fields('rating', array('field_om_rating_tid'));
   $query->condition('n.nid', $nid, '=');
   $resource = $query->execute();
   $result = $resource->fetchAll();
@@ -1184,7 +1184,7 @@ function om_timeslot_scheduler_load_show_node($nid) {
         )
       );
     }
-    return FALSE;
+    return $result;
   }
   return FALSE;
 }
