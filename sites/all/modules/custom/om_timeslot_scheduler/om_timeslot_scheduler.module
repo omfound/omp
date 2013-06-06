@@ -325,6 +325,7 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query = db_select('field_data_field_om_timeslot_date', 'date');
   $query->fields('date', array('entity_id', 'field_om_timeslot_date_value', 'field_om_timeslot_date_value2'));
   $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
+  $query->join('field_data_field_om_timeslot_automation', 'automation', 'automation.entity_id=date.entity_id');
     $and_1 = db_and();
     $and_1->condition('field_om_timeslot_date_value', $run['start'], '>=');
     $and_1->condition('field_om_timeslot_date_value2', $run['end'], '<=');
@@ -340,15 +341,14 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
     $or->condition($and_3);
   $query->condition($or);
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
+  $query->condition('field_om_timeslot_automation_value', 1, '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
   while($row = $result->fetchAssoc()) {
     // Custom node load for timeslot events.
-    //$timeslot = om_timeslot_scheduler_load_timeslot_event_node($row['entity_id']);
-    $timeslot = node_load($row['entity_id']);
-    $is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
-    if ($is_available) {
-/*
+    $timeslot = om_timeslot_scheduler_load_timeslot_event_node($row['entity_id']);
+    //$is_available = om_timeslot_scheduler_is_eligible_timeslot($timeslot);
+    if (!empty($timeslot)) {
       $timeslot->field_om_timeslot_date = array(
         $timeslot->language => array(
           0 => array(
@@ -357,7 +357,6 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
           )
         )
       );
-*/
       $run['timeslots'][] = $timeslot;
     }
   }
