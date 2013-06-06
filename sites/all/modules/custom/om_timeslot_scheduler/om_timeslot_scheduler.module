@@ -438,6 +438,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
+  $ze_shows = om_timeslot_scheduler_load_show_nodes();
   $loop_duration = 0;
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
@@ -537,7 +538,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               $used = 0;
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
                 $loop_start = time();
-                $show = om_timeslot_scheduler_load_show_node($show_nid);
+                //$show = om_timeslot_scheduler_load_show_node($show_nid);
+                $show = $ze_shows[$show_nid];
                 $loop_duration += (time() - $loop_start);
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
@@ -1143,6 +1145,56 @@ function om_timeslot_scheduler_commit_schedule_form($form, &$form_state, $pid) {
  *
  * @return built node object
  */
+function om_timeslot_scheduler_load_show_nodes() {
+  $all_shows = array();
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
+  $query->join('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
+  $query->join('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
+  $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
+  $query->fields('duration', array('field_om_show_duration_value'));
+  $query->fields('air_count', array('field_om_show_aired_value'));
+  $query->fields('rating', array('field_om_rating_tid'));
+  $resource = $query->execute();
+  while ($result = $resource->fetchObject()) {
+    if (!empty($result)) {
+      $result = array_shift($result);
+      if (isset($result->field_om_show_duration_value)) {
+        $result->field_om_show_duration = array(
+          $result->language => array(
+            0 => array(
+              'value' => $result->field_om_show_duration_value
+            )
+          )
+        );
+      }
+      if (isset($result->field_om_show_aired_value)) {
+        $result->field_om_show_aired = array(
+          $result->language => array(
+            0 => array(
+              'value' => $result->field_om_show_aired_value
+            )
+          )
+        );
+      }
+      if (isset($result->field_om_rating_tid)) {
+        $result->field_om_rating = array(
+          $result->language => array(
+            0 => array(
+              'value' => $result->field_om_rating_tid
+            )
+          )
+        );
+      }
+    }
+    $all_shows[$result->nid] = $result;
+  }
+  if (!empty($all_shows)) {
+    return $all_shows;
+  }
+  return FALSE;
+}
+
 function om_timeslot_scheduler_load_show_node($nid) {
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
