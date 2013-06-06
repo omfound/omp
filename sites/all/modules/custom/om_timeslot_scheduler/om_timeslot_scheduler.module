@@ -1204,11 +1204,13 @@ function om_timeslot_scheduler_load_timeslot_event_node($nid) {
   $query->fields('leader', array('field_om_timeslot_leader_nid'));
   $query->fields('trailer', array('field_om_timeslot_trailer_nid'));
   $query->fields('rule', array('field_om_timeslot_rule_value'));
+  $query->fields('automation', array('field_om_timeslot_automation_value'));
   $query->condition('n.nid', $nid, '=');
   $resource = $query->execute();
   $result = $resource->fetchAll();
   if (!empty($result)) {
     $result = array_shift($result);
+    dsm($result);
     $field_structure = array($result->language => array(0 => array()));
     $timeslot = new stdClass();
     $timeslot->nid = $result->nid;
@@ -1216,8 +1218,10 @@ function om_timeslot_scheduler_load_timeslot_event_node($nid) {
     $timeslot->language = $result->language;
     $timeslot->field_om_timeslot_theme = $field_structure;
     $timeslot->field_om_timeslot_theme[$result->language][0]['tid'] = $result->field_om_timeslot_theme_tid;
-    $timeslot->field_om_language = $field_structure;
-    $timeslot->field_om_language[$result->language][0]['tid'] = $result->field_om_language_tid;
+    if (!empty($result->field_om_language_tid)) {
+      $timeslot->field_om_language = $field_structure;
+      $timeslot->field_om_language[$result->language][0]['tid'] = $result->field_om_language_tid;
+    }
     if (!empty($result->project)) {
       $timeslot->field_om_timeslot_project = $field_structure;
       $timeslot->field_om_timeslot_project[$result->language][0]['nid'] = $result->field_om_timeslot_project_nid;
