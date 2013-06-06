@@ -1210,7 +1210,6 @@ function om_timeslot_scheduler_load_timeslot_event_node($nid) {
   $result = $resource->fetchAll();
   if (!empty($result)) {
     $result = array_shift($result);
-    dsm($result);
     $field_structure = array($result->language => array(0 => array()));
     $timeslot = new stdClass();
     $timeslot->nid = $result->nid;
