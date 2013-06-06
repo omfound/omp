@@ -421,11 +421,13 @@ function om_project_node_access($node, $op, $account) {
     $user_is_admin = FALSE;
     $user_had_access = FALSE;
     $members = om_project_get_project_members($node->nid);
-    foreach($members AS $member) {
-      if ($member->uid == $account->uid) {
-        $user_is_member = TRUE;
-        if ($member->isadmin == 1) {
-          $user_is_admin = TRUE;
+    if (!empty($members)) {
+      foreach($members AS $member) {
+        if ($member->uid == $account->uid) {
+          $user_is_member = TRUE;
+          if ($member->isadmin == 1) {
+            $user_is_admin = TRUE;
+          }
         }
       }
     }
