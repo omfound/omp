@@ -77,6 +77,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
         'timeslots' => array(),
         'errors' => array()
       );
+      dsm($run);
       // perform airing update steps.
       $context = array();
       _om_broadcast_schedule_get_pbs_airings($run, $context);
@@ -90,6 +91,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       _om_timeslot_scheduler_get_gaps($context);
       _om_timeslot_scheduler_build_schedule($context);
       $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), '', TRUE);
+      dsm($context);
       om_timeslot_scheduler_process_commit($pid, FALSE);
       watchdog('om_timeslot_scheduler_automation', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
     }
