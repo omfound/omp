@@ -3,6 +3,7 @@
 function om_agenda_manager_fetch_google_doc($url) {
   om_agenda_manager_google_api_init();
   $client = om_agenda_manager_google_api_init();
+  dsm($client);
   /**
   if ($client->getAccessToken()) {
     //do stuff
