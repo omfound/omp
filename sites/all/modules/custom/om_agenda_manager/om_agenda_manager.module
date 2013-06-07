@@ -21,7 +21,7 @@ function om_agenda_manager_google_api_init() {
   require_once $base.'/src/contrib/Google_PlusService.php';
 
   dsm('made it past include');
-  $client = new Google_Client();
+  //$client = new Google_Client();
   /**
   $client->setApplicationName('OMP Calendar Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
