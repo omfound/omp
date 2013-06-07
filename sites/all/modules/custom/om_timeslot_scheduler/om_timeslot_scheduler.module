@@ -425,7 +425,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
         }
       }
     }
-    dsm($gap_set);
     $timeslot->gaps = $gap_set;
     $run['timeslots'][$key] = $timeslot;
   }
