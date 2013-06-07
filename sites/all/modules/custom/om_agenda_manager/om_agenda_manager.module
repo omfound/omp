@@ -117,8 +117,27 @@ function om_agenda_manager_google_api_init() {
 function om_agenda_manager_parse_agenda($text) {
   //TODO: eventually need to support multiple options here
   //BASIC for Thornton
+  $start_match = '1. CALL TO ORDER';
+  $end_match = 'ADJOURNMENT';
   
   //break text into lines
   $lines = preg_split("/((\r?\n)|(\r\n?))/", $text);
-  dsm($lines);
+
+  $active = false;
+  $agenda_lines = array(); 
+  foreach ($lines as $key => $info) {
+    if (strpos($info, $start_match) !== false) {
+      $active = true;
+    }
+
+    if ($active) {
+      $agenda_lines[] = $info; 
+    }
+
+    if (strpos($info, $end_match) !== false) {
+      $active = false;
+    }
+  }
+
+  return $agenda_lines;
 }
