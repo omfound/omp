@@ -293,7 +293,9 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
     $or->condition($and_3);
   $query->condition($or);
   $result = $query->execute();
+  dpq($query);
   while($row = $result->fetchAssoc()) {
+    dsm($row);
     if (!in_array($row['entity_id'], $safe)) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
