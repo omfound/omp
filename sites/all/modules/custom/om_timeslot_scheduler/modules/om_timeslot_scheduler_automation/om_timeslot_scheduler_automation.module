@@ -84,7 +84,6 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       _om_broadcast_schedule_purge_unmatched($context);
       _om_broadcast_schedule_create_new($context);
       // reset context and perform scheduling steps.
-/*
       $context = array();
       _om_timeslot_scheduler_get_timeslots($run, $context);
       _om_timeslot_scheduler_implement_rules($context);
@@ -93,7 +92,6 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), '', TRUE);
       om_timeslot_scheduler_process_commit($pid, FALSE);
       watchdog('om_timeslot_scheduler_automation', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
-*/
     }
   }
 }
