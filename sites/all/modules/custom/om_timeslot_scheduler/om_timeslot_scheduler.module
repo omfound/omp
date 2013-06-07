@@ -302,6 +302,7 @@ function _om_timeslot_scheduler_schedule_window($run) {
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
   $steps[] = array('_om_timeslot_scheduler_build_schedule', array());
+  dsm($steps);
   $batch = array(
     'operations' => $steps,
     'finished' => '_om_timeslot_scheduler_batch_complete',
