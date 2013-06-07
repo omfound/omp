@@ -29,6 +29,8 @@ function om_agenda_manager_menu() {
     'access arguments' => array('administer agenda manager'),
     'type' => MENU_NORMAL_ITEM,
   );
+
+  return $items;
 }
 
 function om_agenda_manager_admin_form() {
