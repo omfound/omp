@@ -64,7 +64,7 @@ function om_agenda_manager_fetch_google_doc($url) {
 }
 
 function om_agenda_manager_google_authenticate() {
-  om_agenda_manager_google_client_create();
+  $client = om_agenda_manager_google_client_create();
   $client->authenticate();
   variable_set('om_agenda_manager_google_auth_token', $client->getAccessToken());
   drupal_goto('admin/config/om/agenda-manager');
