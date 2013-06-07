@@ -3,7 +3,7 @@
 function om_agenda_manager_fetch_google_doc($url) {
   om_agenda_manager_google_api_init();
   $client = om_agenda_manager_google_api_init();
-
+  /**
   if ($client->getAccessToken()) {
     //do stuff
     print 'authenticated';
@@ -12,7 +12,7 @@ function om_agenda_manager_fetch_google_doc($url) {
     $authUrl = $client->createAuthUrl();
     print "<a href='$authUrl'>Connect Me!</a>";
     return;
-  }
+  }**/
 }
 
 function om_agenda_manager_google_api_init() {
