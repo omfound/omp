@@ -296,9 +296,12 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
  */
 function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
+  // NB: For the most accurate airing keeping possible start and end 
+  // going to om_broadcast_schedule_schedule_sync_steps need to be the start of the first timeslot
+  // and the end of the last timeslot, not the run start and end.
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
-  array_unshift($steps, array('_om_timeslot_scheduler_get_timeslots', array($run)));
+  $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
   $steps[] = array('_om_timeslot_scheduler_get_gaps', array());
   $steps[] = array('_om_timeslot_scheduler_build_schedule', array());
@@ -344,17 +347,14 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_automation_value', 1, '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
-  $first = TRUE;
   while($row = $result->fetchAssoc()) {
     // Custom node load for timeslot events.
     $timeslot = node_load($row['entity_id']);
     if (!empty($timeslot)) {
-      if ($first == TRUE) {
-        $first = FALSE;
-        $run['start'] = $row['field_om_timeslot_date_value'];
+      if (empty($run['extent_start'])) {
+        $run['extent_start'] = $row['field_om_timeslot_date_value'];
       }
-      dsm($row);
-      $run['end'] = $row['field_om_timeslot_date_value2'];
+      $run['extent_end'] = $row['field_om_timeslot_date_value2'];
       if (empty($run['timeslots'][$timeslot->nid])) {
         $timeslot->field_om_timeslot_date = array(
           $timeslot->language => array(
@@ -427,7 +427,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach ($timeslot->field_om_timeslot_date['und'] AS $date) {
         // Get the time range for appropriate dates as a timeslot an hold many date repeats.
-        if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
+        if (($date['value'] >= $run['extent_start'] && $date['value2'] <= $run['extent_end']) || ($date['value'] <= $run['extent_start'] && $date['value2'] >= $run['extent_start']) || ($date['value'] <= $run['extent_end'] && $date['value2'] >= $run['extent_end'])) {
          $gap_set[$date['value']] = om_timeslot_scheduler_get_gaps($run['channel_tid'], $date['value'], $date['value2']);
         }
       }
