@@ -53,14 +53,27 @@ function om_agenda_manager_admin_form() {
 function om_agenda_manager_fetch_google_doc($url) {
   $client = om_agenda_manager_google_client_create();
   if ($client->getAccessToken()) {
-    //do stuff
-    print 'authenticated';
+    $fileId = om_agenda_manager_google_doc_id_from_url($url);
+    $service = new Google_DriveService($client);
+    $file = $service->files->get($fileId);
+    print "Title: " . $file->getTitle();
     return;
   } else {
-    $authUrl = $client->createAuthUrl();
-    print "<a href='$authUrl'>Connect Me!</a>";
-    return;
+    return false;
   }
+}
+
+function om_agenda_manager_google_doc_id_from_url($url) {
+  $parts = parse_url($url);
+  $path_parts = explode('/', $parts['path']);
+
+  foreach ($path_parts as $key => $value) {
+    if ($value == 'd') {
+      $id_key = $key+1;
+    }
+  }
+
+  return $path_parts[$id_key];
 }
 
 function om_agenda_manager_google_authenticate() {
