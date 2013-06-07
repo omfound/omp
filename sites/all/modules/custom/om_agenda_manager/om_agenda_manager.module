@@ -57,7 +57,7 @@ function om_agenda_manager_fetch_google_doc($url) {
     $service = new Google_DriveService($client);
     $file = $service->files->get($fileId);
     $downloadUrl = $file->getDownloadUrl();
-    dsm($downloadUrl);
+    dsm('download url: '.$downloadUrl);
     if ($downloadUrl) {
       $request = new Google_HttpRequest($downloadUrl, 'GET', null, null);
       $httpRequest = Google_Client::$io->authenticatedRequest($request);
