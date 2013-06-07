@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * Implementation of hook_permission().
+ */
+function om_agenda_manager_permission() {
+  return array(
+    'administer agenda manager' => array(
+      'title' => t('Administer Agenda Manager'), 
+      'description' => t('Administer OMP functionality for the agenda interface.'),
+    )
+  );
+}
+
+function om_agenda_manager_menu() {
+  $items = array();
+
+  $items['google/auth'] = array(
+    'title' => t('Google Authentication'),
+    'page callback' => 'om_agenda_manager_google_authenticate',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  $items['admin/config/om/agenda-manager'] = array(
+    'title' => 'Agenda Manager Configuration',
+    'description' => 'Agenda Manager Configuration options',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_agenda_manager_admin_form'),
+    'access arguments' => array('administer agenda manager'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function om_agenda_manager_admin_form() {
+  $form = array();
+
+  $client = om_agenda_manager_google_client_create();
+  if ($client->getAccessToken()) {
+    $markup = t('Authentication is setup for this site');
+  }else{
+    $markup = '<a href='.$client->createAuthUrl().'>Click here to setup Google Authentication</a>';
+  }
+
+  $form['om_agenda_google_authentication'] = array(
+    '#markup' => $markup,
+  );
+
+  return system_settings_form($form); 
+}
+
+function om_agenda_manager_fetch_google_doc($url) {
+  $client = om_agenda_manager_google_client_create();
+  if ($client->getAccessToken()) {
+    //do stuff
+    print 'authenticated';
+    return;
+  } else {
+    $authUrl = $client->createAuthUrl();
+    print "<a href='$authUrl'>Connect Me!</a>";
+    return;
+  }
+}
+
+function om_agenda_manager_google_authenticate() {
+  $client = om_agenda_manager_google_client_create();
+  $client->authenticate();
+  variable_set('om_agenda_manager_google_auth_token', $client->getAccessToken());
+  drupal_goto('admin/config/om/agenda-manager');
+}
+
+function om_agenda_manager_google_client_create() {
+  om_agenda_manager_google_api_init();
+
+  $client = new Google_Client();
+  $client->setApplicationName('OMP Calendar Manager');
+  $client->setClientId('253524767921.apps.googleusercontent.com');
+  $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
+  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
+  $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
+  $client->setScopes(array('https://www.googleapis.com/auth/drive'));
+  $client->setUseObjects(true);
+  
+  if ($token = variable_get('om_agenda_manager_google_auth_token', false)) { 
+    $client->setAccessToken($token);
+  }
+
+  return $client;
+}
+
+function om_agenda_manager_google_api_init() {
+  $base = libraries_get_path('google-api-php-client');
+  require_once $base.'/src/Google_Client.php';
+  require_once $base.'/src/contrib/Google_PlusService.php';
+}
