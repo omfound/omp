@@ -61,16 +61,12 @@ function om_agenda_manager_fetch_google_doc($url) {
       $request = new Google_HttpRequest($downloadUrl, 'GET', null, null);
       $httpRequest = Google_Client::$io->authenticatedRequest($request);
       if ($httpRequest->getResponseHttpCode() == 200) {
-        dsm('printing');
-        print $httpRequest->getResponseBody();
-      } else {
-        print 'fail';
+        return $httpRequest->getResponseBody();
       }
     }
-    return;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 function om_agenda_manager_google_doc_id_from_url($url) {
