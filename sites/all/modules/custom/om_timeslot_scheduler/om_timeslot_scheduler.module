@@ -344,9 +344,7 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_automation_value', 1, '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
-  $count = 1;
   while($row = $result->fetchAssoc()) {
-    dsm($row);
     // Custom node load for timeslot events.
     $timeslot = node_load($row['entity_id']);
     if (!empty($timeslot)) {
@@ -354,9 +352,7 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
       if (empty($run['extent_start'])) {
         $run['extent_start'] = $row['field_om_timeslot_date_value'];
       }
-      if ($count == $result->rowCount()) {
-        $run['extent_end'] = $row['field_om_timeslot_date_value2'];
-      }
+      $run['extent_end'] = $row['field_om_timeslot_date_value2'];
       if (empty($run['timeslots'][$timeslot->nid])) {
         $timeslot->field_om_timeslot_date = array(
           $timeslot->language => array(
@@ -864,7 +860,6 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   array_walk($normal, '_om_timeslot_scheduler_merge_array', array(&$airings));
   array_walk($intruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
   array_walk($extruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
-
   $gaps = array();
   $gaps[] = array(
     'start' => $start,
