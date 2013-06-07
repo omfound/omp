@@ -679,7 +679,6 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations, 
       }
     }
   }
-  dsm($results);
   if ($return_pid == TRUE) {
     return $pid;
   }
@@ -729,6 +728,8 @@ function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
       $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
       if (!empty($meta_data)) {
         $meta_data = array_merge((array)$meta_data, (array)$item);
+        dsm($item);
+        dsm($show_node);
         $result = $controller->create_airing($pbs, $meta_data);
         if (isset($result['ScheduleID'])) {
           $airing = array(
