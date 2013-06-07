@@ -41,7 +41,7 @@ function om_agenda_manager_admin_form() {
   if ($client->getAccessToken()) {
     $markup = t('Authentication is setup for this site');
   }else{
-    $markup = '<a href='.$client->createAuthUrl.'>Click here to setup Google Authentication</a>';
+    $markup = '<a href='.$client->createAuthUrl().'>Click here to setup Google Authentication</a>';
   }
 
   $form['om_agenda_google_authentication'] = array(
