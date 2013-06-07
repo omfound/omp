@@ -32,9 +32,9 @@ function om_agenda_manager_google_api_init() {
  
   if (isset($_SESSION['token'])) {
     $client->setAccessToken($_SESSION['token']);
-    return $client;
   } elseif ($client->getAccessToken()) {
     $_SESSION['token'] = $client->getAccessToken();
-    return $client;
   }
+
+  return $client;
 }
