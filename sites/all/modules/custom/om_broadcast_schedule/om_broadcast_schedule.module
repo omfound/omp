@@ -238,7 +238,6 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
         $airing['channel_tid'] = $run_info['channel_tid'];
         $airing_array[] = $airing;
       }
-      dsm($airing_array);
       // $airing_array in context
       $context['results']['run_info'] = $run_info;
       $context['results']['airing_values'] = $airing_array;
