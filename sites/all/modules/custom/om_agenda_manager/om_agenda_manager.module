@@ -37,6 +37,7 @@ function om_agenda_manager_admin_form() {
   $form = array();
 
   $client = om_agenda_manager_google_client_create();
+  dsm($client);
   if ($client->getAccessToken()) {
     $markup = t('Authentication is setup for this site');
   }else{
