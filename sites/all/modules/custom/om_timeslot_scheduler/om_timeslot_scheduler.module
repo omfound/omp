@@ -344,10 +344,18 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
   $query->condition('field_om_timeslot_automation_value', 1, '=');
   $query->orderBy('field_om_timeslot_date_value', 'ASC');
   $result = $query->execute();
+  $count = 1;
   while($row = $result->fetchAssoc()) {
     // Custom node load for timeslot events.
     $timeslot = node_load($row['entity_id']);
     if (!empty($timeslot)) {
+      $count ++;
+      if (empty($run['extent_start'])) {
+        $run['extent_start'] = $row['field_om_timeslot_date_value'];
+      }
+      if ($count == $result->rowCount()) {
+        $run['extent_end'] = $row['field_om_timeslot_date_value2'];
+      }
       if (empty($run['timeslots'][$timeslot->nid])) {
         $timeslot->field_om_timeslot_date = array(
           $timeslot->language => array(
@@ -412,6 +420,8 @@ function _om_timeslot_scheduler_implement_rules(&$context) {
 function _om_timeslot_scheduler_get_gaps(&$context) {
   $context['message'] = t('Finding gaps in timeslots.');
   $run = $context['results']['run'];
+  dsm($context);
+  dsm($run);
   if (empty($run['timeslots'])) {
     return;
   }
