@@ -16,9 +16,10 @@ function om_agenda_manager_fetch_google_doc($url) {
 }
 
 function om_agenda_manager_google_api_init() {
-  //require_once DRUPAL_ROOT . '/sites/all/libraries/google-api-php-client/src/Google_Client.php';
-  //require_once DRUPAL_ROOT . '/sites/all/libraries/google-api-php-client/src/contrib/Google_PlusService.php';
+  require_once '/sites/all/libraries/google-api-php-client/src/Google_Client.php';
+  require_once '/sites/all/libraries/google-api-php-client/src/contrib/Google_PlusService.php';
 
+  dsm('made it past include');
   $client = new Google_Client();
   $client->setApplicationName('OMP Calendar Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
