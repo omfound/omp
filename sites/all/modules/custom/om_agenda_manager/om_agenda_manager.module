@@ -1,0 +1,37 @@
+<?php
+
+function om_agenda_manager_fetch_google_doc($url) {
+  om_agenda_manager_google_api_init();
+  $client = om_agenda_manager_google_api_init();
+
+  if ($client->getAccessToken()) {
+    //do stuff
+    print 'authenticated';
+    return;
+  } else {
+    $authUrl = $client->createAuthUrl();
+    print "<a href='$authUrl'>Connect Me!</a>";
+    return;
+  }
+}
+
+function om_agenda_manager_google_api_init() {
+  require_once DRUPAL_ROOT . '/sites/all/libraries/google-api-php-client/src/Google_Client.php';
+  require_once DRUPAL_ROOT . '/sites/all/libraries/google-api-php-client/src/contrib/Google_PlusService.php';
+
+  $client = new Google_Client();
+  $client->setApplicationName('OMP Calendar Manager');
+  $client->setClientId('253524767921.apps.googleusercontent.com');
+  $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
+  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/');
+  $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
+  $plus = new Google_PlusService($client);
+ 
+  if (isset($_SESSION['token'])) {
+    $client->setAccessToken($_SESSION['token']);
+    return $client;
+  } elseif ($client->getAccessToken()) {
+    $_SESSION['token'] = $client->getAccessToken();
+    return $client;
+  } 
+}
