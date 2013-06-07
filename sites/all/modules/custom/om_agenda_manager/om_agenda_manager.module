@@ -22,6 +22,7 @@ function om_agenda_manager_google_api_init() {
 
   dsm('made it past include');
   $client = new Google_Client();
+  /**
   $client->setApplicationName('OMP Calendar Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
   $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
@@ -35,5 +36,5 @@ function om_agenda_manager_google_api_init() {
   } elseif ($client->getAccessToken()) {
     $_SESSION['token'] = $client->getAccessToken();
     return $client;
-  } 
+  } **/
 }
