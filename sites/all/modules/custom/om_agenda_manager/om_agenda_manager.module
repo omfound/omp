@@ -16,8 +16,9 @@ function om_agenda_manager_fetch_google_doc($url) {
 }
 
 function om_agenda_manager_google_api_init() {
-  require_once '/sites/all/libraries/google-api-php-client/src/Google_Client.php';
-  require_once '/sites/all/libraries/google-api-php-client/src/contrib/Google_PlusService.php';
+  $base = libraries_get_path('google-api-php-client');
+  require_once $base.'/src/Google_Client.php';
+  require_once $base.'/src/contrib/Google_PlusService.php';
 
   dsm('made it past include');
   $client = new Google_Client();
