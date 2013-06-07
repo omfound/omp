@@ -61,10 +61,11 @@ function om_agenda_manager_fetch_google_doc($url) {
   }
 }
 
-function om_agenda_manager_google_api_auth_url() {
-  $client = om_agenda_manager_google_client_create();
-  $authUrl = $client->createAuthUrl();
-  return $authUrl;
+function om_agenda_manager_google_authenticate() {
+  om_agenda_manager_google_client_create();
+  $client->authenticate();
+  variable_set('om_agenda_manager_google_auth_token', $client->getAccessToken());
+  drupal_goto('admin/config/om/agenda-manager');
 }
 
 function om_agenda_manager_google_client_create() {
@@ -74,7 +75,7 @@ function om_agenda_manager_google_client_create() {
   $client->setApplicationName('OMP Calendar Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
   $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
-  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/');
+  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
   $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
   
   if ($token = variable_get('om_agenda_manager_google_auth_token', false)) { 
