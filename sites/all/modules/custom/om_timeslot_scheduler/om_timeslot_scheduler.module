@@ -679,6 +679,7 @@ function _om_timeslot_scheduler_batch_complete($success, $results, $operations, 
       }
     }
   }
+  dsm($results);
   if ($return_pid == TRUE) {
     return $pid;
   }
