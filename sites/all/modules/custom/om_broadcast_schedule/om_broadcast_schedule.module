@@ -200,8 +200,6 @@ function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
  *
  */
 function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
-  dsm($start);
-  dsm($end);
   $info = array(
     'channel_tid' => $channel_tid,
     'start' => $start,
