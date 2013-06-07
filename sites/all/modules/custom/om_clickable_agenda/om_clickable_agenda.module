@@ -1,0 +1,373 @@
+<?php  
+
+/**
+ * Implementation of hook_permission().
+ */
+function om_clickable_agenda_permission() {
+ return array(
+    'access clickable agenda' => array(
+      'title' => t('Access Clickable Agenda'),
+      'description' => t('Access and use the clickable agenda tab on show nodes.'),
+    ),
+    'access live broadcast page' => array(
+      'title' => t('Access Live Broadcast Page'),
+      'description' => t('Access and administer live broadcast page.'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function om_clickable_agenda_menu() {
+  $items['node/%node/agenda_manager'] = array(
+    'title' => 'Agenda Manager',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agenda_manager_form', 1),
+    'access callback' => 'om_clickable_agenda_check_for_session_node',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK
+  );
+  $items['create-cue-point'] = array(
+    'title' => 'Create a Cue Point',
+    'page callback' => 'om_clickable_agenda_save_cue_point',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['delete-cue-point'] = array(
+    'title' => 'Delete a Cue Point',
+    'page callback' => 'om_clickable_agenda_delete_cue_point',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['list-cue-points'] = array(
+    'title' => 'Create a Cue Point',
+    'page callback' => 'om_clickable_agenda_list_cue_points',
+    'page arguments' => array(1),
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['get-session-bills'] = array(
+    'title' => 'Get Session Bills',
+    'page callback' => 'get_session_bills',
+    'page arguments' => array(1),
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['change-session-status'] = array(
+    'title' => 'Change Session Status',
+    'page callback' => 'om_clickable_agenda_change_session_status',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  // AJAX endpoints for our custom table
+  $items['write-agenda-session'] = array(
+    'page callback' => '_om_clickable_agenda_create_custom_session',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['get-agenda-session'] = array(
+    'page callback' => '_om_clickable_agenda_get_custom_session',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['delete-agenda-session'] = array(
+    'page callback' => '_om_clickable_agenda_delete_custom_session',
+    'access arguments' => array('access clickable agenda'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_library
+ */
+function om_clickable_agenda_library() {
+  $libraries['underscore'] = array(
+    'title' => 'Underscore JS',
+    'website' => 'http://underscorejs.org',
+    'version' => '1.4.3',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('underscore') . '/underscore-min.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    )
+  );
+  $libraries['backbone'] = array(
+    'title' => 'Backbone JS',
+    'website' => 'http://backbonejs.org',
+    'version' => '0.9.10',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('backbone') . '/backbone-min.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    )
+  );
+  return $libraries;
+}
+
+/**
+ * Check to make sure we are on a "session" node
+ */
+function om_clickable_agenda_check_for_session_node($node){
+  if ($node->type == 'om_show' && user_access('access clickable agenda')) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Endpoint to list a session nodes.
+ */
+function get_session_bills($nid) {
+  $node = node_load($nid);
+  $calendar_url = 'http://www.coloradochannel.net/'.$node->field_session_calendar[0]['filepath'];
+  //$bills = getBillsFromCalendar($calendar_url);
+  $bills = archive_migrator_bills_from_calendar($calendar_url);
+  $json = array();
+  foreach($bills AS $bill) {
+    $bill['text'] = utf8_encode($bill['text']);
+    $json[] = array('title' => str_replace(array("\r", "\n", "<", ">", "&"), array('\r', '\n', '\x3c', '\x3e', '\x26'), $bill['text']));
+  }
+  print drupal_json_encode($json);
+}
+
+function agenda_manager_form(&$form_state, $node) {
+  $nid = $node->nid;
+  $form['session_controls'] = array(
+    '#type' => 'fieldset'
+  );
+  $form['session_controls']['time_toggle'] = array(
+    '#value' => '<div id="agenda-time-toggle">Start Timer</div>',
+  );
+  $query_obj = new stdClass();
+  $query_obj->nid = $nid;
+  $previous_session = om_clickable_agenda_get_custom_session($query_obj);
+  $active_session = om_clickable_agenda_get_session_status();
+  if (!empty($previous_session) && (($previous_session['nid'] == $active_session['houseSession'] && $active_session['house'] == "Live") || ($previous_session['nid'] == $active_session['senateSession'] && $active_session['senate'] == "Live"))) {
+    $session_seconds = time() - $previous_session['initialized'];
+  }
+  else {
+    $session_seconds = 0;
+  }
+  $form['session_controls']['time_container'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $session_seconds,
+    '#attributes' => array('id' => array('timer-wrapper'))
+  );
+  $form['session_controls']['session_toggle'] = array(
+    '#type' => 'checkboxes',
+    '#options' => array('live' => 'Make This Session Live')
+  );
+  $form['session_controls']['session_type'] = array(
+    '#type' => 'select',
+    '#options' => array('house' => t('House'), 'senate' => t('Senate')),
+    '#suffix' => '<div id="session-status"></div>'
+  );
+  $form['session_controls']['active_sessions'] = array(
+    '#value' => '<div id="active-sessions"></div>',
+  );
+  $form['add_bill'] = array(
+    '#type' => 'fieldset',
+  );
+  $form['add_bill']['add_bill_box'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Add an Agenda Item'),
+    '#default_value' => '',
+    '#size' => 50,
+    '#maxlength' => 128,
+  );
+  $form['add_bill']['submit'] = array(
+    '#type' => 'submit', 
+    '#value' => t('Add to Recorded')
+  );
+  $video = "<iframe src='http://www.coloradochannel.net/node/" . $nid . "?width=425&height=280&embed=true' width='425' height='280' frameborder='0' scrolling='no'></iframe>";
+  //$video = "<div id='video'></div>";
+  $form['video_player'] = array(
+    '#type' => 'markup',
+    '#value' => $video
+  );
+  return $form;
+}
+
+/**
+ * Implements hook_init()
+ */
+function om_clickable_agenda_init() {
+  if (arg(2) == 'agenda_manager') {
+    $libary_path = 'sites/all/libraries';
+    drupal_add_js($libary_path . '/json2/json2.js');
+    drupal_add_js($libary_path . '/underscore/underscore-min.js');
+    drupal_add_js($libary_path . '/backbone/backbone-min.js');
+    drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js');
+    $node = menu_get_object();
+    $nid = $node->nid;
+    $session_status = om_clickable_agenda_get_session_status();
+    drupal_add_js(array('clickableAgenda' => array('currentNodeId' => $nid, 'sessionStatus' => $session_status)), 'setting');
+  }
+}
+
+/**
+ * Listen for POST data from script to save or update nodes.
+ */
+function om_clickable_agenda_save_cue_point() {
+  if (!empty($_POST['node'])) {
+    $node_data = drupal_json_decode($_POST['node']);
+    if (empty($node_data->nid)) {
+      $node = new StdClass();
+      $node->type = 'agenda_cue_point';
+      $node->status = 1;
+    }
+    else {
+      $node = node_load($node_data->nid);
+    }
+    $node->title = $node_data->title;
+    if (!empty($node_data->node_revisions_body)) {
+      $node->body = $node_data->node_revisions_body;
+    }
+    $node->field_session_reference = array(
+      0 => array(
+        'nid' => $node_data->node_data_field_session_reference_field_session_reference_nid
+      )
+    );
+    $node->field_cue_seconds = array(
+      0 => array(
+        'value' => $node_data->node_data_field_cue_seconds_field_cue_seconds_value
+      )
+    );
+    node_save($node);
+    print drupal_json_encode($node);
+  }
+}
+/**
+ * Endpoint to set session status on the live broadcast node.
+ */
+function om_clickable_agenda_change_session_status() {
+  if (empty($_POST['sessionUpdate'])) {
+    $json = drupal_json_decode($_POST['sessionStatus']);
+    // Load the live broadcast node.
+    $node = node_load(1620);
+    if (!empty($json->senate)) {
+      $value = trim(ucwords($json->senate));
+      if ($value != 'Offline') {
+        $node->field_senate_video_status[0]['value'] = $value;
+        if ($value == 'Live' && !empty($json->senateNid)) {
+          $node->field_active_session_senate[0]['value'] = $json->senateNid;
+        }
+      }
+    }
+    if (!empty($json->house)) {
+      $value = trim(ucwords($json->house));
+      if ($value != 'Offline') {
+        $node->field_house_video_status[0]['value'] = $value;
+        if ($value == 'Live' && !empty($json->houseNid)) {
+          $node->field_active_session_house[0]['value'] = $json->houseNid;
+        }
+      }
+    }
+    node_save($node);
+  }
+}
+
+function om_clickable_agenda_get_session_status() {
+  $node = node_load(1620);
+  return array(
+    'house' => $node->field_house_video_status[0]['value'],
+    'houseSession' => $node->field_active_session_house[0]['value'],
+    'senate' => $node->field_senate_video_status[0]['value'],
+    'senateSession' => $node->field_active_session_senate[0]['value'],
+  );
+}
+
+/**
+ * Endpoint to delete a cue point node.
+ */
+function om_clickable_agenda_delete_cue_point() {
+  if (!empty($_POST['node'])) {
+    $node_data = drupal_json_decode($_POST['node']);
+    if (!empty($node_data->nid)) {
+      node_delete($node_data->nid);
+    }
+  }
+}
+
+/**
+ * Endpoint to list a cue point nodes.
+ */
+function om_clickable_agenda_list_cue_points($nid) {
+  $args = array();
+  $args[] = $nid;
+  $view = views_get_view('session_agenda');
+  $view->preview('block_1', $args);
+  print drupal_json_encode($view->result);
+}
+
+function om_clickable_agenda_create_custom_session($session_obj) {
+  if (is_object($session_obj)) {
+    drupal_write_record('om_clickable_agenda_sessions', $session_obj);
+  }
+}
+
+function _om_clickable_agenda_create_custom_session() {
+  if (isset($_POST['customSession'])) {
+    $session_obj = drupal_json_decode($_POST['customSession']);
+    $session_obj->initialized = time();
+    om_clickable_agenda_create_custom_session($session_obj);
+  }
+}
+
+function om_clickable_agenda_get_custom_session($session_query) {
+  if ($session_query->nid) {
+    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE nid=%d", $session_query->nid);
+  }
+  else if ($session_query->asid) {
+    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE asid=%d", $session_query->asid);
+  }
+  while ($result = db_fetch_array($query)) {
+    return $result;
+  }
+  return FALSE;
+}
+
+function _om_clickable_agenda_get_custom_session() {
+  if (isset($_POST['sessionQuery'])) {
+    $session_query = drupal_json_decode($_POST['sessionQuery']);
+    $result = om_clickable_agenda_get_custom_session($session_query);
+    print drupal_json_encode($result);
+  }
+}
+
+function om_clickable_agenda_delete_custom_session($session_query) {
+  if ($session_query->nid) {
+    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE nid=%d", $session_query->nid);
+    return TRUE;
+  }
+  else if ($session_query->asid) {
+    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE asid=%d", $session_query->asid);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+function _om_clickable_agenda_delete_custom_session() {
+  if (isset($_POST['sessionQuery'])) {
+    $session_query = drupal_json_decode($_POST['sessionQuery']);
+    om_clickable_agenda_delete_custom_session($session_query);
+    if (!empty($session_query->nid)) {
+      $node = node_load($session_query->nid);
+      $url = $node->field_session_mp4_url[0]['value'];
+      if (is_numeric(strpos($url, 'youtube'))) {
+        $node->field_session_mp4_url[0]['value'] = '';
+        node_save($node);
+      }
+    }
+  }
+}
