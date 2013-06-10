@@ -1,11 +1,17 @@
-Drupal.behaviors.agendaManager = function (context) {
-  // Instantiate a new instance of our app.
-  $target = $('#content-area', context);
-  if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && JSON) {
-    $target.addClass('agenda-manager-processed');
-    var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.sessionStatus);
-  }
-};
+
+(function ($, Drupal, window, document, undefined) {
+  Drupal.behaviors.agendaManager = {
+    attach : function(context) {
+      // Instantiate a new instance of our app.
+      $target = $('#content-area', context);
+      if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && JSON) {
+        $target.addClass('agenda-manager-processed');
+        var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.sessionStatus);
+      }
+    }
+  };
+})(jQuery, Drupal, this, this.document);
+
 // Define wrappers to store a few classes.
 Drupal.agendaManger = Drupal.agendaManger || {};
 Drupal.agendaManger.Views = Drupal.agendaManger.Views || {};
