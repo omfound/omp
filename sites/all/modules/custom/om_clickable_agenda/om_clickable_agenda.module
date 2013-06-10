@@ -121,6 +121,10 @@ function om_clickable_agenda_library() {
         'preprocess' => FALSE
       ),
     ),
+    'dependencies' => array(
+     array('om_clickable_agenda', 'json2'),
+      array('om_clickable_agenda', 'underscore'),
+    ),
   );
   return $libraries;
 }
