@@ -163,10 +163,11 @@ class cablecastPlaybackServerController extends playbackServerController {
   private function soap_request($pbs, $function, $data = array()) {
     try {
       $endpoint = $pbs->uri . '/CablecastWS/CablecastWS.asmx?WSDL';
-      if (!file_exists('/tmp/cablecast.wsdl')) {
-        file_put_contents("/tmp/cablecast.wsdl", file_get_contents($endpoint));
+      $temp = '/tmp/' . $pbs->uri . '.cablecast.wsdl';
+      if (!file_exists($temp)) {
+        file_put_contents($temp, file_get_contents($endpoint));
       }
-      $client = new SoapClient('/tmp/cablecast.wsdl');
+      $client = new SoapClient($temp);
       $auth = array(
         'username' => $pbs->user,
         'password' => $pbs->password
