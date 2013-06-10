@@ -212,3 +212,16 @@ function om_agenda_manager_livestream_info() {
 
   return false;
 }
+
+function om_agenda_manager_livestream_types() {
+  $streams = om_agenda_manager_livestream_info();
+  $types = array();
+  foreach ($streams as $theme_nid => $info) {
+    $types[$theme_nid] = $info['theme'];
+  }
+  if (count($types) > ) {
+    return $types; 
+  }else{
+    return false;
+  }
+}

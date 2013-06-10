@@ -96,6 +96,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.set('timerState', true);
       this.startTimer();
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
+        /** TODO fix this to turn it back on
         var value = this.sessionControllerView.sessionType.val();
         var prevValues = this.get('sessionStatus');
         if (prevValues[value]) {
@@ -103,6 +104,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
         }
         this.set('sessionStatus', prevValues);
         this.saveSessionStatus();
+        **/
       }
     }
   },
@@ -146,11 +148,23 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   initializeTimer : function(data) {
     var obj = JSON.parse(data);
     var currentValues = this.get('sessionStatus');
+    if (obj && obj.nid) {
+      _.each(currentValues, function(zetheme) {
+        if (zetheme.status) {
+          if (obj.nid == zetheme.live_nid) {
+            this.sessionControllerView.toggleTimer();
+            this.sessionControllerView.sessionToggleLive.trigger('change');
+            this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
+          } 
+        }
+      });
+    }
+    /**
     if (obj && obj.nid && ((obj.nid == currentValues.houseSession && currentValues.house == "Live") || (obj.nid == currentValues.senateSession && currentValues.senate == "Live"))) {
       this.sessionControllerView.toggleTimer();
       this.sessionControllerView.sessionToggleLive.trigger('change');
       this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
-    }
+    }**/
   },
   calcTime : function() {
     var newTime = this.get('currentTime') + 1;
@@ -173,6 +187,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.cuePointListView.updateView(this.cuePointList.models);
   },
   saveSessionStatus : function() {
+    /**
     var currentValues = this.get('sessionStatus');
     var values = {};
     var sessionType = this.sessionControllerView.sessionType.val();
@@ -186,7 +201,8 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     if (sessionType == 'senate') {
       values.senateNid = this.get('currentNid');
     }
-    var modelPost = {'sessionStatus' : JSON.stringify(values)};
+    **/
+    var modelPost = {'nid' : this.get('currentNid')};
     $.ajax({
       type : 'post',
       url : '/change-session-status',
@@ -452,8 +468,8 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     // Stuff for changing live session status.
     this.sessionToggleLive = $(this.el).find('#edit-session-toggle-live');
     this.sessionToggleLive.change(this.toggleSelect);
-    this.sessionType = $(this.el).find('#edit-session-type');
-    this.sessionType.attr('disabled', 'disabled');
+    //this.sessionType = $(this.el).find('#edit-session-type');
+    //this.sessionType.attr('disabled', 'disabled');
   },
   toggleTimer : function(e) {
     if (!this.button.hasClass('active')) {
@@ -481,12 +497,13 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     this.trigger('sessionController:submit', values);
   },
   toggleSelect : function() {
+    /**
     if (this.sessionType.attr('disabled')) {
        this.sessionType.attr('disabled', '');
     }
     else {
      this.sessionType.attr('disabled', 'disabled');
-    }
+    }**/
   }
 });
 // Session Status View
@@ -497,6 +514,7 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
     this.activeSessions = $(this.el).siblings('#active-sessions');
   },
   updateView : function(model) {
+    /**
     var sessionStatus = model.get('sessionStatus');
     if (sessionStatus) {
       var $ul = $('<ul/>');
@@ -509,5 +527,6 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
       $(this.el).empty().append($ul);
       
     }
+    **/
   }
 });

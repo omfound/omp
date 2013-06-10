@@ -167,12 +167,19 @@ function agenda_manager_form(&$form_state, $node) {
   $query_obj->nid = $nid;
   $previous_session = om_clickable_agenda_get_custom_session($query_obj);
   $active_session = om_clickable_agenda_get_session_status();
-  if (!empty($previous_session) && (($previous_session['nid'] == $active_session['houseSession'] && $active_session['house'] == "Live") || ($previous_session['nid'] == $active_session['senateSession'] && $active_session['senate'] == "Live"))) {
-    $session_seconds = time() - $previous_session['initialized'];
+  $live_status = om_agenda_manager_livestream_info();
+
+  $session_seconds = 0;
+  if (!empty($previous_session)) {
+    foreach ($live_status as $theme => $info) {
+      if ($info['status']) {
+        if ($info['live_nid'] == $previous_session['nid']) {
+          $session_seconds = time() - $previous_session['initialized'];
+        }
+      }
+    }
   }
-  else {
-    $session_seconds = 0;
-  }
+
   $form['session_controls']['time_container'] = array(
     '#type' => 'textfield',
     '#default_value' => $session_seconds,
@@ -182,11 +189,12 @@ function agenda_manager_form(&$form_state, $node) {
     '#type' => 'checkboxes',
     '#options' => array('live' => 'Make This Session Live')
   );
+  /**
   $form['session_controls']['session_type'] = array(
     '#type' => 'select',
-    '#options' => array('house' => t('House'), 'senate' => t('Senate')),
+    '#options' => om_agenda_manager_livestream_types(),
     '#suffix' => '<div id="session-status"></div>'
-  );
+  );**/
   $form['session_controls']['active_sessions'] = array(
     '#value' => '<div id="active-sessions"></div>',
   );
@@ -224,7 +232,8 @@ function om_clickable_agenda_init() {
     $node = menu_get_object();
     $nid = $node->nid;
     $session_status = om_clickable_agenda_get_session_status();
-    drupal_add_js(array('clickableAgenda' => array('currentNodeId' => $nid, 'sessionStatus' => $session_status)), 'setting');
+    $live_status = om_agenda_manager_livestream_info();
+    drupal_add_js(array('clickableAgenda' => array('currentNodeId' => $nid, 'sessionStatus' => $live_status)), 'setting');
   }
 }
 
