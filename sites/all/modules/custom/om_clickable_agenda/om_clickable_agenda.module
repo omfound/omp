@@ -155,7 +155,7 @@ function get_session_bills($nid) {
   print drupal_json_encode($formatted_bills);
 }
 
-function agenda_manager_form(&$form_state, $node) {
+function agenda_manager_form($form, &$form_state, $node) {
   $nid = $node->nid;
   $form['session_controls'] = array(
     '#type' => 'fieldset'
