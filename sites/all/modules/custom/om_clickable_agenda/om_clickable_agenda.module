@@ -348,10 +348,10 @@ function _om_clickable_agenda_create_custom_session() {
 
 function om_clickable_agenda_get_custom_session($session_query) {
   if ($session_query->nid) {
-    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE nid=%d", $session_query->nid);
+    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE nid=:nid", array(':nid' => $session_query->nid));
   }
   else if ($session_query->asid) {
-    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE asid=%d", $session_query->asid);
+    $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE asid=:asid", array(':asid' => $session_query->asid));
   }
   while ($result = db_fetch_array($query)) {
     return $result;
@@ -369,11 +369,11 @@ function _om_clickable_agenda_get_custom_session() {
 
 function om_clickable_agenda_delete_custom_session($session_query) {
   if ($session_query->nid) {
-    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE nid=%d", $session_query->nid);
+    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE nid=:nid", array(':nid' => $session_query->nid));
     return TRUE;
   }
   else if ($session_query->asid) {
-    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE asid=%d", $session_query->asid);
+    $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE asid=:asid", array(':asid' => $session_query->asid));
     return TRUE;
   }
   return FALSE;
