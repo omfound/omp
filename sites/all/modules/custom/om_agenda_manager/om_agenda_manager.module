@@ -219,7 +219,7 @@ function om_agenda_manager_livestream_types() {
   foreach ($streams as $theme_nid => $info) {
     $types[$theme_nid] = $info['theme'];
   }
-  if (count($types) > ) {
+  if (count($types) > 0) {
     return $types; 
   }else{
     return false;
