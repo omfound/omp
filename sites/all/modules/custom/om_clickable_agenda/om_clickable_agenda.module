@@ -219,7 +219,8 @@ function agenda_manager_form(&$form_state, $node) {
 function om_clickable_agenda_init() {
   if (arg(2) == 'agenda_manager') {
     drupal_add_library('om_clickable_agenda', 'backbone');
-    drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js');
+    $js_options = array('type' => 'file', 'group' => JS_DEFAULT);
+    drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js', $js_options);
     $node = menu_get_object();
     $nid = $node->nid;
     $session_status = om_clickable_agenda_get_session_status();
