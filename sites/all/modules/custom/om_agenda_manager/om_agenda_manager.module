@@ -55,6 +55,7 @@ function om_agenda_manager_admin_form() {
     '#markup' => $markup,
   );
 
+  /**
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $tree = taxonomy_get_tree($theme_taxonomy->vid);
   if (count($tree) > 0) {
@@ -70,6 +71,7 @@ function om_agenda_manager_admin_form() {
       );
     }
   }
+  **/
   return system_settings_form($form); 
 }
 
