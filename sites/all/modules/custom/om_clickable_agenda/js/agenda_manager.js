@@ -455,6 +455,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
 // Session Controller View.
 Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
   initialize : function() {
+    alert('loading view');
     _.bindAll(this, 'toggleTimer', 'updateTimerWrapper', 'sessionControllerSubmit', 'toggleSelect');
     // Add timer controls
     this.setElement($('#agenda-manager-form'));
