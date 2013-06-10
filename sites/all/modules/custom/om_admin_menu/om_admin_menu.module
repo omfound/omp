@@ -3,6 +3,8 @@
 
 function om_admin_menu_admin_menu_output_build(&$content) {
   $paid_memberships = om_admin_menu_paid_memberships();
+  $paid_memberships[] = 'Content Administrator';
+
   $content['menu']['dashboard'] = array(
     '#title' => t('Dashboard'),
     '#access' => om_admin_menu_role_access(array('authenticated user')),
@@ -180,6 +182,12 @@ function om_admin_menu_admin_menu_output_alter(&$content) {
   global $user;
   if (!in_array('administrator', $user->roles) && $user->uid != 1) {
     unset($content['menu']['node/add']);
+    unset($content['menu']['admin/config']);
+    unset($content['menu']['admin/commerce']);
+    unset($content['menu']['admin/help']);
+    unset($content['menu']['admin/index']);
+    unset($content['menu']['admin/content']);
+    unset($content['menu']['admin/structure']);
   }
 }
 

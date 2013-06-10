@@ -60,6 +60,15 @@
 .not-front #content p {
   margin: 0 0 10px 0;
 }
+.not-front #content p.rteindent1 {
+  margin-left: 40px;
+}
+.not-front #content p.rteindent2 {
+  margin-left: 80px;
+}
+.not-front #content p.rteindent3 {
+  margin-left: 120px;
+}
 
 /** Class Display Nodes **/
 .node-type-class-display #content {
@@ -319,6 +328,12 @@ body.page-node-add-om-project .form-item label
   float: left;
   margin-right: 10px;
 }
+body.page-node-add-om-show .form-type-textarea label,
+body.page-node-add-om-project .form-type-textarea label {
+  float: none;
+  margin-right: 0;
+}
+
 body.page-node-add-om-show .form-item label.option,
 body.page-node-add-om-project .form-item label.option
 {

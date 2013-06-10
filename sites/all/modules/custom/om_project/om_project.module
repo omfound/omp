@@ -131,13 +131,14 @@ function om_project_index_page() {
  */
 
 function om_project_form_alter(&$form, &$form_state, $form_id) {
+  /**
   if ($form_id == 'om_project_node_form' && module_exists('advanced_help')) {
     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
     
     $form['om_show_metadata'] = array(
       '#title' => t('Metadata'),
-      '#description' => t('These settings will trickle down to submitted shows (but you can override them if necessary).'),
+      '#description' => t('These settings will trickle down to submitted shows (but you can override them if necessary). Shows produced by members using station equipment default to a ').l('BY-NC-SA Creative Commons License.','http://creativecommons.org/licenses/by-nc-sa/3.0/us/').'.',
       '#type' => 'fieldset',
       '#collapsible' => FALSE,
       '#weight' => 3 ,
@@ -160,7 +161,7 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
       )
     );
     $form['field_om_locally_produced']['und']['#description'] = $output;
-  }
+  }**/
 
   //hide old project nid
   global $user;
@@ -420,14 +421,13 @@ function om_project_node_access($node, $op, $account) {
     $user_is_admin = FALSE;
     $user_had_access = FALSE;
     $members = om_project_get_project_members($node->nid);
-    if ($members == FALSE ||  $member == "") {
-      watchdog("Om_Project membership false", "members is false, node is:".$node->nid);
-    }
-    foreach($members AS $member) {
-      if ($member->uid == $account->uid) {
-        $user_is_member = TRUE;
-        if ($member->isadmin == 1) {
-          $user_is_admin = TRUE;
+    if (!empty($members)) {
+      foreach($members AS $member) {
+        if ($member->uid == $account->uid) {
+          $user_is_member = TRUE;
+          if ($member->isadmin == 1) {
+            $user_is_admin = TRUE;
+          }
         }
       }
     }
