@@ -128,16 +128,14 @@ function om_clickable_agenda_check_for_session_node($node){
  * Endpoint to list a session nodes.
  */
 function get_session_bills($nid) {
-  $node = node_load($nid);
-  $calendar_url = 'http://www.coloradochannel.net/'.$node->field_session_calendar[0]['filepath'];
-  //$bills = getBillsFromCalendar($calendar_url);
-  $bills = archive_migrator_bills_from_calendar($calendar_url);
-  $json = array();
-  foreach($bills AS $bill) {
-    $bill['text'] = utf8_encode($bill['text']);
-    $json[] = array('title' => str_replace(array("\r", "\n", "<", ">", "&"), array('\r', '\n', '\x3c', '\x3e', '\x26'), $bill['text']));
+  global $base_path;
+  $bill_json = file_get_contents($base_path.'/node/'.$nid.'/agenda-items');
+  $bills = json_decode($bill_json);
+  $formatted_bills = array();
+  foreach ($bills as $key => $text) {
+    $formatted_bills[] = array('title' => $text);
   }
-  print drupal_json_encode($json);
+  print drupal_json_encode($formatted_bills);
 }
 
 function agenda_manager_form(&$form_state, $node) {
