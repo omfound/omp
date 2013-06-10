@@ -107,7 +107,11 @@ function om_clickable_agenda_library() {
         'group' => JS_LIBRARY,
         'preprocess' => FALSE
       ),
-    )
+    ),
+    'dependencies' => array(
+	array('om_clickable_agenda' => 'json2'),
+	array('om_clickable_agenda' => 'underscore'),
+    ),
   );
   $libraries['json2'] = array(
     'title' => 'JSON2',
@@ -214,10 +218,7 @@ function agenda_manager_form(&$form_state, $node) {
  */
 function om_clickable_agenda_init() {
   if (arg(2) == 'agenda_manager') {
-    $libary_path = 'sites/all/libraries';
-    drupal_add_js($libary_path . '/json2/json2.js');
-    drupal_add_js($libary_path . '/underscore/underscore-min.js');
-    drupal_add_js($libary_path . '/backbone/backbone-min.js');
+    drupal_add_library('om_clickable_agenda', 'backbone');
     drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js');
     $node = menu_get_object();
     $nid = $node->nid;
