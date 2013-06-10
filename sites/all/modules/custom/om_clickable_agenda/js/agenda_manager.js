@@ -472,6 +472,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     //this.sessionType.attr('disabled', 'disabled');
   },
   toggleTimer : function(e) {
+    alert('toggle timer');
     if (!this.button.hasClass('active')) {
       this.button.addClass('active');
       this.button.text("Reset Timer");
