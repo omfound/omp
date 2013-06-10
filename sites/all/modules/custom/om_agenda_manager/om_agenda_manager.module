@@ -57,7 +57,19 @@ function om_agenda_manager_admin_form() {
 
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $tree = taxonomy_get_tree($theme_taxonomy->vid);
-  dsm($tree);
+  if (count($tree) > 0) {
+    $form['om_agenda_manager_themes'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Activate or disable live streams'),
+    );
+    foreach ($tree as $key => $term) {
+      $form['om_agenda_manager_themes']['om_agenda_manager_live_tid_'.$term->tid] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Activate live streaming for ').$tree->name.'?',
+        '#default_value' => variable_get('om_agenda_manager_live_tid_'.$term->tid, false),
+      );
+    }
+  }
   return system_settings_form($form); 
 }
 
