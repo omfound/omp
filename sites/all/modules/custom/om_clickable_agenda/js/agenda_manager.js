@@ -88,6 +88,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   toggleTimer : function() {
+    alert('firing ze toggle');
     if (this.get('timerState') == true) {
       this.set('timerState', false);
       this.stopTimer();
