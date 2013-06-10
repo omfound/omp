@@ -109,6 +109,19 @@ function om_clickable_agenda_library() {
       ),
     )
   );
+  $libraries['json2'] = array(
+    'title' => 'JSON2',
+    'website' => 'https://github.com/douglascrockford/JSON-js',
+    'version' => '2',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('json2') . '/json2.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    )
+  );
   return $libraries;
 }
 
