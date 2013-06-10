@@ -65,7 +65,7 @@ function om_agenda_manager_admin_form() {
     foreach ($tree as $key => $term) {
       $form['om_agenda_manager_themes']['om_agenda_manager_live_tid_'.$term->tid] = array(
         '#type' => 'checkbox',
-        '#title' => t('Activate live streaming for ').$tree->name.'?',
+        '#title' => t('Activate live streaming for ').$term->name.'?',
         '#default_value' => variable_get('om_agenda_manager_live_tid_'.$term->tid, false),
       );
     }
