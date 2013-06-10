@@ -96,6 +96,19 @@ function om_clickable_agenda_library() {
       ),
     )
   );
+  $libraries['json2'] = array(
+    'title' => 'JSON2',
+    'website' => 'https://github.com/douglascrockford/JSON-js',
+    'version' => '2',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('json2') . '/json2.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    )
+  );
   $libraries['backbone'] = array(
     'title' => 'Backbone JS',
     'website' => 'http://backbonejs.org',
@@ -109,22 +122,9 @@ function om_clickable_agenda_library() {
       ),
     ),
     'dependencies' => array(
-	array('om_clickable_agenda' => 'json2'),
-	array('om_clickable_agenda' => 'underscore'),
+      array('om_clickable_agenda' => 'json2'),
+      array('om_clickable_agenda' => 'underscore'),
     ),
-  );
-  $libraries['json2'] = array(
-    'title' => 'JSON2',
-    'website' => 'https://github.com/douglascrockford/JSON-js',
-    'version' => '2',
-    'js' => array(
-      array(
-        'type' => 'file',
-        'data' => libraries_get_path('json2') . '/json2.js',
-        'group' => JS_LIBRARY,
-        'preprocess' => FALSE
-      ),
-    )
   );
   return $libraries;
 }
@@ -218,7 +218,7 @@ function agenda_manager_form(&$form_state, $node) {
  */
 function om_clickable_agenda_init() {
   if (arg(2) == 'agenda_manager') {
-    drupal_add_library('om_clickable_agenda', 'underscore');
+    drupal_add_library('om_clickable_agenda', 'backbone');
     drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js');
     $node = menu_get_object();
     $nid = $node->nid;
