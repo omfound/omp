@@ -353,8 +353,8 @@ function om_clickable_agenda_get_custom_session($session_query) {
   else if ($session_query->asid) {
     $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE asid=:asid", array(':asid' => $session_query->asid));
   }
-  while ($result = db_fetch_array($query)) {
-    return $result;
+  foreach ($query as $result) {
+    return (array)$result;
   }
   return FALSE;
 }
