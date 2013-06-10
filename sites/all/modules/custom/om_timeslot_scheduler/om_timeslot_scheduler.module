@@ -296,9 +296,6 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
  */
 function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
-  // NB: For the most accurate airing keeping possible start and end 
-  // going to om_broadcast_schedule_schedule_sync_steps need to be the start of the first timeslot
-  // and the end of the last timeslot, not the run start and end.
   $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
   // Add scheduling steps.
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
@@ -568,8 +565,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     }
                     $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
-                    //$adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
-                    //$is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     $is_adult = FALSE;
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                       $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
@@ -587,8 +584,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       continue;
                     }
                     // Adult hours check
-                    //$adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
-                    //$is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
+                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     $is_adult = FALSE;
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
                       $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
@@ -1187,7 +1184,8 @@ function om_timeslot_scheduler_load_all_shows() {
 
 /**
  * Check to see if a rating term is considered adult.
- *
+ *   We call taxonomy_term_load many times, but drupal core statically caches this call.
+ *   So it should be ok.
  * @param $tid
  *   int term id
  *
@@ -1205,7 +1203,8 @@ function om_timeslot_scheduler_rating_is_adult($tid) {
 }
 
 /**
- * Check to see if a rating term is considered adult.
+ * Use a reference time to generate timestamps for the station's adult hours.
+ *  This is needed because it is much simpler for stations to simply enter hours.
  *
  * @param $reference_time
  *   timestamp y-m-d to use for returned dates
@@ -1214,20 +1213,24 @@ function om_timeslot_scheduler_rating_is_adult($tid) {
  */
 function om_timeslot_scheduler_get_adult_hours($reference_time) {
   $ref_hour = date('G', $reference_time);
-  // Get start and end times. Then figure out the difference.
-  $start_hours = variable_get('om_timeslot_scheduler_adult_hours_start', 22);
-  $end_hours = variable_get('om_timeslot_scheduler_adult_hours_end', 5);
-  $start_stamp = mktime($start_hours);
-  $end_stamp = mktime($end_hours);
-  if ($end_hours < $start_hours) {
+  // Limit number of queries needed to run this function.
+  $station_adult_hours = &drupal_static(__FUNCTION__);
+  if (empty($station_adult_hours)) {
+    $station_adult_hours['start'] = variable_get('om_timeslot_scheduler_adult_hours_start', 22);
+    $station_adult_hours['end'] = variable_get('om_timeslot_scheduler_adult_hours_end', 5);
+  }
+  // Create arbitrary timeslots from station hours
+  $start_stamp = mktime($station_adult_hours['start']);
+  $end_stamp = mktime($station_adult_hours['end']);
+  if ($station_adult_hours['end'] < $station_adult_hours['start']) {
     $end_stamp += 86400;
   }
-  if ($ref_hour < $start_hours) {
+  if ($ref_hour < $station_adult_hours['start']) {
     $reference_time -= 86400;
   }
   $difference = abs($end_stamp - $start_stamp);
   // Build actual time from reference
-  $adult_hours['start'] = mktime($start_hours, 0, 0 , date('n', $reference_time), date('j', $reference_time), date('y', $reference_time));
+  $adult_hours['start'] = mktime($station_adult_hours['start'], 0, 0 , date('n', $reference_time), date('j', $reference_time), date('y', $reference_time));
   $adult_hours['end'] = $adult_hours['start'] + $difference;
   return $adult_hours;
 }
