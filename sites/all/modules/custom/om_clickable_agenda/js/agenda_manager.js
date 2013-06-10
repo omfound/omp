@@ -340,7 +340,7 @@ Drupal.agendaManger.Views.appView = Backbone.View.extend({
 Drupal.agendaManger.Views.preloader = Backbone.View.extend({
   initialize : function() {
     _.bindAll(this, 'show', 'hide');
-    this.domElement = $('<div/>').addClass('agenda-manager-preloader').text('loading...');
+    this.domElement = jQuery('<div/>').addClass('agenda-manager-preloader').text('loading...');
   },
   show : function() {
     this.domElement.show();
