@@ -161,7 +161,7 @@ function agenda_manager_form($form, &$form_state, $node) {
     '#type' => 'fieldset'
   );
   $form['session_controls']['time_toggle'] = array(
-    '#value' => '<div id="agenda-time-toggle">Start Timer</div>',
+    '#markup' => '<div id="agenda-time-toggle">Start Timer</div>',
   );
   $query_obj = new stdClass();
   $query_obj->nid = $nid;
