@@ -335,6 +335,7 @@ Drupal.agendaManger.Views.preloader = Backbone.View.extend({
 Drupal.agendaManger.Views.billListView = Backbone.View.extend({
   initialize : function() {
     _.bindAll(this, 'addDomElement', 'template', 'handleClick');
+    alert('building bill list');
     this.domElement = $('<div/>').attr('id', 'bill-list');
   },
   addDomElement : function(model) {
