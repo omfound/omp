@@ -2,7 +2,7 @@
   Drupal.behaviors.agendaManager = {
     attach : function(context) {
       // Instantiate a new instance of our app.
-      $target = $('#content-area', context);
+      $target = $('#content', context);
       if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && Drupal.settings.clickableAgenda.themeNid && JSON) {
         $target.addClass('agenda-manager-processed');
         var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.themeNid, Drupal.settings.clickableAgenda.sessionStatus);
@@ -32,6 +32,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.billList = new Drupal.agendaManger.Collections.sessionBillList();
     this.billListView.on('billListView:click', this.newCuePointHelper, this);
     this.billList.on('add', this.billListView.addDomElement, this.billListView);
+    console.log(this);
     $(this.get('parent').el).append(this.billListView.domElement);
     // Cue Point List
     this.cuePointListView = new Drupal.agendaManger.Views.cuePointList();
@@ -338,7 +339,6 @@ Drupal.agendaManger.Views.billListView = Backbone.View.extend({
     this.domElement = $('<div/>').attr('id', 'bill-list');
   },
   addDomElement : function(model) {
-    alert('appending bill list');
     this.domElement.append(this.template(model));
   },
   template : function(model) {
