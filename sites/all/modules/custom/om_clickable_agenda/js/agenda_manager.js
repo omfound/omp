@@ -3,9 +3,9 @@
     attach : function(context) {
       // Instantiate a new instance of our app.
       $target = $('#content-area', context);
-      if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && JSON) {
+      if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && Drupal.settings.clickableAgenda.themeNid && JSON) {
         $target.addClass('agenda-manager-processed');
-        var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.sessionStatus);
+        var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.themeNid, Drupal.settings.clickableAgenda.sessionStatus);
       }
     }
   };
@@ -100,9 +100,14 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.set('timerState', true);
       this.startTimer();
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
-        var prevValues = this.get('sessionStatus');
-        console.log('activating');
+        var newValues = this.get('sessionStatus');
+        var theme = this.get('themeNid');
+        newValues[theme].live_nid = this.get('currentNid');
+        console.log('prevValues:');
         console.log(prevValues);
+        console.log('newValues:');
+        console.log(newValues);
+        
         /** TODO fix this to turn it back on
         var value = this.sessionControllerView.sessionType.val();
         var prevValues = this.get('sessionStatus');
@@ -314,7 +319,7 @@ Drupal.agendaManger.Collections.cuePointList = Backbone.Collection.extend({
  * Views:
  */
 Drupal.agendaManger.Views.appView = Backbone.View.extend({
-  initialize : function(el, currentNid, sessionStatus) {
+  initialize : function(el, currentNid, themeNid, sessionStatus) {
     _.bindAll(this, 'updateView');
     // Store DOM Reference
     this.setElement(el);
@@ -322,6 +327,7 @@ Drupal.agendaManger.Views.appView = Backbone.View.extend({
     this.interpreter = new Drupal.agendaManger.Models.interpreter({'parent' : this});
     this.interpreter.set('parent', this);
     this.interpreter.set('currentNid', currentNid);
+    this.interpreter.set('themeNid', themeNid);
     this.interpreter.set('sessionStatus', sessionStatus);
     this.interpreter.on('change', this.updateView, this);
     this.interpreter.retrieveData();
