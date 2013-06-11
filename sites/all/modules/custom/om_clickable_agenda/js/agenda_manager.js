@@ -79,11 +79,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('sessionBillsComplete', true);
   },
   addCuePoints : function(data) {
-    console.log('cuepoints:');
-    console.log(data);
-    //dataJSON = JSON.parse(data);
-    //console.log(dataJSON);
-    //dataJSON = data;
     for (x in data) {
       this.cuePointList.add(data[x]);
     }
@@ -209,6 +204,7 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
   },
   saveModel : function() {
     // Theoretically this.toJSON() should work, but results may vary.
+    /**
     console.log(this.attributes);
     var modelPost = {'node' : JSON.stringify(this.attributes)};
     $.ajax({
@@ -216,7 +212,7 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
       data : modelPost,
       type : 'POST',
       success : this.handleResponse
-    });
+    });**/
   },
   handleResponse : function(data) {
     dataJSON = JSON.parse(data);
