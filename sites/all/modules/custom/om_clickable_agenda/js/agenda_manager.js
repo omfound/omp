@@ -32,7 +32,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.billList = new Drupal.agendaManger.Collections.sessionBillList();
     this.billListView.on('billListView:click', this.newCuePointHelper, this);
     this.billList.on('add', this.billListView.addDomElement, this.billListView);
-    console.log(this);
     $(this.get('parent').el).append(this.billListView.domElement);
     // Cue Point List
     this.cuePointListView = new Drupal.agendaManger.Views.cuePointList();
@@ -81,8 +80,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   addCuePoints : function(data) {
     for (x in data) {
-      console.log(data[x]);
-      this.cuePointList.add(data[x]);
+      this.cuePointList.add('<div class="bill-list-item">'+data[x]+'</div>');
     }
     this.updateCuePointListView();
     this.set('addCuePointsComplete', true);
