@@ -92,7 +92,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   toggleTimer : function() {
-    alert('firing ze toggle');
     if (this.get('timerState') == true) {
       this.set('timerState', false);
       this.stopTimer();
@@ -459,7 +458,6 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
 // Session Controller View.
 Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
   initialize : function() {
-    alert('loading view');
     _.bindAll(this, 'toggleTimer', 'updateTimerWrapper', 'sessionControllerSubmit', 'toggleSelect');
     // Add timer controls
     this.setElement($('#agenda-manager-form'));
@@ -478,7 +476,6 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     //this.sessionType.attr('disabled', 'disabled');
   },
   toggleTimer : function(e) {
-    alert('toggle timer');
     if (!this.button.hasClass('active')) {
       this.button.addClass('active');
       this.button.text("Reset Timer");
