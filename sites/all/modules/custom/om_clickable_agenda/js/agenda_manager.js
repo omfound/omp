@@ -113,6 +113,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   startTimer : function() {
+    console.log('starting timer');
     if (this.sessionControllerView.timeInput) {
       this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
     }
