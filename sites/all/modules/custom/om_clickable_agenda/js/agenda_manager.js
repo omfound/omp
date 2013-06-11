@@ -72,10 +72,10 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     });
   },
   addSessionBills : function(data) {
-    dataJSON = JSON.parse(data);
-    console.log(dataJSON);
-    for (x in dataJSON) {
-      this.billList.add(dataJSON[x]);
+    //dataJSON = JSON.parse(data);
+    //console.log(dataJSON);
+    for (x in data) {
+      this.billList.add(data[x]);
     }
     this.set('sessionBillsComplete', true);
   },
