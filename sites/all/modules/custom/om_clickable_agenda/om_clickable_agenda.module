@@ -231,9 +231,10 @@ function om_clickable_agenda_init() {
     drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js', $js_options);
     $node = menu_get_object();
     $nid = $node->nid;
+    $theme = $node->field_om_theme[$node->language][0]['tid'];
     //$session_status = om_clickable_agenda_get_session_status();
     $live_status = om_agenda_manager_livestream_info();
-    drupal_add_js(array('clickableAgenda' => array('currentNodeId' => $nid, 'sessionStatus' => $live_status)), 'setting');
+    drupal_add_js(array('clickableAgenda' => array('currentNodeId' => $nid, 'sessionStatus' => $live_status, 'themeNid' => $theme)), 'setting');
   }
 }
 
