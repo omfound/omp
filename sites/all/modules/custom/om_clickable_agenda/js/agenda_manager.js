@@ -1,4 +1,3 @@
-
 (function ($, Drupal, window, document, undefined) {
   Drupal.behaviors.agendaManager = {
     attach : function(context) {
@@ -10,7 +9,6 @@
       }
     }
   };
-})(jQuery, Drupal, this, this.document);
 
 // Define wrappers to store a few classes.
 Drupal.agendaManger = Drupal.agendaManger || {};
@@ -340,7 +338,7 @@ Drupal.agendaManger.Views.appView = Backbone.View.extend({
 Drupal.agendaManger.Views.preloader = Backbone.View.extend({
   initialize : function() {
     _.bindAll(this, 'show', 'hide');
-    this.domElement = jQuery('<div/>').addClass('agenda-manager-preloader').text('loading...');
+    this.domElement = $('<div/>').addClass('agenda-manager-preloader').text('loading...');
   },
   show : function() {
     this.domElement.show();
@@ -539,3 +537,4 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
     **/
   }
 });
+})(jQuery, Drupal, this, this.document);
