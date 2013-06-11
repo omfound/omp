@@ -210,7 +210,7 @@ div#global-timer {
   float: left;
   width: 365px;
   margin-top: 15px;
-  background-image: url('../images/pending-background.png');
+  background-image: url('img/pending-background.png');
   background-repeat: no-repeat;
   background-position: left top;
   background-color: #E6E7E7;
@@ -224,7 +224,7 @@ div#global-timer {
   width: 365px;
   min-height: 100px;
   margin-top: 15px;
-  background-image: url('../images/recorded-background.png');
+  background-image: url('img/recorded-background.png');
   background-repeat: no-repeat;
   background-position: left top;
   background-color: #E6E7E7;
@@ -277,7 +277,7 @@ div#session-video {
   position: relative;
 }
 div#session-unavailable {
-  background-image: url('../images/processing.jpg');
+  background-image: url('img/processing.jpg');
   background-repeat: no-repeat;
   width: 869px;
   height: 399px; 
@@ -304,7 +304,7 @@ body.live-session div#youtube-overlay {
   z-index: 2;
   left: 0px;
   top: 0px;
-  background-image: url('../images/spacer.gif');
+  background-image: url('img/spacer.gif');
 }
 body.live-session div#button-bar {
   display: none;
@@ -313,12 +313,12 @@ body.live-session span.agenda-instructions {
   display: none;
 }
 body.live-senate div#session-wrapper {
-  background: url('../images/senate-live.png');
+  background: url('img/senate-live.png');
   background-repeat: no-repeat;
   background-position: top right;
 }
 body.live-house div#session-wrapper {
-  background: url('../images/house-live.png');
+  background: url('img/house-live.png');
   background-repeat: no-repeat;
   background-position: top right;
 }
