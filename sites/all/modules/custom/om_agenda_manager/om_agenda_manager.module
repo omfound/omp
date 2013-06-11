@@ -225,3 +225,20 @@ function om_agenda_manager_livestream_types() {
     return false;
   }
 }
+
+function om_agenda_manager_livestream_update($session_status) {
+  foreach ($session_status as $theme_nid => $info) {
+    $loaded_term = taxonomy_term_load($theme_nid);
+    if ($info['live_nid']) {
+      $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'] = $info['live_nid']; 
+    }else{
+      $loaded_term->field_om_live_show = array();
+    }
+
+    if ($info['status']) {
+      $loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'] = 1;
+    }else{
+      $loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'] = 0;
+    }
+  }
+}

@@ -101,22 +101,11 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.startTimer();
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
         var newValues = this.get('sessionStatus');
-        console.log('original:');
-        console.log(newValues);
         var theme = this.get('themeNid');
         newValues[theme].live_nid = this.get('currentNid');
-        console.log('newValues:');
-        console.log(newValues);
-        
-        /** TODO fix this to turn it back on
-        var value = this.sessionControllerView.sessionType.val();
-        var prevValues = this.get('sessionStatus');
-        if (prevValues[value]) {
-          prevValues[value] = 'Live';
-        }
-        this.set('sessionStatus', prevValues);
+        newValues[theme].status = true;
+        this.set('sessionStatus', newValues);
         this.saveSessionStatus();
-        **/
       }
     }
   },
@@ -202,21 +191,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   saveSessionStatus : function() {
     var values = this.get('sessionStatus');
-    /**
-    var currentValues = this.get('sessionStatus');
-    var values = {};
-    var sessionType = this.sessionControllerView.sessionType.val();
-    // @TODO this needs to represent whether or not the session that is going is house or senate.
-    
-    values.house = currentValues.house;
-    values.senate = currentValues.senate;
-    if (sessionType == 'house') {
-      values.houseNid = this.get('currentNid');
-    }
-    if (sessionType == 'senate') {
-      values.senateNid = this.get('currentNid');
-    }
-    **/
     var modelPost = {'sessionStatus' : JSON.stringify(values)};
     $.ajax({
       type : 'post',

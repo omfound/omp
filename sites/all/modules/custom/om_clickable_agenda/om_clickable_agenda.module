@@ -276,27 +276,7 @@ function om_clickable_agenda_save_cue_point() {
 function om_clickable_agenda_change_session_status() {
   if (empty($_POST['sessionUpdate'])) {
     $json = drupal_json_decode($_POST['sessionStatus']);
-    // Load the live broadcast node.
-    $node = node_load(1620);
-    if (!empty($json->senate)) {
-      $value = trim(ucwords($json->senate));
-      if ($value != 'Offline') {
-        $node->field_senate_video_status[0]['value'] = $value;
-        if ($value == 'Live' && !empty($json->senateNid)) {
-          $node->field_active_session_senate[0]['value'] = $json->senateNid;
-        }
-      }
-    }
-    if (!empty($json->house)) {
-      $value = trim(ucwords($json->house));
-      if ($value != 'Offline') {
-        $node->field_house_video_status[0]['value'] = $value;
-        if ($value == 'Live' && !empty($json->houseNid)) {
-          $node->field_active_session_house[0]['value'] = $json->houseNid;
-        }
-      }
-    }
-    node_save($node);
+    om_agenda_manager_livestream_update($json);
   }
 }
 
