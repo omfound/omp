@@ -240,7 +240,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['bayesian_score'] = "<div id='bayesian-score'><div class='score'>Bayesian Score: $bayesian_score</div> $help</div>";
   }
   $learn = l('Learn More About Voting', 'help/om_voting/about-om-voting');
-  $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. !link', array('!link' => $learn));
+  $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('!link', array('!link' => $learn));
   // Node right.
   if (module_exists('om_social')) {
     $social = theme('om_social_vertical_sharing');
