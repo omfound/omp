@@ -144,8 +144,7 @@ function om_agenda_manager_agenda_items($node) {
   if ($url) {
     $text = om_agenda_manager_fetch_google_doc($url);
     $items = om_agenda_manager_parse_agenda($text);
-    $cleaned_items = utf8_encode($items);
-    print drupal_json_encode($cleaned_items);
+    print drupal_json_encode($items);
   } else {
     print '';
   }
@@ -172,7 +171,7 @@ function om_agenda_manager_parse_agenda($text) {
     if ($active) {
       $clean = trim($info);
       if (!empty($clean)) {
-        $agenda_lines[] = $info; 
+        $agenda_lines[] = utf8_encode($clean); 
       }
     }
 
