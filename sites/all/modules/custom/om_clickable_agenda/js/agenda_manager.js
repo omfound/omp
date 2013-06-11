@@ -468,7 +468,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     this.button = $(this.el).find('#agenda-time-toggle');
     this.button.click(this.toggleTimer);
     // Find input and hijack
-    this.timeInput = $(this.el).find('#edit-time-container');
+    this.timeInput = $(this.el).find('#timer-wrapper');
     // Now handle form submit
     $(this.el).submit(this.sessionControllerSubmit);
     // Stuff for changing live session status.
