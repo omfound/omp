@@ -59,7 +59,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     });
     $.ajax({
       type : 'GET',
-      url : '/list-cue-points/' + this.get('currentNid'),
+      url : '/node/'+this.get('currentNid')+'/agenda-items',
       success : this.addCuePoints
     });
     var obj = {'nid' : this.get('currentNid')};
