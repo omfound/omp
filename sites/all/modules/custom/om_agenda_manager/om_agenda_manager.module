@@ -144,13 +144,25 @@ function om_agenda_manager_agenda_items($node) {
   if ($url) {
     $text = om_agenda_manager_fetch_google_doc($url);
     $items = om_agenda_manager_parse_agenda($text);
+    $legacy_items = om_agenda_manager_legacy_agenda_items($items);
+    
     header("content-type:application/json");
-    print drupal_json_encode($items);
+    print drupal_json_encode($legacy_items);
   } else {
     print '';
   }
   
   return;
+}
+
+function om_agenda_manager_legacy_agenda_items($items) {
+  $legacy_items = array();
+  foreach ($items as $key => $title) {
+    $legacy_items[$key] = new stdClass(); 
+    $legacy_items[$key]->title = $title;
+  }
+
+  return $legacy_items;
 }
 
 function om_agenda_manager_parse_agenda($text) {

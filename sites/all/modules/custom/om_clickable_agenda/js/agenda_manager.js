@@ -79,8 +79,9 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('sessionBillsComplete', true);
   },
   addCuePoints : function(data) {
-    for (x in data) {
-      this.cuePointList.add('div').addClass('bill-list-item').html(data[x]);
+    dataJSON = JSON.parse(data);
+    for (x in dataJSON) {
+      this.cuePointList.dataJSON[x]);
     }
     this.updateCuePointListView();
     this.set('addCuePointsComplete', true);
