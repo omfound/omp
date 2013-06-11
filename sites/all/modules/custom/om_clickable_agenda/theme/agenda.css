@@ -137,7 +137,7 @@
 }
 
 #agenda-time-toggle {
-  background: transparent url(/sites/all/themes/cochannel/images/start-button.png);
+  background: transparent url(/sites/all/modules/custom/om_clickable_agenda/theme/img/start-button.png);
   display: block;
   line-height: 59px;
   float: left;
