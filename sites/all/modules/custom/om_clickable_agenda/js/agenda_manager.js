@@ -100,6 +100,9 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.set('timerState', true);
       this.startTimer();
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
+        var prevValues = this.get('sessionStatus');
+        console.log('activating');
+        console.log(prevValues);
         /** TODO fix this to turn it back on
         var value = this.sessionControllerView.sessionType.val();
         var prevValues = this.get('sessionStatus');
@@ -193,6 +196,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.cuePointListView.updateView(this.cuePointList.models);
   },
   saveSessionStatus : function() {
+    var values = this.get('sessionStatus');
     /**
     var currentValues = this.get('sessionStatus');
     var values = {};
@@ -208,7 +212,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       values.senateNid = this.get('currentNid');
     }
     **/
-    var modelPost = {'nid' : this.get('currentNid')};
+    var modelPost = {'sessionStatus' : JSON.stringify(values)};
     $.ajax({
       type : 'post',
       url : '/change-session-status',
