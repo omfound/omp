@@ -152,6 +152,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   initializeTimer : function(data) {
     var obj = JSON.parse(data);
     var currentValues = this.get('sessionStatus');
+    console.log(currentValues);
     if (obj && obj.nid) {
       _.each(currentValues, function(zetheme) {
         if (zetheme.status) {
