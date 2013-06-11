@@ -196,7 +196,7 @@ function agenda_manager_form($form, &$form_state, $node) {
     '#suffix' => '<div id="session-status"></div>'
   );**/
   $form['session_controls']['active_sessions'] = array(
-    '#value' => '<div id="active-sessions"></div>',
+    '#markup' => '<div id="active-sessions"></div>',
   );
   $form['add_bill'] = array(
     '#type' => 'fieldset',
