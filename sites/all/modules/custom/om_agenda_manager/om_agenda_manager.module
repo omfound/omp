@@ -227,7 +227,6 @@ function om_agenda_manager_livestream_types() {
 }
 
 function om_agenda_manager_livestream_update($session_status) {
-  dsm($session_status);
   foreach ($session_status as $theme_nid => $info) {
     $loaded_term = taxonomy_term_load($theme_nid);
     if ($info['live_nid']) {
@@ -241,5 +240,6 @@ function om_agenda_manager_livestream_update($session_status) {
     }else{
       $loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'] = 0;
     }
+    taxonomy_term_save($loaded_term);
   }
 }

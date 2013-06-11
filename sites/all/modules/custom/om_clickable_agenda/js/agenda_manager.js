@@ -110,7 +110,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   startTimer : function() {
-    console.log('starting timer');
     if (this.sessionControllerView.timeInput) {
       this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
     }
@@ -150,7 +149,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   initializeTimer : function(data) {
     var obj = JSON.parse(data);
     var currentValues = this.get('sessionStatus');
-    console.log(currentValues);
     if (obj && obj.nid) {
       _.each(currentValues, function(zetheme) {
         if (zetheme.status) {
@@ -191,8 +189,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   saveSessionStatus : function() {
     var values = this.get('sessionStatus');
-    console.log('posting change to session status');
-    console.log(values);
     var modelPost = {'sessionStatus' : JSON.stringify(values)};
     $.ajax({
       type : 'post',
