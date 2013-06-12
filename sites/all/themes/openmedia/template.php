@@ -56,13 +56,15 @@ function openmedia_preprocess_node(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_field(&$variables, $hook) {
-  dsm($variables);
   // Allow preprocessing for fields
-  /**
-  $function = __FUNCTION__ . '__' . $variables['node']->type;
+  $function = __FUNCTION__ . '__' . $variables['element']['#field_name'];
   if (function_exists($function)) {
     $function($variables);
-  }**/
+  }
+}
+
+function openmedia_preprocess_field_om__field_om_show_video(&$variables) {
+  dsm($variables);
 }
 
  /**
