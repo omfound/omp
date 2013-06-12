@@ -336,3 +336,6 @@ body.youtube div#session-documents {
   top: 0;
   right: 0;
 }
+#agenda-manager-form .field-name-field-om-show-video .field-label {
+  display: none;
+}
