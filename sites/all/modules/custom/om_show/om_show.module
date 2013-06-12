@@ -181,10 +181,14 @@ function om_show_reload($form, $form_state) {
 function om_show_jwplayer_include($node) {
   if (!is_object($node)) {
     $show_field = $node['field_om_show_video'];
-    $thumb_field = $node['field_show_thumbnail'][$node['language']];
+    if (!empty($node['field_show_thumbnail'])) {
+      $thumb_field = $node['field_show_thumbnail'][$node['language']];
+    }
   }else{
     $show_field = $node->field_om_show_video[$node->language];
-    $thumb_field = $node->field_show_thumbnail[$node->language];
+    if (!empty($node->field_show_thumbnail)) {
+      $thumb_field = $node->field_show_thumbnail[$node->language];
+    }
   }
 
   // First do video and video area.
