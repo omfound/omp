@@ -5,6 +5,7 @@
       $target = $('#content', context);
       if ($target && !$target.hasClass('agenda-manager-processed') && Drupal.settings.clickableAgenda.currentNodeId && Drupal.settings.clickableAgenda.themeNid && JSON) {
         $target.addClass('agenda-manager-processed');
+        $target.addClass('clearfix');
         var app = new Drupal.agendaManger.Views.appView($target, Drupal.settings.clickableAgenda.currentNodeId, Drupal.settings.clickableAgenda.themeNid, Drupal.settings.clickableAgenda.sessionStatus);
       }
     }
