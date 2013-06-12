@@ -209,7 +209,7 @@ div#global-timer {
 
 #bill-list {
   float: left;
-  width: 365px;
+  width: 355px;
   margin-top: 15px;
   background-image: url('img/pending-background.png');
   background-repeat: no-repeat;
@@ -218,11 +218,12 @@ div#global-timer {
   padding: 20px 10px 10px 50px;
   margin-bottom: 35px;
   min-height: 250px;
+  margin-left: 10px;
 }
 
 #cue-point-list {
 	float: right;
-  width: 365px;
+  width: 465px;
   min-height: 100px;
   margin-top: 15px;
   background-image: url('img/recorded-background.png');
@@ -231,7 +232,8 @@ div#global-timer {
   background-color: #E6E7E7;
   padding: 20px 10px 10px 50px;
   margin-bottom: 35px;
-  min-height: 250px;
+  min-height: 350px;
+  margin-right: 10px;
 }
 
 #stamped-bill-table tr {
