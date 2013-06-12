@@ -177,3 +177,39 @@ function om_show_reload($form, $form_state) {
   // We just need to return the form here so that the form is re-rendered.
   return $form;
 }
+
+function om_show_jwplayer_include($node) {
+  if(!empty($node['field_om_show_video'])) {
+    $show_field = $node['field_om_show_video'];
+    $thumb_field = $node['field_show_thumbnail'][$node['language']];
+  }elseif(!empty($node->field_om_show_video)) {
+    $show_field = $node->field_om_show_video[$node->language];
+    $thumb_field = $node->field_show_thumbnail[$node->language];
+  }else{
+    return;
+  }
+
+  // First do video and video area.
+  if(!empty($show_field[0]['value'])) {
+    $jwplayer = array();
+    foreach($show_field as $key => $info) {
+      if (!valid_url($info['safe_value'], true)) {
+        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
+      }
+      else {
+        $video_path = $info['safe_value'];
+      }
+      $jwplayer[$key]['path'] = $video_path;
+      if ($thumb_field[0]['uri']) {
+        $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
+        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
+          $jwplayer[$key]['image'] = $image_url;
+        }
+      }
+    }
+    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
+    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
+  }
+}
+
