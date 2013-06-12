@@ -216,7 +216,6 @@ function om_show_jwplayer_include($node) {
 }
 
 function om_show_youtube_id($url) {
-  $url = 'http://www.youtube.com/watch?v=-pi1JKNlTyU';
   $url_info = parse_url($url);
   $query_parts = explode('=', $url_info['query']);
   foreach ($query_parts as $key => $data) {
