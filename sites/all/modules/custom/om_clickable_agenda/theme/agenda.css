@@ -326,3 +326,8 @@ body.live-house div#session-wrapper {
 body.youtube div#session-documents {
   margin-top: 0px;
 }
+
+#agenda-manager-form .jwplayer {
+  width: 525px !important;
+  height: 300px !important;
+}
