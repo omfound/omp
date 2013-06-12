@@ -213,7 +213,7 @@ function agenda_manager_form($form, &$form_state, $node) {
     '#value' => t('Add to Recorded')
   );
   $video_field = field_view_value('node', $node, 'field_om_show_video', $node->field_om_show_video[$node->language][0]);
-  $video = render($field);
+  $video = render($video_field);
   $form['video_player'] = array(
     '#type' => 'markup',
     '#value' => $video
