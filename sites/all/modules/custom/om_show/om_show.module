@@ -202,7 +202,7 @@ function om_show_jwplayer_include($node) {
         $video_path = $info['safe_value'];
       }
       $jwplayer[$key]['path'] = $video_path;
-      if ($thumb_field[0]['uri']) {
+      if (!empty($thumb_field) && $thumb_field[0]['uri']) {
         $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
         if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
           $jwplayer[$key]['image'] = $image_url;
