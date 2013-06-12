@@ -64,7 +64,23 @@ function openmedia_preprocess_field(&$variables, $hook) {
 }
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
-  dsm($variables);
+  $url = $variables['items'][0]['#markup'];
+  if (!empty($url)) {
+    if ($youtube_id = om_show_youtube_id($url)) {
+      $livestream_status = om_show_youtube_livestream_status($youtube_id); 
+      if (!empty($livestream_status) && $livestream_status == 'active') {
+        //youtube embed
+        $video = '<iframe width="500" height="340" src="'.$url.'" frameborder="0" allowfullscreen></iframe>';
+      }
+    } 
+  }
+
+  if (empty($video)) {
+    //default jwplayer code
+    $video = '<div id="jwplayer-0">Loading video...</div>';
+  }
+
+  $variables['video'] = $video;
 }
 
  /**
