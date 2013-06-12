@@ -70,7 +70,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
-        $embed_url = 'http://www.youtube.com/embed/'.$id;
+        $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
         $video = '<iframe width="500" height="340" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
