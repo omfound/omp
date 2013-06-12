@@ -216,7 +216,7 @@ function agenda_manager_form($form, &$form_state, $node) {
   $video = render($video_field);
   $form['video_player'] = array(
     '#type' => 'markup',
-    '#value' => $video
+    '#value' => '<h2>testing</h2>'.$video
   );
   return $form;
 }
