@@ -63,7 +63,7 @@ function openmedia_preprocess_field(&$variables, $hook) {
   }
 }
 
-function openmedia_preprocess_field_om__field_om_show_video(&$variables) {
+function openmedia_preprocess_field__field_om_show_video(&$variables) {
   dsm($variables);
 }
 
