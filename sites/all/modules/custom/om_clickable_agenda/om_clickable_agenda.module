@@ -212,8 +212,8 @@ function agenda_manager_form($form, &$form_state, $node) {
     '#type' => 'submit', 
     '#value' => t('Add to Recorded')
   );
-  $video = "<iframe src='http://www.coloradochannel.net/node/" . $nid . "?width=425&height=280&embed=true' width='425' height='280' frameborder='0' scrolling='no'></iframe>";
-  //$video = "<div id='video'></div>";
+  $video_field = field_view_value('node', $node, 'field_om_show_video', $node->field_om_show_video[$node->language][0]);
+  $video = render($field);
   $form['video_player'] = array(
     '#type' => 'markup',
     '#value' => $video
