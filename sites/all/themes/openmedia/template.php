@@ -55,6 +55,19 @@ function openmedia_preprocess_node(&$variables) {
 /**
  * Implements hook_preprocess_HOOK
  */
+function openmedia_preprocess_field(&$variables, $hook) {
+  dsm($variables);
+  // Allow preprocessing for fields
+  /**
+  $function = __FUNCTION__ . '__' . $variables['node']->type;
+  if (function_exists($function)) {
+    $function($variables);
+  }**/
+}
+
+ /**
+ * Implements hook_preprocess_HOOK
+ */
 function openmedia_preprocess_node__class_display(&$variables) {
   global $user;
   $node_meta = entity_metadata_wrapper('node', $variables['node']);
@@ -172,29 +185,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
   om_show_jwplayer_include($variables);
-  // First do video and video area.
-  /**
-  if(!empty($variables['field_om_show_video'][0]['value'])) {
-    $jwplayer = array();
-    foreach($variables['field_om_show_video'] as $key => $info) {
-      if (!valid_url($info['safe_value'], true)) {
-        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
-      }
-      else {
-        $video_path = $info['safe_value'];
-      }
-      $jwplayer[$key]['path'] = $video_path;
-      if ($variables['field_show_thumbnail'][$variables['language']][0]['uri']) {
-        $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables['language']][0]['uri']); 
-        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
-          $jwplayer[$key]['image'] = $image_url;
-        }
-      }
-    }
-    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
-    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
-    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
-  }**/
 
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
