@@ -162,6 +162,41 @@ function openmedia_preprocess_node__class_display(&$variables) {
   $variables['registration_box'] = theme('class_registration_box', array('registration_details' => $registration_details));
 }
 
+function openmedia_jwplayer_include($node) {
+  if(!empty($node['field_om_show_video'])) {
+    $show_field = $node['field_om_show_video'];
+    $thumb_field = $node['field_show_thumbnail'][$node['language']];
+  }elseif(!empty($node->field_om_show_video)) {
+    $show_field = $node->field_om_show_video[$node->language];
+    $thumb_field = $node->field_show_thumbnail[$node->language];
+  }else{
+    return;
+  }
+
+  // First do video and video area.
+  if(!empty($show_field[0]['value'])) {
+    $jwplayer = array();
+    foreach($show_field as $key => $info) {
+      if (!valid_url($info['safe_value'], true)) {
+        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
+      }
+      else {
+        $video_path = $info['safe_value'];
+      }
+      $jwplayer[$key]['path'] = $video_path;
+      if ($thumb_field[0]['uri']) {
+        $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
+        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
+          $jwplayer[$key]['image'] = $image_url;
+        }
+      }
+    }
+    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
+    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
+  }
+}
+
 /**
  * Implements hook_preprocess_HOOK
  */
@@ -171,7 +206,9 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $file = file_load($variables['picture']);
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
+  openmedia_jwplayer_include($variables);
   // First do video and video area.
+  /**
   if(!empty($variables['field_om_show_video'][0]['value'])) {
     $jwplayer = array();
     foreach($variables['field_om_show_video'] as $key => $info) {
@@ -192,7 +229,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
     drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
     drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
     drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
-  }
+  }**/
+
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
   $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);
