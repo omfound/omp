@@ -232,7 +232,7 @@ function om_show_youtube_id($url) {
 }
 
 function om_show_youtube_livestream_status($id) {
-  $video_info_json = file_get_contents('https://gdata.youtube.com/feeds/api/videos/'.$zeid.'?v=2&alt=json');
+  $video_info_json = file_get_contents('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
   $video_info = json_decode($video_info_json);
   foreach ($video_info->entry->link as $key => $data) {
     if (strpos($data->rel, 'live.event') !== false) {
