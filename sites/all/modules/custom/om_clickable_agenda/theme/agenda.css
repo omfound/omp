@@ -104,6 +104,7 @@
   margin: 0 28px 5px 0;
   border: none;
   background: #E6E7E7;
+  clear: left;
 }
 
 #agenda-manager-form fieldset #edit-submit {
