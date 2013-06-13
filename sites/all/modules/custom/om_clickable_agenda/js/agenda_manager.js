@@ -55,7 +55,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   retrieveData : function() {
     $.ajax({
       type : 'GET',
-      url : '/node/'+this.get('currentNid')+'/agenda-items',
+      url : '/node/' + this.get('currentNid') + '/agenda-items',
       success : this.addSessionBills
     });
     $.ajax({
@@ -82,6 +82,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   addCuePoints : function(data) {
     dataJSON = JSON.parse(data);
+    console.log(dataJSON);
     for (x in dataJSON) {
       this.cuePointList.add(dataJSON[x]);
     }
