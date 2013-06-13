@@ -278,6 +278,7 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
       'variables' => array(),
     )
   );
+  return $themes;
 }
 
 function om_agenda_manager_render_live_page($existing, $type, $theme, $path) {
