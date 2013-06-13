@@ -266,7 +266,7 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $livestream_info = om_agenda_manager_livestream_info();
-  return theme('om_show_live_block', $livestream_info);
+  return theme('om_show_live_block', array('live_themes' => $livestream_info));
 }
 
 /**
