@@ -230,12 +230,25 @@ function om_show_youtube_id($url) {
   return false;
 }
 
+function om_show_youtube_fetch_url($url) {
+
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL,$url);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Open Media Project');
+  $result = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $result;
+}
+
 function om_show_youtube_livestream_status($id) {
-  $video_info_json = file_get_contents('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
+  $video_info_json = om_show_youtube_fetch_url('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
   $video_info = json_decode($video_info_json);
   foreach ($video_info->entry->link as $key => $data) {
     if (strpos($data->rel, 'live.event') !== false) {
-      $event_info_json = file_get_contents($data->href.'&alt=json');
+      $event_info_json = om_show_youtube_fetch_url($data->href.'&alt=json');
       $event_info = json_decode($event_info_json);
       return $event_info->entry->{'yt$status'}->{'$t'};
     }
