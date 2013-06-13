@@ -101,9 +101,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       this.set('timerState', true);
       this.startTimer();
-      console.log('And why not here');
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
-        console.log('And here too.');
         var newValues = this.get('sessionStatus');
         var theme = this.get('themeNid');
         newValues[theme].live_nid = this.get('currentNid');
@@ -194,8 +192,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   saveSessionStatus : function() {
     var values = this.get('sessionStatus');
     var modelPost = {'sessionStatus' : JSON.stringify(values)};
-    console.log('we make it here');
-    console.log(modelPost);
     $.ajax({
       type : 'post',
       url : '/change-session-status',
@@ -211,7 +207,6 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
   },
   saveModel : function() {
     // Theoretically this.toJSON() should work, but results may vary.
-    /**
     console.log(this.attributes);
     var modelPost = {'node' : JSON.stringify(this.attributes)};
     $.ajax({
@@ -219,7 +214,7 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
       data : modelPost,
       type : 'POST',
       success : this.handleResponse
-    });**/
+    });
   },
   handleResponse : function(data) {
     dataJSON = JSON.parse(data);
