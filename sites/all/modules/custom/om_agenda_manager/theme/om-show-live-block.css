@@ -1,0 +1,13 @@
+.om-live-button {
+  padding: 15px;
+  width: 200px;
+  text-align: center;
+  background-color: #DADBDD;
+  font-size: 1.2em;
+  width: 200px;
+  float: left;
+}
+.om-live-button a {
+  width: 100%;
+  height: 100%;
+}
