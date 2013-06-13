@@ -5,9 +5,9 @@
  */
 function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
   dsm($variables);
-  if (!empty($variables['livestream_info'])) {
+  if (!empty($variables['live_themes'])) {
     $buttons = array();
-    foreach ($variables['livestream_info'] as $theme_tid => $details) {
+    foreach ($variables['live_themes'] as $theme_tid => $details) {
       $button = '';
       if ($details['live_nid']) {
         $button .= '<div class="om-live-button stream-online">';
