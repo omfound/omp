@@ -55,7 +55,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   retrieveData : function() {
     $.ajax({
       type : 'GET',
-      url : '/node/' + this.get('currentNid') + '/agenda-items',
+      url : '/node/'+this.get('currentNid')+'/agenda-items',
       success : this.addSessionBills
     });
     $.ajax({
@@ -81,13 +81,16 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('sessionBillsComplete', true);
   },
   addCuePoints : function(data) {
-    dataJSON = JSON.parse(data);
-    console.log(dataJSON);
+    console.log(data);
+    //dataJSON = JSON.parse(data);
+    
+/*
     for (x in dataJSON) {
       this.cuePointList.add(dataJSON[x]);
     }
     this.updateCuePointListView();
     this.set('addCuePointsComplete', true);
+*/
   },
   dataComplete : function() {
     if (this.get('sessionBillsComplete') == true && this.get('addCuePointsComplete') == true) {
@@ -207,7 +210,7 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
     _.bindAll(this, 'saveModel', 'updateModel', 'deleteModel', 'handleResponse', 'inlineEditListener');
   },
   saveModel : function() {
-    var modelPost = {'node' : JSON.stringify(this.attributes)};
+   var modelPost = {'node' : JSON.stringify(this.attributes)};
     $.ajax({
       url : '/create-cue-point',
       data : modelPost,
