@@ -315,7 +315,7 @@ function om_clickable_agenda_list_cue_points($nid) {
   $args = array();
   $args[] = $nid;
   $view = views_get_view('session_agenda');
-  $view->preview('default', $args);
+  $view->execute('default', $args);
   print drupal_json_encode($view->result);
 }
 
