@@ -265,7 +265,7 @@ function om_agenda_manager_livestream_update($session_status) {
 }
 
 function om_agenda_manager_live_page() {
-  return theme('om_agenda_manager_render_live_page');
+  return theme('om_show_live_page');
 }
 
 /**
