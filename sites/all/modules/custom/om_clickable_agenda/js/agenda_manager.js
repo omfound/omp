@@ -206,8 +206,6 @@ Drupal.agendaManger.Models.cuePoint = Backbone.Model.extend({
     _.bindAll(this, 'saveModel', 'updateModel', 'deleteModel', 'handleResponse', 'inlineEditListener');
   },
   saveModel : function() {
-    // Theoretically this.toJSON() should work, but results may vary.
-    console.log(this.attributes);
     var modelPost = {'node' : JSON.stringify(this.attributes)};
     $.ajax({
       url : '/create-cue-point',

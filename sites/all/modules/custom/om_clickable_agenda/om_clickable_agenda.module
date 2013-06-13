@@ -301,8 +301,8 @@ function om_clickable_agenda_get_session_status() {
 function om_clickable_agenda_delete_cue_point() {
   if (!empty($_POST['node'])) {
     $node_data = drupal_json_decode($_POST['node']);
-    if (!empty($node_data->nid)) {
-      node_delete($node_data->nid);
+    if (!empty($node_data['nid'])) {
+      node_delete($node_data['nid']);
     }
   }
 }
