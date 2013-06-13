@@ -65,11 +65,9 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
-  dsm('url: '.$url);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
-      dsm('livestream status: '.$livestream_status);
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
