@@ -246,11 +246,13 @@ function om_show_youtube_fetch_url($url) {
 function om_show_youtube_livestream_status($id) {
   $video_info_json = om_show_youtube_fetch_url('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
   $video_info = json_decode($video_info_json);
-  foreach ($video_info->entry->link as $key => $data) {
-    if (strpos($data->rel, 'live.event') !== false) {
-      $event_info_json = om_show_youtube_fetch_url($data->href.'&alt=json');
-      $event_info = json_decode($event_info_json);
-      return $event_info->entry->{'yt$status'}->{'$t'};
+  if (!empty($video_info)) {
+    foreach ($video_info->entry->link as $key => $data) {
+      if (strpos($data->rel, 'live.event') !== false) {
+        $event_info_json = om_show_youtube_fetch_url($data->href.'&alt=json');
+        $event_info = json_decode($event_info_json);
+        return $event_info->entry->{'yt$status'}->{'$t'};
+      }
     }
   }
   return false;
