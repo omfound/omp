@@ -365,13 +365,6 @@ function _om_clickable_agenda_delete_custom_session() {
   if (isset($_POST['sessionQuery'])) {
     $session_query = drupal_json_decode($_POST['sessionQuery']);
     om_clickable_agenda_delete_custom_session($session_query);
-    if (!empty($session_query->nid)) {
-      $node = node_load($session_query->nid);
-      $url = $node->field_session_mp4_url[0]['value'];
-      if (is_numeric(strpos($url, 'youtube'))) {
-        $node->field_session_mp4_url[0]['value'] = '';
-        node_save($node);
-      }
-    }
+    dsm($session_query);
   }
 }
