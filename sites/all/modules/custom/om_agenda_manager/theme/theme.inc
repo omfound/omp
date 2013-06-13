@@ -4,6 +4,7 @@
  * Implements hook_preprocess_hook
  */
 function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
+  drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-block.css');
   if (!empty($variables['live_themes'])) {
     $buttons = array();
     foreach ($variables['live_themes'] as $theme_tid => $details) {
@@ -11,12 +12,14 @@ function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
       if ($details['live_nid']) {
         $button .= '<div class="om-live-button stream-online">';
         $live_node = node_load($details['live_nid']);
-        $options = array('attributes' => array('class' => 'button-live'));
-        $button = l($details['theme'], 'node/'.$live_node->nid, $options);
+        $options = array('attributes' => array('class' => 'om-live-button-content'));
+        $button .= l($details['theme'], 'node/'.$live_node->nid, $options);
         $button .= '</div>';
       }else{
         $button .= '<div class="om-live-button stream-offline">';
-        $button .= $details['theme'];
+        $button .= '<div class="om-live-button-content">';
+        $button .= $details['theme'].' Currently Not In Session';
+        $button .= '</div>';
         $button .= '</div>';
       }
       $buttons[] = $button;
