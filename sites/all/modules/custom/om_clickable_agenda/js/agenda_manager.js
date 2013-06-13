@@ -58,13 +58,11 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       url : '/node/'+this.get('currentNid')+'/agenda-items',
       success : this.addSessionBills
     });
-/*
     $.ajax({
       type : 'GET',
       url : '/list-cue-points/' + this.get('currentNid'),
       success : this.addCuePoints
     });
-*/
     var obj = {'nid' : this.get('currentNid')};
     var json = JSON.stringify(obj);
     $.ajax({
@@ -84,15 +82,12 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   addCuePoints : function(data) {
     console.log(data);
-    //dataJSON = JSON.parse(data);
-    
-/*
+    dataJSON = JSON.parse(data);
     for (x in dataJSON) {
       this.cuePointList.add(dataJSON[x]);
     }
     this.updateCuePointListView();
     this.set('addCuePointsComplete', true);
-*/
   },
   dataComplete : function() {
     if (this.get('sessionBillsComplete') == true && this.get('addCuePointsComplete') == true) {
