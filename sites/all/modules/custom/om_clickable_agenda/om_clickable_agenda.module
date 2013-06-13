@@ -245,7 +245,7 @@ function om_clickable_agenda_init() {
 function om_clickable_agenda_save_cue_point() {
   if (!empty($_POST['node'])) {
     $node_data = drupal_json_decode($_POST['node']);
-    if (empty($node_data->nid)) {
+    if (empty($node_data['nid'])) {
       $node = new StdClass();
       $node->type = 'agenda_cue_point';
       $node->status = 1;
