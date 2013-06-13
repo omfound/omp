@@ -29,6 +29,13 @@ function om_agenda_manager_menu() {
     'access arguments' => array('administer agenda manager'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['live/status'] = array(
+    'title' => 'Live Broadcast',
+    'description' => 'Livestream page',
+    'page callback' => 'om_agenda_manager_livestream_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
   $items['node/%node/agenda-items'] = array(
     'title' => 'Node Agenda Items',
     'description' => 'Node Agenda Items',
@@ -255,4 +262,29 @@ function om_agenda_manager_livestream_update($session_status) {
     }
     taxonomy_term_save($loaded_term);
   }
+}
+
+function om_agenda_manager_live_page() {
+  return theme('om_agenda_manager_render_live_page');
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_agenda_manager_theme($existing, $type, $theme, $path) {
+  $themes = array(
+    'om_show_live_page' => array(
+      'function' => 'om_agenda_manager_render_live_page',
+      'variables' => array(),
+    )
+  );
+}
+
+function om_agenda_manager_render_live_page($existing, $type, $theme, $path) {
+  $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
+  $themes = taxonomy_get_tree($theme_taxonomy->vid);
+  $livestream_info = om_agenda_manager_livestream_info();
+  dsm($livestream_info);
+  dsm($themes);
+  return '<div>LIVESTREAM INFO</div>'; 
 }
