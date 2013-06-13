@@ -32,7 +32,7 @@ function om_agenda_manager_menu() {
   $items['live/status'] = array(
     'title' => 'Live Broadcast',
     'description' => 'Livestream page',
-    'page callback' => 'om_agenda_manager_livestream_page',
+    'page callback' => 'om_agenda_manager_live_page',
     'access arguments' => array('access content'),
     'type' => MENU_NORMAL_ITEM,
   );
