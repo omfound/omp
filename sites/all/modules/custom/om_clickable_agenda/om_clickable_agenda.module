@@ -316,7 +316,29 @@ function om_clickable_agenda_list_cue_points($nid) {
   $args[] = $nid;
   $view = views_get_view('session_agenda');
   $view->preview('default', $args);
-  print drupal_json_encode($view->result);
+  $results = $view->result;
+  $output = array();
+  if (!empt($results)) {
+    foreach ($results AS $result) {
+      $cleaned_result = om_clickable_agenda_simplify_cue_point_result($result);
+      $output[] = $cleaned_result;
+    }
+  }
+  print drupal_json_encode($output);
+}
+
+function om_clickable_agenda_simplify_cue_point_result($result) {
+  $result = (array) $result;
+  $cleaned_result = array();
+  $cleaned_result['nid'] = $result['nid'];
+  $cleaned_result['node_revisions_body'] = $result['node_title'];
+  $seconds = 0;
+  if (!empty($result['field_field_acp_seconds'][0])) {
+    $seconds = $result['field_field_acp_seconds'][0]['value'];
+  }
+  $cleaned_result['node_data_field_cue_seconds_field_cue_seconds_value'] = $seconds;
+  $cleaned_result['node_data_field_session_reference_field_session_reference_nid'] = $result['field_field_acp_show_reference'][0]['raw']['target_id'];
+  return $cleaned_result;
 }
 
 function om_clickable_agenda_create_custom_session($session_obj) {
