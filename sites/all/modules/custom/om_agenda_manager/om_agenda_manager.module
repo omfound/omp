@@ -285,7 +285,18 @@ function om_agenda_manager_render_live_page($variables) {
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $livestream_info = om_agenda_manager_livestream_info();
-  dsm($livestream_info);
-  dsm($themes);
-  return '<div>LIVESTREAM INFO</div>'; 
+  $output .= '<table><th>Channel</th><th>Status</th>';
+  foreach ($themes as $key => $info) {
+    $output .= '<tr>';
+    $output .= '<td>'.$info->name.'</td>';
+    if ($livestream_info[$info->tid]['status']) {
+      $live_node = node_load($livestream_info[$info->tid]['live_nid']);
+      $output .= '<td>'.l($live_node->title, 'node/'.$live_node->nid).'</td>';
+    }else{
+      $output .= '<td>OFFLINE</td>';
+    }
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output; 
 }
