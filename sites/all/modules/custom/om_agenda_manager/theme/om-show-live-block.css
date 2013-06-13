@@ -1,14 +1,14 @@
 .om-live-button {
   margin-right: 15px;
-  width: 200px;
   text-align: center;
   background-color: #DADBDD;
   font-size: 1.2em;
   width: 200px;
+  height: 50px;
   float: left;
 }
 .om-live-button-content {
-  width: 100%;
-  height: 100%;
+  width: 200px;
   padding: 15px;
+  height: 50px;
 }
