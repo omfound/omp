@@ -1,7 +1,5 @@
-<?php foreach ($live_themes as $theme) { ?>
+<?php foreach ($buttons as $button) { ?>
   <div id="om-show-live-block">
-    <div class="om-show-live-block-button">
-      <?php print $theme['button']; ?>
-    </div>
+    <?php print $button; ?>
   </div>
 <?php } ?>
