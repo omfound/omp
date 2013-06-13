@@ -101,7 +101,9 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       this.set('timerState', true);
       this.startTimer();
+      console.log('And why not here');
       if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
+        console.log('And here too.');
         var newValues = this.get('sessionStatus');
         var theme = this.get('themeNid');
         newValues[theme].live_nid = this.get('currentNid');
