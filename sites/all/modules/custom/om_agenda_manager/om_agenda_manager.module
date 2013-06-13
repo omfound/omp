@@ -285,6 +285,7 @@ function om_agenda_manager_render_live_page($variables) {
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $livestream_info = om_agenda_manager_livestream_info();
+  $output = '';
   $output .= '<table><th>Channel</th><th>Status</th>';
   foreach ($themes as $key => $info) {
     $output .= '<tr>';
