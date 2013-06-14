@@ -26,7 +26,7 @@ body.iframe-mode {
   background-image: none;
 }
 
-.iframe-mode .footer-wrapper {
+.iframe-mode #footer-wrapper {
   display: none;
 }
 
