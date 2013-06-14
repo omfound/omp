@@ -8,6 +8,8 @@ class newestEpisodeInProjectSchedulingRule extends timeslotSchedulingRule {
     // These two lines specific to Local Show Rule.
     $query->join('field_data_field_om_show_project', 'project', 'project.entity_id=n.nid');
     $query->condition('field_om_show_project_nid', $timeslot->nid, '=');
+    // Join to broadcast uri to ensure show has neccesary media.
+    $query->join('field_data_field_om_show_broadcast_file', 'broadcast_file', 'broadcast_file.entity_id=n.nid');
     $resource = $query->execute();
     // Form a list ranked by field_om_show_episode_number
     $shows = array();

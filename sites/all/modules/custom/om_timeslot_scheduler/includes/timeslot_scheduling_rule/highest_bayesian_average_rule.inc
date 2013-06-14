@@ -12,7 +12,10 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
       $query->join('field_data_field_om_theme', 'theme', 'theme.entity_id=n.nid');
       $query->condition('field_om_theme_tid', $timeslot->field_om_timeslot_theme['und'][0]['tid'], '=');
     }
+    // Limit to 150 so this rule doesn't run forever.
     $query->range(0, 150);
+    // Join to broadcast uri to ensure show has neccesary media.
+    $query->join('field_data_field_om_show_broadcast_file', 'broadcast_file', 'broadcast_file.entity_id=n.nid');
     $result = $query->execute();
     $vote_results = array();
     while($nids = $result->fetchAssoc()) {
