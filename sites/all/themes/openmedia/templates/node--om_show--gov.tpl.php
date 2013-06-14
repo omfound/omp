@@ -1,5 +1,4 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <div id="show-left">
     <?php if (isset($video)): ?>
       <?php print $video; ?>
     <?php endif; ?>
@@ -38,5 +37,9 @@
         <?php print render($content['comments']); ?>
       </div>
     </div>
-  </div>
+    <?php if (!empty($node->field_om_calendar)) { ?>
+      <div id="documents">
+        <iframe src="<?php print $node->field_om_calendar[$node->language][0]['url']; ?>" width="100%" height="500" ></iframe> 
+      </div>
+    <?php } ?>
 </article><!-- /.node -->
