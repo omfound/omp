@@ -150,6 +150,10 @@ function om_agenda_manager_agenda_items($node) {
   $url = $node->field_om_calendar[$node->language][0]['url'];
   if ($url) {
     $text = om_agenda_manager_fetch_google_doc($url);
+    if (function_exists('views_trim_text')) {
+      $alter = array('max_length' => 175, 'ellipsis' => TRUE, 'word_boundary' => FALSE);
+      $text = views_trim_text($alter, $text);
+    }
     $items = om_agenda_manager_parse_agenda($text);
     $legacy_items = om_agenda_manager_legacy_agenda_items($items);
     
@@ -265,8 +269,7 @@ function om_agenda_manager_livestream_update($session_status) {
 }
 
 function om_agenda_manager_live_page() {
-  $livestream_info = om_agenda_manager_livestream_info();
-  return theme('om_show_live_block', array('live_themes' => $livestream_info));
+  return theme('om_show_live_page');
 }
 
 /**
@@ -274,17 +277,15 @@ function om_agenda_manager_live_page() {
  */
 function om_agenda_manager_theme($existing, $type, $theme, $path) {
   $themes = array(
-    'om_show_live_block' => array(
-      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
-      'template' => 'om-show-live-block', 
-      'file' => 'theme.inc',
-      'variables' => array('live_themes' => array()),
+    'om_show_live_page' => array(
+      'function' => 'om_agenda_manager_render_live_page',
+      'variables' => array(),
     )
   );
   return $themes;
 }
 
-function om_agenda_manager_render_live_status_page($variables) {
+function om_agenda_manager_render_live_page($variables) {
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $livestream_info = om_agenda_manager_livestream_info();
