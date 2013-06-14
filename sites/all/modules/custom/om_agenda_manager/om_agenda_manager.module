@@ -273,6 +273,7 @@ function om_agenda_manager_live_page() {
   $livestream_info = om_agenda_manager_livestream_info();
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
   $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
+  $output .= '<h1 class="page-title archive-title">Archived Sessions</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
