@@ -270,7 +270,8 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
-  $output .= theme('om_show_live_page'); 
+  $livestream_info = om_agenda_manager_livestream_info();
+  $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
@@ -280,15 +281,17 @@ function om_agenda_manager_live_page() {
  */
 function om_agenda_manager_theme($existing, $type, $theme, $path) {
   $themes = array(
-    'om_show_live_page' => array(
-      'function' => 'om_agenda_manager_render_live_page',
-      'variables' => array(),
+    'om_show_live_block' => array(
+      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
+      'template' => 'om-show-live-block', 
+      'file' => 'theme.inc',
+      'variables' => array('live_themes' => array()),
     )
   );
   return $themes;
 }
 
-function om_agenda_manager_render_live_page($variables) {
+function om_agenda_manager_render_live_status_page($variables) {
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $livestream_info = om_agenda_manager_livestream_info();
@@ -314,14 +317,14 @@ function om_agenda_manager_archive_tabs() {
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $tabs = array();
   foreach ($themes as $key => $info) {
-     $tabs[$info->tid] = array(
-       'title' => $info->name,
-       'type' => 'view',
-       'vid' => 'archived_sessions',
-       'display' => 'block_1',
-       'args' => $info->tid,
-       'weight' => $info->weight,
-     ); 
+    $tabs[$info->tid] = array(
+      'title' => $info->name,
+      'type' => 'view',
+      'vid' => 'archived_sessions',
+      'display' => 'block_1',
+      'args' => $info->tid,
+      'weight' => $info->weight,
+    ); 
   }
 
   $qtoptions = array(
