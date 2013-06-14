@@ -21,6 +21,10 @@ body {
   text-shadow: 1px 1px 1px rgba(239, 239, 239, .75);
 }
 
+body.iframe-mode {
+  background-image: none;
+}
+
 .red,
 .red:link,
 .red:visited {
