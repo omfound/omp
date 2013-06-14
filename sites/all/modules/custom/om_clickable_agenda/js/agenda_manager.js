@@ -97,6 +97,14 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     if (this.get('timerState') == true) {
       this.set('timerState', false);
       this.stopTimer();
+      if (this.sessionControllerView.sessionToggleLive && this.sessionControllerView.sessionToggleLive.attr('checked')) {
+        var newValues = this.get('sessionStatus');
+        var theme = this.get('themeNid');
+        newValues[theme].live_nid = this.get('currentNid');
+        newValues[theme].status = false;
+        this.set('sessionStatus', newValues);
+        this.saveSessionStatus();
+      }
     }
     else {
       this.set('timerState', true);
@@ -192,7 +200,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   saveSessionStatus : function() {
     var values = this.get('sessionStatus');
     var modelPost = {'sessionStatus' : JSON.stringify(values)};
-    console.log(modelPost);
     $.ajax({
       type : 'post',
       url : '/change-session-status',
