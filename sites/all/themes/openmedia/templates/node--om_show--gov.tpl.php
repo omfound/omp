@@ -40,7 +40,7 @@
     </div>
     <?php if (!empty($node->field_om_calendar)) { ?>
       <div id="documents">
-        <iframe src="<?php print $node->field_om_calendar[$node->language][0]['url']; ?>" width="100%" height="500" /> 
+        <iframe src="<?php print $node->field_om_calendar[$node->language][0]['url']; ?>" width="100%" height="500" ></iframe> 
       </div>
     <?php } ?>
   </div>
