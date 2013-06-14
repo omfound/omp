@@ -28,8 +28,8 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#7d7d7d',GradientType=0 ); /* IE6-9 */
 }
 
-a.ca-grey-button:link,
-a.ca-grey-button:visited {
+a:link.ca-grey-button,
+a:visited.ca-grey-button {
  text-shadow: none;
 }
 
