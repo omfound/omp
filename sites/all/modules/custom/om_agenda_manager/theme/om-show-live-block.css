@@ -29,6 +29,7 @@
 .stream-online a:link,
 .stream-online a:visited {
   color: #FFFFFF;
+  text-shadow: 1px 1px 1px rgba(7, 108, 140, .85);
   background: #055770; /* Old browsers */
   background: -moz-linear-gradient(top,  #055770 0%, #055770 50%, #076c8c 51%, #005b7c 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#055770), color-stop(50%,#055770), color-stop(51%,#076c8c), color-stop(100%,#005b7c)); /* Chrome,Safari4+ */
