@@ -10,6 +10,7 @@ function openmedia_preprocess_html(&$variables) {
     foreach ($variables['classes_array'] AS $key => $class) {
       if (in_array($class, $sidebar_classes)) {
         unset($variables['classes_array'][$key]);
+        variables['classes_array'][] = 'iframe-mode';
       }
     }
   }
