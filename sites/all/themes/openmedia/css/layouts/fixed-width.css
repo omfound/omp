@@ -29,6 +29,11 @@
   max-width: 980px;
 }
 
+.iframe-mode #main-inner {
+  width: 980px;
+  margin: 0;
+}
+
 /*
  * Apply the shared properties of grid items in a single, efficient ruleset.
  */
