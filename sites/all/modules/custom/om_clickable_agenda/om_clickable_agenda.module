@@ -146,8 +146,8 @@ function om_clickable_agenda_check_for_session_node($node){
  */
 function get_session_bills($nid) {
   global $base_path;
-  $bill_json = file_get_contents($base_path.'/node/'.$nid.'/agenda-items');
-  $bills = json_decode($bill_json);
+  $bill_json = file_get_contents($base_path . '/node/' . $nid . '/agenda-items');
+  $bills = drupal_json_decode($bill_json);
   $formatted_bills = array();
   foreach ($bills as $key => $text) {
     if (function_exists('views_trim_text')) {
