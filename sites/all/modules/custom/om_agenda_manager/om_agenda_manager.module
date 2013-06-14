@@ -271,8 +271,8 @@ function om_agenda_manager_livestream_update($session_status) {
 function om_agenda_manager_live_page() {
   $output = '';
   $livestream_info = om_agenda_manager_livestream_info();
+  drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
   $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
-  $output .= '<div id="live-separator" class="clearfix">&nbsp</div>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
