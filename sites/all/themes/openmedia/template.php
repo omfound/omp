@@ -4,6 +4,12 @@ if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exis
   require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
 }
 
+function openmedia_preprocess_html(&$variables) {
+  if (!empty($_GET['iframe_mode'])) {
+    dsm($variables);
+  }
+}
+
 function openmedia_preprocess_page(&$variables) {
   if ($_GET['q'] == 'classes') {
     $options = array(
