@@ -196,7 +196,7 @@ function agenda_manager_form($form, &$form_state, $node) {
   );
   $form['session_controls']['session_toggle'] = array(
     '#type' => 'checkboxes',
-    '#options' => array('live' => 'Make This Session Live')
+    '#options' => array('live' => 'Apply to live broadcast')
   );
   /**
   $form['session_controls']['session_type'] = array(
