@@ -28,7 +28,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#7d7d7d',GradientType=0 ); /* IE6-9 */
 }
 
-#content #content-inner .ca-grey-button {
+#content .ca-grey-button {
  text-shadow: none;
 }
 
