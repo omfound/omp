@@ -333,9 +333,8 @@ function om_clickable_agenda_simplify_cue_point_result($result) {
   $cleaned_result['nid'] = $result['nid'];
   $cleaned_result['node_revisions_body'] = $result['node_title'];
   $seconds = 0;
-  print_r($result['field_field_acp_seconds'][0]); 
-  if (!empty($result['field_field_acp_seconds']['und'][0])) {
-    $seconds = $result['field_field_acp_seconds']['und'][0]['value'];
+  if (!empty($result['field_field_acp_seconds'][0])) {
+    $seconds = $result['field_field_acp_seconds'][0]['raw']['value'];
   }
   $cleaned_result['node_data_field_cue_seconds_field_cue_seconds_value'] = $seconds;
   $cleaned_result['node_data_field_session_reference_field_session_reference_nid'] = $result['field_field_acp_show_reference'][0]['raw']['target_id'];
