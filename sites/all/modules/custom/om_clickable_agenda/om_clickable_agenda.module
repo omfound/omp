@@ -151,7 +151,7 @@ function get_session_bills($nid) {
   $formatted_bills = array();
   foreach ($bills as $key => $text) {
     if (function_exists('views_trim_text')) {
-      $alter = array('max_length' => 175, 'ellipsis' => TRUE);
+      $alter = array('max_length' => 175, 'ellipsis' => TRUE, 'word_boundary' => FALSE);
       $text = views_trim_text($alter, $text);
     }
     $formatted_bills[] = array('title' => $text);
