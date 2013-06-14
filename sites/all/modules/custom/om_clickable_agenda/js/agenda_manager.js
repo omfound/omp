@@ -53,6 +53,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('currentTime', 0);
   },
   retrieveData : function() {
+    // @TODO this should use an endpoint in the same module!
     $.ajax({
       type : 'GET',
       url : '/node/' + this.get('currentNid') + '/agenda-items',
