@@ -588,7 +588,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
   if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www')) || is_numeric(stripos($_SERVER['HTTP_HOST'], 'live-'))) {
     header('HTTP/1.0 301 Moved Permanently'); 
-    header('Location: http://www' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
+    header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
     exit();
   }
 }
