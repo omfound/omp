@@ -55,7 +55,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   retrieveData : function() {
     $.ajax({
       type : 'GET',
-      url : '/node/'+this.get('currentNid')+'/agenda-items',
+      url : '/get-session-bills/' + this.get('currentNid'),
       success : this.addSessionBills
     });
     $.ajax({
@@ -74,7 +74,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   addSessionBills : function(data) {
     //dataJSON = JSON.parse(data);
-    //console.log(dataJSON);
     for (x in data) {
       this.billList.add(data[x]);
     }
