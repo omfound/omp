@@ -16,6 +16,7 @@ function om_agenda_manager_theme_registry_alter(&$theme_registry) {
   if (!empty($theme_registry['node__om_show'])) {
     $theme_registry['node__om_show']['template'] == 'node--om_show--gov';
   }
+  dsm($theme_registry);
 }
 
 function om_agenda_manager_menu() {
