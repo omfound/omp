@@ -143,6 +143,8 @@ function om_clickable_agenda_check_for_session_node($node){
 
 /**
  * Endpoint to list a session nodes.
+ *   @TODO this endpoing is not being called. '/node/' . $nid . '/agenda-items' endpoint's contents
+ *   should be moved here instead.
  */
 function get_session_bills($nid) {
   global $base_path;
