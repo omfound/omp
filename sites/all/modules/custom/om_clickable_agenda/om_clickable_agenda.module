@@ -320,7 +320,6 @@ function om_clickable_agenda_list_cue_points($nid) {
   $output = array();
   if (!empty($results)) {
     foreach ($results AS $result) {
-      print_r($result);
       $cleaned_result = om_clickable_agenda_simplify_cue_point_result($result);
       $output[] = $cleaned_result;
     }
