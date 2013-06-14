@@ -333,7 +333,7 @@ function om_clickable_agenda_simplify_cue_point_result($result) {
   $cleaned_result['nid'] = $result['nid'];
   $cleaned_result['node_revisions_body'] = $result['node_title'];
   $seconds = 0;
-  print_r($result['field_field_acp_seconds'][0]['value']); 
+  print_r($result['field_field_acp_seconds'][0]); 
   if (!empty($result['field_field_acp_seconds']['und'][0])) {
     $seconds = $result['field_field_acp_seconds']['und'][0]['value'];
   }
