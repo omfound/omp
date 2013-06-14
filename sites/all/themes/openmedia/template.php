@@ -7,6 +7,12 @@ if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exis
 function openmedia_preprocess_html(&$variables) {
   if (!empty($_GET['iframe_mode'])) {
     dsm($variables);
+    $sidebar_classes = array('one-sidebar sidebar-first', 'one-sidebar sidebar-second', 'two-sidebars');
+    foreach ($variables['classes_array'] AS $key => $class) {
+      if (in_array($class, $sidebar_classes)) {
+        unset($variables['classes_array'][$key]);
+      }
+    }
   }
 }
 
