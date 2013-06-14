@@ -3,6 +3,7 @@
   width: 270px;
   padding: 15px;
   margin-bottom: 20px;
+  float: left;
 }
 
 .om-live-button {
@@ -12,7 +13,7 @@
   font-size: 1.2em;
 }
 
-.om-live-button stream-offline .om-live-button-content {
+.stream-offline .om-live-button-content {
   background: #cccccc; /* Old browsers */
   background: -moz-linear-gradient(top,  #cccccc 0%, #f2f2f2 50%, #e5e5e5 51%, #e5e5e5 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cccccc), color-stop(50%,#f2f2f2), color-stop(51%,#e5e5e5), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
@@ -23,8 +24,8 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
 }
 
-.om-live-button stream-offline .om-live-button-content:focus,
-.om-live-button stream-offline .om-live-button-content:hover {
+.stream-offline .om-live-button-content:focus,
+.stream-offline .om-live-button-content:hover {
   background: #E5E5E5;
   background-image: none;
 }
