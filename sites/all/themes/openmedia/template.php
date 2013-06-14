@@ -4,6 +4,18 @@ if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exis
   require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
 }
 
+function openmedia_preprocess_html(&$variables) {
+  if (!empty($_GET['iframe_mode'])) {
+    dsm($variables);
+    $sidebar_classes = array('one-sidebar sidebar-first', 'one-sidebar sidebar-second', 'two-sidebars');
+    foreach ($variables['classes_array'] AS $key => $class) {
+      if (in_array($class, $sidebar_classes)) {
+        unset($variables['classes_array'][$key]);
+      }
+    }
+  }
+}
+
 function openmedia_preprocess_page(&$variables) {
   if ($_GET['q'] == 'classes') {
     $options = array(
@@ -37,6 +49,12 @@ function openmedia_preprocess_page(&$variables) {
         drupal_set_title(t('Log in'));
         break;
     }
+  }
+
+  if (!empty($_GET['iframe_mode'])) {
+    $content = $variables['page']['content'];
+    unset($variables['page']);
+    $variables['page']['content'] = $content;
   }
 
 }
@@ -168,8 +186,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
   }
-
-
   if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
   }
