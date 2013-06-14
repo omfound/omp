@@ -155,6 +155,9 @@ function get_session_bills($nid) {
   print drupal_json_encode($formatted_bills);
 }
 
+/**
+ * Small form builder for the main interface.
+ */
 function agenda_manager_form($form, &$form_state, $node) {
   $nid = $node->nid;
   $form['session_controls'] = array(
@@ -286,6 +289,10 @@ function om_clickable_agenda_change_session_status() {
   }
 }
 
+/**
+ * @TODO Legacy function. Are we going to display session status?
+ *   Need to remove otherwise.
+ */
 function om_clickable_agenda_get_session_status() {
   $node = node_load(1620);
   return array(
@@ -327,6 +334,10 @@ function om_clickable_agenda_list_cue_points($nid) {
   print drupal_json_encode($output);
 }
 
+/**
+ * Isolate transformation of above view results to objects the agenda app is looking for.
+ *  @TODO make these keys less rediculous one day.
+ */
 function om_clickable_agenda_simplify_cue_point_result($result) {
   $result = (array) $result;
   $cleaned_result = array();
@@ -341,12 +352,19 @@ function om_clickable_agenda_simplify_cue_point_result($result) {
   return $cleaned_result;
 }
 
+/**
+ * Create a custom session entry in the om_clickable_agenda_sessions table.
+ *  Simple wrapper for drupal_write_record.
+ */
 function om_clickable_agenda_create_custom_session($session_obj) {
   if (is_object($session_obj)) {
     drupal_write_record('om_clickable_agenda_sessions', $session_obj);
   }
 }
 
+/**
+ * Helper to call om_clickable_agenda_create_custom_session with a POST request.
+ */
 function _om_clickable_agenda_create_custom_session() {
   if (isset($_POST['customSession'])) {
     $session_obj = drupal_json_decode($_POST['customSession']);
@@ -355,6 +373,9 @@ function _om_clickable_agenda_create_custom_session() {
   }
 }
 
+/**
+ * Read from om_clickable_agenda_sessions by nid or asid.
+ */
 function om_clickable_agenda_get_custom_session($session_query) {
   if ($session_query->nid) {
     $query = db_query("SElECT * FROM {om_clickable_agenda_sessions} WHERE nid=:nid", array(':nid' => $session_query->nid));
@@ -368,6 +389,9 @@ function om_clickable_agenda_get_custom_session($session_query) {
   return FALSE;
 }
 
+/**
+ * Helper to call om_clickable_agenda_get_custom_session with a POST request.
+ */
 function _om_clickable_agenda_get_custom_session() {
   if (isset($_POST['sessionQuery'])) {
     $session_query = drupal_json_decode($_POST['sessionQuery']);
@@ -376,6 +400,9 @@ function _om_clickable_agenda_get_custom_session() {
   }
 }
 
+/**
+ * Deletee from om_clickable_agenda_sessions by nid or asid.
+ */
 function om_clickable_agenda_delete_custom_session($session_query) {
   if ($session_query->nid) {
     $query = db_query("DELETE FROM {om_clickable_agenda_sessions} WHERE nid=:nid", array(':nid' => $session_query->nid));
@@ -388,6 +415,9 @@ function om_clickable_agenda_delete_custom_session($session_query) {
   return FALSE;
 }
 
+/**
+ * Helper to call om_clickable_agenda_delete_custom_session with a POST request.
+ */
 function _om_clickable_agenda_delete_custom_session() {
   if (isset($_POST['sessionQuery'])) {
     $session_query = drupal_json_decode($_POST['sessionQuery']);
