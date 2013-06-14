@@ -40,7 +40,9 @@ function openmedia_preprocess_page(&$variables) {
   }
 
   if (!empty($_GET['iframe_mode'])) {
-    dsm($variables['page']);
+    $content = $variables['page']['content'];
+    unset($variables['page']);
+    $variables['page']['content'] = $content;
   }
 
 }
