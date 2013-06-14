@@ -26,6 +26,10 @@ body.iframe-mode {
   background-image: none;
 }
 
+.iframe-mode .footer-wrapper {
+  display: none;
+}
+
 .red,
 .red:link,
 .red:visited {

@@ -30,7 +30,7 @@
 }
 
 .iframe-mode #main-inner {
-  width: 980px;
+  width: 100%;
   margin: 0;
 }
 
