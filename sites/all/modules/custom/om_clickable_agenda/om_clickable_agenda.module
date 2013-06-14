@@ -150,6 +150,10 @@ function get_session_bills($nid) {
   $bills = json_decode($bill_json);
   $formatted_bills = array();
   foreach ($bills as $key => $text) {
+    if (function_exists('views_trim_text')) {
+      $alter = array('max_length' => 175, 'ellipsis' => TRUE);
+      $text = views_trim_text($alter, $text);
+    }
     $formatted_bills[] = array('title' => $text);
   }
   print drupal_json_encode($formatted_bills);
