@@ -585,20 +585,19 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
-// Check for global OMP setting for SSL
-$secure_connection = variable_get('ssl_enabled', FALSE);
-if (function_exists('db_select')) {
-  print "QUERY LAYER IS PRESENT";
+$secure_sites = array('betv.org', 'denveropenmedia.org');
+$secure_connection = FALSE;
+foreach ($secure_sites AS $site) {
+  if (is_numeric(strpos($_SERVER['HTTP_HOST'], $site))) {
+    $secure_connection = TRUE;
+    break;
+  }
 }
-else {
-  print "QUERY LAYER IS NOT PRESENT";
-}
+
 if (!empty($secure_connection)) {
-  dsm('made it here');
   // Redirect to https:// and www if it's not there
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
-      dsm('redirected');
       header('HTTP/1.0 301 Moved Permanently'); 
       header('Location: https://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
       exit(); 
