@@ -1,0 +1,29 @@
+<?php
+/**
+ * Implements hook_schema
+ */
+function om_clickable_agenda_schema() {
+  $schema = array();
+  $schema['om_clickable_agenda_sessions'] = array(
+    'description' => 'Storage for active agenda sessions.',
+    'fields' => array(
+      'asid' => array(
+        'description' => 'The primary identifier for an agenda session.', 
+        'type' => 'serial', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+      ),
+      'nid' => array( 
+        'type' => 'int',
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+      ),
+      'initialized' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+      )
+    ),
+    'primary key' => array('asid')
+  );
+  return $schema;
+}

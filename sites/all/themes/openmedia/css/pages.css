@@ -21,6 +21,15 @@ body {
   text-shadow: 1px 1px 1px rgba(239, 239, 239, .75);
 }
 
+body.iframe-mode {
+  background-color: #F4F4F4;
+  background-image: none;
+}
+
+.iframe-mode #footer-wrapper {
+  display: none;
+}
+
 .red,
 .red:link,
 .red:visited {
@@ -283,6 +292,11 @@ div.messages ul {
   box-shadow: 1px 1px 2px #AAA, -1px -1px 2px #AAA;
   padding-bottom: 10px;
   margin-bottom: 30px;
+}
+
+.iframe-mode #content {
+  margin: 0;
+  box-shadow: none;
 }
 
 .front .region-sidebar-second {
