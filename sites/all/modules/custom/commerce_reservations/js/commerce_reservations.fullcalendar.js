@@ -94,6 +94,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 dateInvalid = true;
               }
             }
+
             //Check for closed days
             if (array[i].className == 'closed-all-day'){
               if (array[i].start.getDate() == start.getDate()){
@@ -125,6 +126,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 dateInvalid = true;
               }
             }
+
           }
         }
         startMonth = start.getMonth() + 1;
