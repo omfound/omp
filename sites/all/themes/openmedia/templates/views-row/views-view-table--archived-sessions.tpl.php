@@ -36,7 +36,6 @@
     </thead>
   <?php endif; ?>
   <tbody>
-    <?php dsm ($_GET); ?>
     <?php foreach ($rows as $row_count => $row): ?>
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
@@ -46,7 +45,17 @@
             </td>
           <?php }elseif ($field == 'title') { ?>
             <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
-              <?php $link = l($content, $rows[$row_count]['path'], array('absolute' => TRUE)); ?>
+              <?php if ($_GET['iframe_mode']) { ?>
+              <?php 
+                $options = array();
+                $options['absolute'] = TRUE;
+                $options['attributes']['target'] = '_blank';
+                $options['query']['iframe_mode'] = 'true';
+              ?>      
+              <?php }else{ ?>
+                <?php $options = array('absolute' => TRUE); ?>
+              <?php } ?>
+              <?php $link = l($content, $rows[$row_count]['path'], $options); ?>
               <?php print $link; ?>
             </td>
           <?php } ?>
