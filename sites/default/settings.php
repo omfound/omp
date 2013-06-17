@@ -584,10 +584,15 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  * the leading hash sign below.
  */
 # $conf['pressflow_smart_start'] = TRUE;
+
+// Check for global OMP setting for SSL
 $secure_connection = variable_get('ssl_enabled', FALSE);
 if (!empty($secure_connection)) {
+  dsm('made it here');
+  // Redirect to https:// and www if it's not there
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
+      dsm('redirected');
       header('HTTP/1.0 301 Moved Permanently'); 
       header('Location: https://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
       exit(); 
@@ -596,6 +601,7 @@ if (!empty($secure_connection)) {
 }
 else {
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
+    // Redirect to www
     if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
       header('HTTP/1.0 301 Moved Permanently'); 
       header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
