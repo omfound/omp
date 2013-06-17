@@ -584,7 +584,8 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  * the leading hash sign below.
  */
 # $conf['pressflow_smart_start'] = TRUE;
-if (!empty(variable_get('ssl_enabled', FALSE))) {
+$secure_connection = variable_get('ssl_enabled', FALSE);
+if (!empty($secure_connection)) {
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
       header('HTTP/1.0 301 Moved Permanently'); 
