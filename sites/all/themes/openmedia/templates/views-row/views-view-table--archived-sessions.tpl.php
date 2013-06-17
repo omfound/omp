@@ -45,7 +45,7 @@
             </td>
           <?php }elseif ($field == 'title') { ?>
             <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
-              <?php if ($_GET['iframe_mode']) { ?>
+              <?php if (!empty($_GET['iframe_mode'])) { ?>
               <?php 
                 $options = array();
                 $options['absolute'] = TRUE;
