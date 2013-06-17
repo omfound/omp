@@ -1,0 +1,4 @@
+name = Open Media Agenda Manager
+description = Provides tools to manage clickable agendas
+core = 7.x
+package = Open Media System

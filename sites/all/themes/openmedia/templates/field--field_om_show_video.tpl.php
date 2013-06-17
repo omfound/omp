@@ -6,7 +6,7 @@
     <div class="field-items"<?php print $content_attributes; ?>>
       <?php foreach ($items as $delta => $item): ?>
         <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
-          <div id="jwplayer-<?php print $delta; ?>">Loading video...</div>
+          <?php print $video; ?>
         </div>
       <?php endforeach; ?>
     </div>
