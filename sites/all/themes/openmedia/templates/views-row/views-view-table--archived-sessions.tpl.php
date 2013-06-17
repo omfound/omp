@@ -44,8 +44,7 @@
             <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
               <?php print $content; ?>
             </td>
-          <?php } ?>
-          <?php else { ?>
+          <?php }else{ ?>
             <?php $link = l($content, $rows[$row_count]['path']); ?>
           <?php } ?>
         <?php endforeach; ?>
