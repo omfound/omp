@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * Implements hook_permission
+ */
+function om_log_permission() {
+  return array(
+    'administer om log rules' => array(
+      'title' => t('Administer Rules for OM Log'),
+      'description' => t('Create/edit rules with events provided by OM Log'),
+    ),
+  );
+}
+
+/**
+ * Create a log entry
+ *
+ * @param $module
+ *   machine name of the module.
+ *
+ * @param $log_type
+ *   type of log entry
+ *
+ * @param $uid
+ *   optional unique identifyer for modules
+ *
+ * @param $message
+ *   short form message
+ *
+ * @param $details
+ *   array to be serialized and stored as blob
+ *
+ * @returns new record or FALSE
+ *
+ */
+function om_log_create_log_entry($module, $log_type, $unique_id = NULL, $severity = 7, $message = '', $details = array()) {
+  if (is_string($module) && is_string($log_type)) {
+    $record = new stdClass();
+    $record->module = $module;
+    $record->log_type = $log_type;
+    $record->uid = $unique_id;
+    $record->severity = $severity;
+    $record->message = $message;
+    $record->details = serialize($details);
+    $record->timestamp = time();
+    $result = drupal_write_record('om_log', $record);
+    if (is_numeric($result)) {
+      rules_invoke_event('om_log_created', $record);
+      if ($severity == 0) {
+        rules_invoke_event('om_critical_log_created', $record);
+      }
+      return $record;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Load a log entry
+ *
+ * @param $query_params
+ *   array to load by keys are column (timestamp, module, severity, logtype, lid, uid), value, operator
+ *
+ * @returns array of log info or FALSE
+ *
+ */
+function om_log_load_log_entry($query_params) {
+  if (is_array($query_params)) {
+    $query = db_select('om_log', 'log');
+    $query->fields('log');
+    $query->condition($query_params['column'], $query_params['value'], $query_params['operator']);
+    $record = $query->execute();
+    $log_entries = array();
+    while ($result = $record->fetchObject()) {
+      $log_entries[] = $result;
+    }
+    // NB: will return an empty array if no log entries were found!
+    return $log_entries;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Update a log entry
+ *
+ * @param $new_record
+ *   full record value to update
+ *
+ * @returns array of new log info or FALSE
+ *
+ */
+function om_log_update_log_entry($new_record) {
+  if (is_numeric($new_record->lid)) {
+    $result = drupal_write_record('om_log', $new_record, 'lid');
+    if (is_numeric($result)) {
+      rules_invoke_event('om_log_updated', $new_record);
+      return $new_record;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Remove a log entry
+ *
+ * @param $query_params
+ *   array to load by keys are column (timestamp, module, severity, logtype, lid, uid), value, operator
+ *
+ * @returns bool
+ *
+ */
+function om_log_delete_log_entry($query_params) {
+  if (is_array($query_params)) {
+    $query = db_delete('om_log');
+    $query->condition($query_params['column'], $query_params['value'], $query_params['operator']);
+    $query->execute();
+    rules_invoke_event('om_log_deleted', $query_params);
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}

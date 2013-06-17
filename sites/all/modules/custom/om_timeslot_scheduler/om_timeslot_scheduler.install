@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * Implements hook_schema
+ */
+function om_timeslot_scheduler_schema() {
+  $schema['om_timeslot_scheduler_process'] = array(
+    'description' => 'Stores information on scheduling processes.',
+    'fields' => array(
+      'pid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Process id',
+      ),
+      'start' => array(
+        'description' => 'Start time of the process',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'end' => array(
+        'description' => 'End time of the process',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'channel_tid' => array(
+        'description' => 'Channel taxonomy term id associated with run',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'process_status' => array(
+        'description' => 'Status of process',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'time' => array(
+        'description' => 'Time process was recorded',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('pid'),
+  );
+  $schema['om_timeslot_scheduler_cache'] = array(
+    'description' => 'Stores information on individual items in a scheduling run.',
+    'fields' => array(
+      'iid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Item id',
+      ),
+      'pid' => array(
+        'description' => 'Id of the scheduling process',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'timeslot_id' => array(
+        'description' => 'Timeslot node this shedule run is associated with',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'show_id' => array(
+        'description' => 'Id of the show item to be scheduled',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'start' => array(
+        'description' => 'Start time of the item',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'end' => array(
+        'description' => 'End time of the item',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'time' => array(
+        'description' => 'Time process was recorded',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('iid'),
+    'foreign keys' => array('om_timeslot_scheduler_process' => array(
+      'pid' => 'pid'
+      ),
+    ),
+  );
+  return $schema;
+}

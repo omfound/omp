@@ -1,0 +1,168 @@
+/**
+ * @file
+ * Positioning for a fixed-width, desktop-centric layout.
+ *
+ * Define CSS classes to create a table-free, 3-column, 2-column, or single
+ * column layout depending on whether blocks are enabled in the left or right
+ * columns.
+ *
+ * This layout uses the Zen Grids plugin for Compass: http://zengrids.com
+ */
+
+
+/*
+ * Center the page.
+ */
+
+#page,
+.region-bottom {
+  width: 100%;
+}
+
+#header-inner,
+#main-inner,
+#above-content,
+#action-item-inner,
+#footer {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 980px;
+}
+
+.iframe-mode #main-inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/*
+ * Apply the shared properties of grid items in a single, efficient ruleset.
+ */
+
+#header,
+#content,
+#navigation,
+.region-sidebar-first,
+.region-sidebar-second,
+#footer {
+/*
+  padding-left: 10px;
+  padding-right: 10px;
+*/
+  border: 0 !important;
+  word-wrap: break-word;
+  _display: inline;
+  _overflow: hidden;
+  _overflow-y: visible;
+}
+
+#content-inner {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/*
+ * Containers for grid items and flow items.
+ */
+
+#header,
+#main,
+#footer {
+  *position: relative;
+  *zoom: 1;
+}
+#header:before, #header:after,
+#main:before, #main:after,
+#footer:before, #footer:after {
+  content: "";
+  display: table;
+}
+#header:after,
+#main:after,
+#footer:after {
+  clear: both;
+}
+
+/*
+ * Navigation bar
+ */
+
+#main {
+  padding-top: 3em; /* Move all the children of #main down to make room. */
+  position: relative;
+}
+
+#navigation {
+  position: absolute;
+  top: 0; /* Move the navbar up inside #main's padding. */
+  height: 3em;
+  width: 960px;
+}
+
+/*
+ * The layout when there is only one sidebar, the left one.
+ */
+
+.sidebar-first #content {
+  /* Span 4 columns, starting in 2nd column from left. */
+  float: left;
+  width: 730px;
+  margin-left: 250px;
+  margin-right: -980px;
+}
+
+.sidebar-first .region-sidebar-first {
+  /* Span 1 column, starting in 1st column from left. */
+  float: left;
+  width: 230px;
+  margin-left: 0px;
+  margin-right: -250px;
+}
+
+/*
+ * The layout when there is only one sidebar, the right one.
+ */
+
+.sidebar-second #content {
+  /* Span 4 columns, starting in 1st column from left. */
+  float: left;
+  width: 764px;
+  margin-left: 0px;
+  margin-right: -784px;
+}
+
+.sidebar-second .region-sidebar-second {
+  /* Span 1 column, starting in 5th column from left. */
+  float: left;
+  width: 176px;
+  margin-left: 784px;
+  margin-right: -980px;
+}
+
+/*
+ * The layout when there are two sidebars.
+ */
+
+.two-sidebars #content {
+  /* Span 3 columns, starting in 2nd column from left. */
+  float: left;
+  width: 480px;
+  margin-left: 250px;
+  margin-right: -760px;
+}
+
+.two-sidebars .region-sidebar-first {
+  /* Span 1 column, starting in 1st column from left. */
+  float: left;
+  width: 230px;
+  margin-left: 0px;
+  margin-right: -250px;
+}
+
+.two-sidebars .region-sidebar-second {
+  /* Span 1 column, starting in 5th column from left. */
+  float: left;
+  width: 230px;
+  margin-left: 760px;
+  margin-right: -980px;
+}

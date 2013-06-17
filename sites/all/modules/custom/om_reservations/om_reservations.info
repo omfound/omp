@@ -1,0 +1,5 @@
+name = Open Media Reservations
+description = Provides additional theming and functionality for commerce reservations.
+core = 7.x
+package = Commerce Reservations
+php = 5.2.4

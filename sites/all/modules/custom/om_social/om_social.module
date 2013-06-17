@@ -1,0 +1,202 @@
+<?php
+
+/**
+ * Implements hook_block_info
+ */
+function om_social_block_info() {
+  $blocks = array();
+  $blocks['om_social_vertical_sharing'] = array(
+    'info' => t('Vertical Social Icons'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view
+ */
+function om_social_block_view($delta = "") {
+  $blocks = array();
+  switch($delta) {
+    case 'om_social_vertical_sharing':
+      $blocks['content'] = theme('om_social_vertical_sharing');
+      break;
+  }
+  return $blocks;
+} 
+
+/**
+ * Implements hook_theme
+ */
+function om_social_theme($existing, $type, $theme, $path) {
+  return array(
+    'facebook_share' => array(
+      'template' => 'facebook_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'twitter_share' => array(
+      'template' => 'twitter_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'pinterest_share' => array(
+      'template' => 'pinterest_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('image_url' => '')
+    ),
+    'google_share' => array(
+      'template' => 'google_share',
+      'path' => $path . '/theme',
+      'file' => 'theme.inc',
+      'variables' => array('url' => '')
+    ),
+    'custom_print' => array(
+      'function' => 'om_social_custom_print_theme'
+    ),
+    'om_social_vertical_sharing' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_social_vertical_sharing',
+      'file' => 'theme.inc'
+    ),
+  );
+}
+
+/**
+ * Custom theme function to make print icon.
+ */
+
+function om_social_custom_print_theme() {
+  global $base_path;
+  $icon ='<img src="' . $base_path . drupal_get_path('module', 'om_social') . '/theme/images/print-icon.png" />';
+  $options = array('html' => TRUE);
+  return l($icon, 'print/' . $_GET['q'], $options);
+}
+
+function om_social_get_current_path() {
+  global $base_url;
+  $current_path = $base_url.'/'.request_path();
+  return $current_path;
+}
+
+function om_social_page_alter(&$page) {
+  $object = menu_get_object();
+  if (!empty($object) && is_numeric($object->nid)) {
+    om_social_facebook_header($object);
+  }
+}
+
+function om_social_facebook_header($node) {
+  //SITE NAME
+  $site_name = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:site_name',
+      'content' => variable_get('site_name', 'Open Media Project'),
+    ),
+  );
+  drupal_add_html_head($site_name, 'node_' . $node->nid.'_og_site_name');
+
+  //TITLE
+  $title = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:title',
+      'content' => $node->title,
+    ),
+  );
+  drupal_add_html_head($title, 'node_' . $node->nid . '_og_title');
+
+  //URL
+  global $base_url;
+  $query = drupal_get_path_alias();
+  $path = $base_url . '/' . $query;
+  $og_path = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:url',
+      'content' => $path,
+    ),
+  );
+  drupal_add_html_head($og_path, 'node_' . $node->nid . '_og_path');
+
+  //TYPE
+  switch($node->type) {
+    case 'om_show':
+      $type = 'tv_episode';
+    break;
+    case 'om_project':
+      $type = 'tv_show';
+    break;
+    default:
+      $type = 'article';
+    break;
+  }
+
+  $og_type = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:type',
+      'content' => $type,
+    ),
+  );
+  drupal_add_html_head($og_type, 'node_' . $node->nid . '_og_type');
+
+  //DESCRIPTION
+  if(isset($node->body[$node->language])) {
+    $description = $node->body[$node->language][0]['value'];
+  }else{
+    $description = $node->title;
+  }
+  $alter = array(
+    'max_length' => 250,
+    'word_boundary' => true,
+    'ellipsis' => true
+  );
+  $short_desc = views_trim_text($alter, strip_tags($description));
+  $og_desc = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:description',
+      'content' => $short_desc,
+    ),
+  );
+  drupal_add_html_head($og_desc, 'node_' . $node->nid . '_og_desc');
+
+  //IMAGE
+  if(!empty($node->field_show_thumbnail[$node->language][0]['uri'])) {
+    $image = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
+  }
+ 
+  if(isset($image)) {
+    $og_image = array(
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'property' => 'og:image',
+        'content' => $image,
+      ),
+    );
+    drupal_add_html_head($og_image, 'node_' . $node->nid . '_og_image');
+  }
+}
+
+function om_social_fb_comment_count($url = false) {
+  if (!$url) {
+    $url = $GLOBALS['base_url'].request_path();
+  }
+  $request_url = 'https://graph.facebook.com/comments/?ids='.$url;
+  //$requests = file_get_contents($request_url);
+  $requests = '';
+  $comments = json_decode($requests);
+  
+  if(!empty($comments->$url->comments->data)) {
+    if (count($comments->$url->comments->data) > 0) {
+      return count($comments->$url->comments->data);
+    }
+  }
+
+  return 0;
+}
