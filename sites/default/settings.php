@@ -587,7 +587,12 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 
 // Check for global OMP setting for SSL
 $secure_connection = variable_get('ssl_enabled', FALSE);
-print_r($conf);
+if (function_exists('db_select')) {
+  print "QUERY LAYER IS PRESENT";
+}
+else {
+  print "QUERY LAYER IS NOT PRESENT";
+}
 if (!empty($secure_connection)) {
   dsm('made it here');
   // Redirect to https:// and www if it's not there
