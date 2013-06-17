@@ -4,6 +4,18 @@ if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exis
   require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
 }
 
+function openmedia_preprocess_html(&$variables) {
+  if (!empty($_GET['iframe_mode'])) {
+    $sidebar_classes = array('one-sidebar sidebar-first', 'one-sidebar sidebar-second', 'two-sidebars');
+    foreach ($variables['classes_array'] AS $key => $class) {
+      if (in_array($class, $sidebar_classes)) {
+        unset($variables['classes_array'][$key]);
+        $variables['classes_array'][] = 'iframe-mode';
+      }
+    }
+  }
+}
+
 function openmedia_preprocess_page(&$variables) {
   if ($_GET['q'] == 'classes') {
     $options = array(
@@ -39,6 +51,12 @@ function openmedia_preprocess_page(&$variables) {
     }
   }
 
+  if (!empty($_GET['iframe_mode'])) {
+    $content = $variables['page']['content'];
+    unset($variables['page']);
+    $variables['page']['content'] = $content;
+  }
+
 }
 
 /**
@@ -53,6 +71,38 @@ function openmedia_preprocess_node(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK
+ */
+function openmedia_preprocess_field(&$variables, $hook) {
+  // Allow preprocessing for fields
+  $function = __FUNCTION__ . '__' . $variables['element']['#field_name'];
+  if (function_exists($function)) {
+    $function($variables);
+  }
+}
+
+function openmedia_preprocess_field__field_om_show_video(&$variables) {
+  $url = $variables['items'][0]['#markup'];
+  if (!empty($url)) {
+    if ($youtube_id = om_show_youtube_id($url)) {
+      $livestream_status = om_show_youtube_livestream_status($youtube_id); 
+      if (!empty($livestream_status) && $livestream_status == 'active') {
+        //youtube embed
+        $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
+        $video = '<iframe width="500" height="340" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+      }
+    } 
+  }
+
+  if (empty($video)) {
+    //default jwplayer code
+    $video = '<div id="jwplayer-0">Loading video...</div>';
+  }
+
+  $variables['video'] = $video;
+}
+
+ /**
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_node__class_display(&$variables) {
@@ -136,8 +186,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
   }
-
-
   if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
   }
@@ -171,28 +219,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $file = file_load($variables['picture']);
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
-  // First do video and video area.
-  if(!empty($variables['field_om_show_video'][0]['value'])) {
-    $jwplayer = array();
-    foreach($variables['field_om_show_video'] as $key => $info) {
-      if (!valid_url($info['safe_value'], true)) {
-        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
-      }
-      else {
-        $video_path = $info['safe_value'];
-      }
-      $jwplayer[$key]['path'] = $video_path;
-      if ($variables['field_show_thumbnail'][$variables['language']][0]['uri']) {
-        $jwplayer[$key]['image'] = file_create_url($variables['field_show_thumbnail'][$variables['language']][0]['uri']); 
-        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
-          $jwplayer[$key]['image'] = $image_url;
-        }
-      }
-    }
-    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
-    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
-    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
-  }
+  om_show_jwplayer_include($variables);
+
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
   $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);

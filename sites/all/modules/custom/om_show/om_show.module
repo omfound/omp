@@ -177,3 +177,102 @@ function om_show_reload($form, $form_state) {
   // We just need to return the form here so that the form is re-rendered.
   return $form;
 }
+
+function om_show_jwplayer_include($node) {
+  if (!is_object($node)) {
+    $show_field = $node['field_om_show_video'];
+    if (!empty($node['field_show_thumbnail'])) {
+      $thumb_field = $node['field_show_thumbnail'][$node['language']];
+    }
+  }else{
+    $show_field = $node->field_om_show_video[$node->language];
+    if (!empty($node->field_show_thumbnail)) {
+      $thumb_field = $node->field_show_thumbnail[$node->language];
+    }
+  }
+
+  // First do video and video area.
+  if(!empty($show_field[0]['value'])) {
+    $jwplayer = array();
+    foreach($show_field as $key => $info) {
+      if (!valid_url($info['safe_value'], true)) {
+        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
+      }
+      else {
+        $video_path = $info['safe_value'];
+      }
+      $jwplayer[$key]['path'] = $video_path;
+      if (!empty($thumb_field) && $thumb_field[0]['uri']) {
+        $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
+        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
+          $jwplayer[$key]['image'] = $image_url;
+        }
+      }
+    }
+    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
+    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
+  }
+}
+
+function om_show_youtube_id($url) {
+  $url_info = parse_url($url);
+  $query_parts = explode('=', $url_info['query']);
+  foreach ($query_parts as $key => $data) {
+    if ($data == 'v') {
+      $target = $key+1;
+      if (!empty($query_parts[$target])) {
+        return $query_parts[$target];
+      }
+    }
+  }
+
+  return false;
+}
+
+function om_show_youtube_fetch_url($url) {
+
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL,$url);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Open Media Project');
+  $result = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $result;
+}
+
+function om_show_youtube_livestream_status($id) {
+  $video_info_json = om_show_youtube_fetch_url('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
+  $video_info = json_decode($video_info_json);
+  if (!empty($video_info)) {
+    foreach ($video_info->entry->link as $key => $data) {
+      if (strpos($data->rel, 'live.event') !== false) {
+        $event_info_json = om_show_youtube_fetch_url($data->href.'&alt=json');
+        $event_info = json_decode($event_info_json);
+        return $event_info->entry->{'yt$status'}->{'$t'};
+      }
+    }
+  }
+  return false;
+}
+
+function om_show_youtube_info($node) {
+  if (!is_object($node)) {
+    $show_field = $node['field_om_show_video'];
+  }else{
+    $show_field = $node->field_om_show_video[$node->language];
+  }
+
+  if ($youtube_id = om_show_youtube_id($show_field[0]['safe_value'])) {
+    $youtube_info = array(
+      'id' => $youtube_id,
+      'live_status' => om_show_youtube_livestream_status($youtube_id),
+    );
+
+    return $youtube_info;
+  }
+
+  return false;
+}
