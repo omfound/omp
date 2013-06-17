@@ -26,9 +26,11 @@
     <thead>
       <tr>
         <?php foreach ($header as $field => $label): ?>
-          <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . '" '; } ?>>
-            <?php print $label; ?>
-          </th>
+          <?php if ($field != 'path') { ?>
+            <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . '" '; } ?>>
+              <?php print $label; ?>
+            </th>
+          <?php } ?>
         <?php endforeach; ?>
       </tr>
     </thead>
@@ -38,9 +40,14 @@
     <?php foreach ($rows as $row_count => $row): ?>
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
-          <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
-            <?php print $content; ?>
-          </td>
+          <?php if ($field != 'path' && $field != 'title') { ?>
+            <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
+              <?php print $content; ?>
+            </td>
+          <?php } ?>
+          <?php else { ?>
+            <?php $link = l($content, $rows[$row_count]['path']); ?>
+          <?php } ?>
         <?php endforeach; ?>
       </tr>
     <?php endforeach; ?>
