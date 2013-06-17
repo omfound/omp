@@ -16,6 +16,10 @@ function commerce_reservations_permission() {
       'title' => t('Administer commerce reservations'),
       'description' => t('Access configuration settings for commerce reservations'),
     ),
+    'ignore closed times' => array(
+      'title' => t('Ignore closed times in commerce reservations when making checkouts'),
+      'description' => t('Ignore closed times in commerce reservations when making checkouts'),
+    ),
   );
 }
 
@@ -175,6 +179,9 @@ function commerce_reservations_menu(){
  */
  
 function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
+  global $user;
+  drupal_add_js(array('commerce_reservations' => array('roles' => $user->roles)), 'setting');
+
   $my_form_id = substr($form_id, 0, 30);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
     //we have to cache as it is being loaded via ajax
