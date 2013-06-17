@@ -47,6 +47,7 @@
           <?php }elseif ($field == 'title') { ?>
             <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
               <?php $link = l($content, $rows[$row_count]['path']); ?>
+              <?php print $link; ?>
             </td>
           <?php } ?>
         <?php endforeach; ?>
