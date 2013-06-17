@@ -200,10 +200,11 @@ function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
  *
  */
 function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
+  $rounded_days = om_broadcast_schedule_round_to_days($start, $end);
   $info = array(
     'channel_tid' => $channel_tid,
-    'start' => $start,
-    'end' => $end
+    'start' => $rounded_days['start'],
+    'end' => $rounded_days['end']
   );
   $steps = array(
     array('_om_broadcast_schedule_get_pbs_airings', array($info)),
@@ -253,6 +254,12 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $safe = array();
   $context['results']['create_airings'] = array();
   $context['results']['delete_airings'] = array();
+  // Use the rounding function all further work done with the start and end needs to use these values
+/*
+  $rounded_time = om_broadcast_schedule_round_to_days($context['results']['run_info']['start'], $context['results']['run_info']['end']);
+  $context['results']['run_info']['start'] = $rounded_time['start'];
+  $context['results']['run_info']['end'] = $rounded_time['end'];
+*/
   // We are going to try and match based on schedule id.
   // NB: if there are other pbs types in the future we may need more criteria here.
   if (!empty($context['results']['airing_values'])) {
@@ -268,7 +275,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
         $matched = TRUE;
         $safe[] = $row['entity_id'];
       }
-      if ($matched == FALSE) {
+      if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] >= $context['results']['run_info']['end']) {
         $context['results']['create_airings'][] = $airing;
       }
     }
@@ -571,4 +578,21 @@ function om_broadcast_schedule_airing_node_delete_multiple($nids) {
     // Clear the page and block and node_load_multiple caches.
     entity_get_controller('node')->resetCache();
   }
+}
+
+/**
+ * Round a start and end timestamp up to the nearest day.
+ *   For start subtract to midnight of the same day.
+ *   For end add to midnight of the same day.
+ *   NB: This also means if you don't pick values within a 24 hour span extra time will be added.
+ */
+function om_broadcast_schedule_round_to_days($start, $end) {
+  $output = array();
+  if (is_numeric($start)) {
+    $output['start'] = mktime(0, 0, 0, date('n', $start), date('j', $start), date('Y', $start));
+  }
+  if (is_numeric($end)) {
+    $output['end'] = mktime(23, 59, 59, date('n', $end), date('j', $end), date('Y', $end));
+  }
+  return $output;
 }
