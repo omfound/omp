@@ -95,35 +95,38 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               }
             }
 
-            //Check for closed days
-            if (array[i].className == 'closed-all-day'){
-              if (array[i].start.getDate() == start.getDate()){
-                if (array[i].start.getMonth() == start.getMonth()){
-                  if (array[i].start.getYear() == start.getYear()){
-                    $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
-                    $('.view-footer .form-submit').hide();
-                    dateInvalid = true;
+            //if staff ignore hours
+            if (!Drupal.settings.commerce_reservations.staff) {
+              //Check for closed days
+              if (array[i].className == 'closed-all-day'){
+                if (array[i].start.getDate() == start.getDate()){
+                  if (array[i].start.getMonth() == start.getMonth()){
+                    if (array[i].start.getYear() == start.getYear()){
+                      $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      $('.view-footer .form-submit').hide();
+                      dateInvalid = true;
+                    }
                   }
                 }
-              }
-              if (array[i].start.getDate() == end.getDate()){
-                if (array[i].start.getMonth() == end.getMonth()){
-                  if (array[i].start.getYear() == start.getYear()){
-                    $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
-                    $('.view-footer .form-submit').hide();
-                    dateInvalid = true;
-                  }   
+                if (array[i].start.getDate() == end.getDate()){
+                  if (array[i].start.getMonth() == end.getMonth()){
+                    if (array[i].start.getYear() == start.getYear()){
+                      $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      $('.view-footer .form-submit').hide();
+                      dateInvalid = true;
+                    }   
+                  }
                 }
-              }
-            } else if (array[i].className == 'closed-time'){
-              if (start >= array[i].start && start < array[i].end){
-                $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
-                $('.view-footer .form-submit').hide();
-                dateInvalid = true;
-              } else if(end >= array[i].start && end < array[i].end){
-                $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
-                $('.view-footer .form-submit').hide();
-                dateInvalid = true;
+              } else if (array[i].className == 'closed-time'){
+                if (start >= array[i].start && start < array[i].end){
+                  $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                } else if(end >= array[i].start && end < array[i].end){
+                  $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }
               }
             }
 
