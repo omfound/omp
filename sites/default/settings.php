@@ -599,8 +599,7 @@ if (!empty($secure_connection)) {
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
       header('HTTP/1.0 301 Moved Permanently');
-      $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-      header('Location: https://www.' . $host . $_SERVER['REQUEST_URI']);
+      header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
       exit(); 
     }
   }
