@@ -175,9 +175,8 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 
 function om_show_field_group_build_pre_render_alter(&$element) {
 
-  dsm($element);
-  $message = 'ZOMG IT LIVES!';
-  watchdog('om_show', $message);
+dsm($element);
+die('This Happens');
  /* $display = isset($element['#view_mode']);
   $groups = array_keys($element['group_om_legacy']);
 
