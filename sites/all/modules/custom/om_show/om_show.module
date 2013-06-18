@@ -173,7 +173,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 */
 }
 
-function om_show_group_om_legacy_build_pre_render_alter(&$element) {
+function om_show_field_group_build_pre_render_alter(&$element) {
 
 dsm($elements);
 
