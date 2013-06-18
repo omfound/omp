@@ -585,3 +585,33 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
+$secure_sites = array('betv.org', 'denveropenmedia.org');
+$secure_connection = FALSE;
+foreach ($secure_sites AS $site) {
+  if (is_numeric(strpos($_SERVER['HTTP_HOST'], $site))) {
+    $secure_connection = TRUE;
+    break;
+  }
+}
+
+if (!empty($secure_connection)) {
+  // Redirect to https:// and www if it's not there
+  if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
+    if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
+      header('HTTP/1.0 301 Moved Permanently');
+      $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+      header('Location: https://www.' . $host . $_SERVER['REQUEST_URI']);
+      exit(); 
+    }
+  }
+}
+else {
+  if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
+    // Redirect to www
+    if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
+      header('HTTP/1.0 301 Moved Permanently'); 
+      header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
+      exit();
+    }
+  }
+}
