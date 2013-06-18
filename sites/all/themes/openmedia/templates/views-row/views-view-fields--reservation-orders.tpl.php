@@ -59,8 +59,9 @@
       <?php }?>
       </td>
       <td>
-        <?php //print openmedia_order_payment_status($order_id); ?>
-        <?php dsm($fields); ?>
+        <?php $payment_status = openmedia_order_payment_status($fields['order_id']['raw']); ?>
+        <?php if (empty($payment_status)) { $payment_status = 'No Payment'; } ?>
+        <?php print l($payment_status, 'admin/commerce/orders/'.$fields['order_id']['raw']); ?>
       </td>
       <td>
       <?php if ($checkedout) { ?>
