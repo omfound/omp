@@ -12,7 +12,6 @@
   <th class="line-item-title">Item</th>
   <th class = "checkout-status-title">Status</th>
   <th class = "payment-status">Payment</th>
-  <th class = "checkout-options">Options</th>
   </tr>
   <tr>
     <td class="item-name">
