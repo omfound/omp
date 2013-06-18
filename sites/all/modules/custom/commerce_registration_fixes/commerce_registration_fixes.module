@@ -79,14 +79,18 @@ function commerce_registration_fixes_preprocess_table(&$variables) {
       $order_id = commerce_registration_fixes_registration_oid($registration_id);
       $payment_status = commerce_registration_fixes_order_status($registration_id);
       if (empty($payment_status)) {
-        $payment_status = 'Not Available';
+        $payment_status = 'No Payment';
       }
       $payment_column[$key] = l($payment_status, 'admin/commerce/orders/'.$order_id);
     } 
 
-    $variables['header'][] = t('Payment Status');
+    $last_header = array_pop($variables['header']);
+    $variables['header'][] = t('Payment');
+    $variables['header'][] = $last_header;
     foreach ($payment_column as $key => $link) {
+      $last_column = array_pop($variables['rows'][$key]);
       $variables['rows'][$key][] = $link;
+      $variables['rows'][$key][] = $last_column;
     }
   }
 }
