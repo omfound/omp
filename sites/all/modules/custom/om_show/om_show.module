@@ -184,7 +184,8 @@ dsm($elements);
  }
   else {
   }
-*/}
+*/
+}
 
 function om_show_reload($form, $form_state) {
   // We just need to return the form here so that the form is re-rendered.
