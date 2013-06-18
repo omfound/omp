@@ -79,7 +79,11 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
     $texture_file = file_load($texture_fid);
     if (is_object($texture_file)) {
       $stream_wrapper = file_stream_wrapper_get_instance_by_uri($texture_file->uri);
-      $variables['background_texture'] = $stream_wrapper->getExternalUrl();
+      $url = $stream_wrapper->getExternalUrl();
+      if (!empty($_SERVER['HTTP_X_SSL'])) {
+        $url = str_replace('http', 'https', $url);
+      }
+      $variables['background_texture'] = $url;
     }
   }
   $hex_color = variable_get('background_color', '');
