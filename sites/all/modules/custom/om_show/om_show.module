@@ -175,18 +175,13 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 
 function om_show_field_group_build_pre_render_alter(&$element) {
 
-dsm($element);
-$element['group_om_legacy']['#access'] = FALSE;
-//$element['group_om_legacy']->format_type = 'hidden';
-
- /* $display = isset($element['#view_mode']);
-  $groups = array_keys($element['group_om_legacy']);
-
   if (user_access('administer show')) { 
+    $element['group_om_legacy']['#access'] = TRUE;
  }
   else {
+    $element['group_om_legacy']['#access'] = FALSE;
   }
-*/
+
 }
 
 function om_show_reload($form, $form_state) {
