@@ -562,3 +562,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
     }
   }
 }
+
+function openmedia_url_outbound_alter(&$path, &$options, $original_path) {
+  dsm($path);
+}
