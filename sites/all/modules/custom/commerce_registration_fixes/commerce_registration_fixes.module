@@ -70,3 +70,7 @@ function commerce_registration_fixes_load_js($element) {
   drupal_add_js(drupal_get_path('module', 'commerce_registration_fixes').'/js/clearother.js');
   return $element;	
 }
+
+function commerce_registration_fixes_preprocess_table(&$variables) {
+  dsm($variables);
+}
