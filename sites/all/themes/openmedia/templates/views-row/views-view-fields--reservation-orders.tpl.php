@@ -13,7 +13,6 @@
   <th class = "checkout-status-title">Status</th>
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
-  <th></th>
   </tr>
   <tr>
     <td class="item-name">
