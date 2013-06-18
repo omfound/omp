@@ -11,6 +11,8 @@
   <th class="order-title">Order</th>
   <th class="line-item-title">Item</th>
   <th class = "checkout-status-title">Status</th>
+  <th class = "payment-status">Payment</th>
+  <th class = "checkout-options">Options</th>
   <th></th>
   </tr>
   <tr>
@@ -55,6 +57,10 @@
         <?php } ?>
         </div>
       <?php }?>
+      </td>
+      <td>
+        <?php //print openmedia_order_payment_status($order_id); ?>
+        <?php dsm($fields); ?>
       </td>
       <td>
       <?php if ($checkedout) { ?>
