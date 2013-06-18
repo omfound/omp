@@ -589,7 +589,6 @@ $secure_sites = array('betv.org', 'denveropenmedia.org');
 $secure_connection = FALSE;
 foreach ($secure_sites AS $site) {
   if (is_numeric(strpos($_SERVER['HTTP_HOST'], $site))) {
-    print "WE GO HERE";
     $secure_connection = TRUE;
     break;
   }
@@ -599,13 +598,9 @@ if (!empty($secure_connection)) {
   // Redirect to https:// and www if it's not there
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
-    print "OPTION NUMBER 1";
-
-/*
       header('HTTP/1.0 301 Moved Permanently');
       header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
       exit(); 
-*/
     }
   }
 }
@@ -613,12 +608,9 @@ else {
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     // Redirect to www
     if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
-    print "OPTION NUMBER 2";
-/*
       header('HTTP/1.0 301 Moved Permanently'); 
       header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
       exit();
-*/
     }
   }
 }
