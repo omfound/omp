@@ -13,6 +13,9 @@
   text-shadow: none;
 }
 
+#membership-header-links {
+  clear: both;
+}
 
 #membership-header li {
   list-style: none;
