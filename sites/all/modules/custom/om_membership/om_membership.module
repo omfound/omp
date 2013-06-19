@@ -237,7 +237,7 @@ function om_membership_add_membership_and_transfer($pid) {
 function om_membership_get_plans($options = array()) {
   $products = &drupal_static(__FUNCTION__);
   if (empty($products)) {
-    $products = commerce_product_load_multiple(array(), array('type' => 'membership_plan'));
+    $products = commerce_product_load_multiple(array(), array('type' => 'membership_plan', 'status' => 1));
     usort($products, '_om_membership_sort_products_by_price');
   }
   return $products;
