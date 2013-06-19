@@ -554,7 +554,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
           if (!empty($_SERVER['HTTP_X_SSL'])) {
             $url = str_replace('http', 'https', $url);
           }
-          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="success" />';
+          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
           $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
           $content = '<div class="field-content">';
           $content .= $url;
