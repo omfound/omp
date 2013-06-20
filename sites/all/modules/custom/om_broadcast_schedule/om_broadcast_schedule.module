@@ -239,6 +239,7 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
       // $airing_array in context
       $context['results']['run_info'] = $run_info;
       $context['results']['airing_values'] = $airing_array;
+      dsm($airing_array);
     }
   }
   $context['message'] = t('Getting Airings From PBS.');
