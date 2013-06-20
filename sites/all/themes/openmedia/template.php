@@ -95,7 +95,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           $live_height = 300;
         }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video = '<iframe width="'.$live_width'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
   }
