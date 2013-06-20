@@ -158,7 +158,6 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
     return $render;
   }
-
   $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
   $form_render = drupal_render($form);
     $render = array(
@@ -245,6 +244,18 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
  *   and turn it into a usable page.
  */
 function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
+  $back = l('Back', 'node/' . $show->nid);
+  $broadcast_status = om_timeslot_scheduler_producer_show_has_media_assets($node, $channel_tid);
+  if ($broadcast_status == FALSE) {
+    $output = array();
+    $output['error'] = array(
+      '#prefix' => '<p>',
+      '#markup' => t('Your show does not have broadcast media assets for this channel. Please contact station personnel. !back to your show page.', array('!back' => $back)),
+      '#suffix' => '</p>'
+    );
+    return $output;
+  }
+
   $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
   // Not sure why but this page title gets set to 'home'
   drupal_set_title('Schedule Your Show');
@@ -315,7 +326,6 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
     );
   }
   if (empty($series_render) && empty($theme_render)) {
-    $back = l('Back', 'node/' . $show->nid);
     $steps_message['empty message'] = array(
       '#prefix' => '<p>',
       '#markup' => t('There are no timeslots available for your show. Please contact station personel. !back to your show page.', array('!back' => $back)),
@@ -386,9 +396,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
             );
           }
         }
-        //else {
-        //  watchdog('Didnt fit GAP','spacer is '.$spacer . ' and duration is '. $show->field_om_show_duration['und'][0]['value'] . ' and start and end are ' . $gap['start'] . ' and ' . $gap['end']);
-        //}
       }
     }
     if (!empty($list_items)) {
@@ -635,6 +642,15 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
 /**
  * Determine if a show has valid media assets to be scheduled on the given channel.
  */
-function om_timeslot_scheduler_producer_show_has_media_assets($channel, $show) {
-  // Come back to this later
+function om_timeslot_scheduler_producer_show_has_media_assets($show, $channel_tid) {
+  $pbs = om_playback_servers_get_pbs_by_term($channel_tid);
+  $pbs = array_shift($pbs);
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  $status = $controller->check_file_status($pbs, $show);
+  if (!empty($status->GetDigitalFilesResult) && !empty($status->GetDigitalFilesResult->DigitalFileInfo)) {
+    if (is_object($status->GetDigitalFilesResult->DigitalFileInfo)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
