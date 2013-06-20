@@ -3,7 +3,6 @@
       <?php print $video; ?>
     <?php endif; ?>
     <h2><?php print $node->title; ?></h2>
-    <h2><?php print 'GOV'; ?></h2>
     <div class="edit-link-wrapper">
       <?php print $edit_link; ?>
     </div>
