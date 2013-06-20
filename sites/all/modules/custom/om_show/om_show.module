@@ -194,16 +194,13 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
     }
   }
 
+  $img_path = om_agenda_manager_video_image($node);
   if (om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
 
     $playlist_width = $width + 410;
-    $thumb_image = '';
-    if (!empty($thumb_field) && $thumb_field[0]['uri']) {
-      $thumb_image = file_create_url($thumb_field[0]['uri']);
-    }
     $jwplayer[0] = array(
-      'image' => $thumb_image,
+      'image' => $img_path,
       'playlist' => '/node/'.$nid.'/cuepoints',
       'width' => $playlist_width,
       'height' => $height,
@@ -219,12 +216,7 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
         $video_path = $info['safe_value'];
       }
       $jwplayer[$key]['path'] = $video_path;
-      if (!empty($thumb_field) && $thumb_field[0]['uri']) {
-        $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
-        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
-          $jwplayer[$key]['image'] = $image_url;
-        }
-      }
+      $jwplayer[$key]['image'] = $img_path;
       $jwplayer[$key]['width'] = $width;
       $jwplayer[$key]['height'] = $height;
     }
