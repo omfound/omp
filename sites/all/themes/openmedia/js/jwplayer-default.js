@@ -7,7 +7,7 @@
           jwplayer("jwplayer-"+i).setup({
             playlist: Drupal.settings.jwplayer[i].playlist,
             height: 340,
-            width: 550,
+            width: 870,
             image: Drupal.settings.jwplayer[i].image,
             primary: "flash",
             listbar: {
