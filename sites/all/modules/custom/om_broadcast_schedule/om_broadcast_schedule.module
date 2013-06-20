@@ -287,7 +287,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
             dsm("AIRING END PASSED");
           }
         }
-      if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] >= $context['results']['run_info']['end']) {
+      if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] <= $context['results']['run_info']['end']) {
         if ($airing['uid'] == 382223) {
           dsm("Even make it here");
         }
