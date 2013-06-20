@@ -24,7 +24,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   else {
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
-      if ($products->title == 'Online Only Membership') {
+      if ($product->title == 'Online Only Membership') {
         unset($products[$key]);
         continue;
       }
