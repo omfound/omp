@@ -143,22 +143,6 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
   );
 }
 
-function om_theme_assets_block_configure($delta='') {
-  $form = array();
- 
-  switch($delta) {
-    case 'om_footer_block' :
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => variable_get('text_variable', ''),
-      );
-      break;
-    }
-  return $form;
-}
-
 /**
  * Helper function to return content information for callout blocks.
  */
