@@ -9,6 +9,7 @@
             height: 340,
             width: 550,
             image: Drupal.settings.jwplayer[i].image,
+            primary: "flash",
             listbar: {
               position: 'right',
               size: 320
