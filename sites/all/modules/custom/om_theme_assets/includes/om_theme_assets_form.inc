@@ -298,6 +298,25 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('info_tag_color', ''),
     );
+  /**
+  * Footer
+  */
+  $form['main_footer'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Footer Text'),
+    '#suffix' => '</h2>'
+  );
+  $form['main_footer_help'] = array(
+    '#markup' => t('The site\'s footer text')
+  );
+  $form['main_footer_fieldset'] = $fieldset;
+  $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
+  $form['main_footer_fieldset']['main_footer'] = array(
+    '#title' => t('Main Footer'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('main_footer', ''),
+    '#upload_location' => 'public://theme_assets/',
+  );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
