@@ -3,15 +3,7 @@
     <?php if (isset($video)): ?>
       <?php print $video; ?>
     <?php endif; ?>
-    <div class="edit-link-wrapper">
-      <?php print $edit_link; ?>
-    </div>
 
-    <div class="divider">
-      <div class="inner">
-        <?php print render($content['comments']); ?>
-      </div>
-    </div>
     <?php if (!empty($node->field_om_calendar)) { ?>
       <div id="documents">
         <?php $edit_view = str_replace('/pub', '/edit', $node->field_om_calendar[$node->language][0]['url']); ?>
