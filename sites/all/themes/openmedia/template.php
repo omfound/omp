@@ -88,14 +88,21 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
+        $live_width = 600;
+        $live_height = 350;
+        if (arg(2) == 'agenda_manager') {
+          $live_width = 525;
+          $live_height = 300;
+        }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video = '<iframe width="500" height="340" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
   }
 
   if (empty($video)) {
     //default jwplayer code
+    om_show_jwplayer_include($variables);
     $video = '<div id="jwplayer-0">Loading video...</div>';
   }
 
@@ -219,7 +226,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $file = file_load($variables['picture']);
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
-  om_show_jwplayer_include($variables);
 
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
@@ -268,7 +274,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['bayesian_score'] = "<div id='bayesian-score'><div class='score'>Bayesian Score: $bayesian_score</div> $help</div>";
   }
   $learn = l('Learn More About Voting', 'help/om_voting/about-om-voting');
-  $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. !link', array('!link' => $learn));
+  $variables['vote_message'] = '<strong>' . t('Your Vote Counts!') . '</strong> ' . t('!link', array('!link' => $learn));
   // Node right.
   if (module_exists('om_social')) {
     $social = theme('om_social_vertical_sharing');
@@ -551,7 +557,10 @@ function openmedia_preprocess_views_view_fields(&$vars) {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
       if (!empty($vars['fields']['field_om_show_video']->content)) {
         if ($url = internet_archive_thumb_from_file_url(strip_tags($vars['fields']['field_om_show_video']->content))) {
-          $image = '<img typeof="foaf:Image" src="'.$url.'" width="220" height="135" alt="success" />';
+          if (!empty($_SERVER['HTTP_X_SSL'])) {
+            $url = str_replace('http', 'https', $url);
+          }
+          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
           $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
           $content = '<div class="field-content">';
           $content .= $url;
@@ -561,4 +570,14 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       }
     }
   }
+}
+
+function openmedia_order_payment_status($order_id) {
+  $query = "
+    SELECT status 
+    FROM {commerce_payment_transaction}
+    WHERE commerce_payment_transaction.order_id = :oid";
+
+  $status = db_query($query, array(':oid' => $order_id))->fetchField();
+  return $status;
 }

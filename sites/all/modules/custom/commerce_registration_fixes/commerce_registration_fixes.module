@@ -70,3 +70,48 @@ function commerce_registration_fixes_load_js($element) {
   drupal_add_js(drupal_get_path('module', 'commerce_registration_fixes').'/js/clearother.js');
   return $element;	
 }
+
+function commerce_registration_fixes_preprocess_table(&$variables) {
+  if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'registrations') {
+    $payment_column = array();
+    foreach ($variables['rows'] as $key => $registration_info) {
+      $registration_id = strip_tags($registration_info[0]);
+      $order_id = commerce_registration_fixes_registration_oid($registration_id);
+      $payment_status = commerce_registration_fixes_order_status($registration_id);
+      if (empty($payment_status)) {
+        $payment_status = 'No Payment';
+      }
+      $payment_column[$key] = l($payment_status, 'admin/commerce/orders/'.$order_id);
+    } 
+
+    $last_header = array_pop($variables['header']);
+    $variables['header'][] = t('Payment');
+    $variables['header'][] = $last_header;
+    foreach ($payment_column as $key => $link) {
+      $last_column = array_pop($variables['rows'][$key]);
+      $variables['rows'][$key][] = $link;
+      $variables['rows'][$key][] = $last_column;
+    }
+  }
+}
+
+function commerce_registration_fixes_order_status($registration_id) {
+  $query = "
+    SELECT status 
+    FROM {commerce_payment_transaction}
+    JOIN {registration} ON registration.order_id = commerce_payment_transaction.order_id
+    WHERE registration.registration_id = :regid";
+
+  $status = db_query($query, array(':regid' => $registration_id))->fetchField();
+  return $status;
+}
+
+function commerce_registration_fixes_registration_oid($registration_id) {
+  $query = "
+    SELECT order_id
+    FROM {registration}
+    WHERE registration.registration_id = :regid";
+
+  $order_id = db_query($query, array(':regid' => $registration_id))->fetchField();
+  return $order_id;
+}
