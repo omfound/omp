@@ -109,6 +109,7 @@ function om_agenda_manager_video_image($node) {
     $img_path = false;
   }
 
+  dsm($img_path);
   return $img_path;
 }
 
