@@ -154,19 +154,10 @@ function om_theme_assets_block_configure($delta='') {
         '#title' => t('Enter your text here in WYSIWYG format'),
         '#default_value' => variable_get('text_variable', ''),
       );
-}
+      break;
+    }
   return $form;
 }
-
-function om_theme_assests_block_save($delta = '', $edit = array()) {
-  switch($delta) {
-    case 'om_footer_block' :
-      // Saving the WYSIWYG text      
-      variable_set('text_variable', $edit['text_body']['value']);
-    break;
-    }
-}
-
 
 /**
  * Helper function to return content information for callout blocks.
