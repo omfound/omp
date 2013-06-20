@@ -99,6 +99,7 @@ function om_agenda_manager_video_type($node) {
 }
 
 function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
+  $output = '';
   $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://developer.longtailvideo.com/">';
   $output .= '<channel>';
   $output .= '<title>Cuepoints playlist</title>';
