@@ -163,6 +163,7 @@ function om_theme_assests_block_save($delta = '', $edit = array()) {
     case 'om_footer_block' :
       // Saving the WYSIWYG text      
       variable_set('text_variable', $edit['text_body']['value']);
+    break;
     }
 }
 
