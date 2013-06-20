@@ -23,6 +23,7 @@ function om_timeslot_scheduler_producer_menu() {
     'page callback' => 'om_timeslot_scheduler_producer_schedule',
     'page arguments' => array(1),
     'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'access arguments' => array(1),
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
   );
@@ -32,6 +33,7 @@ function om_timeslot_scheduler_producer_menu() {
     'page callback' => '_om_timeslot_scheduler_update_airings',
     'page arguments' => array(1, 3),
     'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'access arguments' => array(1),
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
   );
@@ -41,6 +43,7 @@ function om_timeslot_scheduler_producer_menu() {
     'page callback' => '_om_timeslot_scheduler_producer_timeslots',
     'page arguments' => array(1, 3, 4),
     'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'access arguments' => array(1),
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
   );
@@ -50,6 +53,7 @@ function om_timeslot_scheduler_producer_menu() {
     'page callback' => '_om_timeslot_scheduler_producer_timeslot_dates',
     'page arguments' => array(1, 3, 4),
     'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'access arguments' => array(1),
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
   );
@@ -59,6 +63,7 @@ function om_timeslot_scheduler_producer_menu() {
     'page callback' => '_om_timeslot_scheduler_producer_commit_schedule',
     'page arguments' => array(1, 3, 4, 5, 6, 7),
     'access callback' => 'om_timeslot_scheduler_producer_tab_access',
+    'access arguments' => array(1),
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
   );
@@ -120,18 +125,19 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
 /**
  * Custom access check for the self scheduling tab.
  */ 
-function om_timeslot_scheduler_producer_tab_access() {
-  if (user_access('schedule own shows') || user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
-    $airings_per_show = variable_get('om_timeslot_scheduler_producer_airings', 1);
-    $node = node_load(arg(1));
-    if ($node->type != 'om_show') {
-      return FALSE;
-    }
-    if ($airings_per_show == 0) {
+function om_timeslot_scheduler_producer_tab_access($node) {
+  if (is_object($node) && $node->type == 'om_show') {
+    if (user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
       return TRUE;
     }
-    if (empty($node->field_om_show_aired['und'][0]['value']) || $node->field_om_show_aired['und'][0]['value'] < $airings_per_show) {
-      return TRUE;
+    else if (user_access('schedule own shows')) {
+      $airings_per_show = variable_get('om_timeslot_scheduler_producer_airings', 1);
+      global $user;
+      if ($user->uid == $node->uid) {
+        if (empty($node->field_om_show_aired[$node->language][0]['value']) || $airings_per_show == 0 || $node->field_om_show_aired[$node->language][0]['value'] < $airings_per_show) {
+          return TRUE;
+        }
+      }
     }
   }
 }
@@ -624,4 +630,11 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
     }
   }// End While
   return $output;
+}
+
+/**
+ * Determine if a show has valid media assets to be scheduled on the given channel.
+ */
+function om_timeslot_scheduler_producer_show_has_media_assets($channel, $show) {
+  // Come back to this later
 }

@@ -554,7 +554,7 @@ function openmedia_preprocess_views_view_fields(&$vars) {
           if (!empty($_SERVER['HTTP_X_SSL'])) {
             $url = str_replace('http', 'https', $url);
           }
-          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="success" />';
+          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
           $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
           $content = '<div class="field-content">';
           $content .= $url;
@@ -564,4 +564,14 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       }
     }
   }
+}
+
+function openmedia_order_payment_status($order_id) {
+  $query = "
+    SELECT status 
+    FROM {commerce_payment_transaction}
+    WHERE commerce_payment_transaction.order_id = :oid";
+
+  $status = db_query($query, array(':oid' => $order_id))->fetchField();
+  return $status;
 }
