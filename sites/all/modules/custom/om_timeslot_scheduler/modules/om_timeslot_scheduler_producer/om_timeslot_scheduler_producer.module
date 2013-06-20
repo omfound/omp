@@ -235,9 +235,6 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $start = time();
   $end = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
   $function = 'om_broadcast_schedule_sync_schedule';
-  dsm($channel_tid);
-  dsm($start);
-  dsm($end);
   $batch = $function($channel_tid, $start, $end);
   batch_set($batch);
   batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');

@@ -123,6 +123,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'ToDate' => date("Y-m-d\TH:i:s", $schedule_info['end']),
         'restrictToShowID' => 0
       );
+      dsm($params);
       $request = $this->soap_request($pbs, 'GetScheduleInformation', $params);
       $airings = array();
       if (!empty($request->GetScheduleInformationResult->ScheduleInfo)) {
