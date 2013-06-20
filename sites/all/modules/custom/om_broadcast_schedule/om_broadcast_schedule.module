@@ -171,9 +171,6 @@ function om_broadcast_schedule_manual_sync($form, &$form_state) {
  *   end timestamp of window to begin updating
  */
 function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
-  dsm($channel_tid);
-  dsm($start);
-  dsm($end);
   $steps = om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end);
   
   $batch = array(

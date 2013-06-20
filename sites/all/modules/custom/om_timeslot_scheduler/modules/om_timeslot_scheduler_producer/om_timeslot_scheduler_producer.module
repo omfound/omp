@@ -235,6 +235,9 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $start = time();
   $end = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
   $function = 'om_broadcast_schedule_sync_schedule';
+  dsm($channel_tid);
+  dsm($start);
+  dsm($end);
   $batch = $function($channel_tid, $start, $end);
   batch_set($batch);
   batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');
@@ -630,4 +633,11 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
     }
   }// End While
   return $output;
+}
+
+/**
+ * Determine if a show has valid media assets to be scheduled on the given channel.
+ */
+function om_timeslot_scheduler_producer_show_has_media_assets($channel, $show) {
+  // Come back to this later
 }
