@@ -111,6 +111,11 @@ function om_theme_assets_block_view($delta = "") {
  */
 function om_theme_assets_theme($existing, $type, $theme, $path) {
   return array(
+    'om_footer_block' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_footer_block',
+      'file' => 'theme.inc'
+    ),
     'om_round_social_media' => array(
       'path' => $path . '/theme',
       'template' => 'om_round_social_media',
