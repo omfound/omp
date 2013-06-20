@@ -22,7 +22,6 @@
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
-            width: 550 
           });
         }
       }
