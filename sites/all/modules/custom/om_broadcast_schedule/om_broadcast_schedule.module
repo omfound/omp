@@ -262,11 +262,12 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $query->condition('field_om_airing_guid_value', $airing['uid'], '=');
       $query->condition('field_om_airing_channel_tid', $context['results']['run_info']['channel_tid'], '=');
       $result = $query->execute();
+      dpq($query);
       while($row = $result->fetchAssoc()) {
         $matched = TRUE;
         $safe[] = $row['entity_id'];
       }
-      dsm($matched);
+      dsm($safe);
       if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] >= $context['results']['run_info']['end']) {
         $context['results']['create_airings'][] = $airing;
       }
