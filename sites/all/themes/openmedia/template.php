@@ -96,6 +96,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
 
   if (empty($video)) {
     //default jwplayer code
+    om_show_jwplayer_include($variables);
     $video = '<div id="jwplayer-0">Loading video...</div>';
   }
 
@@ -219,7 +220,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $file = file_load($variables['picture']);
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
-  om_show_jwplayer_include($variables);
 
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);

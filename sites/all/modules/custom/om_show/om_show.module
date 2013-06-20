@@ -180,19 +180,27 @@ function om_show_reload($form, $form_state) {
 
 function om_show_jwplayer_include($node) {
   if (!is_object($node)) {
+    $nid = $node['nid'];
     $show_field = $node['field_om_show_video'];
     if (!empty($node['field_show_thumbnail'])) {
       $thumb_field = $node['field_show_thumbnail'][$node['language']];
     }
   }else{
+    $nid = $node->nid;
     $show_field = $node->field_om_show_video[$node->language];
     if (!empty($node->field_show_thumbnail)) {
       $thumb_field = $node->field_show_thumbnail[$node->language];
     }
   }
+  $normal_node = node_load($node->nid);
 
-  // First do video and video area.
-  if(!empty($show_field[0]['value'])) {
+  if (om_agenda_manager_cuepoints($normal_node)) {
+    $jwplayer = array();
+    $jwplayer[0] = array(
+      'image' => file_create_url($thumb_field[0]['uri']),
+      'playlist' => 'node/'.$nid.'/cuepoints',
+    );
+  }elseif(!empty($show_field[0]['value'])) {
     $jwplayer = array();
     foreach($show_field as $key => $info) {
       if (!valid_url($info['safe_value'], true)) {
@@ -209,6 +217,7 @@ function om_show_jwplayer_include($node) {
         }
       }
     }
+
     drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
     drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
     drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
