@@ -88,8 +88,14 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
+        $live_width = 600;
+        $live_height = 325;
+        if (!empty(arg(2)) && arg(2) == 'agenda_manager') {
+          $live_width = 525;
+          $live_height = 300;
+        }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video = '<iframe width="500" height="340" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video = '<iframe width="'.$live_width'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
   }
