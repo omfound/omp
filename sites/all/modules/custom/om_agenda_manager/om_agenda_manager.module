@@ -137,7 +137,7 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     $output .= '<description>'.$point['title'].'</description>';
     $output .= '<media:content url="'.$url.'" />';
     if ($provider == 'youtube') {
-      $output .= '<media:thumbnail url="novalidimage.png" />';
+      $output .= '<media:thumbnail url="" />';
     }
     $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
     $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
