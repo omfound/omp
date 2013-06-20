@@ -6,31 +6,7 @@
     <div class="edit-link-wrapper">
       <?php print $edit_link; ?>
     </div>
-    <div id="show-details" class="clearfix">
-      <?php if (isset($picture_rendered)): ?>
-        <div id="show-details-left">
-          <?php print $picture_rendered; ?>
-        </div>
-      <?php endif; ?>
-      <div id="show-details-right" <?php print !empty($picture_rendered) ? "class='with-photo'" : "class='without-photo'"; ?>>
-        <div id="author">
-          <?php print $name; ?>
-        </div>
-        <div id="created" class="bold">
-          <?php print $created; ?> | 
-        </div>
-        <?php if (!empty($show_theme)): ?>
-          <div id="theme" class="bold">
-            <?php print $show_theme; ?> | 
-          </div>
-        <?php endif; ?>
-        <?php if (!empty($locally_produced)): ?>
-          <div id="locally-produced" class="bold">
-            <?php print $locally_produced; ?> | 
-          </div>
-        <?php endif; ?>
-      </div>
-    </div>
+
     <div class="divider">
       <div class="inner">
         <?php print render($content['comments']); ?>
