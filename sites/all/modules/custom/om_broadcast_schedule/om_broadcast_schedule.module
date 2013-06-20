@@ -263,8 +263,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $query->condition('field_om_airing_channel_tid', $context['results']['run_info']['channel_tid'], '=');
       $result = $query->execute();
       while($row = $result->fetchAssoc()) {
-        dpq($query);
-        dsm($airing);
         $matched = TRUE;
         $safe[] = $row['entity_id'];
       }
@@ -273,6 +271,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       }
     }
   }
+  dsm($context);
   // Now select all airings in the current date range and see whether to create/leave alone/delete
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
