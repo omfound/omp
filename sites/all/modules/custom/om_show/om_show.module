@@ -210,7 +210,7 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
   }
 
   $img_path = om_show_video_image($node);
-  if (om_agenda_manager_cuepoints($node) && !$disable_playlist) {
+  if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
 
     $playlist_width = $width + 410;
