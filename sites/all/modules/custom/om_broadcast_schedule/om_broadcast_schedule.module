@@ -264,6 +264,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $result = $query->execute();
       while($row = $result->fetchAssoc()) {
         dpq($query);
+        dsm($airing);
         $matched = TRUE;
         $safe[] = $row['entity_id'];
       }
