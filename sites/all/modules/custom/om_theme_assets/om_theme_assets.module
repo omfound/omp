@@ -158,6 +158,14 @@ function om_theme_assets_block_configure($delta='') {
   return $form;
 }
 
+function om_theme_assests_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'om_footer_block' :
+      // Saving the WYSIWYG text      
+      variable_set('text_variable', $edit['text_body']['value']);
+    }
+}
+
 
 /**
  * Helper function to return content information for callout blocks.
