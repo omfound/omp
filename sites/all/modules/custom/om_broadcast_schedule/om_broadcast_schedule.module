@@ -277,6 +277,15 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
           dsm($context['results']['run_info']['end']);
           dsm($airing['start']);
           dsm($airing['end']);
+          if ($matched == FALSE) {
+            dsm("MATCHED PASSED");
+          }
+          if ($airing['start'] >= $context['results']['run_info']['start']) {
+            dsm("AIRING START PASSED");
+          }
+          if ($airing['end'] >= $context['results']['run_info']['end']) {
+            dsm("AIRING END PASSED");
+          }
         }
       if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] >= $context['results']['run_info']['end']) {
         if ($airing['uid'] == 382223) {
