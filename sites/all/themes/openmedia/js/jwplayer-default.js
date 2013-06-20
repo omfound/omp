@@ -7,12 +7,12 @@
           jwplayer("jwplayer-"+i).setup({
             playlist: Drupal.settings.jwplayer[i].playlist,
             height: 340,
-            width: 870,
+            width: 970,
             image: Drupal.settings.jwplayer[i].image,
             primary: "flash",
             listbar: {
               position: 'right',
-              size: 320
+              size: 420
             }
           });
         }
