@@ -98,6 +98,10 @@ function om_agenda_manager_video_type($node) {
  //BRIAN HERE 
 }
 
+function om_agenda_manager_theme_image($node) {
+  
+}
+
 function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output = '';
   $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://rss.jwpcdn.com/">';
@@ -107,20 +111,17 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $node = node_load($session_nid);
  
   $youtube_info = om_show_youtube_info($node);
-  /**
-  if (!empty($node->field_session_subdomain[0]['value'])) {
-    if ($node->field_session_subdomain[0]['value'] == 'colorado-senate') {
-      $img_path = '/sites/all/themes/cochannel/images/senate-image.png';
+  if (!empty($node->field_om_theme[$node->language][0]['tid'])) {
+    $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
+    if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
+      $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
     }
-    if ($node->field_session_subdomain[0]['value'] == 'coloradohouse') {
-      $img_path = '/sites/all/themes/cochannel/images/house-image.png';
-    }
-  }**/
-  $img_path = 'http://www.coloradochannel.net/sites/all/themes/cochannel/images/house-image.png';
-  //$url = archive_migrator_file_url($session_nid);
+  }else{
+    $img_path = 'novalidimage';
+  }
   $url = $node->field_om_show_video[$node->language][0]['safe_value'];
 
-  $output .= '<item>'; 
+  $output .= '<item>';
   $output .= '<description>Start of Session</description>';
   $output .= '<media:content url="'.$url.'" />';
   $output .= '<media:thumbnail url="' . $img_path . '" />';
