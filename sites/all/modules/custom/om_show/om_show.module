@@ -178,7 +178,7 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($node) {
+function om_show_jwplayer_include($node, $disable_playlist = false) {
   $node = menu_get_object();
   if (!is_object($node)) {
     $nid = $node['nid'];
@@ -194,8 +194,9 @@ function om_show_jwplayer_include($node) {
     }
   }
 
-  if (om_agenda_manager_cuepoints($node)) {
+  if (om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
+
     $jwplayer[0] = array(
       'image' => file_create_url($thumb_field[0]['uri']),
       'playlist' => '/node/'.$nid.'/cuepoints',
