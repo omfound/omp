@@ -78,7 +78,7 @@ class cablecastPlaybackServerController extends playbackServerController {
   /**
    * --Methods dealing with files
    */
-  public function check_file_status($pbs, stdClass $show) {
+  public function check_file_status($pbs, $show) {
     $lang = $show->language;
     $id = $show->field_om_show_playback_server_id[$lang][0]['value'];
     $params = array(
