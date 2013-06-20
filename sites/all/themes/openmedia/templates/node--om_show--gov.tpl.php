@@ -39,7 +39,8 @@
     </div>
     <?php if (!empty($node->field_om_calendar)) { ?>
       <div id="documents">
-        <iframe src="<?php print $node->field_om_calendar[$node->language][0]['url']; ?>" width="100%" height="500" ></iframe> 
+        <?php $edit_view = str_replace('/pub', '/edit', $node->field_om_calendar[$node->language][0]['url']); ?>
+        <iframe src="<?php print $edit_view; ?>" width="100%" height="500" ></iframe> 
       </div>
     <?php } ?>
 </article><!-- /.node -->
