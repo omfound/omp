@@ -53,7 +53,7 @@ function om_agenda_manager_menu() {
   $items['node/%node/cuepoints'] = array(
     'title' => 'Cue Points',
     'description' => 'Cue Points',
-    'page callback' => 'om_agenda_manager_cuepoints',
+    'page callback' => 'om_agenda_manager_cuepoints_xml',
     'page arguments' => array(1),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
