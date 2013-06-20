@@ -90,7 +90,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
         //youtube embed
         $live_width = 600;
         $live_height = 325;
-        if (!empty(arg(2)) && arg(2) == 'agenda_manager') {
+        if (arg(2) == 'agenda_manager') {
           $live_width = 525;
           $live_height = 300;
         }
