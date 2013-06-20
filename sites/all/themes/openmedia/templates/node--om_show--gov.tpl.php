@@ -1,8 +1,8 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+    <h2><?php print $node->title; ?></h2>
     <?php if (isset($video)): ?>
       <?php print $video; ?>
     <?php endif; ?>
-    <h2><?php print $node->title; ?></h2>
     <div class="edit-link-wrapper">
       <?php print $edit_link; ?>
     </div>
