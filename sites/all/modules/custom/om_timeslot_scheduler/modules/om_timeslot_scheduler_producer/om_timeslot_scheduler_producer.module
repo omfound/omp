@@ -126,9 +126,8 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
  * Custom access check for the self scheduling tab.
  */ 
 function om_timeslot_scheduler_producer_tab_access($node) {
-  if (!is_object($node) && $node->type != 'om_show') {
+  if (!is_object($node) && $node->type == 'om_show') {
     if (user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
-      dsm('we make it here');
       return TRUE;
     }
     else if (user_access('schedule own shows')) {
@@ -141,7 +140,6 @@ function om_timeslot_scheduler_producer_tab_access($node) {
       }
     }
   }
-  dsm('boo');
 }
 
 /**
