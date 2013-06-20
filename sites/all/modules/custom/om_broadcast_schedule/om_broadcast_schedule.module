@@ -266,6 +266,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
         $matched = TRUE;
         $safe[] = $row['entity_id'];
       }
+      dsm($matched);
       if ($matched == FALSE && $airing['start'] >= $context['results']['run_info']['start'] && $airing['end'] >= $context['results']['run_info']['end']) {
         $context['results']['create_airings'][] = $airing;
       }
@@ -296,7 +297,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
   }
-  dsm($context['results']);
   $context['message'] = t('Match Airings on Drupal site.');
 }
 
