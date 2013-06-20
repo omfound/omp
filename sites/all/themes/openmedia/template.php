@@ -88,14 +88,21 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
+        $live_width = 600;
+        $live_height = 350;
+        if (arg(2) == 'agenda_manager') {
+          $live_width = 525;
+          $live_height = 300;
+        }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video = '<iframe width="500" height="340" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
   }
 
   if (empty($video)) {
     //default jwplayer code
+    om_show_jwplayer_include($variables);
     $video = '<div id="jwplayer-0">Loading video...</div>';
   }
 
@@ -219,7 +226,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $file = file_load($variables['picture']);
     $variables['picture_rendered'] = theme('image_style', array('style_name' => '30x30', 'path' => $file->uri));
   }
-  om_show_jwplayer_include($variables);
 
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);

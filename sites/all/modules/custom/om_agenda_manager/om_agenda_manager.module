@@ -50,8 +50,105 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['node/%node/cuepoints'] = array(
+    'title' => 'Cue Points',
+    'description' => 'Cue Points',
+    'page callback' => 'om_agenda_manager_cuepoints_xml',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
 
   return $items;
+}
+
+function om_agenda_manager_cuepoints_xml($node) {
+  $points = om_agenda_manager_cuepoints($node);
+  $xml = om_agenda_manager_cuepoints_to_xml($points, $node->nid);
+
+  header('Content-type: application/xhtml+xml');
+  print $xml;
+}
+
+function om_agenda_manager_cuepoints($node) {
+  $query = "
+    SELECT field_data_field_acp_show_reference.entity_id, field_acp_seconds_value, title 
+    FROM {field_data_field_acp_show_reference}
+    JOIN {field_data_field_acp_seconds} ON field_data_field_acp_seconds.entity_id = field_data_field_acp_show_reference.entity_id
+    JOIN {node} ON node.nid = field_data_field_acp_show_reference.entity_id
+    WHERE field_acp_show_reference_target_id = :nid
+    ORDER BY field_acp_seconds_value ASC";
+  $result = db_query($query, array(':nid' => $node->nid));
+  $cuepoints = array();
+  foreach ($result as $cuepoint) {
+    $cuepoints[$cuepoint->entity_id] = array(
+      'seconds' => $cuepoint->field_acp_seconds_value,
+      'title' => $cuepoint->title,
+    );
+  }
+
+  if (!empty($cuepoints)) {
+    return $cuepoints;
+  }
+
+  return false;
+}
+
+function om_agenda_manager_video_image($node) {
+  if (!empty($node->field_show_thumbnail)) {
+    $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
+    if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_file_url($node->field_om_show_video[$node->language][0]['safe_value'])) {
+      $img_path = $image_url;
+    }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
+      $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
+      if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
+        $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
+      }
+    }
+  }else{
+    $img_path = false;
+  }
+
+  return $img_path;
+}
+
+function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
+  $output = '';
+  $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://rss.jwpcdn.com/">';
+  $output .= '<channel>';
+  $output .= '<title>Cuepoints playlist</title>';
+  $output .= '<link>http://omp.omfound.org</link>';
+  $node = node_load($session_nid);
+ 
+  $youtube_info = om_show_youtube_info($node);
+  $img_path = om_agenda_manager_video_image($node);
+  $url = $node->field_om_show_video[$node->language][0]['safe_value'];
+
+  $output .= '<item>';
+  $output .= '<description>Start of Session</description>';
+  $output .= '<media:content url="'.$url.'" />';
+  $output .= '<media:thumbnail url="' . $img_path . '" />';
+  $provider = 'http';
+  if($youtube_info) {
+    $provider = 'youtube';
+  }
+  $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
+  $output .= '</item>';
+
+  foreach($points as $key => $point) {
+    $output .= '<item>';
+    $output .= '<description>'.$point['title'].'</description>';
+    $output .= '<media:content url="'.$url.'" />';
+    if ($provider == 'youtube') {
+      $output .= '<media:thumbnail url="novalidimage" />';
+    }
+    $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
+    $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
+    $output .= '</item>';
+  }
+  $output .= '</channel>';
+  $output .= '</rss>';
+  return $output;
 }
 
 function om_agenda_manager_admin_form() {
@@ -68,23 +165,6 @@ function om_agenda_manager_admin_form() {
     '#markup' => $markup,
   );
 
-  /**
-  $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
-  $tree = taxonomy_get_tree($theme_taxonomy->vid);
-  if (count($tree) > 0) {
-    $form['om_agenda_manager_themes'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Activate or disable live streams'),
-    );
-    foreach ($tree as $key => $term) {
-      $form['om_agenda_manager_themes']['om_agenda_manager_live_tid_'.$term->tid] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Activate live streaming for ').$term->name.'?',
-        '#default_value' => variable_get('om_agenda_manager_live_tid_'.$term->tid, false),
-      );
-    }
-  }
-  **/
   return system_settings_form($form); 
 }
 
