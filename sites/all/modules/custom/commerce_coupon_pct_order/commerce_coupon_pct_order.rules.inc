@@ -70,38 +70,46 @@ function commerce_coupon_pct_order_apply_to_product_line_item($line_item, $order
     if (is_object($order)) {
       $order_metadata = entity_metadata_wrapper('commerce_order', $order);
       $line_items = $order_metadata->commerce_line_items->value();
-      $counter = 0;
+
+      $most_expensive_match = array();
       foreach ($line_items as $key => $info) {
         $line_item_product = commerce_product_load($info->data['context']['product_ids'][0]);
+        if ($line_item_product->type == $primary_product->type) {
+          if (empty($most_expensive_match)) {
+            $most_expensive_match = $line_item_product;
+          }elseif($most_expensive_match->commerce_price[LANGUAGE_NONE][0]['amount'] < $line_item_product->commerce_price[LANGUAGE_NONE][0]['amount']) {
+            $most_expensive_match = $line_item_product;
+          }
+        }
       }
-      dsm($line_item_product);
-      dsm($primary_product);
-      return;
+
+      if ($most_expensive_match->product_id == $primary_product->product_id) {
+        //we have a winner
+        // Get the price component to use in this price.
+        $price_component_name = $coupon_wrapper->price_component_name->value();
+
+        $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+        $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
+        $amount = commerce_round($round_mode, $unit_price['amount'] * $rate);
+
+        // Calculate the updated amount and create a price array representing the
+        // difference between it and the current amount.
+        $current_amount = $unit_price['amount'];
+        $updated_amount = commerce_round($round_mode, $current_amount - $amount);
+
+        $difference = array(
+          'amount' => $updated_amount - $current_amount,
+          'currency_code' => $unit_price['currency_code'],
+          'data' => array(),
+        );
+
+        // Set the amount of the unit price and add the difference as a component.
+        $wrapper->commerce_unit_price->amount = $updated_amount;
+
+        $wrapper->commerce_unit_price->data = commerce_price_component_add(
+            $wrapper->commerce_unit_price->value(), $price_component_name, $difference, TRUE
+        );
+      }
     }
-
-    // Get the price component to use in this price.
-    $price_component_name = $coupon_wrapper->price_component_name->value();
-
-    $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-    $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
-    $amount = commerce_round($round_mode, $unit_price['amount'] * $rate);
-
-    // Calculate the updated amount and create a price array representing the
-    // difference between it and the current amount.
-    $current_amount = $unit_price['amount'];
-    $updated_amount = commerce_round($round_mode, $current_amount - $amount);
-
-    $difference = array(
-      'amount' => $updated_amount - $current_amount,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-
-    // Set the amount of the unit price and add the difference as a component.
-    $wrapper->commerce_unit_price->amount = $updated_amount;
-
-    $wrapper->commerce_unit_price->data = commerce_price_component_add(
-        $wrapper->commerce_unit_price->value(), $price_component_name, $difference, TRUE
-    );
   }
 }
