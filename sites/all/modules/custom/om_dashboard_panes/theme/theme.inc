@@ -28,9 +28,10 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
         continue;
       }
     }
-
     $products = array_shift($products);
+    print_r($products);
     if (empty($products)) {
+/*
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
       $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
@@ -39,6 +40,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       $variables['membership_end'] = date('D j/n/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+*/
     }
     else {
       $no_membership = TRUE;
