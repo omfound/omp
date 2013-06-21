@@ -222,6 +222,7 @@ function om_membership_add_membership_and_transfer($pid) {
     watchdog('brian', 'adding cart pid: '.$pid);
     // Add membershipt to cart.
     commerce_cart_product_add_by_id($pid, 1);
+    watchdog('brian', 'made it past cart add');
   }
 
   if($user->uid != 0) {
