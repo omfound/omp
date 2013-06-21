@@ -313,21 +313,12 @@ function om_theme_assets_admin_form() {
   $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
   $form['main_footer_fieldset']['main_footer'] = array(
     '#title' => t('Main Footer'),
-    '#type' => 'text_format',
+    '#type' => 'textfield',
     '#default_value' => variable_get('main_footer_body', ''),
   );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
-}
-
-function om_theme_assets_om_footer_block_save($delta = '', $edit = array()) {
-  switch($delta) {
-    case 'om_footer_block' :
-      // Saving the WYSIWYG text      
-      variable_set('main_footer_body', $edit['main_footer']['value']);
-  break;
-  }
 }
 
 /** 
