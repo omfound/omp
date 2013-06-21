@@ -24,14 +24,11 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   else {
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
-      if ($product->title == 'Online Only Membership') {
+      if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
         continue;
       }
     }
-    print '<pre>';
-    print_r($products);
-    print '</pre>';
     $products = array_shift($products);
     $product_meta = entity_metadata_wrapper('commerce_product', $products);
     $variables['membership_type'] = $products->title;
