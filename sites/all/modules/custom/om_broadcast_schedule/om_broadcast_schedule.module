@@ -572,10 +572,7 @@ function om_broadcast_schedule_round_to_days($start, $end) {
 }
 
 function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_tid) {
-  dsm($start);
-  dsm($end);
-  dsm($channel_tid);
-  $ouput = array();
+  $output = array();
   // Select all airings in the current date range and see whether to create/leave alone/delete
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
@@ -597,7 +594,7 @@ function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_
   $query->condition($or);
   $resource = $query->execute();
   while ($result = $resource->fetchAssoc()) {
-    $ouput[] = $result;
+    $output[] = $result;
   }
   return $output;
 }
