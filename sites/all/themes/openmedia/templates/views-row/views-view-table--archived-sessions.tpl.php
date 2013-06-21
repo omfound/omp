@@ -60,7 +60,7 @@
             </td>
           <?php }elseif ($field == 'field_om_calendar') { ?>
             <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
-              <?php print l('Download PDF', str_replace('/pub', 'export?format=pdf', $content)); ?>
+              <?php print l('Download PDF', str_replace('/pub', '/export?format=pdf', $content)); ?>
             </td>
           <?php } ?>
         <?php endforeach; ?>
