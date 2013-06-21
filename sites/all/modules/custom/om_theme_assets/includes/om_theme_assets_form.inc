@@ -311,10 +311,20 @@ function om_theme_assets_admin_form() {
   );
   $form['main_footer_fieldset'] = $fieldset;
   $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
-  $form['main_footer_fieldset']['main_footer'] = array(
-    '#title' => t('Main Footer'),
-    '#type' => 'text_format',
-    '#default_value' => variable_get('main_footer', ''),
+  $form['main_footer_fieldset']['footer_address'] = array(
+    '#title' => t('Address'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('footer_address', ''),
+  );
+  $form['main_footer_fieldset']['phone_number'] = array(
+    '#title' => t('Phone Number'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('phone_number', ''),
+  );
+  $form['main_footer_fieldset']['email'] = array(
+    '#title' => t('Email Address'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('email', ''),
   );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
