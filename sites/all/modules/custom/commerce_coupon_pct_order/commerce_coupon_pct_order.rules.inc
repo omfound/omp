@@ -66,6 +66,7 @@ function commerce_coupon_pct_order_apply_to_product_line_item($line_item, $order
     if (is_object($order)) {
       $order_metadata = entity_metadata_wrapper('commerce_order', $order);
       $line_items = $order_metadata->commerce_line_items->value();
+      dsm($line_item);
       dsm($line_items);
       foreach ($line_items AS $line_item) {
       }
