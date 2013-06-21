@@ -22,6 +22,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   }
   else {
     $products = om_membership_get_user_membership_products($user);
+    print_r($products);
     foreach ($products AS $key => $product) {
       if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
@@ -29,8 +30,9 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       }
     }
     $products = array_shift($products);
-    print_r($products);
     if (empty($products)) {
+    print 'Somehow this is all still not empty fail';
+    print_r($products);
 /*
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
