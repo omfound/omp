@@ -270,6 +270,16 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_dropdown_background_hover', ''),
     );
+    $form['admin_theme_omp_fieldset']['header_shadow_color'] = array(
+      '#title' => t('Header Shadow Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('header_shadow_color', ''),
+    );
+    $form['admin_theme_omp_fieldset']['content_border_color'] = array(
+      '#title' => t('Content Border Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('content_border_color', ''),
+    );
     $form['admin_theme_omp_fieldset']['site_link_color'] = array(
       '#title' => t('Site Link Color'),
       '#description' => t('The small menu in the header.'),
@@ -287,6 +297,11 @@ function om_theme_assets_admin_form() {
       '#title' => t('Solid Background Color'),
       '#type' => 'textfield',
       '#default_value' => variable_get('background_color', ''),
+    );
+    $form['admin_theme_omp_fieldset']['front_content_background_color'] = array(
+      '#title' => t('Front Content Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('front_content_background_color', ''),
     );
     $form['admin_theme_omp_fieldset']['title_color'] = array(
       '#title' => t('Title Color'),
@@ -311,10 +326,20 @@ function om_theme_assets_admin_form() {
   );
   $form['main_footer_fieldset'] = $fieldset;
   $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
-  $form['main_footer_fieldset']['main_footer'] = array(
-    '#title' => t('Main Footer'),
-    '#type' => 'text_format',
-    '#default_value' => variable_get('main_footer', ''),
+  $form['main_footer_fieldset']['footer_address'] = array(
+    '#title' => t('Address'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('footer_address', ''),
+  );
+  $form['main_footer_fieldset']['phone_number'] = array(
+    '#title' => t('Phone Number'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('phone_number', ''),
+  );
+  $form['main_footer_fieldset']['email'] = array(
+    '#title' => t('Email Address'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('email', ''),
   );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';

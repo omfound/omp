@@ -145,14 +145,29 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
 
 function om_theme_assets_footer_block() {
   $block = array();
-  $text = variable_get('main_footer', '');
-  $block = array(
-    'message' => array(
-      '#type' => 'markup',
-      '#markup' => $text,
-    )
-  );
-  return $block;
+  $text = array( 
+     'footer_address' => variable_get('footer_address', ''),
+     'phone_number' => variable_get('phone_number', ''),
+     'email' => variable_get('email', '')
+     );
+  
+  $output = '';
+  foreach ($text as $item) {
+    $output .= '<span class="footer-item">';
+    $output .= $item;
+    $output .= '</span>';
+  }
+
+  if (!empty($output)) {
+    $block = array(
+      'message' => array(
+        '#type' => 'markup',
+        '#markup' => $output,
+      )
+    );
+
+    return $block;
+  }
 }
   
 
@@ -278,6 +293,10 @@ function om_theme_assets_build_dynamic_css() {
 
 
 function om_theme_assets_hex_to_rgba($hex) {
+  if ($hex == 'transparent') {
+    return '0,0,0,0';
+  }
+
   $hex = str_replace("#", "", $hex);
   if(strlen($hex) == 3) {
     $r = hexdec(substr($hex,0,1).substr($hex,0,1));
