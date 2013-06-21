@@ -82,14 +82,10 @@
   }
 <?php endif; ?>
 <?php if (!empty($front_content_background_color)): ?>
-  body.front #content {
+  body.front #main #content {
     background-color: rgba(<?php print $front_content_background_color; ?>);
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-  }
-  body.front #content-inner {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
   }
 <?php endif; ?>
 <?php if (!empty($title_color)): ?>
