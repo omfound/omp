@@ -288,6 +288,11 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('background_color', ''),
     );
+    $form['admin_theme_omp_fieldset']['front_content_background_color'] = array(
+      '#title' => t('Front Content Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('front_content_background_color', ''),
+    );
     $form['admin_theme_omp_fieldset']['title_color'] = array(
       '#title' => t('Title Color'),
       '#type' => 'textfield',

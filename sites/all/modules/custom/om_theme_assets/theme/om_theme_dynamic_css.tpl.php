@@ -81,6 +81,11 @@
     background-color: rgba(<?php print $background_color; ?>);
   }
 <?php endif; ?>
+<?php if (!empty($front_content_background_color)): ?>
+  body.front #content {
+    background-color: rgba(<?php print $front_content_background_color; ?>);
+  }
+<?php endif; ?>
 <?php if (!empty($title_color)): ?>
   #page #content h1,
   #page #content h2,
