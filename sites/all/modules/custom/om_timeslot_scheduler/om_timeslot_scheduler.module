@@ -447,6 +447,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     return;
   }
   $all_shows = om_timeslot_scheduler_load_all_shows();
+  $all_airings = om_broadcast_schedule_get_airings_by_date_range($run['start'], $run['end'], $run['channel_tid']);
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
@@ -568,12 +569,15 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
-                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
-                      $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
-                      $process_start = ($process_start - ($process_start % 1800)) + 1800;
-                      $next_start = $process_start;
-                      $used = $rank;
-                      unset($timeslot->om_timeslot_showlist[$rank]);
+                      $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
+                      if ($already_aired == FALSE) {
+                        $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
+                        $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                        $process_start = ($process_start - ($process_start % 1800)) + 1800;
+                        $next_start = $process_start;
+                        $used = $rank;
+                        unset($timeslot->om_timeslot_showlist[$rank]);
+                      }
                     }
                   }
                   // START Section 3.2: Schedule Show lt 30m
@@ -586,10 +590,13 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
-                      $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
-                      $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
-                      $used = $rank;
-                      unset($timeslot->om_timeslot_showlist[$rank]);
+                      $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
+                      if ($already_aired == FALSE) {
+                        $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
+                        $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
+                        $used = $rank;
+                        unset($timeslot->om_timeslot_showlist[$rank]);
+                      }
                     }
                   }
                 }
@@ -608,9 +615,12 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $banding_item = $all_shows[$banding_item_nid];
                       $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
                       if ($branding_show_completion <= $mini_gap['end']) {
-                        $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
-                        $process_start += $banding_item->field_om_show_duration['und'][0]['value'];
-                        unset($branding_list[$branding_key]);
+                        $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $branding_list);
+                        if ($already_aired == FALSE) {
+                          $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
+                          $process_start += $banding_item->field_om_show_duration['und'][0]['value'];
+                          unset($branding_list[$branding_key]);
+                        }
                       }
                     }
                   }
@@ -1247,4 +1257,16 @@ function om_timeslot_scheduler_get_adult_hours($reference_time) {
   $adult_hours['start'] = mktime($station_adult_hours['start'], 0, 0 , date('n', $reference_time), date('j', $reference_time), date('y', $reference_time));
   $adult_hours['end'] = $adult_hours['start'] + $difference;
   return $adult_hours;
+}
+
+/**
+ * Loop through all airings and see if a show has been scheduled during this run.
+ */
+function om_timeslot_scheduler_show_is_in_airing_list($airing_list, $show) {
+  foreach ($airing_list AS $airing) {
+    if (!empty($airing['field_om_show_id_value']) && $airing['field_om_show_id_value'] == $show->nid) {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }

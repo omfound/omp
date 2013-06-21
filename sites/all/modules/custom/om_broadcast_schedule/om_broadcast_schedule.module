@@ -273,7 +273,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   }
   // Now select all airings in the current date range and see whether to create/leave alone/delete
   $all_airings = om_broadcast_schedule_get_airings_by_date_range($context['results']['run_info']['start'], $context['results']['run_info']['end'], $context['results']['run_info']['channel_tid']);
-  dsm($all_airings);
   foreach ($all_airings AS $row) {
     if (!in_array($row['entity_id'], $safe)) {
       $context['results']['delete_airings'][] = $row['entity_id'];
@@ -571,12 +570,17 @@ function om_broadcast_schedule_round_to_days($start, $end) {
   return $output;
 }
 
+/**
+ * Return an array of airing ids for nodes fiting the given range and channel.
+ */
 function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_tid) {
   $output = array();
   // Select all airings in the current date range and see whether to create/leave alone/delete
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
+  $query->join('field_data_field_om_show_id', 'show_ref', 'dates.entity_id=show_ref.entity_id');
   $query->fields('dates', array('entity_id'));
+  $query->fields('show_ref', array('field_om_show_id_value'));
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
     $and_1 = db_and();
     $and_1->condition('field_om_airing_dates_value', $start, '>=');
