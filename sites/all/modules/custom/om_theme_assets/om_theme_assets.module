@@ -143,7 +143,7 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
   );
 }
 
-function om_theme_assets_footer_block(); {
+function om_theme_assets_footer_block() {
   $block = array();
   $text = variable_get('main_footer', '');
   $block = array(
