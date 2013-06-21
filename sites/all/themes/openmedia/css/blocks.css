@@ -169,6 +169,25 @@
 
 }
 
+/** Footer Block **/
+
+#block-om-theme-assets-om-footer-block {
+  text-align: center;
+}
+
+#block-om-theme-assets-om-footer-block span.footer-item {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+#block-om-theme-assets-om-footer-block span.footer-item {
+    border-right: 2px solid black;
+}
+
+#block-om-theme-assets-om-footer-block span.footer-item:last-child {
+    border-right: none;
+}​
+
 /** Footer Menu **/
 #block-menu-menu-additional-links ul {
   margin: 0;
