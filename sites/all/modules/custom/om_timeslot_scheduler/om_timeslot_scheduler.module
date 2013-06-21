@@ -872,7 +872,6 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
     foreach($airings AS $airing) {
       array_walk($gaps, '_om_timeslot_scheduler_handle_gaps', array('start' => $airing->field_om_airing_dates_value, 'end' => $airing->field_om_airing_dates_value2, 'gaps' => &$gaps));
     }
-    dsm($gaps);
     return $gaps;
   }
 }
@@ -909,7 +908,6 @@ function _om_timeslot_scheduler_merge_array($val, $key, &$data) {
  */
 function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
   // If an airing is in the middle of a gap split the gap creating two new gaps.
-  // @NB #LK we have set an arbitrary 3 minute minimum gap size to improve performance.
   if ($val['start'] < $data['start'] && $val['end'] > $data['end']) {
     // Destroy original...
     unset($data['gaps'][$key]);
@@ -943,6 +941,23 @@ function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
       'start' => $val['start'],
       'end' => $data['start'],
       'duration' => $data['start'] - $val['start']
+    );
+  }
+  // Catch airings portruding into the timeslots from either side.
+  if ($val['start'] > $data['start'] && $val['start'] < $data['end']) {
+    unset($data['gaps'][$key]);
+    $data['gaps'][$key] = array(
+      'start' => $data['end'],
+      'end' => $val['end'],
+      'duration' => $val['end'] - $data['end']
+    );
+  }
+  if ($val['end'] > $data['start'] && $val['end'] < $data['end']) {
+    unset($data['gaps'][$key]);
+    $data['gaps'][$key] = array(
+      'start' => $val['start'],
+      'end' => $data['start'],
+      'duration' => $val['end'] - $data['end']
     );
   }
 }
