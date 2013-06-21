@@ -321,7 +321,7 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
       '#suffix' => '</p>'
     );
   }
-  return array_merge($steps_message, $series_render, $theme_render);;
+  return array_merge($steps_message, $series_render, $theme_render);
 }
 
 /**
