@@ -22,7 +22,6 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   }
   else {
     $products = om_membership_get_user_membership_products($user);
-    print_r($products);
     foreach ($products AS $key => $product) {
       if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
