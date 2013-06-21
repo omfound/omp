@@ -150,12 +150,14 @@ function om_theme_assets_footer_block() {
      variable_get('phone_number', ''),
      variable_get('email', '')
      );
+  foreach ($text AS $footertext) {
   $block = array(
     'message' => array(
       '#type' => 'markup',
-      '#markup' => $text,
+      '#markup' => $footertext,
     )
   );
+}
   return $block;
 }
   
