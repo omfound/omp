@@ -216,16 +216,13 @@ function om_membership_add_membership_and_transfer($pid) {
   }
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
     // Add membershipt to cart.
-    watchdog('brian', 'user is: <pre>'.print_r($user, TRUE).'</pre>');
     commerce_cart_product_add_by_id($pid, 1);
-    watchdog('brian', 'made it past cart add');
   }
 
   if($user->uid != 0) {
     //this user already has an account, go straight to checkout
     drupal_goto('checkout');
   }
-  watchdog('brian', 'off to signup');
   drupal_goto('membership/signup');
 }
 
