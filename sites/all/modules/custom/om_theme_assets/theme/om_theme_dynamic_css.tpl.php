@@ -96,7 +96,7 @@
 <?php endif; ?>
 <?php if (!empty($front_content_background_color)): ?>
   body.front #main #content {
-    background-color: rgba(<?php print $front_content_background_color; ?>);
+    background-color: <?php print $front_content_background_color; ?>;
     padding: 10px;
     margin-bottom: 10px;
   }
