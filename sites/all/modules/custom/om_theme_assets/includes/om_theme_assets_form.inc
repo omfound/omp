@@ -344,7 +344,7 @@ function _om_theme_assets_url_validate($element, &$form_state) {
  * Submit handler for saving files.
  */
 function om_theme_assets_admin_form_submit(&$form, &$form_state) {
-  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3', 'background_texture', 'main_footer');
+  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3', 'background_texture');
   foreach ($file_elements AS $file_field) {
     if (!empty($form_state['values'][$file_field])) {
       global $user;
