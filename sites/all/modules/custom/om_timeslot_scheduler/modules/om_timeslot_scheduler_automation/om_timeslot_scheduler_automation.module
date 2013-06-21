@@ -77,9 +77,11 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
         'timeslots' => array(),
         'errors' => array()
       );
+      $rounded_times = om_broadcast_schedule_round_to_days($start, $end);
+      dsm($rounded_times);
       // perform airing update steps.
       $context = array();
-      _om_broadcast_schedule_get_pbs_airings($run, $context);
+      _om_broadcast_schedule_get_pbs_airings(array_merge($run, $rounded_times), $context);
       _om_broadcast_schedule_match_drupal_airings($context);
       _om_broadcast_schedule_purge_unmatched($context);
       _om_broadcast_schedule_create_new($context);
