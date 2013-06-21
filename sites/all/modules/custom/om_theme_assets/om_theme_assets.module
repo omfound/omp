@@ -146,9 +146,9 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
 function om_theme_assets_footer_block() {
   $block = array();
   $text = array( 
-     variable_get('footer_address', ''),
-     variable_get('phone_number', ''),
-     variable_get('email', '')
+     'footer_address' => variable_get('footer_address', ''),
+     'phone_number' => variable_get('phone_number', ''),
+     'email' => variable_get('email', '')
      );
   foreach ($text AS $footertext) {
   $block = array(
