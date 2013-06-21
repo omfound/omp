@@ -272,26 +272,8 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
     }
   }
   // Now select all airings in the current date range and see whether to create/leave alone/delete
-  $query = db_select('field_data_field_om_airing_dates', 'dates');
-  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
-  $query->fields('dates', array('entity_id'));
-  $query->condition('field_om_airing_channel_tid', $context['results']['run_info']['channel_tid'], '=');
-    $and_1 = db_and();
-    $and_1->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
-    $and_1->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
-    $and_2 = db_and();
-    $and_2->condition('field_om_airing_dates_value', $context['results']['run_info']['start'], '>=');
-    $and_2->condition('field_om_airing_dates_value2', $context['results']['run_info']['start'], '<=');
-    $and_3 = db_and();
-    $and_3->condition('field_om_airing_dates_value', $context['results']['run_info']['end'], '>=');
-    $and_3->condition('field_om_airing_dates_value2', $context['results']['run_info']['end'], '<=');
-    $or = db_or();
-    $or->condition($and_1);
-    $or->condition($and_2);
-    $or->condition($and_3);
-  $query->condition($or);
-  $result = $query->execute();
-  while($row = $result->fetchAssoc()) {
+  $all_airings = om_broadcast_schedule_get_airings_by_date_range($context['results']['run_info']['start'], $context['results']['run_info']['end'], $context['results']['run_info']['channel_tid']);
+  foreach ($all_airings AS (array)$row) {
     if (!in_array($row['entity_id'], $safe)) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
@@ -586,4 +568,28 @@ function om_broadcast_schedule_round_to_days($start, $end) {
     $output['end'] = mktime(23, 59, 59, date('n', $end), date('j', $end), date('Y', $end));
   }
   return $output;
+}
+
+function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_tid) {
+  // Select all airings in the current date range and see whether to create/leave alone/delete
+  $query = db_select('field_data_field_om_airing_dates', 'dates');
+  $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
+  $query->fields('dates', array('entity_id'));
+  $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
+    $and_1 = db_and();
+    $and_1->condition('field_om_airing_dates_value', $start, '>=');
+    $and_1->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_airing_dates_value', $start, '>=');
+    $and_2->condition('field_om_airing_dates_value2', $start, '<=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_airing_dates_value', $end, '>=');
+    $and_3->condition('field_om_airing_dates_value2', $end], '<=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+  $query->condition($or);
+  $result = $query->execute();
+  return $result->fetchAll();
 }
