@@ -314,7 +314,7 @@ function om_theme_assets_admin_form() {
   $form['main_footer_fieldset']['main_footer'] = array(
     '#title' => t('Main Footer'),
     '#type' => 'text_format',
-    '#default_value' => variable_get('main_footer', ''),
+    '#default_value' => variable_get('main_footer_body', ''),
     '#format' => NULL
   );
   }
@@ -326,7 +326,7 @@ function om_theme_assets_om_footer_block_save($delta = '', $edit = array()) {
   switch($delta) {
     case 'om_footer_block' :
       // Saving the WYSIWYG text      
-      variable_set('main_footer', $edit['main_footer_fieldset']['value']);
+      variable_set('main_footer_body', $edit['main_footer']['value']);
   break;
   }
 }
