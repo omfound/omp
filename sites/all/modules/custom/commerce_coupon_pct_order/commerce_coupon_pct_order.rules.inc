@@ -63,13 +63,19 @@ function commerce_coupon_pct_order_apply_to_product_line_item($line_item, $order
       return;
     }
 
+    //need to get the type of the current line item
+    //check if it is the highest value of its type in the order
+    //if it is, apply the discount
+    $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
     if (is_object($order)) {
       $order_metadata = entity_metadata_wrapper('commerce_order', $order);
       $line_items = $order_metadata->commerce_line_items->value();
-      dsm($line_item);
-      dsm($line_items);
-      foreach ($line_items AS $line_item) {
+      $counter = 0;
+      foreach ($line_items as $key => $info) {
+        $line_item_product = commerce_product_load($info->data['context']['product_ids'][0]);
       }
+      dsm($line_item_product);
+      dsm($primary_product);
       return;
     }
 
