@@ -315,7 +315,7 @@ function om_theme_assets_admin_form() {
     '#title' => t('Main Footer'),
     '#type' => 'text_format',
     '#default_value' => variable_get('main_footer', ''),
-    '#upload_location' => 'public://theme_assets/',
+    '#format' => NULL
   );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
