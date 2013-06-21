@@ -87,6 +87,10 @@
     padding-bottom: 10px;
     margin-bottom: 30px;
   }
+  body.front #content-inner {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 <?php endif; ?>
 <?php if (!empty($title_color)): ?>
   #page #content h1,
