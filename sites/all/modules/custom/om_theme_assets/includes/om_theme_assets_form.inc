@@ -307,7 +307,7 @@ function om_theme_assets_admin_form() {
     '#suffix' => '</h2>'
   );
   $form['main_footer_help'] = array(
-    '#markup' => t('The site\'s footer text')
+    '#markup' => t('The site\'s footer text.')
   );
   $form['main_footer_fieldset'] = $fieldset;
   $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
