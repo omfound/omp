@@ -150,15 +150,24 @@ function om_theme_assets_footer_block() {
      'phone_number' => variable_get('phone_number', ''),
      'email' => variable_get('email', '')
      );
-  foreach ($text AS $footertext) {
-  $block = array(
-    'message' => array(
-      '#type' => 'markup',
-      '#markup' => $footertext,
-    )
-  );
-}
-  return $block;
+  
+  $output = '';
+  foreach ($text as $item) {
+    $output .= '<span class="footer-item">';
+    $output .= $item;
+    $output .= '</span>';
+  }
+
+  if (!empty($output)) {
+    $block = array(
+      'message' => array(
+        '#type' => 'markup',
+        '#markup' => $output,
+      )
+    );
+
+    return $block;
+  }
 }
   
 
