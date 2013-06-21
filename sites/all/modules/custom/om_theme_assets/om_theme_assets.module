@@ -143,12 +143,6 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
   );
 }
 
-
-function om_theme_assets_om_footer_block() {
-  $output = array();
-    $text = variable_get('main_footer', '');
-  return $output;
-}
 /**
  * Helper function to return content information for callout blocks.
  */
