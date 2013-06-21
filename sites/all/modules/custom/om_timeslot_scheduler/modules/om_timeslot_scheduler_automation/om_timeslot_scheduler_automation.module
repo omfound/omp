@@ -79,9 +79,13 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       );
       // perform airing update steps.
       $context = array();
+      dsm($run);
       _om_broadcast_schedule_get_pbs_airings($run, $context);
+      dsm($context);
       _om_broadcast_schedule_match_drupal_airings($context);
+      dsm($context);
       _om_broadcast_schedule_purge_unmatched($context);
+      dsm($context);
       _om_broadcast_schedule_create_new($context);
       // reset context and perform scheduling steps.
 /*
