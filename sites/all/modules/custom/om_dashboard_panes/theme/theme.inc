@@ -29,6 +29,9 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
         continue;
       }
     }
+    print '<pre>';
+    print_r($products);
+    print '</pre>';
     $products = array_shift($products);
     $product_meta = entity_metadata_wrapper('commerce_product', $products);
     $variables['membership_type'] = $products->title;
