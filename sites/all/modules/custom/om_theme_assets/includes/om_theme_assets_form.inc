@@ -314,7 +314,7 @@ function om_theme_assets_admin_form() {
   $form['main_footer_fieldset']['main_footer'] = array(
     '#title' => t('Main Footer'),
     '#type' => 'textfield',
-    '#default_value' => variable_get('main_footer_body', ''),
+    '#default_value' => variable_get('main_footer', ''),
   );
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
