@@ -322,6 +322,15 @@ function om_theme_assets_admin_form() {
   return system_settings_form($form);
 }
 
+function om_theme_assets_om_footer_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'om_footer_block' :
+      // Saving the WYSIWYG text      
+      variable_set('main_footer', $edit['main_footer_fieldset']['value']);
+  break;
+  }
+}
+
 /** 
  * Validate an above url to be both valid and internal.
  */
