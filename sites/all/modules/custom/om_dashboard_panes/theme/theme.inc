@@ -16,28 +16,37 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   global $user;
   $variables['title'] = t('Membership');
   $memberships = om_membership_get_user_membership_orders($user);
+  $no_membership = FALSE;
   if (empty($memberships)) {
-    $options = array('attributes' => array('class' => array('blue-button')));
-    $learn_more = l('Learn More', 'membership', $options);
-    $variables['message'] = t('You don\'t have a membership yet. !learnmore', array('!learnmore' => $learn_more));
+    $no_membership = TRUE;
   }
   else {
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
-      if ($product->title == 'Online Only Membership') {
+      if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
         continue;
       }
     }
     $products = array_shift($products);
-    $product_meta = entity_metadata_wrapper('commerce_product', $products);
-    $variables['membership_type'] = $products->title;
-    $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
-    $year_seconds = 31688800;
-    $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
-    $variables['membership_end'] = date('D j/n/Y', $end);
+    if (!empty($products)) {
+      $product_meta = entity_metadata_wrapper('commerce_product', $products);
+      $variables['membership_type'] = $products->title;
+      $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
+      $year_seconds = 31688800;
+      $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
+      $variables['membership_end'] = date('D j/n/Y', $end);
+      $options = array('attributes' => array('class' => array('blue-button')));
+      $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+    }
+    else {
+      $no_membership = TRUE;
+    }
+  }
+  if ($no_membership == TRUE) {
     $options = array('attributes' => array('class' => array('blue-button')));
-    $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+    $learn_more = l('Learn More', 'membership', $options);
+    $variables['message'] = t('You don\'t have a membership yet. !learnmore', array('!learnmore' => $learn_more));
   }
 }
 
