@@ -192,15 +192,12 @@ function om_membership_completion_page() {
  *   product id to add.
  */
 function om_membership_add_membership_and_transfer($pid) {
-  watchdog('brian', 'registering a new member');
   global $user;
   // User's memberships
   $user_memberships = om_membership_get_user_membership_products($user);
   $user_memberships = array_shift($user_memberships);
-  watchdog('brian', 'user memberships: <pre>'.print_r($user_memberships, TRUE).'</pre>');
   // Check to see if there is an existing membership in the cart.
   $existing_memberships = om_membership_get_currently_selected_membership($user);
-  watchdog('brian', 'existing memberships: <pre>'.print_r($existing_memberships, TRUE).'</pre>');
   if (!empty($existing_memberships)) {
     // If so remove that membership
     $membership_line_item_ids = array();
@@ -209,7 +206,6 @@ function om_membership_add_membership_and_transfer($pid) {
     }
 
     $current_order = commerce_cart_order_load($user->uid);
-    watchdog('brian', 'loaded order: <pre>'.print_r($current_order, TRUE).'</pre>');
     $current_order_metadata = entity_metadata_wrapper('commerce_order', $current_order);
     $current_line_items = $current_order_metadata->commerce_line_items->value();
     foreach ($current_line_items AS $key => $line_item) {
@@ -219,8 +215,8 @@ function om_membership_add_membership_and_transfer($pid) {
     }
   }
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
-    watchdog('brian', 'adding cart pid: '.$pid);
     // Add membershipt to cart.
+    waatchdog('brian', 'user is: <pre>'.print_r($user, TRUE).'</pre>');
     commerce_cart_product_add_by_id($pid, 1);
     watchdog('brian', 'made it past cart add');
   }
