@@ -313,7 +313,7 @@ function om_theme_assets_admin_form() {
   $form['main_footer_fieldset']['#title'] = t('Main Footer Text');
   $form['main_footer_fieldset']['main_footer'] = array(
     '#title' => t('Main Footer'),
-    '#type' => 'textfield',
+    '#type' => 'text_format',
     '#default_value' => variable_get('main_footer', ''),
     '#upload_location' => 'public://theme_assets/',
   );
