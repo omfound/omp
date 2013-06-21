@@ -154,6 +154,15 @@ function om_theme_assets_footer_block() {
   );
   return $block;
 }
+
+function om_theme_assets_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'om_footer_block' :
+      // Saving the WYSIWYG text      
+      variable_set('main_footer', $edit['main_footer_fieldset']['value']);
+      break;
+  }
+}
   
 
 /**
