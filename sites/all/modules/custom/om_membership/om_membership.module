@@ -216,7 +216,7 @@ function om_membership_add_membership_and_transfer($pid) {
   }
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
     // Add membershipt to cart.
-    waatchdog('brian', 'user is: <pre>'.print_r($user, TRUE).'</pre>');
+    watchdog('brian', 'user is: <pre>'.print_r($user, TRUE).'</pre>');
     commerce_cart_product_add_by_id($pid, 1);
     watchdog('brian', 'made it past cart add');
   }
