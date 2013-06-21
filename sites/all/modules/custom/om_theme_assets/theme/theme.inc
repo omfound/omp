@@ -84,7 +84,7 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   }
   $front_hex_color = variable_get('front_content_background_color', '');
   if (!empty($front_hex_color)) {
-    $variables['front_content_background_color'] = om_theme_assets_hex_to_rgba($hex_color);
+    $variables['front_content_background_color'] = om_theme_assets_hex_to_rgba($front_hex_color);
   }
 
   $hex_color = variable_get('background_color', '');
