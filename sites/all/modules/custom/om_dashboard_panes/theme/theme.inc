@@ -28,9 +28,9 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
 /*
       if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
-        c
-*/ontinue;
+        continue;
       }
+*/
     }
     $products = array_shift($products);
     $product_meta = entity_metadata_wrapper('commerce_product', $products);
