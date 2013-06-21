@@ -29,9 +29,10 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
         continue;
       }
     }
-/*
+
     $products = array_shift($products);
-    $product_meta = entity_metadata_wrapper('commerce_product', $products);
+    print_r($products);
+/*    $product_meta = entity_metadata_wrapper('commerce_product', $products);
     $variables['membership_type'] = $products->title;
     $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
     $year_seconds = 31688800;
