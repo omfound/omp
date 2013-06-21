@@ -145,7 +145,11 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
 
 function om_theme_assets_footer_block() {
   $block = array();
-  $text = variable_get('main_footer', '');
+  $text = array( 
+     variable_get('footer_address', ''),
+     variable_get('phone_number', ''),
+     variable_get('email', '')
+     );
   $block = array(
     'message' => array(
       '#type' => 'markup',
@@ -153,15 +157,6 @@ function om_theme_assets_footer_block() {
     )
   );
   return $block;
-}
-
-function om_theme_assets_block_save($delta = '', $edit = array()) {
-  switch($delta) {
-    case 'om_footer_block' :
-      // Saving the WYSIWYG text      
-      variable_set('main_footer', $edit['main_footer_fieldset']['value']);
-      break;
-  }
 }
   
 
