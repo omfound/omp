@@ -585,7 +585,7 @@ function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_
     $and_2->condition('field_om_airing_dates_value2', $start, '<=');
     $and_3 = db_and();
     $and_3->condition('field_om_airing_dates_value', $end, '>=');
-    $and_3->condition('field_om_airing_dates_value2', $end], '<=');
+    $and_3->condition('field_om_airing_dates_value2', $end, '<=');
     $or = db_or();
     $or->condition($and_1);
     $or->condition($and_2);
