@@ -63,6 +63,11 @@
     background-color: <?php print $main_nav_dropdown_background_hover; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($header_shadow_color)): ?>
+  #header {
+    box-shadow: 3px 3px 3px <?php print $header_shadow_color; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($site_links_color)): ?>
   #block-om-theme-assets-om-site-links ul li,
   #block-om-theme-assets-om-site-links ul li a:link,

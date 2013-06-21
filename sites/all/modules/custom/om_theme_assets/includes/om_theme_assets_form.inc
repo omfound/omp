@@ -270,6 +270,11 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('main_nav_dropdown_background_hover', ''),
     );
+    $form['admin_theme_omp_fieldset']['header_shadow_color'] = array(
+      '#title' => t('Header Shadow Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('header_shadow_color', ''),
+    );
     $form['admin_theme_omp_fieldset']['site_link_color'] = array(
       '#title' => t('Site Link Color'),
       '#description' => t('The small menu in the header.'),
