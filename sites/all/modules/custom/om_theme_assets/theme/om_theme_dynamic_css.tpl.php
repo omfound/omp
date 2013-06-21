@@ -68,6 +68,14 @@
     box-shadow: 3px 3px 3px <?php print $header_shadow_color; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($content_border_color)): ?>
+  body.front #main .inner {
+    border-top: 1px solid <?php print $content_border_color; ?>;
+  }
+  body.front #main {
+    border-top: 1px solid <?php print $content_border_color; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($site_links_color)): ?>
   #block-om-theme-assets-om-site-links ul li,
   #block-om-theme-assets-om-site-links ul li a:link,

@@ -75,6 +75,7 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   $variables['main_nav_dropdown_background_hover'] = variable_get('main_nav_dropdown_background_hover', '');
 
   $variables['header_shadow_color'] = variable_get('header_shadow_color', '');
+  $variables['content_border_color'] = variable_get('content_border_color', '');
 
   $texture_fid = variable_get('background_texture', '');
   if (is_numeric($texture_fid)) {

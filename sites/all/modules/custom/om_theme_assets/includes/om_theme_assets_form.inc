@@ -275,6 +275,11 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('header_shadow_color', ''),
     );
+    $form['admin_theme_omp_fieldset']['content_border_color'] = array(
+      '#title' => t('Content Border Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('content_border_color', ''),
+    );
     $form['admin_theme_omp_fieldset']['site_link_color'] = array(
       '#title' => t('Site Link Color'),
       '#description' => t('The small menu in the header.'),
