@@ -24,14 +24,12 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   else {
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
-      print $product->sku;
-/*
       if ($product->sku == 'membership-user-only') {
         unset($products[$key]);
         continue;
       }
-*/
     }
+/*
     $products = array_shift($products);
     $product_meta = entity_metadata_wrapper('commerce_product', $products);
     $variables['membership_type'] = $products->title;
@@ -41,6 +39,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     $variables['membership_end'] = date('D j/n/Y', $end);
     $options = array('attributes' => array('class' => array('blue-button')));
     $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+*/
   }
 }
 
