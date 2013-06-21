@@ -1,4 +1,4 @@
-<?phn
+<?php
 /**
  * Implements hook_permission
  */
