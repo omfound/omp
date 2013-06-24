@@ -120,14 +120,11 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   startTimer : function() {
-    console.log('here we go');
     if (this.sessionControllerView.timeInput) {
       this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
     }
     this.timerInterval = setInterval(this.calcTime, 1000);
-    console.log(this.sessionControllerView.sessionToggleLive.attr('checked'));
-    if (this.sessionControllerView.sessionToggleLive.attr('checked') == true) {
-    console.log('here we go part 2');
+    if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
