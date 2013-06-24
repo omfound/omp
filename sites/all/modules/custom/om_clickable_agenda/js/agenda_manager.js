@@ -128,7 +128,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
-      console.log(json);
       $.ajax({
         type : 'POST',
         url : '/write-agenda-session',
@@ -139,7 +138,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   stopTimer : function() {
     clearInterval(this.timerInterval);
     this.resetTimer();
-    if (this.sessionControllerView.sessionToggleLive.attr('checked') == true) {
+    if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
