@@ -128,6 +128,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
+      console.log(json);
       $.ajax({
         type : 'POST',
         url : '/write-agenda-session',
