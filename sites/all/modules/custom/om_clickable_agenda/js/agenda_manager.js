@@ -161,10 +161,8 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     var currentValues = this.get('sessionStatus');
     if (obj && obj.nid) {
       _.each(currentValues, function(zetheme) {
-        console.log(zetheme);
         if (zetheme.status) {
           if (obj.nid == zetheme.live_nid) {
-            console.log('we make it here');
             this.sessionControllerView.toggleTimer();
             this.sessionControllerView.sessionToggleLive.trigger('change');
             this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
@@ -471,6 +469,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     //this.sessionType.attr('disabled', 'disabled');
   },
   toggleTimer : function(e) {
+    console.log('we make it here');
     if (!this.button.hasClass('active')) {
       this.button.addClass('active');
       this.button.text("Reset Timer");
