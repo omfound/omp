@@ -145,10 +145,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       $.ajax({
         type : 'POST',
         url : '/delete-agenda-session',
-        data : {'sessionQuery' : json},
-        success : function(data) {
-          console.log(data);
-        }
+        data : {'sessionQuery' : json}
       });
     }
   },
@@ -163,7 +160,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       _.each(currentValues, function(zetheme) {
         if (zetheme.status) {
           if (obj.nid == zetheme.live_nid) {
-            console.log(this);
             this.sessionControllerView.toggleTimer();
             this.sessionControllerView.sessionToggleLive.trigger('change');
             this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
@@ -470,7 +466,6 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     //this.sessionType.attr('disabled', 'disabled');
   },
   toggleTimer : function(e) {
-    console.log('we make it here');
     if (!this.button.hasClass('active')) {
       this.button.addClass('active');
       this.button.text("Reset Timer");
