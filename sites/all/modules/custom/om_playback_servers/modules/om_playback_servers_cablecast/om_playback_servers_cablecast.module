@@ -106,6 +106,9 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->condition('field_archive_transfer_value', 1, '=');
   $resource = $query_uri->execute();
   while ($result = $resource->fetchAssoc()) {
+    $mp4 = '';
+    $derivatives = '';
+    $metadata = '';
     if (class_exists('cablecastFile')) {
       $cablecast_file_controller = new cablecastFile();
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);

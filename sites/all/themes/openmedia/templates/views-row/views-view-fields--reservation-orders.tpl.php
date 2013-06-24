@@ -11,7 +11,8 @@
   <th class="order-title">Order</th>
   <th class="line-item-title">Item</th>
   <th class = "checkout-status-title">Status</th>
-  <th></th>
+  <th class = "payment-status">Payment</th>
+  <th class = "checkout-options">Options</th>
   </tr>
   <tr>
     <td class="item-name">
@@ -55,6 +56,11 @@
         <?php } ?>
         </div>
       <?php }?>
+      </td>
+      <td>
+        <?php $payment_status = openmedia_order_payment_status($fields['order_id']->raw); ?>
+        <?php if (empty($payment_status)) { $payment_status = 'No Payment'; } ?>
+        <?php print l($payment_status, 'admin/commerce/orders/'.$fields['order_id']->raw); ?>
       </td>
       <td>
       <?php if ($checkedout) { ?>

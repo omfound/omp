@@ -173,26 +173,55 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 */
 }
 
+function om_show_field_group_build_pre_render_alter(&$element) {
+  if (user_access('administer show')) { 
+    $element['group_om_legacy']['#access'] = TRUE;
+ }
+  else {
+    $element['group_om_legacy']['#access'] = FALSE;
+  }
+   if (user_access('administer show')) { 
+    $element['group_om_admin_info']['#access'] = TRUE;
+ }
+  else {
+    $element['group_om_admin_info']['#access'] = FALSE;
+  }
+}
+
 function om_show_reload($form, $form_state) {
   // We just need to return the form here so that the form is re-rendered.
   return $form;
 }
 
-function om_show_jwplayer_include($node) {
+function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550, $height = 340) {
+  $node = menu_get_object();
   if (!is_object($node)) {
+    $nid = $node['nid'];
     $show_field = $node['field_om_show_video'];
     if (!empty($node['field_show_thumbnail'])) {
       $thumb_field = $node['field_show_thumbnail'][$node['language']];
     }
   }else{
+    $nid = $node->nid;
     $show_field = $node->field_om_show_video[$node->language];
     if (!empty($node->field_show_thumbnail)) {
       $thumb_field = $node->field_show_thumbnail[$node->language];
     }
   }
 
-  // First do video and video area.
-  if(!empty($show_field[0]['value'])) {
+  $img_path = om_show_video_image($node);
+  if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
+    $jwplayer = array();
+
+    $playlist_width = $width + 410;
+    $jwplayer[0] = array(
+      'image' => $img_path,
+      'playlist' => '/node/'.$nid.'/cuepoints',
+      'width' => $playlist_width,
+      'height' => $height,
+    );
+
+  }elseif(!empty($show_field[0]['value'])) {
     $jwplayer = array();
     foreach($show_field as $key => $info) {
       if (!valid_url($info['safe_value'], true)) {
@@ -202,17 +231,15 @@ function om_show_jwplayer_include($node) {
         $video_path = $info['safe_value'];
       }
       $jwplayer[$key]['path'] = $video_path;
-      if (!empty($thumb_field) && $thumb_field[0]['uri']) {
-        $jwplayer[$key]['image'] = file_create_url($thumb_field[0]['uri']); 
-        if (strpos($jwplayer[$key]['image'], 'no_image') && $image_url = internet_archive_thumb_from_file_url($video_path)) {
-          $jwplayer[$key]['image'] = $image_url;
-        }
-      }
+      $jwplayer[$key]['image'] = $img_path;
+      $jwplayer[$key]['width'] = $width;
+      $jwplayer[$key]['height'] = $height;
     }
-    drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
-    drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
-    drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
   }
+
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
+  drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
 }
 
 function om_show_youtube_id($url) {
@@ -275,4 +302,22 @@ function om_show_youtube_info($node) {
   }
 
   return false;
+}
+
+function om_show_video_image($node) {
+  if (!empty($node->field_show_thumbnail)) {
+    $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
+    if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_file_url($node->field_om_show_video[$node->language][0]['safe_value'])) {
+      $img_path = $image_url;
+    }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
+      $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
+      if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
+        $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
+      }
+    }
+  }else{
+    $img_path = false;
+  }
+
+  return $img_path;
 }
