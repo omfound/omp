@@ -125,7 +125,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
     }
     this.timerInterval = setInterval(this.calcTime, 1000);
-    console.log(this.sessionControllerView.sessionToggleLive);
+    console.log(this.sessionControllerView.sessionToggleLive.attr('checked'));
     if (this.sessionControllerView.sessionToggleLive.attr('checked') == true) {
     console.log('here we go part 2');
       // Also clear database record
