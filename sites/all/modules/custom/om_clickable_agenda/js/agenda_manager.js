@@ -138,9 +138,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   stopTimer : function() {
     clearInterval(this.timerInterval);
     this.resetTimer();
-    console.log('out here');
     if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
-      console.log('we made it here');
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
