@@ -429,6 +429,5 @@ function _om_clickable_agenda_delete_custom_session() {
   if (isset($_POST['sessionQuery'])) {
     $session_query = drupal_json_decode($_POST['sessionQuery']);
     om_clickable_agenda_delete_custom_session($session_query);
-    dsm($session_query);
   }
 }
