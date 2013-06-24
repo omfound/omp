@@ -164,6 +164,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
         console.log(zetheme);
         if (zetheme.status) {
           if (obj.nid == zetheme.live_nid) {
+            console.log('we make it here');
             this.sessionControllerView.toggleTimer();
             this.sessionControllerView.sessionToggleLive.trigger('change');
             this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
