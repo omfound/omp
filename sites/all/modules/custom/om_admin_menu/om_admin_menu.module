@@ -107,7 +107,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   );
   $content['menu']['content']['theme_assets'] = array(
     '#title' => t('Admin Theme Assets'),
-    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#access' => om_admin_menu_role_access(array('Content Administrator'), 'om_theme_assets'),
     '#href' => 'om_theme_assets',
   );
   //Reservations Administrators
@@ -201,12 +201,18 @@ function om_admin_menu_admin_menu_output_alter(&$content) {
   }
 }
 
-function om_admin_menu_role_access($roles) {
+function om_admin_menu_role_access($roles, $path = false) {
   global $user;
   
   foreach($roles as $role) {
     if(in_array($role, $user->roles)) {
-      return TRUE;
+      if (!$path) {
+        return TRUE;
+      }else{
+        if (drupal_valid_path($path)) {
+          return TRUE;
+        }
+      }
     } 
   }
   return FALSE;
