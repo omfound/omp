@@ -28,7 +28,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'node/add/om-show',
 	);
   $content['menu']['projects'] = array(
-    '#title' => t('Manage Projects'),
+    '#title' => t('Projects'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/projects',
     '#weight' => '-30',
@@ -46,7 +46,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 
   //Government User
   $content['menu']['gov'] = array(
-    '#title' => t('Manage Themes'),
+    '#title' => t('Themes'),
     '#access' => om_admin_menu_role_access(array('Gov Administrator')),
     '#href' => 'admin/structure/taxonomy/themes',
     '#weight' => '-40',
