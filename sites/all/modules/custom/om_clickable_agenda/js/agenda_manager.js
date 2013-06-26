@@ -395,13 +395,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
     }
     if (mode == 'view') {
       var $domElement = $('<div/>').addClass('cue-point-list-item clearfix');
-      if (model.get('nid')) {
-        var $link = $('<a/>').attr('href', '/node/' + model.get('nid')).text(model.get('node_revisions_body'));
-        var $title = $('<div/>').addClass('cue-point-title').append($link);
-      }
-      else {
-        var $title = $('<div/>').addClass('cue-point-title').text(model.get('node_revisions_body'));
-      }
+      var $title = $('<div/>').addClass('cue-point-title').text(model.get('node_revisions_body'));
       var $time = $('<div/>').addClass('cue-point-seconds').text(model.get('node_data_field_cue_seconds_field_cue_seconds_value'));
       var $edit = $('<div/>').addClass('ca-grey-button action-edit cue-point-edit').text('edit');
       $edit.click(this.editClickHandler);
