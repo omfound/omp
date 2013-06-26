@@ -3,7 +3,7 @@
     <?php if (isset($video)): ?>
       <?php print $video; ?>
     <?php else: ?>
-      <div id="video-processing">This video is currently processing, please check back later.</div>
+      <div id="video-processing" style="clear: left;">This video is currently processing, please check back later.</div>
     <?php endif; ?>
 
     <?php if (!empty($node->field_om_calendar)) { ?>
