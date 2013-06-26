@@ -209,7 +209,15 @@ function om_admin_menu_paid_memberships() {
 		'Editor Membership', 
 		'Studio Producer Membership', 
 		'Unlimited Membership', 
-		'Organizational or Group Membership'
+    'Organizational or Group Membership',
+    'Berkeley Resident',
+    'Non-Resident',
+    'Student',
+    'Lifetime',
+    'Berkeley Business or Group',
+    'Berkeley Based Non-Profit',
+    'Berkeley ASUC Group / Club',
+    'Non-Resident Group, Business or Non-Profit',
 	);
 
   return $paid_memberships;
