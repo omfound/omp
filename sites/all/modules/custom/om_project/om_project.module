@@ -565,6 +565,9 @@ function om_project_membership_delete($options = array()) {
  */
 function om_project_query_alter(QueryAlterableInterface $query) {
   $id = $query->getMetaData('id');
-  dsm($id);
-  dsm($query);
+  if (!empty($id) && $id == '_node_reference_potential_references_standard') {
+   if ($query->alterMetaData->field->field_name == 'field_om_show_project') {
+     $query->condition('n.nid', 29219, '=');  
+   } 
+  }
 }
