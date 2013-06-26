@@ -124,7 +124,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
     }
     this.timerInterval = setInterval(this.calcTime, 1000);
-    if (this.sessionControllerView.sessionToggleLive.attr('checked') == true) {
+    if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
@@ -138,17 +138,14 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   stopTimer : function() {
     clearInterval(this.timerInterval);
     this.resetTimer();
-    if (this.sessionControllerView.sessionToggleLive.attr('checked') == true) {
+    if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
       var json = JSON.stringify(obj);
       $.ajax({
         type : 'POST',
         url : '/delete-agenda-session',
-        data : {'sessionQuery' : json},
-        success : function(data) {
-          console.log(data);
-        }
+        data : {'sessionQuery' : json}
       });
     }
   },
@@ -168,7 +165,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
             this.sessionControllerView.sessionToggleLive.attr('checked', 'checked');
           } 
         }
-      });
+      }, this);
     }
     /**
     if (obj && obj.nid && ((obj.nid == currentValues.houseSession && currentValues.house == "Live") || (obj.nid == currentValues.senateSession && currentValues.senate == "Live"))) {
@@ -398,13 +395,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
     }
     if (mode == 'view') {
       var $domElement = $('<div/>').addClass('cue-point-list-item clearfix');
-      if (model.get('nid')) {
-        var $link = $('<a/>').attr('href', '/node/' + model.get('nid')).text(model.get('node_revisions_body'));
-        var $title = $('<div/>').addClass('cue-point-title').append($link);
-      }
-      else {
-        var $title = $('<div/>').addClass('cue-point-title').text(model.get('node_revisions_body'));
-      }
+      var $title = $('<div/>').addClass('cue-point-title').text(model.get('node_revisions_body'));
       var $time = $('<div/>').addClass('cue-point-seconds').text(model.get('node_data_field_cue_seconds_field_cue_seconds_value'));
       var $edit = $('<div/>').addClass('ca-grey-button action-edit cue-point-edit').text('edit');
       $edit.click(this.editClickHandler);
