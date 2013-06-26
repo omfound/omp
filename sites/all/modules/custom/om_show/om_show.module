@@ -244,7 +244,7 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
 
 function om_show_youtube_id($url) {
   $url_info = parse_url($url);
-  parse_str(urlencode($url_info['query']), $query);
+  parse_str(html_entity_decode($url_info['query']), $query);
   dsm($query);
   if ($query['v']) {
     return $query['v'];
