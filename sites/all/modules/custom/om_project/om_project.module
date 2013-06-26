@@ -564,5 +564,6 @@ function om_project_membership_delete($options = array()) {
  * Implements hook_query_alter
  */
 function om_project_query_alter(QueryAlterableInterface $query) {
-  dsm($query);
+  $id = $query->getMetaData('id');
+  dsm($id);
 }
