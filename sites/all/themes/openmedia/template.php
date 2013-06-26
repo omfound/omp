@@ -83,8 +83,6 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
-  dsm('testing');
-  dsm($url);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
@@ -106,11 +104,9 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       om_show_jwplayer_include($variables);
       $video = '<div id="jwplayer-0">Loading video...</div>';
     }
-  }else{
-    $video = '<div id="video-processing">This video is currently processing, please check back later.</div>';
-  }
 
-  $variables['video'] = $video;
+    $variables['video'] = $video;
+  }
 }
 
  /**
