@@ -83,6 +83,7 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
+  dsm('testing');
   dsm($url);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
