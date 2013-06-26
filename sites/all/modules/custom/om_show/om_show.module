@@ -203,15 +203,17 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
     }
   }else{
     $nid = $node->nid;
-    $show_field = $node->field_om_show_video[$node->language];
-    if (!empty($node->field_show_thumbnail)) {
-      $thumb_field = $node->field_show_thumbnail[$node->language];
+    if (!empty($node->field_om_show_video[$node->language])) {
+      $show_field = $node->field_om_show_video[$node->language];
+      if (!empty($node->field_show_thumbnail)) {
+        $thumb_field = $node->field_show_thumbnail[$node->language];
+      }
     }
   }
 
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
-  if ($youtube_info['live_status']) {
+  if ($youtube_info['live_status'] || empty($show_field)) {
     return;
   }
 
@@ -293,16 +295,20 @@ function om_show_youtube_info($node) {
   if (!is_object($node)) {
     $show_field = $node['field_om_show_video'];
   }else{
-    $show_field = $node->field_om_show_video[$node->language];
+    if (!empty($node->field_om_show_video[$node->language])) {
+      $show_field = $node->field_om_show_video[$node->language];
+    }
   }
+ 
+  if (!empty($show_field)) {
+    if ($youtube_id = om_show_youtube_id($show_field[0]['safe_value'])) {
+      $youtube_info = array(
+        'id' => $youtube_id,
+        'live_status' => om_show_youtube_livestream_status($youtube_id),
+      );
 
-  if ($youtube_id = om_show_youtube_id($show_field[0]['safe_value'])) {
-    $youtube_info = array(
-      'id' => $youtube_id,
-      'live_status' => om_show_youtube_livestream_status($youtube_id),
-    );
-
-    return $youtube_info;
+      return $youtube_info;
+    }
   }
 
   return false;
