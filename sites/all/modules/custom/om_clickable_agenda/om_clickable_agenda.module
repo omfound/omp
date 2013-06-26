@@ -374,7 +374,7 @@ function om_clickable_agenda_create_custom_session($session_obj) {
  */
 function _om_clickable_agenda_create_custom_session() {
   if (isset($_POST['customSession'])) {
-    $session_obj = drupal_json_decode($_POST['customSession']);
+    $session_obj = (object)drupal_json_decode($_POST['customSession']);
     $session_obj->initialized = time();
     om_clickable_agenda_create_custom_session($session_obj);
   }
@@ -401,7 +401,7 @@ function om_clickable_agenda_get_custom_session($session_query) {
  */
 function _om_clickable_agenda_get_custom_session() {
   if (isset($_POST['sessionQuery'])) {
-    $session_query = drupal_json_decode($_POST['sessionQuery']);
+    $session_query = (object)drupal_json_decode($_POST['sessionQuery']);
     $result = om_clickable_agenda_get_custom_session($session_query);
     print drupal_json_encode($result);
   }
@@ -427,8 +427,7 @@ function om_clickable_agenda_delete_custom_session($session_query) {
  */
 function _om_clickable_agenda_delete_custom_session() {
   if (isset($_POST['sessionQuery'])) {
-    $session_query = drupal_json_decode($_POST['sessionQuery']);
+    $session_query = (object)drupal_json_decode($_POST['sessionQuery']);
     om_clickable_agenda_delete_custom_session($session_query);
-    dsm($session_query);
   }
 }

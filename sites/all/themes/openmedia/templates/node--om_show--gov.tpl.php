@@ -2,6 +2,8 @@
     <h2><?php print $node->title; ?></h2>
     <?php if (isset($video)): ?>
       <?php print $video; ?>
+    <?php else: ?>
+      <div id="video-processing" style="clear: left;">This video is currently processing, please check back later.</div>
     <?php endif; ?>
 
     <?php if (!empty($node->field_om_calendar)) { ?>

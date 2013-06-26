@@ -210,6 +210,11 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
   }
 
   $img_path = om_show_video_image($node);
+  $youtube_info = om_show_youtube_info($node);
+  if ($youtube_info['live_status']) {
+    return;
+  }
+
   if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
 
@@ -229,6 +234,10 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
       }
       else {
         $video_path = $info['safe_value'];
+        //if youtube use a standardized url
+        if ($youtube_info) {
+          $video_path = 'http://www.youtube.com/watch?v='.$youtube_info['id'];
+        }
       }
       $jwplayer[$key]['path'] = $video_path;
       $jwplayer[$key]['image'] = $img_path;
@@ -244,14 +253,9 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
 
 function om_show_youtube_id($url) {
   $url_info = parse_url($url);
-  $query_parts = explode('=', $url_info['query']);
-  foreach ($query_parts as $key => $data) {
-    if ($data == 'v') {
-      $target = $key+1;
-      if (!empty($query_parts[$target])) {
-        return $query_parts[$target];
-      }
-    }
+  parse_str(html_entity_decode($url_info['query']), $query);
+  if (!empty($query['v'])) {
+    return $query['v'];
   }
 
   return false;
