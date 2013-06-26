@@ -211,7 +211,10 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
 
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
-  dsm($youtube_info);
+  if ($youtube_info['live_status']) {
+    return;
+  }
+
   if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
 
@@ -231,6 +234,10 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
       }
       else {
         $video_path = $info['safe_value'];
+        //if youtube use a standardized url
+        if ($youtube_info) {
+          $video_path = 'http://www.youtube.com/watch?v='.$youtube_info['id'];
+        }
       }
       $jwplayer[$key]['path'] = $video_path;
       $jwplayer[$key]['image'] = $img_path;
