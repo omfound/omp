@@ -15,6 +15,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Shows'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/shows',
+    '#weight' => -20,
   );
   $content['menu']['shows']['view'] = array(
     '#title' => t('View Shows'),
@@ -30,6 +31,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Manage Projects'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/projects',
+    '#weight' => '-30',
   );
   $content['menu']['projects']['view'] = array(
     '#title' => t('View Projects'),
@@ -47,6 +49,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Manage Themes'),
     '#access' => om_admin_menu_role_access(array('Gov Administrator')),
     '#href' => 'admin/structure/taxonomy/themes',
+    '#weight' => '-40',
   );
 
   //Class Administrators
