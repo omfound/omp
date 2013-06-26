@@ -6,11 +6,7 @@
     <div class="field-items"<?php print $content_attributes; ?>>
       <?php foreach ($items as $delta => $item): ?>
         <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
-          <?php if (!empty($video)) { ?>
           <?php print $video; ?>
-          <?php }else{ ?>
-            <div id="video-processing">This video is currently processing, please check back later.</div>
-          <?php } ?>
         </div>
       <?php endforeach; ?>
     </div>
