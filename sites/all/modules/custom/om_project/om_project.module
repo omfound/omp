@@ -567,6 +567,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
   $id = $query->getMetaData('id');
   if (!empty($id) && $id == '_node_reference_potential_references_standard') {
    if ($query->alterMetaData->field->field_name == 'field_om_show_project') {
+     dsm('we make it here');
      $query->condition('n.nid', 29219, '=');  
    } 
   }
