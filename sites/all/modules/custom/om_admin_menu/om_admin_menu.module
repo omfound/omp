@@ -42,6 +42,13 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'node/add/om-project',
   );
 
+  //Government User
+  $content['menu']['gov'] = array(
+    '#title' => t('Manage Themes'),
+    '#access' => om_admin_menu_role_access(array('Gov Administrator')),
+    '#href' => 'admin/structure/taxonomy/themes',
+  );
+
   //Class Administrators
   $content['menu']['classes'] = array(
     '#title' => t('Classes'),
