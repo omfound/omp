@@ -15,6 +15,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Shows'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/shows',
+    '#weight' => -20,
   );
   $content['menu']['shows']['view'] = array(
     '#title' => t('View Shows'),
@@ -27,9 +28,10 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'node/add/om-show',
 	);
   $content['menu']['projects'] = array(
-    '#title' => t('Manage Projects'),
+    '#title' => t('Projects'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/projects',
+    '#weight' => '-30',
   );
   $content['menu']['projects']['view'] = array(
     '#title' => t('View Projects'),
@@ -40,6 +42,14 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Submit new project'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-project',
+  );
+
+  //Government User
+  $content['menu']['gov'] = array(
+    '#title' => t('Themes'),
+    '#access' => om_admin_menu_role_access(array('Gov Administrator')),
+    '#href' => 'admin/structure/taxonomy/themes',
+    '#weight' => '-40',
   );
 
   //Class Administrators
@@ -97,7 +107,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   );
   $content['menu']['content']['theme_assets'] = array(
     '#title' => t('Admin Theme Assets'),
-    '#access' => om_admin_menu_role_access(array('Content Administrator')),
+    '#access' => om_admin_menu_role_access(array('Content Administrator'), 'om_theme_assets'),
     '#href' => 'om_theme_assets',
   );
   //Reservations Administrators
@@ -191,12 +201,18 @@ function om_admin_menu_admin_menu_output_alter(&$content) {
   }
 }
 
-function om_admin_menu_role_access($roles) {
+function om_admin_menu_role_access($roles, $path = false) {
   global $user;
   
   foreach($roles as $role) {
     if(in_array($role, $user->roles)) {
-      return TRUE;
+      if (!$path) {
+        return TRUE;
+      }else{
+        if (drupal_valid_path($path)) {
+          return TRUE;
+        }
+      }
     } 
   }
   return FALSE;
@@ -209,7 +225,15 @@ function om_admin_menu_paid_memberships() {
 		'Editor Membership', 
 		'Studio Producer Membership', 
 		'Unlimited Membership', 
-		'Organizational or Group Membership'
+    'Organizational or Group Membership',
+    'Berkeley Resident',
+    'Non-Resident',
+    'Student',
+    'Lifetime',
+    'Berkeley Business or Group',
+    'Berkeley Based Non-Profit',
+    'Berkeley ASUC Group / Club',
+    'Non-Resident Group, Business or Non-Profit',
 	);
 
   return $paid_memberships;
