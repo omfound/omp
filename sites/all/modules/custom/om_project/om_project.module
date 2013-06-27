@@ -572,8 +572,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
       $or = db_or();
       $or->condition('n.uid', $user->uid, '=');
       if (!empty($project_nids)) {
-        dsm($project_nids);
-        //$or->condition('n.nid', $project_nids, 'IN');
+        $or->condition('n.nid', $project_nids, 'IN');
       }
       $query->condition($or);
     }
