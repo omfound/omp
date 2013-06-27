@@ -613,6 +613,7 @@ function om_project_views_query_alter(&$view, &$query) {
               'operator' => 'formula'
             );
             $query->where[$key]['conditions'][] = $condition;
+            dsm($query->where[$key]);
           }
         }
       }
