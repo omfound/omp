@@ -582,3 +582,7 @@ function om_project_add_membership_or($query) {
   }
   $query->condition($or);
 }
+
+function om_project_views_query_alter(&$view, &$query) {
+  dsm($view);
+}
