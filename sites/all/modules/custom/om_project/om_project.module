@@ -609,7 +609,7 @@ function om_project_views_query_alter(&$view, &$query) {
             $query->where[$key]['type'] = "OR";
             $condition = array(
               'field' => 'node.nid',
-              'value' => implode($project_nids, ', '),
+              'value' => $project_nids,
               'operator' => 'IN'
             );
             $query->where[$key]['conditions'][] = $condition;
