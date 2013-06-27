@@ -583,6 +583,9 @@ function om_project_add_membership_or($query) {
   $query->condition($or);
 }
 
+/**
+ * Implements hook_views_query_alter
+ */
 function om_project_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_shows') {
     foreach ($query->where AS $key => $where) {
@@ -611,8 +614,6 @@ function om_project_views_query_alter(&$view, &$query) {
             );
             $query->where[$key]['conditions'][] = $condition;
           }
-          dsm($query->where[$key]);
-          dsm($condition); 
         }
       }
     }
