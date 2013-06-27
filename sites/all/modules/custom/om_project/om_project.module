@@ -585,6 +585,6 @@ function om_project_add_membership_or($query) {
 
 function om_project_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_shows') {
-    om_project_add_membership_or($query);
+    dsm($query);
   }
 }
