@@ -563,10 +563,9 @@ function om_project_query_alter(QueryAlterableInterface $query) {
       );
       $projects = om_project_membership_load($options);
       $project_nids = '';
-      dsm($projects);
       if (!empty($projects)) {
         foreach ($projects AS $project) {
-          $project_nids .= $project->nid . ',';
+          $project_nids .= $project->entity_id . ',';
         }
         $project_nids = rtrim($project_nids, ',');
       }
