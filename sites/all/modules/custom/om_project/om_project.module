@@ -554,7 +554,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
   if (trim($id) == '_node_reference_potential_references_standard') {
     $field = $query->getMetaData('field');
     if ($field['field_name'] == 'field_om_show_project') {
-     dsm('getting closer'); 
+      $query->condition('n.nid', 29280, '=');
     }
   }
 }
