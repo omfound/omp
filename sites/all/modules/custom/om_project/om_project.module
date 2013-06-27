@@ -546,6 +546,7 @@ function om_project_membership_delete($options = array()) {
   $resource = $query->execute();
   return TRUE;
 }
+
 /**
  * Implements hook_query_alter
  */
