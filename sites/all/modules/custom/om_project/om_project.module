@@ -563,6 +563,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
       );
       $projects = om_project_membership_load($options);
       $project_nids = '';
+      dsm($projects);
       if (!empty($projects)) {
         foreach ($projects AS $project) {
           $project_nids .= $project->nid . ',';
@@ -574,7 +575,6 @@ function om_project_query_alter(QueryAlterableInterface $query) {
       if (!empty($project_nids)) {
         $or->condition('n.nid', $project_nids, 'IN');
       }
-      dsm($project_nids);
       $query->condition($or);
     }
   }
