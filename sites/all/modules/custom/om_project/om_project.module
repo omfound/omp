@@ -587,6 +587,7 @@ function om_project_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_shows') {
     foreach ($query->where AS $key => $where) {
      foreach ($where AS $condition) {
+dsm($condition['field']);
        if ($condition['field'] == 'node.uid = :node_uid') {
          dsm('yay we are in the right place');
        }
