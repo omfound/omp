@@ -586,7 +586,12 @@ function om_project_add_membership_or($query) {
 function om_project_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_shows') {
     foreach ($query->where AS $key => $where) {
-      dsm($where);
+      foreach($where['conditions'] AS $condition) {
+        dsm($condition);
+        if ($condition['field'] == 'node.uid = :node_uid') {
+          dsm("made it!");
+        }
+      }
     }
   }
 }
