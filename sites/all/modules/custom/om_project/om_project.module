@@ -562,20 +562,18 @@ function om_project_query_alter(QueryAlterableInterface $query) {
         'operator' => '='
       );
       $projects = om_project_membership_load($options);
-      $project_nids = '';
+      $project_nids = array();
       if (!empty($projects)) {
         foreach ($projects AS $project) {
-          $project_nids .= $project->entity_id . ',';
+          $project_nids[] = $project->entity_id;
         }
-        $project_nids = rtrim($project_nids, ',');
       }
-      //$or = db_or();
-      //$or->condition('n.uid', $user->uid, '=');
+      $or = db_or();
+      $or->condition('n.uid', $user->uid, '=');
       if (!empty($project_nids)) {
-        //$or->condition('n.nid', $project_nids, 'IN');
-        $query->condition('nid', $project_nids, 'IN');
+        $or->condition('n.nid', $project_nids, 'IN');
       }
-      //$query->condition($or);
+      $query->condition($or);
     }
   }
 }
