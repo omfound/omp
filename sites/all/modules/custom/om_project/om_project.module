@@ -554,7 +554,27 @@ function om_project_query_alter(QueryAlterableInterface $query) {
   if (trim($id) == '_node_reference_potential_references_standard') {
     $field = $query->getMetaData('field');
     if ($field['field_name'] == 'field_om_show_project') {
-      $query->condition('n.nid', 29280, '=');
+      global $user;
+      $options = array();
+      $options[] = array(
+        'field' => 'uid',
+        'value' => $user->uid,
+        'operator' => '='
+      );
+      $projects = om_project_membership_load($options);
+      $project_nids = '';
+      if (!empty($projects)) {
+        foreach ($projects AS $project) {
+          $project_nids .= $project->nid . ',';
+        }
+        $project_nids = rtrim($project_nids, ',');
+      }
+      $or = db_or();
+      $or->condition('n.uid', $user->uid, '=');
+      if (!empty($project_nids)) {
+        $or->condition('n.nid', $project_nids, 'IN');
+      }
+      $query->condition($or);
     }
   }
 }
