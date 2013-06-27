@@ -165,25 +165,25 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'admin/commerce/cr/settings',
   );
 
-  //Scheduling Administrators
+  //Schedule Administrators
   $content['menu']['scheduling'] = array(
     '#title' => t('Scheduling Settings'),
-    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
     '#href' => 'om_playback_servers',
   );
   $content['menu']['scheduling']['servers'] = array(
     '#title' => t('Playback Servers'),
-    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
     '#href' => 'om_playback_servers',
   );
   $content['menu']['scheduling']['schedule'] = array(
     '#title' => t('Broadcast Synchronization'),
-    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
     '#href' => 'om_broadcast_schedule',
   );
   $content['menu']['scheduling']['timeslots'] = array(
     '#title' => t('Timeslots'),
-    '#access' => om_admin_menu_role_access(array('Scheduling Administrator')),
+    '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
     '#href' => 'om_timeslot_schedule',
   );
 }
