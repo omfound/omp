@@ -586,7 +586,7 @@ function om_project_add_membership_or($query) {
 function om_project_views_query_alter(&$view, &$query) {
   if ($view->name == 'user_shows') {
     foreach ($query->where AS $key => $where) {
-      foreach($where['conditions'] AS $condition) {
+      foreach($where['conditions'] AS $c_key => $condition) {
         if (trim($condition['field']) == 'node.uid = :node_uid') {
           global $user;
           $options = array();
@@ -601,6 +601,15 @@ function om_project_views_query_alter(&$view, &$query) {
             foreach ($projects AS $project) {
               $project_nids[] = $project->entity_id;
             }
+          }
+          if (!empty($project_nids)) {
+            $query->where[$key]['type'] = "OR";
+            $condition = array(
+              'field' => 'node.nid IN (:node_nids)',
+              'value' => array(':node_nids' => implode($project_nids, ',')),
+              'operator' => 'formula'
+            );
+            $query->where[$key]['conditions'][$ckey] = $condition;
           }
           dsm($query->where[$key]);
           dsm($condition); 
