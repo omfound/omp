@@ -608,7 +608,9 @@ function om_project_views_query_alter(&$view, &$query) {
           if (!empty($project_nids)) {
             $query->where[$key]['type'] = "OR";
             $condition = array(
-              'field' => 'node.nid IN (' . implode($project_nids, ', ') . ')',
+              'field' => 'node.nid',
+              'value' => implode($project_nids, ', '),
+              'operator' => 'IN'
             );
             $query->where[$key]['conditions'][] = $condition;
             dsm($query->where[$key]);
