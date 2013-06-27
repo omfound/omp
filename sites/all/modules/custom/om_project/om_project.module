@@ -569,12 +569,13 @@ function om_project_query_alter(QueryAlterableInterface $query) {
         }
         $project_nids = rtrim($project_nids, ',');
       }
-      $or = db_or();
-      $or->condition('n.uid', $user->uid, '=');
+      //$or = db_or();
+      //$or->condition('n.uid', $user->uid, '=');
       if (!empty($project_nids)) {
-        $or->condition('n.nid', $project_nids, 'IN');
+        //$or->condition('n.nid', $project_nids, 'IN');
+        $query->condition('n.nid', $project_nids, 'IN');
       }
-      $query->condition($or);
+      //$query->condition($or);
     }
   }
 }
