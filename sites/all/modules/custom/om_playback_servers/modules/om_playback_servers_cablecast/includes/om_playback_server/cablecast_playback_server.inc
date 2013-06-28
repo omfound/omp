@@ -81,8 +81,8 @@ class cablecastPlaybackServerController extends playbackServerController {
   public function last_modified_search($pbs, $options)  {
     $default_options = array(
       'LocationID' => $pbs->location_id,
-      'SearchDate' => date('Y-m-d\TH:i:s'),
-      'dateComparator' => '<=',
+      'SearchDate' => '1900-01-01T12:00:00',
+      'dateComparator' => '>',
     );
     $options = array_merge($default_options, $options);
     $shows = $this->soap_request($pbs, 'LastModifiedSearch', $options);
