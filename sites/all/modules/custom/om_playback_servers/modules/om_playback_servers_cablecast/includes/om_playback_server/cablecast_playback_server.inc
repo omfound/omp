@@ -82,11 +82,17 @@ class cablecastPlaybackServerController extends playbackServerController {
     $default_options = array(
       'ChannelID' => $pbs->output,
       'displayStreamingShowsOnly' => TRUE,
-      'searchOtherSites' => TRUE
+      'searchOtherSites' => TRUE,
+      'eventDate' => date('Y-m-d\TH:i:s'),
+      'dateComparator' => '>=',
+      'restrictToCategoryID' => 0,
+      'restrictToProducerID' => 0,
+      'restrictToProjectID' => 0,
+      'displayStreamingShowsOnly' => FALSE,
+      'searchOtherSites' => FALSE
     );
     $options = array_merge($default_options, $options);
-    dsm($options);
-    //$shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
+    $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
     dsm($shows);
   } 
   /**
