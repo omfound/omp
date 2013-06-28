@@ -84,9 +84,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       'displayStreamingShowsOnly' => TRUE,
       'searchOtherSites' => TRUE
     );
-    array_merge($default_options, $options);
-    dsm($options);
-    //$shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
+    $options = array_merge($default_options, $options);
+    $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
     dsm($shows);
   } 
   /**
