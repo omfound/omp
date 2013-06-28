@@ -388,15 +388,16 @@ function om_agenda_manager_archive_tabs() {
   $tabs = array();
   foreach ($themes as $key => $info) {
     $loaded = taxonomy_term_load($info->tid);
-    dsm($loaded);
-    $tabs[$info->tid] = array(
-      'title' => $info->name,
-      'type' => 'view',
-      'vid' => 'archived_sessions',
-      'display' => 'block_1',
-      'args' => $info->tid,
-      'weight' => $info->weight,
-    ); 
+    if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+      $tabs[$info->tid] = array(
+        'title' => $info->name,
+        'type' => 'view',
+        'vid' => 'archived_sessions',
+        'display' => 'block_1',
+        'args' => $info->tid,
+        'weight' => $info->weight,
+      ); 
+    }
   }
 
   $qtoptions = array(
