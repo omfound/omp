@@ -69,7 +69,8 @@ function _om_timeslot_scheduler_basic_config_form() {
   );
 
   $form['basic_config']['om_timeslot_scheduler_branding_warning'] = array(
-    '#markup' => "<strong>Station branding functionality is currently disabled while the scheduling system is stabilized.</strong>"
+    '#markup' => "<strong>Station branding functionality is currently disabled while the scheduling system is stabilized.</strong>",
+    '#weight' => 3
   );
   variable_set('om_timeslot_scheduler_branding', FALSE);
   $form['basic_config']['om_timeslot_scheduler_branding'] = array(
