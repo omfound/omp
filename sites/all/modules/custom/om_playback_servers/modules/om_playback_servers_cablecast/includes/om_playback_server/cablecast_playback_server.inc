@@ -76,6 +76,15 @@ class cablecastPlaybackServerController extends playbackServerController {
     return FALSE;
   }
   /**
+   * Perform an advanced search.
+   */
+  public function meta_data_advanced_search($pbs, $options)  {
+    $default_options = array();
+    array_merge($default_options, $options);
+    $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
+    dsm($shows);
+  } 
+  /**
    * --Methods dealing with files
    */
   public function check_file_status($pbs, $show) {
