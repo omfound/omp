@@ -79,7 +79,7 @@ class cablecastPlaybackServerController extends playbackServerController {
    * Perform an advanced search.
    */
   public function meta_data_advanced_search($pbs, $options)  {
-    /*$default_options = array(
+    $default_options = array(
       'ChannelID' => $pbs->output,
       'eventDate' => date('Y-m-d\TH:i:s'),
       'dateComparator' => '<=',
@@ -88,13 +88,9 @@ class cablecastPlaybackServerController extends playbackServerController {
       'restrictToProjectID' => 0,
       'displayStreamingShowsOnly' => FALSE,
       'searchOtherSites' => FALSE
-    );*/
-    $default_options = array(
-      'ChannelID' => $pbs->output,
-      'searchString' => ''
     );
     $options = array_merge($default_options, $options);
-    $shows = $this->soap_request($pbs, 'SimpleShowSearch', $options);
+    $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
     dsm($shows);
   } 
   /**
