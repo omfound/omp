@@ -147,6 +147,14 @@ function om_agenda_manager_admin_form() {
     '#markup' => $markup,
   );
 
+  $form['om_agenda_status_embed'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Live Status Page Optional Embed',
+    '#default_value ' => variable_get('om_agenda_status_embed', ''),
+    '#size' => 60,
+    '#maxlength' => 500,
+  );
+
   return system_settings_form($form); 
 }
 
