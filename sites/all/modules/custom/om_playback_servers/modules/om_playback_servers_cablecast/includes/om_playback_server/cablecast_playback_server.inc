@@ -80,7 +80,7 @@ class cablecastPlaybackServerController extends playbackServerController {
    */
   public function last_modified_search($pbs, $options)  {
     $default_options = array(
-      'ChannelID' => $pbs->output,
+      'LocationID' => $pbs->location_id,
       'SearchDate' => date('Y-m-d\TH:i:s'),
       'dateComparator' => '<=',
     );
