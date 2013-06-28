@@ -339,6 +339,7 @@ function om_agenda_manager_livestream_update($session_status) {
 function om_agenda_manager_live_page() {
   $output = '';
   $livestream_info = om_agenda_manager_livestream_info();
+  dsm($livestream_info);
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
   $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
   $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
@@ -387,8 +388,8 @@ function om_agenda_manager_archive_tabs() {
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $tabs = array();
   foreach ($themes as $key => $info) {
-    $loaded = taxonomy_term_load($info->tid);
-    if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+    //$loaded = taxonomy_term_load($info->tid);
+    //if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
       $tabs[$info->tid] = array(
         'title' => $info->name,
         'type' => 'view',
@@ -397,7 +398,7 @@ function om_agenda_manager_archive_tabs() {
         'args' => $info->tid,
         'weight' => $info->weight,
       ); 
-    }
+    //}
   }
 
   $qtoptions = array(
