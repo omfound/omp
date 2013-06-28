@@ -347,7 +347,7 @@ function om_agenda_manager_live_page() {
     }
   }
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
-  $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
+  $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
   $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
