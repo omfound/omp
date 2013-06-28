@@ -344,6 +344,9 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
+  if ($embed = variable_get('om_agenda_status_embed', false)) {
+    $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
+  }
   $livestream_info = om_agenda_manager_livestream_info();
   $include_on_live = array();
   foreach ($livestream_info as $tid => $info) {
