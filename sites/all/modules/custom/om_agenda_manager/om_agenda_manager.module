@@ -387,6 +387,7 @@ function om_agenda_manager_archive_tabs() {
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $tabs = array();
   foreach ($themes as $key => $info) {
+    dsm($info);
     $tabs[$info->tid] = array(
       'title' => $info->name,
       'type' => 'view',
