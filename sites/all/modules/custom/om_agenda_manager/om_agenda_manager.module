@@ -341,7 +341,7 @@ function om_agenda_manager_live_page() {
   $livestream_info = om_agenda_manager_livestream_info();
   $include_on_live = array();
   foreach ($livestream_info as $tid => $info) {
-    $loaded = taxonomy_load_term($tid);
+    $loaded = taxonomy_term_load($tid);
     if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
       $include_on_live[$tid] = $info;
     }
