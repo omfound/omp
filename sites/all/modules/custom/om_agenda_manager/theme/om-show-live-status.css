@@ -2,3 +2,8 @@
   clear: left;
   padding-top: 20px;
 }
+
+div#om-embedded-content {
+  float: left;
+  margin-right: 20px;
+}
