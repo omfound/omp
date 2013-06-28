@@ -79,7 +79,11 @@ class cablecastPlaybackServerController extends playbackServerController {
    * Perform an advanced search.
    */
   public function meta_data_advanced_search($pbs, $options)  {
-    $default_options = array();
+    $default_options = array(
+      'ChannelID' => $pbs->output,
+      'displayStreamingShowsOnly' => TRUE,
+      'searchOtherSites' => TRUE
+    );
     array_merge($default_options, $options);
     $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
     dsm($shows);
