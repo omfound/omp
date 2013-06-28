@@ -103,6 +103,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       //default jwplayer code
       om_show_jwplayer_include($variables);
       $video = '<div id="jwplayer-0">Loading video...</div>';
+      $video .= theme('om_show_share_bar');
     }
 
     $variables['video'] = $video;
