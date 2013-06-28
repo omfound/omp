@@ -76,21 +76,16 @@ class cablecastPlaybackServerController extends playbackServerController {
     return FALSE;
   }
   /**
-   * Perform an advanced search.
+   * Perform a search by modification date.
    */
-  public function meta_data_advanced_search($pbs, $options)  {
+  public function last_modified_search($pbs, $options)  {
     $default_options = array(
       'ChannelID' => $pbs->output,
-      'eventDate' => date('Y-m-d\TH:i:s'),
+      'SearchDate' => date('Y-m-d\TH:i:s'),
       'dateComparator' => '<=',
-      'restrictToCategoryID' => 0,
-      'restrictToProducerID' => 0,
-      'restrictToProjectID' => 0,
-      'displayStreamingShowsOnly' => FALSE,
-      'searchOtherSites' => FALSE
     );
     $options = array_merge($default_options, $options);
-    $shows = $this->soap_request($pbs, 'AdvancedShowSearch', $options);
+    $shows = $this->soap_request($pbs, 'LastModifiedSearch', $options);
     dsm($shows);
   } 
   /**
