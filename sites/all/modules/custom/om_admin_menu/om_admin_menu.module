@@ -78,6 +78,16 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'reports/members',
   );
+  $content['menu']['membership']['report'] = array(
+    '#title' => t('Manage Members'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'reports/members',
+  );
+  $content['menu']['membership']['add'] = array(
+    '#title' => t('Create Membership Order'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/commerce/orders/add',
+  );
 
   //Content Administrators
   $content['menu']['content'] = array(
