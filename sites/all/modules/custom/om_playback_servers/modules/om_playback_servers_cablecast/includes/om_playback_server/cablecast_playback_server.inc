@@ -86,7 +86,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     );
     $options = array_merge($default_options, $options);
     $shows = $this->soap_request($pbs, 'LastModifiedSearch', $options);
-    dsm($shows);
+    return $shows;
   } 
   /**
    * --Methods dealing with files
