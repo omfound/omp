@@ -82,9 +82,8 @@ class cablecastPlaybackServerController extends playbackServerController {
     $default_options = array(
       'ChannelID' => $pbs->output,
       'displayStreamingShowsOnly' => TRUE,
-      'searchOtherSites' => TRUE,
       'eventDate' => date('Y-m-d\TH:i:s'),
-      'dateComparator' => '>=',
+      'dateComparator' => '<=',
       'restrictToCategoryID' => 0,
       'restrictToProducerID' => 0,
       'restrictToProjectID' => 0,
