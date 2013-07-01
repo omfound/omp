@@ -30,18 +30,25 @@ function om_theme_assets_preprocess_om_round_social_media(&$variables) {
 function om_theme_assets_preprocess_om_site_links(&$variables) {
   global $user;
   $links = array();
+  $options = array();
   if ($user->uid > 0) {
-    $links[] = l('Logout', 'user/logout') . ' | ';
+    $options['attributes']['class'] = array('om-logout');
+    $links[] = l('Logout', 'user/logout', $options) . ' | ';
+    $options['attributes']['class'] = array('om-profile');
     $clean_name = strtolower(str_replace(' ', '-', $user->name));
-    $links[] = l('Profile', 'users/' . $clean_name) . ' | ';
+    $links[] = l('Profile', 'users/' . $clean_name, $options) . ' | ';
   }
   else {
-    $links[] = l('Login', 'user') . ' | ';
-    $links[] = l('Register', 'membership') . ' | ';
+    $options['attributes']['class'] = array('om-login');
+    $links[] = l('Login', 'user', $options) . ' | ';
+    $options['attributes']['class'] = array('om-membership');
+    $links[] = l('Register', 'membership', $options) . ' | ';
   }
-  $links[] = l('Help', 'help');
+  $options['attributes']['class'] = array('om-help');
+  $links[] = l('Help', 'help', $options);
   if (drupal_valid_path('cart')) {
-    $links[] = ' | '.l('Shopping Cart', 'cart');
+    $options['attributes']['class'] = array('om-cart');
+    $links[] = ' | '.l('Shopping Cart', 'cart', $options);
   }
   $variables['links'] = $links;
 }

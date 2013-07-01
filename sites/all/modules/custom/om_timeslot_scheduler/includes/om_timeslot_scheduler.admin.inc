@@ -68,6 +68,11 @@ function _om_timeslot_scheduler_basic_config_form() {
     '#weight' => 2,
   );
 
+  $form['basic_config']['om_timeslot_scheduler_branding_warning'] = array(
+    '#markup' => "<strong>Station branding functionality is currently disabled while the scheduling system is stabilized.</strong>",
+    '#weight' => 3
+  );
+  variable_set('om_timeslot_scheduler_branding', FALSE);
   $form['basic_config']['om_timeslot_scheduler_branding'] = array(
     '#type' => 'radios',
     '#title' => t('Favor Station Branding'),
@@ -75,6 +80,7 @@ function _om_timeslot_scheduler_basic_config_form() {
     '#options' => array('Disabled', 'Enabled'),
     '#default_value' => variable_get('om_timeslot_scheduler_branding', 1),
     '#weight' => 3,
+    '#disabled' => TRUE
   );
 
   $rules = om_timeslot_scheduler_entity_get_rules();
@@ -90,6 +96,7 @@ function _om_timeslot_scheduler_basic_config_form() {
     '#options' => $options,
     '#default_value' => variable_get('om_timeslot_scheduler_branding_rule', 'station_branding_scheduling_rule'),
     '#weight' => 3,
+    '#disabled' => TRUE
   );
 
   return $form;

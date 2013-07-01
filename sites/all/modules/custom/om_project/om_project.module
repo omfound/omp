@@ -1,21 +1,7 @@
 <?php
 /**
- * Implementation of hook_permission().
- */
-
-function om_project_permission() {
-  return array(
-    'admin of project' => array(
-      'title' => t('Admin of Project'), 
-      'description' => t('Has administrative rights on a project'),
-    ),
-  );
-}
-
-/**
  * Implementation of hook_menu().
  */
-
 function om_project_menu() {
   
   $items = array();
@@ -559,4 +545,77 @@ function om_project_membership_delete($options = array()) {
   }
   $resource = $query->execute();
   return TRUE;
+}
+
+/**
+ * Implements hook_query_alter
+ */
+function om_project_query_alter(QueryAlterableInterface $query) {
+  $id = $query->getMetaData('id');
+  if (trim($id) == '_node_reference_potential_references_standard') {
+    $field = $query->getMetaData('field');
+    if ($field['field_name'] == 'field_om_show_project') {
+      om_project_add_membership_or($query);
+    }
+  }
+}
+
+function om_project_add_membership_or($query) {
+  global $user;
+  $options = array();
+  $options[] = array(
+    'field' => 'uid',
+    'value' => $user->uid,
+    'operator' => '='
+  );
+  $projects = om_project_membership_load($options);
+  $project_nids = array();
+  if (!empty($projects)) {
+    foreach ($projects AS $project) {
+      $project_nids[] = $project->entity_id;
+    }
+  }
+  $or = db_or();
+  $or->condition('n.uid', $user->uid, '=');
+  if (!empty($project_nids)) {
+    $or->condition('n.nid', $project_nids, 'IN');
+  }
+  $query->condition($or);
+}
+
+/**
+ * Implements hook_views_query_alter
+ */
+function om_project_views_query_alter(&$view, &$query) {
+  if ($view->name == 'user_shows') {
+    foreach ($query->where AS $key => $where) {
+      foreach($where['conditions'] AS $c_key => $condition) {
+        if (trim($condition['field']) == 'node.uid = :node_uid') {
+          global $user;
+          $options = array();
+          $options[] = array(
+            'field' => 'uid',
+            'value' => $user->uid,
+            'operator' => '='
+          );
+          $projects = om_project_membership_load($options);
+          $project_nids = array();
+          if (!empty($projects)) {
+            foreach ($projects AS $project) {
+              $project_nids[] = $project->entity_id;
+            }
+          }
+          if (!empty($project_nids)) {
+            $query->where[$key]['type'] = "OR";
+            $condition = array(
+              'field' => 'node.nid',
+              'value' => $project_nids,
+              'operator' => 'IN'
+            );
+            $query->where[$key]['conditions'][] = $condition;
+          }
+        }
+      }
+    }
+  }
 }
