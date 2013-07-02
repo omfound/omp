@@ -365,6 +365,7 @@ function om_theme_assets_admin_form() {
       '#markup' => t('Various theme settings like color scheme. Colors should be valid hexadecimal values with "#" symbols.')
     );
     $form['admin_theme_dashboard_fieldset'] = $fieldset;
+    $form['admin_theme_dashboard_fieldset']['#title'] = t('Dashboard Theme');
     $form['admin_theme_dashboard_fieldset']['om_dashboard_title_color'] = array(
       '#title' => t('Title Color'),
       '#type' => 'textfield',
