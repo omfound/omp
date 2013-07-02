@@ -7,3 +7,13 @@ div#om-embedded-content {
   float: left;
   margin-right: 20px;
 }
+
+div#om-desc-content {
+  float: left;
+  width: 375px;
+}
+
+h1.archive-title {
+  clear: left;
+  padding-top: 20px;
+}
