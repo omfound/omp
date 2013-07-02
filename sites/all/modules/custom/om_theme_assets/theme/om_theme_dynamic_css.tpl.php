@@ -108,6 +108,13 @@
     color: <?php print $title_color; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($om_dashboard_title_color)): ?>
+  .section-dashboard #page #content h1,
+  .section-dashboard #page #content h2,
+  .section-dashboard #page #content h3 {
+    color: <?php print $om_dashboard_title_color; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($info_tag_color)): ?>
   body .action-item .blue-bubble {
     background-color: <?php print $info_tag_color; ?>;
@@ -115,5 +122,10 @@
   .action-item a:link .blue-text,
   .action-item a:visited .blue-text {
     color: <?php print $info_tag_color; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($om_dashboard_pane_bg)): ?>
+  .page-dashboard #content h3.pane-title {
+    background-color: <?php print $om_dashboard_pane_bg; ?>;
   }
 <?php endif; ?>
