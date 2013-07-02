@@ -147,6 +147,12 @@ function om_agenda_manager_admin_form() {
     '#markup' => $markup,
   );
 
+  $form['om_agenda_status_embed'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Live Status Page Optional Embed',
+    '#default_value' => variable_get('om_agenda_status_embed', ''),
+  );
+
   return system_settings_form($form); 
 }
 
@@ -338,9 +344,19 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
+  if ($embed = variable_get('om_agenda_status_embed', false)) {
+    $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
+  }
   $livestream_info = om_agenda_manager_livestream_info();
+  $include_on_live = array();
+  foreach ($livestream_info as $tid => $info) {
+    $loaded = taxonomy_term_load($tid);
+    if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+      $include_on_live[$tid] = $info;
+    }
+  }
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
-  $output .= theme('om_show_live_block', array('live_themes' => $livestream_info));
+  $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
   $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
@@ -356,7 +372,13 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
       'template' => 'om-show-live-block', 
       'file' => 'theme.inc',
       'variables' => array('live_themes' => array()),
-    )
+    ),
+    'om_show_share_bar' => array(
+      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
+      'template' => 'share_bar', 
+      'file' => 'theme.inc',
+      'variables' => array(),
+    ),
   );
   return $themes;
 }
@@ -387,14 +409,17 @@ function om_agenda_manager_archive_tabs() {
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
   $tabs = array();
   foreach ($themes as $key => $info) {
-    $tabs[$info->tid] = array(
-      'title' => $info->name,
-      'type' => 'view',
-      'vid' => 'archived_sessions',
-      'display' => 'block_1',
-      'args' => $info->tid,
-      'weight' => $info->weight,
-    ); 
+    //$loaded = taxonomy_term_load($info->tid);
+    //if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+      $tabs[$info->tid] = array(
+        'title' => $info->name,
+        'type' => 'view',
+        'vid' => 'archived_sessions',
+        'display' => 'block_1',
+        'args' => $info->tid,
+        'weight' => $info->weight,
+      ); 
+    //}
   }
 
   $qtoptions = array(

@@ -212,6 +212,45 @@ function om_theme_assets_admin_form() {
     '#default_value' => variable_get('twitter_url', ''),
   );
   /**
+   * profile menu
+   */
+  $form['persistant_site_links_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Persistant Site Links'),
+    '#suffix' => '</h2>'
+  );
+  $form['persistant_site_links_help'] = array(
+    '#markup' => t('Options to disable menu items in the top right navigation.')
+  );
+  $form['persistant_site_links'] = $fieldset;
+  $form['persistant_site_links']['#title'] = t('Persistant Site Links');
+  $form['persistant_site_links']['om_loginout_link'] = array(
+    '#title' => t('Include Login/Logout Links'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('om_loginout_link', TRUE),
+  ); 
+  $form['persistant_site_links']['om_register_link'] = array(
+    '#title' => t('Include Register Link'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('om_register_link', TRUE),
+  ); 
+  $form['persistant_site_links']['om_profile_link'] = array(
+    '#title' => t('Include Profile Link'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('om_profile_link', TRUE),
+  ); 
+  $form['persistant_site_links']['om_help_link'] = array(
+    '#title' => t('Include Help Link'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('om_help_link', TRUE),
+  ); 
+  $form['persistant_site_links']['om_cart_link'] = array(
+    '#title' => t('Include Shopping Cart Link'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('om_cart_link', TRUE),
+  ); 
+
+  /**
    * Adding admin section
    */
   if (user_access('admin omp theme')) {

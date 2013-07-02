@@ -30,3 +30,7 @@ function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
     $variables['buttons'] = $buttons;
   }
 }
+
+function om_agenda_manager_preprocess_om_show_share_bar(&$variables) {
+  drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/share_bar.css');
+}
