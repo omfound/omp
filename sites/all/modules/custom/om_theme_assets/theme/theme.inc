@@ -34,22 +34,22 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   if ($user->uid > 0) {
     if (variable_get('om_loginout_link', TRUE)) {
       $options['attributes']['class'] = array('om-logout');
-      $links[] = l('Logout', 'user/logout', $options) . ' | ';
+      $links[] = l('Logout', 'user/logout', $options);
     }
     if (variable_get('om_profile_link', TRUE)) {
       $options['attributes']['class'] = array('om-profile');
       $clean_name = strtolower(str_replace(' ', '-', $user->name));
-      $links[] = l('Profile', 'users/' . $clean_name, $options) . ' | ';
+      $links[] = l('Profile', 'users/' . $clean_name, $options);
     }
   }
   else {
     if (variable_get('om_loginout_link', TRUE)) {
       $options['attributes']['class'] = array('om-login');
-      $links[] = l('Login', 'user', $options) . ' | ';
+      $links[] = l('Login', 'user', $options);
     }
     if (variable_get('om_register_link', TRUE)) {
       $options['attributes']['class'] = array('om-membership');
-      $links[] = l('Register', 'membership', $options) . ' | ';
+      $links[] = l('Register', 'membership', $options);
     }
   }
   if (variable_get('om_help_link', TRUE)) {
@@ -59,7 +59,13 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   if (variable_get('om_cart_link', TRUE)) {
     if (drupal_valid_path('cart')) {
       $options['attributes']['class'] = array('om-cart');
-      $links[] = ' | '.l('Shopping Cart', 'cart', $options);
+      $links[] = l('Shopping Cart', 'cart', $options);
+    }
+  }
+  $last = count($links) - 1;
+  foreach ($links as $key => $link) {
+    if ($key != $last) {
+      $links[$key] = $link.' | ';
     }
   }
   $variables['links'] = $links;
