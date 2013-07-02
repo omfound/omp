@@ -42,8 +42,8 @@ function om_dashboard_menu() {
   );
   $panes = om_dashboard_get_panes();
   if (!empty($panes)) {
-    foreach ($panes AS $pane) {
-      if (isset($pane['menu'])) {
+    foreach ($panes AS $key => $pane) {
+      if (isset($pane['menu']) && variable_get('om_dashboard_item_'.$key, TRUE)) {
         $items += $pane['menu'];
       }
     }
@@ -110,8 +110,10 @@ function om_dashboard_page() {
   drupal_add_js(drupal_get_path('module', 'om_dashboard') . '/js/dashboard-masonry.js', $options);
   $panes = om_dashboard_get_panes();
   $rendered_panes = "";
-  foreach ($panes AS $pane) {
-    $rendered_panes .= om_dashboard_render_pane($pane);
+  foreach ($panes AS $key => $pane) {
+    if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+      $rendered_panes .= om_dashboard_render_pane($pane);
+    }
   }
   $output = theme('om_dashboard_page', array('panes' => $rendered_panes));
   return $output;
@@ -129,8 +131,10 @@ function om_dashboard_theme($existing, $type, $theme, $path) {
   );
   $panes = om_dashboard_get_panes();
   if (!empty($panes)) {
-    foreach ($panes AS $pane) {
-      $themes += $pane['theme'];
+    foreach ($panes AS $key => $pane) {
+      if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+        $themes += $pane['theme'];
+      }
     }
   }
   return $themes;
