@@ -27,6 +27,7 @@ function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
         $form['title']['#required'] = false;
         unset($form['title']['#size']);
       }
+      dsm($form);
     }
   }
 }
