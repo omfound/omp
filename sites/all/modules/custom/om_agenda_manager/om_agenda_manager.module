@@ -18,6 +18,10 @@ function om_agenda_manager_theme_registry_alter(&$theme_registry) {
   }
 }
 
+function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);
+}
+
 function om_agenda_manager_menu() {
   $items = array();
 
