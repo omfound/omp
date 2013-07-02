@@ -35,7 +35,7 @@ function om_agenda_manager_project_options() {
   $results = db_query($query, array(':type' => 'om_project', ':status' => 1));
   $options = array();
   foreach ($results as $result) {
-    $options[$result->nid] = $result->title;
+    $options[$result->title] = $result->title;
   }
 
   return $options;
