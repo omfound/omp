@@ -155,7 +155,9 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
     $form['field_old_project_id']['#type'] = 'hidden';
   }
 
-  dsm($form_id);
+  if ($form_id == 'taxonomy_overview_terms') {
+    dsm($form);
+  }
 }
 
 /**
