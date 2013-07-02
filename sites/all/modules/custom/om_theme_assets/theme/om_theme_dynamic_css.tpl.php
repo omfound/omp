@@ -115,6 +115,11 @@
     color: <?php print $om_dashboard_title_color; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($om_dashboard_shadow_color)): ?>
+  .section-dashboard {
+    text-shadow: 1px 1px 1px <?php print $om_dashboard_shadow_color; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($info_tag_color)): ?>
   body .action-item .blue-bubble {
     background-color: <?php print $info_tag_color; ?>;

@@ -371,6 +371,11 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('om_dashboard_title_color', ''),
     );
+    $form['admin_theme_dashboard_fieldset']['om_dashboard_shadow_color'] = array(
+      '#title' => t('Shadow Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('om_dashboard_shadow_color', ''),
+    );
     $form['admin_theme_dashboard_fieldset']['om_dashboard_pane_bg'] = array(
       '#title' => t('Pane Background Color'),
       '#type' => 'textfield',
