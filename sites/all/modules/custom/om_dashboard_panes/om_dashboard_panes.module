@@ -7,6 +7,7 @@
 function om_dashboard_panes_om_dashboard_panes() {
   return array(
     'profile' => array(
+      'title' => t('Profile Information'),
       'theme' => array(
         'om_profile_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
@@ -16,6 +17,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       )
     ),
     'classes' => array(
+      'title' => t('Upcoming Classes'),
       'theme' => array(
         'om_classes_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
@@ -25,6 +27,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       )
     ),
     'membership' => array(
+      'title' => t('Current Membership Info'),
       'theme' => array(
         'om_membership_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
@@ -35,6 +38,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       'dependency' => 'om_membership',
     ),
     'class_registrations' => array(
+      'title' => t('Class Registrations'),
       'theme' => array(
         'om_class_registration_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
@@ -45,6 +49,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       'dependency' => 'om_classes',
     ),
     'reservations' => array(
+      'title' => t('Upcoming Reservations'),
       'theme' => array(
         'om_reservations_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
@@ -55,6 +60,7 @@ function om_dashboard_panes_om_dashboard_panes() {
       'dependency' => 'commerce_reservations'
     ),
     'shows' => array(
+      'title' => t('User Shows'),
       'theme' => array(
         'om_shows_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',

@@ -352,6 +352,36 @@ function om_theme_assets_admin_form() {
       '#type' => 'textfield',
       '#default_value' => variable_get('info_tag_color', ''),
     );
+
+    /**
+     * Dashboard theme settings
+     */
+    $form['admin_theme_dashboard_header'] = array(
+      '#prefix' => '<h2>',
+      '#markup' => t('Open Media Dashboard Theme Administration'),
+      '#suffix' => '</h2>'
+    );
+    $form['admin_theme_dashboard_help'] = array(
+      '#markup' => t('Various theme settings like color scheme. Colors should be valid hexadecimal values with "#" symbols.')
+    );
+    $form['admin_theme_dashboard_fieldset'] = $fieldset;
+    $form['admin_theme_dashboard_fieldset']['#title'] = t('Dashboard Theme');
+    $form['admin_theme_dashboard_fieldset']['om_dashboard_title_color'] = array(
+      '#title' => t('Title Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('om_dashboard_title_color', ''),
+    );
+    $form['admin_theme_dashboard_fieldset']['om_dashboard_shadow_color'] = array(
+      '#title' => t('Shadow Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('om_dashboard_shadow_color', ''),
+    );
+    $form['admin_theme_dashboard_fieldset']['om_dashboard_pane_bg'] = array(
+      '#title' => t('Pane Background Color'),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('om_dashboard_pane_bg', ''),
+    );
+
   /**
   * Footer
   */

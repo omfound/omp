@@ -102,6 +102,10 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   $variables['header_shadow_color'] = variable_get('header_shadow_color', '');
   $variables['content_border_color'] = variable_get('content_border_color', '');
 
+  $variables['om_dashboard_title_color'] = variable_get('om_dashboard_title_color', '');
+  $variables['om_dashboard_pane_bg'] = variable_get('om_dashboard_pane_bg', '');
+  $variables['om_dashboard_shadow_color'] = variable_get('om_dashboard_shadow_color', '');
+
   $texture_fid = variable_get('background_texture', '');
   if (is_numeric($texture_fid)) {
     $texture_file = file_load($texture_fid);
