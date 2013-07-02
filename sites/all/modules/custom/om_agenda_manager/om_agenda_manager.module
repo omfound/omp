@@ -153,6 +153,12 @@ function om_agenda_manager_admin_form() {
     '#default_value' => variable_get('om_agenda_status_embed', ''),
   );
 
+  $form['om_agenda_status_desc'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Text to display on Live Page',
+    '#default_value' => variable_get('om_agenda_status_desc', ''),
+  );
+
   return system_settings_form($form); 
 }
 
@@ -357,6 +363,9 @@ function om_agenda_manager_live_page() {
   }
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
   $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
+  if ($desc = variable_get('om_agenda_status_desc', false)) {
+    $output .= '<div id="om-desc-content">'.$desc.'</div>';
+  }
   $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
