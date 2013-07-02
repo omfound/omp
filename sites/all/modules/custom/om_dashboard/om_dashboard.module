@@ -62,8 +62,13 @@ function om_dashboard_admin_form() {
     '#markup' => t('Use the checkboxes below to disable or enable available dashboard panes.')
   );
   $panes = om_dashboard_get_panes();
-  dsm($panes);
-  foreach ($panes as $pane) {
+  foreach ($panes as $key => $pane) {
+    $form_item = 'om_dashboard_item_'.$key;
+    $from[$form_item] = array(
+      '#title' => $pane['title'],
+      '#type' => 'checkbox',
+      '#default_value' => variable_get($form_item, true),
+    );
   } 
   return system_settings_form($form);
 }
