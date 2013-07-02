@@ -35,7 +35,7 @@ function om_agenda_manager_project_options() {
   $query = "SELECT * FROM {node} WHERE type = :type AND status = :status ORDER BY title ASC";
   $results = db_query($query, array(':type' => 'om_project', ':status' => 1));
   $options = array();
-  $options['All'] = '- Any -';
+  $options[''] = '- Any -';
   foreach ($results as $result) {
     $options[$result->title] = $result->title;
   }
