@@ -229,6 +229,6 @@ body.front div.views-widget div.form-type-textfield input {
 }
 
 /** hide path form on taxonomy pages **/
-.page-taxonomy-term form.path-form {
+.page-taxonomy-term fieldset.path-form {
   display: none;
 }
