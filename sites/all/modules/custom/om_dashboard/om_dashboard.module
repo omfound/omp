@@ -64,7 +64,7 @@ function om_dashboard_admin_form() {
   $panes = om_dashboard_get_panes();
   foreach ($panes as $key => $pane) {
     $form_item = 'om_dashboard_item_'.$key;
-    $from[$form_item] = array(
+    $form[$form_item] = array(
       '#title' => $pane['title'],
       '#type' => 'checkbox',
       '#default_value' => variable_get($form_item, true),
