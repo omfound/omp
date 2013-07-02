@@ -32,23 +32,35 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   $links = array();
   $options = array();
   if ($user->uid > 0) {
-    $options['attributes']['class'] = array('om-logout');
-    $links[] = l('Logout', 'user/logout', $options) . ' | ';
-    $options['attributes']['class'] = array('om-profile');
-    $clean_name = strtolower(str_replace(' ', '-', $user->name));
-    $links[] = l('Profile', 'users/' . $clean_name, $options) . ' | ';
+    if (variable_get('om_loginout_link', TRUE)) {
+      $options['attributes']['class'] = array('om-logout');
+      $links[] = l('Logout', 'user/logout', $options) . ' | ';
+    }
+    if (variable_get('om_profile_link', TRUE)) {
+      $options['attributes']['class'] = array('om-profile');
+      $clean_name = strtolower(str_replace(' ', '-', $user->name));
+      $links[] = l('Profile', 'users/' . $clean_name, $options) . ' | ';
+    }
   }
   else {
-    $options['attributes']['class'] = array('om-login');
-    $links[] = l('Login', 'user', $options) . ' | ';
-    $options['attributes']['class'] = array('om-membership');
-    $links[] = l('Register', 'membership', $options) . ' | ';
+    if (variable_get('om_loginout_link', TRUE)) {
+      $options['attributes']['class'] = array('om-login');
+      $links[] = l('Login', 'user', $options) . ' | ';
+    }
+    if (variable_get('om_register_link', TRUE)) {
+      $options['attributes']['class'] = array('om-membership');
+      $links[] = l('Register', 'membership', $options) . ' | ';
+    }
   }
-  $options['attributes']['class'] = array('om-help');
-  $links[] = l('Help', 'help', $options);
-  if (drupal_valid_path('cart')) {
-    $options['attributes']['class'] = array('om-cart');
-    $links[] = ' | '.l('Shopping Cart', 'cart', $options);
+  if (variable_get('om_help_link', TRUE)) {
+    $options['attributes']['class'] = array('om-help');
+    $links[] = l('Help', 'help', $options);
+  }
+  if (variable_get('om_cart_link', TRUE)) {
+    if (drupal_valid_path('cart')) {
+      $options['attributes']['class'] = array('om-cart');
+      $links[] = ' | '.l('Shopping Cart', 'cart', $options);
+    }
   }
   $variables['links'] = $links;
 }
