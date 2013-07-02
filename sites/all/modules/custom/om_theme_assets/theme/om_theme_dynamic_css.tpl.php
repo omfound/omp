@@ -116,7 +116,7 @@
   }
 <?php endif; ?>
 <?php if (!empty($om_dashboard_shadow_color)): ?>
-  .section-dashboard {
+  .section-dashboard #content {
     text-shadow: 1px 1px 1px <?php print $om_dashboard_shadow_color; ?>;
   }
 <?php endif; ?>
