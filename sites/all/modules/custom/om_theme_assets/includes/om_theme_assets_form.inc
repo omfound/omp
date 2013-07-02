@@ -214,6 +214,14 @@ function om_theme_assets_admin_form() {
   /**
    * profile menu
    */
+  $form['persistant_site_links_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Persistant Site Links'),
+    '#suffix' => '</h2>'
+  );
+  $form['persistant_site_links_help'] = array(
+    '#markup' => t('Options to disable menu items in the top right navigation.')
+  );
   $form['persistant_site_links'] = $fieldset;
   $form['persistant_site_links']['#title'] = t('Persistant Site Links');
   $form['persistant_site_links']['om_loginout_link'] = array(
