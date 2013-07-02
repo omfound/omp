@@ -28,7 +28,7 @@ function om_agenda_manager_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/config/om/agenda-manager'] = array(
-    'title' => 'Agenda Manager Configuration',
+    'title' => 'Site Configuration',
     'description' => 'Agenda Manager Configuration options',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_agenda_manager_admin_form'),
