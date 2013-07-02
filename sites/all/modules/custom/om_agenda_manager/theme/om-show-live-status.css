@@ -10,7 +10,9 @@ div#om-embedded-content {
 
 div#om-desc-content {
   float: left;
-  width: 375px;
+  width: 355px;
+  background-color: #fff;
+  padding: 10px;
 }
 
 h1.archive-title {
