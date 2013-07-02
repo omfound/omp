@@ -21,9 +21,23 @@ function om_agenda_manager_theme_registry_alter(&$theme_registry) {
 function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] == 'views-exposed-form-archived-sessions-page-2') {
-      dsm($form);
+      if ($form['title']) {
+        $form['title']['#type'] = 'select';
+        $form['title']['#options'] = om_agenda_manager_project_options();
+      }
     }
   }
+}
+
+function om_agenda_manager_project_options() {
+  $query = "SELECT * FROM {node} WHERE type = :type AND status = :status ORDER BY title ASC";
+  $results = db_query($query, array(':type' => 'om_project', ':status' => 1));
+  $options = array();
+  foreach ($results as $result) {
+    $options[$result->nid] = $result->title;
+  }
+
+  return $options;
 }
 
 function om_agenda_manager_menu() {
