@@ -424,7 +424,7 @@ function om_agenda_manager_archive_tabs() {
         'title' => $info->name,
         'type' => 'view',
         'vid' => 'archived_sessions',
-        'display' => 'page_1',
+        'display' => 'page_2',
         'args' => $info->tid,
         'weight' => $info->weight,
       ); 
