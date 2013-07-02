@@ -24,10 +24,9 @@ function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
       if ($form['title']) {
         $form['title']['#type'] = 'select';
         $form['title']['#options'] = om_agenda_manager_project_options();
-        $form['title']['#required'] = false;
+        $form['title']['#default_value'] = 'All';
         unset($form['title']['#size']);
       }
-      dsm($form);
     }
   }
 }
@@ -36,6 +35,7 @@ function om_agenda_manager_project_options() {
   $query = "SELECT * FROM {node} WHERE type = :type AND status = :status ORDER BY title ASC";
   $results = db_query($query, array(':type' => 'om_project', ':status' => 1));
   $options = array();
+  $options['All'] = '- Any -';
   foreach ($results as $result) {
     $options[$result->title] = $result->title;
   }
