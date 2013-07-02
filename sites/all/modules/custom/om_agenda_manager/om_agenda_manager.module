@@ -24,6 +24,7 @@ function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
       if ($form['title']) {
         $form['title']['#type'] = 'select';
         $form['title']['#options'] = om_agenda_manager_project_options();
+        $form['title']['#required'] = false;
         unset($form['title']['#size']);
       }
     }
