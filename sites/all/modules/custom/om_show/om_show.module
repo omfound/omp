@@ -212,10 +212,10 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
   }
 
   $img_path = om_show_video_image($node);
-  //$youtube_info = om_show_youtube_info($node);
-  //if ($youtube_info['live_status'] || empty($show_field)) {
-    //return;
-  //}
+  $youtube_info = om_show_youtube_info($node);
+  if ($youtube_info['live_status'] || empty($show_field)) {
+    return;
+  }
 
   if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
     $jwplayer = array();
