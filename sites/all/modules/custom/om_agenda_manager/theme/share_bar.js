@@ -60,11 +60,12 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   setPoint : function(e) {
     player = this.shareBarModel.get('player');
+    console.log(player.getPosition());
     if ($(e.target).hasClass('in-point')) {
-      this.shareBarModel.set('inPoint');  
+      //this.shareBarModel.set('inPoint');  
     }
     if ($(e.target).hasClass('out-point')) {
-      this.shareBarModel.set('outPoint');
+      //this.shareBarModel.set('outPoint');
     } 
   }
 });
@@ -78,11 +79,10 @@ Drupal.behaviors.shareBar = {
    player = jwplayer();
    player.onReady(
      function() {
-       console.log(player.getPosition());
+       // Initialize tray.
+       var tray = new Drupal.shareBar.views.shareBar(player, $target);
      }
    );
-   // Initialize tray.
-   var tray = new Drupal.shareBar.views.shareBar(player, $target);
   }
 }
 })(jQuery, Drupal, this, this.document);
