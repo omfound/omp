@@ -476,7 +476,8 @@ function om_membership_adjust_existing_memberships() {
               om_membership_remove_user_role($user);
               $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
               $user->roles[$role->rid] = $role->name;
-              user_save($user);
+              dsm($user);
+              //user_save($user);
             }
           }
         }
