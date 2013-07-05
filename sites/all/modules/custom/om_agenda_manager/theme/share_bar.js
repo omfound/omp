@@ -24,7 +24,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
-    _.bindAll(this, 'initializeInterface', 'toggleInterface');
+    _.bindAll(this, 'initializeInterface', 'toggleInterface', 'buildEmbed');
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
@@ -54,6 +54,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.in-point').val(0);
     duration = player.getDuration();
     duration = parseInt(duration);
+    console.log(duration);
     $(this.el).find('input.end-point').val(duration);
     $(this.el).find('input.width').val(player.config.width);
     $(this.el).find('input.height').val(player.config.height);
