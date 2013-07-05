@@ -71,6 +71,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.height').val(player.config.height);
     $(this.el).find('.facebook').val(url);
     this.buildEmbed();
+    // Do stupid play for one second to get duration.
+   player.play();
+   player.stop();
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
@@ -123,7 +126,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
     url += '&embedOutPoint=' + this.shareBarModel.get('embedOutPoint');
     this.shareBarModel.set('embedUrl', url);
-    url = "<iframe height='" + this.shareBarModel.get('height')  + "' width='" + this.shareBarModel.get('width')  + "' frameborder='0' scrolling='no' src='" + url + "'></iframe>";
+    url = "<iframe width='" + this.shareBarModel.get('width')  + "' height='" + this.shareBarModel.get('height') + "' frameborder='0' scrolling='no' src='" + url + "'></iframe>";
     $(this.el).find('input.embed').val(url);
   }
 });
