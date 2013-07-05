@@ -35,7 +35,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.setElement(domInterface);
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
-    this.shareBarModel.on('onReady', 'initializeInterface', this);
+    this.shareBarModel.on('onReady', this.initializeInterface, this);
     // Set toggle to closed.
     this.toggleState = false;
     // Hijack the dom interface
