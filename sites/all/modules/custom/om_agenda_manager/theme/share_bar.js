@@ -73,7 +73,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.buildEmbed();
     // Do stupid play for one second to get duration.
     player.play();
-    window.setTimeout(this.stopPlayer, 1000); 
+    setTimeout(this.stopPlayer, 1000); 
   },
   stopPlayer : function() {
     player = this.shareBarModel.get('player');
