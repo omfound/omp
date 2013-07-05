@@ -9,7 +9,7 @@ Drupal.shareBar.models = {};
 // Extremely simple model to act as storage for player state and various resources.
 Drupal.shareBar.models.shareBar = Backbone.Model.extend({
   initialize : function() {
-    console.log(this.player);
+    console.log(this.get('player'));
   }
 }); 
 // Views:
@@ -20,7 +20,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     _.bindAll(this, 'initializeInterface');
     // Instantiate new sharebar model.
     // This model will automatically bind itself to the player object.
-    console.log(player);
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // Attach this view to the dom element.
     this.setElement(domInterface);
