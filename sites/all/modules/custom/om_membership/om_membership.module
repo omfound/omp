@@ -456,6 +456,9 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('roles.rid', $rid, '=');
     $query->condition('uid', 14351, '=');
     $resource = $query->execute();
+    if ($rid == 5) {
+      dpq($query);
+    }
     while ($row = $resource->fetchObject()) {
       dsm($row);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
