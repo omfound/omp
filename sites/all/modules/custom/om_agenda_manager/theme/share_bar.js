@@ -76,7 +76,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     window.setTimeout(this.stopPlayer, 1000); 
   },
   stopPlayer : function() {
-    console.log(this);
+    player = this.shareBarModel.get('player');
+    player.stop();
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
