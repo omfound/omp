@@ -82,7 +82,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     if (player.getPosition() > 0) {
       clearInterval(this.playerInterval);
       player.stop();
-      player.setVolume(.5);
+      player.setVolume(50);
     }i
   },
   toggleInterface : function(e) {
