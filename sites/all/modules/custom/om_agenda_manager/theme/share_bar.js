@@ -65,8 +65,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
-    $(this.el).find('input.in-point').val(0);
-    $(this.el).find('input.out-point').val(0);
+    $(this.el).find('input.in-point').val(0).trigger('change');
+    $(this.el).find('input.out-point').val(0).trigger('change');
     $(this.el).find('input.width').val(player.config.width);
     $(this.el).find('input.height').val(player.config.height);
     $(this.el).find('.facebook').val(url);
@@ -113,14 +113,15 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
       duration = player.getDuration();
       duration = parseInt(duration);
       $(this.el).find('input.out-point').val(duration).trigger('change');
+      this.buildEmbed();
     }
   },
   buildEmbed : function() {
-    url = this.shareBarModel.set('url', url);
+    url = this.shareBarModel.get('url', url);
     url += '?embed=true&width=' + this.shareBarModel.get('width');
-    url += '&height' + this.shareBarModel.get('height');
-    url += '&embedInPoint' + this.shareBarModel.get('embedInPoint');
-    url += '&embedOutPoint' + this.shareBarModel.get('embedOutPoint');
+    url += '&height=' + this.shareBarModel.get('height');
+    url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
+    url += '&embedOutPoint=' + this.shareBarModel.get('embedOutPoint');
     this.shareBarModel.set('embedUrl', url);
     $(this.el).find('input.embed').val(url);
   }
@@ -134,12 +135,6 @@ Drupal.behaviors.shareBar = {
    $target = $('#session-video-embed-tray', context);
    player = jwplayer();
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
-   /*player.onReady(
-     function() {
-       // Initialize tray.
-       var tray = new Drupal.shareBar.views.shareBar(player, $target);
-     }
-   );*/
   }
 }
 })(jQuery, Drupal, this, this.document);
