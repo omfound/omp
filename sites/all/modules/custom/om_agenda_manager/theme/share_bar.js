@@ -30,21 +30,41 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // Set width and height.
-    this.shareBarModel.set('width', 960);
-    this.shareBarModel.set('height', $(this.el).find('form').outerHeight());
+    this.shareBarModel.set('interfaceWidth', 960);
+    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
+    this.shareBarModel.set('width', player.config.width);
+    this.shareBarModel.set('height', player.config.height);
+    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
     // Set toggle to closed.
     this.toggleState = false;
     // Hijack the dom interface
     this.initializeInterface();
   },
   initializeInterface : function() {
-   $(this.el).width(this.shareBarModel.get('width')); 
+    url = document.URL;
+    if (url.indexOf('embed=true') > 0) {
+      this.remove();
+    }
+    url = url.split("?");
+    url = url[0];
+    this.url = url;
+    console.log(this.url);
+    // Resize interface.
+    $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
+    // Set Default values.
+    $(this.el).find('input.in-point').val(0);
+    player = this.shareBarModel.get('player');
+    duration = player.getDuration();
+    duration = parseInt(duration);
+    $(this.el).find('input.end-point').val(duration);
+    $(this.el).find('input.width').val(this.shareBarModel.get('width'));
+    $(this.el).find('input.height').val(this.shareBarModel.get('height'));
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
       this.toggleState = true;
       $(e.target).text('- Hide');
-      $(this.el).find('.inner').animate({'height' : this.shareBarModel.get('height')}, 500);
+      $(this.el).find('.inner').animate({'height' : this.shareBarModel.get('interfaceHeight')}, 500);
     }
     else {
       this.toggleState = false;
@@ -56,19 +76,24 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     e.preventDefault();
   },
   interfaceChange : function(e) {
-
+    key = $(e.target).attr('name');
+    value = $(e.target).val();
+    this.shareBarModel.set(key, value);
+    this.buildUrls();
   },
   setPoint : function(e) {
     player = this.shareBarModel.get('player');
     position = player.getPosition();
+    position = parseInt(position);
     if ($(e.target).hasClass('in-point')) {
-      this.shareBarModel.set('embedInPoint', position);
       $(this.el).find('input.in-point').val(position);
     }
     if ($(e.target).hasClass('out-point')) {
-      this.shareBarModel.set('embedOutPoint', position);
       $(this.el).find('input.out-point').val(position);
     } 
+  },
+  buildUrls : function() {
+    
   }
 });
 
