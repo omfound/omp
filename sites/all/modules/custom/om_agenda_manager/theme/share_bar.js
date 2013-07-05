@@ -25,7 +25,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // This model will automatically bind itself to the player object.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // We get the width from the player.
-    this.shareBarModel.set('height', $(this.el).find('.inner').height());
+    this.shareBarModel.set('height', $(this.el).find('form').height());
     // Hijack the dom interface
     this.initializeInterface();
   },
