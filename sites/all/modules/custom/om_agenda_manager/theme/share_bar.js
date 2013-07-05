@@ -59,7 +59,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Set width and height.
     player = this.shareBarModel.get('player');
     this.shareBarModel.set('interfaceWidth', 960);
-    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
+    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight() + 20);
     console.log($(this.el).find('.inner').outerHeight());
     this.shareBarModel.set('width', player.config.width);
     this.shareBarModel.set('height', player.config.height);
