@@ -822,8 +822,8 @@ function om_membership_tokens($type, $tokens, array $data = array(), array $opti
 }
 
 function om_membership_unbork_ze_members() {
-  $query = db_select('commerce_order', 'order');
-  $query->fields('order', array('order_id'));
+  $query = db_select('commerce_order', 'co');
+  $query->fields('co', array('order_id'));
   $resource = $query->execute();
   while ($row = $resource->fetchAssoc) {
     $order = commerce_order_load($row['order_id']);
