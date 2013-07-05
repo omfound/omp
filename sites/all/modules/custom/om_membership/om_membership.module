@@ -454,7 +454,7 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('roles.rid', $rid, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
-      dsm($row['uid']);
+      dsm($row->uid);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
       if (!empty($memberships)) {
         foreach($memberships AS $membership) {
