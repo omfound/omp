@@ -40,13 +40,13 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     _.bindAll(this, 'initializeInterface', 'toggleInterface', 'buildEmbed', 'stopPlayer');
     // Attach this view to the dom element.
     this.setElement(domInterface);
+    $(this.el).hide();
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     this.shareBarModel.on('onReady', this.initializeInterface, this);
     this.shareBarModel.on('onPlay', this.setDurationOnce, this);
     // Set toggle to closed.
     this.toggleState = false;
-    // Hijack the dom interface
   },
   initializeInterface : function() {
     url = document.URL;
@@ -84,7 +84,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
       clearInterval(this.playerInterval);
       player.stop();
       player.setVolume(50);
-    }i
+      $(this.el).show();
+    }
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
