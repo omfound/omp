@@ -17,7 +17,7 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
-    _.bindAll('initializeInterface', this);
+    _.bindAll(this, 'initializeInterface');
     // Instantiate new sharebar model.
     // This model will automatically bind itself to the player object.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
