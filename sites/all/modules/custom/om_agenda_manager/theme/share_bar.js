@@ -37,7 +37,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
-    _.bindAll(this, 'initializeInterface', 'toggleInterface', 'buildEmbed');
+    _.bindAll(this, 'initializeInterface', 'toggleInterface', 'buildEmbed', 'stopPlayer');
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
@@ -72,7 +72,11 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('.facebook').val(url);
     this.buildEmbed();
     // Do stupid play for one second to get duration.
-   player.play();
+    player.play();
+    window.setTimeout(this.stopPlayer, 1000); 
+  },
+  stopPlayer : function() {
+    console.log(this);
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
