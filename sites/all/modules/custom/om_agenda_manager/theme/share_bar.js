@@ -73,7 +73,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.buildEmbed();
     // Do stupid play for one second to get duration.
    player.play();
-   player.stop();
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
@@ -93,8 +92,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   interfaceChange : function(e) {
     key = $(e.target).attr('name');
     value = $(e.target).val();
-    console.log(key);
-    console.log(value);
     this.shareBarModel.set(key, value);
     this.buildEmbed();
   },
@@ -110,14 +107,12 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     } 
   },
   setDurationOnce: function() {
-    console.log(this.shareBarModel.get('embedOutPoint'));
-    if (this.shareBarModel.get('embedOutPoint') == undefined) {
-      player = this.shareBarModel.get('player');
-      duration = player.getDuration();
-      duration = parseInt(duration);
-      $(this.el).find('input.out-point').val(duration).trigger('change');
-      this.buildEmbed();
-    }
+    player = this.shareBarModel.get('player');
+    duration = player.getDuration();
+    duration = parseInt(duration);
+    $(this.el).find('input.out-point').val(duration).trigger('change');
+    this.buildEmbed();
+    this.shareBarModel.off('onPlay', this.setDurationOnce, this);
   },
   buildEmbed : function() {
     url = this.shareBarModel.get('url', url);
