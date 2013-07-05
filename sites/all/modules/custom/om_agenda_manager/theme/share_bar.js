@@ -16,6 +16,11 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 // Views:
 // View to handle most of the interaction for the sharebar.
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
+  events : {
+    // Prevent form submit.
+    'submit form' : 'preventSubmit',
+    'click .show-hide' : 'toggleInterface'
+  },
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
     _.bindAll(this, 'initializeInterface', 'toggleInterface');
@@ -25,15 +30,26 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // This model will automatically bind itself to the player object.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // We get the width from the player.
-    this.shareBarModel.set('height', $(this.el).find('form').height());
+    this.shareBarModel.set('height', $(this.el).find('form').outerHeight());
+    // Set toggle to closed.
+    this.toggleState = false;
     // Hijack the dom interface
     this.initializeInterface();
   },
   initializeInterface : function() {
-   console.log(this.shareBarModel.get('height')); 
   },
   toggleInterface : function() {
-    
+    if (this.toggleState == false) {
+      this.toggleState = true;
+      console.log('open');
+    }
+    else {
+      this.toggleState = false;
+      console.log('closed');
+    }
+  },
+  preventSubmit : function(e) {
+    e.preventDefault();
   }
 });
 
