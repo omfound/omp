@@ -41,11 +41,11 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   toggleInterface : function() {
     if (this.toggleState == false) {
       this.toggleState = true;
-      $(this.el).animate({'height' : this.shareBarModel.get('height')}, 500);
+      $(this.el).find('.inner').animate({'height' : this.shareBarModel.get('height')}, 500);
     }
     else {
       this.toggleState = false;
-      $(this.el).animate({'height' : 0}, 500);
+      $(this.el).find('.inner').animate({'height' : 0}, 500);
     }
   },
   preventSubmit : function(e) {
