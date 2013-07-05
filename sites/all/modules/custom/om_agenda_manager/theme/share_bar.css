@@ -10,7 +10,7 @@
 .embed-tray .inner {
   height: 0;
   overflow: hidden;
-  /*padding: 10px 5px 5px 5px;*/
+  padding: 10px 5px 5px 5px;
   position: relative;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .embed-tray form {
-  margin: 10px 5px 5px 5px;
+  margin-top: 5px;
 }
 
 .start-end {
@@ -48,6 +48,7 @@
   font-family: georgia;
   font-style: italic;
   width: 76px;
+  margin-right: 10px;
 }
 
 .embed-tray div.embed,
