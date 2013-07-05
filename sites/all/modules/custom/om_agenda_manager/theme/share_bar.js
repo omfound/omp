@@ -20,6 +20,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     _.bindAll(this, 'initializeInterface');
     // Instantiate new sharebar model.
     // This model will automatically bind itself to the player object.
+    console.log(player);
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // Attach this view to the dom element.
     this.setElement(domInterface);
