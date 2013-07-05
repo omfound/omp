@@ -454,7 +454,6 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('roles.rid', $rid, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
-      dsm($row->uid);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
       if (!empty($memberships)) {
         foreach($memberships AS $membership) {
@@ -820,4 +819,17 @@ function om_membership_tokens($type, $tokens, array $data = array(), array $opti
     }
   }
   return $replacements;
+}
+
+function om_membership_unbork_ze_members() {
+  $query = db_select('commerce_order', 'order');
+  $query->fields('order', array('order_id'));
+  $resource = $query->execute();
+  while ($row = $resource->fetchAssoc) {
+    $order = commerce_order_load($row['order_id']);
+    $is_membership = om_membership_order_contains_membership($order);
+    if (!empty($is_membership)) {
+      om_membership_grant_user_role($order);
+    }
+  }
 }
