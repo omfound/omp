@@ -34,7 +34,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
-    this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player, 'parent' : this});
+    this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     this.shareBarModel.on('onReady', 'initializeInterface', this);
     // Set toggle to closed.
     this.toggleState = false;
@@ -54,6 +54,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
     this.shareBarModel.set('width', player.config.width);
     this.shareBarModel.set('height', player.config.height);
+    console.log('we make it here');
+    console.log(this);
+    console.log(player);
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
@@ -68,8 +71,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.buildEmbed();
   },
   toggleInterface : function(e) {
-    console.log(this);
-    console.log(this.shareBarModel.get('interfaceHeight'));
     if (this.toggleState == false) {
       this.toggleState = true;
       $(e.target).text('- Hide');
