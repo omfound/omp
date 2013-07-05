@@ -446,10 +446,8 @@ function om_membership_get_expired_memberships() {
  * Ensure that all users have the membership types they are supposed to.
  */
 function om_membership_adjust_existing_memberships() {
-  dsm('hello');
   $users = array();
   $roles = om_membership_return_membership_roles();
-  dsm($roles);
   foreach ($roles AS $rid => $role) {
     $query = db_select('users_roles', 'roles');
     $query->fields('roles', array('uid'));
@@ -457,9 +455,7 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('uid', 14351, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
-      dsm($row);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
-      dsm($memberships);
       if (!empty($memberships)) {
         foreach($memberships AS $membership) {
           $membership_products = om_membership_order_contains_membership($membership);
@@ -471,12 +467,9 @@ function om_membership_adjust_existing_memberships() {
             if ($now > $membership->created && $now < $exp) {
               $user = user_load($row->uid);
               om_membership_remove_user_role($user);
-              dsm($product);
               $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
-              dsm($role);
               $user->roles[$role->rid] = $role->name;
-              dsm($user);
-              //user_save($user);
+              user_save($user);
             }
           }
         }
