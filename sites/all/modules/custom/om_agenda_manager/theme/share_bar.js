@@ -7,19 +7,20 @@ Drupal.shareBar.models = {};
 
 // Models:
 // Extremely simple model to act as storage for player state and various resources.
-Drupal.shareBar.models.shareBar = Backbone.Model.extend({
-  initialize : function() {
-    player = this.get('player');
-    this.set('width', player.config.width);  
-  }
-}); 
+Drupal.shareBar.models.shareBar = Backbone.Model.extend(); 
 // Views:
 // View to handle most of the interaction for the sharebar.
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   events : {
     // Prevent form submit.
     'submit form' : 'preventSubmit',
-    'click .show-hide' : 'toggleInterface'
+    'click .show-hide' : 'toggleInterface',
+    'change input.in-point' : 'interfaceChange',
+    'change input.out-point' : 'interfaceChange',
+    'change input.width' : 'interfaceChange',
+    'change input.height' : 'interfaceChange',
+    'click label.in-point' : 'setPoint',
+    'click label.out-point' : 'setPoint'
   },
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
@@ -27,9 +28,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
-    // This model will automatically bind itself to the player object.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
-    // We get the width from the player.
+    // Set width and height.
+    this.shareBarModel.set('width', 960);
     this.shareBarModel.set('height', $(this.el).find('form').outerHeight());
     // Set toggle to closed.
     this.toggleState = false;
@@ -37,6 +38,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.initializeInterface();
   },
   initializeInterface : function() {
+   $(this.el).width(this.shareBarModel.get('width')); 
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
@@ -52,6 +54,18 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   preventSubmit : function(e) {
     e.preventDefault();
+  },
+  interfaceChange : function(e) {
+
+  },
+  setPoint : function(e) {
+    player = this.shareBarModel.get('player');
+    if ($(e.target).hasClass('in-point')) {
+      this.shareBarModel.set('inPoint');  
+    }
+    if ($(e.target).hasClass('out-point')) {
+      this.shareBarModel.set('outPoint');
+    } 
   }
 });
 
@@ -62,6 +76,9 @@ Drupal.behaviors.shareBar = {
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
    player = jwplayer();
+   player.onReady(
+     function() {alert('ready');}
+   );
    // Initialize tray.
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
   }
