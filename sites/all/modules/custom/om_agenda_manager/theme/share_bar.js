@@ -90,6 +90,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   interfaceChange : function(e) {
     key = $(e.target).attr('name');
     value = $(e.target).val();
+    console.log(key);
+    console.log(value);
     this.shareBarModel.set(key, value);
     this.buildEmbed();
   },
