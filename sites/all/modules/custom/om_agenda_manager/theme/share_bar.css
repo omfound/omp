@@ -3,6 +3,10 @@
   position: relative;
 }
 
+.embed-tray * {
+  text-shadow: none;
+}
+
 .embed-tray .inner {
   height: 0;
   overflow: hidden;
