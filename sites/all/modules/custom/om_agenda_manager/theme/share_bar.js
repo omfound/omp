@@ -7,7 +7,13 @@ Drupal.shareBar.models = {};
 
 // Models:
 // Extremely simple model to act as storage for player state and various resources.
-Drupal.shareBar.models.shareBar = Backbone.Model.extend(); 
+Drupal.shareBar.models.shareBar = Backbone.Model.extend(
+  initialize : function() {
+    player = this.get('player');
+    player.onReady(this.trigger('onReady'));
+    player.onPlay(this.trigger('onPlay'));
+  }
+); 
 // Views:
 // View to handle most of the interaction for the sharebar.
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
@@ -28,11 +34,11 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
-    this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
+    this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player, 'parent' : this});
+    this.shareBarModel.on('onReady', 'initializeInterface', this);
     // Set toggle to closed.
     this.toggleState = false;
     // Hijack the dom interface
-    this.initializeInterface();
   },
   initializeInterface : function() {
     url = document.URL;
@@ -111,12 +117,13 @@ Drupal.behaviors.shareBar = {
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
    player = jwplayer();
-   player.onReady(
+   var tray = new Drupal.shareBar.views.shareBar(player, $target);
+   /*player.onReady(
      function() {
        // Initialize tray.
        var tray = new Drupal.shareBar.views.shareBar(player, $target);
      }
-   );
+   );*/
   }
 }
 })(jQuery, Drupal, this, this.document);
