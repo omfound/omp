@@ -43,6 +43,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     this.shareBarModel.on('onReady', this.initializeInterface, this);
+    this.shareBarModel.on('onPlay', this.setDurationOnce, this);
     // Set toggle to closed.
     this.toggleState = false;
     // Hijack the dom interface
@@ -61,17 +62,11 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
     this.shareBarModel.set('width', player.config.width);
     this.shareBarModel.set('height', player.config.height);
-    console.log('we make it here');
-    console.log(this);
-    console.log(player);
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
     $(this.el).find('input.in-point').val(0);
-    duration = player.getDuration();
-    duration = parseInt(duration);
-    console.log(duration);
-    $(this.el).find('input.end-point').val(duration);
+    $(this.el).find('input.end-point').val(0);
     $(this.el).find('input.width').val(player.config.width);
     $(this.el).find('input.height').val(player.config.height);
     $(this.el).find('.facebook').val(url);
@@ -108,6 +103,14 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     if ($(e.target).hasClass('out-point')) {
       $(this.el).find('input.out-point').val(position);
     } 
+  },
+  setDurationOnce: function() {
+    if (this.shareBarModel.get('embedOutPoint') == undefined) {
+      player = this.shareBarModel.get('player');
+      duration = player.getDuration();
+      duration = parseInt(duration);
+      $(this.el).find('input.end-point').val(duration);
+    }
   },
   buildEmbed : function() {
     url = this.shareBarModel.set('url', url);
