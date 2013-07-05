@@ -452,6 +452,7 @@ function om_membership_adjust_existing_memberships() {
     $query = db_select('users_roles', 'roles');
     $query->fields('roles', array('uid'));
     $query->condition('roles.rid', $rid, '=');
+    $query->condition('uid', 14351, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
@@ -552,10 +553,10 @@ function om_membership_order_contains_membership($commerce_order, $paid_only = f
       if (is_object($product) && $product->type == 'membership_plan') {
         if (!$paid_only) {
           $memberships[] = $product;
-	      }
-	      elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
-	        $memberships[] = $product;
-	      }
+	}
+	elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
+          $memberships[] = $product;
+        }
       }
     }
   }
