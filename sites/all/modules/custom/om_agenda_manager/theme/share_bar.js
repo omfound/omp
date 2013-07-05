@@ -72,6 +72,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('.facebook').val(url);
     this.buildEmbed();
     // Do stupid play for one second to get duration.
+    // PILE ON THE PENUT BUTTER KLUDGE
+    player.setVolume(0);
     player.play();
     this.playerInterval = setInterval(this.stopPlayer, 1000); 
   },
@@ -80,7 +82,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     if (player.getPosition() > 0) {
       clearInterval(this.playerInterval);
       player.stop();
-    }
+      player.setVolume(.5);
+    }i
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
