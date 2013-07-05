@@ -9,9 +9,16 @@ Drupal.shareBar.models = {};
 // Extremely simple model to act as storage for player state and various resources.
 Drupal.shareBar.models.shareBar = Backbone.Model.extend({
   initialize : function() {
+    _.bindAll(this, 'onReady', 'onPlay');
     player = this.get('player');
-    player.onReady(this.trigger('onReady'));
-    player.onPlay(this.trigger('onPlay'));
+    player.onReady(this.onReady);
+    player.onPlay(this.onPlay);
+  },
+  onReady: function(){
+    this.trigger('onReady');
+  },
+  onPlay: function(){
+    this.trigger('onPlay');
   }
 }); 
 // Views:
