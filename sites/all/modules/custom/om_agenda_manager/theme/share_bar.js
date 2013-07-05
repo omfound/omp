@@ -68,6 +68,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.buildEmbed();
   },
   toggleInterface : function(e) {
+    console.log(this);
     console.log(this.shareBarModel.get('interfaceHeight'));
     if (this.toggleState == false) {
       this.toggleState = true;
