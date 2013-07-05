@@ -123,6 +123,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
     url += '&embedOutPoint=' + this.shareBarModel.get('embedOutPoint');
     this.shareBarModel.set('embedUrl', url);
+    url = "<iframe height='" + this.shareBarModel.get('height')  + "' width='" + this.shareBarModel.get('width')  + "' frameborder='0' scrolling='no' src='" + url + "'></iframe>";
     $(this.el).find('input.embed').val(url);
   }
 });
