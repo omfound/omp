@@ -8,6 +8,10 @@ function om_dashboard_permission() {
       'title' => t('Access Dashboard'), 
       'description' => t('Access the dashboard page.'),
     ),
+    'administer dashboards' => array(
+      'title' => t('Administer Dashboards'),
+      'description' => t('Administer dashboard panes'),
+    ),
   );
 }
 
@@ -20,24 +24,53 @@ function om_dashboard_menu() {
     'title' => t('My Dashboard'),
     'page callback' => 'om_dashboard_page',
     'access arguments' => array('access dashboard'),
-    'type' => MENU_NORMAL_ITEM
+    'type' => MENU_NORMAL_ITEM,
   );
   $items['dashboard/%om_dashboard_pane'] = array(
     'title' => t('My Dashboard'),
     'page callback' => 'om_dashboard_pane_page',
     'page arguments' => array(1),
     'access arguments' => array('access dashboard'),
-    'type' => MENU_CALLBACK
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/om/dashboard-panes'] = array(
+    'title' => t('Administer Dashboard Panes'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_dashboard_admin_form'), 
+    'access arguments' => array('administer dashboards'),
+    'type' => MENU_NORMAL_ITEM,
   );
   $panes = om_dashboard_get_panes();
   if (!empty($panes)) {
-    foreach ($panes AS $pane) {
-      if (isset($pane['menu'])) {
+    foreach ($panes AS $key => $pane) {
+      if (isset($pane['menu']) && variable_get('om_dashboard_item_'.$key, TRUE)) {
         $items += $pane['menu'];
       }
     }
   }
   return $items;
+}
+
+function om_dashboard_admin_form() {
+  $form = array();
+  $form['om_dashboard_form_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Open Media Dashboard Panes'),
+    '#suffix' => '</h2>'
+  );
+  $form['om_dashboard_form_help'] = array(
+    '#markup' => t('Use the checkboxes below to disable or enable available dashboard panes.')
+  );
+  $panes = om_dashboard_get_panes();
+  foreach ($panes as $key => $pane) {
+    $form_item = 'om_dashboard_item_'.$key;
+    $form[$form_item] = array(
+      '#title' => $pane['title'],
+      '#type' => 'checkbox',
+      '#default_value' => variable_get($form_item, true),
+    );
+  } 
+  return system_settings_form($form);
 }
 
 /**
@@ -77,8 +110,10 @@ function om_dashboard_page() {
   drupal_add_js(drupal_get_path('module', 'om_dashboard') . '/js/dashboard-masonry.js', $options);
   $panes = om_dashboard_get_panes();
   $rendered_panes = "";
-  foreach ($panes AS $pane) {
-    $rendered_panes .= om_dashboard_render_pane($pane);
+  foreach ($panes AS $key => $pane) {
+    if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+      $rendered_panes .= om_dashboard_render_pane($pane);
+    }
   }
   $output = theme('om_dashboard_page', array('panes' => $rendered_panes));
   return $output;
@@ -96,8 +131,10 @@ function om_dashboard_theme($existing, $type, $theme, $path) {
   );
   $panes = om_dashboard_get_panes();
   if (!empty($panes)) {
-    foreach ($panes AS $pane) {
-      $themes += $pane['theme'];
+    foreach ($panes AS $key => $pane) {
+      if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+        $themes += $pane['theme'];
+      }
     }
   }
   return $themes;

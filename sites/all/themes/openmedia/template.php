@@ -98,11 +98,11 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
         $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
-
     if (empty($video)) {
       //default jwplayer code
       om_show_jwplayer_include($variables);
       $video = '<div id="jwplayer-0">Loading video...</div>';
+      //$video .= theme('om_show_share_bar');
     }
 
     $variables['video'] = $video;

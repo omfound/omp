@@ -19,6 +19,8 @@
 
 #membership-header li {
   list-style: none;
+  font-size: 110%;
+  margin: 10px 0;
 }
 
 .section-membership h1#page-title {
@@ -33,7 +35,7 @@
 }
 
 .section-membership #content td {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #F4F4F4;
   padding: 5px 0;
 }
 
@@ -52,7 +54,7 @@
 .section-membership #content th,
 .section-membership td.feature-no {
   background-color: #A89F94;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #F4F4F4;
 }
 .section-membership #content th,
 .section-membership #content td.feature {
@@ -86,6 +88,7 @@
   text-align: center;
   padding: 0;
   color: #FFFFFF;
+  font-size: 11px;
 }
 
 .section-membership #content td.action a:link,

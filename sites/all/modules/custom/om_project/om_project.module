@@ -154,6 +154,14 @@ function om_project_form_alter(&$form, &$form_state, $form_id) {
   if(!in_array('administrator', $user->roles)) {
     $form['field_old_project_id']['#type'] = 'hidden';
   }
+
+  /** these fields are used programmatically so we hide them **/
+  if ($form_id == 'taxonomy_form_term') {
+    if ($form['#vocabulary']->machine_name == 'themes') {
+      $form['field_om_live_show_status']['#access'] = FALSE;
+      $form['field_om_live_show']['#access'] = FALSE;
+    }
+  }
 }
 
 /**

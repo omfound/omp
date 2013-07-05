@@ -46,10 +46,20 @@ function om_admin_menu_admin_menu_output_build(&$content) {
 
   //Government User
   $content['menu']['gov'] = array(
-    '#title' => t('Themes'),
+    '#title' => t('Site Configuration'),
     '#access' => om_admin_menu_role_access(array('Gov Administrator')),
     '#href' => 'admin/structure/taxonomy/themes',
     '#weight' => '-40',
+  );
+  $content['menu']['gov']['themes'] = array(
+    '#title' => t('Themes'),
+    '#access' => om_admin_menu_role_access(array('Gov Administrator')),
+    '#href' => 'admin/structure/taxonomy/themes',
+  );
+  $content['menu']['gov']['agenda-config'] = array(
+    '#title' => t('Archive Page Configuration'),
+    '#access' => om_admin_menu_role_access(array('Gov Administrator')),
+    '#href' => 'admin/config/om/agenda-manager',
   );
 
   //Class Administrators

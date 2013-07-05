@@ -30,18 +30,43 @@ function om_theme_assets_preprocess_om_round_social_media(&$variables) {
 function om_theme_assets_preprocess_om_site_links(&$variables) {
   global $user;
   $links = array();
+  $options = array();
   if ($user->uid > 0) {
-    $links[] = l('Logout', 'user/logout') . ' | ';
-    $clean_name = strtolower(str_replace(' ', '-', $user->name));
-    $links[] = l('Profile', 'users/' . $clean_name) . ' | ';
+    if (variable_get('om_loginout_link', TRUE)) {
+      $options['attributes']['class'] = array('om-logout');
+      $links[] = l('Logout', 'user/logout', $options);
+    }
+    if (variable_get('om_profile_link', TRUE)) {
+      $options['attributes']['class'] = array('om-profile');
+      $clean_name = strtolower(str_replace(' ', '-', $user->name));
+      $links[] = l('Profile', 'users/' . $clean_name, $options);
+    }
   }
   else {
-    $links[] = l('Login', 'user') . ' | ';
-    $links[] = l('Register', 'membership') . ' | ';
+    if (variable_get('om_loginout_link', TRUE)) {
+      $options['attributes']['class'] = array('om-login');
+      $links[] = l('Login', 'user', $options);
+    }
+    if (variable_get('om_register_link', TRUE)) {
+      $options['attributes']['class'] = array('om-membership');
+      $links[] = l('Register', 'membership', $options);
+    }
   }
-  $links[] = l('Help', 'help');
-  if (drupal_valid_path('cart')) {
-    $links[] = ' | '.l('Shopping Cart', 'cart');
+  if (variable_get('om_help_link', TRUE)) {
+    $options['attributes']['class'] = array('om-help');
+    $links[] = l('Help', 'help', $options);
+  }
+  if (variable_get('om_cart_link', TRUE)) {
+    if (drupal_valid_path('cart')) {
+      $options['attributes']['class'] = array('om-cart');
+      $links[] = l('Shopping Cart', 'cart', $options);
+    }
+  }
+  $last = count($links) - 1;
+  foreach ($links as $key => $link) {
+    if ($key != $last) {
+      $links[$key] = $link.' | ';
+    }
   }
   $variables['links'] = $links;
 }
@@ -76,6 +101,10 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
 
   $variables['header_shadow_color'] = variable_get('header_shadow_color', '');
   $variables['content_border_color'] = variable_get('content_border_color', '');
+
+  $variables['om_dashboard_title_color'] = variable_get('om_dashboard_title_color', '');
+  $variables['om_dashboard_pane_bg'] = variable_get('om_dashboard_pane_bg', '');
+  $variables['om_dashboard_shadow_color'] = variable_get('om_dashboard_shadow_color', '');
 
   $texture_fid = variable_get('background_texture', '');
   if (is_numeric($texture_fid)) {
