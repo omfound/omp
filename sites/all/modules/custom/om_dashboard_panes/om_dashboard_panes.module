@@ -120,3 +120,15 @@ function om_dashboard_panes_get_users_shows($user = NULL) {
   $result = $query->execute();
   return $result->fetchAll();
 }
+
+function om_dashboard_panes_get_users_reservations($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $query = db_select('node', 'node');
+  $query->fields('node', array('nid', 'title', 'created'));
+  $query->condition('uid', $user->uid, '=');
+  $query->condition('type', 'om_show', '=');
+  $result = $query->execute();
+  return $result->fetchAll();
+}
