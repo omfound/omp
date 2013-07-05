@@ -455,7 +455,9 @@ function om_membership_adjust_existing_memberships() {
     $query->condition('uid', 14351, '=');
     $resource = $query->execute();
     while ($row = $resource->fetchObject()) {
+      dsm($row);
       $memberships = om_membership_get_user_membership_orders($row, FALSE);
+      dsm($memberships);
       if (!empty($memberships)) {
         foreach($memberships AS $membership) {
           $membership_products = om_membership_order_contains_membership($membership);
