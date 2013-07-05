@@ -100,10 +100,10 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     position = player.getPosition();
     position = parseInt(position);
     if ($(e.target).hasClass('in-point')) {
-      $(this.el).find('input.in-point').val(position);
+      $(this.el).find('input.in-point').val(position).trigger('change');
     }
     if ($(e.target).hasClass('out-point')) {
-      $(this.el).find('input.out-point').val(position);
+      $(this.el).find('input.out-point').val(position).trigger('change');
     } 
   },
   setDurationOnce: function() {
@@ -112,7 +112,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
       player = this.shareBarModel.get('player');
       duration = player.getDuration();
       duration = parseInt(duration);
-      $(this.el).find('input.out-point').val(duration);
+      $(this.el).find('input.out-point').val(duration).trigger('change');
     }
   },
   buildEmbed : function() {
