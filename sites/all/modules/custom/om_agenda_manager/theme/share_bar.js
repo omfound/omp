@@ -24,7 +24,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Attach this view to the dom element.
     this.setElement(domInterface);
     this.initializeInterface();
-  }
+  },
   initializeInterface : function() {
     
   }
