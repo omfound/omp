@@ -29,12 +29,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.setElement(domInterface);
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
-    // Set width and height.
-    this.shareBarModel.set('interfaceWidth', 960);
-    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
-    this.shareBarModel.set('width', player.config.width);
-    this.shareBarModel.set('height', player.config.height);
-    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
     // Set toggle to closed.
     this.toggleState = false;
     // Hijack the dom interface
@@ -47,18 +41,24 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     }
     url = url.split("?");
     url = url[0];
-    this.url = url;
-    console.log(this.url);
+    this.shareBarModel.set('url', url);
+    // Set width and height.
+    player = this.shareBarModel.get('player');
+    this.shareBarModel.set('interfaceWidth', 960);
+    this.shareBarModel.set('interfaceHeight', $(this.el).find('form').outerHeight());
+    this.shareBarModel.set('width', player.config.width);
+    this.shareBarModel.set('height', player.config.height);
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
-    // Set Default values.
+    // Set Default interface values.
     $(this.el).find('input.in-point').val(0);
-    player = this.shareBarModel.get('player');
     duration = player.getDuration();
     duration = parseInt(duration);
     $(this.el).find('input.end-point').val(duration);
-    $(this.el).find('input.width').val(this.shareBarModel.get('width'));
-    $(this.el).find('input.height').val(this.shareBarModel.get('height'));
+    $(this.el).find('input.width').val(player.config.width);
+    $(this.el).find('input.height').val(player.config.height);
+    $(this.el).find('.facebook').val(url);
+    this.buildEmbed();
   },
   toggleInterface : function(e) {
     if (this.toggleState == false) {
@@ -79,7 +79,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     key = $(e.target).attr('name');
     value = $(e.target).val();
     this.shareBarModel.set(key, value);
-    this.buildUrls();
+    this.buildEmbed();
   },
   setPoint : function(e) {
     player = this.shareBarModel.get('player');
@@ -92,8 +92,14 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
       $(this.el).find('input.out-point').val(position);
     } 
   },
-  buildUrls : function() {
-    
+  buildEmbed : function() {
+    url = this.shareBarModel.set('url', url);
+    url += '?embed=true&width=' + this.shareBarModel.get('width');
+    url += '&height' + this.shareBarModel.get('height');
+    url += '&embedInPoint' + this.shareBarModel.get('embedInPoint');
+    url += '&embedOutPoint' + this.shareBarModel.get('embedOutPoint');
+    this.shareBarModel.set('embedUrl', url);
+    $(this.el).find('input.embed').val(url);
   }
 });
 
