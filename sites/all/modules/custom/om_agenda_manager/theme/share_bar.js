@@ -60,12 +60,14 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   setPoint : function(e) {
     player = this.shareBarModel.get('player');
-    console.log(player.getPosition());
+    position = player.getPosition();
     if ($(e.target).hasClass('in-point')) {
-      //this.shareBarModel.set('inPoint');  
+      this.shareBarModel.set('embedInPoint', position);
+      $(this.el).find('input.in-point').val(position);
     }
     if ($(e.target).hasClass('out-point')) {
-      //this.shareBarModel.set('outPoint');
+      this.shareBarModel.set('embedOutPoint', position);
+      $(this.el).find('input.out-point').val(position);
     } 
   }
 });
