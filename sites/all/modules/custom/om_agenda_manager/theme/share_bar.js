@@ -18,19 +18,22 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
-    _.bindAll(this, 'initializeInterface');
+    _.bindAll(this, 'initializeInterface', 'toggleInterface');
     // Attach this view to the dom element.
     this.setElement(domInterface);
     // Instantiate new sharebar model.
     // This model will automatically bind itself to the player object.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
     // We get the width from the player.
-    this.shareBarModel.set('height', $(this.el).find('form').height());
+    this.shareBarModel.set('height', $(this.el).find('.inner').height());
     // Hijack the dom interface
     this.initializeInterface();
   },
   initializeInterface : function() {
    console.log(this.shareBarModel.get('height')); 
+  },
+  toggleInterface : function() {
+    
   }
 });
 
