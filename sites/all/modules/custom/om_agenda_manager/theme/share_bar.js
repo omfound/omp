@@ -77,7 +77,9 @@ Drupal.behaviors.shareBar = {
    $target = $('#session-video-embed-tray', context);
    player = jwplayer();
    player.onReady(
-     function() {alert('ready');}
+     function() {
+       console.log(player.getPosition());
+     }
    );
    // Initialize tray.
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
