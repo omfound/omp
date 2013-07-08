@@ -467,8 +467,10 @@ function om_membership_adjust_existing_memberships() {
               $user = user_load($row->uid);
               om_membership_remove_user_role($user);
               $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
-              $user->roles[$role->rid] = $role->name;
-              user_save($user);
+              if (!empty($role)) {
+                $user->roles[$role->rid] = $role->name;
+                user_save($user);
+              }
             }
           }
         }
@@ -552,10 +554,10 @@ function om_membership_order_contains_membership($commerce_order, $paid_only = f
       if (is_object($product) && $product->type == 'membership_plan') {
         if (!$paid_only) {
           $memberships[] = $product;
-	      }
-	      elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
-	        $memberships[] = $product;
-	      }
+	}
+	elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
+          $memberships[] = $product;
+        }
       }
     }
   }
@@ -789,6 +791,9 @@ function om_membership_cron() {
   om_membership_validate_all_org_sub_members();
 }
 
+/**
+ * Implements hook_token_info
+ */
 function om_membership_token_info() {
   $info['tokens']['user']['org_user_login_link'] = array(
     'name' => t('Organization User Login Link'),
@@ -798,11 +803,13 @@ function om_membership_token_info() {
   return $info;
 }
 
+/**
+ * Implements hook_tokens
+ */
 function om_membership_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
   if ($type == 'user' && !empty($data['user'])) {
     $account = $data['user'];
-
     foreach ($tokens as $name => $original) {
       switch ($name) {
       case 'org_user_login_link':
@@ -811,6 +818,24 @@ function om_membership_tokens($type, $tokens, array $data = array(), array $opti
       }
     }
   }
-
   return $replacements;
+}
+
+function om_membership_sync_members() {
+  $query = db_select('commerce_order', 'co');
+  $query->fields('co', array('order_id'));
+  $query->leftJoin('users', 'u', 'co.uid=u.uid');
+  $resource = $query->execute();
+  while ($row = $resource->fetchAssoc()) {
+    $order = commerce_order_load($row['order_id']);
+    $is_membership = om_membership_order_contains_membership($order);
+    if (!empty($is_membership)) {
+      try {
+        om_membership_grant_user_role($order);
+      }
+      catch (Exception $e) {
+        drupal_set_message("Order ID: " . $row['order_id'] . " failed. ");
+      }
+    }
+  }
 }
