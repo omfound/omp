@@ -116,10 +116,6 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       } 
     }
     $variables['video'] = $video;
-  }else{
-    $video['status'] = 'processing';
-    $video['image'] = $show_status_images['processing'];
-    $variables['video'] = $video;
   }
 }
 
