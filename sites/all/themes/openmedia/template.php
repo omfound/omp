@@ -117,8 +117,6 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
     }
     $variables['video'] = $video;
   }
-  dsm('video:');
-  dsm($video);
 }
 
  /**

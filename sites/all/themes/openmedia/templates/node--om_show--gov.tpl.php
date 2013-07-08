@@ -1,6 +1,5 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-    <?php print 'testing:'; ?>
-    <?php print_r($video); ?>
+    <?php dsm($video); ?>
     <?php $show_status_images = om_theme_assets_show_status_images(); ?>
     <h2><?php print $node->title; ?></h2>
     <?php if (isset($video) && $video['status'] != 'processing'): ?>
