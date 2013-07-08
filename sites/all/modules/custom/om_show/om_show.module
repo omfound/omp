@@ -245,6 +245,8 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
       $jwplayer[$key]['image'] = $img_path;
       $jwplayer[$key]['width'] = $width;
       $jwplayer[$key]['height'] = $height;
+      $jwplayer[$key]['embedInPoint'] = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
+      $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }
   }
 

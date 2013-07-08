@@ -21,7 +21,7 @@ function om_jwplayer_preprocess_om_show_share_bar(&$variables) {
 function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $css_path = '/' . drupal_get_path('module', 'om_jwplayer') . '/theme/share_page.css';
   $variables['styles'] = '<link type="text/css" rel="stylesheet" href="' . $css_path .'" media="all" />';
-  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  /*drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_page.js', array('type' => 'file', 'group' => JS_DEFAULT));
   $params = array();
   $params['width'] = isset($_GET['width']) ? $_GET['width'] : '420';
@@ -29,6 +29,9 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $params['embedInPoint'] = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
   $params['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
   $params = array('om_jwplayer' => $params);
-  drupal_add_js($params, array('type' => 'setting'));
+  drupal_add_js($params, array('type' => 'setting'));*/
+  $width = isset($_GET['width']) ? $_GET['width'] : '420';
+  $height = isset($_GET['height']) ? $_GET['height'] : '340';
+  om_show_jwplayer_include($variables['node'], TRUE, $width, $height);
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
