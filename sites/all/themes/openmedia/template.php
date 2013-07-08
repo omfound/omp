@@ -86,6 +86,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $show_status_images = om_theme_assets_show_status_images();
 
   if (!empty($url)) {
+    unset($video);
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
