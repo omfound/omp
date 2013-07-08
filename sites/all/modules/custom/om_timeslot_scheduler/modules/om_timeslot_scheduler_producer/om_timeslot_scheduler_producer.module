@@ -342,7 +342,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   // @TODO this is only grabbing 30 minute timeslots.
   $dates = om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid);
   $date_options = array();
-  dsm($dates); 
+  //dsm($dates); 
   $query = db_select('node', 'n');
   $query->fields('n', array('title'));
   $query->condition('nid', $timeslot_nid, '=');
