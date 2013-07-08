@@ -24,7 +24,6 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 // View to handle most of the interaction for the sharebar.
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   events : {
-    // Prevent form submit.
     'submit form' : 'preventSubmit',
     'click .show-hide' : 'toggleInterface',
     'change input.in-point' : 'interfaceChange',
@@ -32,7 +31,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     'change input.width' : 'interfaceChange',
     'change input.height' : 'interfaceChange',
     'click label.in-point' : 'setPoint',
-    'click label.out-point' : 'setPoint'
+    'click label.out-point' : 'setPoint',
+    'focus input.embed' : 'selectAllText',
+    'focus input.facebook' : 'selectAllText'
   },
   initialize : function(player, domInterface) {
     // Standard bindall for this view.
@@ -103,6 +104,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   preventSubmit : function(e) {
     e.preventDefault();
+  },
+  selectAllText : function(e) {
+    $(e.target).select();
   },
   interfaceChange : function(e) {
     key = $(e.target).attr('name');
