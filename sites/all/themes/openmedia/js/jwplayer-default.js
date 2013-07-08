@@ -4,7 +4,7 @@
       var i;
       for(i = 0; i < Drupal.settings.jwplayer.length; ++i) {
         if (typeof Drupal.settings.jwplayer[i].playlist !== "undefined") {
-          player = jwplayer("jwplayer-"+i).setup({
+          var player = jwplayer("jwplayer-"+i).setup({
             playlist: Drupal.settings.jwplayer[i].playlist,
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
@@ -17,7 +17,7 @@
           });
         }
         else{
-         player = jwplayer("jwplayer-" + i).setup({
+          var player = jwplayer("jwplayer-" + i).setup({
             file: Drupal.settings.jwplayer[i].path,
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
@@ -29,15 +29,11 @@
         }
         console.log(Drupal.settings.jwplayer[i]);
         if (Drupal.settings.jwplayer[i].embedOutPoint) {
-          console.log('made it here');
           player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
           interval = setInterval(
-            (function(player) {
-              return function() {
-                console.log('here weeee go');
-                console.log(player);
-              }
-            })(this),
+            function() {
+             console.log(player); 
+            }, 
           1000);
         }
       }
