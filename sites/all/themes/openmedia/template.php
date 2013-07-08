@@ -239,10 +239,10 @@ function openmedia_preprocess_node__om_show(&$variables) {
       if (!empty($livestream_status) && $livestream_status == 'active') {
         $video_info['status'] = 'live';
         $video_info['image'] = $show_status_images['live']; 
+      }else{
+        $video_info['status'] = 'ondemand';
+        $video_info['image'] = $show_status_images['ondemand'];
       }
-    }else{
-      $video_info['status'] = 'ondemand';
-      $video_info['image'] = $show_status_images['ondemand'];
     }
   }else{
     $video_info['status'] = 'processing';
