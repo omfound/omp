@@ -86,7 +86,6 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $show_status_images = om_theme_assets_show_status_images();
 
   if (!empty($url)) {
-    unset($video);
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
@@ -108,7 +107,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       om_show_jwplayer_include($variables);
       $vid_content = '<div id="jwplayer-0">Loading video...</div>';
       if (arg(2) != 'agenda_manager') {
-        $vid_content .= theme('om_show_share_bar');
+        //$vid_content .= theme('om_show_share_bar');
       }
       $video['content'] = $vid_content;
       if (arg(2) != 'agenda_manager') {
