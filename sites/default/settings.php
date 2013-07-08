@@ -615,8 +615,8 @@ else {
 
     // Redirect to www
     if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
-      dsm('firing server');
-      dsm('subdomain: '.$subdomain);
+      print_r('firing server');
+      print_r('subdomain: '.$subdomain);
       header('HTTP/1.0 301 Moved Permanently'); 
       //if (empty($subdomain)) {
       //  header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
