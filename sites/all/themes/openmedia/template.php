@@ -83,7 +83,6 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
-  $show_status_images = om_theme_assets_show_status_images();
 
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
@@ -97,23 +96,16 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           $live_height = 300;
         }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video['content'] = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
-        $video['status'] = 'live';
-        $video['image'] = $show_status_images['live'];
+        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 
     if (empty($video)) {
       //default jwplayer code
       om_show_jwplayer_include($variables);
-      $vid_content = '<div id="jwplayer-0">Loading video...</div>';
+      $video = '<div id="jwplayer-0">Loading video...</div>';
       if (arg(2) != 'agenda_manager') {
-        //$vid_content .= theme('om_show_share_bar');
+        $video .= theme('om_show_share_bar');
       }
-      $video['content'] = $vid_content;
-      if (arg(2) != 'agenda_manager') {
-        $video['status'] = 'ondemand';
-        $video['image'] = $show_status_images['ondemand'];
-      } 
     }
     $variables['video'] = $video;
   }
@@ -238,6 +230,12 @@ function openmedia_preprocess_node__om_show(&$variables) {
   }
 
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
+  $show_status_images = om_theme_assets_show_status_images();
+  $video_info = array();
+  dsm($variables['video']);
+  //$youtube_id = om_show_youtube_id($url);
+  //om_show_youtube_livestream_status($youtube_id);
+
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
   $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);
   // Show details area (name and picture are already included in vars)
