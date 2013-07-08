@@ -9,6 +9,12 @@ function om_jwplayer_theme($existing, $type, $theme, $path) {
       'template' => 'share_bar',
       'file' => 'theme.inc',
       'variables' => array(),
+    ),
+    'om_show_share_page' => array(
+      'path' => $path . '/theme',
+      'template' => 'share_page',
+      'file' => 'theme.inc',
+      'variables' => array('node' => ''),
     )
   );
 }
@@ -28,7 +34,7 @@ function om_jwplayer_menu() {
 }
 
 function om_jwplayer_share_show($node) {
- return array();
+  print theme('om_show_share_page', array('node' => $node));
 }
 
 
