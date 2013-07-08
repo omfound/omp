@@ -11,4 +11,24 @@ function om_jwplayer_theme($existing, $type, $theme, $path) {
       'variables' => array(),
     )
   );
-} 
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_jwplayer_menu() {
+  $items = array();
+  $items['node/%node/share'] = array(
+    'page callback' => 'om_jwplayer_share_show',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function om_jwplayer_share_show($node) {
+ return array();
+}
+
+
