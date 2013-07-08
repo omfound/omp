@@ -18,7 +18,9 @@
           if (Drupal.settings.jwplayer[i].embedInPoint) {
             player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
           }
+          console.log(Drupal.settings.jwplayer[i]);
           if (Drupal.settings.jwplayer[i].embedOutPoint) {
+            console.log('made it here');
             player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
             interval = setInterval(
               (function(player) {
