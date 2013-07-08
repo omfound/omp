@@ -29,6 +29,6 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $params = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
   $params = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
   $params = array('om_jwplayer' => $params);
-  drupal_add_js($params, array('type' => 'settings'));
+  drupal_add_js($params, array('type' => 'setting'));
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
