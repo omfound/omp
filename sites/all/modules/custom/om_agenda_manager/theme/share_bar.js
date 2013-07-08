@@ -55,7 +55,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     }
     url = url.split("?");
     url = url[0];
+    console.log(url);
     this.shareBarModel.set('url', url);
+    console.log(url);
     // Set width and height.
     player = this.shareBarModel.get('player');
     this.shareBarModel.set('interfaceWidth', 960);
@@ -65,13 +67,13 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
+    console.log(url);
+    $(this.el).find('.facebook').val(url);
     $(this.el).find('input.in-point').val(0).trigger('change');
     $(this.el).find('input.out-point').val(0).trigger('change');
     $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
-    console.log(url);
-    $(this.el).find('.facebook').val(url);
-    //this.buildEmbed();
+    this.buildEmbed();
     // Do stupid play for one second to get duration.
     // PILE ON THE PENUT BUTTER KLUDGE
     player.setVolume(0);
