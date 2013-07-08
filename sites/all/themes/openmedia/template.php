@@ -83,6 +83,8 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
+  $show_status_images = om_theme_assets_show_status_images();
+
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
@@ -97,6 +99,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
         $video['content'] = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
         $video['status'] = 'live';
+        $video['image'] = $show_status_images['live'];
       }
     } 
     if (empty($video)) {
@@ -109,9 +112,14 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $video['content'] = $vid_content;
       if (arg(2) != 'agenda_manager') {
         $video['status'] = 'ondemand';
+        $video['image'] = $show_status_images['ondemand'];
       } 
     }
 
+    if (empty($url)) {
+      $video['status'] = 'processing';
+      $video['image'] = $show_status_images['processing'];
+    }
     $variables['video'] = $video;
   }
 }

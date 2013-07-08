@@ -29,6 +29,7 @@ function om_theme_assets_admin_form() {
     '#default_value' => variable_get('theme_banner', ''),
     '#upload_location' => 'public://theme_assets/',
   );
+
   /**
    * Calls to action
    */
@@ -251,6 +252,39 @@ function om_theme_assets_admin_form() {
   ); 
 
   /**
+   * Main banner
+   */
+  $form['show_status_images_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Show Status Images'),
+    '#suffix' => '</h2>'
+  );
+  $form['show_status_images_help'] = array(
+    '#markup' => t('Images shown on the show page while it is live or processing.')
+  );
+  $form['show_status_images_fieldset'] = $fieldset;
+
+  $form['show_status_images_fieldset']['#title'] = t('Show Status Images');
+  $form['show_status_images_fieldset']['show_processing'] = array(
+    '#title' => t('Show Processing Image'),
+    '#type' => 'managed_file',
+    '#default_value' => variable_get('show_processing', ''),
+    '#upload_location' => 'public://theme_assets/',
+  );
+  $form['show_status_images_fieldset']['show_ondemand'] = array(
+    '#title' => t('Show OnDemand Image'),
+    '#type' => 'managed_file',
+    '#default_value' => variable_get('show_ondemand', ''),
+    '#upload_location' => 'public://theme_assets/',
+  );
+  $form['show_status_images_fieldset']['show_live'] = array(
+    '#title' => t('Show Live Image'),
+    '#type' => 'managed_file',
+    '#default_value' => variable_get('show_live', ''),
+    '#upload_location' => 'public://theme_assets/',
+  );
+
+  /**
    * Adding admin section
    */
   if (user_access('admin omp theme')) {
@@ -437,7 +471,7 @@ function _om_theme_assets_url_validate($element, &$form_state) {
  * Submit handler for saving files.
  */
 function om_theme_assets_admin_form_submit(&$form, &$form_state) {
-  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3', 'background_texture');
+  $file_elements = array('theme_banner', 'call_to_action_1', 'call_to_action_2', 'call_to_action_3', 'background_texture', 'show_live', 'show_processing', 'show_ondemand');
   foreach ($file_elements AS $file_field) {
     if (!empty($form_state['values'][$file_field])) {
       global $user;
