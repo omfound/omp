@@ -19,10 +19,11 @@
             player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
           }
           if (Drupal.settings.jwplayer[i].embedOutPoint) {
+            player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
             interval = setInterval(
               (function(player) {
                 return function() {
-                   console.log(player);
+                  console.log(player);
                 }
               })(this),
             1000);
