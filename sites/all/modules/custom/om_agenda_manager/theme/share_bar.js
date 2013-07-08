@@ -50,7 +50,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   initializeInterface : function() {
     url = document.URL;
-    if (url.indexOf('embed=true') > 0) {
+    if (url.indexOf('iframe_mode=true') > 0) {
       this.remove();
     }
     url = url.split("?");
@@ -136,7 +136,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   buildEmbed : function() {
     // Build iframe embed
     url = this.shareBarModel.get('url', url);
-    url += '?embed=true&width=' + this.shareBarModel.get('width');
+    url += '?iframe_mode=true&width=' + this.shareBarModel.get('width');
     url += '&height=' + this.shareBarModel.get('height');
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
     url += '&embedOutPoint=' + this.shareBarModel.get('embedOutPoint');
