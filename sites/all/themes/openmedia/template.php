@@ -95,16 +95,21 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           $live_height = 300;
         }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video['content'] = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video['status'] = 'live';
       }
     } 
     if (empty($video)) {
       //default jwplayer code
       om_show_jwplayer_include($variables);
-      $video = '<div id="jwplayer-0">Loading video...</div>';
+      $vid_content = '<div id="jwplayer-0">Loading video...</div>';
       if (arg(2) != 'agenda_manager') {
-        $video .= theme('om_show_share_bar');
+        $vid_content .= theme('om_show_share_bar');
       }
+      $video['content'] = $vid_content;
+      if (arg(2) != 'agenda_manager') {
+        $video['status'] = 'ondemand';
+      } 
     }
 
     $variables['video'] = $video;
