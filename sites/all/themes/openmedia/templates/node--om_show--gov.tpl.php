@@ -12,6 +12,7 @@
       <div id="video-status video-live"><?php print $video['image']; ?></div>
       <?php elseif ($video['status'] == 'ondemand'): ?>
       <div id="video-status video-ondemand"><?php print $video['image']; ?></div>
+      <?php endif; ?>
     <?php endif; ?>
 
     <?php if (!empty($node->field_om_calendar)) { ?>
