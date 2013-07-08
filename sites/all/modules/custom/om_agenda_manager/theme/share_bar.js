@@ -55,9 +55,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     }
     url = url.split("?");
     url = url[0];
-    console.log(url);
     this.shareBarModel.set('url', url);
-    console.log(url);
     // Set width and height.
     player = this.shareBarModel.get('player');
     this.shareBarModel.set('interfaceWidth', 960);
@@ -67,7 +65,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
-    console.log(url);
+    // Set url before any of the other fields. Otherwise it gets messed up
+    // by the change events fired around rebuilding the url.
     $(this.el).find('.facebook').val(url);
     $(this.el).find('input.in-point').val(0).trigger('change');
     $(this.el).find('input.out-point').val(0).trigger('change');
