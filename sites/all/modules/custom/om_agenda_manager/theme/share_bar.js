@@ -1,15 +1,14 @@
 (function ($, Drupal, window, document, undefined) {
-
 // Namespace global containers
 Drupal.shareBar = {};
 Drupal.shareBar.views = {};
 Drupal.shareBar.models = {};
-
 // Models:
 // Extremely simple model to act as storage for player state and various resources.
 Drupal.shareBar.models.shareBar = Backbone.Model.extend({
   initialize : function() {
     _.bindAll(this, 'onReady', 'onPlay');
+    // Bind player events to this model.
     player = this.get('player');
     player.onReady(this.onReady);
     player.onPlay(this.onPlay);
@@ -43,6 +42,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).hide();
     // Instantiate new sharebar model.
     this.shareBarModel = new Drupal.shareBar.models.shareBar({'player' : player});
+    // Listen for player events.
     this.shareBarModel.on('onReady', this.initializeInterface, this);
     this.shareBarModel.on('onPlay', this.setDurationOnce, this);
     // Set toggle to closed.
@@ -60,8 +60,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     player = this.shareBarModel.get('player');
     this.shareBarModel.set('interfaceWidth', 960);
     this.shareBarModel.set('interfaceHeight', 68);
-    console.log($(this.el).find('.inner').outerHeight());
-    this.shareBarModel.set('width', player.config.width);
+    this.shareBarModel.set('width', 420);
     this.shareBarModel.set('height', player.config.height);
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
@@ -88,6 +87,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     }
   },
   toggleInterface : function(e) {
+    // Open or close the interface.
     if (this.toggleState == false) {
       this.toggleState = true;
       $(e.target).text('- Hide');
@@ -109,6 +109,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.buildEmbed();
   },
   setPoint : function(e) {
+    // Set a cuepoint.
     player = this.shareBarModel.get('player');
     position = player.getPosition();
     position = parseInt(position);
@@ -120,6 +121,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     } 
   },
   setDurationOnce: function() {
+    // Event handler to be tied to onPlay from the video player.
+    // After the file has been buffered once the duration is availabble.
+    // Snag it and stop listening. This could be combined into stop player above.
     player = this.shareBarModel.get('player');
     duration = player.getDuration();
     duration = parseInt(duration);
@@ -128,6 +132,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.off('onPlay', this.setDurationOnce, this);
   },
   buildEmbed : function() {
+    // Build iframe embed
     url = this.shareBarModel.get('url', url);
     url += '?embed=true&width=' + this.shareBarModel.get('width');
     url += '&height=' + this.shareBarModel.get('height');
