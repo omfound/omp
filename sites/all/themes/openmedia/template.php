@@ -89,7 +89,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
-        $live_width = 600;
+        $live_width = 550;
         $live_height = 350;
         if (arg(2) == 'agenda_manager') {
           $live_width = 525;
