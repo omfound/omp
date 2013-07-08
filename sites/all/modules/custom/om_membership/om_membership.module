@@ -829,7 +829,8 @@ function om_membership_unbork_ze_members() {
     $order = commerce_order_load($row['order_id']);
     $is_membership = om_membership_order_contains_membership($order);
     if (!empty($is_membership)) {
-      om_membership_grant_user_role($order);
+      //om_membership_grant_user_role($order);
+      dsm($order);
     }
   }
 }
