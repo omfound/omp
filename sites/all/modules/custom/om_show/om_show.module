@@ -228,9 +228,10 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
       'height' => $height,
     );
 
-  }elseif(!empty($show_field[0]['value'])) {
+  }
+  elseif (!empty($show_field[0]['value'])) {
     $jwplayer = array();
-    foreach($show_field as $key => $info) {
+    foreach ($show_field as $key => $info) {
       if (!valid_url($info['safe_value'], true)) {
         $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
       }
@@ -250,9 +251,9 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
     }
   }
 
-  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js');
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
-  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js');
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
 function om_show_youtube_id($url) {
