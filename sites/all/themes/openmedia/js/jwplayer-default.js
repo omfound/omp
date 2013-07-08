@@ -23,6 +23,7 @@
             interval = setInterval(
               (function(player) {
                 return function() {
+                  console.log('here weeee go');
                   console.log(player);
                 }
               })(this),
