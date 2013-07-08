@@ -193,7 +193,7 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550, $height = 340) {
+function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550, $height = 338) {
   $node = menu_get_object();
   if (!is_object($node)) {
     $nid = $node['nid'];
