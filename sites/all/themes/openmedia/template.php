@@ -232,9 +232,23 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $show_status_images = om_theme_assets_show_status_images();
   $video_info = array();
-  dsm($variables['content']);
-  //$youtube_id = om_show_youtube_id($url);
-  //om_show_youtube_livestream_status($youtube_id);
+  $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
+  if (!empty($url)) {
+    if ($youtube_id = om_show_youtube_id($url)) {
+      $livestream_status = om_show_youtube_livestream_status($youtube_id);
+      if (!empty($livestream_status) && $livestream_status == 'active') {
+        $video_info['status'] = 'live';
+        $video_info['image'] = $show_status_images['live']; 
+      }
+    }else{
+      $video_info['status'] = 'ondemand';
+      $video_info['image'] = $show_status_images['ondemand'];
+    }
+  }else{
+    $video_info['status'] = 'processing';
+    $video_info['image'] = $show_status_images['processing'];
+  }
+  $variables['video_info'] = $video_info;
 
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
   $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);
