@@ -71,7 +71,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.height').val(player.config.height);
     console.log(url);
     $(this.el).find('.facebook').val(url);
-    this.buildEmbed();
+    //this.buildEmbed();
     // Do stupid play for one second to get duration.
     // PILE ON THE PENUT BUTTER KLUDGE
     player.setVolume(0);
