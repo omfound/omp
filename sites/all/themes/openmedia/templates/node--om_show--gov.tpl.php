@@ -4,7 +4,7 @@
     <?php if (isset($video) && $video['status'] != 'processing'): ?>
       <?php print $video['content']; ?>
     <?php else: ?>
-      <?php if (!empty($show_status_images['processing']) { ?>
+      <?php if (!empty($show_status_images['processing'])) { ?>
         <div id="video-status video-processing"><?php print $show_status_images['processing']; ?></div>
       <?php }else{ ?>
         <div id="video-status video-processing">This video is currently processing, please check back later.</div>
