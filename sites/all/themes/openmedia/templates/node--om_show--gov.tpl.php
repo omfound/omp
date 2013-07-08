@@ -9,7 +9,6 @@
       <div id="video-status video-live"><?php print $video['image']; ?></div>
       <?php elseif ($video['status'] == 'ondemand'): ?>
       <div id="video-status video-ondemand"><?php print $video['image']; ?></div>
-      <?php endif; ?>
       <?php elseif ($video['status'] == 'processing'): ?>
         <div id="video-status video-processing">This video is currently processing, please check back later.<?php print $video['image']; ?></div>
       <?php endif; ?>
