@@ -219,6 +219,10 @@
   width: 550px;
   margin-bottom: 20px;
 }
+.node-type-om-show .node #video-status {
+  float: left;
+  width: 410px;
+}
 
 .node-type-om-show #show-left .edit-link-wrapper {
   text-align: right;
