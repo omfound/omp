@@ -612,11 +612,13 @@ else {
     if (count($parts) > 2 && $parts[0] != 'www') {
       $subdomain = $parts[0];
     }
-
+    print_r($subdomain);
+    print_r($parts);
+    print_r($url);
     // Redirect to www
     if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www')) && empty($subdomain)) {
-      header('HTTP/1.0 301 Moved Permanently'); 
-      header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
+      //header('HTTP/1.0 301 Moved Permanently'); 
+      //header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
       exit();
     }
   }
