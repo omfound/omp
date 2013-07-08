@@ -363,7 +363,7 @@ function om_agenda_manager_livestream_update($session_status) {
     }else{
       if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
         $node = node_load($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']);
-        $node->field_om_show_video[$node->language] = array();
+        $node->field_om_show_video[$node->language][0]['value'] = "";
         node_save($node);
       }
       $loaded_term->field_om_live_show = array();
