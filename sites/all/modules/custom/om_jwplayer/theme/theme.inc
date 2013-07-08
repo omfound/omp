@@ -24,10 +24,10 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_page.js', array('type' => 'file', 'group' => JS_DEFAULT));
   $params = array();
-  $params = isset($_GET['width']) ? $_GET['width'] : '420';
-  $params = isset($_GET['height']) ? $_GET['height'] : '340';
-  $params = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
-  $params = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
+  $params['width'] = isset($_GET['width']) ? $_GET['width'] : '420';
+  $params['height'] = isset($_GET['height']) ? $_GET['height'] : '340';
+  $params['embedInPoint'] = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
+  $params['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
   $params = array('om_jwplayer' => $params);
   drupal_add_js($params, array('type' => 'setting'));
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
