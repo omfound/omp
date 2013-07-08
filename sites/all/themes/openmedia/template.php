@@ -232,7 +232,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['video'] = drupal_render($variables['content']['field_om_show_video']);
   $show_status_images = om_theme_assets_show_status_images();
   $video_info = array();
-  dsm($variables['video']);
+  dsm($variables['content']);
   //$youtube_id = om_show_youtube_id($url);
   //om_show_youtube_livestream_status($youtube_id);
 
