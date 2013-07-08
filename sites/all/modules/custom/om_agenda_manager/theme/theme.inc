@@ -13,7 +13,7 @@ function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
         $button .= '<div class="om-live-button stream-online">';
         $live_node = node_load($details['live_nid']);
         $options = array('attributes' => array('class' => 'om-live-button-content'));
-        $button .= l($details['theme'], 'node/'.$live_node->nid, $options);
+        $button .= l($details['theme'].' Currently In Session', 'node/'.$live_node->nid, $options);
         $button .= '</div>';
       }else{
         $button .= '<div class="om-live-button stream-offline">';

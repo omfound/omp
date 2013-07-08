@@ -90,7 +90,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
         $live_width = 550;
-        $live_height = 350;
+        $live_height = 338;
         if (arg(2) == 'agenda_manager') {
           $live_width = 525;
           $live_height = 300;
@@ -239,10 +239,10 @@ function openmedia_preprocess_node__om_show(&$variables) {
       if (!empty($livestream_status) && $livestream_status == 'active') {
         $video_info['status'] = 'live';
         $video_info['image'] = $show_status_images['live']; 
+      }else{
+        $video_info['status'] = 'ondemand';
+        $video_info['image'] = $show_status_images['ondemand'];
       }
-    }else{
-      $video_info['status'] = 'ondemand';
-      $video_info['image'] = $show_status_images['ondemand'];
     }
   }else{
     $video_info['status'] = 'processing';
