@@ -67,7 +67,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Set Default interface values.
     $(this.el).find('input.in-point').val(0).trigger('change');
     $(this.el).find('input.out-point').val(0).trigger('change');
-    $(this.el).find('input.width').val(player.config.width);
+    $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
     $(this.el).find('.facebook').val(url);
     this.buildEmbed();
