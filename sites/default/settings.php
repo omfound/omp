@@ -618,11 +618,11 @@ else {
       dsm('firing server');
       dsm('subdomain: '.$subdomain);
       header('HTTP/1.0 301 Moved Permanently'); 
-      if (empty($subdomain)) {
-        header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
-      }else{
+      //if (empty($subdomain)) {
+      //  header('Location: http://www.' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
+      //}else{
         header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); 
-      }
+      //}
       exit();
     }
   }
