@@ -69,6 +69,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.out-point').val(0).trigger('change');
     $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
+    console.log(url);
     $(this.el).find('.facebook').val(url);
     this.buildEmbed();
     // Do stupid play for one second to get duration.
@@ -143,7 +144,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.embed').val(url);
   }
 });
-
 Drupal.behaviors.shareBar = {
   attach : function(context) {
    // NB: here I've hard coded ids for the tray and used the ambiguous player call.
