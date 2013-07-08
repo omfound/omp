@@ -30,9 +30,12 @@
         console.log(Drupal.settings.jwplayer[i]);
         if (Drupal.settings.jwplayer[i].embedOutPoint) {
           player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
-          interval = setInterval(
+          var interval = setInterval(
             function() {
-             console.log(player); 
+              if (parseInt(player.getPosition()) >= player.embedOutPoint) {
+                clearInterval(interval);
+                player.pause();
+              } 
             }, 
           1000);
         }
