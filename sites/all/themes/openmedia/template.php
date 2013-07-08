@@ -115,11 +115,10 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
         $video['image'] = $show_status_images['ondemand'];
       } 
     }
-
-    if (empty($url)) {
-      $video['status'] = 'processing';
-      $video['image'] = $show_status_images['processing'];
-    }
+    $variables['video'] = $video;
+  }else{
+    $video['status'] = 'processing';
+    $video['image'] = $show_status_images['processing'];
     $variables['video'] = $video;
   }
 }
