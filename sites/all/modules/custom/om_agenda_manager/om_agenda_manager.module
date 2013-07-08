@@ -406,13 +406,7 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
       'template' => 'om-show-live-block', 
       'file' => 'theme.inc',
       'variables' => array('live_themes' => array()),
-    ),
-    'om_show_share_bar' => array(
-      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
-      'template' => 'share_bar', 
-      'file' => 'theme.inc',
-      'variables' => array(),
-    ),
+    )
   );
   return $themes;
 }
