@@ -826,6 +826,7 @@ function om_membership_unbork_ze_members() {
   $query->fields('co', array('order_id'));
   $resource = $query->execute();
   while ($row = $resource->fetchAssoc) {
+    dsm($row);
     $order = commerce_order_load($row['order_id']);
     dsm($order);
     $is_membership = om_membership_order_contains_membership($order);
