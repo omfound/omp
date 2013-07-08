@@ -24,6 +24,5 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $width = isset($_GET['width']) ? $_GET['width'] : '420';
   $height = isset($_GET['height']) ? $_GET['height'] : '340';
   om_show_jwplayer_include($variables['node'], TRUE, $width, $height);
-  drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_page.js', array('type' => 'file', 'group' => JS_DEFAULT));
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
