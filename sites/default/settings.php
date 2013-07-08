@@ -608,13 +608,11 @@ if (!empty($secure_connection)) {
 else {
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     $url = parse_url($_SERVER['HTTP_HOST']);
-    $parts = explode('.', $url['host']);
+    $parts = explode('.', $url['path']);
     if (count($parts) > 2 && $parts[0] != 'www') {
       $subdomain = $parts[0];
     }
-    print_r($subdomain);
-    print_r($parts);
-    print_r($url);
+
     // Redirect to www
     if (!is_numeric(stripos($_SERVER['HTTP_HOST'], 'www')) && empty($subdomain)) {
       //header('HTTP/1.0 301 Moved Permanently'); 
