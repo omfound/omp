@@ -15,22 +15,6 @@
               size: 410
             }
           });
-          if (Drupal.settings.jwplayer[i].embedInPoint) {
-            player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
-          }
-          console.log(Drupal.settings.jwplayer[i]);
-          if (Drupal.settings.jwplayer[i].embedOutPoint) {
-            console.log('made it here');
-            player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
-            interval = setInterval(
-              (function(player) {
-                return function() {
-                  console.log('here weeee go');
-                  console.log(player);
-                }
-              })(this),
-            1000);
-          }
         }
         else{
           jwplayer("jwplayer-" + i).setup({
@@ -39,6 +23,22 @@
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
           });
+        }
+        if (Drupal.settings.jwplayer[i].embedInPoint) {
+          player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
+        }
+        console.log(Drupal.settings.jwplayer[i]);
+        if (Drupal.settings.jwplayer[i].embedOutPoint) {
+          console.log('made it here');
+          player.embedOutPoint = Drupal.settings.jwplayer[i].embedOutPoint;
+          interval = setInterval(
+            (function(player) {
+              return function() {
+                console.log('here weeee go');
+                console.log(player);
+              }
+            })(this),
+          1000);
         }
       }
     }
