@@ -17,7 +17,7 @@
           });
         }
         else{
-          jwplayer("jwplayer-" + i).setup({
+         player = jwplayer("jwplayer-" + i).setup({
             file: Drupal.settings.jwplayer[i].path,
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
