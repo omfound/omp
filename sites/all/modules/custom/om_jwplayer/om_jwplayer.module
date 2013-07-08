@@ -18,7 +18,7 @@ function om_jwplayer_theme($existing, $type, $theme, $path) {
  */
 function om_jwplayer_menu() {
   $items = array();
-  $items['node/%node/share'] => array(
+  $items['node/%node/share'] = array(
     'page callback' => 'om_jwplayer_share_show',
     'page arguments' => array(1),
     'access arguments' => array('access content'),
