@@ -27,8 +27,8 @@
           <input type='textfield' class="embed" name='embed' />
         </div>
         <div class="facebook">
-          <label for="embed" class="facebook">Link:</label>
-          <input type='textfield' class="facebook" name='embed' />
+          <label for="facebookLink" class="facebook">Link:</label>
+          <input type='textfield' class="facebook" name='facebookLink' />
         </div>
       </div>
     </form>
