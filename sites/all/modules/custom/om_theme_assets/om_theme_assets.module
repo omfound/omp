@@ -260,6 +260,27 @@ function om_theme_assets_main_banner() {
   return '';
 }
 
+function om_theme_assets_show_status_images() {
+  $fids = array();
+  $fids['processing'] = variable_get('show_processing', FALSE); 
+  $fids['live'] = variable_get('show_live', FALSE); 
+  $fids['ondemand'] = variable_get('show_ondemand', FALSE); 
+
+  foreach ($fids as $key => $fid) {
+    if (is_numeric($fid)) {
+      $show_file = file_load($fid);
+      if (is_object($show_file)) {
+        $stream_wrapper = file_stream_wrapper_get_instance_by_uri($show_file->uri);
+        $show_url = $stream_wrapper->getExternalUrl();
+        $image = "<image src='$show_url' />";
+        $show_status_images[$key] = $image;
+      }
+    }
+  }
+  
+  return $show_status_images;
+}
+
 /*
 function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-show-grid-page') {

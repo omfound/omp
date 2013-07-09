@@ -1,0 +1,4 @@
+name = Open Media JWPlayer
+description = Utilities for implementing the omps various JWPlayers.
+core = 7.x
+package = Open Media System

@@ -2,8 +2,26 @@
     <h2><?php print $node->title; ?></h2>
     <?php if (isset($video)): ?>
       <?php print $video; ?>
-    <?php else: ?>
-      <div id="video-processing" style="clear: left;">This video is currently processing, please check back later.</div>
+    <?php endif; ?>
+
+    <?php if ($video_info['status'] == 'processing' && !empty($video_info['image'])) { ?>
+      <div class="video-status video-processing"><?php print $video_info['image']; ?></div>
+    <?php }elseif($video_info['status'] == 'processing') { ?>
+      <div class="video-status video-processing">This video is currently processing, please check back later.</div>
+    <?php } ?>
+
+    <?php if ($video_info['status'] == 'live' && !empty($video_info['image'])) { ?>
+      <div class="video-status video-live"><?php print $video_info['image']; ?></div>
+    <?php } ?>
+
+    <?php if ($video_info['status'] == 'ondemand' && !empty($video_info['image'])) { ?>
+      <div class="video-status video-ondemand"><?php print $video_info['image']; ?></div>
+    <?php } ?>
+      
+    <?php if (isset($description)): ?>
+      <div id="gov-description">
+          <?php print $description; ?>
+      </div>
     <?php endif; ?>
 
     <?php if (!empty($node->field_om_calendar)) { ?>
