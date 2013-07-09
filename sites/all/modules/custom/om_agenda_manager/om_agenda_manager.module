@@ -397,7 +397,7 @@ function om_agenda_manager_live_page() {
   if ($desc = variable_get('om_agenda_status_desc', false)) {
     $output .= '<div id="om-desc-content">'.$desc.'</div>';
   }
-  $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
+  $output .= '<h1 class="title archive-title">Archived Video</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
