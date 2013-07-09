@@ -215,9 +215,18 @@
 }
 
 .node-type-om-show .node .field-name-field-om-show-video {
+  float: left;
+  width: 550px;
   margin-bottom: 20px;
 }
-
+.node-type-om-show .node .video-status {
+  float: left;
+  width: 410px;
+}
+.node-type-om-show .node .video-processing {
+  clear: left;
+  width: 959px;
+}
 .node-type-om-show #show-left .edit-link-wrapper {
   text-align: right;
   float: left;
@@ -284,6 +293,9 @@
 .node-type-om-show #description {
   margin: 10px 0;
   position: relative;
+}
+.node-type-om-show #gov-description {
+  clear: left;
 }
 
 .node-type-om-show #description .show-hide-toggle {

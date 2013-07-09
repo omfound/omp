@@ -361,6 +361,12 @@ function om_agenda_manager_livestream_update($session_status) {
     if ($info['live_nid']) {
       $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'] = $info['live_nid']; 
     }else{
+      /*
+      if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
+        $node = node_load($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']);
+        $node->field_om_show_video[$node->language][0]['value'] = "";
+        node_save($node);
+      }*/
       $loaded_term->field_om_live_show = array();
     }
 
@@ -391,7 +397,7 @@ function om_agenda_manager_live_page() {
   if ($desc = variable_get('om_agenda_status_desc', false)) {
     $output .= '<div id="om-desc-content">'.$desc.'</div>';
   }
-  $output .= '<h1 class="title archive-title">Archived Sessions</h2>';
+  $output .= '<h1 class="title archive-title">Archived Video</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
@@ -402,17 +408,11 @@ function om_agenda_manager_live_page() {
 function om_agenda_manager_theme($existing, $type, $theme, $path) {
   $themes = array(
     'om_show_live_block' => array(
-      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
+      'path' => $path . '/theme', 
       'template' => 'om-show-live-block', 
       'file' => 'theme.inc',
       'variables' => array('live_themes' => array()),
-    ),
-    'om_show_share_bar' => array(
-      'path' => drupal_get_path('module', 'om_agenda_manager') . '/theme', 
-      'template' => 'share_bar', 
-      'file' => 'theme.inc',
-      'variables' => array(),
-    ),
+    )
   );
   return $themes;
 }
