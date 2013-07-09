@@ -2,6 +2,8 @@
   Drupal.behaviors.jwDefault = {
     attach : function() {
       var i;
+      jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
+
       for(i = 0; i < Drupal.settings.jwplayer.length; ++i) {
         if (typeof Drupal.settings.jwplayer[i].playlist !== "undefined") {
           var player = jwplayer("jwplayer-"+i).setup({
