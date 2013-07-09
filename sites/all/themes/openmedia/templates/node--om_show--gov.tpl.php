@@ -19,10 +19,8 @@
     <?php } ?>
       
     <?php if (isset($description)): ?>
-      <div id="description">
-        <div class="inner">
+      <div id="gov-description">
           <?php print $description; ?>
-        </div>
       </div>
     <?php endif; ?>
 
