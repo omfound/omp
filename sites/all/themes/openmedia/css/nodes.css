@@ -294,6 +294,9 @@
   margin: 10px 0;
   position: relative;
 }
+.node-type-om-show #gov-description {
+  clear: left;
+}
 
 .node-type-om-show #description .show-hide-toggle {
   position: absolute;

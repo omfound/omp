@@ -18,6 +18,12 @@
       <div class="video-status video-ondemand"><?php print $video_info['image']; ?></div>
     <?php } ?>
       
+    <?php if (isset($description)): ?>
+      <div id="gov-description">
+          <?php print $description; ?>
+      </div>
+    <?php endif; ?>
+
     <?php if (!empty($node->field_om_calendar)) { ?>
       <div id="documents">
         <br />
