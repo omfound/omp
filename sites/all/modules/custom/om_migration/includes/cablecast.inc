@@ -27,7 +27,7 @@ class MigrateSourceCablecast extends MigrateSource {
   protected $currentDateMarker;
   protected $rowNumber;
 
-  function __construct($options = array(), stdClass $pbs, $apiOptions = array()) {
+  function __construct($options = array(), $pbs, $apiOptions = array()) {
     if (!module_exists('om_playback_servers_cablecast')) {
       throw new Exception('Cablecast Playback Server module is missing. Please download and/or enable it.');
     }
