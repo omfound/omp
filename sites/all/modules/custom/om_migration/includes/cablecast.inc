@@ -92,7 +92,7 @@ class MigrateSourceCablecast extends MigrateSource {
     $this->rowNumber = 0;
   }
   public function getNextRow() {
-    if (empty($this->rowNumber)) {
+    if (!isset($this->rowNumber)) {
       $this->rowNumber = 0;
     }
     else {
