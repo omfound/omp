@@ -115,6 +115,7 @@ function om_membership_form_commerce_checkout_form_checkout_alter(&$form, &$form
  */
 function om_membership_form_profile2_form_alter(&$form, &$form_state) {
   if (!empty($form['profile_manage_organizational_membership'])) {
+    $form['#submit'][] = 'om_membership_organizational_membership_submit';
     unset($form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE]['add_more']);
     $field_keys = array_keys($form['profile_manage_organizational_membership']['field_invitations'][LANGUAGE_NONE]);
     foreach ($field_keys AS $key => $value) {
@@ -137,6 +138,10 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
       }
     }
   }
+}
+
+function om_membership_organizational_membership_submit($form, &$form_state) {
+  drupal_set_message('<pre>'.print_r($form_state['values']).'</pre>');
 }
 
 /**
