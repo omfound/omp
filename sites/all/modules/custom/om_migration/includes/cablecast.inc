@@ -57,7 +57,7 @@ class MigrateSourceCablecast extends MigrateSource {
         }
         $this->_collectResults();
       }
-      cache_set('cablecast_migration', $this->result, 'cache', CACHE_TEMPORARY);
+      cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
     }
   }
   /**
