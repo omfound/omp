@@ -98,6 +98,7 @@ class MigrateSourceCablecast extends MigrateSource {
     else {
       $this->rowNumber ++;
     }
+    dsm($this->rowNumer);
     if (!empty($this->results[$this->rowNumber])) {
       return $this->results[$this->rowNumber];
     }
