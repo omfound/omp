@@ -140,10 +140,14 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
 }
 
 function om_membership_entity_insert($entity, $type) {
-  drupal_set_message($type);  
+  if ($type == 'profile2') {
+    drupal_set_message('<pre>'.print_r($entity, TRUE).'</pre>');
+  }
 }
 function om_membership_entity_update($entity, $type) {
-  drupal_set_message($type);
+  if ($type == 'profile2') {
+    drupal_set_message('<pre>'.print_r($entity, TRUE).'</pre>');
+  }
 }
 
 /**
