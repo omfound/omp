@@ -31,6 +31,7 @@ class MigrateSourceCablecast extends MigrateSource {
     $this->options = $options;
     $this->pbs = $pbs;
     $this->pbsController = om_playback_servers_entity_get_controller($this->pbs);
+    $this->rowNumber = 0;
     // Perform result collection
     $this->collectResults();
   }
@@ -90,17 +91,11 @@ class MigrateSourceCablecast extends MigrateSource {
     $this->rowNumber = 0;
   }
   public function getNextRow() {
-    if (!isset($this->rowNumber)) {
-      $this->rowNumber = 0;
-    }
-    else {
-      $this->rowNumber ++;
-    }
-    dsm($this->rowNumer);
     if (!empty($this->results[$this->rowNumber])) {
-      return $this->results[$this->rowNumber];
+      $result = $this->results[$this->rowNumber];
+      $this->rowNumber ++;
+      return $result;
     }
-    $this->rowNumber --;
     return NULL;
   }  
 }
