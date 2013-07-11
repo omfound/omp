@@ -34,7 +34,7 @@ class omCablecastShowMigration extends Migration {
     );
     // Field mappings
     $this->addFieldMapping('title', 'Title');
-    $this->addFieldMapping('field_om_show_broadcast_file', 'ShowID');
+    $this->addFieldMapping('field_om_show_broadcast_file', 'ShowUri');
     $this->addFieldMapping('field_om_show_project', 'MappedProjectID');
     $this->addFieldMapping('field_cablecast_project', 'Project');
     $this->addFieldMapping('uid', 'MappedProducerID');
@@ -50,7 +50,7 @@ class omCablecastShowMigration extends Migration {
   }
   public function prepareRow($current_row) {
     // Turn show id into cablecast uri
-    $current_row->ShowID = "cablecast://" . $current_row->ShowID;
+    $current_row->ShowUri = "cablecast://" . $current_row->ShowID;
     // Try to match a drupal user with cablecast producer or use the default migration user.
     $current_row->MappedProducerID = $this->match_user($current_row->Producer);
     // Try to match a migration project or use the default migration user's project.
