@@ -28,5 +28,8 @@ class omCablecastShowMigration extends Migration {
       ),
       MigrateDestinationNode::getKeySchema()
     );
+    // Field mappings
+    $this->addFieldMapping('title', 'Title');
+    $this->addFieldMapping('body', 'ShowID'); 
   }
 }
