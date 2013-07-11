@@ -14,6 +14,19 @@ class omCablecastShowMigration extends Migration {
       require_once('/' . drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
     }
     $this->source = new MigrateSourceCablecast(array(), $pbs, array());
-    $this->destination = new MigrateDestinationNode('om_show');
+    $this->destination = new MigrateDestinationNode('om_show'); 
+    // map source and destination keys
+    $this->map = new MigrateSQLMap($this->machineName,
+      array(
+        'nid' => array(
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'D6 Unique Node ID',
+          'alias' => 'n',
+        )
+      ),
+      MigrateDestinationNode::getKeySchema()
+    );
   }
 }
