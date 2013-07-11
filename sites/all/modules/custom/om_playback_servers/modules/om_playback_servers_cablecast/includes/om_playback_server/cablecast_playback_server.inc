@@ -76,6 +76,19 @@ class cablecastPlaybackServerController extends playbackServerController {
     return FALSE;
   }
   /**
+   * Perform a search by modification date.
+   */
+  public function last_modified_search($pbs, $options)  {
+    $default_options = array(
+      'LocationID' => $pbs->location_id,
+      'SearchDate' => '1900-01-01T12:00:00',
+      'dateComparator' => '>',
+    );
+    $options = array_merge($default_options, $options);
+    $shows = $this->soap_request($pbs, 'LastModifiedSearch', $options);
+    return $shows;
+  } 
+  /**
    * --Methods dealing with files
    */
   public function check_file_status($pbs, $show) {

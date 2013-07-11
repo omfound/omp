@@ -139,6 +139,21 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
   }
 }
 
+function om_membership_entity_insert($entity, $type) {
+  if ($type == 'profile2') {
+    if ($entity->type == 'manage_organizational_membership') {
+      om_membership_validate_all_org_sub_members();
+    }
+  }
+}
+function om_membership_entity_update($entity, $type) {
+  if ($type == 'profile2') {
+    if ($entity->type == 'manage_organizational_membership') {
+      om_membership_validate_all_org_sub_members();
+    }
+  }
+}
+
 /**
  * Implements hook_profile2_access
  */
@@ -686,6 +701,9 @@ function om_membership_remove_user_role($user) {
     }
   }
   if ($user_modified == TRUE) {
+    if (module_exists('rules')) {
+      rules_invoke_event('om_membership_removed_org_sub_member', $user);
+    }
    return user_save($user);
   }
   return $user;

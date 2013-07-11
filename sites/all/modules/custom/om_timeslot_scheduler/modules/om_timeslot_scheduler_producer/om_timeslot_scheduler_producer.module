@@ -339,7 +339,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
       '#suffix' => '</p>',
     )
   );
-  // @TODO this is only grabbing 30 minute timeslots.
   $dates = om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid);
   $date_options = array();
   $query = db_select('node', 'n');
@@ -360,7 +359,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
       '#suffix' => '</div>',
     ),
   );
-
   // Find out if the show is adult
   if (!empty($show->field_om_rating[$show->language])) {
     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
@@ -538,10 +536,12 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
   $query->join('field_data_field_om_timeslot_project', 'series', 'date.entity_id=series.entity_id');
   $query->join('node', 'n', 'date.entity_id=n.nid');
+  $query->leftJoin('field_data_field_om_timeslot_producer', 'producer_enabled', 'producer_enabled.entity_id=date.entity_id');
   $query->condition('field_om_timeslot_date_value', $start, '>=');
   $query->condition('field_om_timeslot_date_value2', $end, '<=');
   $query->condition('field_om_timeslot_channel_tid', $channel_tid, '=');
   $query->condition('field_om_timeslot_project_nid', $project_nid, '=');
+  $query->condition('field_om_timeslot_producer_value', '1', '=');
   $result = $query->execute();
   $series = $result->fetchAll();
 
@@ -555,10 +555,12 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
       $query->join('field_data_field_om_timeslot_channel', 'channel', 'date.entity_id=channel.entity_id');
       $query->join('field_data_field_om_timeslot_theme', 'theme', 'date.entity_id=theme.entity_id');
       $query->join('node', 'n', 'date.entity_id=n.nid');
+      $query->leftJoin('field_data_field_om_timeslot_producer', 'producer_enabled', 'producer_enabled.entity_id=date.entity_id');
       $query->condition('field_om_timeslot_date_value', $start, '>=');
       $query->condition('field_om_timeslot_date_value2', $end, '<=');
       $query->condition('field_om_timeslot_channel_tid', $channel_tid, '=');
       $query->condition('field_om_timeslot_theme_tid', $project_theme, '=');
+      $query->condition('field_om_timeslot_producer_value', '1', '=');
       $result = $query->execute();
       $themes = $result->fetchAll();
     }
@@ -596,7 +598,8 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
       if ($gap['end'] - $gap['start'] > 1800) {
         // Figure out how many half hours are in this gap.
         $half_hours = 0;
-        if (date('i', $gap['start']) !== "00") {
+        //if (date('i', $gap['start']) !== "00") {
+        if ($gap['start'] % 1800 != 0) {
           $start = $gap['start'];
           $seconds_to_next = -($gap['start'] % 1800) + 1800;
           $gap_parts[0] = array(

@@ -20,6 +20,7 @@ function om_migration_migrate_api() {
       'OM_USER4' => array('class_name' => 'omUserWithCertificationMigration'),
       'om_project' => array('class_name' => 'omProjectMigration'),
       'OM_SHOW' => array('class_name' => 'omShowMigration'),
+      'om_cablecast_show' => array('class_name' => 'omCablecastShowMigration')
     ),
   );
 
