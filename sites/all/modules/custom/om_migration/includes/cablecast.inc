@@ -17,19 +17,27 @@ class MigrateSourceCablecast extends MigrateSource {
    */
   protected $options;
   /**
-   * Result set
+   * Result set array of cablecast show objects.
    */
   protected $results;
+  /**
+   * Date used to recursively get show list.
+   */
   protected $currentDateMarker;
+  /**
+   * Current iterator row number.
+   */
   protected $rowNumber;
 
   function __construct($options = array(), $pbs) {
+    // Most importantly make sure that the cablecast module is available.
     if (!module_exists('om_playback_servers_cablecast')) {
       throw new Exception('Cablecast Playback Server module is missing. Please download and/or enable it.');
     }
     parent :: __construct($options);
     $this->options = $options;
     $this->pbs = $pbs;
+    // Store controller for convenience
     $this->pbsController = om_playback_servers_entity_get_controller($this->pbs);
     $this->rowNumber = 0;
     // Perform result collection
@@ -39,6 +47,7 @@ class MigrateSourceCablecast extends MigrateSource {
    * Function to recursively collect all Cablecast shows.
    */
   protected function collectResults() {
+    // Temporarily cache results as _collectResults is tied to potentially many Cablecast requests.
     $cache = cache_get('cablecast_migration', 'cache');
     if (empty($cache) || empty($cache->data)) {
       $this->currentDateMarker = '1900-01-01T12:00:00';
@@ -49,6 +58,9 @@ class MigrateSourceCablecast extends MigrateSource {
       $this->results = $cache->data;
     }
   }
+  /** 
+   * Recursively iterate through all shows on the Cablecast.
+   */
   protected function _collectResults() {
     $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
     if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
@@ -84,12 +96,21 @@ class MigrateSourceCablecast extends MigrateSource {
       'TotalSeconds' => 'Duration of show'
     ); 
   }
+  /** 
+   * Return show count
+   */
   public function computeCount() {
     return empty($this->results) ? 0 : count($this->results);
   }
+  /**
+   * Reset row number.
+   */
   public function performRewind() {
     $this->rowNumber = 0;
   }
+  /**
+   * Increment row number and return result, if any.
+   */
   public function getNextRow() {
     if (!empty($this->results[$this->rowNumber])) {
       $result = $this->results[$this->rowNumber];
