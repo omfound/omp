@@ -43,25 +43,26 @@ class MigrateSourceCablecast extends MigrateSource {
    * Function to recursively collect all Cablecast shows.
    */
   protected function collectResults() {
-    $this->currentDateMarker = '1900-01-01T12:00:00';
-    $this->_collectResults();
-  }
-  protected function _collectResults() {
     $cache = cache_get('cablecast_migration', 'cache');
-    if (empty($cache->data)) {
-      $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
-      if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
-        foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
-          $this->results[] = $show;
-          $this->currentDateMarker = $show->LastModified;
-        }
-        $this->_collectResults();
-      }
+    if (empty($cache) || empty($cache->data)) {
+      $this->currentDateMarker = '1900-01-01T12:00:00';
+      $this->_collectResults();
       cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
     }
     else {
-      $this->results = $cache->data;
+      $this->result = $cache->data;
     }
+  }
+  protected function _collectResults() {
+    $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
+    if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
+      foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
+        $this->results[] = $show;
+        $this->currentDateMarker = $show->LastModified;
+      }
+      $this->_collectResults();
+    }
+    cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
   }
   /**
    * Return a string representing the source query.
