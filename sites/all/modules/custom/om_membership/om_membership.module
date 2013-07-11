@@ -700,6 +700,7 @@ function om_membership_validate_all_org_sub_members() {
   // We will remove users from this array of all org members until we are left with only defuct members.
   // They will then be removed.
   $org_members = om_membership_get_all_org_members();
+  watchdog('brian', 'org members:<pre>'.print_r($org_members, TRUE).'</pre>');
   $admins = om_membership_get_org_admin_member_users();
   if (!empty($admins)) {
     foreach($admins AS $admin) {
