@@ -57,7 +57,7 @@ class omCablecastShowMigration extends Migration {
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
   }
   public function get_user_map() {
-    $ouput = array();
+    $output = array();
     $query = db_select('users', 'u');
     $query->fields('u', array('uid', 'name'));
     $resource = $query->execute();
@@ -67,7 +67,7 @@ class omCablecastShowMigration extends Migration {
     return $output;
   }
   public function get_project_map() {
-    $ouput = array();
+    $output = array();
     $query = db_select('node', 'n');
     $query->fields('n', array('uid', 'nid'));
     $query->condition('title', 'migration', '=');
