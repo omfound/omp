@@ -48,14 +48,14 @@ class omCablecastShowMigration extends Migration {
     }
     $this->drupal_project_map = $this->get_project_map();
   }
-  public function prepareRow($current_row) {
+ /* public function prepareRow($current_row) {
     // Turn show id into cablecast uri
     $current_row->ShowID = "cablecast://" . $current_row->ShowID;
     // Try to match a drupal user with cablecast producer or use the default migration user.
     $current_row->MappedProducerID = $this->match_user($current_row->Producer);
     // Try to match a migration project or use the default migration user's project.
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
-  }
+  }*/
   public function get_user_map() {
     $output = array();
     $query = db_select('users', 'u');
