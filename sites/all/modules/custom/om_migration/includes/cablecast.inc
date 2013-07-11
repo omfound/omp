@@ -46,7 +46,7 @@ class MigrateSourceCablecast extends MigrateSource {
       cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
     }
     else {
-      $this->result = $cache->data;
+      $this->results = $cache->data;
     }
   }
   protected function _collectResults() {
