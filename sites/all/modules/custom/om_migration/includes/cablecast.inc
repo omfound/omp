@@ -47,8 +47,8 @@ class MigrateSourceCablecast extends MigrateSource {
     $this->_collectResults();
   }
   protected function _collectResults() {
-    $this->results = cache_get('cablecast_migration', 'cache');
-    if (empty($this->results)) {
+    $cache = cache_get('cablecast_migration', 'cache');
+    if (empty($cache->data)) {
       $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
       if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
         foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
@@ -58,6 +58,9 @@ class MigrateSourceCablecast extends MigrateSource {
         $this->_collectResults();
       }
       cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
+    }
+    else {
+      $this->results = $cache->data;
     }
   }
   /**
