@@ -724,6 +724,7 @@ function om_membership_validate_all_org_sub_members() {
       }
       // Next look for valid sub members.
       foreach($invites AS $invite) {
+        watchdog('brian', 'invite: <pre>'.print_r($invite, TRUE).'</pre>');
         $invited_user = user_load_by_mail($invite);
         if (empty($invited_user)) {
           // If the user doesn't exist create them and add role.
