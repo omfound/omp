@@ -27,7 +27,11 @@
     <?php if (!empty($node->field_om_calendar)) { ?>
       <div id="documents">
         <br />
-        <?php $edit_view = str_replace('/pub', '/edit?rm=minimal', $node->field_om_calendar[$node->language][0]['url']); ?>
+        <?php if(strpos($node->field_om_calendar[$node->language][0]['url'], '/pub') !== false) { ?>
+          <?php $edit_view = str_replace('/pub', '/edit?rm=minimal', $node->field_om_calendar[$node->language][0]['url']); ?>
+        <?php }elseif(strpos($node->field_om_calendar[$node->language][0]['url'], '/edit') !== false) { ?>
+          <?php $edit_view = str_replace('/edit', '/edit?rm=minimal', $node->field_om_calendar[$node->language][0]['url']); ?>
+        <?php } ?>
         <iframe src="<?php print $edit_view; ?>" width="100%" height="500" ></iframe> 
       </div>
     <?php } ?>
