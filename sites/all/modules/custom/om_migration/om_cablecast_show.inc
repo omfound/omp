@@ -54,7 +54,7 @@ class omCablecastShowMigration extends Migration {
     // Try to match a drupal user with cablecast producer or use the default migration user.
     $current_row->MappedProducerID = $this->match_user($current_row->Producer);
     // Try to match a migration project or use the default migration user's project.
-    //$current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
+    $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
   }
   public function get_user_map() {
     $output = array();
