@@ -18,11 +18,11 @@ class omCablecastShowMigration extends Migration {
     // map source and destination keys
     $this->map = new MigrateSQLMap($this->machineName,
       array(
-        'nid' => array(
+        'ShowID' => array(
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
-          'description' => 'D6 Unique Node ID',
+          'description' => 'Cablecast show id.',
           'alias' => 'n',
         )
       ),
