@@ -141,7 +141,8 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
 }
 
 function om_membership_organizational_membership_submit($form, &$form_state) {
-  drupal_set_message('<pre>'.print_r($form_state['values'], TRUE).'</pre>');
+  //recalculate sub members on org member update
+  om_membership_validate_all_org_sub_members();
 }
 
 /**
@@ -705,7 +706,6 @@ function om_membership_validate_all_org_sub_members() {
   // We will remove users from this array of all org members until we are left with only defuct members.
   // They will then be removed.
   $org_members = om_membership_get_all_org_members();
-  watchdog('brian', 'org members:<pre>'.print_r($org_members, TRUE).'</pre>');
   $admins = om_membership_get_org_admin_member_users();
   if (!empty($admins)) {
     foreach($admins AS $admin) {
@@ -730,7 +730,6 @@ function om_membership_validate_all_org_sub_members() {
       }
       // Next look for valid sub members.
       foreach($invites AS $invite) {
-        watchdog('brian', 'invite: <pre>'.print_r($invite, TRUE).'</pre>');
         $invited_user = user_load_by_mail($invite);
         if (empty($invited_user)) {
           // If the user doesn't exist create them and add role.
