@@ -17,17 +17,13 @@ class MigrateSourceCablecast extends MigrateSource {
    */
   protected $options;
   /**
-   * Options to pass to the Cablecast api call.
-   */
-  protected $apiOptions;
-  /**
    * Result set
    */
   protected $results;
   protected $currentDateMarker;
   protected $rowNumber;
 
-  function __construct($options = array(), $pbs, $apiOptions = array()) {
+  function __construct($options = array(), $pbs) {
     if (!module_exists('om_playback_servers_cablecast')) {
       throw new Exception('Cablecast Playback Server module is missing. Please download and/or enable it.');
     }
@@ -35,7 +31,6 @@ class MigrateSourceCablecast extends MigrateSource {
     $this->options = $options;
     $this->pbs = $pbs;
     $this->pbsController = om_playback_servers_entity_get_controller($this->pbs);
-    $this->apiOptions = $apiOptions;
     // Perform result collection
     $this->collectResults();
   }
