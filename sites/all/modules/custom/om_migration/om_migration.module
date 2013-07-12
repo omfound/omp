@@ -156,7 +156,6 @@ function om_migration_permission() {
     ),
   );
 }
-
 /**
  * Implements hook_menu
  */
@@ -167,11 +166,13 @@ function om_migration_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_migration_cablecast_taxonomy_map_form'),
     'access arguments' => array('administer open media migration'),
-    'type' => 'MENU_LOCAL_TASK'
+    'type' => MENU_LOCAL_TASK
   );
   return $items;
 }
-
+/**
+ * Build a little migration helper form.
+ */
 function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
   $form = array();
   $form['mapping_description'] = array(
@@ -208,7 +209,9 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
   $form['#submit'] = array('om_migration_cablecast_taxonomy_map_form_submit');
   return $form;
 }
-
+/**
+ * Handler for that form.
+ */
 function om_migration_cablecast_taxonomy_map_form_submit($form, $form_state) {
 
 
