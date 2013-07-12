@@ -166,7 +166,8 @@ function om_migration_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_migration_cablecast_taxonomy_map_form'),
     'access arguments' => array('administer open media migration'),
-    'type' => MENU_LOCAL_TASK
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 400
   );
   return $items;
 }
