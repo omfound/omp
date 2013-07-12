@@ -34,13 +34,15 @@ class omCablecastShowMigration extends Migration {
     );
     // Field mappings
     $this->addFieldMapping('title', 'Title');
-    $this->addFieldMapping('field_om_show_playback_server_id', 'ShowID');
     $this->addFieldMapping('field_om_show_project', 'MappedProjectID');
-    $this->addFieldMapping('field_cablecast_project', 'Project');
     $this->addFieldMapping('uid', 'MappedProducerID');
-    $this->addFieldMapping('field_cablecast_user', 'Producer');
     $this->addFieldMapping('field_om_show_duration', 'TotalSeconds');
     $this->addFieldMapping('field_archive_transfer', 'ArchiveTransfer');
+    // NB: These are migration only fields. These fields shoud be manually created BEFORE running. 
+    $this->addFieldMapping('field_cablecast_user', 'Producer'); 
+    $this->addFieldMapping('field_cablecast_project', 'Project');
+    $this->addFieldMapping('field_cablecast_category', 'Category'); 
+    $this->addFieldMapping('field_om_show_playback_server_id', 'ShowID');
     // Add other mappings.
     $this->drupal_user_map = $this->get_user_map();
     $this->drupal_migration_user = variable_get('cablecast_migration_user');
