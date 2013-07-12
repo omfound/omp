@@ -605,6 +605,21 @@ function om_membership_get_all_org_members() {
   return $users;
 }
 
+function om_membership_user_org_membership($user) {
+  $plans = om_membership_get_plans();
+  foreach ($plans as $plan) {
+    $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
+    if ($plan_meta_wrapper->field_user_type->value() == 1) {
+      if (!empty($user->roles[$rid])) {
+        //this user has an org membership
+        return $plan;
+      }
+    }
+  }
+
+  return false;
+}
+
 /**
  * Get a list of all organiztional admin users.
  *  @returns array
