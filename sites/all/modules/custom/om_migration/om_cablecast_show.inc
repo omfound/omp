@@ -40,6 +40,7 @@ class omCablecastShowMigration extends Migration {
     $this->addFieldMapping('uid', 'MappedProducerID');
     $this->addFieldMapping('field_cablecast_user', 'Producer');
     $this->addFieldMapping('field_om_show_duration', 'TotalSeconds');
+    $this->addFieldMapping('field_archive_transfer', 'ArchiveTransfer');
     // Add other mappings.
     $this->drupal_user_map = $this->get_user_map();
     $this->drupal_migration_user = variable_get('cablecast_migration_user');
@@ -49,6 +50,7 @@ class omCablecastShowMigration extends Migration {
     $this->drupal_project_map = $this->get_project_map();
   }
   public function prepareRow($current_row) {
+    $current_row->ArchiveTransfer = 0;
     // Try to match a drupal user with cablecast producer or use the default migration user.
     $current_row->MappedProducerID = $this->match_user($current_row->Producer);
     // Try to match a migration project or use the default migration user's project.
