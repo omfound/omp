@@ -620,8 +620,8 @@ function om_membership_user_org_membership($user) {
     $admin_memberships = om_membership_get_user_membership_products($admin); 
     $admin_orders = om_membership_get_user_membership_orders($admin);
     if (!empty($admin_memberships[0]) && !empty($admin_orders[0])) {
-      $org_membership['product'] = $admin_memberships[0];
-      $org_membership['order'] = $admin_orders[0];
+      $org_membership['product'] = array_shift($admin_memberships);
+      $org_membership['order'] = array_shift($admin_orders);
       return $org_membership;
     }
   }
