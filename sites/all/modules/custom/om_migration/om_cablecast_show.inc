@@ -54,6 +54,7 @@ class omCablecastShowMigration extends Migration {
     // Try to match a migration project or use the default migration user's project.
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
   }
+  // Build map of all users keyed cleaned_name => uid
   public function get_user_map() {
     $output = array();
     $query = db_select('users', 'u');
@@ -64,6 +65,7 @@ class omCablecastShowMigration extends Migration {
     }
     return $output;
   }
+  // Build map of all projects keyed uid => nid
   public function get_project_map() {
     $output = array();
     $query = db_select('node', 'n');
@@ -75,9 +77,14 @@ class omCablecastShowMigration extends Migration {
     }
     return $output;
   }
+  // Remove spaces and lowercase for easier comparison.
   public function groom_string($name) {
     return str_replace(' ', '', strtolower($name));
   }
+  /** 
+   * Match a project to a uid. If one doesn't exist create a new one.
+   * Each user should only have one migration project.
+   */
   public function match_project($uid) {
     if (!empty($this->drupal_project_map[$uid])) {
       return $this->drupal_project_map[$uid];
@@ -86,6 +93,7 @@ class omCablecastShowMigration extends Migration {
       return $this->create_new_project($uid);
     }
   }
+  // Create a new project node and add it to the project map.
   public function create_new_project($uid) {
     $project = new stdClass();
     $project->type = 'om_project';
@@ -95,6 +103,7 @@ class omCablecastShowMigration extends Migration {
     $this->drupal_project_map[$uid] = $project->nid;
     return $project->nid;
   }
+  // Attempt to match users by name otherwise return the migration user.
   public function match_user($name) {
     $name = $this->groom_string($name);
     if (!empty($this->drupal_user_map[$name])) {
