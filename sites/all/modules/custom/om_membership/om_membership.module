@@ -610,8 +610,8 @@ function om_membership_user_org_membership($user) {
   foreach ($plans as $plan) {
     $plan_meta_wrapper = entity_metadata_wrapper('commerce_product', $plan);
     if ($plan_meta_wrapper->field_user_type->value() == 1) {
+      $rid = $plan_meta_wrapper->field_associated_role->value();
       if (!empty($user->roles[$rid])) {
-        //this user has an org membership
         return $plan;
       }
     }
