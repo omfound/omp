@@ -97,8 +97,8 @@ class omCablecastShowMigration extends Migration {
   }
   public function match_user($name) {
     $name = $this->groom_string($name);
-    if (!empty($this->drupal_project_map[$name])) {
-      return $this->drupal_project_map[$name];
+    if (!empty($this->drupal_user_map[$name])) {
+      return $this->drupal_user_map[$name];
     }
     else {
       return $this->drupal_migration_user;
