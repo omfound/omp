@@ -38,6 +38,7 @@ class omCablecastShowMigration extends Migration {
     $this->addFieldMapping('uid', 'MappedProducerID');
     $this->addFieldMapping('field_om_show_duration', 'TotalSeconds');
     $this->addFieldMapping('field_archive_transfer', 'ArchiveTransfer');
+    $this->addFieldMapping('field_om_theme', 'CategoryID');
     // NB: These are migration only fields. These fields shoud be manually created BEFORE running. 
     $this->addFieldMapping('field_cablecast_user', 'Producer'); 
     $this->addFieldMapping('field_cablecast_project', 'Project');
