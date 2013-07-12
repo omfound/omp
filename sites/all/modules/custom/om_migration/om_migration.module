@@ -188,6 +188,7 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
   $controller = om_playback_servers_entity_get_controller($pbs);
   $categories = $controller->get_categories($pbs);
   $defaults = variable_get('cablecast_category_mapping', array());
+  dsm($defaults);
   if (!empty($categories->GetCategoriesResult->Category)) {
     $theme_vocabulary = taxonomy_vocabulary_machine_name_load('themes');
     $theme_taxonomy = taxonomy_get_tree($theme_vocabulary->vid);
@@ -215,7 +216,12 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
  * Handler for that form.
  */
 function om_migration_cablecast_taxonomy_map_form_submit($form, &$form_state) {
-  dsm('Debugging');
-  dsm($form_state['values']);
-  variable_set('cablecast_category_mapping', $form_state['values']);
+  $values = array();
+  $ignore = array('form_build_id', 'submit', 'op', 'form_token', 'form_id');
+  foreach ($form_state['values'] AS $key => $value) {
+    if (!in_array($ignore, $key) && $value != FALSE) {
+      $values[$key] = $value;
+    }
+  }
+  variable_set('cablecast_category_mapping', $values);
 }
