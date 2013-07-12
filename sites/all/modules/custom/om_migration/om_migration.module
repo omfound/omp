@@ -144,3 +144,72 @@ function om_migration_update_voting() {
   }
   return array();
 }
+
+/** 
+ * Implements hook_permission
+ */
+function om_migration_permission() {
+  return array(
+    'administer open media migration' => array(
+      'title' => t('Administer Open Media Migration'),
+      'description' => t('Access administration pages related to migrations.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_migration_menu() {
+  $items = array();
+  $items['admin/content/migrate/cablecast_category_map'] = array(
+    'title' => t('Cablecast Category to OMP Theme Map'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_migration_cablecast_taxonomy_map_form'),
+    'access arguments' => array('administer open media migration'),
+    'type' => 'MENU_LOCAL_TASK'
+  );
+  return $items;
+}
+
+function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
+  $form = array();
+  $form['mapping_description'] = array(
+    '#markup' => t('This page allows you to map categories from your Cablecast to Themes in the Open Media System.')
+  );
+  $pbsid = variable_get('default_cablecast');
+  if (empty($pbsid)) {
+    throw new Exception('No default Cablecast has been set.');
+  }
+  $pbs = om_playback_servers_load($pbsid);
+  $pbs = array_shift($pbs); 
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  $categories = $controller->get_categories($pbs);
+  if (!empty($categories->GetCategoriesResult->Category)) {
+    $theme_vocabulary = taxonomy_vocabulary_machine_name_load('themes');
+    $theme_taxonomy = taxonomy_get_tree($theme_vocabulary->vid);
+    $taxonomy_options = array();
+    foreach ($theme_taxonomy AS $term) {
+      $taxonomy_options[$term->tid] = $term->name;
+    }
+    foreach ($categories->GetCategoriesResult->Category AS $category) {
+      $form[$category->Name] = array(
+        '#type' => 'select',
+        '#title' => $category->Name,
+        '#default_value' => FALSE,
+        '#options' => $taxonomy_options
+      );
+    }
+  }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save Mapping')
+  );
+  $form['#submit'] = array('om_migration_cablecast_taxonomy_map_form_submit');
+  return $form;
+}
+
+function om_migration_cablecast_taxonomy_map_form_submit($form, $form_state) {
+
+
+}
