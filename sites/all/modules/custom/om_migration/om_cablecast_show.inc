@@ -51,6 +51,7 @@ class omCablecastShowMigration extends Migration {
       throw new Exception('No cablecast_migration_user has been set.');
     }
     $this->drupal_project_map = $this->get_project_map();
+    $this->drupal_theme_map = $this->get_theme_map();
   }
   public function prepareRow($current_row) {
     $current_row->ArchiveTransfer = 0;
@@ -58,6 +59,8 @@ class omCablecastShowMigration extends Migration {
     $current_row->MappedProducerID = $this->match_user($current_row->Producer);
     // Try to match a migration project or use the default migration user's project.
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
+    // Try to map to the theme map.
+    $current_row->CategoryID = $this->match_theme($current_row->Category);
   }
   // Build map of all users keyed cleaned_name => uid
   public function get_user_map() {
@@ -81,6 +84,10 @@ class omCablecastShowMigration extends Migration {
       $output[$row['uid']] = $row['nid'];
     }
     return $output;
+  }
+  // Build map of all themes keyed category => term id
+  public function get_theme_map() {
+    return variable_get('cablecast_category_mapping', array()); 
   }
   // Remove spaces and lowercase for easier comparison.
   public function groom_string($name) {
@@ -117,5 +124,12 @@ class omCablecastShowMigration extends Migration {
     else {
       return $this->drupal_migration_user;
     }
+  }
+  public function match_theme($category) {
+    $key = $this->groom_string($category);
+    if (!empty($this->drupal_theme_map[$key])) {
+      return $this->drupal_theme_map[$key];
+    } 
+    return FALSE;
   }
 }
