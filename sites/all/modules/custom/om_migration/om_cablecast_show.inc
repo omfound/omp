@@ -61,6 +61,7 @@ class omCablecastShowMigration extends Migration {
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
     // Try to map to the theme map.
     $current_row->CategoryID = $this->match_theme($current_row->Category);
+    dsm($current_row);
   }
   // Build map of all users keyed cleaned_name => uid
   public function get_user_map() {
