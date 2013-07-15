@@ -18,7 +18,12 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   $memberships = om_membership_get_user_membership_orders($user);
   $no_membership = FALSE;
   if (empty($memberships)) {
-    $no_membership = TRUE;
+    if (!$org_membership = om_membership_user_org_membership($user)) {
+      $no_membership = TRUE;
+    }else{
+      //stuff will go here
+      $no_membership = TRUE;
+    }
   }
   else {
     $products = om_membership_get_user_membership_products($user);
