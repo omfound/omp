@@ -197,10 +197,11 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
       $taxonomy_options[$term->tid] = $term->name;
     }
     foreach ($categories->GetCategoriesResult->Category AS $category) {
-      $form[str_replace(' ', '_', strtolower($category->Name))] = array(
+      $key = str_replace(' ', '_', strtolower($category->Name));
+      $form[$key] = array(
         '#type' => 'select',
         '#title' => $category->Name,
-        '#default_value' => !empty($defaults[$category->Name]) ? $defaults[$category->Name] : FALSE,
+        '#default_value' => !empty($defaults[$key]) ? $defaults[$key] : FALSE,
         '#options' => $taxonomy_options
       );
     }
