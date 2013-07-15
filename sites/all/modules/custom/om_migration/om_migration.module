@@ -188,7 +188,6 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
   $controller = om_playback_servers_entity_get_controller($pbs);
   $categories = $controller->get_categories($pbs);
   $defaults = variable_get('cablecast_category_mapping', array());
-  dsm($defaults);
   if (!empty($categories->GetCategoriesResult->Category)) {
     $theme_vocabulary = taxonomy_vocabulary_machine_name_load('themes');
     $theme_taxonomy = taxonomy_get_tree($theme_vocabulary->vid);
