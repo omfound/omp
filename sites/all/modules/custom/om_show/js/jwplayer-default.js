@@ -2,6 +2,8 @@
   Drupal.behaviors.jwDefault = {
     attach : function() {
       var i;
+      jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
+
       for(i = 0; i < Drupal.settings.jwplayer.length; ++i) {
         if (typeof Drupal.settings.jwplayer[i].playlist !== "undefined") {
           var player = jwplayer("jwplayer-"+i).setup({
@@ -9,6 +11,7 @@
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
+            autostart: Drupal.settings.jwplayer[i].autostart,
             primary: "flash",
             listbar: {
               position: 'right',
@@ -22,6 +25,7 @@
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
+            autostart: Drupal.settings.jwplayer[i].autostart
           });
         }
         if (Drupal.settings.jwplayer[i].embedInPoint) {
