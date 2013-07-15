@@ -197,7 +197,7 @@ function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
       $taxonomy_options[$term->tid] = $term->name;
     }
     foreach ($categories->GetCategoriesResult->Category AS $category) {
-      $form[$category->Name] = array(
+      $form[str_replace(' ', '_', strtolower($category->Name))] = array(
         '#type' => 'select',
         '#title' => $category->Name,
         '#default_value' => !empty($defaults[$category->Name]) ? $defaults[$category->Name] : FALSE,
