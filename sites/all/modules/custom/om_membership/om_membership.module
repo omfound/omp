@@ -605,6 +605,32 @@ function om_membership_get_all_org_members() {
   return $users;
 }
 
+function om_membership_user_org_membership($user) {
+  $query = '
+    SELECT uid 
+    FROM {profile} 
+    JOIN {field_data_field_invitations} 
+    ON field_data_field_invitations.entity_id=profile.pid 
+    WHERE field_invitations_value=:email';
+
+  $result = db_query($query, array(':email' => $user->mail));
+  $org_admin = $result->fetchField();
+  if (!empty($org_admin)) {
+    $admin = user_load($org_admin);
+    $admin_memberships = om_membership_get_user_membership_products($admin); 
+    $admin_orders = om_membership_get_user_membership_orders($admin);
+    $admin_order = array_shift($admin_orders);
+    $admin_product = array_shift($admin_memberships);
+    if (!empty($admin_product) && !empty($admin_order)) {
+      $org_membership['product'] = $admin_product;
+      $org_membership['order'] = $admin_order;
+      return $org_membership;
+    }
+  }
+
+  return false;
+}
+
 /**
  * Get a list of all organiztional admin users.
  *  @returns array
