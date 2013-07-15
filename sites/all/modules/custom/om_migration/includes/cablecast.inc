@@ -52,7 +52,7 @@ class MigrateSourceCablecast extends MigrateSource {
     if (empty($cache) || empty($cache->data)) {
       $this->currentDateMarker = '1900-01-01T12:00:00';
       $this->_collectResults();
-      cache_set('cablecast_migration', $this->results, 'cache', CACHE_TEMPORARY);
+      cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
     }
     else {
       $this->results = $cache->data;
