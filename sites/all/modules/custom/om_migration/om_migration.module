@@ -219,7 +219,7 @@ function om_migration_cablecast_taxonomy_map_form_submit($form, &$form_state) {
   $values = array();
   $ignore = array('form_build_id', 'submit', 'op', 'form_token', 'form_id');
   foreach ($form_state['values'] AS $key => $value) {
-    if (!in_array($ignore, $key) && $value != FALSE) {
+    if (!in_array($key, $ignore) && $value != FALSE) {
       $values[$key] = $value;
     }
   }
