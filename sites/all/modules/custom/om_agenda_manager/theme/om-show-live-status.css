@@ -2,7 +2,7 @@
   clear: left;
   padding-top: 20px;
 }
-.section-archived-sessions #content h1.title {
+.section-archived-sessions #content #content-inner h1.title {
   font-size: 1.9em;
   font-family: 'PTSansBold', sans-serif;
   margin-top: 0.75em;
