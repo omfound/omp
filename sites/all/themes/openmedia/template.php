@@ -56,6 +56,7 @@ function openmedia_preprocess_page(&$variables) {
     unset($variables['page']);
     $variables['page']['content'] = $content;
     $variables['theme_hook_suggestions'][]['page__iframe_mode'];
+    dsm($variables);
   }
 
 }
