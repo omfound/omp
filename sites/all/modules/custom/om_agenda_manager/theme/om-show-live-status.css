@@ -14,7 +14,9 @@ div#om-desc-content {
   background-color: #fff;
   padding: 10px;
 }
-
+.not-front div#om-desc-content {
+  width: 620px;
+}
 h1.archive-title {
   clear: left;
   padding-top: 20px;
