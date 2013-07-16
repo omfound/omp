@@ -14,7 +14,7 @@ function om_theme_assets_permission() {
     ),
     'view iframe embed' => array(
       'title' => t('View iframe embed code at bottom of pages'),
-      'description' => t('Roles with this permission will see the iframe embed code at the bottom of applicable pages.'),,
+      'description' => t('Roles with this permission will see the iframe embed code at the bottom of applicable pages.'),
     ),
   );
 }
