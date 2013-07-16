@@ -1,3 +1,3 @@
-<div id="iframe-page">
+<div id="page" class="iframe">
   <?php print render($page['content']); ?>
 </div>
