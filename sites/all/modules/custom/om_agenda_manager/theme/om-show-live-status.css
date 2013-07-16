@@ -10,13 +10,13 @@ div#om-embedded-content {
 
 div#om-desc-content {
   float: left;
-  clear: left;
-  width: 100%;
+  width: 355px;
   background-color: #fff;
   padding: 10px;
 }
 .not-front div#om-desc-content {
-  width: 620px;
+  clear: left;
+  width: 100%;
 }
 h1.archive-title {
   clear: left;
