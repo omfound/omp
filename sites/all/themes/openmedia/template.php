@@ -52,9 +52,11 @@ function openmedia_preprocess_page(&$variables) {
   }
 
   if (user_access('view iframe embed')) {
-    global $base_url;
-    $path = $base_url.'/'.request_path().'?iframe_mode=true';
-    $variables['page']['iframe_embed'] = '<iframe src="'.$path.'" width="760" height="1000" frameborder="0"></iframe>';
+    if (arg(0) == 'archived-sessions' || arg(0) == 'live') {
+      global $base_url;
+      $path = $base_url.'/'.request_path().'?iframe_mode=true';
+      $variables['page']['iframe_embed'] = '<iframe src="'.$path.'" width="760" height="1000" frameborder="0"></iframe>';
+    }
   }
 
   if (!empty($_GET['iframe_mode'])) {
