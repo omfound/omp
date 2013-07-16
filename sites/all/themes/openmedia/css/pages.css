@@ -350,3 +350,11 @@ body.front h2.block-title {
 .hidden-form {
   display: none;
 }
+
+#page-iframe-embed {
+  margin-left: 10px;
+}
+#page-iframe-embed textarea {
+  width: 800px;
+}
+ 
