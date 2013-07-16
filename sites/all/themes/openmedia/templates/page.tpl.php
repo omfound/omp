@@ -31,6 +31,12 @@
             <?php print render($page['content']); ?>
             <?php print $feed_icons; ?>
           </div>
+          <?php if (!empty($page['iframe_embed'])) { ?>
+            <div id="page-iframe-embed">
+              <label>IFrame Embed:</label>
+              <textarea class="iframe-embed"><?php print $page['iframe_embed']; ?></textarea>
+            </div>
+          <?php } ?>
         </div><!-- /#content -->
         <?php
           // Render the sidebars to see if there's anything in them.
