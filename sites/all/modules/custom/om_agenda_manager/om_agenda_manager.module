@@ -505,6 +505,7 @@ function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $
 
   if (!empty($replacements)) {
     drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-block.css');
+    drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
   }
   return $replacements;
 }
