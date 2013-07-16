@@ -464,3 +464,38 @@ function om_agenda_manager_archive_tabs() {
   $quicktabs = quicktabs_build_quicktabs($qtname,$qtoptions,$tabs);
   return drupal_render($quicktabs['content']); 
 }
+
+function om_agenda_manager_live_button($theme) {
+  if ($theme['live_nid'] && $theme['status']) {
+    $button .= '<div class="om-live-button stream-online">';
+    $live_node = node_load($theme['live_nid']);
+    $options = array('attributes' => array('class' => 'om-live-button-content'));
+    $button .= l($theme['theme'].' Currently In Session', 'node/'.$live_node->nid, $options);
+    $button .= '</div>';
+  }else{
+    $button .= '<div class="om-live-button stream-offline">';
+    $button .= '<div class="om-live-button-content">';
+    $button .= $theme['theme'].' Currently Not In Session';
+    $button .= '</div>';
+    $button .= '</div>';
+  }
+
+  return $button;
+}
+
+function om_agenda_manager_token_info() {
+  $livestream_info = om_agenda_manager_livestream_info();
+  foreach ($livestream_info as $tid => $info) {
+    $info['tokens']['om_agenda_manager'][$tid] = array(
+      'name' => $info['theme'].' Live Button',
+      'description' => t('Live status button.'),
+    );
+  }
+}
+
+function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  if ($type == 'om_agenda_manager') {
+    dsm($tokens);
+    //BRIAN finish token implementation 
+  }
+}
