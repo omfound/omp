@@ -7,6 +7,8 @@
   font-family: 'PTSansBold', sans-serif;
   margin-top: 0.75em;
   line-height: 36px;
+  padding-top: 20px;
+  padding-bottom: 0;
 }
 div#om-embedded-content {
   float: left;
