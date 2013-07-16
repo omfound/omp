@@ -55,6 +55,7 @@ function openmedia_preprocess_page(&$variables) {
     $content = $variables['page']['content'];
     unset($variables['page']);
     $variables['page']['content'] = $content;
+    dsm($variables['theme_hook_suggestion']);
   }
 
 }
