@@ -10,7 +10,8 @@ div#om-embedded-content {
 
 div#om-desc-content {
   float: left;
-  width: 355px;
+  clear: left;
+  width: 100%;
   background-color: #fff;
   padding: 10px;
 }
