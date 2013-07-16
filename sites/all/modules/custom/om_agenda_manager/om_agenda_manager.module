@@ -495,7 +495,14 @@ function om_agenda_manager_token_info() {
 
 function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $options = array()) {
   if ($type == 'om_agenda_manager') {
+    $livestream_info = om_agenda_manager_livestream_info();
+    foreach ($tokens as $theme_tid => $token) {
+      if ($livestream_info[$theme_tid]) {
+        $replacements[$token] = om_agenda_manager_live_button($livestream_info[$theme_tid]); 
+      }
+    }
     dsm($tokens);
+    dsm($replacements);
     //BRIAN finish token implementation 
   }
 }
