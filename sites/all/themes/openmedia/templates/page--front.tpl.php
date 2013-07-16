@@ -29,7 +29,7 @@
           <?php print $feed_icons; ?>
           <?php if (!empty($page['iframe_embed'])) { ?>
             <div id="page-iframe-embed">
-              <label>IFrame Embed:</label>
+              <label>Embed this page:</label>
               <textarea class="iframe-embed"><?php print $page['iframe_embed']; ?></textarea>
             </div>
           <?php } ?>
