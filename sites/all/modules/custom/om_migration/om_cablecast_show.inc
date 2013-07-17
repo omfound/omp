@@ -127,7 +127,6 @@ class omCablecastShowMigration extends Migration {
   }
   public function match_theme($category) {
     $key = $this->groom_string($category);
-    dsm($key);
     if (!empty($this->drupal_theme_map[$key])) {
       $term = taxonomy_term_load($this->drupal_theme_map[$key]);
       return !empty($term->name) ? $term->name : FALSE;
