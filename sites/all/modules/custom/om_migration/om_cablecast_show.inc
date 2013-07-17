@@ -61,7 +61,6 @@ class omCablecastShowMigration extends Migration {
     $current_row->MappedProjectID = $this->match_project($current_row->MappedProducerID);
     // Try to map to the theme map.
     $current_row->CategoryID = $this->match_theme($current_row->Category);
-    dsm($current_row);
   }
   // Build map of all users keyed cleaned_name => uid
   public function get_user_map() {
@@ -92,7 +91,7 @@ class omCablecastShowMigration extends Migration {
   }
   // Remove spaces and lowercase for easier comparison.
   public function groom_string($name) {
-    return str_replace(' ', '', strtolower($name));
+    return trim(str_replace(' ', '', strtolower($name)));
   }
   /** 
    * Match a project to a uid. If one doesn't exist create a new one.
@@ -128,9 +127,9 @@ class omCablecastShowMigration extends Migration {
   }
   public function match_theme($category) {
     $key = $this->groom_string($category);
+    dsm($key);
     if (!empty($this->drupal_theme_map[$key])) {
       $term = taxonomy_term_load($this->drupal_theme_map[$key]);
-      dsm($term);
       return !empty($term->name) ? $term->name : FALSE;
     } 
     return FALSE;
