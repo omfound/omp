@@ -91,7 +91,7 @@ class omCablecastShowMigration extends Migration {
   }
   // Remove spaces and lowercase for easier comparison.
   public function groom_string($name) {
-    return trim(str_replace(' ', '', strtolower($name)));
+    return trim(str_replace(' ', '_', strtolower($name)));
   }
   /** 
    * Match a project to a uid. If one doesn't exist create a new one.
