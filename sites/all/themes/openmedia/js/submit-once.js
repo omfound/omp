@@ -1,7 +1,7 @@
 (function ($, Drupal, window, document, undefined) {
   Drupal.behaviors.submitOnce = {
     attach : function(context) {
-      $('.submit-once', context).once('submit-once'
+      $('.submit-once', context).once('submit-once',
         function() {
           $(this).click(
             function() {
