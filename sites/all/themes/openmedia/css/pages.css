@@ -22,7 +22,7 @@ body {
 }
 
 body.iframe-mode {
-  background-color: #F4F4F4;
+  background-color: #FFF;
   background-image: none;
 }
 
@@ -350,3 +350,11 @@ body.front h2.block-title {
 .hidden-form {
   display: none;
 }
+
+#page-iframe-embed {
+  margin-left: 10px;
+}
+#page-iframe-embed textarea {
+  width: 800px;
+}
+ 

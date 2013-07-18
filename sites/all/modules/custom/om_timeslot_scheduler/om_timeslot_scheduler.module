@@ -1146,6 +1146,7 @@ function om_timeslot_scheduler_commit_schedule_form($form, &$form_state, $pid) {
     '#type' => 'submit',
     '#value' => 'Commit Schedule',
     '#suffix' => t('or !link', array('!link' => $link)),
+    '#attributes' => array('class' => array('submit-once'), 'data-submit-once' => array('Please Wait...'))
   );
   $form['#submit'][] = '_om_timeslot_scheduler_process_commit';
   return $form;

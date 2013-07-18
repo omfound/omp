@@ -12,6 +12,10 @@ function om_theme_assets_permission() {
       'title' => t('Administer the OMP theme'),
       'description' => t('Allows users to change the color scheme and manage other low level functionality of the OMP theme.'),
     ),
+    'view iframe embed' => array(
+      'title' => t('View iframe embed code at bottom of pages'),
+      'description' => t('Roles with this permission will see the iframe embed code at the bottom of applicable pages.'),
+    ),
   );
 }
 
