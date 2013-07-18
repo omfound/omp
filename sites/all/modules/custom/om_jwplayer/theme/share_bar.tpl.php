@@ -1,6 +1,7 @@
 <div id="session-video-embed-tray" class='embed-tray'>
   <div class="inner">
     <form class="clearfix">
+      <?php if (!empty($cuepoints)): ?>
       <div class="section start-end">
         <div class="group">
           <label for="embedInPoint" class="in-point">Set In Point</label>
@@ -11,6 +12,7 @@
           <input type='textfield' class="out-point" name='embedOutPoint' />
         </div>
       </div>
+      <?php endif; ?>
       <div class="section width-height">
         <div class="group">
           <label for="width" class="width">Width:</label>
