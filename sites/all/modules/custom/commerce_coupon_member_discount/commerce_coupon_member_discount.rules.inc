@@ -55,6 +55,7 @@ function commerce_coupon_member_discount_apply_discount($line_item, $order, $cou
     $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
     if (!empty($primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'])) {
       $member_price = $primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'];
+      $member_price = $member_price*100;
       
       // Get the price component to use in this price.
       $price_component_name = $coupon_wrapper->price_component_name->value();
