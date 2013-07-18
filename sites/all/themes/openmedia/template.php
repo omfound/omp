@@ -56,7 +56,7 @@ function openmedia_preprocess_page(&$variables) {
     unset($variables['page']);
     $variables['page']['content'] = $content;
   }
-
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/submit-once.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
 /**
