@@ -25,7 +25,7 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   events : {
     'submit form' : 'preventDefault',
-    'click .show-hide' : 'toggleInterface',
+    'click .share-show-hide' : 'toggleInterface',
     'change input.in-point' : 'interfaceChange',
     'change input.out-point' : 'interfaceChange',
     'change input.width' : 'interfaceChange',

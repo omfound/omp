@@ -33,5 +33,5 @@
       </div>
     </form>
   </div>
-  <div class="show-hide">Share This +</div>
+  <div class="share-show-hide">Share This +</div>
 </div>
