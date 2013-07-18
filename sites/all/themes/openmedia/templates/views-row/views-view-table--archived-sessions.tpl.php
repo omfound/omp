@@ -50,7 +50,7 @@
                 $options = array();
                 $options['absolute'] = TRUE;
                 $options['attributes']['target'] = '_blank';
-                $options['query']['iframe_mode'] = 'true';
+                //$options['query']['iframe_mode'] = 'true';
               ?>      
               <?php }else{ ?>
                 <?php $options = array('absolute' => TRUE); ?>

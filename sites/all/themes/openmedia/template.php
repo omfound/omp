@@ -6,11 +6,11 @@ if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exis
 
 function openmedia_preprocess_html(&$variables) {
   if (!empty($_GET['iframe_mode'])) {
+    $variables['classes_array'][] = 'iframe-mode';
     $sidebar_classes = array('one-sidebar sidebar-first', 'one-sidebar sidebar-second', 'two-sidebars');
     foreach ($variables['classes_array'] AS $key => $class) {
       if (in_array($class, $sidebar_classes)) {
         unset($variables['classes_array'][$key]);
-        $variables['classes_array'][] = 'iframe-mode';
       }
     }
   }
@@ -51,10 +51,19 @@ function openmedia_preprocess_page(&$variables) {
     }
   }
 
+  if (user_access('view iframe embed')) {
+    if (arg(0) == 'archived-sessions' || arg(0) == 'live') {
+      global $base_url;
+      $path = $base_url.'/'.request_path().'?iframe_mode=true';
+      $variables['page']['iframe_embed'] = '<iframe src="'.$path.'" width="760" height="1000" frameborder="0"></iframe>';
+    }
+  }
+
   if (!empty($_GET['iframe_mode'])) {
     $content = $variables['page']['content'];
     unset($variables['page']);
     $variables['page']['content'] = $content;
+    $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
   }
 
 }
@@ -96,6 +105,11 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           $live_height = 300;
         }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
+        if (!arg(2) == 'agenda_manager') {
+          if (variable_get('om_show_autoplay', false)) {
+            $embed_url .= '?autoplay=1';
+          }
+        }
         $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 

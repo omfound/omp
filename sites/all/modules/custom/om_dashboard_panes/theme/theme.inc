@@ -18,7 +18,19 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   $memberships = om_membership_get_user_membership_orders($user);
   $no_membership = FALSE;
   if (empty($memberships)) {
-    $no_membership = TRUE;
+    if (!$org_membership = om_membership_user_org_membership($user)) {
+      $no_membership = TRUE;
+    }else{
+      //stuff will go here
+      $product_meta = entity_metadata_wrapper('commerce_product', $org_membership['product']);
+      $variables['membership_type'] = $org_membership['product']->title;
+      $variables['membership_start'] = date('D j/n/Y', $org_membership['order']->created);
+      $year_seconds = 31688800;
+      $end = $org_membership['order']->created + ($year_seconds * $product_meta->field_duration->value());
+      $variables['membership_end'] = date('D j/n/Y', $end);
+      $options = array('attributes' => array('class' => array('blue-button')));
+      $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+    }
   }
   else {
     $products = om_membership_get_user_membership_products($user);
