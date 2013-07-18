@@ -6,8 +6,10 @@
           $(this).click(
             function() {
               $(this).attr('disabled', 'disabled');
+              $(this).css('opacity', .5);
               var text = $(this).attr('data-submit-once');
               $(this).val(text);
+              $(this).parents('form').submit(); 
             }
           )
         }
