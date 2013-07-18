@@ -1,0 +1,5 @@
+name = Commerce Coupon Member Discount
+description = "A coupon code that provides member discount."
+dependencies[] = commerce_coupon
+package = Commerce Coupon
+core = 7.x

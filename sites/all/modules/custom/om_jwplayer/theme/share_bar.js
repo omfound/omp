@@ -25,7 +25,7 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
 Drupal.shareBar.views.shareBar = Backbone.View.extend({
   events : {
     'submit form' : 'preventDefault',
-    'click .show-hide' : 'toggleInterface',
+    'click .share-show-hide' : 'toggleInterface',
     'change input.in-point' : 'interfaceChange',
     'change input.out-point' : 'interfaceChange',
     'change input.width' : 'interfaceChange',
@@ -61,7 +61,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.set('url', url);
     // Set width and height.
     player = this.shareBarModel.get('player');
-    this.shareBarModel.set('interfaceWidth', 960);
+    this.shareBarModel.set('interfaceWidth', player.config.width);
     this.shareBarModel.set('interfaceHeight', 68);
     this.shareBarModel.set('width', 420);
     this.shareBarModel.set('height', player.config.height);

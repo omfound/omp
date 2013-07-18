@@ -117,9 +117,10 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       //default jwplayer code
       om_show_jwplayer_include($variables);
       $video = '<div id="jwplayer-0">Loading video...</div>';
-      //if (arg(2) != 'agenda_manager') {
-        //$video .= theme('om_show_share_bar');
-      //}
+      $use_share_bar = variable_get('om_show_share_bar', FALSE);
+      if (arg(2) != 'agenda_manager' && $use_share_bar) {
+        $video .= theme('om_show_share_bar');
+      }
     }
     $variables['video'] = $video;
   }
