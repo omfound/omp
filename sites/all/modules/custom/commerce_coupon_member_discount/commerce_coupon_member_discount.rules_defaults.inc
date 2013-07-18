@@ -33,7 +33,7 @@ function commerce_coupon_member_discount_default_rules_configuration() {
       'unique' => 1,
     ));
 
-  $rules['commerce_coupon_member_discount_apply_discount'] = $rule;
+  $rules['commerce_coupon_member_discount_amount'] = $rule;
 
   $rule = rules_reaction_rule();
   $rule->label = t('Apply member discount coupons to product line item');
@@ -55,7 +55,7 @@ function commerce_coupon_member_discount_default_rules_configuration() {
     'item:var' => 'list_coupon',
     'item:label' => t('Current coupon'),
       ))
-      ->action('commerce_coupon_member_discount_apply_to_product_line_item', array(
+      ->action('commerce_coupon_member_discount_apply_discount', array(
         'line_item:select' => 'commerce-line-item',
         'commerce_order:select' => 'commerce-line-item:order',
         'coupon:select' => 'list-coupon',
