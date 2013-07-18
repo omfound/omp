@@ -96,6 +96,11 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           $live_height = 300;
         }
         $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
+        if (!arg(2) == 'agenda_manager') {
+          if (variable_get('om_show_autoplay', false)) {
+            $embed_url .= '?autoplay=1';
+          }
+        }
         $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
       }
     } 

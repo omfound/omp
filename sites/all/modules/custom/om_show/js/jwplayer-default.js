@@ -11,6 +11,7 @@
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
+            autostart: Drupal.settings.jwplayer[i].autostart,
             primary: "flash",
             listbar: {
               position: 'right',
@@ -24,6 +25,7 @@
             height: Drupal.settings.jwplayer[i].height,
             width: Drupal.settings.jwplayer[i].width,
             image: Drupal.settings.jwplayer[i].image,
+            autostart: Drupal.settings.jwplayer[i].autostart
           });
         }
         if (Drupal.settings.jwplayer[i].embedInPoint) {
