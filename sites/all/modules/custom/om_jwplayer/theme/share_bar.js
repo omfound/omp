@@ -15,7 +15,7 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
       player.onPlay(this.onPlay);    
     }
     else {
-      this.onReady();
+      this.trigger('onReady');
     }
   },
   onReady: function(){
