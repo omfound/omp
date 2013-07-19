@@ -218,7 +218,13 @@
   float: left;
   width: 550px;
   margin-bottom: 20px;
+  line-height: 0;
 }
+
+#session-video-embed-tray {
+  line-height: normal;
+}
+
 .node-type-om-show .node .video-status {
   float: left;
   width: 410px;
