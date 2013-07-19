@@ -81,7 +81,7 @@ class MigrateSourceCablecast extends MigrateSource {
    */
   protected $rowNumber;
 
-  function __construct($options = array(), $pbs) {
+  function __construct($options = array()) {
     parent :: __construct($options);
     $this->options = $options;
     $this->rowNumber = 0;
@@ -102,7 +102,8 @@ class MigrateSourceCablecast extends MigrateSource {
    * @return string
    */
   public function __toString() {
-    return drupal_json_encode($this->pbs);
+    $pbs = om_migration_get_default_cablecast();
+    return drupal_json_encode($pbs);
   }
   /**
    * Returns a list of fields available to be mapped from the source query.

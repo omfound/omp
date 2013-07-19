@@ -4,13 +4,6 @@ class omCablecastShowMigration extends Migration {
   public function __construct() {
     parent::__construct();
     $this->description = t('Migrate Cablecast shows to Drupal.');
-    // Use the default Cablecast.
-    $pbsid = variable_get('default_cablecast');
-    if (empty($pbsid)) {
-      throw new Exception('No default Cablecast has been set.');
-    }
-    $pbs = om_playback_servers_load($pbsid);
-    $pbs = array_shift($pbs);
     // Not sure how to get migrate to automatically include new sources (if it's possible at all)
     if (!class_exists('MigrateSourceCablecast')) {
       require_once('/' . drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');

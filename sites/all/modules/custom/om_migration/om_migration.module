@@ -244,7 +244,8 @@ function om_migration_build_cablecast_migration_cache_form($form, $form_state) {
   );
   $form['cache_build'] = array(
     '#type' => 'submit',
-    '#value' => t('Build Cache')
+    '#value' => t('Build Cache'),
+    '#suffix' => t('The following process may take a few minutes.')
   );
   $form['#submit'] = array('om_migration_build_cablecast_migration_cache_form_submit');
   return $form;
@@ -252,4 +253,36 @@ function om_migration_build_cablecast_migration_cache_form($form, $form_state) {
 
 function om_migration_build_cablecast_migration_cache_form_submit(&$form, &$form_state) {
   require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $batch = array(
+    'title' => t('Building Cablecast cache...'),
+    'operations' => array(
+      array('_om_migration_build_cablecast_cache', array()),
+      array('_om_migration_validate_cablecast_cache', array())
+    )
+  );
+  batch_set($batch);
+}
+
+function _om_migration_build_cablecast_cache(&$context) {
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $pbs = om_migration_get_default_cablecast(); 
+  $cache_controller = new CablecastMigrationCache($pbs);
+  $cache_controller->collectResults();
+}
+
+function _om_migration_validate_cablecast_cache(&$context) {
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $pbs = om_migration_get_default_cablecast();
+  $cache_controller = new CablecastMigrationCache($pbs);
+  $cache_controller->validateResults(); 
+}
+
+function om_migration_get_default_cablecast() {
+  $pbsid = variable_get('default_cablecast');
+  if (empty($pbsid)) {
+    throw new Exception('No default Cablecast has been set.');
+  }
+  $pbs = om_playback_servers_load($pbsid);
+  $pbs = array_shift($pbs);
+  return $pbs;
 }
