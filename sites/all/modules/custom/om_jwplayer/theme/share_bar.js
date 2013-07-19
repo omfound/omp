@@ -173,7 +173,7 @@ Drupal.behaviors.shareBar = {
    else {
      player = {
        config : {
-         width : 550,
+         width : 960,
          height : 338
        }
      };
