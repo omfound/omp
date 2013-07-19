@@ -466,6 +466,7 @@ function om_agenda_manager_archive_tabs() {
 }
 
 function om_agenda_manager_live_button($theme) {
+  $button = '';
   if ($theme['live_nid'] && $theme['status']) {
     $button .= '<div class="om-live-button stream-online">';
     $live_node = node_load($theme['live_nid']);
