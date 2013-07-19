@@ -27,6 +27,7 @@ class CablecastMigrationCache {
     $this->pbsController = om_playback_servers_entity_get_controller($this->pbs);
     // Perform result collection
     $this->collectResults();
+    $this->count = 0;
   }
   public function collectResults() {
     $this->currentDateMarker = '1900-01-01T12:00:00';
@@ -34,6 +35,7 @@ class CablecastMigrationCache {
     cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   } 
   protected function _collectResults() {
+    if ($this->count < 500) {
     $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
     if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
       foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
@@ -43,6 +45,8 @@ class CablecastMigrationCache {
       dsm($this->currentDateMarker);
       $this->_collectResults();
     }
+   $this->count ++;
+  }
   }
   public function validateResults() {
     if (empty($this->results)) {
