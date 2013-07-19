@@ -81,11 +81,13 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
     this.buildEmbed();
-    // Do stupid play for one second to get duration.
-    // PILE ON THE PENUT BUTTER KLUDGE
-    player.setVolume(0);
-    player.play();
-    this.playerInterval = setInterval(this.stopPlayer, 1000); 
+    if (typeof(player.play) == 'function') {
+      // Do stupid play for one second to get duration.
+      // PILE ON THE PENUT BUTTER KLUDGE
+      player.setVolume(0);
+      player.play();
+      this.playerInterval = setInterval(this.stopPlayer, 1000);
+    } 
   },
   stopPlayer : function() {
     player = this.shareBarModel.get('player');
