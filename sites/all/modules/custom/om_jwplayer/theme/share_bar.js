@@ -151,9 +151,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.off('onPlay', this.setDurationOnce, this);
   },
   buildEmbed : function() {
-    // Build iframe embed
-    
-    url = 'node/' + this.shareBarModel.get('embedUrlStem')  + '/share';
+    // Build iframe embed 
+    url = this.shareBarModel.get('embedUrlStem');
     url += '?iframe_mode=true&width=' + this.shareBarModel.get('width');
     url += '&height=' + this.shareBarModel.get('height');
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
