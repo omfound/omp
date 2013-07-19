@@ -40,7 +40,8 @@ class CablecastMigrationCache {
         $this->results[] = $show;
         $this->currentDateMarker = $show->LastModified;
       }
-      //$this->_collectResults();
+      dsm($this->currentDateMarker);
+      $this->_collectResults();
     }
   }
   public function validateResults() {
