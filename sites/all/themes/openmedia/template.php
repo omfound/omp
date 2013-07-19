@@ -111,6 +111,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           }
         }
         $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        $video .= $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
       }
     } 
     if (empty($video)) {
@@ -119,7 +120,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
       $video = '<div id="jwplayer-0">Loading video...</div>';
       $use_share_bar = variable_get('om_show_share_bar', FALSE);
       if (arg(2) != 'agenda_manager' && $use_share_bar) {
-        $video .= theme('om_show_share_bar');
+        $video .= theme('om_show_share_bar', array('cuepoints' => TRUE));
       }
     }
     $variables['video'] = $video;
