@@ -285,7 +285,9 @@ function om_show_render_video_url($url, $width = 550, $height = 338, $disable_pl
           }
         }
         $video = '<iframe width="'.$width.'" height="'.$height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
-        $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+        if (empty($_GET['iframe_mode'])) {
+          $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+        }
       }
     } 
 
@@ -293,9 +295,11 @@ function om_show_render_video_url($url, $width = 550, $height = 338, $disable_pl
       //default jwplayer code
       om_show_jwplayer_include($disable_playlist, $width, $height);
       $video = '<div id="jwplayer-0">Loading video...</div>';
-      $use_share_bar = variable_get('om_show_share_bar', FALSE);
-      if (arg(2) != 'agenda_manager' && $use_share_bar) {
-        $video .= theme('om_show_share_bar', array('cuepoints' => TRUE));
+      if (empty($_GET['iframe_mode'])) {
+        $use_share_bar = variable_get('om_show_share_bar', FALSE);
+        if (arg(2) != 'agenda_manager' && $use_share_bar) {
+          $video .= theme('om_show_share_bar', array('cuepoints' => TRUE));
+        }
       }
     }
 
