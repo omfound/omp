@@ -53,6 +53,7 @@ class CablecastMigrationCache {
       $file_options['RestrictToShowID'] = $show->ShowID;
       $file = $this->pbsController->get_digital_files($this->pbs, $file_options);
       $file_record = $file->GetDigitalFilesResult->DigitalFileInfo;
+      dsm($file_record);
       if (empty($file_record) || $file_record->IsValid == FALSE) {
         unset($this->results[$key]);
       }
