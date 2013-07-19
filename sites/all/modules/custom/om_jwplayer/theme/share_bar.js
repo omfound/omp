@@ -10,8 +10,10 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
     _.bindAll(this, 'onReady', 'onPlay');
     // Bind player events to this model.
     player = this.get('player');
-    player.onReady(this.onReady);
-    player.onPlay(this.onPlay);
+    console.log("HERE IT IS");
+    console.log(player);
+    //player.onReady(this.onReady);
+    //player.onPlay(this.onPlay);
   },
   onReady: function(){
     this.trigger('onReady');
@@ -158,6 +160,9 @@ Drupal.behaviors.shareBar = {
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
    player = jwplayer();
+   if (!player) {
+     player = {};
+   }
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
   }
 }
