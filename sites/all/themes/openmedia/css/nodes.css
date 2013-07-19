@@ -223,6 +223,7 @@
 
 #session-video-embed-tray {
   line-height: normal;
+  margin-bottom: 15px;
 }
 
 .node-type-om-show .node .video-status {
