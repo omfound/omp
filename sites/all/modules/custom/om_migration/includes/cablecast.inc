@@ -59,6 +59,10 @@ class CablecastMigrationCache {
     cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   }
   public function computeCount() {
+    if (empty($this->results)) {
+      $cache = cache_get('cablecast_migration', 'cache');
+      $this->results = $cache->data;
+    }
     return empty($this->results) ? 0 : count($this->results);
   }
 }
