@@ -44,7 +44,7 @@ class CablecastMigrationCache {
     }
   }
   public function validateResults() {
-    if empty($this->results)) {
+    if (empty($this->results)) {
       $cache = cache_get('cablecast_migration', 'cache');
       $this->results = $cache->data;
     }
@@ -52,7 +52,7 @@ class CablecastMigrationCache {
     foreach ($this->results AS $key => $show) {
       $file_options['RestrictToShowID'] = $show->ShowID;
       $file = $this->pbsController->get_digital_files($this->pbs, $file_options);
-      $file_record = $file->GetDigitalFilesResult->DigitalFileInfo[0];
+      $file_record = $file->GetDigitalFilesResult->DigitalFileInfo;
       if (empty($file_record) || $file_record->IsValid == FALSE) {
         unset($this->results[$key]);
       }
@@ -94,9 +94,6 @@ class MigrateSourceCablecast extends MigrateSource {
   protected function collectResults() {
     // Temporarily cache results as _collectResults is tied to potentially many Cablecast requests.
     $cache = cache_get('cablecast_migration', 'cache');
-    if (empty($cache->data)) {
-      throw new Exception('Cablecast migration cache has not been built. Please build it before attempting a migration.');
-    }
     $this->results = $cache->data;    
   }
   /**
