@@ -14,9 +14,6 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
       player.onReady(this.onReady);
       player.onPlay(this.onPlay);    
     }
-    else {
-      this.trigger('onReady');
-    }
   },
   onReady: function(){
     this.trigger('onReady');
@@ -53,6 +50,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Listen for player events.
     this.shareBarModel.on('onReady', this.initializeInterface, this);
     this.shareBarModel.on('onPlay', this.setDurationOnce, this);
+    if (typeof(player.onReady) != 'function') {
+      this.initializeInterface();
+    }
     // Set toggle to closed.
     this.toggleState = false;
   },
