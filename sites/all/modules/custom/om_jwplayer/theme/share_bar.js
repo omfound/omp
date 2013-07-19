@@ -57,7 +57,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.toggleState = false;
   },
   initializeInterface : function() {
-    console.log("Initializing!!");
     url = document.URL;
     if (url.indexOf('iframe_mode=true') > 0) {
       this.remove();
@@ -89,6 +88,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
       player.play();
       this.playerInterval = setInterval(this.stopPlayer, 1000);
     } 
+    else {
+      $(this.el).show();
+    }
   },
   stopPlayer : function() {
     player = this.shareBarModel.get('player');
