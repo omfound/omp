@@ -9,7 +9,7 @@ function om_jwplayer_preprocess_om_show_share_bar(&$variables) {
   if (module_exists('om_clickable_agenda')) {
     drupal_add_library('om_clickable_agenda', 'backbone');
     $options = array('type' => 'file', 'group' => JS_DEFAULT);
-    drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_bar.js');
+    //drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_bar.js');
     $variables['share_url'] = $base_url.'/node/' . arg(1) . '/share';
   }
   else {
