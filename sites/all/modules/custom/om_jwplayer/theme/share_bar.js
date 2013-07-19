@@ -159,7 +159,7 @@ Drupal.behaviors.shareBar = {
    // This is due to the previous "frameworking" and lack of selectability other than arbitrary id.
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
-   if (jwplayer == undefined) {
+   if (typeof(jwplayer) == undefined) {
      player = {};
    }
    else {
