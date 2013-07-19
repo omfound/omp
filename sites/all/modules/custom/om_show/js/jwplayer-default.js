@@ -29,6 +29,7 @@
           });
         }
         if (Drupal.settings.jwplayer[i].embedInPoint) {
+          alert('seeking');
           player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
         }
         if (Drupal.settings.jwplayer[i].embedOutPoint) {
