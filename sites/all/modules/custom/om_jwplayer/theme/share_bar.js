@@ -70,6 +70,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.set('interfaceHeight', 68);
     this.shareBarModel.set('width', 420);
     this.shareBarModel.set('height', player.config.height);
+    this.shareBarModel.set('embedUrl', $(this.el).attr('data-share-link'));
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
@@ -151,7 +152,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
   },
   buildEmbed : function() {
     // Build iframe embed
-    url = this.shareBarModel.get('url', url);
+    
+    url = 'node/' + this.shareBarModel.get('embedUrl')  + '/share';
     url += '?iframe_mode=true&width=' + this.shareBarModel.get('width');
     url += '&height=' + this.shareBarModel.get('height');
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');

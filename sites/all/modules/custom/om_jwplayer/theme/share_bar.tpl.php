@@ -1,4 +1,4 @@
-<div id="session-video-embed-tray" class='embed-tray'>
+<div id="session-video-embed-tray" data-share-link="<?php print $share_url; ?>" class='embed-tray'>
   <div class="inner">
     <form class="clearfix">
       <?php if (!empty($cuepoints)): ?>
