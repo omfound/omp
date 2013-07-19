@@ -169,6 +169,14 @@ function om_migration_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 400
   );
+  $items['admin/content/migrate/cablecast_cache'] = array(
+    'title' => t('Cablecast Migration Cache'),
+    'page callback' => 'om_migration_build_cablecast_migration_cache',
+    'access arguments' => array('administer open media migration'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => drupal_get_path('module', 'om_migration') . 'includes/cablecast.inc'
+    'weight' => 500,
+  );
   return $items;
 }
 /**
@@ -224,4 +232,9 @@ function om_migration_cablecast_taxonomy_map_form_submit($form, &$form_state) {
     }
   }
   variable_set('cablecast_category_mapping', $values);
+}
+
+function om_migration_build_cablecast_migration_cache() {
+  dsm('ehre we go');
+  return array();
 }
