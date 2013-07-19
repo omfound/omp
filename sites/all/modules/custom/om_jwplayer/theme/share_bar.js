@@ -17,7 +17,6 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
     else {
       this.onReady();
     }
-    console.log(player);
   },
   onReady: function(){
     this.trigger('onReady');
@@ -58,6 +57,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.toggleState = false;
   },
   initializeInterface : function() {
+    console.log("Initializing!!");
     url = document.URL;
     if (url.indexOf('iframe_mode=true') > 0) {
       this.remove();
