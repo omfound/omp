@@ -5,7 +5,6 @@
   </head>
   <body>
     <?php print $video; ?>
-    <?php dsm($scripts); ?>
     <?php print $scripts; ?>
   </body>
 </html>

@@ -272,7 +272,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
-function om_show_render_video_url($url, $width = 550, $height = 338) {
+function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
@@ -291,7 +291,7 @@ function om_show_render_video_url($url, $width = 550, $height = 338) {
 
     if (empty($video)) {
       //default jwplayer code
-      om_show_jwplayer_include(false, $width, $height);
+      om_show_jwplayer_include($disable_playlist, $width, $height);
       $video = '<div id="jwplayer-0">Loading video...</div>';
       $use_share_bar = variable_get('om_show_share_bar', FALSE);
       if (arg(2) != 'agenda_manager' && $use_share_bar) {

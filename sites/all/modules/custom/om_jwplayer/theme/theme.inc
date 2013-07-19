@@ -26,7 +26,7 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $width = isset($_GET['width']) ? $_GET['width'] : '420';
   $height = isset($_GET['height']) ? $_GET['height'] : '340';
   if (!empty($variables['node']->field_om_show_video[$variables['node']->language][0]['value'])) {
-    $variables['video'] = om_show_render_video_url($variables['node']->field_om_show_video[$variables['node']->language][0]['value'], $width, $height);
+    $variables['video'] = om_show_render_video_url($variables['node']->field_om_show_video[$variables['node']->language][0]['value'], $width, $height, true);
   }
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
