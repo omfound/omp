@@ -222,6 +222,8 @@
 .node-type-om-show .node .video-status {
   float: left;
   width: 410px;
+  max-height: 338px;
+  line-height: 0;
 }
 .node-type-om-show .node .video-processing {
   clear: left;
