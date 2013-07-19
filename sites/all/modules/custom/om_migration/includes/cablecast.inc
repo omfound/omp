@@ -69,7 +69,8 @@ class MigrateSourceCablecast extends MigrateSource {
         $file_options['RestrictToShowID'] = $show->ShowID;
         $file = $this->pbsController->get_digital_files($this->pbs, $file_options);
         $file_record = $file->GetDigitalFilesResponse->GetDigitalFilesResult[0];
-        if (!empty($file_record) && file_record['IsValid'] == TRUE) {
+        dsm($file_record);
+        if (!empty($file_record)) {
           $this->results[] = $show;
           $this->currentDateMarker = $show->LastModified;
         }
