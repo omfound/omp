@@ -35,7 +35,7 @@ class CablecastMigrationCache {
     cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   } 
   protected function _collectResults() {
-    if ($this->count < 500) {
+    if ($this->count < 5) {
     $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
     if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
       foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
