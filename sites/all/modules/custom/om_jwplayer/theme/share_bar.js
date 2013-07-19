@@ -10,10 +10,13 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
     _.bindAll(this, 'onReady', 'onPlay');
     // Bind player events to this model.
     player = this.get('player');
-    console.log("HERE IT IS");
-    console.log(player);
-    //player.onReady(this.onReady);
-    //player.onPlay(this.onPlay);
+    if (typeof(player.onReady) == 'function') {
+      player.onReady(this.onReady);
+      player.onPlay(this.onPlay);    
+    }
+    else {
+      this.onReady();
+    }
   },
   onReady: function(){
     this.trigger('onReady');
@@ -163,7 +166,12 @@ Drupal.behaviors.shareBar = {
      player = jwplayer();
    }
    else {
-     player = {};
+     player = {
+       config : {
+         width : 960,
+         height : 338
+       }
+     };
    }
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
   }
