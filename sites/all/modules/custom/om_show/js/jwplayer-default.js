@@ -5,7 +5,6 @@
       jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
 
       for(i = 0; i < Drupal.settings.jwplayer.length; ++i) {
-        alert('loading player');
         if (typeof Drupal.settings.jwplayer[i].playlist !== "undefined") {
           var player = jwplayer("jwplayer-"+i).setup({
             playlist: Drupal.settings.jwplayer[i].playlist,
