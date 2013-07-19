@@ -29,5 +29,4 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
     $variables['video'] = om_show_render_video_url($variables['node']->field_om_show_video[$variables['node']->language][0]['value'], $width, $height);
   }
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
-  dsm($variables);
 }
