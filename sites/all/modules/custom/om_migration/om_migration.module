@@ -174,7 +174,7 @@ function om_migration_menu() {
     'page callback' => 'om_migration_build_cablecast_migration_cache',
     'access arguments' => array('administer open media migration'),
     'type' => MENU_LOCAL_TASK,
-    'file' => drupal_get_path('module', 'om_migration') . 'includes/cablecast.inc',
+    'file' => 'includes/cablecast.inc',
     'weight' => 500,
   );
   return $items;
