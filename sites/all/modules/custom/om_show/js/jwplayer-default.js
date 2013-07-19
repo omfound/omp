@@ -37,6 +37,7 @@
             function() {
               if (parseInt(player.getPosition()) >= player.embedOutPoint) {
                 clearInterval(interval);
+                alert('pausing');
                 player.pause();
               } 
             }, 
