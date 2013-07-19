@@ -257,7 +257,7 @@ function om_migration_build_cablecast_migration_cache_form_submit(&$form, &$form
     'title' => t('Building Cablecast cache...'),
     'operations' => array(
       array('_om_migration_build_cablecast_cache', array()),
-      array('_om_migration_validate_cablecast_cache', array())
+      //array('_om_migration_validate_cablecast_cache', array())
     )
   );
   batch_set($batch);
