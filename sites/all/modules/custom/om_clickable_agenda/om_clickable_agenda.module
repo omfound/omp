@@ -239,7 +239,7 @@ function om_clickable_agenda_init() {
     drupal_add_js(drupal_get_path('module', 'om_clickable_agenda') . '/js/agenda_manager.js', $js_options);
     drupal_add_css(drupal_get_path('module', 'om_clickable_agenda') . '/theme/agenda.css');
     $node = menu_get_object();
-    om_show_jwplayer_include($node, true, 525, 300);
+    om_show_jwplayer_include(true, 525, 300);
     $nid = $node->nid;
     $theme = $node->field_om_theme[$node->language][0]['tid'];
     //$session_status = om_clickable_agenda_get_session_status();

@@ -25,6 +25,6 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $variables['styles'] = '<link type="text/css" rel="stylesheet" href="' . $css_path .'" media="all" />';
   $width = isset($_GET['width']) ? $_GET['width'] : '420';
   $height = isset($_GET['height']) ? $_GET['height'] : '340';
-  om_show_jwplayer_include($variables['node'], TRUE, $width, $height);
+  om_show_jwplayer_include(TRUE, $width, $height);
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
