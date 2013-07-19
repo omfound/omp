@@ -63,10 +63,16 @@ class MigrateSourceCablecast extends MigrateSource {
    */
   protected function _collectResults() {
     $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
+    $file_options = array('IncludeValidFiles' => TRUE, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE);
     if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
       foreach ($result->LastModifiedSearchResult->ShowInfo AS $show) {
-        $this->results[] = $show;
-        $this->currentDateMarker = $show->LastModified;
+        $file_options['RestrictToShowID'] = $show->ShowID;
+        $file = $this->pbsController->get_digital_files($this->pbs, $file_options);
+        $file_record = $file->GetDigitalFilesResponse->GetDigitalFilesResult[0];
+        if (!empty($file_record) && file_record->IsValid == TRUE) {
+          $this->results[] = $show;
+          $this->currentDateMarker = $show->LastModified;
+        }
       }
       $this->_collectResults();
     }
