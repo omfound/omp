@@ -25,7 +25,8 @@ function om_jwplayer_preprocess_om_show_share_page(&$variables) {
   $variables['styles'] = '<link type="text/css" rel="stylesheet" href="' . $css_path .'" media="all" />';
   $width = isset($_GET['width']) ? $_GET['width'] : '420';
   $height = isset($_GET['height']) ? $_GET['height'] : '340';
-  dsm($variables);
-  $variables['video'] = om_show_render_video_url($url);
+  if (!empty($variables['node']->field_om_show_video[$variables['node']->language][0]['value'])) {
+    $variables['video'] = om_show_render_video_url($variables['node']->field_om_show_video[$variables['node']->language][0]['value']);
+  }
   $variables['scripts'] = drupal_get_js($scope = 'header', $javascript = NULL, $skip_alter = FALSE);
 }
