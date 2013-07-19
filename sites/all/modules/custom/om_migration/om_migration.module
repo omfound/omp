@@ -251,5 +251,5 @@ function om_migration_build_cablecast_migration_cache_form($form, $form_state) {
 }
 
 function om_migration_build_cablecast_migration_cache_form_submit(&$form, &$form_state) {
-  require_once(drupal_get_path('module', 'om_migration') . 'includes/cablecast.inc');
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
 }
