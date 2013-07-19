@@ -111,7 +111,7 @@ function openmedia_preprocess_field__field_om_show_video(&$variables) {
           }
         }
         $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
-        $video .= $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+        $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
       }
     } 
     if (empty($video)) {
