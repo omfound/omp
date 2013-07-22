@@ -6,7 +6,7 @@
 
     <?php if (!empty($video_info['status']) && $video_info['status'] == 'processing' && !empty($video_info['image'])) { ?>
       <div class="video-status video-processing"><?php print $video_info['image']; ?></div>
-    <?php }elseif($video_info['status'] == 'processing') { ?>
+    <?php }elseif(!empty($video_info['status']) && $video_info['status'] == 'processing') { ?>
       <div class="video-status video-processing">This video is currently processing, please check back later.</div>
     <?php } ?>
 
