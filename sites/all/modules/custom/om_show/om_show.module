@@ -182,6 +182,8 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 */
 }
 
+//test
+
 function om_show_field_group_build_pre_render_alter(&$element) {
   if (user_access('administer show')) { 
     $element['group_om_legacy']['#access'] = TRUE;
