@@ -125,10 +125,9 @@ function om_dashboard_panes_get_users_reservations($user = NULL) {
   if (empty($user)) {
     global $user;
   }
-  $query = db_select('node', 'node');
-  $query->fields('node', array('nid', 'title', 'created'));
-  $query->condition('uid', $user->uid, '=');
-  $query->condition('type', 'om_show', '=');
-  $result = $query->execute();
+  $result = db_query('SELECT line_item_id, cli.order_id FROM {commerce_line_item} cli
+    inner join {commerce_order} co on co.order_id=cli.order_id
+    WHERE cli.type = :type
+    and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
   return $result->fetchAll();
 }
