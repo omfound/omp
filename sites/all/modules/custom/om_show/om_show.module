@@ -315,9 +315,11 @@ function om_show_render_video_url($url, $width = 550, $height = 338, $disable_pl
 
 function om_show_youtube_id($url) {
   $url_info = parse_url($url);
-  parse_str(html_entity_decode($url_info['query']), $query);
-  if (!empty($query['v'])) {
-    return $query['v'];
+  if (!empty($url_info['query'])) {
+    parse_str(html_entity_decode($url_info['query']), $query);
+    if (!empty($query['v'])) {
+      return $query['v'];
+    }
   }
 
   return false;
