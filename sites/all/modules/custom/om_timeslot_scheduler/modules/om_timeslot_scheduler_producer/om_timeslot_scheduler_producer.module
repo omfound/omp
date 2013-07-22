@@ -346,7 +346,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   $query->condition('nid', $timeslot_nid, '=');
   $result = $query->execute();
   $title = $result->fetchAll();
-
+  dsm($dates);
   $date_options = array(
     'header' => array(
       '#prefix' => '<p>',
@@ -591,7 +591,6 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   while($dates = $result->fetchAssoc()) {
     $output[$dates['field_om_timeslot_date_value']] = array();
     $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
-    dsm($gaps);
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
