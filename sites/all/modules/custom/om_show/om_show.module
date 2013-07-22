@@ -287,7 +287,10 @@ function om_show_render_video_url($url, $width = 550, $height = 338, $disable_pl
         }
         $video = '<iframe width="'.$width.'" height="'.$height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
         if (empty($_GET['iframe_mode'])) {
-          $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+          $use_share_bar = variable_get('om_show_share_bar', FALSE);
+          if (arg(2) != 'agenda_manager' && $use_share_bar) {
+            $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+          }
         }
       }
     } 
