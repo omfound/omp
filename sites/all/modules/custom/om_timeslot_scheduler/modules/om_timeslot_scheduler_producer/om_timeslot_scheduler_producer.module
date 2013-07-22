@@ -527,7 +527,7 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $themes = array();
 
   // @TODO Change field_om_theme_tax to real field
-  $project_nid = $show->field_om_show_project['und'][0]['nid'];
+  $project_nid = $show->field_om_show_project[$show->language][0]['nid'];
 
   // This show's series slots. field_om_timeslot_project
   $query = db_select('field_data_field_om_timeslot_date', 'date');
@@ -544,7 +544,8 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $query->condition('field_om_timeslot_producer_value', '1', '=');
   $result = $query->execute();
   $series = $result->fetchAll();
-
+  dsm($series);
+  dpq($query);
   if (isset($show->field_om_theme['und'][0]['tid'])) {
     $project_theme = $show->field_om_theme['und'][0]['tid'];
     // Shows with same theme.
