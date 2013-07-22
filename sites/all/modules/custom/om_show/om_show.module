@@ -122,10 +122,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
-  dsm($form);
-  dsm($form_state);
-  dsm($form_id);
-  
+ /* 
   // Auto population of metadata/contact info from project
      $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced');
      $om_show_project_info = array('field_om_project_company', 'field_om_project_contact','field_om_language','field_license');
@@ -185,7 +182,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     }
 
 }
-
+*/
 //test
 
 function om_show_field_group_build_pre_render_alter(&$element) {
