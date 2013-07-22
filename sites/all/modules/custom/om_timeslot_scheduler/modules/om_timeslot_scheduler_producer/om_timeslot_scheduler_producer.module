@@ -544,9 +544,6 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $query->condition('field_om_timeslot_producer_value', '1', '=');
   $result = $query->execute();
   $series = $result->fetchAll();
-  dsm("test");
-  dsm($series);
-  dpq($query);
   if (isset($show->field_om_theme['und'][0]['tid'])) {
     $project_theme = $show->field_om_theme['und'][0]['tid'];
     // Shows with same theme.
@@ -594,6 +591,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   while($dates = $result->fetchAssoc()) {
     $output[$dates['field_om_timeslot_date_value']] = array();
     $gaps = om_timeslot_scheduler_get_gaps($dates['field_om_timeslot_channel_tid'], $dates['field_om_timeslot_date_value'], $dates['field_om_timeslot_date_value2']);
+    dsm($gaps);
     foreach($gaps AS $gap) {
       $process_start = $gap['start'];
       $process_end = $gap['end'];
