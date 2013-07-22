@@ -122,7 +122,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
-  
+  /*
   // Auto population of metadata/contact info from project
      $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced');
      $om_show_project_info = array('field_om_project_company', 'field_om_project_contact','field_om_language','field_license');
@@ -144,7 +144,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
        unset($form[$field]);
      }
      $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
-
+    
      // If there is a value for project try and load in meta values.
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
@@ -180,7 +180,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     else {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
     }
-
+*/
 }
 
 //test
