@@ -544,6 +544,7 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $query->condition('field_om_timeslot_producer_value', '1', '=');
   $result = $query->execute();
   $series = $result->fetchAll();
+  dsm("test");
   dsm($series);
   dpq($query);
   if (isset($show->field_om_theme['und'][0]['tid'])) {
