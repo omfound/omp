@@ -136,7 +136,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
        //'#description' => t('Metadata fields for this show.'),
        '#type' => 'fieldset',
        '#collapsible' => FALSE,
-       '#weight' => 51.5 ,
+       '#weight' => 23.5 ,
        '#prefix' => '<div class = "show_metadata"',
        '#suffix' => '</div>', 
      );
