@@ -10,6 +10,8 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
     _.bindAll(this, 'onReady', 'onPlay');
     // Bind player events to this model.
     player = this.get('player');
+    console.log("HERE IS TYPE OF");
+    console.log(typeof(player.onReady));
     if (typeof(player.onReady) == 'function') {
       player.onReady(this.onReady);
       player.onPlay(this.onPlay);    
@@ -40,10 +42,6 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     'mouseup input.facebook' : 'preventDefault',
   },
   initialize : function(player, domInterface) {
-    console.log("Here is player:");
-    console.log(player);
-    console.log("Here is interface");
-    console.log(domInterface);
     // Standard bindall for this view.
     _.bindAll(this, 'initializeInterface', 'toggleInterface', 'buildEmbed', 'stopPlayer');
     // Attach this view to the dom element.
