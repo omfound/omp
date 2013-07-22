@@ -82,7 +82,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
     this.buildEmbed();
-    console.log(console.log(player));
+    console.log(player);
     if (typeof(player.play) == 'function') {
       // Do stupid play for one second to get duration.
       // PILE ON THE PENUT BUTTER KLUDGE
