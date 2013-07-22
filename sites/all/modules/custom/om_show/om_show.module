@@ -130,10 +130,10 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
      
     $form['om_show_metadata'] = array(
        '#title' => t('Show Metadata'),
-       //'#description' => t('Metadata fields for this show.'),
+       '#description' => t('Metadata fields for this show.'),
        '#type' => 'fieldset',
        '#collapsible' => FALSE,
-       '#weight' => '1' ,
+       '#weight' => 1.5 ,
        '#prefix' => '<div class = "show_metadata"',
        '#suffix' => '</div>', 
      );
