@@ -585,6 +585,8 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
+$redirect_sites = array('denveropenmedia.com' => 'denveropenmedia.org');
+
 $secure_sites = array('betv.org', 'denveropenmedia.org', 'denveropenmedia.com');
 $secure_connection = FALSE;
 foreach ($secure_sites AS $site) {
@@ -600,12 +602,17 @@ if (!empty($secure_connection)) {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
       header('HTTP/1.0 301 Moved Permanently');
       $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+      // Check for a redirect
+      if (!empty($redirect_sites[$host])) {
+        $host = $redirect_sites[$host];
+      }
       header('Location: https://www.' . $host . $_SERVER['REQUEST_URI']);
       exit(); 
     }
   }
 }
 else {
+  // @TODO need to figure out what's going on here and checck for redirects.
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     $url = parse_url($_SERVER['HTTP_HOST']);
     $parts = explode('.', $url['path']);
