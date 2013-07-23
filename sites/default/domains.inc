@@ -27,19 +27,27 @@ function _omp_perform_redirect() {
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
     if ($domain_info['www_enabled'] == FALSE && $request_contains_www == TRUE) {
       if (empty($redirect)) {
-        $redirect = 'http://';
+        if (isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
+          $redirect = 'http://';
+        }
+        else {
+          $redirect = 'https://';
+        }
       }
     }
     if ($domain_info['www_enabled'] == TRUE && $request_contains_www == FALSE) {
-      if (empty($redirect)) {
+      if (isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
         $redirect = 'http://';
+      }
+      else {
+        $redirect = 'https://';
       }
       $redirect .= 'www.';
     }
     
     if (!empty($redirect)) { 
       $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
-     print "proposed redirect";
+     print "proposed redirect: \n";
      print $redirect;
      // header('HTTP/1.0 301 Moved Permanently');
      // header('Location: ' . $redirecit);
