@@ -21,38 +21,53 @@ function _omp_perform_redirect() {
   $current_host = _omp_clean_host();
   $domain_info = _omp_return_current_domain_info($current_host);
   if (!empty($domain_info)) {
-    $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
-    $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
-    if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
-      if ($domain_info['www_enabled'] == TRUE) {
-        $redirect = 'https://www.';
+    if (!empty($domain_info['redirect'])) {
+      if ($domain_info['ssl_enabled'] == TRUE) {
+        $redirect = 'https://';
       }
       else {
-        $redirect = 'https://';
-      }
-    }
-    else if ($request_is_secure == TRUE && $domain_info['ssl_enabled'] == TRUE) {
-      if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
-        $redirect = 'https://www.';
-      }
-      else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
-        $redirect = 'https://';
-      }
-    }
-    else if ($domain_info['ssl_enabled'] == FALSE) {
-      if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
-        $redirect = 'http://www.';
-      }
-      else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
         $redirect = 'http://';
       }
+      if ($domain_info['www_enabled'] == TRUE) {
+        $redirect .= 'www.';
+      }
+      $redirect .= $domain_info['redirect'];
+    }
+    else {
+      $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
+      $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
+      if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
+        if ($domain_info['www_enabled'] == TRUE) {
+          $redirect = 'https://www.';
+        }
+        else {
+          $redirect = 'https://';
+        }
+      }
+      else if ($request_is_secure == TRUE && $domain_info['ssl_enabled'] == TRUE) {
+        if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
+          $redirect = 'https://www.';
+        }
+        else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
+          $redirect = 'https://';
+        }
+      }
+      else if ($domain_info['ssl_enabled'] == FALSE) {
+        if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
+          $redirect = 'http://www.';
+        }
+        else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
+          $redirect = 'http://';
+        }
+      }
+      $redirect .= $current_host;
     }
     if (!empty($redirect)) { 
-      $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
+      $redirect .=  $_SERVER['REQUEST_URI'];
       print "proposed redirect: \n";
       print $redirect;
      // header('HTTP/1.0 301 Moved Permanently');
-     // header('Location: ' . $redirecit);
+     // header('Location: ' . $redirect);
      // exit(); 
     }
   }
@@ -71,7 +86,6 @@ function _omp_return_current_domain_info($key) {
   $aliases = _omp_return_aliases();
   // See if we have a domain
   if (!empty($domains[$key])) {
-    $domains[$key]['redirect'] = $key;
     return $domains[$key];
   }
   // See if we have an alias
