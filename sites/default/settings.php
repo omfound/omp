@@ -588,6 +588,4 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 if (!isset($domains)) {
   require_once('domains.inc');
 }
-if (drupal_is_front_page()) {
-  _omp_perform_redirect();
-}
+_omp_perform_redirect();
