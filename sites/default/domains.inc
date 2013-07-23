@@ -48,7 +48,7 @@ function _omp_perform_redirect() {
 function _omp_return_current_domain_info($key) {
   global $domains, $aliases;
   // See if we have a domain
-  if (!empty($domains[$key]) {
+  if (!empty($domains[$key])) {
     $domains[$key]['redirect'] = $key;
     return $domains[$key];
   }
