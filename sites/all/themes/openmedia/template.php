@@ -92,36 +92,8 @@ function openmedia_preprocess_field(&$variables, $hook) {
 
 function openmedia_preprocess_field__field_om_show_video(&$variables) {
   $url = $variables['items'][0]['#markup'];
-
-  if (!empty($url)) {
-    if ($youtube_id = om_show_youtube_id($url)) {
-      $livestream_status = om_show_youtube_livestream_status($youtube_id); 
-      if (!empty($livestream_status) && $livestream_status == 'active') {
-        //youtube embed
-        $live_width = 550;
-        $live_height = 338;
-        if (arg(2) == 'agenda_manager') {
-          $live_width = 525;
-          $live_height = 300;
-        }
-        $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
-        if (!arg(2) == 'agenda_manager') {
-          if (variable_get('om_show_autoplay', false)) {
-            $embed_url .= '?autoplay=1';
-          }
-        }
-        $video = '<iframe width="'.$live_width.'" height="'.$live_height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
-      }
-    } 
-    if (empty($video)) {
-      //default jwplayer code
-      om_show_jwplayer_include($variables);
-      $video = '<div id="jwplayer-0">Loading video...</div>';
-      $use_share_bar = variable_get('om_show_share_bar', FALSE);
-      if (arg(2) != 'agenda_manager' && $use_share_bar) {
-        $video .= theme('om_show_share_bar');
-      }
-    }
+  $video = om_show_render_video_url($url);
+  if (!empty($video)) {
     $variables['video'] = $video;
   }
 }

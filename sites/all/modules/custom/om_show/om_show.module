@@ -122,10 +122,11 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
-/*
+  /*
   // Auto population of metadata/contact info from project
-     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced', 'field_om_language','field_license');
-     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact');
+     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced');
+     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact','field_om_language','field_license');
+
      
     $form['om_show_metadata'] = array(
        '#title' => t('Show Metadata'),
@@ -136,14 +137,14 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
        '#prefix' => '<div class = "show_metadata"',
        '#suffix' => '</div>', 
      );
-
+    
      // move metadata to fieldset
      foreach ($om_show_meta_entities AS $field) {
        $form['om_show_metadata'][$field] = $form[$field];
        unset($form[$field]);
      }
      $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
-
+    
      // If there is a value for project try and load in meta values.
      if (isset($key) && arg(2) != 'edit') {
        $project = node_load($key);
@@ -202,7 +203,7 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550, $height = 338) {
+function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
   $node = menu_get_object();
   if (!is_object($node)) {
     $nid = $node['nid'];
@@ -272,11 +273,53 @@ function om_show_jwplayer_include($node, $disable_playlist = false, $width = 550
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
+function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
+  if (!empty($url)) {
+    if ($youtube_id = om_show_youtube_id($url)) {
+      $livestream_status = om_show_youtube_livestream_status($youtube_id); 
+      if (!empty($livestream_status) && $livestream_status == 'active') {
+        //youtube embed
+        $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
+        if (!arg(2) == 'agenda_manager') {
+          if (variable_get('om_show_autoplay', false)) {
+            $embed_url .= '?autoplay=1';
+          }
+        }
+        $video = '<iframe width="'.$width.'" height="'.$height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        if (empty($_GET['iframe_mode'])) {
+          $use_share_bar = variable_get('om_show_share_bar', FALSE);
+          if (arg(2) != 'agenda_manager' && $use_share_bar) {
+            $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+          }
+        }
+      }
+    } 
+
+    if (empty($video)) {
+      //default jwplayer code
+      om_show_jwplayer_include($disable_playlist, $width, $height);
+      $video = '<div id="jwplayer-0">Loading video...</div>';
+      if (empty($_GET['iframe_mode'])) {
+        $use_share_bar = variable_get('om_show_share_bar', FALSE);
+        if (arg(2) != 'agenda_manager' && $use_share_bar) {
+          $video .= theme('om_show_share_bar', array('cuepoints' => TRUE));
+        }
+      }
+    }
+
+    return $video;
+  }
+
+  return false;
+}
+
 function om_show_youtube_id($url) {
   $url_info = parse_url($url);
-  parse_str(html_entity_decode($url_info['query']), $query);
-  if (!empty($query['v'])) {
-    return $query['v'];
+  if (!empty($url_info['query'])) {
+    parse_str(html_entity_decode($url_info['query']), $query);
+    if (!empty($query['v'])) {
+      return $query['v'];
+    }
   }
 
   return false;

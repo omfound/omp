@@ -4,17 +4,17 @@
       <?php print $video; ?>
     <?php endif; ?>
 
-    <?php if ($video_info['status'] == 'processing' && !empty($video_info['image'])) { ?>
+    <?php if (!empty($video_info['status']) && $video_info['status'] == 'processing' && !empty($video_info['image'])) { ?>
       <div class="video-status video-processing"><?php print $video_info['image']; ?></div>
-    <?php }elseif($video_info['status'] == 'processing') { ?>
+    <?php }elseif(!empty($video_info['status']) && $video_info['status'] == 'processing') { ?>
       <div class="video-status video-processing">This video is currently processing, please check back later.</div>
     <?php } ?>
 
-    <?php if ($video_info['status'] == 'live' && !empty($video_info['image'])) { ?>
+    <?php if (!empty($video_info['status']) && $video_info['status'] == 'live' && !empty($video_info['image'])) { ?>
       <div class="video-status video-live"><?php print $video_info['image']; ?></div>
     <?php } ?>
 
-    <?php if ($video_info['status'] == 'ondemand' && !empty($video_info['image'])) { ?>
+    <?php if (!empty($video_info['status']) && $video_info['status'] == 'ondemand' && !empty($video_info['image'])) { ?>
       <div class="video-status video-ondemand"><?php print $video_info['image']; ?></div>
     <?php } ?>
       

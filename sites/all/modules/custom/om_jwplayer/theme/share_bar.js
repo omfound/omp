@@ -10,8 +10,10 @@ Drupal.shareBar.models.shareBar = Backbone.Model.extend({
     _.bindAll(this, 'onReady', 'onPlay');
     // Bind player events to this model.
     player = this.get('player');
-    player.onReady(this.onReady);
-    player.onPlay(this.onPlay);
+    if (typeof(player.onReady) == 'function') {
+      player.onReady(this.onReady);
+      player.onPlay(this.onPlay);    
+    }
   },
   onReady: function(){
     this.trigger('onReady');
@@ -48,6 +50,9 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Listen for player events.
     this.shareBarModel.on('onReady', this.initializeInterface, this);
     this.shareBarModel.on('onPlay', this.setDurationOnce, this);
+    if (typeof(player.onReady) != 'function') {
+      this.initializeInterface();
+    }
     // Set toggle to closed.
     this.toggleState = false;
   },
@@ -65,6 +70,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.set('interfaceHeight', 68);
     this.shareBarModel.set('width', 420);
     this.shareBarModel.set('height', player.config.height);
+    this.shareBarModel.set('embedUrlStem', $(this.el).attr('data-share-link'));
     // Resize interface.
     $(this.el).width(this.shareBarModel.get('interfaceWidth')); 
     // Set Default interface values.
@@ -76,11 +82,16 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     $(this.el).find('input.width').val(420);
     $(this.el).find('input.height').val(player.config.height);
     this.buildEmbed();
-    // Do stupid play for one second to get duration.
-    // PILE ON THE PENUT BUTTER KLUDGE
-    player.setVolume(0);
-    player.play();
-    this.playerInterval = setInterval(this.stopPlayer, 1000); 
+    if (typeof(player.play) == 'function' && player.getState() == "IDLE") {
+      // Do stupid play for one second to get duration.
+      // PILE ON THE PENUT BUTTER KLUDGE
+      player.setVolume(0);
+      player.play();
+      this.playerInterval = setInterval(this.stopPlayer, 1000);
+    } 
+    else {
+      $(this.el).show();
+    }
   },
   stopPlayer : function() {
     player = this.shareBarModel.get('player');
@@ -140,8 +151,8 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     this.shareBarModel.off('onPlay', this.setDurationOnce, this);
   },
   buildEmbed : function() {
-    // Build iframe embed
-    url = this.shareBarModel.get('url', url);
+    // Build iframe embed 
+    url = this.shareBarModel.get('embedUrlStem');
     url += '?iframe_mode=true&width=' + this.shareBarModel.get('width');
     url += '&height=' + this.shareBarModel.get('height');
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
@@ -157,7 +168,17 @@ Drupal.behaviors.shareBar = {
    // This is due to the previous "frameworking" and lack of selectability other than arbitrary id.
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
-   player = jwplayer();
+   if (typeof(jwplayer) == 'function') {
+     player = jwplayer();
+   }
+   else {
+     player = {
+       config : {
+         width : 960,
+         height : 338
+       }
+     };
+   }
    var tray = new Drupal.shareBar.views.shareBar(player, $target);
   }
 }
