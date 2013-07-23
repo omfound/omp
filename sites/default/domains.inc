@@ -6,6 +6,10 @@ function _omp_return_domains() {
     'ssl_enabled' => TRUE,
     'www_enabled' => TRUE
   );
+  $domains['betv.org'] = array(
+    'ssl_enabled' => TRUE,
+    'www_enabled' => TRUE
+  );
   return $domains;
 }
 
