@@ -128,8 +128,7 @@ function om_dashboard_panes_get_users_reservations($user = NULL) {
   $result = db_query('SELECT line_item_id, cli.order_id FROM {commerce_line_item} cli
     inner join {commerce_order} co on co.order_id=cli.order_id
     WHERE cli.type = :type
-    and uid=:uid
-    and cli.date', array(':type' => 'reservable_product', ':uid' => $user->uid));
+    and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
   $reservations = array();
   // from UTC to Mountain time
   $offset = -6*60*60;
