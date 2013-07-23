@@ -1,11 +1,15 @@
 <?php
+/**
+ * Return a map of all domains to anticipate
+ */
 function _omp_return_domains() {
   $domains = array();
-  // Denver Open Media #DOM
+  // Denver Open Media
   $domains['denveropenmedia.org'] = array(
     'ssl_enabled' => TRUE,
     'www_enabled' => TRUE
   );
+  // Berkely Community Media
   $domains['betv.org'] = array(
     'ssl_enabled' => TRUE,
     'www_enabled' => TRUE
@@ -13,18 +17,27 @@ function _omp_return_domains() {
   return $domains;
 }
 
+/**
+ * Return a map of all aliases to track. Relationship goes request => redirect. 
+ */
 function _omp_return_aliases() {
   $aliases = array(
-    // Denver Open Media #DOM
+    // Denver Open Media
     'denveropenmedia.com' => 'denveropenmedia.org',
   );
   return $aliases;
 }
 
+/**
+ * Determine if we need a redirect and then perform it.
+ */
 function _omp_perform_redirect() {
+  // Get current host key
   $current_host = _omp_clean_host();
   $domain_info = _omp_return_current_domain_info($current_host);
+  // If no domain info is available do nothing.
   if (!empty($domain_info)) {
+    // If we are dealing with an alias redirect to the correct form of that alias.
     if (!empty($domain_info['redirect'])) {
       if ($domain_info['ssl_enabled'] == TRUE) {
         $redirect = 'https://';
@@ -38,6 +51,7 @@ function _omp_perform_redirect() {
       $redirect .= $domain_info['redirect'];
     }
     else {
+      // Otherwise correct the current path if anything is wrong.
       $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
       $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
       if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
@@ -68,6 +82,7 @@ function _omp_perform_redirect() {
         $redirect .= $current_host;
       }
     }
+    // Perform redirect
     if (!empty($redirect)) { 
       $redirect .=  $_SERVER['REQUEST_URI'];
       header('HTTP/1.0 301 Moved Permanently');
