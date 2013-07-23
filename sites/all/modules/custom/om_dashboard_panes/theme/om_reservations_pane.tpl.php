@@ -3,4 +3,9 @@
   <div class="inner">
      <?php print $reservations_output; ?>
   </div>
+  <?php if (isset($add_link)): ?>
+  <div class="divider">
+  <?php print $add_link; ?>
+  </div>
+  <?php endif; ?>
 </div>
