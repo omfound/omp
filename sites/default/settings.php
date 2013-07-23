@@ -586,5 +586,5 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 # $conf['pressflow_smart_start'] = TRUE;
 
 if (!isset($domains)) {
-  require_once('../domains.inc');
+  require_once('domains.inc');
 }
