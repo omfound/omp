@@ -64,8 +64,8 @@ function _omp_perform_redirect() {
     }
     if (!empty($redirect)) { 
       $redirect .=  $_SERVER['REQUEST_URI'];
-      print "proposed redirect: \n";
-      print $redirect;
+     // print "proposed redirect: \n";
+     // print $redirect;
      // header('HTTP/1.0 301 Moved Permanently');
      // header('Location: ' . $redirect);
      // exit(); 
