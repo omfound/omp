@@ -24,10 +24,10 @@ function _omp_perform_redirect() {
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
     $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
     if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
-      if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
+      if ($domain_info['www_enabled'] == TRUE) {
         $redirect = 'https://www.';
       }
-      else if ($domain_info['www_enabled'] == FALSE) {
+      else {
         $redirect = 'https://';
       }
     }
@@ -35,7 +35,7 @@ function _omp_perform_redirect() {
       if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
         $redirect = 'https://www.';
       }
-      else if ($domain_info['www_enabled'] == FALSE) {
+      else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
         $redirect = 'https://';
       }
     }
@@ -43,11 +43,10 @@ function _omp_perform_redirect() {
       if ($request_contains_www == FALSE && $domain_info['www_enabled'] == TRUE) {
         $redirect = 'http://www.';
       }
-      else if ($domain_info['www_enabled'] == FALSE) {
+      else if ($request_contains_www == TRUE && $domain_info['www_enabled'] == FALSE) {
         $redirect = 'http://';
       }
     }
-
     if (!empty($redirect)) { 
       $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
       print "proposed redirect: \n";
