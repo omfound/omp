@@ -22,7 +22,11 @@ function _omp_perform_redirect() {
   $domain_info = _omp_return_current_domain_info($current_host);
   if (!empty($domain_info)) {
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
-    $request_is_secure = isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
+    $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
+    print_r("CONTAINS WWW: ");
+    print_r($request_contains_www);
+    print_r(" CONTAINS HTTPS: ");
+    print_r($request_is_secure);
     if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
       if ($request_contains_www == FALSE && $domain_info['www_enabled'] = TRUE) {
         $redirect = 'https://www.';
