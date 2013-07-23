@@ -22,7 +22,6 @@ function _omp_perform_redirect() {
   $domain_info = _omp_return_current_domain_info($current_host);
   if (!empty($domain_info)) {
     if (!empty($domain_info['redirect'])) {
-      print 'we go in here';
       if ($domain_info['ssl_enabled'] == TRUE) {
         $redirect = 'https://';
       }
@@ -65,8 +64,8 @@ function _omp_perform_redirect() {
     }
     if (!empty($redirect)) { 
       $redirect .=  $_SERVER['REQUEST_URI'];
-     // print "proposed redirect: \n";
-     // print $redirect;
+     print "proposed redirect: \n";
+     print $redirect;
      // header('HTTP/1.0 301 Moved Permanently');
      // header('Location: ' . $redirect);
      // exit(); 
