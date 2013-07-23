@@ -585,7 +585,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
-if (!isset($domains)) {
+if (!function_exists('_omp_perform_redirect')) {
   require_once('domains.inc');
 }
 _omp_perform_redirect();
