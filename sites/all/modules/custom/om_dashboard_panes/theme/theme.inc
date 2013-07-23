@@ -111,7 +111,7 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
     $reservations_output = 'No upcoming reservations'; 
   }
   $variables['title'] = t('Reservations') . l('Make a Reservation', 'reservations', $options);
-  $variables['reservations_table'] = $reservations_table;
+  $variables['reservations_output'] = $reservations_output;
 }
 
 /**
