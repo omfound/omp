@@ -129,5 +129,18 @@ function om_dashboard_panes_get_users_reservations($user = NULL) {
     inner join {commerce_order} co on co.order_id=cli.order_id
     WHERE cli.type = :type
     and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
-  return $result->fetchAll();
+  $reservations = array();
+  // from UTC to Mountain time
+  $offset = -6*60*60;
+  foreach($result as $row) {
+    $line_item = commerce_line_item_load($row->line_item_id);
+    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+    $title = $product->title;
+    $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
+    $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2']) + $offset;
+    $reservations[$row->line_item_id]->title = $title;
+    $reservations[$row->line_item_id]->start_date = $start_date;
+    $reservations[$row->line_item_id]->end_date = $end_date;
+  }
+  return $reservations;
 }

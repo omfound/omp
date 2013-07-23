@@ -45,3 +45,46 @@ function commerce_reservations_theme(){
 	  ),
 	);
 }
+
+/**
+ * Helper to load reservations and send to theme layer.
+ */
+function commerce_reservations_user_reservations($user = false, $format = 'full') {
+  if (!$user) {
+    global $user;
+  }
+  $reservations = commerce_reservations_get_reservations($user);
+  if ($format == 'full') {
+    // call commerce_reservations_user_reservations() located in theme.inc
+    return theme('commerce_reservations_user_reservations', array('reservations' => $reservations));
+  }
+  else {
+    return theme('commerce_reservations_user_reservations_simple', array('reservations' => $reservations));
+  }
+}
+
+function commerce_reservations_get_reservations($user) {
+  $res = db_query('SELECT line_item_id, cli.order_id FROM {commerce_line_item} cli
+      inner join {commerce_order} co on co.order_id=cli.order_id
+      WHERE cli.type = :type
+      and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
+  // translate date to Denver time
+  $offset = 60 * 60 * -6;
+  foreach ($res as $row) {
+    $key = $row->line_item_id;
+    $line_item = commerce_line_item_load($row->line_item_id);
+    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+    $date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
+    $reservations[$key] = $line_item;
+    $reservations[$key]->product = $product;
+    // I think we just need the product title and the reservation date.
+    $reservations[$key]->title = $product->title;
+    $reservations[$key]->date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
+  }
+  if (count($reservations > 0)) {
+    return $reservations;
+  }
+  else {
+    return false;
+  }
+}
