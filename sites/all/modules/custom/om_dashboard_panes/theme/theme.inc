@@ -87,8 +87,8 @@ function om_dashboard_panes_preprocess_om_classes_pane(&$variables) {
 }
 
 /**
-  *  * Implements hook_preprocess_hook
-  *   */
+ * Implements hook_preprocess_hook
+ */
 function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
   global $user;
   $registration_table = om_classes_user_registrations($user, 'simple');
@@ -101,7 +101,19 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
-  $variables['title'] = t('Reservations') . l('Make a Reservation', 'reservations', $options);
+  $reservations = om_dashboard_panes_get_users_reservations();
+  if(!empty($reservations)) {
+    $reservations_output = '<table><tr><th>Start Date</th><th>Item</th></tr>';
+    foreach($reservations as $res) {
+      $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td></tr>';
+    }
+    $reservations_output .= '</table>';
+  } else {
+    $reservations_output = 'No upcoming reservations'; 
+  }
+  $variables['title'] = t('Upcoming Reservations');
+  $variables['reservations_output'] = $reservations_output;
+  $variables['add_link'] = l('Make a Reservation', 'reservations', $options);
 }
 
 /**
