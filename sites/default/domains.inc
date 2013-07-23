@@ -21,34 +21,37 @@ function _omp_perform_redirect() {
   $current_host = _omp_clean_host();
   $domain_info = _omp_return_current_domain_info($current_host);
   if (!empty($domain_info)) {
-    if ((!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') && $domain_info['ssl_enabled'] == TRUE) {
-      $redirect = 'https://';
-    }
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
-    if ($domain_info['www_enabled'] == FALSE && $request_contains_www == TRUE) {
-      if (empty($redirect)) {
-        if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
-          $redirect = 'http://';
-        }
-        else {
-          $redirect = 'https://';
-        }
+    $request_is_secure = isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
+    if ($request_is_secure == FALSE && $domain_info['ssl_enabled'] == TRUE) {
+      if ($request_contains_www == FALSE && $domain_info['www_enabled'] = TRUE) {
+        $redirect = 'https://www.';
       }
-    }
-    if ($domain_info['www_enabled'] == TRUE && $request_contains_www == FALSE) {
-      if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
-        $redirect = 'http://';
-      }
-      else {
+      else if ($domain_info['www_enabled'] == FALSE) {
         $redirect = 'https://';
       }
-      $redirect .= 'www.';
     }
-    
+    else if ($request_is_secure == TRUE && $domain_info['ssl_enabled'] == TRUE) {
+      if ($request_contains_www == FALSE && $domain_info['www_enabled'] = TRUE) {
+        $redirect = 'https://www.';
+      }
+      else if ($domain_info['www_enabled'] == FALSE) {
+        $redirect = 'https://';
+      }
+    }
+    else if ($domain_info['ssl_enabled'] == FALSE) {
+      if ($request_contains_www == FALSE && $domain_info['www_enabled'] = TRUE) {
+        $redirect = 'http://www.';
+      }
+      else if ($domain_info['www_enabled'] == FALSE) {
+        $redirect = 'http://';
+      }
+    }
+
     if (!empty($redirect)) { 
       $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
-     print "proposed redirect: \n";
-     print $redirect;
+      print "proposed redirect: \n";
+      print $redirect;
      // header('HTTP/1.0 301 Moved Permanently');
      // header('Location: ' . $redirecit);
      // exit(); 
