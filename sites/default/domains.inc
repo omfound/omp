@@ -20,11 +20,6 @@ function _omp_return_aliases() {
 function _omp_perform_redirect() {
   $current_host = _omp_clean_host();
   $domain_info = _omp_return_current_domain_info($current_host);
-  print "<pre>";
-  print $current_host;
-  print "\n";
-  print_r($domain_info);
-  print "</pre>";
   if (!empty($domain_info)) {
     if ((!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') && $domain_info['ssl_enabled'] == TRUE) {
       $redirect = 'https://';
@@ -38,12 +33,14 @@ function _omp_perform_redirect() {
         $redirect .= 'www.';
       }
     }
-    print "MADE IT HERE: " . $redirect;
+    
     if (!empty($redirect)) { 
       $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
-      header('HTTP/1.0 301 Moved Permanently');
-      header('Location: ' . $redirect);
-      exit(); 
+     print "proposed redirect";
+     print $redirect;
+     // header('HTTP/1.0 301 Moved Permanently');
+     // header('Location: ' . $redirecit);
+     // exit(); 
     }
   }
 }
