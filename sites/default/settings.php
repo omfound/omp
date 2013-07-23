@@ -602,7 +602,7 @@ if (!empty($secure_connection)) {
     if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON' || !is_numeric(stripos($_SERVER['HTTP_HOST'], 'www'))) {
       header('HTTP/1.0 301 Moved Permanently');
       $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-      print "HOST : " . $host;
+      die("HOST : " . $host);
       // Check for a redirect
       if (!empty($redirect_sites[$host])) {
         $host = $redirect_sites[$host];
