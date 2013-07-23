@@ -52,7 +52,9 @@ function _omp_perform_redirect() {
  * @returns array entry from above or boolean FALSE
  */
 function _omp_return_current_domain_info($key) {
-  global $domains, $aliases;
+  global $domains;
+  global $aliases;
+  print 'here we are';
   print_r($domains);
   // See if we have a domain
   if (!empty($domains[$key])) {
