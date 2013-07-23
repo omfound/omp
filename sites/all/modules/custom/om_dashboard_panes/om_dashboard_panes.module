@@ -120,3 +120,31 @@ function om_dashboard_panes_get_users_shows($user = NULL) {
   $result = $query->execute();
   return $result->fetchAll();
 }
+
+function om_dashboard_panes_get_users_reservations($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $result = db_query('SELECT line_item_id, cli.order_id FROM {commerce_line_item} cli
+    inner join {commerce_order} co on co.order_id=cli.order_id
+    WHERE cli.type = :type
+    and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
+  $reservations = array();
+  // from UTC to Mountain time
+  $offset = -6*60*60;
+  foreach($result as $row) {
+    $line_item = commerce_line_item_load($row->line_item_id);
+    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+    $title = $product->title;
+    $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
+    $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2']) + $offset;
+    // if this line item is past, then skip 
+    if($end_date < strtotime("now")) {
+      continue;
+    }
+    $reservations[$row->line_item_id]->title = $title;
+    $reservations[$row->line_item_id]->start_date = date("m/d/Y h:i A", $start_date);
+    $reservations[$row->line_item_id]->end_date = date("m/d/Y h:i A", $end_date);
+  }
+  return $reservations;
+}

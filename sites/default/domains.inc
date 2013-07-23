@@ -1,0 +1,89 @@
+<?php
+function _omp_return_domains() {
+  $domains = array();
+  // Denver Open Media #DOM
+  $domains['denveropenmedia.org'] = array(
+    'ssl_enabled' => TRUE,
+    'www_enabled' => TRUE
+  );
+  return $domains;
+}
+
+function _omp_return_aliases() {
+  $aliases = array(
+    // Denver Open Media #DOM
+    'denveropenmedia.com' => 'denveropenmedia.org',
+  );
+  return $aliases;
+}
+
+function _omp_perform_redirect() {
+  $current_host = _omp_clean_host();
+  $domain_info = _omp_return_current_domain_info($current_host);
+  if (!empty($domain_info)) {
+    if ((!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') && $domain_info['ssl_enabled'] == TRUE) {
+      $redirect = 'https://';
+    }
+    $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
+    if ($domain_info['www_enabled'] == FALSE && $request_contains_www == TRUE) {
+      if (empty($redirect)) {
+        if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
+          $redirect = 'http://';
+        }
+        else {
+          $redirect = 'https://';
+        }
+      }
+    }
+    if ($domain_info['www_enabled'] == TRUE && $request_contains_www == FALSE) {
+      if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
+        $redirect = 'http://';
+      }
+      else {
+        $redirect = 'https://';
+      }
+      $redirect .= 'www.';
+    }
+    
+    if (!empty($redirect)) { 
+      $redirect .= $current_host .  $_SERVER['REQUEST_URI'];
+     print "proposed redirect: \n";
+     print $redirect;
+     // header('HTTP/1.0 301 Moved Permanently');
+     // header('Location: ' . $redirecit);
+     // exit(); 
+    }
+  }
+}
+
+/**
+ * Use the above lookups to return information about the
+ * current domain and if we need to perform any redirects.
+ *
+ * @param $key cleaned string of current url with no www, preceeding or trailing slashes.
+ *
+ * @returns array entry from above or boolean FALSE
+ */
+function _omp_return_current_domain_info($key) {
+  $domains = _omp_return_domains();
+  $aliases = _omp_return_aliases();
+  // See if we have a domain
+  if (!empty($domains[$key])) {
+    $domains[$key]['redirect'] = $key;
+    return $domains[$key];
+  }
+  // See if we have an alias
+  if (!empty($aliases[$key])) {
+    // Include a convenience key 'redirect'.
+    $domains[$aliases[$key]]['redirect'] = $aliases[$key]; 
+    return $domains[$aliases[$key]];
+  }
+  return FALSE;
+}
+
+/**
+ * Return a cleaned version of the $_SERVER['HTTP_HOST'] variable with no www, preceeding or trailing slashes.
+ */
+function _omp_clean_host() {
+  return trim(str_replace('www.', '', $_SERVER['HTTP_HOST']), '/');
+}
