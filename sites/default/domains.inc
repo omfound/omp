@@ -60,7 +60,9 @@ function _omp_perform_redirect() {
           $redirect = 'http://';
         }
       }
-      $redirect .= $current_host;
+      if (!empty($redirect)) {
+        $redirect .= $current_host;
+      }
     }
     if (!empty($redirect)) { 
       $redirect .=  $_SERVER['REQUEST_URI'];
