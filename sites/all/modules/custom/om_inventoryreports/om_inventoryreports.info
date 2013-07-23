@@ -1,0 +1,4 @@
+name = Open Media Inventory Reports
+description = Provides inventory reports for the Open Media System.
+core = 7.x
+package = Open Media System
