@@ -139,8 +139,8 @@ function om_dashboard_panes_get_users_reservations($user = NULL) {
     $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
     $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2']) + $offset;
     $reservations[$row->line_item_id]->title = $title;
-    $reservations[$row->line_item_id]->start_date = $start_date;
-    $reservations[$row->line_item_id]->end_date = $end_date;
+    $reservations[$row->line_item_id]->start_date = date("Y/m/d H:i:s", $start_date);
+    $reservations[$row->line_item_id]->end_date = date("Y/m/d H:i:s", $end_date);
   }
   return $reservations;
 }
