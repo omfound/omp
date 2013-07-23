@@ -107,6 +107,7 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
     foreach($reservations as $res) {
       $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td></tr>';
     }
+    $reservations_output .= '</table>';
   } else {
     $reservations_output = 'No upcoming reservations'; 
   }
