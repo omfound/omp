@@ -103,7 +103,7 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
   $reservations = om_dashboard_panes_get_users_reservations();
   if(!empty($reservations)) {
-    $reservations_output = '<table><tr><th>Date</th><th>Item</th></tr>';
+    $reservations_output = '<table><tr><th>Start Date</th><th>Item</th></tr>';
     foreach($reservations as $res) {
       $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td></tr>';
     }
@@ -111,8 +111,8 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   } else {
     $reservations_output = 'No upcoming reservations'; 
   }
-  $variables['title'] = t('Reservations') . l('Make a Reservation', 'reservations', $options);
-  $variables['reservations_output'] = $reservations_output;
+  $variables['title'] = t('Upcoming Reservations');
+  $variables['reservations_output'] = $reservations_output . l('Make a Reservation', 'reservations', $options);
 }
 
 /**
