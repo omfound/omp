@@ -585,7 +585,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
-$secure_sites = array('betv.org', 'denveropenmedia.org');
+$secure_sites = array('betv.org', 'denveropenmedia.org', 'denveropenmedia.com');
 $secure_connection = FALSE;
 foreach ($secure_sites AS $site) {
   if (is_numeric(strpos($_SERVER['HTTP_HOST'], $site))) {
