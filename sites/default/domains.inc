@@ -1,16 +1,21 @@
 <?php
-
-$domains = array();
-// Denver Open Media #DOM
-$domains['denveropenmedia.org'] = array(
-  'ssl_enabled' => TRUE,
-  'www_enabled' => TRUE
-);
-
-$aliases = array(
+function _omp_return_domains() {
+  $domains = array();
   // Denver Open Media #DOM
-  'denveropenmedia.com' => 'denveropenmedia.org',
-);
+  $domains['denveropenmedia.org'] = array(
+    'ssl_enabled' => TRUE,
+    'www_enabled' => TRUE
+  );
+  return $domains
+}
+
+function _omp_return_aliases() {
+  $aliases = array(
+    // Denver Open Media #DOM
+    'denveropenmedia.com' => 'denveropenmedia.org',
+  );
+  return $aliases;
+}
 
 function _omp_perform_redirect() {
   $current_host = _omp_clean_host();
@@ -52,10 +57,8 @@ function _omp_perform_redirect() {
  * @returns array entry from above or boolean FALSE
  */
 function _omp_return_current_domain_info($key) {
-  global $domains;
-  global $aliases;
-  print 'here we are';
-  print_r($domains);
+  $domains = _omp_return_domains();
+  $aliases = _omp_return_aliases();
   // See if we have a domain
   if (!empty($domains[$key])) {
     $domains[$key]['redirect'] = $key;
