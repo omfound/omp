@@ -27,7 +27,7 @@ function _omp_perform_redirect() {
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
     if ($domain_info['www_enabled'] == FALSE && $request_contains_www == TRUE) {
       if (empty($redirect)) {
-        if (isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
+        if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
           $redirect = 'http://';
         }
         else {
@@ -36,7 +36,7 @@ function _omp_perform_redirect() {
       }
     }
     if ($domain_info['www_enabled'] == TRUE && $request_contains_www == FALSE) {
-      if (isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
+      if (!isset($_SERVER['HTTP_X_SSL']) || $_SERVER['HTTP_X_SSL'] != 'ON') {
         $redirect = 'http://';
       }
       else {
