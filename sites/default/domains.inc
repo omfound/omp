@@ -25,13 +25,16 @@ function _omp_perform_redirect() {
       $redirect = 'https://';
     }
     $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
-    if ($domain_info['www_enabled'] != $request_contains_www) {
+    if ($domain_info['www_enabled'] == FALSE && $request_contains_www == TRUE) {
       if (empty($redirect)) {
         $redirect = 'http://';
       }
-      if ($domain_info['www_enabled'] == TRUE) {
-        $redirect .= 'www.';
+    }
+    if ($domain_info['www_enabled'] == TRUE && $request_contains_www == FALSE) {
+      if (empty($redirect)) {
+        $redirect = 'http://';
       }
+      $redirect .= 'www.';
     }
     
     if (!empty($redirect)) { 
