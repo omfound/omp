@@ -18,5 +18,5 @@ function om_field_lock_menu() {
 }
 
 function om_field_lock_entity_query_alter($query) {
-  dsm($query);
+  $query->entityCondition('entity_type', NULL, '=');
 }
