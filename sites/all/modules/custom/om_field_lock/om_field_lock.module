@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_permission
+ */
+function om_field_lock_permission() {
+  return array(
+    'administer locked fields' => array(
+      'title' => t('Administer locked fields'),
+      'description' => t('Lock or unlock a field.'),
+    ),
+  );
+}
+
+function om_field_lock_menu() {
+  $items = array();
+  return $items;
+}
+
+function om_field_lock_query_alter(QueryAlterableInterface $query) {
+  dsm($query);
+} 
