@@ -17,7 +17,11 @@ function om_field_lock_menu() {
   return $items;
 }
 
-function om_field_lock_entity_query_alter($query) {
-  dsm($query);
-  $query->range['length'] = 0;
-}
+//function om_field_lock_entity_query_alter($query) {
+  //dsm($query);
+  //$query->range['length'] = 0;
+  //$field_name = 'field_associated_role';
+  //$field = field_read_field($field_name);
+  //$field['locked'] = 0; // 0: unlock; 1: lock.
+  //field_update_field($field);
+//}
