@@ -17,6 +17,6 @@ function om_field_lock_menu() {
   return $items;
 }
 
-function om_field_entity_query_alter($query) {
+function om_field_lock_entity_query_alter($query) {
   dsm($query);
 }
