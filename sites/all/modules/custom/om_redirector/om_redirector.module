@@ -18,8 +18,7 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
   }
 
   if (variable_get('site_name', false) == 'DOM') {
-    global $base_url;
-    if (!drupal_valid_path($base_url.'/'.$original_path)) {
+    if (!drupal_lookup_path('source', $original_path)) {
       dsm ($original_path);
     }
   }
