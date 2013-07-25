@@ -16,4 +16,10 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
       }
     }
   }
+
+  if (variable_get('site_name', false) == 'DOM') {
+    if (!drupal_valid_path($original_path)) {
+      dsm ($original_path);
+    }
+  }
 }
