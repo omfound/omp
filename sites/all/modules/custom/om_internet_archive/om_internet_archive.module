@@ -84,7 +84,7 @@ class internetArchiveDerivativeHandler {
     $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
     curl_close($this->ch);
     if ($response > 300) {
-      $message = "internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org";
+      $message = "internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path";
       throw new Exception($message);
     }
     else {
