@@ -40,7 +40,6 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
           }
         }
       }
-      dsm ($original_path);
     }
   }
 }
