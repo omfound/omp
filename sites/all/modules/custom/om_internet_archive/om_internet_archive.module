@@ -56,8 +56,12 @@ class internetArchiveDerivativeHandler {
   }
   public function get_derivatives() {
     $derivatives = $this->make_curl_request();
-    $this->derivatives = drupal_json_decode($derivatives);
-    return $this->derivatives;
+    if ($derivatives) {
+      $this->derivatives = drupal_json_decode($derivatives);
+      return $this->derivatives;
+    }
+
+    return false;
   }
   public function get_derivative($extension) {
     if (strpos($extension, '.') === FALSE) {
@@ -84,8 +88,9 @@ class internetArchiveDerivativeHandler {
     $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
     curl_close($this->ch);
     if ($response > 300) {
-      $message = "internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path";
-      throw new Exception($message);
+      watchdog('om_internet_archive', "internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path");
+      dsm("internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path");
+      return false;
     }
     else {
       return $output;
