@@ -29,12 +29,12 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
           $query = "SELECT entity_id FROM {field_data_field_old_show_id} WHERE field_old_show_id_value = :nid";
           $result = db_query($query, array(':nid' => $old_nid));
           if ($new_nid = $result->fetchField()) {
-            dsm('Going to map this old show!');
+            drupal_goto('node/'.$new_nid);
           }else{
             $query = "SELECT entity_id FROM {field_data_field_old_project_id} WHERE field_old_project_id_value = :nid";
             $result = db_query($query, array(':nid' => $old_nid));
             if ($new_nid = $result->fetchField()) {
-              dsm('Going to map this old project!');
+              drupal_goto('node/'.$new_nid);
             }
           }
         }
