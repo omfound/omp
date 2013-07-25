@@ -1,0 +1,4 @@
+name = Open Media Field Lock
+description = Provides an admin interface to lock/unlock fields.
+core = 7.x
+package = "Open Media System"

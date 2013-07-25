@@ -122,7 +122,7 @@ function om_inventoryreports() {
 
         $rows[] = array(
             array('data' => t($reservable_product_wrapper->title->value())),
-            array('data' => t($onhand_count)),
+            array('data' => t($onhand_count - $checkout_count)),
             array('data' => t($checkout_count)),
             array('data' => t($unavailable_count)),
             array('data' => t(count($reservable_product_wrapper->field_crp_product_reference->raw())))

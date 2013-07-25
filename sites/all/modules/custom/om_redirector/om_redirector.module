@@ -16,4 +16,30 @@ function om_redirector_url_inbound_alter(&$path, $original_path, $path_language)
       }
     }
   }
+
+  //Uses the old_url_alias table from previous site and redirects when
+  //possible to the new nodes
+  if (variable_get('site_name', false) == 'DOM') {
+    if (!drupal_lookup_path('source', $original_path) && strpos($original_path, 'cache') === false) {
+      $query = "SELECT src FROM {old_url_alias} WHERE dst=:path";
+      $result = db_query($query, array(':path' => $original_path));
+      if ($old_src = $result->fetchField()) {
+        $old_parts = explode('/', $old_src);
+        $old_nid = $old_parts[1];
+        if (is_numeric($old_nid)) {
+          $query = "SELECT entity_id FROM {field_data_field_old_show_id} WHERE field_old_show_id_value = :nid";
+          $result = db_query($query, array(':nid' => $old_nid));
+          if ($new_nid = $result->fetchField()) {
+            drupal_goto('node/'.$new_nid);
+          }else{
+            $query = "SELECT entity_id FROM {field_data_field_old_project_id} WHERE field_old_project_id_value = :nid";
+            $result = db_query($query, array(':nid' => $old_nid));
+            if ($new_nid = $result->fetchField()) {
+              drupal_goto('node/'.$new_nid);
+            }
+          }
+        }
+      }
+    }
+  }
 }
