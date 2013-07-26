@@ -2155,6 +2155,7 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
     }
 
     if (!empty($product_id)) {
+      dsm($product);
       $product = commerce_product_load($product_id);
       if (!empty($product)) {
         $default_quantity = 1;
