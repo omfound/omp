@@ -2204,10 +2204,11 @@ function commerce_reservations_build_form($form_id) {
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date) {
   $product = commerce_product_load($product_id);
   $query = "
-    SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
-    JOIN {field_data_field_reservation_dates} ON field_data_field_reservation_dates.entity_id = commerce_line_item.entity_id
-    JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.entity_id
-    WHERE line_item_label=:sku
+    SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_product} 
+    JOIN {commerce_line_item} ON commerce_line_item.line_item_label = commerce_product.sku
+    JOIN {field_data_field_reservation_dates} ON field_data_field_reservation_dates.entity_id = commerce_line_item.line_item_id
+    JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
+    WHERE commerce_product.product_id = :product_id
     AND field_data_field_checkout_status.field_checkout_status_value != 'Checked In'
     AND field_data_field_checkout_status.field_checkout_status_value != 'No Show'
     AND (
@@ -2215,7 +2216,7 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
       OR
       field_reservation_dates_value2 BETWEEN :start_date AND :end_date
     )";
-  $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
+  $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':product_id' => $product_id));
   foreach ($results as $result) {
     return $result->field_checkout_status_value;
   }
