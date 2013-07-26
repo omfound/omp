@@ -2206,7 +2206,7 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
     JOIN {field_data_field_reservation_dates} ON field_data_field_reservation_dates.entity_id = commerce_line_item.line_item_id
-    JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
+    LEFT JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
     WHERE commerce_line_item.line_item_label = :sku
     AND field_data_field_checkout_status.field_checkout_status_value != 'Checked In'
     AND field_data_field_checkout_status.field_checkout_status_value != 'No Show'
