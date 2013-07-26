@@ -2215,8 +2215,11 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   foreach ($results as $result) {
-    dsm ($result);
-    //return $result->field_checkout_status_value;
+    if (is_null($result->field_checkout_status_value)) {
+      return 'Pending Reservation';  
+    }else{
+      return $result->field_checkout_status_value;
+    }
   }
   
   return 'Available';
