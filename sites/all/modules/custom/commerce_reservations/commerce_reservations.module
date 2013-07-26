@@ -2232,7 +2232,6 @@ function commerce_reservations_entity_presave($entity, $type) {
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date);
     if ($checkout_status != 'Available') {
-      dsm('Swapping for available item');
       $display_nid = commerce_reservations_entity_display_lookup($product_id);
       $display_node = node_load($display_nid);
       foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
@@ -2240,7 +2239,6 @@ function commerce_reservations_entity_presave($entity, $type) {
           $swap_checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
           if ($swap_checkout_status == 'Available') {
             $swap_product = commerce_product_load($info['product_id']);
-            dsm('Swapped for '.$swap_product->sku);
             $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $info['product_id'];
             $entity->line_item_label = $swap_product->sku;
           }
