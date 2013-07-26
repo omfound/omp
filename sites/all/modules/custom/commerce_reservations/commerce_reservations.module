@@ -2223,6 +2223,6 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   return 'Available';
 }
 
-function commerce_reservations_cart_product_add($order, $product, $quantity, $line_item) {
+function commerce_reservations_commerce_cart_product_add($order, $product, $quantity, $line_item) {
   dsm($line_item);
 }
