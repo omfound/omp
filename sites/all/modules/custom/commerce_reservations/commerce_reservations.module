@@ -2208,8 +2208,6 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     JOIN {field_data_field_reservation_dates} ON field_data_field_reservation_dates.entity_id = commerce_line_item.line_item_id
     LEFT JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
     WHERE commerce_line_item.line_item_label = :sku
-    AND field_data_field_checkout_status.field_checkout_status_value != 'Checked In'
-    AND field_data_field_checkout_status.field_checkout_status_value != 'No Show'
     AND (
       field_data_field_reservation_dates.field_reservation_dates_value BETWEEN :start_date AND :end_date 
       OR
@@ -2217,7 +2215,8 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   foreach ($results as $result) {
-    return $result->field_checkout_status_value;
+    dsm ($result);
+    //return $result->field_checkout_status_value;
   }
   
   return 'Available';
