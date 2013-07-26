@@ -2155,7 +2155,6 @@ function commerce_reservations_add_to_cart_form ($product_id = null, $render = t
     }
 
     if (!empty($product_id)) {
-      dsm($product_id);
       $product = commerce_product_load($product_id);
       if (!empty($product)) {
         $default_quantity = 1;
@@ -2222,4 +2221,8 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   }
   
   return 'Available';
+}
+
+function commerce_reservations_cart_product_add($order, $product, $quantity, $line_item) {
+  dsm($line_item);
 }
