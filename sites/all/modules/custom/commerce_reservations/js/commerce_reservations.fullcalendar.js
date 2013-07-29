@@ -46,8 +46,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             cache : false,
             success : function (data) {
               counter = 0;
-              console.log(data);
               $('div.closed-time', data).each(function(index){
+                console.log($(this));
                 event = new Object();
                 event.title = 'Closed';
                 event.start = $(this).attr('start');
