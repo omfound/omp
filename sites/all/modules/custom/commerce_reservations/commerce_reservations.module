@@ -1508,6 +1508,7 @@ function commerce_reservations_commerce_order_status_info(){
 
 function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
+  dsm($line_item);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
