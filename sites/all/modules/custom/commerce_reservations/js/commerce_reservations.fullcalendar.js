@@ -64,8 +64,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               $('div.closed_dates', data).each(function(index){
                 event = new Object();
                 event.title = 'Closed';
-                event.start = $(this).attr('start');
-                event.end = $(this).attr('end');
+                event.start = $(this).attr('date');
                 event.allDay = true;
                 event.className = 'closed-date';
                 event.color = '#56a4da';
