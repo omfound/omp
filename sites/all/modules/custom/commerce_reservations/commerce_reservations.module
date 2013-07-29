@@ -1417,11 +1417,24 @@ function commerce_reservations_separate_quantity($order) {
       if ($line_item->quantity > 1) {
         $clone_count = $line_item->quantity - 1;
         $counter = 1;
+        $product_id = $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'];
+        $start_date = $line_item->field_reservation_dates[LANGUAGE_NONE][0]['value'];
+        $end_date = $line_item->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
+        $exclude_ids = array();
         while ($counter <= $clone_count) {
+          //grab an available product id from this products bucket
+          $available_pid = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
+          $exclude_ids[] = $available_pid;
+          $available_product = commerce_product_load($available_pid);
+
+          //build a new line item by cloning existing and changing product
           $new_line_item = clone $line_item;
           $new_line_item->line_item_id = null;
           $new_line_item->is_new = TRUE; 
           $new_line_item->quantity = 1;
+          $new_line_item->commerce_product[LANGUAGE_NONE][0]['product_id'] = $info['product_id'];
+          $new_line_item->line_item_label = $swap_product->sku;
+
           commerce_line_item_save($new_line_item);
           $order_wrapper->commerce_line_items[] = $new_line_item;
           $counter++;
@@ -2234,18 +2247,28 @@ function commerce_reservations_entity_presave($entity, $type) {
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date);
     if ($checkout_status != 'Available') {
-      $display_nid = commerce_reservations_entity_display_lookup($product_id);
-      $display_node = node_load($display_nid);
-      foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
-        if ($info['product_id'] != $product_id) {
-          $swap_checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
-          if ($swap_checkout_status == 'Available') {
-            $swap_product = commerce_product_load($info['product_id']);
-            $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $info['product_id'];
-            $entity->line_item_label = $swap_product->sku;
-          }
-        }
+      $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date);
+      if ($swap_product_id) {
+        $swap_product = commerce_product_load($swap_product_id);
+        $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $info['product_id'];
+        $entity->line_item_label = $swap_product->sku;
       }
     }
   }
+}
+
+function commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids = array()) {
+  $display_nid = commerce_reservations_entity_display_lookup($product_id);
+  $display_node = node_load($display_nid);
+
+  foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
+    if (empty($exclude_ids) || !in_array($info['product_id'], $exclude_ids)) {
+      $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
+      if ($checkout_status == 'Available') {
+        return $info['product_id'];
+      }
+    }
+  }
+
+  return false;
 }
