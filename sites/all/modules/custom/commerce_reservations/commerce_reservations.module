@@ -856,7 +856,7 @@ function commerce_reservations_product_type_check($order) {
       foreach($order->commerce_line_items['und'] AS $line_item) {
         $line_item = commerce_line_item_load($line_item['line_item_id']);
         $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-        if ($product->type == 'reservable_product') {
+        if (!empty($product) && $product->type == 'reservable_product') {
           return TRUE;
         }
       }
