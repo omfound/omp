@@ -2241,7 +2241,7 @@ function commerce_reservations_entity_presave($entity, $type) {
       $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
       if ($swap_product_id) {
         $swap_product = commerce_product_load($swap_product_id);
-        $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $info['product_id'];
+        $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $swap_product_id;
         $entity->line_item_label = $swap_product->sku;
       }
     }
