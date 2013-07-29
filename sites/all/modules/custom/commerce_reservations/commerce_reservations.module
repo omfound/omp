@@ -2230,6 +2230,7 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
 }
 
 function commerce_reservations_entity_presave($entity, $type) {
+  /**
   if ($type == 'commerce_line_item' && $entity->type == 'reservable_product') {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
@@ -2243,7 +2244,7 @@ function commerce_reservations_entity_presave($entity, $type) {
         $entity->line_item_label = $swap_product->sku;
       }
     }
-  }
+  }**/
 }
 
 function commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids = array()) {
