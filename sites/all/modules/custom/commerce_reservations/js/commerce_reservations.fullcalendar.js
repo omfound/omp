@@ -61,7 +61,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 $(".fullcalendar").fullCalendar('renderEvent', event, false);
               });
 
-              $('div.closed-date', data).each(function(index){
+              $('div.closed_dates', data).each(function(index){
                 event = new Object();
                 event.title = 'Closed';
                 event.start = $(this).attr('start');
