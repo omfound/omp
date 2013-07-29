@@ -740,6 +740,7 @@ class EntityDrupalWrapper extends EntityStructureWrapper {
    * Overridden to support setting the entity by either the object or the id.
    */
   public function set($value) {
+    dsm(debug_backtrace());
     if (!$this->validate($value)) {
       throw new EntityMetadataWrapperException('Invalid data value given. Be sure it matches the required data type and format.');
     }
