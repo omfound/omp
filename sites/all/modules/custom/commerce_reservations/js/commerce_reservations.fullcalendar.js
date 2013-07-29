@@ -58,9 +58,23 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.eventBorderColor = '#56a4da';
                 event.textColor = 'white';
                 dom_id: this.dom_id;
-                console.log(event);
                 $(".fullcalendar").fullCalendar('renderEvent', event, false);
-            });
+              });
+
+              $('div.closed-date', data).each(function(index){
+                event = new Object();
+                event.title = 'Closed';
+                event.start = $(this).attr('start');
+                event.end = $(this).attr('end');
+                event.allDay = true;
+                event.className = 'closed-date';
+                event.color = '#56a4da';
+                event.backgroundColor = '#ac3d33';
+                event.eventBorderColor = '#56a4da';
+                event.textColor = 'white';
+                dom_id: this.dom_id;
+                $(".fullcalendar").fullCalendar('renderEvent', event, false);
+              });
           }
         });
       }
