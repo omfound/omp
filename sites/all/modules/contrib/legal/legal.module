@@ -241,7 +241,6 @@ function theme_legal_accept_label($variables) {
  * Implements hook_form_FORM_ID_alter().
  */
 function legal_form_user_register_form_alter(&$form, &$form_state) {
-  drupal_set_message('altering user form');
   global $user;
   global $language;
 
@@ -253,7 +252,6 @@ function legal_form_user_register_form_alter(&$form, &$form_state) {
   }
 
   $form = array_merge($form, legal_display_fields($conditions));
-  drupal_set_message('added legal fields');
 
   // Disable checkbox if:
   //  - user is already registered (administer users);

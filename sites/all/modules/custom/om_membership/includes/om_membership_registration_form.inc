@@ -125,6 +125,17 @@ function om_membership_user_registration_form(&$form, &$form_state) {
   // Needs work!
   om_membership_add_form_helper($form, $form_state);
   $form = user_register_form($form, $form_state);
+
+  // if legal is installed, merge it into user reg form
+  if (module_exists('legal')) {
+    global $user;
+    global $language;
+
+    $conditions = legal_get_conditions($language->language);
+    if (!empty($conditions['conditions'])) {
+      $form = array_merge($form, legal_display_fields($conditions));
+    }
+  }
   $form['#submit'][] = 'om_membership_form_submit';
 }
 
