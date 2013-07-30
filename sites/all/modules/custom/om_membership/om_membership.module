@@ -766,12 +766,12 @@ function om_membership_validate_all_org_sub_members() {
           unset($org_members[$key]);
         }
       }
-      /**
       // Next look for valid sub members.
       foreach($invites AS $invite) {
         $invited_user = user_load_by_mail($invite);
         if (empty($invited_user)) {
           // If the user doesn't exist create them and add role.
+          /**
           $new_user = new StdClass;
           $new_user->roles = array();
           $new_user->roles[$admin_role->rid] = $admin_role->name;
@@ -781,6 +781,7 @@ function om_membership_validate_all_org_sub_members() {
           $new_user->status = 1;
           $new_user->is_new = 1;
           user_save($new_user);
+          **/
           if (module_exists('rules')) {
             rules_invoke_event('om_membership_new_org_sub_member', $new_user);
           }
@@ -802,7 +803,6 @@ function om_membership_validate_all_org_sub_members() {
           }
         }
       }
-      **/
     }
   }
   // Remove defunct users.
