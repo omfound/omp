@@ -142,7 +142,7 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
 function om_membership_entity_insert($entity, $type) {
   if ($type == 'profile2') {
     if ($entity->type == 'manage_organizational_membership') {
-      //om_membership_validate_all_org_sub_members();
+      om_membership_validate_all_org_sub_members();
     }
   }
 }
@@ -745,6 +745,7 @@ function om_membership_validate_all_org_sub_members() {
   // They will then be removed.
   $org_members = om_membership_get_all_org_members();
   $admins = om_membership_get_org_admin_member_users();
+  /**
   if (!empty($admins)) {
     foreach($admins AS $admin) {
       $admin_memberships = om_membership_get_user_membership_products($admin);
@@ -806,7 +807,7 @@ function om_membership_validate_all_org_sub_members() {
   // Remove defunct users.
   foreach($org_members AS $key => $member) {
     om_membership_remove_user_role($member);
-  }
+  }**/
 }
 
 /**
