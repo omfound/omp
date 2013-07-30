@@ -768,7 +768,6 @@ function om_membership_validate_all_org_sub_members() {
       }
       // Next look for valid sub members.
       foreach($invites AS $invite) {
-        // BRIAN: PROBLEM SAVING IS HERE
         if (filter_var($invite, FILTER_VALIDATE_EMAIL)) {
           $invited_user = user_load_by_mail($invite);
           if (empty($invited_user)) {
