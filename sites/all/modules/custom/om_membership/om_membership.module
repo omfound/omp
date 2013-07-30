@@ -756,7 +756,6 @@ function om_membership_validate_all_org_sub_members() {
            break;
          }
       }
-      /**
       $admin_role = user_role_load($admin_membership->field_associated_role[LANGUAGE_NONE][0]['rid']);
       $org_profile = profile2_by_uid_load($admin->uid, 'manage_organizational_membership');
       $org_profile_metadata = entity_metadata_wrapper('profile2', $org_profile);
@@ -767,6 +766,7 @@ function om_membership_validate_all_org_sub_members() {
           unset($org_members[$key]);
         }
       }
+      /**
       // Next look for valid sub members.
       foreach($invites AS $invite) {
         $invited_user = user_load_by_mail($invite);
