@@ -785,20 +785,20 @@ function om_membership_validate_all_org_sub_members() {
               rules_invoke_event('om_membership_new_org_sub_member', $new_user);
             }
           }
-        }
-        else {
-          // If the user does exist remove them from the list and add their role.
-          foreach($org_members AS $key => $member) {
-            if ($member->mail == $invite) {
-              unset($org_members[$key]);
+          else {
+            // If the user does exist remove them from the list and add their role.
+            foreach($org_members AS $key => $member) {
+              if ($member->mail == $invite) {
+                unset($org_members[$key]);
+              }
             }
-          }
-          // If the invited user has an account, but not the roll add it!
-          if (empty($invited_user->roles[$admin_role->rid])) {
-            $invited_user->roles[$admin_role->rid] = $admin_role->name;
-            user_save($invited_user);
-            if (module_exists('rules')) {
-              rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+            // If the invited user has an account, but not the roll add it!
+            if (empty($invited_user->roles[$admin_role->rid])) {
+              $invited_user->roles[$admin_role->rid] = $admin_role->name;
+              user_save($invited_user);
+              if (module_exists('rules')) {
+                rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+              }
             }
           }
         }
