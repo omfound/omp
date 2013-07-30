@@ -768,22 +768,23 @@ function om_membership_validate_all_org_sub_members() {
       }
       // Next look for valid sub members.
       foreach($invites AS $invite) {
-        $invited_user = user_load_by_mail($invite);
-        if (empty($invited_user)) {
-          // If the user doesn't exist create them and add role.
-          // BRIAN: PROBLEM SAVING IS HERE
-          $new_user = new StdClass;
-          $new_user->roles = array();
-          $new_user->roles[$admin_role->rid] = $admin_role->name;
-          $new_user->name = substr($invite, 0, strpos($invite, '@'));
-          $new_user->mail = $invite;
-          $new_user->password = user_password();
-          $new_user->status = 1;
-          $new_user->is_new = 1;
-          dsm($new_user->mail);
-          user_save($new_user);
-          if (module_exists('rules')) {
-            rules_invoke_event('om_membership_new_org_sub_member', $new_user);
+        // BRIAN: PROBLEM SAVING IS HERE
+        if (filter_var($invite, FILTER_VALIDATE_EMAIL)) {
+          $invited_user = user_load_by_mail($invite);
+          if (empty($invited_user)) {
+            // If the user doesn't exist create them and add role.
+            $new_user = new StdClass;
+            $new_user->roles = array();
+            $new_user->roles[$admin_role->rid] = $admin_role->name;
+            $new_user->name = substr($invite, 0, strpos($invite, '@'));
+            $new_user->mail = $invite;
+            $new_user->password = user_password();
+            $new_user->status = 1;
+            $new_user->is_new = 1;
+            user_save($new_user);
+            if (module_exists('rules')) {
+              rules_invoke_event('om_membership_new_org_sub_member', $new_user);
+            }
           }
         }
         else {
