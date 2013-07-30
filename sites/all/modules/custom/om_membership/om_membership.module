@@ -771,6 +771,7 @@ function om_membership_validate_all_org_sub_members() {
         $invited_user = user_load_by_mail($invite);
         if (empty($invited_user)) {
           // If the user doesn't exist create them and add role.
+          /**
           $new_user = new StdClass;
           $new_user->roles = array();
           $new_user->roles[$admin_role->rid] = $admin_role->name;
@@ -783,6 +784,7 @@ function om_membership_validate_all_org_sub_members() {
           if (module_exists('rules')) {
             rules_invoke_event('om_membership_new_org_sub_member', $new_user);
           }
+          **/
         }
         else {
           // If the user does exist remove them from the list and add their role.
