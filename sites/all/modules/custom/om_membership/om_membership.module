@@ -142,7 +142,7 @@ function om_membership_form_profile2_form_alter(&$form, &$form_state) {
 function om_membership_entity_insert($entity, $type) {
   if ($type == 'profile2') {
     if ($entity->type == 'manage_organizational_membership') {
-      om_membership_validate_all_org_sub_members();
+      //om_membership_validate_all_org_sub_members();
     }
   }
 }
