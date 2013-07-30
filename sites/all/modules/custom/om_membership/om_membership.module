@@ -463,7 +463,6 @@ function om_membership_get_expired_memberships() {
 function om_membership_adjust_existing_memberships() {
   $users = array();
   $roles = om_membership_return_membership_roles();
-  dsm($roles);
   foreach ($roles AS $rid => $role) {
     $query = db_select('users_roles', 'roles');
     $query->fields('roles', array('uid'));
