@@ -58,8 +58,12 @@ class CablecastMigrationCache {
         }
       }
     }
-    dsm($valid_ids);
-    //cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
+    foreach($this->results AS $key => $result) {
+      if (!in_array($result->ShowID, $valid_ids)) {
+        unset($this->results[$key]);
+      }
+    }
+    cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   }
   public function computeCount() {
     if (empty($this->results)) {
