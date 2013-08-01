@@ -122,6 +122,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
   $variables['what_to_bring'] = $what_to_bring;
   /** --CERTIFICATIONS **/
   $certs_required = $product_meta->field_class_required_certs->value();
+  dsm($product_meta);
+  dsm($certs_required);
   if (!empty($certs_required)) {
     $variables['certs_required'] = '';
     foreach ($certs_required AS $term) {
