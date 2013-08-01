@@ -2205,7 +2205,7 @@ function commerce_reservations_build_form($form_id) {
  return drupal_build_form($form_id, $form_state);
 }
 
-function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date) {
+function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
   $product = commerce_product_load($product_id);
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
@@ -2219,10 +2219,12 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   foreach ($results as $result) {
-    if (is_null($result->field_checkout_status_value)) {
-      return 'Pending Reservation';  
-    }else{
-      return $result->field_checkout_status_value;
+    if ($exclude_id != $result->line_item_id) {
+      if (is_null($result->field_checkout_status_value)) {
+        return 'Pending Reservation';  
+      }else{
+        return $result->field_checkout_status_value;
+      }
     }
   }
   
@@ -2234,7 +2236,11 @@ function commerce_reservations_entity_presave($entity, $type) {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
-    $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date);
+    $exclude_id = null;
+    if (!empty($entity->line_item_id)) {
+      $exclude_id = $entity->line_item_id;
+    }
+    $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
