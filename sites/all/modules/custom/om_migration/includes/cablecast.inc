@@ -104,6 +104,10 @@ class MigrateSourceCablecast extends MigrateSource {
   protected function collectResults() {
     // Temporarily cache results as _collectResults is tied to potentially many Cablecast requests.
     $cache = cache_get('cablecast_migration', 'cache');
+    if (empty($cache) || empty($cache->data)) {
+      $link = l('Build it.', 'admin/content/migrate/cablecast_cache');
+      $message = t('The Cablecast migration cache has not been built. !build.', array('!build' => $link));
+    }
     $this->results = $cache->data;    
   }
   /**

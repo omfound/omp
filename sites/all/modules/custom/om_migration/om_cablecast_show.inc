@@ -9,7 +9,7 @@ class omCablecastShowMigration extends Migration {
       require_once('/' . drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
     }
     // Set our source and destination
-    $this->source = new MigrateSourceCablecast(array(), $pbs, array());
+    $this->source = new MigrateSourceCablecast(array());
     $this->destination = new MigrateDestinationNode('om_show'); 
     // Here we rip off the SQL map class as it performs well enough.
     // If we wanted more custom messaging or were to distribute this migration we would want our own.
