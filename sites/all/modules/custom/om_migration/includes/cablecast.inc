@@ -72,7 +72,7 @@ class CablecastMigrationCache {
         unset($this->results[$key]);
       }
     }
-    cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
+    cache_set('cablecast_migration', array_values($this->results), 'cache', CACHE_PERMANENT);
   }
   /**
    * Return current result count from cache.
