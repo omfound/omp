@@ -48,7 +48,7 @@ class CablecastMigrationCache {
     }
     $file_options = array('IncludeValidFiles' => TRUE, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE);
     $files = $this->pbsController->get_digital_files($this->pbs, $file_options);
-    dsm($cache); 
+    dsm($files->GetDigitalFilesResult->DigitalFileInfo);
     //cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   }
   public function computeCount() {
