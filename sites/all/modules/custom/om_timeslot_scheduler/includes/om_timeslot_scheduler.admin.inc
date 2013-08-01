@@ -46,7 +46,6 @@ function _om_timeslot_scheduler_basic_config_form() {
     '#title' => t('Time Between Airings'),
     '#description' => t('Time in seconds between scheduled airings.'),
     '#default_value' => variable_get('om_timeslot_scheduler_time_between_shows', 30),
-    '#element_validate' => array('_om_timeslot_admin_validate_numeric'),
     '#weight' => 0,
   );
 
