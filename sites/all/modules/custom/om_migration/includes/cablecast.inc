@@ -26,11 +26,17 @@ class CablecastMigrationCache {
     // Store controller for convenience
     $this->pbsController = om_playback_servers_entity_get_controller($this->pbs);
   }
+  /**
+   * Collect all shows from cablecast using last_modified_search method.
+   */
   public function collectResults() {
     $this->currentDateMarker = '1900-01-01T12:00:00';
     $this->_collectResults();
     cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
-  } 
+  }
+  /**
+   * Recursive helper called above.
+   */ 
   protected function _collectResults() {
     $result = $this->pbsController->last_modified_search($this->pbs, array('SearchDate' => $this->currentDateMarker));
     if (!empty($result->LastModifiedSearchResult->ShowInfo)) {
@@ -41,6 +47,9 @@ class CablecastMigrationCache {
       $this->_collectResults();
     }
   }
+  /**
+   * Validate that shows in the cache have good files on the Cablecast.
+   */
   public function validateResults() {
     if (empty($this->results)) {
       $cache = cache_get('cablecast_migration', 'cache');
@@ -65,6 +74,9 @@ class CablecastMigrationCache {
     }
     cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   }
+  /**
+   * Return current result count from cache.
+   */
   public function computeCount() {
     if (empty($this->results)) {
       $cache = cache_get('cablecast_migration', 'cache');
@@ -106,7 +118,7 @@ class MigrateSourceCablecast extends MigrateSource {
     $cache = cache_get('cablecast_migration', 'cache');
     if (empty($cache) || empty($cache->data)) {
       $link = l('Build it.', 'admin/content/migrate/cablecast_cache');
-      $message = t('The Cablecast migration cache has not been built. !build.', array('!build' => $link));
+      $message = t('The Cablecast migration cache has not been built. !build', array('!build' => $link));
       drupal_set_message($message);
     }
     $this->results = $cache->data;    
