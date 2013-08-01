@@ -38,6 +38,7 @@ $logourl = theme_get_setting('logo_path', '');
     $cost = money_format('%(#10n', $item->commerce_total['und'][0]['amount']/100);
     $rate = money_format('%(#10n', ($item->product->commerce_price['und'][0]['amount']/100)).' / '.$item->product->field_charge_by_the_['und'][0]['value'];
     $title = $item->product->title;
+    $accessories = '';
     if (!empty($item->clean_accessories)) {
       $accessories = '<br /><strong>+</strong><span style="font-size: .8em;"> '.$item->clean_accessories.'</span>';
     }
