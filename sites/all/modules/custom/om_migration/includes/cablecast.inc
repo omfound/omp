@@ -47,17 +47,9 @@ class CablecastMigrationCache {
       $this->results = $cache->data;
     }
     $file_options = array('IncludeValidFiles' => TRUE, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE);
-    // Here we have to call the GetDigitalFilesResult on every show.
-    // This is because the Cablecast has no mechanism to get ShowID from file records.
-    foreach ($this->results AS $key => $show) {
-      $file_options['RestrictToShowID'] = $show->ShowID;
-      $file = $this->pbsController->get_digital_files($this->pbs, $file_options);
-      $file_record = $file->GetDigitalFilesResult->DigitalFileInfo;
-      if (empty($file_record) || $file_record->IsValid == FALSE) {
-        unset($this->results[$key]);
-      }
-    }
-    cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
+    $files = $this->pbsController->get_digital_files($this->pbs, $file_options);
+    dsm($cache); 
+    //cache_set('cablecast_migration', $this->results, 'cache', CACHE_PERMANENT);
   }
   public function computeCount() {
     if (empty($this->results)) {
