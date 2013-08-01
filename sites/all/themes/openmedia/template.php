@@ -581,6 +581,10 @@ function openmedia_preprocess_views_view_fields(&$vars) {
       }
     }
   }
+
+  if ($view->name == 'classes') {
+    dsm($vars);
+  }
 }
 
 function openmedia_order_payment_status($order_id) {
