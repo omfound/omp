@@ -126,6 +126,7 @@ function cr_printable_contract($order_id) {
       $clean_accessories = array();
       foreach ($items[$info['line_item_id']]->field_checked_out_accessories[LANGUAGE_NONE] as $key => $term) {
         $term = taxonomy_term_load($term->tid);
+        dsm($term);
         $clean_accessories[] = $term->name;
       }
       $items[$info['line_item_id']]->clean_accessories = implode(', ', $clean_accessories);
