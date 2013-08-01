@@ -40,7 +40,9 @@
   -o-transition: background 0.5s linear;
   transition: background 0.5s linear;
 }
-
+.view-classes .omp-grid .views-row {
+  height: auto;
+}
 .no-sidebars .omp-grid .views-row {
   margin-left: 30px;
 }
