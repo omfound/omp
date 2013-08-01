@@ -107,6 +107,7 @@ class MigrateSourceCablecast extends MigrateSource {
     if (empty($cache) || empty($cache->data)) {
       $link = l('Build it.', 'admin/content/migrate/cablecast_cache');
       $message = t('The Cablecast migration cache has not been built. !build.', array('!build' => $link));
+      drupal_set_message($message);
     }
     $this->results = $cache->data;    
   }
