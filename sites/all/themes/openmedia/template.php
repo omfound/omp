@@ -124,16 +124,18 @@ function openmedia_preprocess_node__class_display(&$variables) {
   $certs_required = $product_meta->field_class_required_certs->value();
   if (!empty($certs_required)) {
     $variables['certs_required'] = '';
-    foreach ($certs_required AS $term) {
-      $variables['certs_required'] .= $term->name . ', ';
+    foreach ($certs_required AS $key => $rid) {
+      $role = user_role_load($rid);
+      $variables['certs_required'] .= $role->name . ', ';
     }
     $variables['certs_required'] = rtrim($variables['certs_required'], ', ');
   }
   $certs_earned = $product_meta->field_class_earned_certs->value();
   if (!empty($certs_earned)) {
     $variables['certs_earned'] = '';
-    foreach ($certs_earned AS $term) {
-      $variables['certs_earned'] .= $term->name . ', ';
+    foreach ($certs_earned AS $key => $rid) {
+      $role = user_role_load($rid);
+      $variables['certs_earned'] .= $role->name . ', ';
     }
     $variables['certs_earned'] = rtrim($variables['certs_earned'], ', ');
   }
