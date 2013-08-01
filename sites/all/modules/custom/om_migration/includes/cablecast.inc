@@ -46,9 +46,8 @@ class CablecastMigrationCache {
       $cache = cache_get('cablecast_migration', 'cache');
       $this->results = $cache->data;
     }
-    $file_options = array('IncludeValidFiles' => TRUE, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE);
+    $file_options = array('IncludeValidFiles' => TRUE, 'IncludeInvalidFiles' => FALSE, 'RestrictToOrphanedFiles' => FALSE);
     $files = $this->pbsController->get_digital_files($this->pbs, $file_options);
-    dsm($files->GetDigitalFilesResult->DigitalFileInfo);
     $valid_ids = array();
     if (!empty($files->GetDigitalFilesResult->DigitalFileInfo)) {
       foreach ($files->GetDigitalFilesResult->DigitalFileInfo  AS $file) {
