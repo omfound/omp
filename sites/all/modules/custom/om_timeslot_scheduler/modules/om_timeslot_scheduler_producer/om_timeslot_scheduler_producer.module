@@ -95,7 +95,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_airings_markup'] = array(
-    '#markup' => "<p>The Number of Producer Schedulings and Days fields are used to allow a certain number of producer schedulings per time period (x schedulings in y days). Alternatively either field may be set to 0 with the results described below.</p>",
+    '#markup' => "<p>The Number of Producer Schedulings and Days fields are used to allow a certain number of producer schedulings per time period (x schedulings in y days). Alternatively, either field may be set to 0 with the results described below.</p>",
     '#weight' => 4
 
   );
