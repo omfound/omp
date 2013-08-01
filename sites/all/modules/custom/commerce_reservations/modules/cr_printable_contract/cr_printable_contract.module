@@ -130,6 +130,7 @@ function cr_printable_contract($order_id) {
       }
       $items[$info['line_item_id']]->clean_accessories = implode(', ', $clean_accessories);
     }
+    dsm($items);
   }
 
   //$timezone = $node->field_cr_date[0]['timezone'];
