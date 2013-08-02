@@ -651,6 +651,17 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   return $output;
 }
 
+/**
+ * Find all airings for a single show in a given date range.
+ *
+ * @param nid int project node id
+ *
+ * @param start timestamp start
+ *
+ * @param end timestamp end
+ *
+ * @returns array of all airings
+ */
 function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, $end) {
   $query = db_select('field_data_field_om_show_id', 'airing');
   $query->join('node', 'n', 'airing.entity_id=n.nid');
@@ -681,6 +692,17 @@ function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, 
   return $resource->fetchAll();
 }
 
+/**
+ * Find all airings for every show in a project in a given date range.
+ *
+ * @param nid int project node id
+ *
+ * @param start timestamp start
+ *
+ * @param end timestamp end
+ *
+ * @returns array of all airings
+ */
 function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $start, $end) {
   $query = db_select('field_data_field_om_show_project', 'project');
   $query->fields('project', array('entity_id'));
