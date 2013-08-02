@@ -587,14 +587,18 @@ function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_
     $and_1->condition('field_om_airing_dates_value2', $end, '<=');
     $and_2 = db_and();
     $and_2->condition('field_om_airing_dates_value', $start, '>=');
-    $and_2->condition('field_om_airing_dates_value2', $start, '<=');
+    $and_2->condition('field_om_airing_dates_value', $end, '<=');
     $and_3 = db_and();
-    $and_3->condition('field_om_airing_dates_value', $end, '>=');
+    $and_3->condition('field_om_airing_dates_value2', $start, '>=');
     $and_3->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_airing_dates_value', $start, '<=');
+    $and_4->condition('field_om_airing_dates_value2', $end, '>=');
     $or = db_or();
     $or->condition($and_1);
     $or->condition($and_2);
     $or->condition($and_3);
+    $or->condition($and_4);
   $query->condition($or);
   $resource = $query->execute();
   while ($result = $resource->fetchAssoc()) {
