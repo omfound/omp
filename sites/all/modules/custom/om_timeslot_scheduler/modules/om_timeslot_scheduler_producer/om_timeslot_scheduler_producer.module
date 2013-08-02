@@ -676,6 +676,7 @@ function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, 
     $or->condition($and_3);
     $or->condition($and_4);
   $query->condition($or);
+  $query->orderBy('field_om_airing_dates_value', 'ASC');
   $resource = $query->execute();
   return $resource->fetchAll();
 }
