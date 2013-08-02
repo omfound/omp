@@ -650,3 +650,36 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
   }// End While
   return $output;
 }
+
+function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, $end) {
+  $query = db_query('field_data_field_om_show_id', 'airing');
+  $query->join('node', 'n', 'airing.entity_id=n.nid');
+  $query->join('field_data_field_om_airing_dates', 'dates' 'airing.entity_id=dates.entity_id');
+  $query->fields('dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->condition('airing.field_om_show_id_value', $nid, '=');
+  $query->condition('node.type', 'om_airing', '='); 
+    $and_1 = db_and();
+    $and_1->condition('field_om_airing_dates_value', $start, '>=');
+    $and_1->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_airing_dates_value', $start, '>=');
+    $and_2->condition('field_om_airing_dates_value', $end, '<=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_airing_dates_value2', $start, '>=');
+    $and_3->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_airing_dates_value', $start, '<=');
+    $and_4->condition('field_om_airing_dates_value2', $end, '>=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+    $or->condition($and_4);
+  $query->condition($or);
+  $resource = $query->execute();
+  return $resource->fetchAll();
+}
+
+function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $start, $end) {
+  
+}
