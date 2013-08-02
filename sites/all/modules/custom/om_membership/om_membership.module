@@ -732,7 +732,6 @@ function om_membership_update_role_from_order($commerce_order) {
     }
   }
 } 
-}
 
 /**
  * Remove all membership roles from a user.
