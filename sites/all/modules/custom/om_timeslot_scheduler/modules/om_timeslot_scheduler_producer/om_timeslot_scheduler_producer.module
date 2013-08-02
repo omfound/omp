@@ -654,7 +654,7 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
 function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, $end) {
   $query = db_query('field_data_field_om_show_id', 'airing');
   $query->join('node', 'n', 'airing.entity_id=n.nid');
-  $query->join('field_data_field_om_airing_dates', 'dates' 'airing.entity_id=dates.entity_id');
+  $query->join('field_data_field_om_airing_dates', 'dates', 'airing.entity_id=dates.entity_id');
   $query->fields('dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->condition('airing.field_om_show_id_value', $nid, '=');
   $query->condition('node.type', 'om_airing', '='); 
