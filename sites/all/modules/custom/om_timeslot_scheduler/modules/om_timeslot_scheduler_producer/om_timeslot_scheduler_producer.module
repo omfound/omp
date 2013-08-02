@@ -153,12 +153,9 @@ function om_timeslot_scheduler_producer_tab_access($node) {
       return TRUE;
     }
     else if (user_access('schedule own shows')) {
-      $airings_per_show = variable_get('om_timeslot_scheduler_producer_airings', 1);
       global $user;
       if ($user->uid == $node->uid) {
-        if (empty($node->field_om_show_aired[$node->language][0]['value']) || $airings_per_show == 0 || $node->field_om_show_aired[$node->language][0]['value'] < $airings_per_show) {
-          return TRUE;
-        }
+        return TRUE;
       }
     }
   }
@@ -180,6 +177,7 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
     return $render;
   }
+  
   $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
   $form_render = drupal_render($form);
     $render = array(
@@ -716,4 +714,54 @@ function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $star
     }
   }
   return $airings;
+}
+
+function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '') {
+  global $user;
+  if ($user->uid == 1 || user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
+    return TRUE;
+  }
+  if (empty($date)) {
+    $date = time();
+  }
+  // Get vars
+  $days = variable_get('om_timeslot_scheduler_producer_days', 0);
+  $airings_allowed = variable_get('om_timeslot_scheduler_producer_airings', 3);
+  if ($airings_allowed == 0) {
+    return TRUE;
+  }
+  // If the limit per # of days is 0 and airings allowed > 0 check all airings ever.
+  if ($days == 0) {
+    $airings = om_timeslot_scheduler_producer_check_show($node, 0, $days);
+    if (count($airings) >= $airings_allowed) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+  // If there is a limit per days calculate range and check.
+  $range = om_timeslot_scheduler_producer_calculate_date_range($date, $days);
+  $airings = om_timeslot_scheduler_producer_check_show($node, $range['start'], $range['end']);
+  if (count($airings) >= $airings_allowed) {
+    return FALSE;
+  }
+  return TRUE;  
+}
+
+function om_timeslot_scheduler_producer_check_show($node, $start, $end) {
+  $limit_by = variable_get('om_timeslot_scheduler_producer_limit_by', 'show');
+  if ($limit_by == 'show') {
+    $airings = om_timeslot_scheduler_producer_airings_per_show_in_range($node->nid, $start, $end);
+  }
+  else {
+    $airings = om_timeslot_scheduler_producer_airings_per_project_in_range($node->field_om_show_project[$node->language][0]['nid'], $start, $end);
+  }
+  return $airings;
+}
+
+function om_timeslot_scheduler_producer_calculate_date_range($date, $days) {
+  $days = $days * 86400;
+  return array(
+    'start' => $date - $days,
+    'end' => $date,
+  );
 }
