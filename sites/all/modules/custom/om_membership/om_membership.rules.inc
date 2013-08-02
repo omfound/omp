@@ -112,7 +112,7 @@ function om_membership_rules_condition_info() {
  */
 function om_membership_rules_action_info() {
   $actions = array();
-  $actions['om_membership_grant_user_role'] = array(
+  $actions['om_membership_update_role_from_order'] = array(
     'label' => t('Grant User Role From Product'),
     'group' => 'Open Media Membership',
     'parameter' => array(
