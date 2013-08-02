@@ -681,5 +681,16 @@ function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, 
 }
 
 function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $start, $end) {
-  
+  $query = db_select('field_data_field_om_show_project', 'project');
+  $query->fields('project', array('entity_id'));
+  $query->condition('field_om_show_project_nid', $nid, '=');
+  $resource = $query->execute();
+  $airings = array();
+  while($row = $resource->fetchAssoc()) {
+    $new_airings = om_timeslot_scheduler_producer_airings_per_show_in_range($row['entity_id'], $start, $end);
+    foreach ($new_airings AS $airing) {
+      $airings[] = $airing;
+    }
+  }
+  return $airings;
 }
