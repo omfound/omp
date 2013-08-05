@@ -767,7 +767,7 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   // If the limit per # of days is 0 and airings allowed > 0 check all airings ever.
   if ($days == 0) {
     drupal_set_message('we go in here');
-    $airings = om_timeslot_scheduler_producer_check_show($node, 0, $days);
+    $airings = om_timeslot_scheduler_producer_check_show($node, 0, time());
     if (count($airings) >= $airings_allowed) {
       return FALSE;
     }
