@@ -176,18 +176,6 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
     return $render;
   }
-  $can_air = om_timeslot_scheduler_producer_show_can_be_scheduled($node);
-  if ($can_air == FALSE) {
-    $message = om_timeslot_scheduler_producer_generate_warning();
-    $render = array(
-      'no_channel_response' => array(
-        '#prefix' => '<p>',
-        '#markup' => $message,
-        '#suffix' => '</p>',
-      ),
-    );
-    return $render;
-  } 
   $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
   $form_render = drupal_render($form);
     $render = array(
@@ -274,6 +262,18 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
  *   and turn it into a usable page.
  */
 function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
+  $can_air = om_timeslot_scheduler_producer_show_can_be_scheduled($show);
+  if ($can_air == FALSE) {
+    $message = om_timeslot_scheduler_producer_generate_warning();
+    $render = array(
+      'restricted_airing_message' => array(
+        '#prefix' => '<p>',
+        '#markup' => $message,
+        '#suffix' => '</p>',
+      ),
+    );
+    return $render;
+  } 
   $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
   // Not sure why but this page title gets set to 'home'
   drupal_set_title('Schedule Your Show');
