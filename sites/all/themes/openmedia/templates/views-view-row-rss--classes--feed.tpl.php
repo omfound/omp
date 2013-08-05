@@ -9,7 +9,8 @@
 ?>
 <item>
   <title><?php print $title; ?></title>
-  <link><?php ?></link>
+  <link><?php print $link?></link>
+  <description><?php print $description; ?></description>
   <summary><?php print $description; ?></summary>
 </item>
 
