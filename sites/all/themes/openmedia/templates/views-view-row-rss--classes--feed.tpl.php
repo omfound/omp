@@ -14,8 +14,7 @@
   <summary><?php print $description; ?></summary>
   <content>
   <?php
-  $desc = $node->field_teaser[0]['value'] ? $node->field_teaser[0]['value'] : $node->body;
-  print $desc;
+  print dsm($row); 
   ?>
   </content>
 </item>
