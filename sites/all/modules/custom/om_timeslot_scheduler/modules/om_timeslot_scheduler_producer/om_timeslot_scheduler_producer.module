@@ -764,8 +764,6 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   if ($days == 0) {
     $end = strtotime('2099-01-01T00:00:00');
     $airings = om_timeslot_scheduler_producer_check_show($node, 0, $end);
-    drupal_set_message(print_r($airings, true));
-    drupal_set_message("AIRING COUNT:" . count($airings));
     if (count($airings) >= $airings_allowed) {
       return FALSE;
     }
