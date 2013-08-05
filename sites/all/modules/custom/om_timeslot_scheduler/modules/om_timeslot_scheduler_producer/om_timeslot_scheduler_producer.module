@@ -104,7 +104,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#description' => t('Enter 0 to indicate no limit.'),
     '#type' => 'textfield',
     '#default_value' => variable_get('om_timeslot_scheduler_producer_airings', 1),
-    '#weight' => 5,
+    '#weight' => 5.1,
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_days'] = array(
@@ -112,7 +112,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#type' => 'textfield',
     '#description' => t('Enter 0 to indicate no time i.e. a producer may schedule their show once ever.'),
     '#default_value' => variable_get('om_timeslot_scheduler_producer_days', 0),
-    '#weight' => 5,
+    '#weight' => 5.2,
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_limit_by'] = array(
@@ -121,7 +121,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#type' => 'select',
     '#options' => array('project' => 'project', 'show' => 'show'),
     '#default_value' => variable_get('om_timeslot_scheduler_producer_limit_by', 'show'),
-    '#weight' => 5,
+    '#weight' => 5.3,
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_themes'] = array(
