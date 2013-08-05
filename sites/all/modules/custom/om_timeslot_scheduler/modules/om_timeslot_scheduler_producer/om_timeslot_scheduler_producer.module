@@ -765,7 +765,7 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   if ($days == 0) {
     drupal_set_message('we go in here');
     $airings = om_timeslot_scheduler_producer_check_show($node, 0, $days);
-    dsm(print_r($airings, true));
+    drupal_set_message(print_r($airings, true));
     if (count($airings) >= $airings_allowed) {
       return FALSE;
     }
