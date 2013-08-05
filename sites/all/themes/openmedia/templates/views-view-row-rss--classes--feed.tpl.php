@@ -12,6 +12,11 @@
   <link><?php print $link?></link>
   <description><?php print $description; ?></description>
   <summary><?php print $description; ?></summary>
-  <content></content>
+  <content>
+  <?php
+  $desc = $node->field_teaser[0]['value'] ? $node->field_teaser[0]['value'] : $node->body;
+  print $desc;
+  ?>
+  </content>
 </item>
 
