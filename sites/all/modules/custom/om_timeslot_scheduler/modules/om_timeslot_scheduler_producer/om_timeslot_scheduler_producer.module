@@ -187,6 +187,7 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
   return $render;
 }
+
 /**
  * Build a basic channel selector form for producers here.
  */
@@ -746,6 +747,9 @@ function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $star
   return $airings;
 }
 
+/**
+ * Determine if a show can be scheduled given the configuration variables.
+ */
 function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '') {
   global $user;
   if ($user->uid == 1 || user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
@@ -777,6 +781,9 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   return TRUE;  
 }
 
+/**
+ * Use the om_timeslot_scheduler_producer_limit_by variable to run the appropriate airing check.
+ */
 function om_timeslot_scheduler_producer_check_show($node, $start, $end) {
   $limit_by = variable_get('om_timeslot_scheduler_producer_limit_by', 'show');
   if ($limit_by == 'show') {
@@ -788,6 +795,9 @@ function om_timeslot_scheduler_producer_check_show($node, $start, $end) {
   return $airings;
 }
 
+/**
+ * Produce a start/end array given a date and the number of days.
+ */
 function om_timeslot_scheduler_producer_calculate_date_range($date, $days) {
   $days = $days * 86400;
   return array(
@@ -796,15 +806,22 @@ function om_timeslot_scheduler_producer_calculate_date_range($date, $days) {
   );
 }
 
+/**
+ * Determine the proper warning to issue for a scheduling violation.
+ * Could use a configuration item for this too.
+ *
+ * @returns string
+ */
 function om_timeslot_scheduler_producer_generate_warning() {
   $limit_by = variable_get('om_timeslot_scheduler_producer_limit_by', 'show');
   $days = variable_get('om_timeslot_scheduler_producer_days', 0);
   $airings_allowed = variable_get('om_timeslot_scheduler_producer_airings', 3);
+  $link = l('Back to show.', 'node/' . arg(1));
   if ($days == 0) {
-    $message = 'Your station only allows ' . $airings_allowed . ' scheduling(s) per ' . $limit_by . '. It appears this ' . $limit_by . ' has exceeded the limit. If you feel this is an error please contact station personel.';
+    $message = t('Your station only allows !airings scheduling(s) per !type. It appears this !type has exceeded the limit. If you feel this is an error please contact station personel. !back', array('!airings' => $airings_allowed, '!type' => $limit_by, '!back' => $link));
   }
   if ($days > 0) {
-    $message = 'Your station only allows ' . $airings_allowed . ' scheduling(s) per ' . $limit_by . ' every ' . $days  . ' days. It appears this ' . $limit_by . ' has exceeded the limit. If you feel this is an error please contact station personel.';
+    $message = t('Your station only allows !airings scheduling(s) per !type every !days days. It appears this !type has exceeded the limit. If you feel this is an error please contact station personel. !back', array('!airings' => $airings_allowed, '!type' => $limit_by, '!days' => $days, '!back' => $link));
   }
   return $message;
 }
