@@ -11,4 +11,8 @@
 <title><?php print $title; ?></title>
 <link><?php print $date; ?></link>
 <summary><?php print $description; ?></summary>
-</item>  
+</item>
+
+print '<pre>';
+  var_dump(get_defined_vars());
+  print '</pre>';
