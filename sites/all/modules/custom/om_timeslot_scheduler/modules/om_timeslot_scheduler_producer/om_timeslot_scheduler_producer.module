@@ -761,17 +761,16 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   if ($airings_allowed == 0) {
     return TRUE;
   }
-  drupal_set_message('We make it further');
   // If the limit per # of days is 0 and airings allowed > 0 check all airings ever.
   if ($days == 0) {
+    drupal_set_message('we go in here');
     $airings = om_timeslot_scheduler_producer_check_show($node, 0, $days);
-    drupal_set_message(count($airings));
+    dsm(print_r($airings, true));
     if (count($airings) >= $airings_allowed) {
       return FALSE;
     }
     return TRUE;
   }
-  drupal_set_message('we go further still');
   // If there is a limit per days calculate range and check.
   $range = om_timeslot_scheduler_producer_calculate_date_range($date, $days);
   $airings = om_timeslot_scheduler_producer_check_show($node, $range['start'], $range['end']);
