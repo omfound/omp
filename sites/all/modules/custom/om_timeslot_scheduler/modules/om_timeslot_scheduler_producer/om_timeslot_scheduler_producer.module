@@ -691,9 +691,6 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
  * @returns array of all airings
  */
 function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, $end) {
-  drupal_set_message($nid);
-  drupal_set_message($start);
-  drupal_set_message($end);
   $query = db_select('field_data_field_om_show_id', 'airing');
   $query->join('node', 'n', 'airing.entity_id=n.nid');
   $query->join('field_data_field_om_airing_dates', 'dates', 'airing.entity_id=dates.entity_id');
@@ -757,7 +754,6 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   if (empty($date)) {
     $date = time();
   }
-  drupal_set_message('We make it here');
   // Get vars
   $days = variable_get('om_timeslot_scheduler_producer_days', 0);
   $airings_allowed = variable_get('om_timeslot_scheduler_producer_airings', 3);
@@ -766,7 +762,6 @@ function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '')
   }
   // If the limit per # of days is 0 and airings allowed > 0 check all airings ever.
   if ($days == 0) {
-    drupal_set_message('we go in here');
     $airings = om_timeslot_scheduler_producer_check_show($node, 0, time());
     if (count($airings) >= $airings_allowed) {
       return FALSE;
