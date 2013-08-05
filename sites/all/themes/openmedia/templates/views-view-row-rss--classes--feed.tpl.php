@@ -12,5 +12,6 @@
   <link><?php print $link?></link>
   <description><?php print $description; ?></description>
   <summary><?php print $description; ?></summary>
+  <content></content>
 </item>
 
