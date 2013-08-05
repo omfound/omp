@@ -251,6 +251,7 @@ function om_timeslot_scheduler_producer_channel_form_submit($form, $form_state) 
 function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $start = time();
   $end = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
+  die($start . ' ' . $end);
   $function = 'om_broadcast_schedule_sync_schedule';
   $batch = $function($channel_tid, $start, $end, 'producer');
   batch_set($batch);
