@@ -715,6 +715,25 @@ function om_membership_grant_user_role($commerce_order) {
 }
 
 /**
+ * A simple version of om_membership_grant_user_role that updates a
+ * user membership role based on the membership product in an order
+ */
+function om_membership_update_role_from_order($commerce_order) {
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+  $line_items = $order_wrapper->commerce_line_items->value();
+  foreach ($line_items AS $line_item) {
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if ($product->type == 'membership_plan' && !empty($product->field_associated_role[LANGUAGE_NONE][0]['rid'])) {
+      $order_user = user_load($commerce_order->uid);
+      $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+      $order_user->roles[$role->rid] = $role->name;
+      user_save($order_user);
+    }
+  }
+} 
+
+/**
  * Remove all membership roles from a user.
  */
 function om_membership_remove_user_role($user) {

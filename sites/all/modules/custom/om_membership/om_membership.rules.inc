@@ -112,8 +112,18 @@ function om_membership_rules_condition_info() {
  */
 function om_membership_rules_action_info() {
   $actions = array();
+  $actions['om_membership_update_role_from_order'] = array(
+    'label' => t('Update user membership based on order'),
+    'group' => 'Open Media Membership',
+    'parameter' => array(
+      'commerce_order' => array(
+        'type' => 'commerce_order',
+        'label' => t('Commerce Order'),
+      )
+    )
+  );
   $actions['om_membership_grant_user_role'] = array(
-    'label' => t('Grant User Role From Product'),
+    'label' => t('Grant user membership based on order and past membership'),
     'group' => 'Open Media Membership',
     'parameter' => array(
       'commerce_order' => array(
