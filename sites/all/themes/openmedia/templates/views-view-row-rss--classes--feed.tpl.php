@@ -12,5 +12,5 @@
   <link><?php print $link?></link>
   <description><?php print $description; ?></description>
   <summary><?php print $description; ?></summary>
-  <content> <?php print dpm($row); ?> </content>
+  <content> <?php print $row[1]['value'] ?> </content>
 </item>
