@@ -9,5 +9,5 @@
     <link><?php print $link?></link>
     <description><?php print $description; ?></description>
     <summary><?php print $description; ?></summary>
-    <content> <?php print $row->{$field->field_class_description} ?></content>
+    <content> <?php print_r($row); ?></content>
 </item>
