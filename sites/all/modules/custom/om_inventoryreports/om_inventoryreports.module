@@ -31,7 +31,7 @@ function om_inventoryreports_menu() {
         'title' => 'Inventory Report',
         'page callback' => 'om_inventoryreports',
         'access arguments' => array('access content'),
-        'type' => MENU_CALLBACK);
+        'type' => MENU_NORMAL_ITEM);
     return $items;
 }
 
@@ -101,13 +101,16 @@ function om_inventoryreports() {
             //Get Commerce Line Item Info
             $chkoutstat_wrapper = entity_metadata_wrapper('commerce_line_item', $prod_id);
 
-            //calculate number of items on hand for reservable product display
+            //calculate onhand and unavailable
             if ($prod_wrapper->status->value() == 1) {
+                //calculate number of items on hand for reservable product display
                 $onhand_count = ++$onhand_count;
             }
-
+            else {
             //calculate number of items unavailable for reservable product display
-            $unavailable_count = count($reservable_product_wrapper->field_crp_product_reference->raw()) - $onhand_count;
+                $unavailable_count = ++ $unavailable_count;
+            }
+
 
             //calculate number of items unavailable for reservable product display
             //determine number checked out count
@@ -122,7 +125,7 @@ function om_inventoryreports() {
 
         $rows[] = array(
             array('data' => t($reservable_product_wrapper->title->value())),
-            array('data' => t($onhand_count - $checkout_count)),
+            array('data' => t($onhand_count - $checkout_count - $unavailable_count)),
             array('data' => t($checkout_count)),
             array('data' => t($unavailable_count)),
             array('data' => t(count($reservable_product_wrapper->field_crp_product_reference->raw())))

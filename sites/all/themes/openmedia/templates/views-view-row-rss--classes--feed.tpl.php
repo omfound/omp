@@ -1,5 +1,4 @@
 <?php
-// $Id: views-view-row-rss.tpl.php,v 1.1 2008/12/02 22:17:42 merlinofchaos Exp $
 /**
  * @file views-view-row-rss.tpl.php
  * Default view template to display a item in an RSS feed.
@@ -8,13 +7,13 @@
  */
 ?>
 <item>
-<title><?php print $title; ?></title>
-<link><?php print $date; ?></link>
-<summary><?php print $description; ?></summary>
+  <title><?php print $title; ?></title>
+  <link><?php print $link?></link>
+  <description><?php print $description; ?></description>
+  <summary><?php print $description; ?></summary>
+  <content>
+  <![CDATA[
+  <?php print $row->elements[1]['value']; ?>
+  ]]>
+  </content>
 </item>
-
-<?php
-print '<pre>';
-  var_dump(get_defined_vars());
-print '</pre>';
-?>
