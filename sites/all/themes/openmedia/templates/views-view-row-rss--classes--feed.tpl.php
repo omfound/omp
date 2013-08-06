@@ -9,5 +9,5 @@
     <link><?php print $link?></link>
     <description><?php print $description; ?></description>
     <summary><?php print $description; ?></summary>
-    <content> <?php print_r($row); ?></content>
+    <content> <?php print $row->elements[1]['value']; ?></content>
 </item>
