@@ -1540,7 +1540,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
     if ($loaded_term->field_reservable_product){
       foreach($loaded_term->field_reservable_product as $term_product_reference){
         foreach ($term_product_reference as $key => $info) {
-          if ($info->target_id == $display_nid) {
+          if ($info['target_id'] == $display_nid) {
             $accessories[$loaded_term->tid] = $loaded_term->name;
           }
         }
