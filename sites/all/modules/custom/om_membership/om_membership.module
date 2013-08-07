@@ -904,3 +904,28 @@ function om_membership_sync_members() {
     }
   }
 }
+
+function om_membership_broken_memberships() {
+  $query = "SELECT * FROM {commerce_order}";
+  $result = db_query($query);
+
+  $suspect_orders = array();
+  foreach ($result as $order) {
+    if(date('i', $order->created) == 26 && date('g', $order->created) == 6) {
+      $suspect_orders[$order->order_id] = array(
+        'order_id' => $order->order_id,
+        'uid' => $order->uid,
+        'created' => $order->created,
+      );
+    }
+  }
+
+  foreach ($suspect_orders as $order_id => $info) {
+    $user = user_load($info['uid']);
+    $suspect_orders[$order_id]['username'] = $user->name;
+    $suspect_orders[$order_id]['mail'] = $user->mail;
+    $suspect_orders[$order_id]['old_uid'] = $user->field_legacy_uid[LANGUAGE_NONE][0]['value'];
+  }
+
+  return $suspect_orders;
+}
