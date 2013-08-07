@@ -1538,8 +1538,8 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
       $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
     }
     if ($loaded_term->field_reservable_product){
-      foreach($term_wrapper->field_reservable_product as $product_term_wrapper){
-        dsm($product_term_wrapper);
+      foreach($loaded_term->field_reservable_product as $accessory_term){
+        dsm($accessory_term);
         if (method_exists($product_term_wrapper, 'name') && method_exists($product_display_wrapper, 'title')) {
           if ($product_term_wrapper->name->value() == $product_display_wrapper->title->value()){
             $accessories[$term_wrapper->tid->value()] = $term_wrapper->name->value();
