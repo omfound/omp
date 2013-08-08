@@ -747,7 +747,7 @@ function om_membership_remove_user_role($user) {
   }
   if ($user_modified == TRUE) {
     if (module_exists('rules')) {
-      rules_invoke_event('om_membership_removed_org_sub_member', $user);
+      rules_invoke_event('om_membership_removed_membership', $user);
     }
    return user_save($user);
   }
