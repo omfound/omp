@@ -143,8 +143,13 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }
               }
-
-              //check for more hours brian
+              if (Drupal.settings.commerce_reservations.maximum_length != 0) {
+                if (dateDiffHours > Drupal.settings.commerce_reservations.maximum_length) {
+                  $('.date-status').html('<p class = "error">You cannot make a reservation greater than '+Drupal.settings.commerce_reservations.maximum_length+' hours.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }  
+              }
             }
 
           }
