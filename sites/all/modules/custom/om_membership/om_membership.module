@@ -816,7 +816,11 @@ function om_membership_validate_all_org_sub_members() {
               $invited_user->roles[$admin_role->rid] = $admin_role->name;
               user_save($invited_user);
               if (module_exists('rules')) {
-                rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+                //have to check if we are on a manage org page because the membership
+                //system wipes all user roles on cron causing this message to go out repeatedly.
+                if (arg(1) == 'user' && arg(3) == 'manage_organizational_membership')) {
+                  rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+                }
               }
             }
           }
