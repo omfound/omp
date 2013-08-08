@@ -143,6 +143,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }
               }
+
+              //check for more hours brian
             }
 
           }
