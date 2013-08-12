@@ -550,6 +550,24 @@ function openmedia_commerce_registration_order($variables) {
   return $title . theme('table', $table) . theme('pager') . "</div>";
 }
 
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function openmedia_preprocess_views_view(&$variables) {
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($variables);
+    }
+  }
+}
+
+function openmedia_preprocess_views_view_unformatted__reservation_orders__page(&$variables) {
+  dsm($variables);
+}
+
 function openmedia_preprocess_views_view_unformatted($vars) {
   switch($vars['view']->name) {
     case 'calendar_product_view':
