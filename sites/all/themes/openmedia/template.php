@@ -554,6 +554,7 @@ function openmedia_commerce_registration_order($variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_views_view(&$variables) {
+  dsm('preprocess called');
   $sub_functions = array();
   $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
   $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
