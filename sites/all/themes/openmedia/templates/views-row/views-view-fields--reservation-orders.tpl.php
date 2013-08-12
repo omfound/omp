@@ -68,6 +68,7 @@
       <?php } elseif(!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Checked In') {?>
         <?php print 'Checked In Product: ' . $fields['commerce_product']->content; ?>
       <?php } ?>
+      <?php dsm($view->cr); ?>
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Awaiting Checkout'){?>
         <?php
           $link_options = array(

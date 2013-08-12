@@ -565,7 +565,26 @@ function openmedia_preprocess_views_view(&$variables) {
 }
 
 function openmedia_preprocess_views_view__reservation_orders(&$variables) {
-  dsm($variables);
+  foreach ($variables['view']->result as $key => $info) {
+    $variables['view']->cr = array();
+    //generate utility buttons
+    $link_options = array(
+      'query' => drupal_get_destination(),
+      'attributes' => array(
+        'class' => 'checkout_button',
+      ),
+    );
+    switch ($info->field_field_checkout_status[0]['raw']['value']) {
+      case 'Awaiting Checkout':
+        $link_options['attributes']['class'] = 'checkout_button';
+        $variables['view']['cr'][$info->line_item_id]['buttons'][] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
+        break;
+      case 'Checked Out':
+        $link_options['attributes']['class'] = 'checkin_button';
+        $variables['view']['cr'][$info->line_item_id]['buttons'][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
+        break;
+    } 
+  }
 }
 
 function openmedia_preprocess_views_view_unformatted($vars) {
