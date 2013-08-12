@@ -559,6 +559,7 @@ function openmedia_preprocess_views_view(&$variables) {
   $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
   foreach ($sub_functions AS $function) {
     if (function_exists($function)) {
+      dsm($function);
       $function($variables);
     }
   }
