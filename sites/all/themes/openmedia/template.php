@@ -585,6 +585,7 @@ function openmedia_preprocess_views_view__reservation_orders(&$variables) {
         break;
     } 
   }
+  dsm($variables);
 }
 
 function openmedia_preprocess_views_view_unformatted($vars) {
