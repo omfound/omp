@@ -587,7 +587,7 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 
 function openmedia_preprocess_views_view_unformatted__reservation_orders(&$variables) {
   foreach ($variables['view']->result as $key => $info) {
-    $variables['view']->cr = array();
+    $variables['cr'] = array();
     //generate utility buttons
     $link_options = array(
       'query' => drupal_get_destination(),
@@ -598,11 +598,11 @@ function openmedia_preprocess_views_view_unformatted__reservation_orders(&$varia
     switch ($info->field_field_checkout_status[0]['raw']['value']) {
       case 'Awaiting Checkout':
         $link_options['attributes']['class'] = 'checkout_button';
-        $variables['view']->cr['buttons'][] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
+        $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
         break;
       case 'Checked Out':
         $link_options['attributes']['class'] = 'checkin_button';
-        $variables['view']->cr['buttons'][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
+        $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
         break;
     } 
   }
