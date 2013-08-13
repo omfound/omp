@@ -146,6 +146,7 @@ function commerce_reservations_menu(){
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_line_item_cancel_form', 2),
     'access callback' => 'commerce_reservations_cancel_reservation_access',
+    'access arguments' => array(2),
     'type' => MENU_CALLBACK,
   );
   $items['cr/res_noshow'] = array(
@@ -1613,10 +1614,17 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $form_state['redirect'] = 'administer_reservations';
 }
 
-function commerce_reservations_cancel_reservation_access() {
+function commerce_reservations_cancel_reservation_access($lid) {
   global $user;
-  if (in_array('cancel own commerce reservations', $user->roles) || in_array('administer commerce reservations', $user->roles)) {
-    return true;
+  $line_item = commerce_line_item_load($lid);
+  $status = $line_item->field_field_checkout_status[0]['raw']['value'];
+  if ($status == 'Awaiting Checkout') { 
+    if (in_array('administer commerce reservations', $user->roles)) {
+      return true;
+    }
+    if (in_array('cancel own commerce reservations', $user->roles) && $user->uid == $line_item->uid) {
+      return true;
+    }
   }
   return false;
 }
