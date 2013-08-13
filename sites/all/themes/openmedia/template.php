@@ -598,11 +598,11 @@ function openmedia_preprocess_views_view_unformatted__reservation_orders(&$varia
     switch ($info->field_field_checkout_status[0]['raw']['value']) {
       case 'Awaiting Checkout':
         $link_options['attributes']['class'] = 'checkout_button';
-        $variables['view']->result[$key]->cr_buttons[] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
+        $variables['view']->cr['buttons'][] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
         break;
       case 'Checked Out':
         $link_options['attributes']['class'] = 'checkin_button';
-        $variables['view']->result[$key]->cr_buttons[][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
+        $variables['view']->cr['buttons'][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
         break;
     } 
   }
