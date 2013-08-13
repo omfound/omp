@@ -585,31 +585,60 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 
 }
 
-function openmedia_preprocess_views_view_unformatted__reservation_orders(&$variables) {
-  foreach ($variables['view']->result as $key => $info) {
-    $variables['cr'] = array();
-    //generate utility buttons
-    $link_options = array(
-      'query' => drupal_get_destination(),
-      'attributes' => array(
-        'class' => 'checkout_button',
-      ),
-    );
-    switch ($info->field_field_checkout_status[0]['raw']['value']) {
-      case 'Awaiting Checkout':
-        $link_options['attributes']['class'] = 'checkout_button';
-        $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $info->line_item_id, $link_options);
-        break;
-      case 'Checked Out':
-        $link_options['attributes']['class'] = 'checkin_button';
-        $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
-        break;
-    } 
-  }
+function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
+
+  //generate utility buttons
+  $link_options = array(
+    'query' => drupal_get_destination(),
+    'attributes' => array(
+      'class' => 'checkout_button',
+    ),
+  );
+  $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
+  switch ($status) {
+    case 'Awaiting Checkout':
+      $link_options['attributes']['class'] = 'checkout_button';
+      $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
+      break;
+    case 'Checked Out':
+      $link_options['attributes']['class'] = 'checkin_button';
+      $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
+      break;
+  } 
+
   dsm($variables);
 }
 
-function openmedia_preprocess_views_view_fields(&$vars) {
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function openmedia_preprocess_views_view_fields(&$variables) {
+  $fields_rendered = '';
+  if (!empty($variables['fields'])) {
+    foreach ($variables['fields'] AS $id => $field) {
+      // Seperator
+      if (!empty($field->separator)) {
+        $fields_rendered .= $field->separator;
+      }
+      $fields_rendered .= $field->wrapper_prefix; 
+      $fields_rendered .= $field->label_html; 
+      $fields_rendered .= $field->content;
+      $fields_rendered .= $field->wrapper_suffix;
+    }
+  }
+  $variables['fields_rendered'] = $fields_rendered;
+  // Allow for more granular preproces_functions
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($variables);
+    }
+  }
+}
+
+function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
