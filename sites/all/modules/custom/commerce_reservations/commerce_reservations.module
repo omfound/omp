@@ -1621,7 +1621,6 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $status = $line_item->field_field_checkout_status[0]['raw']['value'];
   if ($status == 'Awaiting Checkout') { 
     if (in_array('administer commerce reservations', $user->roles)) {
-      dsm('testing');
       return true;
     }
     if (in_array('cancel own commerce reservations', $user->roles) && $user->uid == $order->uid) {
