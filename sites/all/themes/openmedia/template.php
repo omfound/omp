@@ -553,7 +553,7 @@ function openmedia_commerce_registration_order($variables) {
 /**
  * Implements hook_preprocess_HOOK
  */
-function minim_preprocess_views_view_unformatted(&$variables) {
+function openmedia_preprocess_views_view_unformatted(&$variables) {
   $rows_rendered = array();
   if (!empty($variables['rows'])) {
     foreach ($variables['rows'] AS $id => $row) {
