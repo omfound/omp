@@ -606,7 +606,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       break;
   } 
 
-  dsm($variables);
+  dsm($variables['row']);
 }
 
 /**
