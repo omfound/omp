@@ -573,6 +573,17 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
       $function($variables);
     }
   }
+
+  switch($vars['view']->name) {
+    case 'calendar_product_view':
+      //drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
+      //drupal_add_css(path_to_theme() . '/css/reservations.css');
+      break;
+    case 'show_grid':
+      drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
+      break;
+  }
+
 }
 
 function openmedia_preprocess_views_view_unformatted__reservation_orders(&$variables) {
@@ -598,18 +609,6 @@ function openmedia_preprocess_views_view_unformatted__reservation_orders(&$varia
     } 
   }**/
   dsm($variables);
-}
-
-function openmedia_preprocess_views_view_unformatted($vars) {
-  switch($vars['view']->name) {
-    case 'calendar_product_view':
-      //drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
-      //drupal_add_css(path_to_theme() . '/css/reservations.css');
-      break;
-    case 'show_grid':
-      drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
-      break;
-  }
 }
 
 function openmedia_preprocess_views_view_fields(&$vars) {
