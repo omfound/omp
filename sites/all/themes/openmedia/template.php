@@ -605,8 +605,6 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
-
-  dsm($variables['row']);
 }
 
 /**
