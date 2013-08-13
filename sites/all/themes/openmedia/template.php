@@ -610,8 +610,8 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
-  //$link_options['attributes']['class'] = 'contract_button';
-  //$variables['cr']['buttons'][] = l('Contract', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
+  $link_options['attributes']['class'] = 'contract_button';
+  $variables['cr']['buttons'][] = l('Contract', 'cr/res_cancel/' . $variables['row']->commerce_line_item_order_id, $link_options);
 }
 
 /**
