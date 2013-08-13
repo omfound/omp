@@ -1604,8 +1604,12 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
 }
 
 function commerce_reservations_line_item_cancel_form($form, &$form_state, $lid){
-  $form = confirm_form(null, 'Are you sure you want to cancel this reservation?', 'administer_reservations');
+  $form = confirm_form($form, 'Are you sure you want to cancel this reservation?', 'administer_reservations');
   return $form;
+}
+
+function commerce_reservations_line_item_cancel_form_submit($form, &$form_state) {
+  dsm($form_state); 
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
