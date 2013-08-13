@@ -565,8 +565,8 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
   }
   $variables['rows_rendered'] = $rows_rendered;
   $sub_functions = array();
-  $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name;
-  $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name . '__' . $variables['view']->current_display;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
   foreach ($sub_functions AS $function) {
     dsm($function);
     if (function_exists($function)) {
