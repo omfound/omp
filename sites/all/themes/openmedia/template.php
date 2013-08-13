@@ -553,10 +553,20 @@ function openmedia_commerce_registration_order($variables) {
 /**
  * Implements hook_preprocess_HOOK
  */
-function openmedia_preprocess_views_view(&$variables) {
+function minim_preprocess_views_view_unformatted(&$variables) {
+  $rows_rendered = array();
+  if (!empty($variables['rows'])) {
+    foreach ($variables['rows'] AS $id => $row) {
+      $complete_row = "<div class='" . $variables['classes_array'][$id] . "'>";
+      $complete_row .= $row;
+      $complete_row .= "</div>";
+      $rows_rendered[] = array('row' => $complete_row);
+    }
+  }
+  $variables['rows_rendered'] = $rows_rendered;
   $sub_functions = array();
-  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
-  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name . '--' . $variables['view']->current_display;
   foreach ($sub_functions AS $function) {
     if (function_exists($function)) {
       $function($variables);
@@ -564,7 +574,8 @@ function openmedia_preprocess_views_view(&$variables) {
   }
 }
 
-function openmedia_preprocess_views_view__reservation_orders(&$variables) {
+function openmedia_preprocess_views_view_unformatted__reservation_orders(&$variables) {
+  /**
   foreach ($variables['view']->result as $key => $info) {
     $variables['view']->cr = array();
     //generate utility buttons
@@ -584,7 +595,7 @@ function openmedia_preprocess_views_view__reservation_orders(&$variables) {
         $variables['view']->result[$key]->cr_buttons[][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
         break;
     } 
-  }
+  }**/
   dsm($variables);
 }
 
