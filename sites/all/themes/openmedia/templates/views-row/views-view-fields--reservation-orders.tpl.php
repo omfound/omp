@@ -73,7 +73,6 @@
           <?php print $button; ?>
         <?php } ?>
       <?php } ?>
-      <?php print l('Printable Contract', 'cr/contract/'.$fields['order_id']->raw); ?>
     </td>
   </table>
 </div>
