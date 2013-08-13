@@ -1617,12 +1617,13 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
 function commerce_reservations_cancel_reservation_access($lid) {
   global $user;
   $line_item = commerce_line_item_load($lid);
+  $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_field_checkout_status[0]['raw']['value'];
   if ($status == 'Awaiting Checkout') { 
     if (in_array('administer commerce reservations', $user->roles)) {
       return true;
     }
-    if (in_array('cancel own commerce reservations', $user->roles) && $user->uid == $line_item->uid) {
+    if (in_array('cancel own commerce reservations', $user->roles) && $user->uid == $order->uid) {
       return true;
     }
   }
