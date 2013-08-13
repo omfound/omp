@@ -138,6 +138,12 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/res_cancel'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_reservations_line_item_cancel_form', 2),
+    'access arguments' => array('administer commerce reservations'),
+    'type' => MENU_CALLBACK,
+  );
   $items['admin/commerce/cr/settings'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_settings_form'),
@@ -1595,6 +1601,11 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
+}
+
+function commerce_reservations_line_item_cancel_form($form, &$form_state, $lid){
+  $form = confirm_form(null, 'Are you sure you want to cancel this reservation?', 'administer_reservations');
+  return $form;
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
