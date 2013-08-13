@@ -586,7 +586,6 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 }
 
 function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
-  dsm($variables['row']);
   //generate utility buttons
   $link_options = array(
     'query' => drupal_get_destination(),
