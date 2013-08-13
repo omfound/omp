@@ -568,6 +568,7 @@ function minim_preprocess_views_view_unformatted(&$variables) {
   $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name;
   $sub_functions[] = __FUNCTION__ . '--' . $variables['view']->name . '--' . $variables['view']->current_display;
   foreach ($sub_functions AS $function) {
+    dsm($function);
     if (function_exists($function)) {
       $function($variables);
     }
