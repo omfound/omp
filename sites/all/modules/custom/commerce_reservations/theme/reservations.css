@@ -792,6 +792,7 @@ body.page-reservations #main-content #squeeze{
 .page-administer-reservations .reservation .cancel_button,
 .page-administer-reservations .reservation-overdue .cancel_button {
   background-color: #E64A4E;
+  width: 80px;
 }
 
 .page-administer-reservations .reservation .checkout_button:hover,
