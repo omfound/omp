@@ -599,6 +599,8 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     case 'Awaiting Checkout':
       $link_options['attributes']['class'] = 'checkout_button';
       $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = 'cancel_button';
+      $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
       break;
     case 'Checked Out':
     case 'Overdue':
