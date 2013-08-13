@@ -586,7 +586,6 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 }
 
 function openmedia_preprocess_views_view_unformatted__reservation_orders(&$variables) {
-  /**
   foreach ($variables['view']->result as $key => $info) {
     $variables['view']->cr = array();
     //generate utility buttons
@@ -606,7 +605,7 @@ function openmedia_preprocess_views_view_unformatted__reservation_orders(&$varia
         $variables['view']->result[$key]->cr_buttons[][] = l('Check In', 'cr/res_checkin/' . $info->line_item_id, $link_options);
         break;
     } 
-  }**/
+  }
   dsm($variables);
 }
 
