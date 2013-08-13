@@ -102,6 +102,7 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
 function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
   $reservations = om_dashboard_panes_get_users_reservations();
+  dsm($reservations);
   if(!empty($reservations)) {
     $reservations_output = '<table><tr><th>Start Date</th><th>Item</th></tr>';
     foreach($reservations as $res) {

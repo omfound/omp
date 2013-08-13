@@ -16,6 +16,10 @@ function commerce_reservations_permission() {
       'title' => t('Administer commerce reservations'),
       'description' => t('Access configuration settings for commerce reservations'),
     ),
+    'cancel own commerce reservations' => array(
+      'title' => t('Cancel own commerce reservations'),
+      'description' => t('Cancel own commerce reservations'),
+    ),
   );
 }
 
@@ -141,7 +145,7 @@ function commerce_reservations_menu(){
   $items['cr/res_cancel'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_line_item_cancel_form', 2),
-    'access arguments' => array('administer commerce reservations'),
+    'access callback' => 'commerce_reservations_cancel_reservation_access',
     'type' => MENU_CALLBACK,
   );
   $items['cr/res_noshow'] = array(
@@ -1607,6 +1611,14 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
+}
+
+function commerce_reservations_cancel_reservation_access() {
+  global $user;
+  if (in_array('cancel own commerce reservations', $user->roles) || in_array('administer commerce reservations', $user->roles)) {
+    return true;
+  }
+  return false;
 }
 
 function commerce_reservations_line_item_cancel_form($form, &$form_state, $lid){
