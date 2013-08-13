@@ -610,7 +610,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       break;
   } 
   $link_options['attributes']['class'] = array('cr_button', 'cr_contract_button');
-  $variables['cr']['buttons'][] = l('Contract', 'cr/res_cancel/' . $variables['row']->commerce_line_item_order_id, $link_options);
+  $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
 }
 
 /**
