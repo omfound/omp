@@ -68,29 +68,10 @@
       <?php } elseif(!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Checked In') {?>
         <?php print 'Checked In Product: ' . $fields['commerce_product']->content; ?>
       <?php } ?>
-      <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == 'Awaiting Checkout'){?>
-        <?php
-          $link_options = array(
-            'query' => drupal_get_destination(),
-            'attributes' => array(
-              'class' => 'checkout_button',
-            ),
-          );
-          print l('Check Out', 'cr/res_checkout/' . $fields['line_item_id']->raw, $link_options);
-        ?>
-        <?php $checkedout = FALSE;?>
-      <?php } ?>
-      <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && ($row->field_field_checkout_status[0]['raw']['value'] == 'Checked Out' || $row->field_field_checkout_status[0]['raw']['value'] == 'Overdue')){?>
-        <?php
-          $link_options = array(
-            'query' => drupal_get_destination(),
-            'attributes' => array(
-              'class' => 'checkin_button',
-            ),
-          );
-          print l('Check In', 'cr/res_checkin/' . $fields['line_item_id']->raw, $link_options);
-        ?>
-        <?php $checkedout = TRUE;?>
+      <?php if (!empty($cr['buttons'])) { ?>
+        <?php foreach ($cr['buttons'] as $key => $button) { ?>
+          <?php print $button; ?>
+        <?php } ?>
       <?php } ?>
       <?php print l('Printable Contract', 'cr/contract/'.$fields['order_id']->raw); ?>
     </td>

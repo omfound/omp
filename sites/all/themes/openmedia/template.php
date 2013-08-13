@@ -550,8 +550,30 @@ function openmedia_commerce_registration_order($variables) {
   return $title . theme('table', $table) . theme('pager') . "</div>";
 }
 
-function openmedia_preprocess_views_view_unformatted($vars) {
-  switch($vars['view']->name) {
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function openmedia_preprocess_views_view_unformatted(&$variables) {
+  $rows_rendered = array();
+  if (!empty($variables['rows'])) {
+    foreach ($variables['rows'] AS $id => $row) {
+      $complete_row = "<div class='" . $variables['classes_array'][$id] . "'>";
+      $complete_row .= $row;
+      $complete_row .= "</div>";
+      $rows_rendered[] = array('row' => $complete_row);
+    }
+  }
+  $variables['rows_rendered'] = $rows_rendered;
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($variables);
+    }
+  }
+
+  switch($variables['view']->name) {
     case 'calendar_product_view':
       //drupal_add_js(path_to_theme() . '/js/om_reservations.js', array('group' => JS_THEME));
       //drupal_add_css(path_to_theme() . '/css/reservations.css');
@@ -560,9 +582,66 @@ function openmedia_preprocess_views_view_unformatted($vars) {
       drupal_add_js(path_to_theme() . '/js/om_show_grid.js', array('group' => JS_THEME));
       break;
   }
+
 }
 
-function openmedia_preprocess_views_view_fields(&$vars) {
+function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
+
+  //generate utility buttons
+  $link_options = array(
+    'query' => drupal_get_destination(),
+    'attributes' => array(
+      'class' => 'checkout_button',
+    ),
+  );
+  $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
+  switch ($status) {
+    case 'Awaiting Checkout':
+      $link_options['attributes']['class'] = 'cancel_button';
+      $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = 'noshow_button';
+      $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = 'checkout_button';
+      $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
+      break;
+    case 'Checked Out':
+    case 'Overdue':
+      $link_options['attributes']['class'] = 'checkin_button';
+      $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
+      break;
+  } 
+}
+
+/**
+ * Implements hook_preprocess_HOOK
+ */
+function openmedia_preprocess_views_view_fields(&$variables) {
+  $fields_rendered = '';
+  if (!empty($variables['fields'])) {
+    foreach ($variables['fields'] AS $id => $field) {
+      // Seperator
+      if (!empty($field->separator)) {
+        $fields_rendered .= $field->separator;
+      }
+      $fields_rendered .= $field->wrapper_prefix; 
+      $fields_rendered .= $field->label_html; 
+      $fields_rendered .= $field->content;
+      $fields_rendered .= $field->wrapper_suffix;
+    }
+  }
+  $variables['fields_rendered'] = $fields_rendered;
+  // Allow for more granular preproces_functions
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($variables);
+    }
+  }
+}
+
+function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {

@@ -138,6 +138,18 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/res_cancel'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_reservations_line_item_cancel_form', 2),
+    'access arguments' => array('administer commerce reservations'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['cr/res_noshow'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_reservations_line_item_noshow_form', 2),
+    'access arguments' => array('administer commerce reservations'),
+    'type' => MENU_CALLBACK,
+  );
   $items['admin/commerce/cr/settings'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_settings_form'),
@@ -1595,6 +1607,38 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
+}
+
+function commerce_reservations_line_item_cancel_form($form, &$form_state, $lid){
+  $form['lid'] = array('#type' => 'hidden', '#value' => $lid);
+  $form = confirm_form($form, 'Are you sure you want to cancel this reservation?', 'administer_reservations');
+  return $form;
+}
+
+function commerce_reservations_line_item_cancel_form_submit($form, &$form_state) {
+  if (!empty($form_state['values']['confirm']) && $form_state['values']['confirm'] == 1) {
+    if (!empty($form_state['values']['lid']) && is_numeric($form_state['values']['lid'])) {
+      commerce_line_item_delete($form_state['values']['lid']);
+      drupal_set_message('Reservation cancelled.');
+    }
+  }
+}
+
+function commerce_reservations_line_item_noshow_form($form, &$form_state, $lid){
+  $form['lid'] = array('#type' => 'hidden', '#value' => $lid);
+  $form = confirm_form($form, 'Are you sure you want to mark this reservation as no show?', 'administer_reservations');
+  return $form;
+}
+
+function commerce_reservations_line_item_noshow_form_submit($form, &$form_state) {
+  if (!empty($form_state['values']['confirm']) && $form_state['values']['confirm'] == 1) {
+    if (!empty($form_state['values']['lid']) && is_numeric($form_state['values']['lid'])) {
+      $line_item = commerce_line_item_load($form_state['values']['lid']);
+      $line_item->field_checkout_status[LANGUAGE_NONE][0]['value'] = 'No Show';
+      commerce_line_item_save($line_item);
+      drupal_set_message('Reservation set to noshow.');
+    }
+  }
 }
 
 function commerce_reservations_line_item_checkin_form($form, &$form_state, $lid){
