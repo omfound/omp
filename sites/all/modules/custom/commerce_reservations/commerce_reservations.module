@@ -1619,9 +1619,9 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $line_item = commerce_line_item_load($lid);
   $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_field_checkout_status[0]['raw']['value'];
+  watchdog('brian', '<pre>'.print_r($user, TRUE).'</pre>');
+  watchdog('brian', '<pre>'.print_r($order, TRUE).'</pre>');
   if ($status == 'Awaiting Checkout') { 
-    drupal_set_message('<pre>'.print_r($user, TRUE).'</pre>');
-    drupal_set_message('<pre>'.print_r($order, TRUE).'</pre>');
     if (in_array('administer commerce reservations', $user->roles)) {
       return true;
     }
