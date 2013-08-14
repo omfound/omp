@@ -191,7 +191,6 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer .date-details').addClass('preloader-active');
 
       //load item reservations
-      alert(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
