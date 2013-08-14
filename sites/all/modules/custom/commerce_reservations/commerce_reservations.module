@@ -544,6 +544,7 @@ function commerce_reservations_views_post_execute(&$view){
     if (sizeof($view->args) > 0){
       //create the reservation array, passing start end and line_id
       $reservations = array();
+      dsm($view->result);
       foreach ($view->result as $reservation){
         $quantity = $reservation->_field_data['line_item_id']['entity']->quantity;
         for ($i = 0; $i < $quantity; $i++){
