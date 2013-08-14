@@ -285,10 +285,10 @@ function om_project_sync_all_shows_to_project_owner() {
   // check if properties exist
   if(!$nid || !$project || !isset($project->uid))  {
     print "node is $nid, project is $project, perhaps project uid is missing";
-    exit;
+    exit("nid or project do not exist");
   }
   
-  $children = db_select('field_data_field_om_show_projects', 'projects');
+  $children = db_select('field_data_field_om_show_project', 'projects');
   $children->fields('projects', array('entity_id'));
   $children->condition('field_om_show_projects_nid', $nid);
   $result = $children->execute();
