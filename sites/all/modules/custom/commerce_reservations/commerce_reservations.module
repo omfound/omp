@@ -1619,6 +1619,10 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $line_item = commerce_line_item_load($lid);
   $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_checkout_status[LANGUAGE_NONE][0]['value'];
+  watchdog('brian', 'status: '.$status);
+  watchdog('brian', '<pre>'.print_r($order, TRUE).'</pre>');
+  watchdog('brian', '<pre>'.print_r($line_item, TRUE).'</pre>');
+  watchdog('brian', '<pre>'.print_r($user, TRUE).'</pre>');
   if ($status == 'Awaiting Checkout') { 
     if (in_array('administer commerce reservations', $user->roles)) {
       return true;
