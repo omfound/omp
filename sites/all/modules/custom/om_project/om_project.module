@@ -290,7 +290,7 @@ function om_project_sync_all_shows_to_project_owner() {
   
   $children = db_select('field_data_field_om_show_project', 'projects');
   $children->fields('projects', array('entity_id'));
-  $children->condition('field_om_show_projects_nid', $nid);
+  $children->condition('field_om_show_project_nid', $nid);
   $result = $children->execute();
   
   while ($child = $result->fetchAssoc()) {
