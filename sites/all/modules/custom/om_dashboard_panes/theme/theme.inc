@@ -112,7 +112,7 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
         $cancel_link = l('Cancel Reservation', 'cr/res_cancel/' . $key, $link_options);
         $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td><td>' . $cancel_link . '</td></tr>';
       }else{
-        $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td></tr>';
+        $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td><td></td></tr>';
       }
     }
     $reservations_output .= '</table>';
