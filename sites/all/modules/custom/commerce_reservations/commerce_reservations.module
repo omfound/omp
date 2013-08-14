@@ -1620,6 +1620,8 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_field_checkout_status[0]['raw']['value'];
   if ($status == 'Awaiting Checkout') { 
+    dsm($user);
+    dsm($order);
     if (in_array('administer commerce reservations', $user->roles)) {
       return true;
     }
