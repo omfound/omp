@@ -1618,7 +1618,7 @@ function commerce_reservations_cancel_reservation_access($lid) {
   global $user;
   $line_item = commerce_line_item_load($lid);
   $order = commerce_order_load($line_item->order_id);
-  $status = $line_item->field_field_checkout_status[0]['raw']['value'];
+  $status = $line_item->field_checkout_status[0]['raw']['value'];
   watchdog('brian', '<pre>'.print_r($line_item, TRUE).'</pre>');
   watchdog('brian', '<pre>'.print_r($user, TRUE).'</pre>');
   watchdog('brian', '<pre>'.print_r($order, TRUE).'</pre>');
