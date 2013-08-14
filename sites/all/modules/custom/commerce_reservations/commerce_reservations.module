@@ -1624,10 +1624,10 @@ function commerce_reservations_cancel_reservation_access($lid) {
   watchdog('brian', '<pre>'.print_r($line_item, TRUE).'</pre>');
   watchdog('brian', '<pre>'.print_r($user, TRUE).'</pre>');
   if ($status == 'Awaiting Checkout') { 
-    if (in_array('administer commerce reservations', $user->roles)) {
+    if (user_access('administer commerce reservations')) {
       return true;
     }
-    if (in_array('cancel own commerce reservations', $user->roles) && $user->uid == $order->uid) {
+    if (user_access('cancel own commerce reservations') && $user->uid == $order->uid) {
       return true;
     }
   }
