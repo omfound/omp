@@ -166,6 +166,7 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     }
     $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
     $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
+    $output .= '<guid>'.$point['seconds'].'</guid>';
     $output .= '</item>';
   }
   $output .= '</channel>';
