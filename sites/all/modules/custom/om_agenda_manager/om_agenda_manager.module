@@ -96,7 +96,7 @@ function om_agenda_manager_menu() {
 }
 
 function om_agenda_manager_test($node) { 
-  drupal_add_js('js/jwplayer_test.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(drupal_get_path('module', 'om_agenda_manager') . '/js/jwplayer-test.js', array('type' => 'file', 'group' => JS_DEFAULT));
   return '<div id="jwplayer-test"></div>';
 }
