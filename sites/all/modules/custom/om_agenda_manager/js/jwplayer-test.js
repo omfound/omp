@@ -14,7 +14,8 @@
         events: {
           onPlaylistItem: function(event) {
             var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
-            console.log(currentPlaylistItem.mediaid);
+            jwplayer().seek(currentPlaylistItem.mediaid);
+            //console.log(currentPlaylistItem.mediaid);
             //console.log(event);
             //console.log(jwplayer().getPlaylistItem(event.index));
           }
