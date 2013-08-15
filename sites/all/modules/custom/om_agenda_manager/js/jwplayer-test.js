@@ -19,7 +19,7 @@
             //console.log(event);
             //console.log(jwplayer().getPlaylistItem(event.index));
           },
-          onPlay(event) {
+          onPlay: function(event) {
             console.log(event);
             console.log(jwplayer().getPlaylistItem(event.index));
           }
