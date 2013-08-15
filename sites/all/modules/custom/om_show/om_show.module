@@ -167,7 +167,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
          }
        }
      }
-    
+/*    
     // Only provide ajax if we are on node add screen.
     if (arg(2) != 'edit') {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
@@ -180,7 +180,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     else {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
     }
-
+*/
 }
 //End of work
 
