@@ -3,14 +3,21 @@
     attach : function() {
       jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
       var player = jwplayer("jwplayer-test").setup({ 
-        flashplayer:  'http://dev-thornton.gotpantheon.com/sites/all/modules/custom/om_agenda_manager/js/jwplayer/player.swf',
-        playlist: 'http://dev-thornton.gotpantheon.com/node/29357/cuepoints',
-        height: 500,
-        width: 800,
+        playlist: Drupal.settings.jwplayer[i].playlist,
+        height: Drupal.settings.jwplayer[i].height,
+        width: Drupal.settings.jwplayer[i].width,
+        image: Drupal.settings.jwplayer[i].image,
+        autostart: Drupal.settings.jwplayer[i].autostart,
         primary: "flash",
         listbar: {
           position: 'right',
-          size: 300
+          size: 410
+        },
+        events: {
+          onPlaylistItem: function(event) {
+            console.log(event);
+            console.log(jwplayer().getPlaylistItem(event.index));
+          }
         }
       });
     }
