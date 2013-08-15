@@ -40,12 +40,12 @@ function om_membership_rules_event_info() {
       ),
     )
   );
-  $items['om_membership_removed_org_sub_member'] = array(
-    'label' => t('When Removing an Org Membership from a User'),
+  $items['om_membership_removed_membership'] = array(
+    'label' => t('When Removing a Membership from a User'),
     'group' => 'Open Media Membership',
     'variables' => array(
       'previous_org_user' => array(
-        'label' => t('Existing user removed org membership'),
+        'label' => t('Existing user removed membership'),
         'type' => 'user',
         'skip save' => TRUE,
       ),
