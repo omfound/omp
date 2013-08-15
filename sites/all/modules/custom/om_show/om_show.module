@@ -111,7 +111,7 @@ function om_show_migrate_flash() {
 
 
 function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
-  if (!user_access('administer show')) { dsm($form); dsm($form_state); dsm($form_id);}
+  if (!user_access('administer show')) { dsm($form); dsm($form_state); dsm($form_id);}}
  /*   $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
     foreach ($functional_fields AS $field) {
       if (!empty($form[$field])) {
