@@ -84,7 +84,21 @@ function om_agenda_manager_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['jwplayer/test/%node'] = array(
+    'title' => 'JWPlayer Test',
+    'description' => 'JWPlayer Test',
+    'page callback' => 'om_agenda_manager_test',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
+}
+
+function om_agenda_manager_test($node) { 
+  drupal_add_js('js/jwplayer_test.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(drupal_get_path('module', 'om_agenda_manager') . '/js/jwplayer-test.js', array('type' => 'file', 'group' => JS_DEFAULT));
+  print '<div id="jwplayer-test"></div>';
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
