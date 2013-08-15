@@ -13,8 +13,10 @@
         },
         events: {
           onPlaylistItem: function(event) {
-            console.log(event);
-            console.log(jwplayer().getPlaylistItem(event.index));
+            var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
+            jwplayer().seek(currentPlaylistItem.mediaid);
+            //console.log(event);
+            //console.log(jwplayer().getPlaylistItem(event.index));
           }
         }
       });
