@@ -3,11 +3,9 @@
     attach : function() {
       jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
       var player = jwplayer("jwplayer-test").setup({ 
-        playlist: Drupal.settings.jwplayer[i].playlist,
-        height: Drupal.settings.jwplayer[i].height,
-        width: Drupal.settings.jwplayer[i].width,
-        image: Drupal.settings.jwplayer[i].image,
-        autostart: Drupal.settings.jwplayer[i].autostart,
+        playlist: 'http://dev-thornton.gotpantheon.com/node/29357/cuepoints',
+        height: 600,
+        width: 600,
         primary: "flash",
         listbar: {
           position: 'right',
