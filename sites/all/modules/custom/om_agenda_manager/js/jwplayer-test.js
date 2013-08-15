@@ -13,15 +13,18 @@
         },
         events: {
           onPlaylistItem: function(event) {
-            var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
+            //var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
             //jwplayer().seek(currentPlaylistItem.mediaid);
             //console.log(currentPlaylistItem.mediaid);
             //console.log(event);
             //console.log(jwplayer().getPlaylistItem(event.index));
           },
           onPlay: function(event) {
-            console.log(event);
-            console.log(jwplayer().getPlaylistItem(event.index));
+            if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
+              var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
+              jwplayer().seek(currentPlaylistItem.mediaid);
+              //console.log(jwplayer().getPlaylistItem(event.index));
+            }
           }
         }
       });
