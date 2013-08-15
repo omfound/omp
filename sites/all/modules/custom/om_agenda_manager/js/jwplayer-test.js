@@ -5,11 +5,11 @@
       var player = jwplayer("jwplayer-test").setup({ 
         playlist: 'http://dev-thornton.gotpantheon.com/node/29357/cuepoints',
         height: 600,
-        width: 600,
+        width: 800,
         primary: "flash",
         listbar: {
           position: 'right',
-          size: 410
+          size: 310
         },
         events: {
           onPlaylistItem: function(event) {
