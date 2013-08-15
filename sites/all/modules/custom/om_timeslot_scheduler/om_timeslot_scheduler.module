@@ -157,6 +157,7 @@ function om_timeslot_scheduler_calendar_page($channel = NULL) {
  * Implements hook_form_FORM_ID_alter
  */
 function om_timeslot_scheduler_form_om_timeslot_event_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form);
   $rules = om_timeslot_scheduler_entity_get_rules();
   foreach ($rules AS $machine_name => $rule) {
     $options[$machine_name] = $rule['title'];
