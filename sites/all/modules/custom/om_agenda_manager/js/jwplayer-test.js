@@ -7,7 +7,6 @@
         height: 500,
         width: 800,
         primary: "flash",
-        type: "youtube",
         listbar: {
           position: 'right',
           size: 300
