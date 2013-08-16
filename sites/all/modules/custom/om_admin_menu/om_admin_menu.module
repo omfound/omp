@@ -209,7 +209,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   $content['menu']['scheduling']['timeslots'] = array(
     '#title' => t('Timeslots'),
     '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
-    '#href' => 'om_timeslot_schedule',
+    '#href' => 'om_timeslot_scheduler',
   );
 }
 
