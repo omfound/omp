@@ -16,6 +16,14 @@
             listbar: {
               position: 'right',
               size: 410
+            },
+            events: {
+              onPlay: function(event) {
+                if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
+                  var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
+                  jwplayer().seek(currentPlaylistItem.mediaid);
+                }
+              }
             }
           });
         }
