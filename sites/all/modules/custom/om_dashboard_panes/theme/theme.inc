@@ -99,6 +99,14 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
 /**
  * Implements hook_preprocess_hook
  */
+function om_dashboard_panes_preprocess_om_switch_user_pane(&$variables) {
+  $devel_switch = block_load('devel', 'switch_user');
+  $variables['switch_block'] = $devel_switch;
+}
+
+/**
+ * Implements hook_preprocess_hook
+ */
 function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
   $reservations = om_dashboard_panes_get_users_reservations();
