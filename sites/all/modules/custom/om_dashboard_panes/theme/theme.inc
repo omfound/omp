@@ -101,7 +101,8 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_switch_user_pane(&$variables) {
   $devel_switch = block_load('devel', 'switch_user');
-  $variables['switch_block'] = $devel_switch;
+  $rendered_devel_switch = drupal_render(_block_get_renderable_array(_block_render_blocks(array($devel_switch))));
+  $variables['switch_block'] = $rendered_devel_switch;
   $variables['title'] = t('Switch User');
 }
 
