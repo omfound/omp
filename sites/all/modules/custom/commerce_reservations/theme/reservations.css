@@ -726,29 +726,29 @@ body.page-reservations #main-content #squeeze{
 	background-color: whiteSmoke;
 }
 
-.page-administer-reservations .reservation{
+.section-administer-reservations .reservation{
   padding: 10px;
   background: white;
   border-left: 1px dashed grey;
   border-right: 1px dashed grey;
   border-bottom: 1px dashed blue;
 }
-.page-administer-reservations .views-row-first .reservation {
+.section-administer-reservations .views-row-first .reservation {
   border-top: 1px dashed grey;
 }
-.page-administer-reservations .views-row-last .reservation {
+.section-administer-reservations .views-row-last .reservation {
   border-bottom: 1px dashed grey;
 }
 
-.page-administer-reservations .reservation-overdue{
+.section-administer-reservations .reservation-overdue{
 	padding: 10px;
   background: #FFF68F;
   box-shadow: 2px 2px 10px grey;
   margin-bottom: 15px;
 }
 
-.page-administer-reservations .reservation .reservation-dates,
-.page-administer-reservations #content .view-id-reservation_orders h3 {
+.section-administer-reservations .reservation .reservation-dates,
+.section-administer-reservations #content .view-id-reservation_orders h3 {
 	color: #85B740;
   font-weight: bold;
   font-size: 21px;
@@ -756,18 +756,18 @@ body.page-reservations #main-content #squeeze{
   margin-top: 15px;
 }
 
-.page-administer-reservations .reservation-overdue .reservation-dates{
+.section-administer-reservations .reservation-overdue .reservation-dates{
 	color: #912a1b;
   font-weight: bold;
   font-size: 21px;
 }
 
-.page-administer-reservations .reservation .reservation-info-table,
-.page-administer-reservations .eservation-overdue .reservation-info-table{
+.section-administer-reservations .reservation .reservation-info-table,
+.section-administer-reservations .eservation-overdue .reservation-info-table{
 	margin-top: 10px;
 }
 
-.page-administer-reservations .cr_button { 
+.section-administer-reservations .cr_button { 
   color: #fff; 
   background-color: #85B740;
   float: right;
@@ -785,19 +785,23 @@ body.page-reservations #main-content #squeeze{
   height: 30px;
 }
 
-.page-administer-reservations .cr_cancel_button {
+.section-administer-reservations .cr_cancel_button {
   background-color: #E64A4E;
   width: 80px;
   height: 40px;
   padding-top: 5px;
 }
 
-.page-administer-reservations .cr_noshow_button {
+.section-administer-reservations .cr_noshow_button {
   background-color: #3394D1;
 }
 
-.page-administer-reservations .cr_button:hover {
+.section-administer-reservations .cr_button:hover {
   background-position: 0 -50px; 
+}
+
+.section-administer-reservations .checkout-options {
+  width: 350px;
 }
 
 .checkout_status_bad{
