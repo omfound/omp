@@ -18,3 +18,5 @@ files[] = om_users_with_membership.inc
 files[] = om_users_with_certification.inc
 files[] = om_cablecast_show.inc
 files[] = includes/om_migration_utils.inc
+files[] = includes/cablecast.inc
+

@@ -715,6 +715,25 @@ function om_membership_grant_user_role($commerce_order) {
 }
 
 /**
+ * A simple version of om_membership_grant_user_role that updates a
+ * user membership role based on the membership product in an order
+ */
+function om_membership_update_role_from_order($commerce_order) {
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+  $line_items = $order_wrapper->commerce_line_items->value();
+  foreach ($line_items AS $line_item) {
+    $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+    $product = $line_item_meta->commerce_product->value();
+    if ($product->type == 'membership_plan' && !empty($product->field_associated_role[LANGUAGE_NONE][0]['rid'])) {
+      $order_user = user_load($commerce_order->uid);
+      $role = user_role_load($product->field_associated_role[LANGUAGE_NONE][0]['rid']);
+      $order_user->roles[$role->rid] = $role->name;
+      user_save($order_user);
+    }
+  }
+} 
+
+/**
  * Remove all membership roles from a user.
  */
 function om_membership_remove_user_role($user) {
@@ -728,7 +747,7 @@ function om_membership_remove_user_role($user) {
   }
   if ($user_modified == TRUE) {
     if (module_exists('rules')) {
-      rules_invoke_event('om_membership_removed_org_sub_member', $user);
+      rules_invoke_event('om_membership_removed_membership', $user);
     }
    return user_save($user);
   }
@@ -768,35 +787,41 @@ function om_membership_validate_all_org_sub_members() {
       }
       // Next look for valid sub members.
       foreach($invites AS $invite) {
-        $invited_user = user_load_by_mail($invite);
-        if (empty($invited_user)) {
-          // If the user doesn't exist create them and add role.
-          $new_user = new StdClass;
-          $new_user->roles = array();
-          $new_user->roles[$admin_role->rid] = $admin_role->name;
-          $new_user->name = substr($invite, 0, strpos($invite, '@'));
-          $new_user->mail = $invite;
-          $new_user->password = user_password();
-          $new_user->status = 1;
-          $new_user->is_new = 1;
-          user_save($new_user);
-          if (module_exists('rules')) {
-            rules_invoke_event('om_membership_new_org_sub_member', $new_user);
-          }
-        }
-        else {
-          // If the user does exist remove them from the list and add their role.
-          foreach($org_members AS $key => $member) {
-            if ($member->mail == $invite) {
-              unset($org_members[$key]);
+        if (filter_var($invite, FILTER_VALIDATE_EMAIL)) {
+          $invited_user = user_load_by_mail($invite);
+          if (empty($invited_user)) {
+            // If the user doesn't exist create them and add role.
+            $new_user = new StdClass;
+            $new_user->roles = array();
+            $new_user->roles[$admin_role->rid] = $admin_role->name;
+            $new_user->name = substr($invite, 0, strpos($invite, '@'));
+            $new_user->mail = $invite;
+            $new_user->password = user_password();
+            $new_user->status = 1;
+            $new_user->is_new = 1;
+            user_save($new_user);
+            if (module_exists('rules')) {
+              rules_invoke_event('om_membership_new_org_sub_member', $new_user);
             }
           }
-          // If the invited user has an account, but not the roll add it!
-          if (empty($invited_user->roles[$admin_role->rid])) {
-            $invited_user->roles[$admin_role->rid] = $admin_role->name;
-            user_save($invited_user);
-            if (module_exists('rules')) {
-              rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+          else {
+            // If the user does exist remove them from the list and add their role.
+            foreach($org_members AS $key => $member) {
+              if ($member->mail == $invite) {
+                unset($org_members[$key]);
+              }
+            }
+            // If the invited user has an account, but not the roll add it!
+            if (empty($invited_user->roles[$admin_role->rid])) {
+              $invited_user->roles[$admin_role->rid] = $admin_role->name;
+              user_save($invited_user);
+              if (module_exists('rules')) {
+                //have to check if we are on a manage org page because the membership
+                //system wipes all user roles on cron causing this message to go out repeatedly.
+                if (arg(0) == 'user' && arg(3) == 'manage_organizational_membership') {
+                  rules_invoke_event('om_membership_add_org_membership_existing_user', $invited_user);
+                }
+              }
             }
           }
         }
@@ -882,4 +907,29 @@ function om_membership_sync_members() {
       }
     }
   }
+}
+
+function om_membership_broken_memberships() {
+  $query = "SELECT * FROM {commerce_order}";
+  $result = db_query($query);
+
+  $suspect_orders = array();
+  foreach ($result as $order) {
+    if(date('i', $order->created) == 26 && date('g', $order->created) == 6) {
+      $suspect_orders[$order->order_id] = array(
+        'order_id' => $order->order_id,
+        'uid' => $order->uid,
+        'created' => $order->created,
+      );
+    }
+  }
+
+  foreach ($suspect_orders as $order_id => $info) {
+    $user = user_load($info['uid']);
+    $suspect_orders[$order_id]['username'] = $user->name;
+    $suspect_orders[$order_id]['mail'] = $user->mail;
+    $suspect_orders[$order_id]['old_uid'] = $user->field_legacy_uid[LANGUAGE_NONE][0]['value'];
+  }
+
+  return $suspect_orders;
 }

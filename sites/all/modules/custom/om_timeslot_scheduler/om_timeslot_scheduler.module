@@ -282,6 +282,7 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
     'channel_tid' => $channel_tid,
     'start' => $start,
     'end' => $end,
+    'mode' => 'bulk',
     'timeslots' => array(),
     'errors' => array()
   );
@@ -330,15 +331,19 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
     $and_1->condition('field_om_timeslot_date_value', $run['start'], '>=');
     $and_1->condition('field_om_timeslot_date_value2', $run['end'], '<=');
     $and_2 = db_and();
-    $and_2->condition('field_om_timeslot_date_value', $run['start'], '<=');
-    $and_2->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_2->condition('field_om_timeslot_date_value', $run['start'], '>=');
+    $and_2->condition('field_om_timeslot_date_value', $run['end'], '<=');
     $and_3 = db_and();
-    $and_3->condition('field_om_timeslot_date_value', $run['end'], '<=');
-    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '>=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_timeslot_date_value', $run['start'], '<=');
+    $and_4->condition('field_om_timeslot_date_value2', $run['end'], '>=');
     $or = db_or();
     $or->condition($and_1);
     $or->condition($and_2);
     $or->condition($and_3);
+    $or->condition($and_4);
   $query->condition($or);
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->condition('field_om_timeslot_automation_value', 1, '=');

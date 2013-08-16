@@ -74,6 +74,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
         'channel_tid' => $tid,
         'start' => $start,
         'end' => $end,
+        'mode' => 'automation',
         'timeslots' => array(),
         'errors' => array()
       );

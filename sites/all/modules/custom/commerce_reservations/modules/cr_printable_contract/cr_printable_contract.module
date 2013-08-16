@@ -122,6 +122,14 @@ function cr_printable_contract($order_id) {
   foreach ($order->commerce_line_items['und'] as $key => $info) {
     $items[$info['line_item_id']] = commerce_line_item_load($info['line_item_id']);
     $items[$info['line_item_id']]->product = commerce_product_load($items[$info['line_item_id']]->commerce_product['und'][0]['product_id']);
+    if (!empty($items[$info['line_item_id']]->field_checked_out_accessories)) {
+      $clean_accessories = array();
+      foreach ($items[$info['line_item_id']]->field_checked_out_accessories[LANGUAGE_NONE] as $key => $term) {
+        $term = taxonomy_term_load($term['tid']);
+        $clean_accessories[] = $term->name;
+      }
+      $items[$info['line_item_id']]->clean_accessories = implode(', ', $clean_accessories);
+    }
   }
 
   //$timezone = $node->field_cr_date[0]['timezone'];
