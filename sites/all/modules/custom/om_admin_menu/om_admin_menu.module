@@ -271,4 +271,22 @@ function om_admin_menu_menu_alter(&$items) {
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access arguments'] = array(3);
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access callback'] = 'taxonomy_term_edit_access';
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access arguments'] = array(3);
+  $items['devel/switch']['access callback'] = 'om_admin_menu_devel_switch_user_access';
+}
+
+/**
+ * Ovveride of devel switch access check to make it so users
+ * cannot switch to user 1 or administrative users
+ */
+function om_admin_menu_devel_switch_user_access($name) {
+  if (user_access('switch users')) {
+    if (drupal_valid_token(@$_GET['token'], "devel/switch/$name|" . @$_GET['destination'], TRUE)) {
+      $account = user_load_by_name($name);
+      if ($account->uid != 1 && !in_array('administrator', $account->roles)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
