@@ -430,39 +430,39 @@ body.page-reservations fieldset {
 	background-color: whiteSmoke;
 }
 
-.page-administer-reservations .reservation{
+.section-administer-reservations .reservation{
   padding: 10px;
   background: white;
   box-shadow: 2px 2px 10px grey;
   margin-bottom: 15px;
 }
 
-.page-administer-reservations .reservation-overdue{
+.section-administer-reservations .reservation-overdue{
 	padding: 10px;
   background: #FFF68F;
   box-shadow: 2px 2px 10px grey;
   margin-bottom: 15px;
 }
 
-.page-administer-reservations .reservation .reservation-dates{
+.section-administer-reservations .reservation .reservation-dates{
 	color: #85B740;
   font-weight: bold;
   font-size: 21px;
 }
 
-.page-administer-reservations .reservation-overdue .reservation-dates{
+.section-administer-reservations .reservation-overdue .reservation-dates{
 	color: #912a1b;
   font-weight: bold;
   font-size: 21px;
 }
 
-.page-administer-reservations .reservation .reservation-info-table,
-.page-administer-reservations .eservation-overdue .reservation-info-table{
+.section-administer-reservations .reservation .reservation-info-table,
+.section-administer-reservations .eservation-overdue .reservation-info-table{
 	margin-top: 10px;
 }
 
-.page-administer-reservations .reservation .checkout_button,
-.page-administer-reservations .reservation-overdue .checkout_button{ 
+.section-administer-reservations .reservation .checkout_button,
+.section-administer-reservations .reservation-overdue .checkout_button{ 
   color: #fff; 
   background-color: #85B740;
   float: right;
@@ -479,8 +479,8 @@ body.page-reservations fieldset {
   box-shadow: inset -2px -2px 10px grey;
 }
 
-.page-administer-reservations .reservation .checkin_button,
-.page-administer-reservations .reservation-overdue .checkin_button{ 
+.section-administer-reservations .reservation .checkin_button,
+.section-administer-reservations .reservation-overdue .checkin_button{ 
   color: #fff; 
   background-color: #85B740;
   float: right;
@@ -497,13 +497,13 @@ body.page-reservations fieldset {
   box-shadow: inset -2px -2px 10px grey;
 }
 
-.page-administer-reservations .reservation .checkout_button:hover,
-.page-administer-reservations .reservation-overdue .checkout_button:hover{ 
+.section-administer-reservations .reservation .checkout_button:hover,
+.section-administer-reservations .reservation-overdue .checkout_button:hover{ 
   background-position: 0 -25px; 
 }
 
-.page-administer-reservations .reservation .checkout_button:hover,
-.page-administer-reservations .reservation-overdue .checkout_button:hover{ 
+.section-administer-reservations .reservation .checkout_button:hover,
+.section-administer-reservations .reservation-overdue .checkout_button:hover{ 
   background-position: 0 -50px; 
 }
 
@@ -515,6 +515,10 @@ body.page-reservations fieldset {
 .checkout_status_good{
 	color: #85B740;
 	font-weight: bold;
+}
+
+.section-administer-reservations .checkout-options {
+  width: 350px;
 }
 
 
