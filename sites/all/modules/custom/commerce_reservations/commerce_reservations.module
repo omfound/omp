@@ -1632,7 +1632,9 @@ function commerce_reservations_cancel_reservation_access($lid) {
 
 function commerce_reservations_line_item_cancel_form($form, &$form_state, $lid){
   $form['lid'] = array('#type' => 'hidden', '#value' => $lid);
-  $form = confirm_form($form, 'Are you sure you want to cancel this reservation?', 'administer_reservations');
+  $question = t('Are you sure you want to cancel this reservation?');
+  $description = '<strong>'.t('This action cannot be undone. Our system does not currently support automatically refunding any payments made for this reservation. If you need a refund please contact station personnel to cancel and refund your reservation.').'</strong>'; 
+  $form = confirm_form($form, $question, 'administer_reservations', $description);
   return $form;
 }
 
