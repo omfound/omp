@@ -102,6 +102,7 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
 function om_dashboard_panes_preprocess_om_switch_user_pane(&$variables) {
   $devel_switch = block_load('devel', 'switch_user');
   $variables['switch_block'] = $devel_switch;
+  $variables['title'] = t('Switch User');
 }
 
 /**
