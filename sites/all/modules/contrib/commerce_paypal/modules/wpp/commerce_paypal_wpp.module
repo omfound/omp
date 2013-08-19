@@ -239,6 +239,9 @@ function commerce_paypal_wpp_submit_form_submit($payment_method, $pane_form, $pa
   // Ensure we can determine a valid IPv4 IP address as required by PayPal WPP.
   $ip_address = ip_address();
 
+  //HACK: BRIAN ADDED TO FIX IP ADDRESS
+  $ip_address = str_replace('::ffff:', '', $ip_address);
+
   // Go ahead and convert localhost from IPv6 to IPv4.
   if ($ip_address == '::1') {
     $ip_address = '127.0.0.1';
