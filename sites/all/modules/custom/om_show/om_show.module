@@ -135,6 +135,18 @@ function om_show_migrate_flash() {
                                                                            }
                                                                             }
                                                                              }
+    // Only provide ajax if we are on node add screen.
+        if (arg(2) != 'edit') {
+                $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
+                      $form['field_om_show_project']['und']['#ajax'] = array(
+                              'callback' => 'om_show_reload',
+                                      'wrapper' => 'om-show-node-form',
+                                              'event' => 'change',
+                                                    );
+                          }
+                              else {
+                                      $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
+                                          }
 
 }
 }
