@@ -117,9 +117,26 @@ function om_show_migrate_flash() {
 
   if (!user_access('administer show')) { 
     
-  }
-echo 'this is a test';      
+  
+  $om_show_project_info = array('field_om_language');
 
+      $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
+          
+       // If there is a value for project try and load in meta values.
+           if (isset($key) && arg(2) != 'edit') {
+             $project = node_load($key);
+               foreach($om_show_project_info AS $field) {
+                 $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
+                      if (!empty($value_array)) {
+                                   foreach($value_array AS $value) {
+                                                  unset($form_state['input'][$field][$project->language]);
+                                                               $form[$field][$project->language][0]['value']['#default_value'] = $value;
+                                                                          }
+                                                                           }
+                                                                            }
+                                                                             }
+
+}
 }
 
 
