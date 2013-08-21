@@ -108,7 +108,7 @@ function om_show_migrate_flash() {
 /**
  * Implements hook_form_form_id_alter
  */
-
+/*
 
  function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
   dsm($form); 
@@ -123,7 +123,7 @@ function om_show_migrate_flash() {
 
 }
 }
-
+*/
 
 /*  if (!user_access('administer show')) { }}
     $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
