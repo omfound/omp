@@ -120,7 +120,6 @@ function om_show_migrate_flash() {
   
   $om_show_project_info = array('field_om_language');
 
-  dsm($om_show_project_info);        
 
 }
 }
