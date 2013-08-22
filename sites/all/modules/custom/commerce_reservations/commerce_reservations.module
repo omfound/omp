@@ -2288,9 +2288,9 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     LEFT JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
     WHERE commerce_line_item.line_item_label = :sku
     AND (
-      field_data_field_reservation_dates.field_reservation_dates_value BETWEEN :start_date AND :end_date 
+      DATE_ADD(field_data_field_reservation_dates.field_reservation_dates_value, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date 
       OR
-      field_data_field_reservation_dates.field_reservation_dates_value2 BETWEEN :start_date AND :end_date
+      DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   foreach ($results as $result) {
