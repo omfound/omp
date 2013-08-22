@@ -155,7 +155,7 @@ function om_broadcast_schedule_manual_sync($form, &$form_state) {
   drupal_set_message($end);
   // Setup Batch Process For Manual Sync
   $function = 'om_broadcast_schedule_sync_schedule';
-  $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end);
+  $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end, 'manual_sync');
   batch_set($batch);
 }
 
