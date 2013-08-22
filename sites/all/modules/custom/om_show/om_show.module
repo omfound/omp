@@ -110,6 +110,13 @@ function om_show_migrate_flash() {
  */
 
 
+function om_project_form_om_project_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form);
+  dsm($form_state);
+  dsm($form_id);
+}
+
+
  function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
   dsm($form); 
   dsm($form_state); 
