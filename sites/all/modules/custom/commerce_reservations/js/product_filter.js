@@ -189,6 +189,7 @@ Drupal.cr = Drupal.cr || {};
       //activate preloader on quantity form
       $('.view-footer .form-item-quantity img').show();
       $('.view-footer .date-details').addClass('preloader-active');
+      $('.view-footer input#edit-submit').hide();
 
       //load item reservations
       $.ajax(
@@ -197,6 +198,7 @@ Drupal.cr = Drupal.cr || {};
           success : function (data) {
             $('.view-footer .date-details').removeClass('preloader-active');
             $('.view-footer .form-item-quantity img').hide();
+            $('.view-footer input#edit-submit').show();
 
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
