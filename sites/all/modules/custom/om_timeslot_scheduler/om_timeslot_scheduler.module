@@ -289,7 +289,6 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
     'channel_tid' => $channel_tid,
     'start' => $start,
     'end' => $end,
-    'mode' => 'bulk',
     'timeslots' => array(),
     'errors' => array()
   );
