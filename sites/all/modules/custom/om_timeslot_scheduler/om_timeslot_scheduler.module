@@ -304,7 +304,7 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
  */
 function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
-  $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
+  $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end'], 'bulk');
   // Add scheduling steps.
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
