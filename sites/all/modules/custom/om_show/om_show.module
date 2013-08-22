@@ -117,9 +117,10 @@ function om_show_migrate_flash() {
 
   if (!user_access('administer show')) { 
     
-  
+    
   $om_show_project_info = array('field_om_locally_produced');
-
+ $result = array_intersect($form_state['field'], $om_show_project_info);
+ print_r($result);
 
 }
 }
