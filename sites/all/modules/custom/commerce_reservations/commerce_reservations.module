@@ -2306,6 +2306,10 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   return 'Available';
 }
 
+//TODO: BRIAN an odd situation can occur if a checkout contains overlapping reservations
+//by the time it gets to the line item save -- basically the same sku will get assigned
+//because no available sku will be found. It shouldn't be possible but at some point
+//we should probably make this fail if no swap_product_id is found...
 function commerce_reservations_entity_presave($entity, $type) {
   if ($type == 'commerce_line_item' && $entity->type == 'reservable_product') {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
@@ -2316,19 +2320,14 @@ function commerce_reservations_entity_presave($entity, $type) {
       $exclude_id = $entity->line_item_id;
     }
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
-    dsm($product_id.' Status:'.$checkout_status);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
-      dsm($start_date.' : '.$end_date);
-      dsm($exclude_ids);
       $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
-      dsm($product_id.' Swap ID:'.$swap_product_id);
       if ($swap_product_id) {
         $swap_product = commerce_product_load($swap_product_id);
         $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $swap_product_id;
         $entity->line_item_label = $swap_product->sku;
-        dsm($product_id.' Swap SKU:'.$swap_product->sku);
       }
     }
   }
