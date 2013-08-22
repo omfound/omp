@@ -2320,6 +2320,8 @@ function commerce_reservations_entity_presave($entity, $type) {
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
+      dsm($start_date.' : '.$end_date);
+      dsm($exclude_ids);
       $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
       dsm($product_id.' Swap ID:'.$swap_product_id);
       if ($swap_product_id) {
