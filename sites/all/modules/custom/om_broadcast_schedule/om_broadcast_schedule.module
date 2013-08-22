@@ -151,8 +151,6 @@ function om_broadcast_schedule_manual_sync_form($form, &$form_state) {
 function om_broadcast_schedule_manual_sync($form, &$form_state) {
   $start = strtotime($form_state['values']['om_broadcast_schedule_start']);
   $end = strtotime($form_state['values']['om_broadcast_schedule_end']);
-  drupal_set_message($start);
-  drupal_set_message($end);
   // Setup Batch Process For Manual Sync
   $function = 'om_broadcast_schedule_sync_schedule';
   $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end, 'manual_sync');
@@ -298,6 +296,7 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
 function _om_broadcast_schedule_create_new(&$context) {
   foreach ($context['results']['create_airings'] AS $airing) {
     $airing['mode'] = $context['results']['run_info']['mode'];
+    dsm($context);
     om_broadcast_schedule_create_airing_node($airing);
   }
   $context['message'] = t('Create new airing nodes.');
