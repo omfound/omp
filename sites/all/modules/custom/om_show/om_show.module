@@ -108,8 +108,33 @@ function om_show_migrate_flash() {
 /**
  * Implements hook_form_form_id_alter
  */
-function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
-  if (!user_access('administer show')) {
+
+//Marty is screwing stuff up in here
+
+
+/*
+function om_project_form_om_project_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form);
+  dsm($form_state);
+  dsm($form_id);
+}
+
+
+ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form); 
+  dsm($form_state); 
+  dsm($form_id);
+
+  if (!user_access('administer show')) { 
+    
+ $result = array_intersect($form_state['field'], );
+ print_r($result);
+
+}
+}
+*/
+
+/*  if (!user_access('administer show')) { }}
     $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
     foreach ($functional_fields AS $field) {
       if (!empty($form[$field])) {
@@ -122,7 +147,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
-  /*
+  
   // Auto population of metadata/contact info from project
      $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced');
      $om_show_project_info = array('field_om_project_company', 'field_om_project_contact','field_om_language','field_license');
@@ -180,8 +205,10 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     else {
       $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
     }
-*/
+
 }
+*/
+//End of work
 
 function om_show_field_group_build_pre_render_alter(&$element) {
   if (user_access('administer show')) { 

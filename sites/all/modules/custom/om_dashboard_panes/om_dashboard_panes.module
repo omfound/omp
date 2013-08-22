@@ -59,6 +59,18 @@ function om_dashboard_panes_om_dashboard_panes() {
       ),
       'dependency' => 'commerce_reservations'
     ),
+    'switch_user' => array(
+      'title' => t('Switch User'),
+      'theme' => array(
+        'om_switch_user_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_switch_user_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'devel',
+      'access' => 'switch users'
+    ),
     'shows' => array(
       'title' => t('User Shows'),
       'theme' => array(
