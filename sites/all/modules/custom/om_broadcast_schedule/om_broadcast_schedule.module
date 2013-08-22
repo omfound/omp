@@ -294,9 +294,9 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
  * Create airings that were not present on the Drupal side.
  */
 function _om_broadcast_schedule_create_new(&$context) {
+  watchdog('leo', print_r($context['run_info'], TRUE));
   foreach ($context['results']['create_airings'] AS $airing) {
     $airing['mode'] = $context['results']['run_info']['mode'];
-    dsm($context);
     om_broadcast_schedule_create_airing_node($airing);
   }
   $context['message'] = t('Create new airing nodes.');
