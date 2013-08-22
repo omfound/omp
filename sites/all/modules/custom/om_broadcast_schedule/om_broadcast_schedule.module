@@ -296,6 +296,7 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
 function _om_broadcast_schedule_create_new(&$context) {
   foreach ($context['results']['create_airings'] AS $airing) {
     $airing['mode'] = $context['results']['run_info']['mode'];
+    dsm($context);
     om_broadcast_schedule_create_airing_node($airing);
   }
   $context['message'] = t('Create new airing nodes.');
