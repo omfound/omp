@@ -62,7 +62,9 @@ function commerce_reservations_init(){
     global $user;
     if ($cart = commerce_cart_order_load($user->uid)) {
       $time_lapse = $cart->created - time();
+      dsm($time_lapse);
       $minutes = $time_lapse / 60;
+      dsm($minutes);
 
       if ($minutes > 10) {
         drupal_set_message('You started an order that has not been completed. Click here to review your order and continue. Incomplete orders older than 60 minutes will be deleted.', 'warning');
