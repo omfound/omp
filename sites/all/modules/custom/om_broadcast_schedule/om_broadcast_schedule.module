@@ -224,8 +224,8 @@ function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end, $
  *   end timestamp of window to begin updating
  */
 function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
-  watchdog('leo', $run_info);
-  watchdog('leo', $context);
+  watchdog('leo', serialize($run_info));
+  watchdog('leo', serialize($context));
   $pbs_array = om_playback_servers_get_pbs_by_term($run_info['channel_tid']);
   foreach ($pbs_array AS $pbs) {
     $controller = om_playback_servers_entity_get_controller($pbs);
