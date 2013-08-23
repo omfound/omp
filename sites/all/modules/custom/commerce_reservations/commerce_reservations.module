@@ -59,7 +59,7 @@ function commerce_reservations_init(){
   }
 
   global $user;
-  if ($cart == commerce_cart_order_load($user->uid)) {
+  if ($cart = commerce_cart_order_load($user->uid)) {
     dsm($cart);
   }
 }
