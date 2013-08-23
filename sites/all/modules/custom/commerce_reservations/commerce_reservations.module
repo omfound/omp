@@ -58,9 +58,16 @@ function commerce_reservations_init(){
     drupal_add_css($path . '/theme/reservations.css');
   }
 
-  global $user;
-  if ($cart = commerce_cart_order_load($user->uid)) {
-    dsm($cart);
+  if (variable_get('cr_expired_cart_warning', 0)) {
+    global $user;
+    if ($cart = commerce_cart_order_load($user->uid)) {
+      $time_lapse = $cart->created - time();
+      $minutes = $time_lapse / 60;
+
+      if ($minutes > 10) {
+        drupal_set_message('You started an order that has not been completed. Click here to review your order and continue. Incomplete orders older than 60 minutes will be deleted.', 'warning');
+      } 
+    }
   }
 }
 
@@ -1993,6 +2000,11 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#default_value' => variable_get('cr_max_reservation_length', 0),
     '#description' => t('Enter 0 for no limit'),
   );
+  $form['cr_expired_cart_warning'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Warn users after 10 minutes of an incomplete order'),
+    '#default_value' => variable_get('cr_expired_cart_warning', 0),
+  );
   $form['closed_dates'] = array(
     '#prefix' => '<div id="closed_dates">', 
     '#suffix' => '</div>',
@@ -2129,6 +2141,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
 	  variable_set('cr_allow_commercial', 0);
   }
   variable_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], 0);
+  variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
+
   if ($form_state['input']['email_confirm']){
     variable_set('cr_email_admin_confirm', 1);
     variable_set('cr_admin_email', $form_state['input']['email']);
