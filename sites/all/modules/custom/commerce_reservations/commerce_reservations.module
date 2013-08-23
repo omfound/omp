@@ -57,6 +57,11 @@ function commerce_reservations_init(){
   if (arg(0) == 'administer_reservations') {
     drupal_add_css($path . '/theme/reservations.css');
   }
+
+  global $user;
+  if ($cart == commerce_cart_order_load($user->uid) {
+    dsm($cart);
+  }
 }
 
 
