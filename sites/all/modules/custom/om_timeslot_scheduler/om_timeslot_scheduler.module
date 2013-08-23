@@ -730,13 +730,13 @@ function om_timeslot_scheduler_process_complete_page($pid) {
  */
 function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
   $pid = $form_state['values']['om_timeslot_scheduler_commit_schedule_pid'];
-  om_timeslot_scheduler_process_commit($pid, TRUE);
+  om_timeslot_scheduler_process_commit($pid, TRUE, 'bulk');
 }
 
 /**
  * Commit the schedule and move the user to the completion page.
  */
-function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
+function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE, $mode = 'bulk') {
   $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
   if ($run_info[0]->process_status == 0) {
     $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
@@ -761,6 +761,7 @@ function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
               'channel_tid' => $run_info[0]->channel_tid,
               'show_id' => $show_node->nid,
               'uid' => $result['ScheduleID'],
+              'mode' => $mode
             );
             if (isset($show_node->field_om_show_aired[$lang][0]['value'])) {
               $show_node->field_om_show_aired[$lang][0]['value'] ++;

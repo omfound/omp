@@ -536,8 +536,20 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   // Commit results
   $meta_data['start'] = $start;
-  $controller->create_airing($pbs, $meta_data);
-
+  $result = $controller->create_airing($pbs, $meta_data);
+  // Create airing
+  if (isset($result['ScheduleID'])) {
+    $airing = array(
+      'title' => date('m/d/y G:ia', $start),
+      'start' => $start,
+      'end' => $end,
+      'channel_tid' => $channel_tid,
+      'show_id' => $show->nid,
+      'uid' => $result['ScheduleID'],
+      'mode' => 'producer'
+    );
+    om_broadcast_schedule_create_airing_node($airing);
+  }
   om_timeslot_scheduler_process_complete($pid);
 
   $message = t('Summary');
