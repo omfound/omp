@@ -62,9 +62,7 @@ function commerce_reservations_init(){
     global $user;
     if ($cart = commerce_cart_order_load($user->uid)) {
       $time_lapse = time() - $cart->created;
-      dsm($time_lapse);
       $minutes = $time_lapse / 60;
-      dsm($minutes);
 
       if ($minutes > 10) {
         $cart = l('Click here to review your order and continue', 'cart');
