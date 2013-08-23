@@ -228,7 +228,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#weight'] = 0;
       $form['quantity']['#title'] = 'QUANTITY';
       unset($form['quantity']['#size']);
-      $form['submit']['#value'] = 'Rent This Item'; 
+      $form['submit']['#value'] = 'Add Rental to Shopping Cart'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
       $form['#submit'][] = 'commerce_reservations_redirect_add';
     }
