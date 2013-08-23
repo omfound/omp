@@ -57,6 +57,19 @@ function commerce_reservations_init(){
   if (arg(0) == 'administer_reservations') {
     drupal_add_css($path . '/theme/reservations.css');
   }
+
+  if (variable_get('cr_expired_cart_warning', 0)) {
+    global $user;
+    if ($cart = commerce_cart_order_load($user->uid)) {
+      $time_lapse = time() - $cart->created;
+      $minutes = $time_lapse / 60;
+
+      if ($minutes > 10) {
+        $cart = l('Click here to review your order and continue', 'cart');
+        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning');
+      } 
+    }
+  }
 }
 
 
@@ -228,7 +241,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       $form['quantity']['#weight'] = 0;
       $form['quantity']['#title'] = 'QUANTITY';
       unset($form['quantity']['#size']);
-      $form['submit']['#value'] = 'Rent This Item'; 
+      $form['submit']['#value'] = 'Add Rental to Shopping Cart'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
       $form['#submit'][] = 'commerce_reservations_redirect_add';
     }
@@ -1988,6 +2001,11 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#default_value' => variable_get('cr_max_reservation_length', 0),
     '#description' => t('Enter 0 for no limit'),
   );
+  $form['cr_expired_cart_warning'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Warn users after 10 minutes of an incomplete order'),
+    '#default_value' => variable_get('cr_expired_cart_warning', 0),
+  );
   $form['closed_dates'] = array(
     '#prefix' => '<div id="closed_dates">', 
     '#suffix' => '</div>',
@@ -2124,6 +2142,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
 	  variable_set('cr_allow_commercial', 0);
   }
   variable_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], 0);
+  variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
+
   if ($form_state['input']['email_confirm']){
     variable_set('cr_email_admin_confirm', 1);
     variable_set('cr_admin_email', $form_state['input']['email']);
@@ -2288,9 +2308,9 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
     LEFT JOIN {field_data_field_checkout_status} ON field_data_field_checkout_status.entity_id = commerce_line_item.line_item_id
     WHERE commerce_line_item.line_item_label = :sku
     AND (
-      field_data_field_reservation_dates.field_reservation_dates_value BETWEEN :start_date AND :end_date 
+      DATE_ADD(field_data_field_reservation_dates.field_reservation_dates_value, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date 
       OR
-      field_data_field_reservation_dates.field_reservation_dates_value2 BETWEEN :start_date AND :end_date
+      DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   foreach ($results as $result) {
@@ -2306,6 +2326,10 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   return 'Available';
 }
 
+//TODO: BRIAN an odd situation can occur if a checkout contains overlapping reservations
+//by the time it gets to the line item save -- basically the same sku will get assigned
+//because no available sku will be found. It shouldn't be possible but at some point
+//we should probably make this fail if no swap_product_id is found...
 function commerce_reservations_entity_presave($entity, $type) {
   if ($type == 'commerce_line_item' && $entity->type == 'reservable_product') {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
