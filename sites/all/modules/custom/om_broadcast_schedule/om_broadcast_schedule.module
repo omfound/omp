@@ -224,8 +224,6 @@ function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end, $
  *   end timestamp of window to begin updating
  */
 function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
-  watchdog('leo', serialize($run_info));
-  watchdog('leo', serialize($context));
   $pbs_array = om_playback_servers_get_pbs_by_term($run_info['channel_tid']);
   foreach ($pbs_array AS $pbs) {
     $controller = om_playback_servers_entity_get_controller($pbs);
@@ -249,6 +247,7 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
  * Based on airings pulled from the pbs above queue up airings to add/remove.
  */
 function _om_broadcast_schedule_match_drupal_airings(&$context) {
+  watchdog('leo', 'Match airings: ' . serialzie($context));
   $safe = array();
   $context['results']['create_airings'] = array();
   $context['results']['delete_airings'] = array();
@@ -296,6 +295,7 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
  * Create airings that were not present on the Drupal side.
  */
 function _om_broadcast_schedule_create_new(&$context) {
+  watchdog('leo', 'Create airings: ' . serialzie($context));
   foreach ($context['results']['create_airings'] AS $airing) {
     $airing['mode'] = $context['results']['run_info']['mode'];
     om_broadcast_schedule_create_airing_node($airing);
