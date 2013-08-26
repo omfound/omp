@@ -645,7 +645,7 @@ function openmedia_preprocess_views_view_fields(&$variables) {
 function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
-    dsm($vars['fields']);
+    dsm($vars);
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
       if (!empty($vars['fields']['field_om_show_video']->content)) {
         if ($url = internet_archive_thumb_from_file_url(strip_tags($vars['fields']['field_om_show_video']->content))) {
