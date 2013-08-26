@@ -612,6 +612,11 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   } 
   $link_options['attributes']['class'] = array('cr_button', 'cr_contract_button');
   $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
+  if ($payment_info = openmedia_order_payment_info($variables['row']->commerce_line_item_order_id)) {
+    $variables['cr']['payment'] = l($payment_info['status'], 'payment/'.$payment_info['id'].'/edit');
+  }else{
+    $variables['cr']['payment'] = t('No Payment');
+  }
 }
 
 /**
@@ -664,12 +669,17 @@ function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   }
 }
 
-function openmedia_order_payment_status($order_id) {
+function openmedia_order_payment_info($order_id) {
   $query = "
-    SELECT status 
+    SELECT status, remote_id 
     FROM {commerce_payment_transaction}
     WHERE commerce_payment_transaction.order_id = :oid";
 
-  $status = db_query($query, array(':oid' => $order_id))->fetchField();
-  return $status;
+  $info = array();
+  foreach ($query as $result) {
+    $info['status'] = $result->status;
+    $info['id'] = $result->remote_id;
+  }
+  
+  return $info;
 }
