@@ -675,8 +675,10 @@ function openmedia_order_payment_info($order_id) {
     FROM {commerce_payment_transaction}
     WHERE commerce_payment_transaction.order_id = :oid";
 
+  $results = db_query($query, array(':oid' => $order_id));
+
   $info = array();
-  foreach ($query as $result) {
+  foreach ($results as $result) {
     $info['status'] = $result->status;
     $info['id'] = $result->remote_id;
   }
