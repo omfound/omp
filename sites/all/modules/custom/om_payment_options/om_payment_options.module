@@ -1,6 +1,6 @@
 <?php
 
-define('PAYMENT_STATUS_MONEY_TRANSFERRED', 'payment_status_money_transferred');
+//define('PAYMENT_STATUS_MONEY_TRANSFERRED', 'payment_status_money_transferred');
 define('PAYMENT_STATUS_SUCCESS_CASH', 'payment_status_success_cash');
 define('PAYMENT_STATUS_SUCCESS_CHECK', 'payment_status_success_check');
 define('PAYMENT_STATUS_SUCCESS_CARD', 'payment_status_success_card');
