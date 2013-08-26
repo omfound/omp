@@ -1,6 +1,6 @@
 <?php
 
-function internet_archive_thumb_from_file_nid($nid) {
+function internet_archive_thumb_from_nid($nid) {
   $node = node_load($nid);
   if (!empty($node->field_archive_derivatives)) {
     $derivatives = json_decode($node->field_archive_derivatives[$node->language][0]['value']);
