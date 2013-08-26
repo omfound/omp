@@ -593,6 +593,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       'class' => 'checkout_button',
     ),
   );
+  dsm($variables['row']);
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
   switch ($status) {
     case 'Awaiting Checkout':
