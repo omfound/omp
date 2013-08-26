@@ -1,21 +1,35 @@
 <?php
 
-function internet_archive_thumb_from_file_url($url) {
-  if ($item = internet_archive_item_from_file_url($url)) {
-    $pathinfo = pathinfo($url);
-    if (!empty($pathinfo['filename'])) {
-      $filename = $pathinfo['filename'] . '_000001.jpg';
-      $filename = str_replace('_512kb', '', $filename);
-
-      $link = 'http://www.archive.org/download/';
-      $link .= $item .'/'. $item .'.thumbs/';
-      $link .= $filename;
-
-      return $link;
+function internet_archive_thumb_from_nid($nid) {
+  $node = node_load($nid);
+  if (!empty($node->field_archive_derivatives)) {
+    $derivatives = json_decode($node->field_archive_derivatives[$node->language][0]['value']);
+    $thumbnails = internet_archive_derivative_thumbnails($derivatives);
+    if (!empty($thumbnails)) {
+      if (!empty($thumbnails[1])) {
+        return $thumbnails[1]['url']; 
+      }else{
+        return $thumbnails[0]['url'];
+      }
     }
   }
 
   return false;
+}
+
+function internet_archive_derivative_thumbnails($derivatives) {
+  foreach ($derivatives as $item_path => $info) {
+    foreach ($info->files as $key => $file) {
+      if ($file->format == 'Thumbnail') {
+        $thumbnails[] = array(
+          'details' => $file,
+          'url' => 'http://www.archive.org/download/'.$item_path.$key,
+        ); 
+      }
+    }
+  }
+
+  return $thumbnails;
 }
 
 function internet_archive_item_from_file_url($url) {

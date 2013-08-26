@@ -647,7 +647,7 @@ function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
       if (!empty($vars['fields']['field_om_show_video']->content)) {
-        if ($url = internet_archive_thumb_from_file_url(strip_tags($vars['fields']['field_om_show_video']->content))) {
+        if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
           if (!empty($_SERVER['HTTP_X_SSL'])) {
             $url = str_replace('http', 'https', $url);
           }
