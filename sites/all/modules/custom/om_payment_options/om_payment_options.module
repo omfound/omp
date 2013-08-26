@@ -1,5 +1,15 @@
 <?php
 
+define('PAYMENT_STATUS_MONEY_TRANSFERRED', 'payment_status_money_transferred');
+define('PAYMENT_STATUS_SUCCESS_CASH', 'payment_status_success_cash');
+define('PAYMENT_STATUS_SUCCESS_CHECK', 'payment_status_success_check');
+define('PAYMENT_STATUS_SUCCESS_CARD', 'payment_status_success_card');
+define('PAYMENT_STATUS_SUCCESS_GIFT', 'payment_status_success_gift');
+define('PAYMENT_STATUS_SUCCESS_INTERN_CREDIT', 'payment_status_success_intern_credit');
+define('PAYMENT_STATUS_SUCCESS_BOARD_CREDIT', 'payment_status_success_board_credit');
+define('PAYMENT_STATUS_SUCCESS_ORG_CREDIT', 'payment_status_success_org_credit');
+define('PAYMENT_STATUS_SUCCESS_MEMBER_CREDIT', 'payment_status_success_member_credit');
+
 function om_payment_options_payment_status_info() {
   return array(
     new PaymentStatusInfo(array(
