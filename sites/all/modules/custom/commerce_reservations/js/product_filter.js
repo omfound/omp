@@ -5,7 +5,6 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-      $('body').once('product-filter', function() { 
       //basepath to site
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
@@ -22,7 +21,8 @@ Drupal.cr = Drupal.cr || {};
       Drupal.behaviors.product_filter.hideCalendar();
 
       //The user has selected a reservable item
-      $(item).mousedown(function() {
+      //$(item).mousedown(function() {
+        $(item).one("mousedown", function() {
         //show the calendar
         Drupal.behaviors.product_filter.showCalendar();
 
@@ -45,7 +45,6 @@ Drupal.cr = Drupal.cr || {};
 
         //Populate details pane and calendar with defaults
         Drupal.behaviors.product_filter.loadProductForm(pid, nid);
-      });
       });
     },
 
