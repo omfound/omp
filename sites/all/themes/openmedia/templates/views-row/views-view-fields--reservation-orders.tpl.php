@@ -57,10 +57,8 @@
         </div>
       <?php }?>
       </td>
-      <td>
-        <?php $payment_status = openmedia_order_payment_status($fields['order_id']->raw); ?>
-        <?php if (empty($payment_status)) { $payment_status = 'No Payment'; } ?>
-        <?php print l($payment_status, 'admin/commerce/orders/'.$fields['order_id']->raw); ?>
+      <td class="payment-status">
+        <?php print $cr['payment']; ?> 
       </td>
       <td class="checkout-options">
       <?php if ($checkedout) { ?>

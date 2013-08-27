@@ -420,7 +420,7 @@ function om_show_youtube_info($node) {
 function om_show_video_image($node) {
   if (!empty($node->field_show_thumbnail)) {
     $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
-    if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_file_url($node->field_om_show_video[$node->language][0]['safe_value'])) {
+    if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_nid($node->nid)) {
       $img_path = $image_url;
     }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
       $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
