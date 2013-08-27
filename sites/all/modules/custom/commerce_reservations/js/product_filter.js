@@ -79,6 +79,7 @@ Drupal.cr = Drupal.cr || {};
                 }
               });
               quantity = $('.view-footer [id|=edit-quantity]').val();
+              console.log('test');
               Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, newPid, quantity, basePath);
               $(".fullcalendar").ajaxStop(function() {
                 Drupal.behaviors.product_filter.addDateSelectionToCalendar();
