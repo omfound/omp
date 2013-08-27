@@ -34,6 +34,7 @@ Drupal.cr = Drupal.cr || {};
         var pid = $(this).find('.pid .field-content').text(); 
 
         //Add existing reservations for this item to calendar
+        console.log('running..');
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
         //Render the current selection based on date picker values
@@ -79,7 +80,6 @@ Drupal.cr = Drupal.cr || {};
                 }
               });
               quantity = $('.view-footer [id|=edit-quantity]').val();
-              console.log('test');
               Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, newPid, quantity, basePath);
               $(".fullcalendar").ajaxStop(function() {
                 Drupal.behaviors.product_filter.addDateSelectionToCalendar();
