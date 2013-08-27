@@ -46,7 +46,7 @@ Drupal.cr = Drupal.cr || {};
         //Populate details pane and calendar with defaults
         Drupal.behaviors.product_filter.loadProductForm(pid, nid);
       });
-      });}
+      });
     },
 
     //start loadProductForm function
