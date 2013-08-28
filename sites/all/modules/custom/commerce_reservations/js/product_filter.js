@@ -34,7 +34,6 @@ Drupal.cr = Drupal.cr || {};
         var pid = $(this).find('.pid .field-content').text(); 
 
         //Add existing reservations for this item to calendar
-        //console.log('running..');
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
         //Render the current selection based on date picker values
@@ -193,7 +192,6 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer input#edit-submit').hide();
 
       //load item reservations
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
@@ -229,7 +227,7 @@ Drupal.cr = Drupal.cr || {};
     //start addReservations function
     addReservations:function(data) {
       $('a.fullcalendar-event-details', data).each(function(index){
-        console.log($(this));
+        console.log($(this).attr('href'));
         reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
         dom_id: this.dom_id;
         $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
