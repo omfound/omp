@@ -605,12 +605,13 @@ function commerce_reservations_views_post_execute(&$view){
               }
               $view->result[$index]->field_field_reservation_dates[0]['raw']['value'] = date("Y-m-d H:i:s", $overlaps[$index]['start']);
               $view->result[$index]->field_field_reservation_dates[0]['raw']['value2'] = date("Y-m-d H:i:s", $overlaps[$index]['end']);
+              dsm($overlaps);
+              //$view->result[$index]->line_item_id
             }
           }
         }
         $view->result = array_values($view->result);
         $view = check_view_overlaps($view);
-        dsm($view->result);
       } else{
         if (property_exists($view, 'selected_nid')){
           $nid = $view->selected_nid;
