@@ -5,6 +5,7 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
+      console.log('hullo');
       //basepath to site
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
