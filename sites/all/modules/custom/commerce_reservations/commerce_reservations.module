@@ -553,7 +553,6 @@ function calendar_filter($pid, $node, $quantity = 0){
 
 //Here we intercept the view result and check the results for overlaps
 function commerce_reservations_views_post_execute(&$view){
-  dsm($view->result);
   if ($view->name == 'reservation_calendar'){
     if (sizeof($view->args) > 0){
       //create the reservation array, passing start end and line_id
@@ -589,7 +588,6 @@ function commerce_reservations_views_post_execute(&$view){
       for ($i = 0; $i < $array_size; $i++){
         unset($view->result[$i]);
       }
-      dsm($view->result);
       if (!empty($overlaps)){
       //loop through and add in overlaps, remove view results
         foreach($overlaps as $index => $reservation){
