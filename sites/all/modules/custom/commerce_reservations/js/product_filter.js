@@ -192,7 +192,6 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer input#edit-submit').hide();
 
       //load item reservations
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
@@ -329,7 +328,7 @@ Drupal.cr = Drupal.cr || {};
     this.index = $reservation.attr('index');
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
-    this.url = 'administer_reservations?line_item_id='.$reservation.attr('eid');
+    this.url = 'administer_reservations?line_item_id='+$reservation.attr('eid');
     this.className = 'overlap';
     this.editable = true;
     this.color = '#912711';
