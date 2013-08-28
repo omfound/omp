@@ -588,7 +588,6 @@ function commerce_reservations_views_post_execute(&$view){
       for ($i = 0; $i < $array_size; $i++){
         unset($view->result[$i]);
       }
-      dsm($result);
       if (!empty($overlaps)){
       //loop through and add in overlaps, remove view results
         foreach($overlaps as $index => $reservation){
@@ -611,6 +610,7 @@ function commerce_reservations_views_post_execute(&$view){
         }
         $view->result = array_values($view->result);
         $view = check_view_overlaps($view);
+        dsm($view->result);
       } else{
         if (property_exists($view, 'selected_nid')){
           $nid = $view->selected_nid;
