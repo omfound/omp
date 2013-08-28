@@ -800,6 +800,10 @@ body.page-reservations #main-content #squeeze{
   background-position: 0 -50px; 
 }
 
+.section-administer-reservation #edit-line-item-id-wrapper {
+  display: none;
+}
+
 .section-administer-reservations .checkout-options {
   width: 350px;
 }
