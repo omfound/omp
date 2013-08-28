@@ -329,7 +329,7 @@ Drupal.cr = Drupal.cr || {};
     this.index = $reservation.attr('index');
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
-    this.url = $reservation.attr('href');
+    this.url = 'administer_reservations?line_item_id='.$reservation.attr('eid');
     this.className = 'overlap';
     this.editable = true;
     this.color = '#912711';
