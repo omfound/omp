@@ -167,6 +167,7 @@ function fullcalendar_prepare_events($view, $rows, $options) {
 
     $entities = array();
     $event = array();
+    dsm($date_fields);
     foreach ($date_fields as $field) {
       // If this row doesn't contain this entity, or if this entity has already
       // been processed, skip it.
@@ -181,7 +182,6 @@ function fullcalendar_prepare_events($view, $rows, $options) {
         $entity->entity_type = $row->_field_data[$alias]['entity_type'];
 
         list(, , $bundle) = entity_extract_ids($entity->entity_type, $entity);
-        dsm($entity);
         $entity->bundle = $bundle;
         $entity->eid = $row->{$alias};
         $entity->options = $view->style_options;
