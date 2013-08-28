@@ -605,6 +605,7 @@ function commerce_reservations_views_post_execute(&$view){
               }
               $view->result[$index]->field_field_reservation_dates[0]['raw']['value'] = date("Y-m-d H:i:s", $overlaps[$index]['start']);
               $view->result[$index]->field_field_reservation_dates[0]['raw']['value2'] = date("Y-m-d H:i:s", $overlaps[$index]['end']);
+              $view->result[$index]->line_item_id = $overlaps[$index]['line_id_array'][0];
             }
           }
         }
