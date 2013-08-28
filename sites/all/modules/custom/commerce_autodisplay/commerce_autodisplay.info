@@ -1,0 +1,6 @@
+name = Commerce Autodisplay
+description = Provides automatic creation/update/delete of product display nodes.
+core = 7.x
+package = Commerce (contrib)
+version = 7.x-1.0
+project status url = http://omp.omfound.org

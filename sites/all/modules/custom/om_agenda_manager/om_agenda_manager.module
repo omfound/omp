@@ -1,0 +1,528 @@
+<?php
+
+/**
+ * Implementation of hook_permission().
+ */
+function om_agenda_manager_permission() {
+  return array(
+    'administer agenda manager' => array(
+      'title' => t('Administer Agenda Manager'), 
+      'description' => t('Administer OMP functionality for the agenda interface.'),
+    )
+  );
+}
+
+function om_agenda_manager_theme_registry_alter(&$theme_registry) {
+  if (!empty($theme_registry['node__om_show'])) {
+    $theme_registry['node__om_show']['template'] = 'node--om_show--gov';
+  }
+}
+
+function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    if ($form['#id'] == 'views-exposed-form-archived-sessions-page-2') {
+      if ($form['title']) {
+        $form['title']['#type'] = 'select';
+        $form['title']['#options'] = om_agenda_manager_project_options();
+        $form['title']['#default_value'] = 'All';
+        unset($form['title']['#size']);
+      }
+    }
+  }
+}
+
+function om_agenda_manager_project_options() {
+  $query = "SELECT * FROM {node} WHERE type = :type AND status = :status ORDER BY title ASC";
+  $results = db_query($query, array(':type' => 'om_project', ':status' => 1));
+  $options = array();
+  $options[''] = '- Any -';
+  foreach ($results as $result) {
+    $options[$result->title] = $result->title;
+  }
+
+  return $options;
+}
+
+function om_agenda_manager_menu() {
+  $items = array();
+
+  $items['google/auth'] = array(
+    'title' => t('Google Authentication'),
+    'page callback' => 'om_agenda_manager_google_authenticate',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/om/agenda-manager'] = array(
+    'title' => 'Site Configuration',
+    'description' => 'Agenda Manager Configuration options',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_agenda_manager_admin_form'),
+    'access arguments' => array('administer agenda manager'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['live/status'] = array(
+    'title' => 'Live Broadcast',
+    'description' => 'Livestream page',
+    'page callback' => 'om_agenda_manager_live_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['node/%node/agenda-items'] = array(
+    'title' => 'Node Agenda Items',
+    'description' => 'Node Agenda Items',
+    'page callback' => 'om_agenda_manager_agenda_items',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/cuepoints'] = array(
+    'title' => 'Cue Points',
+    'description' => 'Cue Points',
+    'page callback' => 'om_agenda_manager_cuepoints_xml',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['jwplayer/test/%node'] = array(
+    'title' => 'JWPlayer Test',
+    'description' => 'JWPlayer Test',
+    'page callback' => 'om_agenda_manager_test',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function om_agenda_manager_test($node) { 
+  drupal_add_js(drupal_get_path('module', 'om_agenda_manager') . '/js/jwplayer-test.js', array('type' => 'file', 'group' => JS_DEFAULT));
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+  return '<div id="jwplayer-test"></div>';
+}
+
+function om_agenda_manager_cuepoints_xml($node) {
+  $points = om_agenda_manager_cuepoints($node);
+  $xml = om_agenda_manager_cuepoints_to_xml($points, $node->nid);
+
+  header('Content-type: application/xhtml+xml');
+  print $xml;
+}
+
+function om_agenda_manager_cuepoints($node) {
+  $query = "
+    SELECT field_data_field_acp_show_reference.entity_id, field_acp_seconds_value, title 
+    FROM {field_data_field_acp_show_reference}
+    JOIN {field_data_field_acp_seconds} ON field_data_field_acp_seconds.entity_id = field_data_field_acp_show_reference.entity_id
+    JOIN {node} ON node.nid = field_data_field_acp_show_reference.entity_id
+    WHERE field_acp_show_reference_target_id = :nid
+    ORDER BY field_acp_seconds_value ASC";
+  $result = db_query($query, array(':nid' => $node->nid));
+  $cuepoints = array();
+  foreach ($result as $cuepoint) {
+    $cuepoints[$cuepoint->entity_id] = array(
+      'seconds' => $cuepoint->field_acp_seconds_value,
+      'title' => $cuepoint->title,
+    );
+  }
+
+  if (!empty($cuepoints)) {
+    return $cuepoints;
+  }
+
+  return false;
+}
+
+function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
+  $output = '';
+  $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://rss.jwpcdn.com/">';
+  $output .= '<channel>';
+  $output .= '<title>Cuepoints playlist</title>';
+  $output .= '<link>http://omp.omfound.org</link>';
+  $node = node_load($session_nid);
+ 
+  $youtube_info = om_show_youtube_info($node);
+  $img_path = om_show_video_image($node);
+  $url = $node->field_om_show_video[$node->language][0]['safe_value'];
+
+  $output .= '<item>';
+  $output .= '<description>Start of Session</description>';
+  $output .= '<media:content url="'.$url.'" />';
+  $output .= '<media:thumbnail url="' . $img_path . '" />';
+  $provider = 'http';
+  if($youtube_info) {
+    $provider = 'youtube';
+  }
+  $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
+  $output .= '</item>';
+
+  foreach($points as $key => $point) {
+    $output .= '<item>';
+    $output .= '<description>'.$point['title'].'</description>';
+    $output .= '<media:content url="'.$url.'" />';
+    if ($provider == 'youtube') {
+      $output .= '<media:thumbnail url="novalidimage" />';
+    }
+    $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
+    $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
+    $output .= '<guid>'.$point['seconds'].'</guid>';
+    $output .= '</item>';
+  }
+  $output .= '</channel>';
+  $output .= '</rss>';
+  return $output;
+}
+
+function om_agenda_manager_admin_form() {
+  $form = array();
+
+  $client = om_agenda_manager_google_client_create();
+  if ($client->getAccessToken()) {
+    $markup = t('Authentication is setup for this site');
+  }else{
+    $markup = '<a href='.$client->createAuthUrl().'>Click here to setup Google Authentication</a>';
+  }
+
+  $form['om_agenda_google_authentication'] = array(
+    '#markup' => $markup,
+  );
+
+  $form['om_agenda_status_embed'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Live Status Page Optional Embed',
+    '#default_value' => variable_get('om_agenda_status_embed', ''),
+  );
+
+  $form['om_agenda_status_desc'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Text to display on Live Page',
+    '#default_value' => variable_get('om_agenda_status_desc', ''),
+  );
+
+  return system_settings_form($form); 
+}
+
+function om_agenda_manager_fetch_google_doc($url) {
+  $client = om_agenda_manager_google_client_create();
+  if ($client->getAccessToken()) {
+    $fileId = om_agenda_manager_google_doc_id_from_url($url);
+    $service = new Google_DriveService($client);
+    $file = $service->files->get($fileId);
+    $downloadUrl = $file->exportLinks['text/plain'];
+    if ($downloadUrl) {
+      $request = new Google_HttpRequest($downloadUrl, 'GET', null, null);
+      $httpRequest = Google_Client::$io->authenticatedRequest($request);
+      if ($httpRequest->getResponseHttpCode() == 200) {
+        return $httpRequest->getResponseBody();
+      }
+    }
+  }
+
+  return false;
+}
+
+function om_agenda_manager_google_doc_id_from_url($url) {
+  $parts = parse_url($url);
+  $path_parts = explode('/', $parts['path']);
+
+  foreach ($path_parts as $key => $value) {
+    if ($value == 'd') {
+      $id_key = $key+1;
+    }
+  }
+
+  return $path_parts[$id_key];
+}
+
+function om_agenda_manager_google_authenticate() {
+  $client = om_agenda_manager_google_client_create();
+  $client->authenticate();
+  variable_set('om_agenda_manager_google_auth_token', $client->getAccessToken());
+  drupal_goto('admin/config/om/agenda-manager');
+}
+
+function om_agenda_manager_google_client_create() {
+  om_agenda_manager_google_api_init();
+
+  $client = new Google_Client();
+  $client->setApplicationName('OMP Calendar Manager');
+  $client->setClientId('253524767921.apps.googleusercontent.com');
+  $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
+  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
+  $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
+  $client->setScopes(array('https://www.googleapis.com/auth/drive'));
+  $client->setUseObjects(true);
+  
+  if ($token = variable_get('om_agenda_manager_google_auth_token', false)) { 
+    $client->setAccessToken($token);
+  }
+
+  return $client;
+}
+
+function om_agenda_manager_google_api_init() {
+  $base = libraries_get_path('google-api-php-client');
+  require_once $base.'/src/Google_Client.php';
+  require_once $base.'/src/contrib/Google_DriveService.php';
+}
+
+function om_agenda_manager_agenda_items($node) {
+  $url = $node->field_om_calendar[$node->language][0]['url'];
+  if ($url) {
+    $text = om_agenda_manager_fetch_google_doc($url);
+    $items = om_agenda_manager_parse_agenda($text);
+    $legacy_items = om_agenda_manager_legacy_agenda_items($items);
+    
+    header("content-type:application/json");
+    print drupal_json_encode($legacy_items);
+  } else {
+    print '';
+  }
+  
+  return;
+}
+
+function om_agenda_manager_legacy_agenda_items($items) {
+  $legacy_items = array();
+  foreach ($items as $key => $title) {
+    $legacy_items[$key] = new stdClass(); 
+    if (function_exists('views_trim_text')) {
+      $alter = array('max_length' => 175, 'ellipsis' => TRUE, 'word_boundary' => FALSE);
+      $title = views_trim_text($alter, $title);
+    }
+    $legacy_items[$key]->title = $title;
+  }
+
+  return $legacy_items;
+}
+
+function om_agenda_manager_parse_agenda($text) {
+  //TODO: eventually need to support multiple options here
+  //BASIC for Thornton
+  $start_match = '1. CALL TO ORDER';
+  $end_match = 'ADJOURNMENT';
+  
+  //break text into lines
+  $lines = preg_split("/((\r?\n)|(\r\n?))/", $text);
+
+  $active = false;
+  $agenda_lines = array(); 
+  foreach ($lines as $key => $info) {
+    if (strpos($info, $start_match) !== false) {
+      $active = true;
+    }
+
+    if ($active) {
+      $clean = trim($info);
+      if (!empty($clean)) {
+        $agenda_lines[] = utf8_encode($clean); 
+      }
+    }
+
+    if (strpos($info, $end_match) !== false) {
+      $active = false;
+    }
+  }
+
+  return $agenda_lines;
+}
+
+function om_agenda_manager_livestream_info() {
+  $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
+  $tree = taxonomy_get_tree($theme_taxonomy->vid);
+  $live_shows = array();
+  if (count($tree) > 0) {
+    foreach ($tree as $key => $term) {
+      $loaded_term = taxonomy_term_load($term->tid);
+      if (!empty($loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'])) {
+        $status = true;
+      }else{
+        $status = false;
+      }
+      if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
+        $live_nid = $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'];
+      }else{
+        $live_nid = false;
+      }
+      $live_shows[$loaded_term->tid] = array(
+        'theme' => $loaded_term->name,
+        'status' => $status,
+        'live_nid' => $live_nid, 
+      ); 
+    }
+
+    return $live_shows;
+  } 
+
+  return false;
+}
+
+function om_agenda_manager_livestream_types() {
+  $streams = om_agenda_manager_livestream_info();
+  $types = array();
+  foreach ($streams as $theme_nid => $info) {
+    $types[$theme_nid] = $info['theme'];
+  }
+  if (count($types) > 0) {
+    return $types; 
+  }else{
+    return false;
+  }
+}
+
+function om_agenda_manager_livestream_update($session_status) {
+  foreach ($session_status as $theme_nid => $info) {
+    $loaded_term = taxonomy_term_load($theme_nid);
+    if ($info['live_nid']) {
+      $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'] = $info['live_nid']; 
+    }else{
+      /*
+      if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
+        $node = node_load($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']);
+        $node->field_om_show_video[$node->language][0]['value'] = "";
+        node_save($node);
+      }*/
+      $loaded_term->field_om_live_show = array();
+    }
+
+    if ($info['status']) {
+      $loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'] = 1;
+    }else{
+      $loaded_term->field_om_live_show_status[LANGUAGE_NONE][0]['value'] = 0;
+    }
+    taxonomy_term_save($loaded_term);
+  }
+}
+
+function om_agenda_manager_live_page() {
+  $output = '';
+  if ($embed = variable_get('om_agenda_status_embed', false)) {
+    $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
+  }
+  $livestream_info = om_agenda_manager_livestream_info();
+  $include_on_live = array();
+  foreach ($livestream_info as $tid => $info) {
+    $loaded = taxonomy_term_load($tid);
+    if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+      $include_on_live[$tid] = $info;
+    }
+  }
+  drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
+  $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
+  if ($desc = variable_get('om_agenda_status_desc', false)) {
+    $output .= '<div id="om-desc-content">'.$desc.'</div>';
+  }
+  $output .= '<h1 class="title archive-title">Archived Video</h2>';
+  $output .= om_agenda_manager_archive_tabs();
+  return $output;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_agenda_manager_theme($existing, $type, $theme, $path) {
+  $themes = array(
+    'om_show_live_block' => array(
+      'path' => $path . '/theme', 
+      'template' => 'om-show-live-block', 
+      'file' => 'theme.inc',
+      'variables' => array('live_themes' => array()),
+    )
+  );
+  return $themes;
+}
+
+function om_agenda_manager_render_live_status_page($variables) {
+  $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
+  $themes = taxonomy_get_tree($theme_taxonomy->vid);
+  $livestream_info = om_agenda_manager_livestream_info();
+  $output = '';
+  $output .= '<table><th>Channel</th><th>Status</th>';
+  foreach ($themes as $key => $info) {
+    $output .= '<tr>';
+    $output .= '<td>'.$info->name.'</td>';
+    if ($livestream_info[$info->tid]['status']) {
+      $live_node = node_load($livestream_info[$info->tid]['live_nid']);
+      $output .= '<td>'.l($live_node->title, 'node/'.$live_node->nid).'</td>';
+    }else{
+      $output .= '<td>OFFLINE</td>';
+    }
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output; 
+}
+
+function om_agenda_manager_archive_tabs() {
+  $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
+  $themes = taxonomy_get_tree($theme_taxonomy->vid);
+  $tabs = array();
+  foreach ($themes as $key => $info) {
+    //$loaded = taxonomy_term_load($info->tid);
+    //if (!empty($loaded->field_om_live_feed[LANGUAGE_NONE][0]['value'])) {
+      $tabs[$info->tid] = array(
+        'title' => $info->name,
+        'type' => 'view',
+        'vid' => 'archived_sessions',
+        'display' => 'page_2',
+        'args' => $info->tid,
+        'weight' => $info->weight,
+      ); 
+    //}
+  }
+
+  $qtoptions = array(
+    'style' => 'Zen',
+    'ajax' => FALSE,
+  );
+  $qtname = 'archive_tabs';
+  $quicktabs = quicktabs_build_quicktabs($qtname,$qtoptions,$tabs);
+  return drupal_render($quicktabs['content']); 
+}
+
+function om_agenda_manager_live_button($theme) {
+  $button = '';
+  if ($theme['live_nid'] && $theme['status']) {
+    $button .= '<div class="om-live-button stream-online">';
+    $live_node = node_load($theme['live_nid']);
+    $options = array('attributes' => array('class' => 'om-live-button-content'));
+    $button .= l($theme['theme'].' Currently In Session', 'node/'.$live_node->nid, $options);
+    $button .= '</div>';
+  }else{
+    $button .= '<div class="om-live-button stream-offline">';
+    $button .= '<div class="om-live-button-content">';
+    $button .= $theme['theme'].' Currently Not In Session';
+    $button .= '</div>';
+    $button .= '</div>';
+  }
+
+  return $button;
+}
+
+function om_agenda_manager_token_info() {
+  $livestream_info = om_agenda_manager_livestream_info();
+  foreach ($livestream_info as $tid => $info) {
+    $info['tokens']['om_agenda_manager'][$tid] = array(
+      'name' => $info['theme'].' Live Button',
+      'description' => t('Live status button.'),
+    );
+  }
+}
+
+function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  if ($type == 'om_agenda_manager') {
+    $livestream_info = om_agenda_manager_livestream_info();
+    foreach ($tokens as $theme_tid => $token) {
+      if ($livestream_info[$theme_tid]) {
+        $replacements[$token] = om_agenda_manager_live_button($livestream_info[$theme_tid]); 
+      }
+    }
+  }
+
+  if (!empty($replacements)) {
+    drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-block.css');
+    drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
+    return $replacements;
+  }
+}

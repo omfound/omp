@@ -1,0 +1,65 @@
+<?php
+
+function commerce_registration_clone_module_implements_alter(&$implementations, $hook) {
+  if($hook == 'entity_insert') {
+  }
+}
+
+function commerce_registration_clone_entity_insert($entity, $type) {
+  if($type == 'commerce_product') {
+    $display = commerce_autodisplay_entity_display_lookup($entity->product_id); 
+    if(!empty($entity->field_class_source[LANGUAGE_NONE][0]['value'])) {
+      if($source_product = $entity->field_class_source[LANGUAGE_NONE][0]['value']) {
+        $source_display = commerce_autodisplay_entity_display_lookup($source_product);
+        if(is_numeric($source_display)) {
+          commerce_registration_clone_registration($source_display, $display);
+        }
+      }
+    }
+  }
+}
+
+function commerce_registration_clone_registration($source_display_nid, $destination_display_nid) {
+  //make the form available
+  require_once(drupal_get_path('module', 'commerce_registration').'/includes/commerce_registration.forms.inc');
+
+  //grab the source & target display node info
+  $source_display_node = node_load($source_display_nid);
+  $source_product_id = $source_display_node->field_class_display_class[$source_display_node->language][0]['product_id'];
+  $source_commerce_code = 'commerce_product-'.$source_product_id;
+  $destination_display_node = node_load($destination_display_nid);
+  $destination_product_id = $destination_display_node->field_class_display_class[$destination_display_node->language][0]['product_id'];
+  $destination_commerce_code = 'commerce_product-'.$destination_product_id;
+  
+  //grab the default form state values from source display node registration form
+  $source_form_state_values = commerce_registration_form_state_values('commerce_registration_node_registrations_settings_form', 'node', $source_display_node);
+  
+  //submit the source values using the target registration form
+  $form_state['values']['settings'][$destination_commerce_code] = $source_form_state_values['settings'][$source_commerce_code];
+  $form_state = commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code);
+  $form_state['build_info']['args'] = array('node', &$destination_display_node);
+  drupal_form_submit('commerce_registration_node_registrations_settings_form', $form_state); 
+}
+
+function commerce_registration_form_state_values($form_id, $form_type, $display_node) {
+  $form_state = array();
+  $args = func_get_args();
+
+  // Remove $form_id from the arguments.
+  array_shift($args);
+  $form_state['build_info']['args'] = $args;
+
+  drupal_build_form($form_id, $form_state); 
+
+  return $form_state['values'];
+}
+
+function commerce_registration_form_fix_checkboxes($form_state, $destination_commerce_code) {
+  if($form_state['values']['settings'][$destination_commerce_code]['settings']['multiple_registrations'] == 0) {
+    $form_state['values']['settings'][$destination_commerce_code]['settings']['multiple_registrations'] = null;
+  }
+  if($form_state['values']['settings'][$destination_commerce_code]['reminder']['send_reminder'] == 0) {
+    $form_state['values']['settings'][$destination_commerce_code]['reminder']['send_reminder'] = null;
+  }
+  return $form_state;
+}

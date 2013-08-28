@@ -1,0 +1,210 @@
+<?php
+
+function commerce_autodisplay_menu() {
+  $items = array();
+  $items['admin/config/commerce_autodisplay'] = array(
+    'title' => 'Commerce Autodisplay',
+    'description' => 'Define products where displays should be automatically managed',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_autodisplay_configuration_form'),
+    'access arguments' => array('administer products'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['node/%node/product-delete'] = array(
+    'title' => 'Delete',
+    'description' => 'Delete products associated with nodes',
+    'page callback' => 'commerce_autodisplay_delete_tab',
+    'page arguments' => array(1),
+    'access callback' => 'commerce_autodisplay_delete_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
+  );
+
+  return $items;
+}
+
+function commerce_autodisplay_delete_tab_access($node) {
+  $product = commerce_autodisplay_node_product($node); 
+  if($product) {
+    $url = 'admin/commerce/products/'.$product->product_id.'/delete';
+    if(drupal_valid_path($url)) {
+      return true;
+    }
+  }else{
+    return false;
+  }
+}
+
+function commerce_autodisplay_delete_tab($node) {
+  $product = commerce_autodisplay_node_product($node);
+  drupal_goto('admin/commerce/products/'.$product->product_id.'/delete', array('query' => array('destination' => 'admin/commerce/products')));
+}
+
+function commerce_autodisplay_configuration_form($form, &$form_state) {
+  $form['autodisplay_info'] = array(
+    '#markup' => '<strong>'.t('For any product type below, select the display node type to have display nodes automatically created, updated and deleted for products of that type.').'</strong>', 
+  );
+
+  $product_types = commerce_product_types();
+  $display_types = commerce_autodisplay_display_bundles();
+  foreach($display_types as $type => $field_name) {
+    $options[$type] = $type;
+  }
+  if(!empty($product_types)) {
+    foreach($product_types as $type => $info) {
+      $item_name = 'autodisplay_product_'.$type;
+      $form[$item_name] = array(
+        '#type' => 'select',
+        '#title' => $info['name'],
+        '#options' => $options,
+        '#empty_option' => t('- Select -'),
+        '#empty_value' => false,
+        '#default_value' => variable_get($item_name, false),
+      );
+    }
+  }else{
+    $form['autodisplay_noproducts'] = array(
+      '#markup' => t('There are currently no product types defined on this site.'),
+    );
+  }
+
+  return system_settings_form($form);
+}
+
+function commerce_autodisplay_entity_insert($entity, $type) {
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      $node = new stdClass();
+      $node->uid = $entity->uid;
+      $node->type = $display_type;
+      $node->title = $entity->title;
+      $node->status = $entity->status;
+      $node->language = LANGUAGE_NONE;
+      $node->created = $entity->created;
+      $node->changed = $entity->changed;
+      $reference_field = commerce_autodisplay_display_bundles($display_type);
+      $node->{$reference_field}[LANGUAGE_NONE][]['product_id'] = $entity->product_id;
+      node_save($node);
+    }
+  }
+}
+
+function commerce_autodisplay_entity_update($entity, $type) {
+  if($type == 'commerce_product') {
+    if($display_type = commerce_autodisplay_is_enabled($entity->type)) {
+      if($nid = commerce_autodisplay_entity_display_lookup($entity->product_id)) {
+        $node = node_load($nid);
+        $node->uid = $entity->uid;
+        $node->title = $entity->title;
+        $node->status = $entity->status;
+        $node->language = LANGUAGE_NONE;
+        $node->created = $entity->created;
+        $node->changed = $entity->changed;
+        node_save($node);
+      }
+    }
+  }
+}
+
+function commerce_autodisplay_commerce_product_delete($product) {
+  if($display_type = commerce_autodisplay_is_enabled($product->type)) {
+    $nid = commerce_autodisplay_entity_display_lookup($product->product_id);
+    if(!empty($nid)) {
+      node_delete($nid);
+    }
+  }
+}
+
+function commerce_autodisplay_entity_display_lookup($product_id) {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node', '=')
+    ->entityCondition('bundle', 'class_display', '=')
+    ->fieldCondition('field_class_display_class', 'product_id', $product_id, '=')
+    ->execute();
+
+  foreach($result as $type) {
+    foreach($type as $key => $info) {
+      if($info->nid) {
+        return $info->nid;
+      }
+    } 
+  }
+
+  return false;
+}
+
+function commerce_autodisplay_display_bundles($product_type = NULL) {
+  $fields = field_info_fields();
+  $bundles = array();
+
+  foreach($fields as $field_name => $info) {
+    if($info['type'] == 'commerce_product_reference') {
+      if(isset($info['bundles']['node'])) {
+        foreach($info['bundles']['node'] as $key => $type) {
+          if($product_type) {
+            if($type == $product_type) {
+              return $info['field_name'];
+            }
+          }else{
+            $bundles[$type] = $info['field_name'];
+          }
+        }
+      }
+    }
+  }
+  
+  if(!empty($bundles)) {
+    return $bundles;
+  }else{
+    return false;
+  }
+}
+
+function commerce_autodisplay_is_enabled($product_type) {
+  if($display_type = variable_get('autodisplay_product_'.$product_type, false)) {
+    return $display_type; 
+  }else{
+    return false;
+  }
+}
+
+/**
+ * Implementation of hook_preprocess_page
+ * For product display nodes that have been setup on the config page this alters
+ * the edit links to go to the product edit page and then redirect back to the node
+ */
+function commerce_autodisplay_preprocess_page(&$vars) {
+  $node = menu_get_object();
+  $product = commerce_autodisplay_node_product($node);
+  if($product) {
+    if($vars['tabs']['#primary']) {
+      foreach ($vars['tabs']['#primary'] as $key => $info) {
+        if ($info['#link']['href'] == 'node/'.$node->nid.'/edit') {
+          $vars['tabs']['#primary'][$key]['#link']['href'] = 'admin/commerce/products/'.$product->product_id.'/edit';
+          $vars['tabs']['#primary'][$key]['#link']['localized_options'] = array('query' => array('destination' => 'node/'.$node->nid));
+        }
+      }
+    }
+  }
+}
+
+function commerce_autodisplay_node_product($node) {
+  $display_types = commerce_autodisplay_display_bundles();
+  if(!empty($node->type) && !empty($display_types)) {
+    if(!empty($display_types[$node->type])) {
+      if ($field_name = $display_types[$node->type]) {
+        if ($product_id = $node->{$field_name}[$node->language][0]['product_id']) {
+          if ($product = commerce_product_load($product_id)) {
+            if (commerce_autodisplay_is_enabled($product->type)) {
+              return $product;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return false;
+}

@@ -1,0 +1,16 @@
+name = Basic Payment Method tests
+description = "Supports Basic Payment Method's automated tests."
+core = 7.x
+dependencies[] = paymentmethodbasic
+dependencies[] = xtools
+package = Payment
+hidden = TRUE
+files[] = tests/PaymentmethodbasicTestCallablesWebTestCase.test
+files[] = tests/PaymentmethodbasicTestPaymentMethodBasicControllerWebTestCase.test
+
+; Information added by drupal.org packaging script on 2013-04-22
+version = "7.x-1.6"
+core = "7.x"
+project = "payment"
+datestamp = "1366630975"
+

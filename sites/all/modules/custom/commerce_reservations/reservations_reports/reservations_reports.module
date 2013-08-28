@@ -1,0 +1,95 @@
+<?php
+/*
+ * @file 
+ * Provides basic reports on equipment and reservations for the Commerce Reservation System
+ *
+ */
+ 
+/*
+ * Implements hook_menu
+ */
+ 
+function reservations_reports_menu(){
+	$items['reservations-reports/generate-usage-report'] = array(
+	  'page callback' => 'drupal_get_form',
+	  'page arguments' => array('usage_report_form'),
+	  'access arguments' => array('access content'),
+	  'type' => MENU_CALLBACK,
+	);
+	$items['reservations-reports/usage-report'] = array(
+	  'page callback' => 'reservations_reports_usage_report',
+	  'page arguments' => array(2,3),
+	  'access arguments' => array('access content'),
+	  'type' => MENU_CALLBACK,
+	);
+	return $items;
+}
+
+/*
+ * A simple form for a start and end date
+ */
+
+function usage_report_form($form, &$form_state){
+	$form['start_date'] = array(
+	  '#type' => 'date_popup',
+	  '#title' => t('From'),
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d'
+	);
+	$form['end_date'] = array(
+	  '#type' => 'date_popup',
+	  '#title' => t('To'),
+	  '#default_value' => '',
+	  '#date_format' => 'Y-m-d'
+	);
+	$form['submit'] = array(
+	  '#type' => 'submit',
+	  '#value' => 'Generate Usage Report',
+	);
+	return($form);
+}
+
+function usage_report_form_submit($form, &$form_state){
+	$form_state['redirect'] = 'reservations-reports/usage-report/' . $form_state['values']['start_date'] . '/' . $form_state['values']['end_date'];
+}
+
+function reservations_reports_usage_report($start_date = '', $end_date = ''){
+	$result = db_query('SELECT line_item_id FROM {commerce_line_item} WHERE type = :type', array(':type' => 'reservable_product',));
+	$line_items = array();
+	foreach ($result as $record) {
+	  $line_items[] = commerce_line_item_load($record->line_item_id);
+  }
+  $verified_line_items = array();
+  $start_date_time = strtotime($start_date);
+  $end_date_time = strtotime($end_date);
+  foreach($line_items as $line_item){
+    if (strtotime($line_item->field_reservation_dates['und'][0]['value'])>$start_date_time && strtotime($line_item->field_reservation_dates['und'][0]['value'])<$end_date_time){
+      $verified_line_items[] = $line_item;
+    }
+  }
+  $products = array();
+  $result = db_query('SELECT product_id FROM {commerce_product} WHERE type = :type', array(':type' => 'reservable_product',));
+  foreach ($result as $record) {
+	  $product = commerce_product_load($record->product_id);
+	  $products[$product->product_id] = $product->title;
+  }
+  $content = theme('reservations_reports_usage_report', array('products' => $products, 'line_items' => $verified_line_items));
+  return ($content);
+}
+
+/*
+ * Implements hook_theme
+ */
+ 
+function reservations_reports_theme(){
+	return array(
+	  'reservations_reports_usage_report' => array(
+	    'template' => 'reservations_reports_usage_report',
+	    'path' => drupal_get_path('module', 'commerce_reservations') . '/reservations_reports/theme',
+	    'file' => 'theme.inc',
+	    'variables' => array(
+	      $products = NULL,
+	    ),
+	  ),
+	);
+}

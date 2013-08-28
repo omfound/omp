@@ -1,0 +1,31 @@
+.not-front #content h1.archive-title {
+  clear: left;
+  padding-top: 20px;
+}
+.section-archived-sessions #content #content-inner .block h1.title {
+  font-size: 1.9em;
+  font-family: 'PTSansBold', sans-serif;
+  margin-top: 0.75em;
+  line-height: 36px;
+  padding-top: 20px;
+  padding-bottom: 0;
+}
+div#om-embedded-content {
+  float: left;
+  margin-right: 20px;
+}
+
+div#om-desc-content {
+  float: left;
+  width: 355px;
+  background-color: #fff;
+  padding: 10px;
+}
+.not-front div#om-desc-content {
+  clear: left;
+  width: 98%;
+}
+h1.archive-title {
+  clear: left;
+  padding-top: 20px;
+}

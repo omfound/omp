@@ -1,0 +1,162 @@
+<?php
+require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_servers_cablecast.field.inc';
+
+require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_servers_cablecast_file.inc';
+
+function om_playback_servers_cablecast_menu() {
+  $items = array();
+  $items['om_playback_servers/cablecast'] = array(
+    'title' => t('Cablecast Settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_playback_servers_cablecast_admin_form'),
+    'access arguments' => array('administer om playback servers'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 100
+  );
+  return $items;
+}
+
+function om_playback_servers_cablecast_admin_form($form, $form_state) {
+  $query = db_select('om_playback_servers', 'pbs');
+  $query->fields('pbs', array('pbsid', 'name'));
+  $query->condition('ompbs_type', 'cablecast', '=');
+  $resource = $query->execute();
+  $pbs = array();
+  while ($result = $resource->fetchAssoc()) {
+    $pbs[$result['pbsid']] = $result['name'];
+  }
+  if (empty($pbs)) {
+    $link = l('Add one now.', 'om_playback_servers/add');
+    $form['default_cablecast'] = array(
+      '#title' => t('Default Cablecast'),
+      '#markup' => t('You have not created any Cablecast playback servers yet. !addone', array('!addone' => $link)),
+    );
+  }
+  else {
+    $form['default_cablecast'] = array(
+      '#title' => t('Default Cablecast'),
+      '#description' => 'Select which Cablecast contains your files database.',
+      '#type' => 'select',
+      '#options' => $pbs
+    );
+  }
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_om_playback_servers_om_playback_server
+ */
+function om_playback_servers_cablecast_om_playback_servers_om_playback_server() {
+  return array(
+    'cablecast' => array(
+      'title' => t('Cablecast'),
+      'description' => t('Provides API support for Tightrope Cablecasts.'),
+      'type' => 'om_playback_server',
+      'path' => drupal_get_path('module', 'om_playback_servers_cablecast') . '/includes/om_playback_server',
+      'file' => 'cablecast_playback_server.inc',
+      'playback_server' => array(
+        'class' => 'cablecastPlaybackServerController',
+        'parent' => 'playbackServerController',
+      ),
+    )
+  );
+}
+
+/**
+ * Implements hook_permission
+ */
+function om_playback_servers_cablecast_permission() {
+  return array(
+    'use cablecast media browser' => array(
+      'title' => t('Use Cablecast Media Selector'),
+      'description' => t('Select orphaned files from your Cablecast, create show metadata and store them on a node.'),
+    ),
+  );
+}
+
+/**
+ * Get ia url from cablecast uri.
+ */
+function om_playback_servers_cablecast_file_ia_url($uri) {
+  try {
+    $cablecast_file_controller = new cablecastFile();
+    return $cablecast_file_controller->get_ia_url($uri);
+  }
+  catch(Exception $e) {
+    $message =  'Cablecast Playback Server: ' . $pbs->name . ' threw exception: ' . $e->getMessage();
+  }
+}
+
+/**
+ * Get shows with a broadcast uri, but no vod file and check ia to see if there is
+ *   a vod resource available yet. If so, update node. Also update show duration.
+ */
+function om_playback_servers_cablecast_update_vod_field() {
+  $query = db_select('field_data_field_om_show_video', 'vod_files');
+  $query->fields('vod_files', array('entity_id'));
+  $resource = $query->execute();
+  $nids = array();
+  while ($result = $resource->fetchAssoc()) {
+    $nids[] = $result['entity_id'];
+  }
+  $query_uri = db_select('field_data_field_om_show_broadcast_file', 'bc_files');
+  $query_uri->join('field_data_field_archive_transfer', 'transfer', 'bc_files.entity_id=transfer.entity_id');
+  $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
+  $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
+  $query_uri->condition('field_archive_transfer_value', 1, '=');
+  $resource = $query_uri->execute();
+  while ($result = $resource->fetchAssoc()) {
+    $mp4 = '';
+    $derivatives = '';
+    $metadata = '';
+    if (class_exists('cablecastFile')) {
+      $cablecast_file_controller = new cablecastFile();
+      $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
+      $item = substr($url, strripos($url, '/'), strlen($url));
+      $item = rtrim($item, '/');
+      if (class_exists('internetArchiveDerivativeHandler') && !empty($item)) {
+        $ia_handler = new internetArchiveDerivativeHandler();
+        $ia_handler->set_item($item);
+        $derivatives = $ia_handler->get_derivatives();
+        $derivatives = drupal_json_encode(array($item => $derivatives));
+        $mp4 = $ia_handler->get_derivative('mp4');
+      }
+      $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
+      if (!empty($metadata)) {
+        $node = node_load($result['entity_id']);
+        if (!empty($mp4)) {
+          $node->field_om_show_video = array(
+            $node->language => array(
+              0 => array(
+                'value' => $mp4
+              )
+            )
+          );
+          $node->field_archive_derivatives = array(
+            $node->language => array(
+              0 => array(
+                'value' => $derivatives
+              )
+            )
+          );
+        }
+        $node->field_om_show_duration = array(
+          $node->language => array(
+            0 => array(
+              'value' => $metadata['TotalSeconds']
+            )
+          )
+        );
+        node_save($node);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_cron
+ */
+function om_playback_servers_cablecast_cron() {
+  om_playback_servers_cablecast_update_vod_field();
+  watchdog('om_playback_servers_cablecast', 'Cablecast Playback Server cron ran.');
+}

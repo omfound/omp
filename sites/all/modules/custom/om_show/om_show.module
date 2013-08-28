@@ -1,0 +1,458 @@
+<?php
+
+/**
+ * Implementation of hook_menu()
+ */
+function om_show_menu() {
+  $items = array();
+
+  $items['admin/config/om/show'] = array(
+    'title' => 'Show Configuration',
+    'description' => 'Configuration for show options',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_show_admin_form'),
+    'access arguments' => array('administer show'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_permission().
+ */
+function om_show_permission() {
+  return array(
+    'administer show' => array(
+      'title' => t('Administer OM Show'), 
+      'description' => t('Administer OMP functionality for the show interface.'),
+    )
+  );
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_show_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_show_upcoming_airings' => array(
+       'template' => 'om_show_upcoming_airings',
+       'variables' => array('show' => FALSE),
+       'path' => $path . '/theme',
+       'file' => 'theme.inc'
+     )
+  );
+}
+
+function om_show_admin_form($form, &$form_state) {
+  $form['om_show_allow_web_input'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show the web url input on om show forms?'),
+    '#default_value' => variable_get('om_show_allow_web_input', 0),
+  );
+  $form['om_show_autoplay'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Autoplay all shows on page load?'),
+    '#default_value' => variable_get('om_show_autoplay', 0),
+  );
+  $form['om_show_share_bar'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable player share bar?'),
+    '#default_value' => variable_get('om_show_share_bar', 0),
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_views_query_alter
+ */
+function om_show_views_query_alter(&$view, &$query) {
+  if ($view->name == 'user_projects' && user_access('administer show')) {
+    if (isset($query->where[0])) {
+      unset($query->where[0]);
+    }
+  }
+}
+
+function om_show_migrate_flash() {
+  db_set_active('legacy');
+  $query = "
+    SELECT content_type_om_show.nid, files.filepath FROM content_type_om_show
+    JOIN files ON files.fid = content_type_om_show.field_om_show_flash_fid";
+  $results = db_query($query);
+  $flash_files = array();
+  foreach ($results as $result) {
+    $flash_files[$result->nid] = $result->filepath;
+  }
+  db_set_active('default');
+
+  $query = "
+    SELECT node.nid, field_data_field_om_show_video.field_om_show_video_value, field_data_field_old_show_id.field_old_show_id_value
+    FROM {node}
+    JOIN {field_data_field_om_show_video} ON field_data_field_om_show_video.entity_id = node.nid
+    JOIN {field_data_field_old_show_id} ON field_data_field_old_show_id.entity_id = node.nid
+    WHERE field_data_field_om_show_video.field_om_show_video_value = '' AND node.type = 'om_show'";
+  $results = db_query($query);
+  $shows_without_video = array();
+  foreach($results as $result) {
+    $shows_without_video[$result->field_old_show_id_value] = $result->nid;
+  }
+
+  $update_shows = array();
+  foreach ($shows_without_video as $old_nid => $new_nid) {
+    if (!empty($flash_files[$old_nid])) {
+      $update_shows[$new_nid] = $flash_files[$old_nid];
+    }
+  }
+
+  $update_count = 0;
+  foreach($update_shows as $new_nid => $flash_file) {
+    $updated = db_update('field_data_field_om_show_video')
+      ->fields(array(
+        'field_om_show_video_value' => $flash_file,
+      ))
+      ->condition('field_data_field_om_show_video.entity_id', $new_nid, '=')
+      ->execute();
+    $update_count++;
+  }
+
+  drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
+}
+
+/**
+ * Implements hook_form_form_id_alter
+ */
+
+//Marty is screwing stuff up in here
+
+
+/*
+function om_project_form_om_project_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form);
+  dsm($form_state);
+  dsm($form_id);
+}
+
+
+ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form); 
+  dsm($form_state); 
+  dsm($form_id);
+
+  if (!user_access('administer show')) { 
+    
+ $result = array_intersect($form_state['field'], );
+ print_r($result);
+
+}
+}
+*/
+
+/*  if (!user_access('administer show')) { }}
+    $functional_fields = array('field_om_show_aired', 'field_om_show_branding', 'field_archive_transfer', 'field_crawl_text', 'field_om_show_video', 'field_archive_derivatives');
+    foreach ($functional_fields AS $field) {
+      if (!empty($form[$field])) {
+        if ($field != 'field_om_show_video') {
+          $form[$field]['#type'] = 'hidden';
+        }
+        elseif (!variable_get('om_show_allow_web_input', false)) {
+          $form[$field]['#type'] = 'hidden';
+        }
+      }
+    }
+  }
+  
+  // Auto population of metadata/contact info from project
+     $om_show_meta_entities = array('field_om_theme', 'field_om_genre', 'field_om_rating', 'field_om_locally_produced');
+     $om_show_project_info = array('field_om_project_company', 'field_om_project_contact','field_om_language','field_license');
+
+     
+    $form['om_show_metadata'] = array(
+       '#title' => t('Show Metadata'),
+       //'#description' => t('Metadata fields for this show.'),
+       '#type' => 'fieldset',
+       '#collapsible' => FALSE,
+       '#weight' => 1.5 ,
+       '#prefix' => '<div class = "show_metadata"',
+       '#suffix' => '</div>', 
+     );
+    
+     // move metadata to fieldset
+     foreach ($om_show_meta_entities AS $field) {
+       $form['om_show_metadata'][$field] = $form[$field];
+       unset($form[$field]);
+     }
+     $key = isset($form_state['values']['field_om_show_project']['und'][0]['nid']) ? $form_state['values']['field_om_show_project']['und'][0]['nid'] : NULL;
+    
+     // If there is a value for project try and load in meta values.
+     if (isset($key) && arg(2) != 'edit') {
+       $project = node_load($key);
+       foreach($om_show_meta_entities AS $field) {
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form['om_show_metadata'][$field][$project->language]['#default_value'] = $value;
+           }
+         }
+       }
+       foreach($om_show_project_info AS $field) {
+         $value_array = !empty($project->{$field}[$project->language]) ? $project->{$field}[$project->language][0] : FALSE;
+         if (!empty($value_array)) {
+           foreach($value_array AS $value) {
+             unset($form_state['input'][$field][$project->language]);
+             $form[$field][$project->language][0]['value']['#default_value'] = $value;
+           }
+         }
+       }
+     }
+    
+    // Only provide ajax if we are on node add screen.
+    if (arg(2) != 'edit') {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('The metadata section below will be populated based on the selected project where available.');
+      $form['field_om_show_project']['und']['#ajax'] = array(
+        'callback' => 'om_show_reload',
+        'wrapper' => 'om-show-node-form',
+        'event' => 'change',
+      );
+    }
+    else {
+      $form['field_om_show_project']['und']['#description'] .= ' ' . t('This show has already been edited once, and will no longer auto populate.');
+    }
+
+}
+*/
+//End of work
+
+function om_show_field_group_build_pre_render_alter(&$element) {
+  if (user_access('administer show')) { 
+    $element['group_om_legacy']['#access'] = TRUE;
+ }
+  else {
+    $element['group_om_legacy']['#access'] = FALSE;
+  }
+   if (user_access('administer show')) { 
+    $element['group_om_admin_info']['#access'] = TRUE;
+ }
+  else {
+    $element['group_om_admin_info']['#access'] = FALSE;
+  }
+}
+
+function om_show_reload($form, $form_state) {
+  // We just need to return the form here so that the form is re-rendered.
+  return $form;
+}
+
+function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
+  $node = menu_get_object();
+  if (!is_object($node)) {
+    $nid = $node['nid'];
+    $show_field = $node['field_om_show_video'];
+    if (!empty($node['field_show_thumbnail'])) {
+      $thumb_field = $node['field_show_thumbnail'][$node['language']];
+    }
+  }else{
+    $nid = $node->nid;
+    if (!empty($node->field_om_show_video[$node->language])) {
+      $show_field = $node->field_om_show_video[$node->language];
+      if (!empty($node->field_show_thumbnail)) {
+        $thumb_field = $node->field_show_thumbnail[$node->language];
+      }
+    }
+  }
+
+  if (variable_get('om_show_autoplay', false)) {
+    $autostart = true;
+  }else{
+    $autostart = false;
+  }
+  $img_path = om_show_video_image($node);
+  $youtube_info = om_show_youtube_info($node);
+  if ($youtube_info['live_status'] || empty($show_field)) {
+    return;
+  }
+
+  if (function_exists('om_agenda_manager_cuepoints') && om_agenda_manager_cuepoints($node) && !$disable_playlist) {
+    $jwplayer = array();
+
+    $playlist_width = $width + 410;
+    $jwplayer[0] = array(
+      'image' => $img_path,
+      'playlist' => '/node/'.$nid.'/cuepoints',
+      'width' => $playlist_width,
+      'height' => $height,
+      'autostart' => $autostart,
+    );
+
+  }
+  elseif (!empty($show_field[0]['value'])) {
+    $jwplayer = array();
+    foreach ($show_field as $key => $info) {
+      if (!valid_url($info['safe_value'], true)) {
+        $video_path = 'http://archive.denveropenmedia.org/'.$info['safe_value'];
+      }
+      else {
+        $video_path = $info['safe_value'];
+        //if youtube use a standardized url
+        if ($youtube_info) {
+          $video_path = 'http://www.youtube.com/watch?v='.$youtube_info['id'];
+        }
+      }
+      $jwplayer[$key]['path'] = $video_path;
+      $jwplayer[$key]['image'] = $img_path;
+      $jwplayer[$key]['width'] = $width;
+      $jwplayer[$key]['height'] = $height;
+      $jwplayer[$key]['autostart'] = $autostart;
+      $jwplayer[$key]['embedInPoint'] = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
+      $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
+    }
+  }
+
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+  drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
+}
+
+function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
+  if (!empty($url)) {
+    if ($youtube_id = om_show_youtube_id($url)) {
+      $livestream_status = om_show_youtube_livestream_status($youtube_id); 
+      if (!empty($livestream_status) && $livestream_status == 'active') {
+        //youtube embed
+        $embed_url = 'http://www.youtube.com/embed/'.$youtube_id;
+        if (!arg(2) == 'agenda_manager') {
+          if (variable_get('om_show_autoplay', false)) {
+            $embed_url .= '?autoplay=1';
+          }
+        }
+        $video = '<iframe width="'.$width.'" height="'.$height.'" src="'.$embed_url.'" frameborder="0" allowfullscreen></iframe>';
+        if (empty($_GET['iframe_mode'])) {
+          $use_share_bar = variable_get('om_show_share_bar', FALSE);
+          if (arg(2) != 'agenda_manager' && $use_share_bar) {
+            $video .= theme('om_show_share_bar', array('cuepoints' => FALSE));
+          }
+        }
+      }
+    } 
+
+    if (empty($video)) {
+      //default jwplayer code
+      om_show_jwplayer_include($disable_playlist, $width, $height);
+      $video = '<div id="jwplayer-0">Loading video...</div>';
+      if (empty($_GET['iframe_mode'])) {
+        $use_share_bar = variable_get('om_show_share_bar', FALSE);
+        if (arg(2) != 'agenda_manager' && $use_share_bar) {
+          $video .= theme('om_show_share_bar', array('cuepoints' => TRUE));
+        }
+      }
+    }
+
+    return $video;
+  }
+
+  return false;
+}
+
+function om_show_youtube_id($url) {
+  $url_info = parse_url($url);
+  if (!empty($url_info['query'])) {
+    parse_str(html_entity_decode($url_info['query']), $query);
+    if (!empty($query['v'])) {
+      return $query['v'];
+    }
+  }
+
+  return false;
+}
+
+function om_show_youtube_fetch_url($url) {
+
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL,$url);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Open Media Project');
+  $result = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $result;
+}
+
+function om_show_youtube_livestream_status($id) {
+  $video_info_json = om_show_youtube_fetch_url('https://gdata.youtube.com/feeds/api/videos/'.$id.'?v=2&alt=json');
+  $video_info = json_decode($video_info_json);
+  if (!empty($video_info)) {
+    foreach ($video_info->entry->link as $key => $data) {
+      if (strpos($data->rel, 'live.event') !== false) {
+        $event_info_json = om_show_youtube_fetch_url($data->href.'&alt=json');
+        $event_info = json_decode($event_info_json);
+        return $event_info->entry->{'yt$status'}->{'$t'};
+      }
+    }
+  }
+  return false;
+}
+
+function om_show_youtube_info($node) {
+  if (!is_object($node)) {
+    $show_field = $node['field_om_show_video'];
+  }else{
+    if (!empty($node->field_om_show_video[$node->language])) {
+      $show_field = $node->field_om_show_video[$node->language];
+    }
+  }
+ 
+  if (!empty($show_field)) {
+    if ($youtube_id = om_show_youtube_id($show_field[0]['safe_value'])) {
+      $youtube_info = array(
+        'id' => $youtube_id,
+        'live_status' => om_show_youtube_livestream_status($youtube_id),
+      );
+
+      return $youtube_info;
+    }
+  }
+
+  return false;
+}
+
+function om_show_video_image($node) {
+  if (!empty($node->field_show_thumbnail)) {
+    $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
+    if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_nid($node->nid)) {
+      $img_path = $image_url;
+    }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
+      $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
+      if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
+        $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
+      }
+    }
+  }else{
+    $img_path = false;
+  }
+
+  return $img_path;
+}
+
+function om_show_upcoming_airings($node) {
+  $output = array();
+  $query = db_query('field_data_field_om_show_id', 'show');
+  $query->join('field_data_field_om_airing_channel', 'channel', 'show.entity_id=channel.entity_id');
+  $query->join('field_data_field_om_airing_dates', 'dates', 'show.entity_id=dates.entity_id');
+  $query->fields('dates', array('field_om_airing_dates_value'));
+  $query->fields('channel', array('field_om_airing_channel_tid'));
+  $query->condition('show.field_om_show_id_value', $node->nid, '=');
+  $query->condition('dates.field_om_airing_dates_value', time(), '>=');
+  $query->orderBy('dates.field_om_airing_dates_value', 'DESC');
+  $query->range(0, 4);
+  $resource = $query->execute();
+  while ($row = $resource->fetchAssoc()) {
+    $term = taxonomy_term_load($row['field_om_airing_channel_tid']);
+    if (is_object($term)) {
+      $output[] = array('airing' => $row['field_om_airing_dates_value'], 'channel' => $term->name);
+    }
+  }
+  return $output; 
+}
+

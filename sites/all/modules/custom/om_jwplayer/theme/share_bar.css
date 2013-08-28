@@ -1,0 +1,139 @@
+.embed-tray {
+  background: #003E5E;
+  position: relative;
+}
+
+.embed-tray * {
+  text-shadow: none;
+}
+
+.embed-tray .inner {
+  height: 0;
+  overflow: hidden;
+  padding: 10px 5px 5px 5px;
+  position: relative;
+}
+
+.no-sidebars #content .embed-tray .section {
+  float: left;
+  padding: 0 15px 0 11px;
+  margin: 0 15px 0 0;
+  width: 185px;
+  border-right: solid 1px white;
+}
+
+.embed-tray form {
+  margin-top: 5px;
+}
+
+.start-end {
+  padding: 0 0 10px 0;
+  margin: 0 0 5px 0;
+}
+
+.width-height {
+  padding: 5px 0 10px 0;
+  margin: 5px 0 5px 0;
+}
+
+.no-sidebars #content .embed-tray .embeds {
+  width: 416px;
+  position: relative;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.embed-tray input {
+  font-family: georgia;
+  font-style: italic;
+  width: 76px;
+  margin-right: 10px;
+}
+
+.embed-tray div.embed,
+.embed-tray div.facebook {
+  width: 195px;
+  position: relative;
+  float: left;
+  margin-right: 15px;
+}
+
+.embed-tray div.facebook {
+  margin-right: 0;
+}
+
+.embed-tray div.embed input,
+.embed-tray div.facebook input {
+  width: 190px;
+}
+
+.copy-label {
+  font-family: georgia;
+  font-size: 11px;
+  position: absolute;
+  display: block;
+  padding: 3px;
+  color: white;
+  top: -2px;
+  right: -5px;
+}
+
+div.facebook .copy-label {
+  top: 0;
+}
+
+.embed-tray label {
+  text-transform: uppercase;
+  font-weight: normal;
+  color: #FFFFFF;
+  display: block;
+  font-size: 11px;
+}
+
+.embed-tray .group {
+  float: left;
+  
+}
+
+label.in-point,
+label.out-point {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.start-end label.active,
+.start-end label.active {
+  text-decoration: underline;
+}
+
+input {
+  width: 75px;
+  margin-right: 10px;
+}
+
+input.active {
+  -moz-appearance: none;
+  outline: none;
+  border: 2px solid #680B00;
+}
+
+input.embed {
+  width: 280px;
+}
+
+input.facebook {
+  width: 263px;
+}
+
+.share-show-hide {
+  width: 114px;
+  height: 24px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: transparent url(images/pce-show-hide-bg.png) top left no-repeat;
+  padding: 3px 3px 3px 8px;
+  position: absolute;
+  bottom: -30px;
+  cursor: pointer;
+}

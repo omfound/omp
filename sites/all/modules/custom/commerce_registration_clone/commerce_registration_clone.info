@@ -1,0 +1,10 @@
+name = Commerce Registration Clone
+description = Allows users to clone registrations while cloning commerce products.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce
+dependencies[] = entity
+dependencies[] = commerce_product
+dependencies[] = commerce_product_ui
+dependencies[] = commerce_product_clone

@@ -1,0 +1,418 @@
+.node-unpublished p.unpublished,
+.comment-unpublished p.unpublished { /* The word "Unpublished" displayed underneath the content. */
+  height: 0;
+  overflow: visible;
+  color: #d8d8d8;
+  font-size: 75px;
+  line-height: 1;
+  font-family: Impact, "Arial Narrow", Helvetica, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  word-wrap: break-word; /* A very nice CSS3 property */
+}
+
+.lt-ie8 .node-unpublished p.unpublished > *,
+.lt-ie8 .comment-unpublished > * {
+  position: relative; /* Otherwise these elements will appear below the "Unpublished" text. */
+}
+
+/** Page Nodes **/
+.not-front #content h1.title,
+.not-front #content h1 {
+  font-family: 'PTSansBold', sans-serif;
+  font-size: 36px;
+  padding: 0 0 10px 0;
+  margin: 0;
+}
+.page-dashboard #content h1,
+.page-views #content h1 {
+  line-height: 36px;
+}
+
+.not-front #content h2 {
+  font-family: 'PTSansRegular', sans-serif;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.not-front #content h3 {
+  font-family: 'PTSansItalic', sans-serif;
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.not-front #content h4 {
+  font-family: 'PTSansItalic', sans-serif;
+  font-size: 14px;
+  line-height: 25px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.not-front #content p {
+  margin: 0 0 10px 0;
+}
+.not-front #content p.rteindent1 {
+  margin-left: 40px;
+}
+.not-front #content p.rteindent2 {
+  margin-left: 80px;
+}
+.not-front #content p.rteindent3 {
+  margin-left: 120px;
+}
+
+/** Class Display Nodes **/
+.node-type-class-display #content {
+  background: rgb(255,255,255); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 93%, rgba(239,239,239,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(93%,rgba(255,255,255,1)), color-stop(100%,rgba(239,239,239,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 93%,rgba(239,239,239,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,1) 93%,rgba(239,239,239,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,1) 93%,rgba(239,239,239,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 93%,rgba(239,239,239,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#efefef',GradientType=0 ); /* IE6-9 */
+}
+
+#class-node-left {
+  width: 255px;
+  float: left;
+  padding-right: 5px;
+}
+
+#class-node-right {
+  width: 445px;
+  float: left;
+  padding-left: 5px;
+}
+.not-logged-in #class-node-right {
+  width: 695px;
+}
+
+.node-class-display .label {
+  font-weight: bold;
+  color: #3C2D36;
+}
+
+#registration-box {
+  width: 190px;
+  float: right;
+  background-color: #D0CBC3;
+  border-radius: 3px;
+  border: solid 1px #D0CBC3;
+  margin-left: 10px;
+}
+
+#registration-box .registration-button {
+  float: left;
+  width: 83px;
+  font-size: 14px;
+}
+
+#registration-box .registration-button input {
+  padding: 5px;
+}
+
+#registration-box .registration-button .gray-button {
+  width: 83px;
+  height: 30px;
+}
+
+#registration-box .price {
+  background-color: #FFFFFF;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  padding: 5px;
+  color: #3C2D36;
+  font-size: 16px;
+}
+
+#registration-box .price-value {
+  width: 70px;
+  float: left;
+  line-height: 35px;
+}
+
+#registration-box .discount-message {
+  font-size: 10px;
+  clear: both;
+}
+
+#registration-box .seats-left {
+  color: #FFFFFF;
+  font-size: 16px;
+  text-shadow: none;
+  padding: 5px;
+  background: #85B740;
+  border-top: solid 1px #D0CBC3;
+}
+
+#registration-box .dates {
+  padding: 5px 5px 0 5px;
+}
+
+#registration-box .location {
+  padding: 0 5px 5px 5px;
+}
+
+#registration-box .location ul,
+#registration-box .location ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 16px;
+}
+
+#registration-box .direction-link {
+  padding: 0 5px 5px 5px;
+}
+
+#registration-box .direction-link a:link,
+#registration-box .direction-link a:visited {
+  color: #3C2D36;
+}
+
+#registration-box .dates .date-instance {
+  border-bottom: 1px solid #B4B0AA;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+#registration-box .dates .last {
+  border-bottom: none;
+}
+
+#registration-box .dates {
+  line-height: 1.3em;
+}
+
+/** 
+ * Show nodes
+ */
+
+.node-type-om-show .node {
+  padding-top: 10px;
+}
+
+.node-type-om-show .node #show-left {
+  width: 550px;
+  float: left;
+  position: relative;
+}
+
+.node-type-om-show .node #show-right {
+  width: 140px;
+  float: left;
+  padding-left: 20px;
+}
+
+.node-type-om-show .node .field-name-field-om-show-video {
+  float: left;
+  width: 550px;
+  margin-bottom: 20px;
+  line-height: 0;
+}
+
+#session-video-embed-tray {
+  line-height: normal;
+  margin-bottom: 15px;
+}
+
+.node-type-om-show .node .video-status {
+  float: left;
+  width: 410px;
+  max-height: 338px;
+  line-height: 0;
+}
+.node-type-om-show .node .video-processing {
+  clear: left;
+  width: 959px;
+}
+.node-type-om-show #show-left .edit-link-wrapper {
+  text-align: right;
+  float: left;
+  width: 50px;
+}
+
+.node-type-om-show #show-left .edit-link-wrapper .icon {
+  background: transparent url(../images/pencil-icon.png) bottom left no-repeat;
+  width: 14px;
+  height: 19px;
+  float: left;
+}
+
+.node-type-om-show .node h2 {
+  margin-bottom: 10px;
+  float: left;
+  width: 500px;
+}
+
+.node-type-om-show #show-details-left {
+  float: left;
+  padding: 5px 10px 5px 0;
+  width: 30px;
+}
+
+.node-type-om-show #show-details-right.with-photo {
+  width: 510px;
+  float: left;
+}
+
+.node-type-om-show #show-details-right.without-photo {
+  width: 550px;
+  float: left;
+  margin-bottom: 15px;
+}
+
+.node-type-om-show #show-details-right {
+  padding: 5px 0px;
+}
+
+.node-type-om-show #show-details-right div {
+  float: left;
+  margin-right: 3px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.node-type-om-show #show-details-right #author {
+  float: none;
+}
+
+.node-type-om-show #show-details-right #author a:link,
+.node-type-om-show #show-details-right #author a:visited {
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.node-type-om-show #show-details-right #author a:focus,
+.node-type-om-show #show-details-right #author a:hover {
+  text-decoration: underline;
+}
+
+.node-type-om-show #description {
+  margin: 10px 0;
+  position: relative;
+}
+.node-type-om-show #gov-description {
+  clear: left;
+}
+
+.node-type-om-show #description .show-hide-toggle {
+  position: absolute;
+  top: -15px;
+  left: 239px;
+}
+
+.node-type-om-show #description .inner {
+  padding-top: 20px;
+}
+
+.node-type-om-show #voting-msg {
+  width: 375px;
+  float: left;
+  padding: 20px;
+}
+
+#voting-widget {
+  width: 135px;
+  float: left;
+}
+
+#bayesian-score .score {
+  float: left;
+  width: auto;
+}
+
+#vote-summary {
+  width: 45px;
+  font-weight: bold;
+  font-size: 18px;
+  background: transparent url(../images/ideal-star.jpg) 100% 37% no-repeat;
+}
+
+/**
+ * Show && Project Node Forms
+ **/
+body.page-node-add-om-show .form-item label,
+body.page-node-add-om-project .form-item label
+{
+  float: left;
+  margin-right: 10px;
+}
+body.page-node-add-om-show .form-type-textarea label,
+body.page-node-add-om-project .form-type-textarea label {
+  float: none;
+  margin-right: 0;
+}
+
+body.page-node-add-om-show .form-item label.option,
+body.page-node-add-om-project .form-item label.option
+{
+  float: none;
+  margin-right: 0;
+}
+body.page-node-add-om-show .form-type-radio,
+body.page-node-add-om-project .form-type-radio
+{
+  clear: left;
+}
+
+/** 
+ * Project Nodes
+ **/
+#project-left {
+  float: left;
+  width: 220px;
+}
+
+#project-left .label {
+  float: left;
+  width: 70px;
+  margin-right: 10px;
+}
+
+#project-left .value {
+  float: left;
+  width: 140px;
+}
+
+#project-right {
+  float: left;
+  width: 475px;
+  margin-left: 15px;
+}
+
+#project-date-author {
+  line-height: 12px;
+  margin-bottom: 5px;
+}
+
+#show-grid {
+  clear: left;
+  margin: 10px 0 0 0;
+}
+
+#show-grid .inner {
+  padding: 10px 0;
+}
+
+#show-grid .inner a {
+  display: block;
+  float: left;
+  margin: 0 6px 0px 0;
+}
+
+#show-grid .inner img {
+  padding: 5px;
+  border: solid 1px #B7B1A4;
+}

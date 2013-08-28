@@ -1,0 +1,92 @@
+<?php
+
+/**
+** Implements hook_menu
+**/
+function om_voting_menu() {
+  $items = array();
+
+  $items['postmark/inbound'] = array(
+    'title' => t('Inbound Postmark Messages'),
+    'page callback' => 'om_voting_postmark_inbound',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  if (module_exists('advanced_help')) {
+    $items['admin/advanced_help/openmedia/voting'] = array(
+      'title' => t('Open Media Voting System Help'),
+      'page callback' => 'om_voting_index_page',
+      'access arguments' => array('view advanced help index'),
+      'type' => MENU_NORMAL_ITEM
+    );
+  }
+  return $items;
+}
+
+/**
+ * Advanced help helper function.
+ * @returns themed help page.
+ */
+function om_voting_index_page() {
+  $output = theme('advanced_help_topic',
+    array(
+      'module' => 'om_voting',
+      'topic' => 'about-om-voting',
+    )
+  );
+  $output .= '&nbsp;' . t('Help resources for voting system on the site.');
+  return $output;
+}
+
+function om_voting_postmark_inbound () {
+  $email = json_decode(file_get_contents('php://input'));
+  if ($vote = om_voting_prepare_vote($email)) {
+    drupal_write_record('votingapi_vote', $vote); 
+    $to_values = explode('@', $email->ToFull[0]->Email);
+    $nid = $to_values[0];
+    votingapi_recalculate_results('node', $nid);
+  }
+}
+
+function om_voting_prepare_vote ($email) {
+  $email->Subject = trim($email->Subject);
+  $vote_value = substr($email->Subject, 0, 1);
+  $to_values = explode('@', $email->ToFull[0]->Email);
+  $nid = $to_values[0];
+  if (is_numeric($vote_value) && is_numeric($nid)) {
+    if ($vote_value == 1 || $vote_value == 2 || $vote_value == 3 || $vote_value == 4 || $vote_value == 5) {
+      switch($vote_value) {
+        case 1:
+          $vote_value = 20;
+          break;
+        case 2:
+          $vote_value = 40;
+          break;
+        case 3:
+          $vote_value = 60;
+          break;
+        case 4:
+          $vote_value = 80;
+          break;
+        case 5:
+          $vote_value = 100;
+          break;
+      }
+      $vote = array(
+        'entity_type' => 'node',
+        'entity_id' => $nid,
+        'tag' => 'vote',
+        'uid' => 0,
+        'value' => $vote_value,
+        'value_type' => 'percent',
+        'timestamp' => time(),
+        'vote_source' => $email->FromFull->Email,
+        'prepped' => 1, 
+      );
+
+      return $vote;
+    }
+  }
+
+  return false;
+}

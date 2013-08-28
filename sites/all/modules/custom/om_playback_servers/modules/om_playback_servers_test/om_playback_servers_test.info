@@ -1,0 +1,5 @@
+name = Open Media Playback Servers Test Playback Server
+description = Provides a dummy playback server.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "om_playback_servers"

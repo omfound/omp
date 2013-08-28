@@ -1,0 +1,93 @@
+<?php
+
+/**
+** Implements hook_menu
+**/
+function om_classes_menu() {
+  $items = array();
+
+  $items['user/registrations'] = array(
+    'title' => t('Registration History'),
+    'page callback' => 'om_classes_user_registrations',
+    'access callback' => 'om_classes_user_registrations_access',
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function om_classes_user_registrations_access() {
+  return true;
+}
+
+function om_classes_order_contains_class($commerce_order) {
+  $classes = array();
+  if (is_object($commerce_order)) {
+    $order_metadata = entity_metadata_wrapper('commerce_order', $commerce_order);
+    $line_items = $order_metadata->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_metadata = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_metadata->commerce_product->value();
+      if (is_object($product) && $product->type == 'class') {
+        $classes[] = $product;
+      }
+    }
+  }
+  return $classes;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_classes_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_classes_user_registrations' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_classes_user_registrations',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
+    'om_classes_user_registrations_simple' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_classes_user_registrations_simple',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
+  );
+}
+
+/**
+ * Helper to load plans and send to theme layer.
+ */
+function om_classes_user_registrations($user = false, $format = 'full') {
+  if (!$user) {
+    global $user;
+  }
+  $registrations = om_classes_get_registrations($user);
+  if ($format == 'full') {
+    return theme('om_classes_user_registrations', array('registrations' => $registrations));
+  }
+  else {
+    return theme('om_classes_user_registrations_simple', array('registrations' => $registrations));
+  }
+}
+
+function om_classes_get_registrations($user) {
+  $query = "SELECT * FROM registration WHERE user_uid = :uid ORDER BY created ASC";
+  $results = db_query($query, array(':uid' => $user->uid));
+  $registrations = array();
+  foreach ($results as $registration) {
+    $registrations[$registration->registration_id] = $registration; 
+  }
+  if (count($registrations > 0)) {
+    foreach($registrations as $key => $registration) {
+      $product = commerce_product_load($registration->entity_id);
+      $registrations[$key]->product = $product;
+    }
+
+    return $registrations;
+  }
+  else {
+    return false;
+  }
+}

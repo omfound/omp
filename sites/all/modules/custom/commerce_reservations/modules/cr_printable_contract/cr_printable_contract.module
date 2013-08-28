@@ -1,0 +1,160 @@
+<?php
+
+/**
+ * @file
+ * cr_printable_contract functions
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function cr_printable_contract_menu() {
+
+  $items['cr/contract/%'] = array(
+    'title' => 'Printable contract',
+    'description' => 'Takes an order object and returns a printable contract',
+    'page arguments' => array(2),
+    'page callback' => 'cr_printable_contract',
+    'access arguments' => array('administer commerce reservations'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+   // Standard Administration settings.
+  $items['admin/config/cr/contract'] = array(
+    'title' => 'Printable Contract',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cr_printable_contract_admin_settings'),
+    'access arguments' => array('administer commerce reservations'),
+    'description' => t('Configure settings for Printable Contract.'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+
+  return $items;
+}
+
+function cr_printable_contract_theme() {
+  $path = drupal_get_path('module', 'cr_printable_contract');
+
+  return array (
+    'cr_printable_contract' => array(
+      'template' => 'cr-printable-contract',
+      'path' => "$path/",
+      'variables' => array(
+        'order_date' => NULL,
+        'order' => NULL,
+        'hours' => NULL,
+        'username' => NULL,
+        'email' => NULL,
+        'phone' => NULL,
+        'items' => NULL, 
+      ), 
+    ),
+  );
+}
+
+/**
+ * Builds the admininstration settings form.
+ */
+function cr_printable_contract_admin_settings() {
+
+  $form['cr_contract_header'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Contract header'),
+    '#rows' => 10,
+    // TODO: this doesn't seem to work...
+    '#cols' => 5,
+    '#default_value' => variable_get('cr_contract_header', ''),
+    '#description' => t('Header portion of printable contract.  Allows HTML.'),
+  );
+
+  $form['cr_contract_boilerplate'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Contract boilerplate'),
+    '#rows' => 10,
+    // TODO: this doesn't seem to work...
+    '#cols' => 5,
+    '#default_value' => variable_get('cr_contract_boilerplate', ''),
+    '#description' => t('Legalese that makes the contract legally binding.'),
+  );
+
+  $form['cr_contract_footer'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Contract footer'),
+    '#rows' => 10,
+    // TODO: this doesn't seem to work...
+    '#cols' => 5,
+    '#default_value' => variable_get('cr_contract_footer', ''),
+    '#description' => t('Footer portion of printable contract. Normally includes signature lines. HTML allowed.'),
+  );
+
+  if (module_exists('token')) {
+    $form['token_help'] = array(
+      '#title' => t('Replacement patterns'),
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $form['token_help']['help'] = array(
+      '#value' => theme('token_help', 'node'),
+    );
+  }
+  
+  return system_settings_form($form);
+}
+
+function cr_printable_contract($order_id) {
+  $order = commerce_order_load($order_id);
+  setlocale(LC_MONETARY, 'en_US');
+
+  $user     = user_load($order->uid);
+  $username = $user->name;
+  $email    = $user->mail;
+
+  $contact_info = profile2_load_by_user($user, 'contact_info'); 
+  $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+  $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
+  $username = $first_name.' '.$last_name;
+  $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
+
+  $items = array();
+  foreach ($order->commerce_line_items['und'] as $key => $info) {
+    $items[$info['line_item_id']] = commerce_line_item_load($info['line_item_id']);
+    $items[$info['line_item_id']]->product = commerce_product_load($items[$info['line_item_id']]->commerce_product['und'][0]['product_id']);
+    if (!empty($items[$info['line_item_id']]->field_checked_out_accessories)) {
+      $clean_accessories = array();
+      foreach ($items[$info['line_item_id']]->field_checked_out_accessories[LANGUAGE_NONE] as $key => $term) {
+        $term = taxonomy_term_load($term['tid']);
+        $clean_accessories[] = $term->name;
+      }
+      $items[$info['line_item_id']]->clean_accessories = implode(', ', $clean_accessories);
+    }
+  }
+
+  //$timezone = $node->field_cr_date[0]['timezone'];
+  //$timezone_db = $node->field_cr_date[0]['timezone_db'];
+  //$start_date = date_make_date($node->field_cr_date[0]['value'], $timezone_db);
+  //$end_date = date_make_date($node->field_cr_date[0]['value2'], $timezone_db);
+  //date_timezone_set($start_date, timezone_open($timezone));
+  //date_timezone_set($end_date, timezone_open($timezone));
+
+  //$hours = round((intval(date_format($end_date,"U")) - intval(date_format($start_date,"U"))) / 3600, 2);
+
+  $order_date = $order->created;
+  $hours = 10; 
+  $html = theme('cr_printable_contract', array(
+    'order_date' => $order_date,
+    'order' => $order,
+    'hours' => $hours, 
+    'username' => $username, 
+    'email' => $email, 
+    'phone' => $phone,
+    'items' => $items,
+    )
+  );
+  
+  print $html;
+}
+// cr_printable_contract
+

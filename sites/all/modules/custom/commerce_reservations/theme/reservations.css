@@ -1,0 +1,901 @@
+.page-reservations #main-content-inner-2 div.region-content{
+	background: transparent;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	margin-top: 19px;
+}
+
+.not-logged-in #main-content-inner-2 div.region-content #block-views-calendar-product-view-block{
+	margin-left: 15%;
+}
+
+.page-reservations #main-content-inner-2.sidebar-left{
+	margin-left: 168px;
+	margin-right: 229px;
+}
+
+.page-reservations div#main-content.page div.node-content-inner{
+	padding: 0px 0px 0px 8px;
+}
+
+.page-reservations div#main-content.page table.h1-wrapper td{
+	height: 101px;
+}
+.page-reservations div.status {
+  background-color: #FFFFCC;
+}
+body.page-reservations #main-content #squeeze{
+	margin-right: 0px;
+	float: left;
+}
+
+.page-reservations #page-title{
+	font-family: "proxima-nova";
+	font-size: 40px;
+}
+.page-reservations #block-system-main{
+	margin-top: 40px;
+}
+
+.view-id-calendar_product_view #top-area{
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+.view-id-calendar_product_view .item{
+	height: 140px;
+}
+
+#reservations-header{
+	background-color: white;
+	height: 250px;
+  -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+#reservations-header #left-side{
+	float: left;
+	width: 245px;
+  border-right: 2px solid #dedede;
+  height: 220px;
+}
+
+#reservations-header #left-side .commerce-add-to-cart{
+	width: 200px;
+}
+
+#reservations-header #left-side .form-item-quantity label{
+	float: left;
+	padding-top: 4px;
+	margin-left: 35px;
+	margin-right: 10px;
+	font-weight: bold;
+}
+
+.view-footer .form-item-quantity {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.view-footer .form-item-quantity label {
+  float: left;
+  padding-right: 10px;
+}
+#reservations-header #left-side .form-item, .form-actions{
+  padding-bottom: 1px;
+}
+
+#reservations-header #left-side .form-item-quantity .form-select{
+	float: left;
+}
+
+#reservations-header #right-side{
+  float: left;
+  width: 700px;
+}
+
+#reservations-header #equipment_img{
+	margin: 25px;
+	box-shadow: 1px 1px 5px black;
+}
+
+#block-views-calendar-product-view-block .views-exposed-form label{
+	float: left;
+	margin-right: 5px;
+	line-height: 26px;
+}
+
+#block-views-calendar-product-view-block .views-exposed-form #edit-tid-wrapper{
+	/*width: 280px;*/
+  width: auto;
+  margin-left: 35px;
+}
+#block-views-calendar-product-view-block .views-exposed-form #edit-tid-wrapper .views-widget{
+  float:right;
+}
+
+#block-views-calendar-product-view-block .view-filters{
+	background-color: white;
+	height: 50px;
+}
+
+.view-id-reservation_calendar .res-title-number, 
+#block-views-calendar-product-view-block .res-title-number {
+	display: block;
+	width: 42px;
+	height: 30px;
+	background-color: #85B740;
+	color: white;
+	float: left;
+	text-align: center;
+	padding-top: 7px;
+	margin-right: 10px;
+}
+
+.view-id-reservation_calendar .res-title,
+#block-views-calendar-product-view-block .res-title {
+  padding-top: 7px;
+  padding-bottom: 7px;
+	height: 23px;
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #D0CBC3;
+}
+
+#block-views-calendar-product-view-block .item-area{
+	overflow-x: scroll;
+	white-space: nowrap;
+	height: 155px;
+	margin-bottom: 25px;
+	background-color: white;
+  width: 100%;
+}
+
+#block-views-calendar-product-view-block .item-area::-webkit-scrollbar{
+	-webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+}
+
+#block-views-calendar-product-view-block .item-area::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, .5);
+}
+
+#block-views-calendar-product-view-block .views-row{
+  display: inline-block;
+	width: 172px;
+	height: 135px;
+	margin-left: 10px;
+	background-color: white;
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+  border: 1px solid #c9c2ba;
+}
+
+#block-views-calendar-product-view-block .views-row:hover{
+	cursor: pointer;
+}
+
+#block-views-calendar-product-view-block .views-row.selected_product .title{
+	color: #912610;
+}
+
+#block-views-calendar-product-view-block .views-row .small-image{
+	margin: auto;
+  height: 110px;
+}
+
+#block-views-calendar-product-view-block .views-row .title{
+	color: #676767;
+	font-family: "proxima-nova";
+	text-align: center;
+	height: 32px;
+	border-top: 1px solid #d6d2ce;
+	width: 172px;
+}
+
+#block-views-calendar-product-view-block .views-row .details-button{
+  margin-top: 20px;
+  color: white;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  text-align: center;
+  height: 42px;
+  padding: 5px;
+	background: rgb(76,76,76); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(76,76,76,1) 0%, rgba(89,89,89,1) 12%, rgba(102,102,102,1) 25%, rgba(71,71,71,1) 39%, rgba(44,44,44,1) 50%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 60%, rgba(43,43,43,1) 76%, rgba(28,28,28,1) 91%, rgba(19,19,19,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(76,76,76,1)), color-stop(12%,rgba(89,89,89,1)), color-stop(25%,rgba(102,102,102,1)), color-stop(39%,rgba(71,71,71,1)), color-stop(50%,rgba(44,44,44,1)), color-stop(51%,rgba(0,0,0,1)), color-stop(60%,rgba(17,17,17,1)), color-stop(76%,rgba(43,43,43,1)), color-stop(91%,rgba(28,28,28,1)), color-stop(100%,rgba(19,19,19,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* IE10+ */
+  background: linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* W3C */
+}
+
+#block-views-calendar-product-view-block .views-row .details-button p{
+	padding: 0px;
+	text-shadow: none;
+}
+
+#block-views-calendar-product-view-block .views-row .details-button h3{
+	padding: 0px;
+	text-shadow: none;
+}
+
+#block-views-calendar-product-view-block #leftContent .large-image{
+	margin-left: 50px;
+  margin-right: 40px;
+  margin-top: 40px;
+}
+
+#block-views-calendar-product-view-block #leftContent .no-quantity{
+	margin-top: 53px;
+}
+
+#block-views-calendar-product-view-block #leftContent .preloader-active{
+	margin-top: 20px;
+}
+
+
+#block-views-calendar-product-view-block #rightContent{
+	margin-top: 25px;
+  padding-left: 20px;
+}
+
+#block-views-calendar-product-view-block #rightContent .title{
+	font-weight: bold;
+	font-size: larger;
+	font-family: 'proxima-nova';
+}
+
+#block-views-calendar-product-view-block #rightContent .body a{
+	color: #85b841;
+	line-height: 35px;
+	text-decoration: underline;
+	display: block;
+}
+
+#rightContent .price span.price-label, 
+#rightContent .certifications span.certifications-label {
+  font-weight: bold;  
+}
+#rightContent .price div, 
+#rightContent .certifications div {
+  display: inline;
+}
+
+.view-id-reservation_calendar{
+	position: absolute;
+}
+
+.view-id-reservation_calendar div.view-header{
+  width: 741px;
+	background-color: white;
+	color: #5d5d5f;
+	text-shadow: none;
+	height: 105px;
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+.view-id-reservation_calendar .view-content{
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+  line-height: normal;
+}
+
+.view-id-reservation_calendar div.view-header h3{
+	position: relative;
+  top: -30px;
+  color: white;
+  background-color: #3C2D36;
+  width: 530px;
+  margin: 0px;
+  left: -15px;
+  padding: 5px;
+  padding-left: 13px;
+}
+
+.view-id-reservation_calendar div.view-header p{
+	position: relative;
+  padding: 10px;
+}
+
+.view-id-reservation_calendar .fc-header-left,
+.view-id-reservation_calendar .fc-header-center,
+.view-id-reservation_calendar .fc-header-right{
+	background-color: #d0cbc3;
+	color: #3c2d36;
+	text-shadow: none;
+}
+
+.view-id-reservation_calendar .fc-widget-header{
+	background-color: white;
+  color: #d0cbc3;
+  text-shadow: none;
+}
+
+.view-id-reservation_calendar .fc-header-title{
+}
+
+.view-id-reservation_calendar .fc-header-center {
+  padding-top: 5px;
+}
+
+.view-id-reservation_calendar .fc-header-title h2{
+  margin-top: 10px;
+  margin-left: 45px;
+}
+
+.view-id-reservation_calendar .fc-button-effect span{
+	height: 0px;
+	width: 0px;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek,
+.view-id-reservation_calendar .fc-button-month,
+.view-id-reservation_calendar .fc-button-today{
+	height: 35px;
+	width: 70px;
+	border: none;
+}
+
+.view-id-reservation_calendar .fc-button-prev,
+.view-id-reservation_calendar .fc-button-next,
+.view-id-reservation_calendar .fc-button-prev .fc-button-inner,
+.view-id-reservation_calendar .fc-button-next .fc-button-inner{
+	height: 35px;
+	border: none;
+	background-color: transparent;
+}
+
+.view-id-reservation_calendar .fc-button-prev .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-next .fc-button-inner .fc-button-content{
+	line-height: 2.6em;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek .fc-button-inner,
+.view-id-reservation_calendar .fc-button-month .fc-button-inner,
+.view-id-reservation_calendar .fc-button-today .fc-button-inner{
+	height: 35px;
+	width: 70px;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-month .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-today .fc-button-inner .fc-button-content{
+  line-height: 2.7em;
+  padding-left: 18px;
+}
+
+.view-id-reservation_calendar .fc-state-active,
+.view-id-reservation_calendar .fc-state-hover{
+	border: none;
+}
+
+.view-id-reservation_calendar .fc-state-active .fc-button-inner,
+.view-id-reservation_calendar .fc-state-disabled .fc-button-inner{
+}
+
+.view-id-reservation_calendar .fc-header-space{
+	padding-left: 0px;
+}
+
+.view-id-reservation_calendar .fc-agenda-slots tr{
+	background-color: transparent;
+}
+
+.view-id-reservation_calendar .fc-agenda-days{
+	background-color: white;
+}
+
+.view-id-reservation_calendar .fc-select-helper{
+  display: none;
+  /**
+	background-color: #85B740;
+	opacity: 1 !important;
+  **/
+}
+
+.view-id-reservation_calendar .fc-event-time,
+.view-id-reservation_calendar .fc-event-title{
+	text-shadow: none;
+  font-size: 1.3em;
+}
+.view-id-reservation_calendar .fc-event-head {
+  padding-top: 5px;
+  padding-left: 5px;
+}
+.view-id-reservation_calendar .fc-event-content {
+  padding-left: 5px;
+}
+.view-id-reservation_calendar .fc-event-bg{
+	opacity: 0;
+}
+
+.view-id-reservation_calendar .closed-all-day{
+	height: 35px;
+}
+
+#pickedDates legend,
+.pickedDates legend
+{
+	background-color: #85B740;
+  padding: 3px 10px 3px 10px;
+}
+
+.page-reservations .add-to-cart .form-wrapper{
+  margin:0;
+  padding:0;
+}
+
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value-ampm,
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-ampm {
+  position:relative;
+  line-height: 1.2em;
+  padding-top: 10px;
+}
+
+.page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
+	display: none !important;
+}
+
+.page-reservations .add-to-cart span.fieldset-legend{
+	font-family: "proxima-nova";
+	font-size: 18px;
+	width: 230px;
+	background-color: #85B740;
+	color: #fff;
+  text-shadow: none;
+}
+
+.page-reservations .add-to-cart div.fieldset-wrapper{
+	background-color: white;
+}
+
+#pickedStartDate,
+#pickedEndDate{
+	background-color: #362a2e;
+	color: white;
+}
+
+.page-reservations .add-to-cart .form-submit{
+	background: #5e5f61;
+	color: white;
+	text-shadow: none;
+	border-radius: 0px;
+	float: right;
+	width: 175px;
+	padding: 5px 3px;
+	margin-right: 10px;
+  margin-top: 10px;
+	box-shadow: inset -2px -2px 1px black;
+	font-size: 12px;
+}
+
+.page-reservations .add-to-cart .form-item{
+  margin-left: 0;
+}
+
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-month,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-day,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-year,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-month,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-day,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-year{
+	margin-bottom: 10px;
+}
+
+.page-reservations .add-to-cart .date-padding{
+	padding: 0px;
+}
+
+.page-reservations .add-to-cart div.fieldset-wrapper{
+  padding: 8px 0 8px 8px;
+}
+
+.page-reservations .add-to-cart .form-type-date-select label{
+	font-weight: bold;
+}
+
+.qtip-tip{
+	opacity: 0;
+}
+
+            
+#block-views-calendar-product-view-block .views-exposed-form .views-exposed-widget{
+  padding-bottom: 15px;
+  padding-top: 10px;
+}
+
+#block-views-calendar-product-view-block .views-widget{
+	float: left;
+}
+
+#block-views-calendar-product-view-block .chzn-container-single .chzn-single {
+  background-image: none;
+  border-radius:3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border:1px solid #b0aea0;
+  box-shadow:none;
+}
+#block-views-calendar-product-view-block .chzn-container-single .chzn-single div b{
+  background:none;
+  text-shadow:none;
+}
+#block-views-calendar-product-view-block .chzn-container-single .chzn-single span {
+  margin-right:0;
+}
+#block-views-calendar-product-view-block .chzn-container .chzn-results li{
+  text-shadow:none;
+}
+#block-views-calendar-product-view-block .chzn-container-single .chzn-single span {
+  color:#3994cc;
+  text-shadow:none;
+}
+#block-views-calendar-product-view-block .chzn-search{
+  display:none;
+}
+#block-views-calendar-product-view-block .chzn-container .chzn-results {
+  padding:0;
+  margin:0;
+  max-height: none;
+  
+}
+#block-views-calendar-product-view-block .chzn-container .chzn-results .active-result{
+  border-bottom:1px solid #ded9cd;
+}
+#block-views-calendar-product-view-block .chzn-container .chzn-results .active-result:last-child{
+  border-bottom:none;
+}
+#block-views-calendar-product-view-block .chzn-container .chzn-results .highlighted{
+  
+}
+#block-views-calendar-product-view-block .chzn-container-single .chzn-drop{
+  border-radius:3px;
+  border-top: 1px solid #AAAAAA
+}
+#block-views-calendar-product-view-block .chzn-container-active .chzn-single-with-drop{
+  background:#fff;
+}
+
+#block-views-reservations_cart-block_1{
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+#block-views-reservations_cart-block_1 .block-title{
+	margin: 0px;
+	background-color: #3d2d37;
+	color: white;
+	text-shadow: none;
+	font-weight: 100;
+	font-family: "proxima-nova";
+	font-size: 15px;
+	padding: 5px;
+}
+
+#block-views-reservations_cart-block_1 thead tr{
+	height: 25px;
+}
+
+#block-views-reservations_cart-block_1 thead tr th{
+	background-color: #f0f5f1;
+	border: 1px solid #cac7c0;
+	color: #3d2d37;
+	text-shadow: none;
+	font-weight: normal;
+	padding-left: 5px;
+}
+
+#block-views-reservations_cart-block_1 tbody tr.odd td{
+	padding: 5px;
+	background-color: #d0ccc3;
+	border: 1px solid #cac7c0;
+}
+
+#block-views-reservations_cart-block_1 tbody tr.even td{
+	padding: 5px;
+	background-color: #f1f6f2;
+	border: 1px solid #cac7c0;
+}
+
+#block-views-reservations_cart-block_1 .views-table{
+	border-bottom: none;
+}
+
+#block-views-reservations_cart-block_1 .view-footer{
+	background-color: #f1f6f2;
+	color: #3d2d37;
+}
+
+#block-views-reservations_cart-block_1 ul.links{
+	display: block;
+	width: 225px;
+	height: 25px;
+	background-color: #D0CCC3;
+	padding-top: 10px;
+}
+
+#block-views-reservations_cart-block_1 .block-inner{
+	padding: 0px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary{
+	margin-bottom: 0px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary-view-cart{
+	display: block;
+	float: left;
+	margin-left: 90px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary-checkout{
+	display: block;
+	float: left;
+	margin-left: 30px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-quantity{
+	padding-top: 10px;
+	padding-left: 5px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-total{
+	height: 20px;
+	padding-top: 10px;
+	padding-right: 10px;
+}
+
+.view-id-reservations_cart td{
+  padding: 0px;
+}
+
+.no-certification-message, 
+.commercial-message{
+	min-height: 23px;
+  background-color: #912A1B;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 2px 10px grey;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  height: 25px;
+  text-shadow: none;
+  font-size: 1.2em;
+}
+.no-certification-message p, 
+.commercial-message p{
+}
+
+.no-certification-message a,
+.no-certification-message a:link,
+.no-certification-message a:visited,
+.commercial-message .commercial-button{
+	font-family:  Helvetica, Arial,sans-serif;
+	font-size: 12px;
+	color: #ffffff;
+	padding: 5px 7px;
+	background:#3395d2;
+	background:#3395d2;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	border: 1px solid #2e87be;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	position: relative;
+  z-index: 666;
+	float: right;
+  top: -40px;
+  margin-right: 40px;
+}
+.no-certification-message a:hover,
+.commercial-message .commercial-button:hover{
+	text-shadow: 0 0 10px #FFFFFF;
+	background:#acf4f9);
+	border: 1px solid #acf4f9;	
+	-webkit-transition: All 0.7s ease;
+	-moz-transition: All 0.7s ease;
+	-o-transition: All 0.7s ease;
+	-ms-transition: All 0.7s ease;
+	transition: All 0.7s ease;
+	cursor: pointer;
+}
+
+#views-form-commerce-cart-form-default .form-disabled .form-text{
+	border: none;
+	background-color: whiteSmoke;
+}
+
+.section-administer-reservations .reservation{
+  padding: 10px;
+  background: white;
+  border-left: 1px dashed grey;
+  border-right: 1px dashed grey;
+  border-bottom: 1px dashed blue;
+}
+.section-administer-reservations .views-row-first .reservation {
+  border-top: 1px dashed grey;
+}
+.section-administer-reservations .views-row-last .reservation {
+  border-bottom: 1px dashed grey;
+}
+
+.section-administer-reservations .reservation-overdue{
+	padding: 10px;
+  background: #FFF68F;
+  box-shadow: 2px 2px 10px grey;
+  margin-bottom: 15px;
+}
+
+.section-administer-reservations .reservation .reservation-dates,
+.section-administer-reservations #content .view-id-reservation_orders h3 {
+	color: #85B740;
+  font-weight: bold;
+  font-size: 21px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-top: 15px;
+}
+
+.section-administer-reservations .reservation-overdue .reservation-dates{
+	color: #912a1b;
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.section-administer-reservations .reservation .reservation-info-table,
+.section-administer-reservations .eservation-overdue .reservation-info-table{
+	margin-top: 10px;
+}
+
+.section-administer-reservations .cr_button { 
+  color: #fff; 
+  background-color: #85B740;
+  float: right;
+  font-size: 10px; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  padding: 15px 6px 6px 6px; 
+  cursor: pointer; font-family: Arial, Helvetica, sans-serif; 
+  line-height: 19px;
+  width: 60px;
+  text-align: center;
+  text-decoration: none;
+  margin-right: 10px;
+  box-shadow: inset -2px -2px 10px grey;
+  height: 30px;
+}
+
+.section-administer-reservations .cr_cancel_button {
+  background-color: #E64A4E;
+  width: 80px;
+  height: 40px;
+  padding-top: 5px;
+}
+
+.section-administer-reservations .cr_noshow_button {
+  background-color: #3394D1;
+}
+
+.section-administer-reservations .cr_button:hover {
+  background-position: 0 -50px; 
+}
+
+.section-administer-reservations #edit-line-item-id-wrapper {
+  display: none;
+}
+
+.section-administer-reservations .checkout-options {
+  width: 350px;
+}
+
+.checkout_status_bad{
+	color: #912a1b;
+	font-weight: bold;
+}
+
+.checkout_status_good {
+	color: #85B740;
+	font-weight: bold;
+}
+
+
+.page-cr-res-checkout #main-content-inner-2 div.region-content,
+.page-cr-res-checkin #main-content-inner-2 div.region-content,
+.page-cr-missing-accessories-confirm #main-content-inner-2 div.region-content{
+	background-color: white;
+	margin-top: 145px;
+	box-shadow: 2px 2px 10px grey;
+	padding: 10px;
+}
+
+.page-cr-missing-accessories-confirm #main-content-inner-2 div.region-content{
+	margin-top: 0px;
+}
+
+/*------------Reservations Usage Report----------*/
+
+.page-reservations-reports-usage-report #block-system-main .quarterly-report td{
+	text-align: center;
+	border: 1px solid grey;
+}
+
+.page-reservations-reports-usage-report #block-system-main .quarterly-report td.odd{
+	background-color: #e9e8e8;
+}
+
+/*-----------Line Item View---------*/
+#views-form-commerce-reservations-line-item-view-page .views-label, 
+.view-commerce-reservations-line-item-view .views-label {
+  font-weight: bold;
+}
+#views-form-commerce-reservations-line-item-view-page .views-field, 
+.view-commerce-reservations-line-item-view .views-field {
+  margin-bottom: 10px;
+}
+#views-form-commerce-reservations-line-item-view-page .form-actions, 
+.view-commerce-reservations-line-item-view .form-actions { 
+  display: none; 
+} 
+
+/** date picker **/
+.view-reservation-calendar div.view-content {
+  float: left;
+  width: 741px;
+}
+.view-reservation-calendar div.view-footer {
+  margin-left: 10px;
+  margin-top: -105px;
+  height: 535px;
+  float: left;
+  width: 208px;
+  background-color: #FFF;
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+  padding-bottom: 7px;
+}
+
+.view-reservation-calendar div.view-footer .date-details {
+  padding: 4px;
+}
+.view-reservation-calendar div.view-footer .date-status {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+}
+.view-reservation-calendar div.view-footer select option {
+  padding: 0px;
+  margin: 0px;
+}
+
+.not-front #content .view-reservation-calendar div.view-footer .date-status p {
+  margin: 0;
+  font-weight: bold;
+  background-color: #FFFFCC;
+  padding: 5px;
+  margin-top: 5px;
+}
+.pid {
+  display: none;
+}
+/** end date picker **/

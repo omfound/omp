@@ -1,0 +1,162 @@
+<?php
+
+/**
+ * Implements hook_om_dashboard_panes
+ * Masonry alternates sides left, right, left, right
+ */
+function om_dashboard_panes_om_dashboard_panes() {
+  return array(
+    'profile' => array(
+      'title' => t('Profile Information'),
+      'theme' => array(
+        'om_profile_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_profile_pane',
+          'file' => 'theme.inc'
+        )
+      )
+    ),
+    'classes' => array(
+      'title' => t('Upcoming Classes'),
+      'theme' => array(
+        'om_classes_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_classes_pane',
+          'file' => 'theme.inc'
+        )
+      )
+    ),
+    'membership' => array(
+      'title' => t('Current Membership Info'),
+      'theme' => array(
+        'om_membership_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_membership_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_membership',
+    ),
+    'class_registrations' => array(
+      'title' => t('Class Registrations'),
+      'theme' => array(
+        'om_class_registration_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_class_registration_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_classes',
+    ),
+    'reservations' => array(
+      'title' => t('Upcoming Reservations'),
+      'theme' => array(
+        'om_reservations_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_reservations_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'commerce_reservations'
+    ),
+    'switch_user' => array(
+      'title' => t('Switch User'),
+      'theme' => array(
+        'om_switch_user_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_switch_user_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'devel',
+      'access' => 'switch users'
+    ),
+    'shows' => array(
+      'title' => t('User Shows'),
+      'theme' => array(
+        'om_shows_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_shows_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_show'
+    ),
+  );
+}
+
+function om_dashboard_panes_upcoming_classes($num) {
+  // Include date repeat utiltiy
+  if (!function_exists('date_repeat_helper_fetch_all_date_formats') && module_exists('date')) {
+    require_once(DRUPAL_ROOT . '/sites/all/libraries/date-repeat-helper/date-repeat-helper.inc');
+  }
+  $classes = array();
+  $conditions = array(
+    'type' => 'class'
+  );
+  $products = commerce_product_load_multiple(array(), $conditions);
+  $count = 0;
+  foreach ($products AS $product_id => $product) {
+    $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
+    $final_date = date_repeat_helper_ordered_dates($date_info);
+    if (!empty($final_date[0])) {
+      $classes[] = array(
+        'title' => $product->title,
+        'product_id' => $product->product_id,
+        'date' => $final_date[0]['start']
+      );
+    }
+  }
+  $classes = array_slice($classes, 0, $num);
+  uasort($classes, '_om_dashboard_class_sort');
+  return $classes;
+}
+
+function _om_dashboard_class_sort($a, $b) {
+  if (is_array($a) && isset($a['date']) && is_array($b) && isset($b['date'])) {
+    if ($a['date'] > $b['date']) {
+      return -1;
+    }
+  }
+  return 1;
+}
+
+function om_dashboard_panes_get_users_shows($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $query = db_select('node', 'node');
+  $query->fields('node', array('nid', 'title', 'created'));
+  $query->condition('uid', $user->uid, '=');
+  $query->condition('type', 'om_show', '=');
+  $result = $query->execute();
+  return $result->fetchAll();
+}
+
+function om_dashboard_panes_get_users_reservations($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $result = db_query('SELECT line_item_id, cli.order_id FROM {commerce_line_item} cli
+    inner join {commerce_order} co on co.order_id=cli.order_id
+    WHERE cli.type = :type
+    and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
+  $reservations = array();
+  // trying to get timezone offset programmatically so it will adjust for Daylight savings
+  $offset = date("Z");
+  foreach($result as $row) {
+    $line_item = commerce_line_item_load($row->line_item_id);
+    $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+    $title = $product->title;
+    $start_date = strtotime($line_item->field_reservation_dates['und'][0]['value']) + $offset;
+    $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2']) + $offset;
+    // if this line item is past, then skip 
+    if($end_date < strtotime("now")) {
+      continue;
+    }
+    $reservations[$row->line_item_id]->title = $title;
+    $reservations[$row->line_item_id]->start_date = date("m/d/Y h:i A", $start_date);
+    $reservations[$row->line_item_id]->end_date = date("m/d/Y h:i A", $end_date);
+  }
+  return $reservations;
+}

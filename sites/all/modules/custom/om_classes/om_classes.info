@@ -1,0 +1,10 @@
+name = Open Media Classes
+description = Provides rules for classes.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "commerce"
+dependencies[] = "commerce_product"
+dependencies[] = "rules"
+dependencies[] = "commerce_registration"
+dependencies[] = "registration"
+version = 7.x-1.0

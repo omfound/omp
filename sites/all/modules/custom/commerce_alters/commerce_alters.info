@@ -1,0 +1,6 @@
+name = Commerce Alters 
+description = Collection of form alters for commerce process.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce
