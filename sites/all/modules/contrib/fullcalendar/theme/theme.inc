@@ -128,6 +128,7 @@ function theme_fullcalendar_event($variables) {
  *   A render array of events.
  */
 function fullcalendar_prepare_events($view, $rows, $options) {
+  dsm($rows);
   if (empty($rows)) {
     return;
   }
@@ -182,7 +183,6 @@ function fullcalendar_prepare_events($view, $rows, $options) {
 
         list(, , $bundle) = entity_extract_ids($entity->entity_type, $entity);
         $entity->bundle = $bundle;
-        dsm($row);
         $entity->eid = $row->{$alias};
         $entity->options = $view->style_options;
 
