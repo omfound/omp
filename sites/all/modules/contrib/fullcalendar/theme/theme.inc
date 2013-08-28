@@ -181,7 +181,6 @@ function fullcalendar_prepare_events($view, $rows, $options) {
         $entity->entity_type = $row->_field_data[$alias]['entity_type'];
 
         list(, , $bundle) = entity_extract_ids($entity->entity_type, $entity);
-        dsm($row->{$alias});
         $entity->bundle = $bundle;
         $entity->eid = $row->{$alias};
         $entity->options = $view->style_options;
