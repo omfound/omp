@@ -229,6 +229,7 @@ Drupal.cr = Drupal.cr || {};
     //start addReservations function
     addReservations:function(data) {
       $('a.fullcalendar-event-details', data).each(function(index){
+        console.log($(this));
         reservedEvent = new Drupal.cr.reservedTime('Reserved', $(this).attr('start'), $(this).attr('end'), $(this));
         dom_id: this.dom_id;
         $(".fullcalendar").fullCalendar('renderEvent', reservedEvent, true);
