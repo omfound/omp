@@ -35,12 +35,10 @@ Drupal.cr = Drupal.cr || {};
 
         //Add existing reservations for this item to calendar
         //console.log('running..');
-        //Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
+        Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
         //Render the current selection based on date picker values
         $(".fullcalendar").ajaxStop(function() {
-          console.log('running..test');
-          Drupal.behaviors.product_filter.addDateSelectionToCalendar();
           Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
           $(this).unbind("ajaxStop");
         });
