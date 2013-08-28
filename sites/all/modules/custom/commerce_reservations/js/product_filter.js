@@ -330,7 +330,7 @@ Drupal.cr = Drupal.cr || {};
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
     if (Drupal.settings.commerce_reservations.staff) {
-      this.url = 'administer_reservations?field_last_name_value=&field_reservation_dates_value%5Bvalue%5D%5Bdate%5D=&field_reservation_dates_value2%5Bvalue%5D%5Bdate%5D=&line_item_id='+$reservation.attr('eid');
+      this.url = 'administer_reservations?field_last_name_value=&field_reservation_dates_value%5Bvalue%5D%5Bdate%5D=&field_reservation_dates_value2%5Bvalue%5D%5Bdate%5D=&field_checkout_status_value%5B%5D=Awaiting+Checkout&field_checkout_status_value%5B%5D=No+Show&field_checkout_status_value%5B%5D=Checked+Out&field_checkout_status_value%5B%5D=Checked+In&field_checkout_status_value%5B%5D=Overdue&line_item_id='+$reservation.attr('eid');
     }else{
       this.url = $reservation.attr('href');
     }
