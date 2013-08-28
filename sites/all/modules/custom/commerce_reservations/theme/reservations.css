@@ -800,7 +800,7 @@ body.page-reservations #main-content #squeeze{
   background-position: 0 -50px; 
 }
 
-.section-administer-reservation #edit-line-item-id-wrapper {
+.section-administer-reservations #edit-line-item-id-wrapper {
   display: none;
 }
 
