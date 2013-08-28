@@ -5,7 +5,6 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-
       //basepath to site
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
@@ -22,6 +21,7 @@ Drupal.cr = Drupal.cr || {};
       Drupal.behaviors.product_filter.hideCalendar();
 
       //The user has selected a reservable item
+      $(item).unbind();
       $(item).mousedown(function() {
         //show the calendar
         Drupal.behaviors.product_filter.showCalendar();
@@ -34,11 +34,12 @@ Drupal.cr = Drupal.cr || {};
         var pid = $(this).find('.pid .field-content').text(); 
 
         //Add existing reservations for this item to calendar
+        //console.log('running..');
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
         //Render the current selection based on date picker values
         $(".fullcalendar").ajaxStop(function() {
-          Drupal.behaviors.product_filter.addDateSelectionToCalendar();
+          Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
           $(this).unbind("ajaxStop");
         });
 
@@ -192,6 +193,7 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer input#edit-submit').hide();
 
       //load item reservations
+      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
