@@ -128,7 +128,6 @@ function theme_fullcalendar_event($variables) {
  *   A render array of events.
  */
 function fullcalendar_prepare_events($view, $rows, $options) {
-  dsm($rows);
   if (empty($rows)) {
     return;
   }
