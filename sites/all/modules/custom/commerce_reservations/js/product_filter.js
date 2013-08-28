@@ -22,8 +22,8 @@ Drupal.cr = Drupal.cr || {};
       Drupal.behaviors.product_filter.hideCalendar();
 
       //The user has selected a reservable item
-      //$(item).mousedown(function() {
-        $(item).one("mousedown", function() {
+      $(item).unbind();
+      $(item).mousedown(function() {
         //show the calendar
         Drupal.behaviors.product_filter.showCalendar();
 
