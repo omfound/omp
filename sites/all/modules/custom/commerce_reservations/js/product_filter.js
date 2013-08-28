@@ -326,9 +326,14 @@ Drupal.cr = Drupal.cr || {};
     this.textColor = '#fff';
     this.field = $reservation.attr('field'); 
     this.index = $reservation.attr('index');
+
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
-    this.url = 'administer_reservations?field_last_name_value=&field_reservation_dates_value%5Bvalue%5D%5Bdate%5D=&field_reservation_dates_value2%5Bvalue%5D%5Bdate%5D=&line_item_id='+$reservation.attr('eid');
+    if (Drupal.settings.commerce_reservations.staff) {
+      this.url = 'administer_reservations?field_last_name_value=&field_reservation_dates_value%5Bvalue%5D%5Bdate%5D=&field_reservation_dates_value2%5Bvalue%5D%5Bdate%5D=&line_item_id='+$reservation.attr('eid');
+    }else{
+      this.url = $reservation.attr('href');
+    }
     this.className = 'overlap';
     this.editable = true;
     this.color = '#912711';

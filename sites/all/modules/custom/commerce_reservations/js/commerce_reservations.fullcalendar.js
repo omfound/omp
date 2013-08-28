@@ -9,7 +9,15 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     var options = {}; 
     options.disableResizing = true;
     options.eventClick = function(event){
-      return false;
+      if (!Drupal.settings.commerce_reservations.staff) {
+        return false;
+      }else{
+        if (event.url) {
+          window.open(event.url);
+          return false;
+        }
+        return false;
+      }
     }  
     options.eventMouseover = function(event){
     }
