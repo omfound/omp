@@ -39,7 +39,7 @@ Drupal.cr = Drupal.cr || {};
 
         //Render the current selection based on date picker values
         $(".fullcalendar").ajaxStop(function() {
-          console.log('running..');
+          console.log('running..test');
           Drupal.behaviors.product_filter.addDateSelectionToCalendar();
           Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
           $(this).unbind("ajaxStop");
