@@ -1554,11 +1554,12 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
   $product_options = array();
-  //$product_options[] = $line_item->line_item_label;
+  $product_options[] = $line_item->line_item_label;
+  /**
   foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
     $product_sku = $product_wrapper->sku->value();
     $product_options[] = $product_sku;
-  }
+  }**/
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
@@ -1611,7 +1612,9 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  /**
   if ($line_item->line_item_label != $product_wrapper->sku->value()) {
+    //BRIAN HERE
     dsm('CHOSE DIFFERENT SKU!');
     $form_state['redirect'] = 'administer_reservations';
     return;
@@ -1619,7 +1622,7 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
     $form_state['redirect'] = 'administer_reservations';
     dsm('CHOSE SAME SKU!');
     return;
-  } 
+  }**/
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');
