@@ -340,7 +340,7 @@
   background: transparent url(../images/ideal-star.jpg) 100% 37% no-repeat;
 }
 
-#show-right h3 {
+.not-front #show-right h3 {
   font-weight: bold; 
 }
 
