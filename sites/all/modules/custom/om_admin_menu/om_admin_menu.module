@@ -259,6 +259,8 @@ function om_admin_menu_paid_memberships() {
     'Berkeley Based Non-Profit',
     'Berkeley ASUC Group / Club',
     'Non-Resident Group, Business or Non-Profit',
+    'Equipment Access Membership',
+    'Equipment and Training Access Membership',
 	);
 
   return $paid_memberships;
