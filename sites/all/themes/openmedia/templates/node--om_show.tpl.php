@@ -69,6 +69,9 @@
   <?php if (isset($node_right)): ?>
     <div id="show-right">
       <?php print $node_right; ?>
+      <?php if (!empty($upcoming_airings)): ?>
+        <?php print $upcoming_airings; ?>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 </article><!-- /.node -->
