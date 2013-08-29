@@ -437,20 +437,20 @@ function om_show_video_image($node) {
 
 function om_show_upcoming_airings($node) {
   $output = array();
-  $query = db_query('field_data_field_om_show_id', 'show');
-  $query->join('field_data_field_om_airing_channel', 'channel', 'show.entity_id=channel.entity_id');
-  $query->join('field_data_field_om_airing_dates', 'dates', 'show.entity_id=dates.entity_id');
+  $query = db_select('field_data_field_om_show_id', 'node');
+  $query->join('field_data_field_om_airing_channel', 'channel', 'node.entity_id=channel.entity_id');
+  $query->join('field_data_field_om_airing_dates', 'dates', 'node.entity_id=dates.entity_id');
   $query->fields('dates', array('field_om_airing_dates_value'));
   $query->fields('channel', array('field_om_airing_channel_tid'));
-  $query->condition('show.field_om_show_id_value', $node->nid, '=');
+  $query->condition('node.field_om_show_id_value', $node->nid, '=');
   $query->condition('dates.field_om_airing_dates_value', time(), '>=');
-  $query->orderBy('dates.field_om_airing_dates_value', 'DESC');
+  $query->orderBy('dates.field_om_airing_dates_value', 'ASC');
   $query->range(0, 4);
   $resource = $query->execute();
   while ($row = $resource->fetchAssoc()) {
     $term = taxonomy_term_load($row['field_om_airing_channel_tid']);
     if (is_object($term)) {
-      $output[] = array('airing' => $row['field_om_airing_dates_value'], 'channel' => $term->name);
+      $output[] = array('airing' => date('n/d g:ia', $row['field_om_airing_dates_value']), 'channel' => $term->name);
     }
   }
   return $output; 

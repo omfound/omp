@@ -291,6 +291,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings', array('show' => $variables['node']));
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
