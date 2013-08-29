@@ -29,7 +29,11 @@ function internet_archive_derivative_thumbnails($derivatives) {
     }
   }
 
-  return $thumbnails;
+  if (!empty($thumbnails)) {
+    return $thumbnails;
+  }else{
+    return false;
+  }
 }
 
 function internet_archive_item_from_file_url($url) {
