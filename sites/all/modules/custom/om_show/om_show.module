@@ -450,7 +450,7 @@ function om_show_upcoming_airings($node) {
   while ($row = $resource->fetchAssoc()) {
     $term = taxonomy_term_load($row['field_om_airing_channel_tid']);
     if (is_object($term)) {
-      $output[] = array('airing' => date('Y-m-d g:ia', $row['field_om_airing_dates_value']), 'channel' => $term->name);
+      $output[] = array('airing' => date('m/d g:ia', $row['field_om_airing_dates_value']), 'channel' => $term->name);
     }
   }
   return $output; 
