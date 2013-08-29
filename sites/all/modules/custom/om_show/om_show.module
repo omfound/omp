@@ -444,7 +444,7 @@ function om_show_upcoming_airings($node) {
   $query->fields('channel', array('field_om_airing_channel_tid'));
   $query->condition('node.field_om_show_id_value', $node->nid, '=');
   $query->condition('dates.field_om_airing_dates_value', time(), '>=');
-  $query->orderBy('dates.field_om_airing_dates_value', 'DESC');
+  $query->orderBy('dates.field_om_airing_dates_value', 'ASC');
   $query->range(0, 4);
   $resource = $query->execute();
   while ($row = $resource->fetchAssoc()) {
