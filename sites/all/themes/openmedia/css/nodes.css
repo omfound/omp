@@ -210,8 +210,8 @@
 
 .node-type-om-show .node #show-right {
   width: 140px;
-  float: right;
-  padding: 0 10px 0 0;
+  float: left;
+  padding-left: 20px;
 }
 
 .node-type-om-show .node .field-name-field-om-show-video {
