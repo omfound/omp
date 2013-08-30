@@ -1612,6 +1612,17 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+  /**
+  if ($line_item->line_item_label != $product_wrapper->sku->value()) {
+    //BRIAN HERE
+    dsm('CHOSE DIFFERENT SKU!');
+    $form_state['redirect'] = 'administer_reservations';
+    return;
+  }else{
+    $form_state['redirect'] = 'administer_reservations';
+    dsm('CHOSE SAME SKU!');
+    return;
+  }**/
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');

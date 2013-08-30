@@ -139,7 +139,9 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
   $variables['title'] = t('Shows');
-  $shows = om_dashboard_panes_get_users_shows();
+  if (function_exists('om_show_get_users_shows')) {
+    $shows = om_show_get_users_shows();
+  }
   $options = array('attributes' => array('class' => array('blue-button')));
   if (!empty($shows)) {
     $show_output = '<table><tr><th>Title</th><th>Date Created</th></tr>';
@@ -156,4 +158,13 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     $link = l('Make One Now', 'node/add/om_show', $options);
     $variables['message'] = t('You haven\'t created any shows yet. !now', array('!now' => $link));
   }
+}
+
+/**
+ * Implements hook_preprocess_hook
+ */
+function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
+  global $user;
+  $variables['title'] = t('Upcoming Airings');
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
 }

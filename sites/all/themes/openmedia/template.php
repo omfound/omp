@@ -240,7 +240,9 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['video_info'] = $video_info;
 
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
-  $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);
+  if (drupal_valid_path('node/'.$variables['node']->nid.'/edit')) {
+    $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid.'/edit', $options);
+  }
   // Show details area (name and picture are already included in vars)
   $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
   $stats = statistics_get($variables['node']->nid);
@@ -291,6 +293,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings', array('show' => $variables['node']));
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
