@@ -173,4 +173,5 @@ function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
   global $user;
   $variables['title'] = t('Upcoming Airings');
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
+  $variables['all_airings'] = l('See all airings', 'upcoming-airings');
 }
