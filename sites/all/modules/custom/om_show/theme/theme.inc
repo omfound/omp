@@ -21,7 +21,7 @@ function om_show_preprocess_om_show_upcoming_airings_all(&$variables) {
         $alter = array('max_length' => 75, 'ellipsis' => TRUE);
         $title = views_trim_text($alter, $airing['title']);
         $variables['airings'][] = array(
-          'show' => l($title, 'node/' . $airing['nid'], array('attributes' => array('class' => array('blue-button')))),
+          'show' => l($title, 'node/' . $airing['nid']),
           'airing' => $airing['airing'],
           'channel' => $airing['channel']
         );
