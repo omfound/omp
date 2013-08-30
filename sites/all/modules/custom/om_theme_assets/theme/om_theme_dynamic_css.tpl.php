@@ -136,22 +136,22 @@
 <?php endif; ?>
 <?php if (!empty($show_page_left_width)): ?>
   .not-logged-in .node-om-show #show-left {
-    width: <?php print $show_page_left_width; ?>;
+    width: <?php print $show_page_left_width; ?>px;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_right_width)): ?>
   .not-logged-in .node-om-show #show-right {
-    width: <?php print $show_page_right_width; ?>;
+    width: <?php print $show_page_right_width; ?>px;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_left_width_user)): ?>
   .logged-in .node-om-show #show-left {
-    width: <?php print $show_page_left_width_user; ?>;
+    width: <?php print $show_page_left_width_user; ?>px;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_right_width_user)): ?>
   .logged-in .node-om-show #show-right {
-    width: <?php print $show_page_right_width_user; ?>;
+    width: <?php print $show_page_right_width_user; ?>px;
   }
 <?php endif; ?>
 
