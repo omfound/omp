@@ -145,7 +145,12 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
   if (!empty($shows)) {
     $show_output = '<table><tr><th>Title</th><th>Date Created</th></tr>';
+    $count = 0;
     foreach ($shows AS $show) {
+      if ($count > 9) {
+        continue;
+      }
+      $count ++;
       $created = date('D n/j/y', $show->created);
       $title = l($show->title, 'node/' . $show->nid);
       $show_output .= '<tr><td>' . $created . '</td><td>' . $title . '</td></tr>';
@@ -153,6 +158,7 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     $show_output .= "</table>";
     $variables['show_output'] = $show_output;
     $variables['add_link'] = l('Add a New Show', 'node/add/om_show', $options);
+    $variables['all_shows'] = l('My Shows', 'user/shows', $options);
   }
   else {
     $link = l('Make One Now', 'node/add/om_show', $options);
