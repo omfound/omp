@@ -5,7 +5,6 @@ class newestEpisodeInProjectSchedulingRule extends timeslotSchedulingRule {
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
-    // These two lines specific to Local Show Rule.
     $query->join('field_data_field_om_show_project', 'project', 'project.entity_id=n.nid');
     $query->condition('field_om_show_project_nid', $timeslot->field_om_timeslot_project[$timeslot->language][0]['nid'], '=');
     // Join to broadcast uri to ensure show has neccesary media.
@@ -14,9 +13,11 @@ class newestEpisodeInProjectSchedulingRule extends timeslotSchedulingRule {
     // Form a list ranked by field_om_show_episode_number
     $shows = array();
     while ($result = $resource->fetchAssoc()) {
+      dsm($result);
       $episode_query = db_select('field_data_field_om_show_episode_number', 'episode');
       $episode_query->fields('episode', array('entity_id', 'field_om_show_episode_number_value'));
       $episode_query->condition('entity_id', $result['nid'], '=');
+      dpq($episode_query);
       $resource_episode = $episode_query->execute();
       $episodes = $resource_episode->fetchAll();
       if (!empty($episodes)) {
