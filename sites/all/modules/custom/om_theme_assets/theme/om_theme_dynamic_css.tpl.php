@@ -134,3 +134,14 @@
     background-color: <?php print $om_dashboard_pane_bg; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($show_page_left_width)): ?>
+  .node-type-om-show .node #show-left {
+    width: <?php print $show_page_left_width; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($show_page_right_width)): ?>
+  .node-type-om-show .node #show-right {
+    width: <?php print $show_page_right_width; ?>;
+  }
+<?php endif; ?>
+

@@ -444,6 +444,30 @@ function om_theme_assets_admin_form() {
     '#type' => 'textfield',
     '#default_value' => variable_get('email', ''),
   );
+
+  /**
+  * Show Pages 
+  */
+  $form['show_page'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Show Pages'),
+    '#suffix' => '</h2>'
+  );
+  $form['show_page_help'] = array(
+    '#markup' => t('Show / video page settings')
+  );
+  $form['show_page_fieldset'] = $fieldset;
+  $form['show_page_fieldset']['show_page_left_width'] = array(
+    '#title' => t('Left column width'),
+    '#type' => 'textfield',
+    '#default_value' => 550,
+  );
+  $form['show_page_fieldset']['show_page_right_width'] = array(
+    '#title' => t('Right column width'),
+    '#type' => 'textfield',
+    '#default_value' => 140,
+  );
+
   }
   $form['#submit'][] = 'om_theme_assets_admin_form_submit';
   return system_settings_form($form);
