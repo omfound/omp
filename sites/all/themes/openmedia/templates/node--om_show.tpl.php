@@ -48,11 +48,7 @@
         </div>
       </div>
     <?php endif; ?>
-    <div class="divider">
-      <div class="inner">
-        <?php print render($content['comments']); ?>
-      </div>
-    </div>
+    <?php print render($content['comments']); ?>
   </div>
   <?php if (isset($node_right)): ?>
     <div id="show-right">
