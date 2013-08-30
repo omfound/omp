@@ -696,6 +696,5 @@ function openmedia_order_payment_info($order_id) {
 }
 
 function openmedia_preprocess_views_view_field(&$variables) {
-  dsm('here we go');
-  //dsm($variables);
+  dsm($variables['row']);
 }
