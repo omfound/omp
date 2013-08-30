@@ -322,5 +322,5 @@ function alternative_rating_bayesian_value($nid) {
 }
 
 function alternative_rating_cron() {
-	//alternative_rating_populate();
+	alternative_rating_populate();
 }
