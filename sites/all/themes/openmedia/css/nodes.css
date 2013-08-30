@@ -238,7 +238,7 @@
 }
 .node-type-om-show #show-left .edit-link-wrapper {
   text-align: right;
-  float: left;
+  float: right;
   width: 50px;
 }
 
@@ -317,17 +317,14 @@
   padding-top: 20px;
 }
 
-.node-type-om-show #voting-msg {
-  width: 375px;
-  float: left;
-  padding: 20px;
-}
-
 #voting-widget {
   width: 135px;
   float: left;
+  margin-top: 20px;
 }
-
+#voting-msg {
+  margin-bottom: 20px;
+}
 #bayesian-score .score {
   float: left;
   width: auto;
