@@ -697,7 +697,13 @@ function openmedia_order_payment_info($order_id) {
 
 function openmedia_preprocess_views_view_field(&$variables) {
   if ($variables['view']->name == 'upcoming_airings') {
-    dsm($variables['field']->field_alias);
-    //dsm($variables['output']);
+    if (is_numeric($variables['output'])) { 
+      $query = db_select('n', 'node');
+      $query->condition('nid', $variables['output']);
+      $query->fields('n', array('nid', 'title'));
+      $resource = $query->execute();
+      $result = $resource->fetchAssoc();
+      $variables['output'] = l($result['title'], 'node/' . $result['nid']);
+    }
   }
 }
