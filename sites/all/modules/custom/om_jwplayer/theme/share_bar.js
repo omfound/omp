@@ -67,7 +67,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     // Set width and height.
     player = this.shareBarModel.get('player');
     this.shareBarModel.set('interfaceWidth', player.config.width);
-    this.shareBarModel.set('interfaceHeight', 68);
+    this.shareBarModel.set('interfaceHeight', 78);
     this.shareBarModel.set('width', 420);
     this.shareBarModel.set('height', player.config.height);
     this.shareBarModel.set('embedUrlStem', $(this.el).attr('data-share-link'));
