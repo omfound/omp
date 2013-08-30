@@ -697,6 +697,7 @@ function openmedia_order_payment_info($order_id) {
 
 function openmedia_preprocess_views_view_field(&$variables) {
   if ($variables['view']->name == 'upcoming_airings') {
+    dsm(array_keys($variables['field']));
     if (is_numeric($variables['output'])) { 
       $query = db_select('node', 'n');
       $query->condition('nid', $variables['output']);
