@@ -159,3 +159,12 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     $variables['message'] = t('You haven\'t created any shows yet. !now', array('!now' => $link));
   }
 }
+
+/**
+ * Implements hook_preprocess_hook
+ */
+function om_dashboard_panes_preprocess_upcoming_airings_pane(&$variables) {
+  global $user;
+  $variables['title'] = t('Upcoming Airings');
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
+}
