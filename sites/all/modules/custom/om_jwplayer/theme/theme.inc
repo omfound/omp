@@ -6,7 +6,7 @@
 function om_jwplayer_preprocess_om_show_share_bar(&$variables) {
   global $base_url;
   drupal_add_css(drupal_get_path('module', 'om_jwplayer') . '/theme/share_bar.css');
-  drupal_add_library('om_clickable_agenda', 'backbone');
+  drupal_add_library('om_jwplayer', 'backbone');
   $options = array('type' => 'file', 'group' => JS_DEFAULT);
   drupal_add_js(drupal_get_path('module', 'om_jwplayer') . '/theme/share_bar.js');
   $variables['share_url'] = $base_url.'/node/' . arg(1) . '/share';
