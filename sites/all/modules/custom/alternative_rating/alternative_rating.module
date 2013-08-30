@@ -198,11 +198,11 @@ function alternative_rating_category($nid) {
   return $category_tid;  
 }
 
-function alternative_rating_insert($nid, $score) {
+function alternative_rating_insert($nid, $bayesian) {
   $result = db_insert('alternative_rating')
     ->fields(array(
       'nid' => $nid,
-      'score' => $score,
+      'bayesian' => $bayesian,
     ))
     ->execute();
 }
@@ -230,7 +230,7 @@ function alternative_rating_populate() {
     $category_average = $categories[$category_tid];
 
 		/** We don't think we need category average?
-    $score = ($count / ($count + $minimum_votes)) * $average +
+    $bayesian = ($count / ($count + $minimum_votes)) * $average +
       ($minimum_votes / ($count + $minimum_votes)) * $category_average;
 		**/
 		
@@ -242,20 +242,20 @@ function alternative_rating_populate() {
 		//m = minimum votes required
 		//C = the mean vote across dimension
     
-    $score = ($count / ($count + $minimum_votes)) * $average +
+    $bayesian = ($count / ($count + $minimum_votes)) * $average +
       ($minimum_votes / ($count + $minimum_votes)) * $total_average;
 
 		//0 + 1
-		//if($score == 0) {
+		//if($bayesian == 0) {
 		  //print 'nid: '.$nid.'<br />';
 			//print 'average: '.$average.'<br />';
 			//print 'count: '.$count.'<br />';
 			//print 'category_nid: '.$category_nid.'<br />';
 			//print 'category_average: '.$category_average.'<br />';
-			//print 'score: '.$score.'<br />';
+			//print 'bayesian: '.$bayesian.'<br />';
 			//print '<br />';
 		//}
-    alternative_rating_insert($nid, $score);
+    alternative_rating_insert($nid, $bayesian);
   }
 }
 
@@ -294,7 +294,7 @@ function alternative_rating_views_data() {
 		),
 	);
 	
-  $data['alternative_rating']['score'] = array(
+  $data['alternative_rating']['bayesian'] = array(
     'title' => t('Bayesian Score'),
     'help' => t('Bayesian estimate for nodes with voting api data available.'), // The help that appears on the UI,
     // Information for displaying the nid
@@ -315,10 +315,10 @@ function alternative_rating_views_data() {
 
 function alternative_rating_bayesian_value($nid) {
   $query = '
-    SELECT score FROM {alternative_rating}
+    SELECT bayesian FROM {alternative_rating}
     WHERE nid = :nid';
-  $score = db_query($query, array(':nid' => $nid))->fetchField();
-  return $score;
+  $bayesian = db_query($query, array(':nid' => $nid))->fetchField();
+  return $bayesian;
 }
 
 function alternative_rating_cron() {
