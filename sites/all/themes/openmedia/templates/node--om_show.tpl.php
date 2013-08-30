@@ -4,9 +4,11 @@
       <?php print $video; ?>
     <?php endif; ?>
     <h2><?php print $node->title; ?></h2>
+    <?php if (!empty($edit_link)) { ?>
     <div class="edit-link-wrapper">
       <?php print $edit_link; ?>
     </div>
+    <?php } ?>
     <div id="show-details" class="clearfix">
       <?php if (isset($picture_rendered)): ?>
         <div id="show-details-left">
