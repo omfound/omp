@@ -352,17 +352,17 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
 function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
   if (user_is_logged_in()) {
     if (empty($width)) {
-      $width = variable_get('om_show_video_width', 550); 
-    }
-    if (empty($height)) {
-      $height = variable_get('om_show_video_height', 338); 
-    }
-  }else{
-    if (empty($width)) {
       $width = variable_get('om_show_video_width_user', 550); 
     }
     if (empty($height)) {
       $height = variable_get('om_show_video_height_user', 338); 
+    }
+  }else{
+    if (empty($width)) {
+      $width = variable_get('om_show_video_width', 550); 
+    }
+    if (empty($height)) {
+      $height = variable_get('om_show_video_height', 338); 
     }
   }
   if (!empty($url)) {
