@@ -48,20 +48,6 @@
         </div>
       </div>
     <?php endif; ?>
-    <div id="voting" class="clearfix">
-      <div id="voting-msg">
-        <?php print $vote_message; ?>
-      </div>
-        <div id="voting-widget">
-          <?php if (!empty($vote_summary)) { ?>
-            <?php print $vote_summary; ?>
-          <?php } ?>
-          <?php print $vote_widget; ?>
-          <?php if (!empty($bayesian_score)): ?>
-            <?php print $bayesian_score; ?>
-          <?php endif; ?>
-        </div>
-    </div>
     <div class="divider">
       <div class="inner">
         <?php print render($content['comments']); ?>
