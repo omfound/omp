@@ -349,7 +349,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
-function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
+function om_show_render_video_url($url, $width = null, $height = null, $disable_playlist = false) {
   if (user_is_logged_in()) {
     if (empty($width)) {
       $width = variable_get('om_show_video_width_user', 550); 
