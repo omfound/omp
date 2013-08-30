@@ -10,7 +10,6 @@ class leastAiredShowInProjectSchedulingRule extends timeslotSchedulingRule {
     // Join to broadcast uri to ensure show has neccesary media.
     $query->join('field_data_field_om_show_broadcast_file', 'broadcast_file', 'broadcast_file.entity_id=n.nid');
     $result = $query->execute();
-    dpq($query);
     $shows_by_airings = array();
     while($nids = $result->fetchAssoc()) {
       $airing_count_query = db_select('field_data_field_om_show_aired', 'aired');

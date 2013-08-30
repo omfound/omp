@@ -12,13 +12,10 @@ class newestEpisodeInProjectSchedulingRule extends timeslotSchedulingRule {
     $resource = $query->execute();
     // Form a list ranked by field_om_show_episode_number
     $shows = array();
-    dpq($query);
     while ($result = $resource->fetchAssoc()) {
-      dsm($result);
       $episode_query = db_select('field_data_field_om_show_episode_number', 'episode');
       $episode_query->fields('episode', array('entity_id', 'field_om_show_episode_number_value'));
       $episode_query->condition('entity_id', $result['nid'], '=');
-      dpq($episode_query);
       $resource_episode = $episode_query->execute();
       $episodes = $resource_episode->fetchAll();
       if (!empty($episodes)) {
