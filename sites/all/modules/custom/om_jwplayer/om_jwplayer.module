@@ -54,4 +54,6 @@ function om_jwplayer_library() {
       ),
     )
   );
+
+  return $libraries;
 }
