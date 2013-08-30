@@ -5,4 +5,6 @@
       <tr><td><?php print $airing['show']; ?></td>td><?php print $airing['airing']; ?></td>td><?php print $airing['channel']; ?></td></tr>
     <?php endforeach; ?>
   </table>
+<?php else: ?>
+  <p>No upcoming airings.</p>
 <?php endif; ?>
