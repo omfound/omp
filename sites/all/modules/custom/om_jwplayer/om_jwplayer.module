@@ -54,6 +54,23 @@ function om_jwplayer_library() {
       ),
     )
   );
+  $libraries['backbone'] = array(
+    'title' => 'Backbone JS',
+    'website' => 'http://backbonejs.org',
+    'version' => '0.9.10',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('backbone') . '/backbone-min.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    ),
+    'dependencies' => array(
+     array('om_clickable_agenda', 'json2'),
+      array('om_clickable_agenda', 'underscore'),
+    ),
+  );
 
   return $libraries;
 }
