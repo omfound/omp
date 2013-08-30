@@ -457,6 +457,7 @@ function om_theme_assets_admin_form() {
     '#markup' => t('Show / video page settings')
   );
   $form['show_page_fieldset'] = $fieldset;
+  $form['show_page_fieldset']['#title'] = t('Show / Video Page Settings');
   $form['show_page_fieldset']['show_page_left_width'] = array(
     '#title' => t('Left column width'),
     '#type' => 'textfield',
