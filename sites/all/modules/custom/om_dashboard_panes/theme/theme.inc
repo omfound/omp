@@ -139,7 +139,9 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
   $variables['title'] = t('Shows');
-  $shows = om_dashboard_panes_get_users_shows();
+  if (function_exists('om_show_get_users_shows')) {
+    $shows = om_show_get_users_shows();
+  }
   $options = array('attributes' => array('class' => array('blue-button')));
   if (!empty($shows)) {
     $show_output = '<table><tr><th>Title</th><th>Date Created</th></tr>';
