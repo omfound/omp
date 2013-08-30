@@ -135,12 +135,12 @@
   }
 <?php endif; ?>
 <?php if (!empty($show_page_left_width)): ?>
-  .not-logged-in .node-om-show .node #show-left {
+  .not-logged-in .node-om-show #show-left {
     width: <?php print $show_page_left_width; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_right_width)): ?>
-  .not-logged-in .node-om-show .node #show-right {
+  .not-logged-in .node-om-show #show-right {
     width: <?php print $show_page_right_width; ?>;
   }
 <?php endif; ?>
