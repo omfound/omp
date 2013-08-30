@@ -211,7 +211,7 @@
 .node-type-om-show .node #show-right {
   width: 140px;
   float: right;
-  padding: 20px;
+  padding: 0 10px 0 0;
 }
 
 .node-type-om-show .node .field-name-field-om-show-video {
