@@ -1,4 +1,4 @@
-<div id="membership-pane" class="pane">
+<div id="show-pane" class="pane">
   <h3 class="pane-title"><?php print $title; ?></h3>
   <div class="inner">
      <?php if (isset($message)): ?>
@@ -10,6 +10,7 @@
      <?php if (isset($add_link)): ?>
        <div class="divider">
          <?php print $add_link; ?>
+         <?php print $all_shows; ?>
        </div>
      <?php endif; ?>
   </div>
