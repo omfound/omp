@@ -71,6 +71,20 @@
   <?php if (isset($node_right)): ?>
     <div id="show-right">
       <?php print $node_right; ?>
+    <div id="voting" class="clearfix">
+      <div id="voting-msg">
+        <?php print $vote_message; ?>
+      </div>
+        <div id="voting-widget">
+          <?php if (!empty($vote_summary)) { ?>
+            <?php print $vote_summary; ?>
+          <?php } ?>
+          <?php print $vote_widget; ?>
+          <?php if (!empty($bayesian_score)): ?>
+            <?php print $bayesian_score; ?>
+          <?php endif; ?>
+        </div>
+    </div>
       <?php if (!empty($upcoming_airings)): ?>
         <?php print $upcoming_airings; ?>
       <?php endif; ?>
