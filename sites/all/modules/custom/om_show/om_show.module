@@ -69,6 +69,26 @@ function om_show_admin_form($form, &$form_state) {
       'community' => t('Community Media'),
     ),
   );
+  $form['om_show_video_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default video player width for anonymous users'),
+    '#default_value' => variable_get('om_show_video_width', 550),
+  );
+  $form['om_show_video_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default video player height for anonymous users'),
+    '#default_value' => variable_get('om_show_video_width', 338),
+  );
+  $form['om_show_video_width_user'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default video player width for logged in users'),
+    '#default_value' => variable_get('om_show_video_width_user', 550),
+  );
+  $form['om_show_video_height_user'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default video player height for logged in users'),
+    '#default_value' => variable_get('om_show_video_width_user', 338),
+  );
   return system_settings_form($form);
 }
 
@@ -330,6 +350,21 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
 }
 
 function om_show_render_video_url($url, $width = 550, $height = 338, $disable_playlist = false) {
+  if (user_is_logged_in()) {
+    if (empty($width)) {
+      $width = variable_get('om_show_video_width', 550); 
+    }
+    if (empty($height)) {
+      $height = variable_get('om_show_video_height', 338); 
+    }
+  }else{
+    if (empty($width)) {
+      $width = variable_get('om_show_video_width_user', 550); 
+    }
+    if (empty($height)) {
+      $height = variable_get('om_show_video_height_user', 338); 
+    }
+  }
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
