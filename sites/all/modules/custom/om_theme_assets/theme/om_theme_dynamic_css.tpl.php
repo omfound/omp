@@ -145,12 +145,12 @@
   }
 <?php endif; ?>
 <?php if (!empty($show_page_left_width_user)): ?>
-  .logged-in .node-om-show .node #show-left {
+  .logged-in .node-om-show #show-left {
     width: <?php print $show_page_left_width_user; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_right_width_user)): ?>
-  .logged-in .node-om-show .node #show-right {
+  .logged-in .node-om-show #show-right {
     width: <?php print $show_page_right_width_user; ?>;
   }
 <?php endif; ?>
