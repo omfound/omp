@@ -4,9 +4,11 @@
       <?php print $video; ?>
     <?php endif; ?>
     <h2><?php print $node->title; ?></h2>
+    <?php if (!empty($edit_link)) { ?>
     <div class="edit-link-wrapper">
       <?php print $edit_link; ?>
     </div>
+    <?php } ?>
     <div id="show-details" class="clearfix">
       <?php if (isset($picture_rendered)): ?>
         <div id="show-details-left">
@@ -46,10 +48,12 @@
         </div>
       </div>
     <?php endif; ?>
-    <div id="voting" class="clearfix">
-      <div id="voting-msg">
-        <?php print $vote_message; ?>
-      </div>
+    <?php print render($content['comments']); ?>
+  </div>
+  <?php if (isset($node_right)): ?>
+    <div id="show-right">
+      <?php print $node_right; ?>
+      <div id="voting" class="clearfix">
         <div id="voting-widget">
           <?php if (!empty($vote_summary)) { ?>
             <?php print $vote_summary; ?>
@@ -59,16 +63,9 @@
             <?php print $bayesian_score; ?>
           <?php endif; ?>
         </div>
-    </div>
-    <div class="divider">
-      <div class="inner">
-        <?php print render($content['comments']); ?>
+      <div id="voting-msg">
+        <?php print $vote_message; ?>
       </div>
-    </div>
-  </div>
-  <?php if (isset($node_right)): ?>
-    <div id="show-right">
-      <?php print $node_right; ?>
       <?php if (!empty($upcoming_airings)): ?>
         <?php print $upcoming_airings; ?>
       <?php endif; ?>
