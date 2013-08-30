@@ -42,13 +42,14 @@
   margin: 5px 0 5px 0;
 }
 
+/**
 .no-sidebars #content .embed-tray .embeds {
   width: 416px;
   position: relative;
   border: none;
   margin: 0;
   padding: 0;
-}
+}**/
 
 .embed-tray input {
   font-family: georgia;
