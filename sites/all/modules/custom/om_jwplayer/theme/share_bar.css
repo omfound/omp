@@ -14,6 +14,11 @@
   position: relative;
 }
 
+#content .embed-tray .section {
+  float: left;
+  padding: 0 15px 10px 11px;
+  margin: 0 15px 0 0;
+}
 .no-sidebars #content .embed-tray .section {
   float: left;
   padding: 0 15px 0 11px;
@@ -24,6 +29,7 @@
 
 .embed-tray form {
   margin-top: 5px;
+  padding-bottom: 30px;
 }
 
 .start-end {
