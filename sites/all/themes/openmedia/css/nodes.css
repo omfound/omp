@@ -320,8 +320,11 @@
 #voting-widget {
   width: 135px;
   float: left;
+  margin-top: 20px;
 }
-
+#voting-message {
+  margin-bottom: 20px;
+}
 #bayesian-score .score {
   float: left;
   width: auto;
