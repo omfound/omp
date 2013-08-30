@@ -67,8 +67,7 @@ function om_jwplayer_library() {
       ),
     ),
     'dependencies' => array(
-     array('om_clickable_agenda', 'json2'),
-      array('om_clickable_agenda', 'underscore'),
+      array('om_jwplayer', 'underscore'),
     ),
   );
 
