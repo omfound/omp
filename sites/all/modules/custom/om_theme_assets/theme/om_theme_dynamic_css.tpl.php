@@ -135,13 +135,23 @@
   }
 <?php endif; ?>
 <?php if (!empty($show_page_left_width)): ?>
-  .node-type-om-show .node #show-left {
+  .not-logged-in .node-om-show .node #show-left {
     width: <?php print $show_page_left_width; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($show_page_right_width)): ?>
-  .node-type-om-show .node #show-right {
+  .not-logged-in .node-om-show .node #show-right {
     width: <?php print $show_page_right_width; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($show_page_left_width_user)): ?>
+  .logged-in .node-om-show .node #show-left {
+    width: <?php print $show_page_left_width_user; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($show_page_right_width_user)): ?>
+  .logged-in .node-om-show .node #show-right {
+    width: <?php print $show_page_right_width_user; ?>;
   }
 <?php endif; ?>
 

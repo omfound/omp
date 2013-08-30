@@ -459,14 +459,24 @@ function om_theme_assets_admin_form() {
   $form['show_page_fieldset'] = $fieldset;
   $form['show_page_fieldset']['#title'] = t('Show / Video Page Settings');
   $form['show_page_fieldset']['show_page_left_width'] = array(
-    '#title' => t('Left column width'),
+    '#title' => t('Anonymous left column width'),
     '#type' => 'textfield',
-    '#default_value' => 550,
+    '#default_value' => variable_get('show_page_left_width', 550),
   );
   $form['show_page_fieldset']['show_page_right_width'] = array(
-    '#title' => t('Right column width'),
+    '#title' => t('Anonymous right column width'),
     '#type' => 'textfield',
-    '#default_value' => 140,
+    '#default_value' => variable_get('show_page_right_width', 140),
+  );
+  $form['show_page_fieldset']['show_page_left_width_user'] = array(
+    '#title' => t('Authenticated left column width'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('show_page_left_width_user',550),
+  );
+  $form['show_page_fieldset']['show_page_right_width_user'] = array(
+    '#title' => t('Authenticated right column width'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('show_page_right_width_user', 140),
   );
 
   }
