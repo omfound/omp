@@ -696,5 +696,8 @@ function openmedia_order_payment_info($order_id) {
 }
 
 function openmedia_preprocess_views_view_field(&$variables) {
-  dsm($variables['output']);
+  if ($variables['view']->name == 'upcoming_airings') {
+    dsm($variables['field']);
+    dsm($variables['output']);
+  }
 }
