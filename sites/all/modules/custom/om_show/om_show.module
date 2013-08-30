@@ -36,11 +36,17 @@ function om_show_permission() {
 function om_show_theme($existing, $type, $theme, $path) {
   return array(
     'om_show_upcoming_airings' => array(
-       'template' => 'om_show_upcoming_airings',
-       'variables' => array('show' => FALSE),
-       'path' => $path . '/theme',
-       'file' => 'theme.inc'
-     )
+      'template' => 'om_show_upcoming_airings',
+      'variables' => array('show' => FALSE),
+      'path' => $path . '/theme',
+      'file' => 'theme.inc'
+    ),
+    'om_show_upcoming_airings_all' => array(
+      'template' => 'om_show_upcoming_airings_all',
+      'variables' => array('user' => FALSE),
+      'path' => $path . '/theme',
+      'file' => 'theme.inc'
+    )
   );
 }
 
@@ -467,6 +473,9 @@ function om_show_youtube_info($node) {
   return false;
 }
 
+/**
+ * Utility function to select a video image for show nodes from the available options.
+ */
 function om_show_video_image($node) {
   if (!empty($node->field_show_thumbnail)) {
     $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
@@ -485,24 +494,68 @@ function om_show_video_image($node) {
   return $img_path;
 }
 
-function om_show_upcoming_airings($node) {
+/**
+ * Get all of a users shows
+ */
+function om_show_get_users_shows($user = NULL) {
+  if (empty($user)) {
+    global $user;
+  }
+  $query = db_select('node', 'node');
+  $query->fields('node', array('nid', 'title', 'created'));
+  $query->condition('uid', $user->uid, '=');
+  $query->condition('type', 'om_show', '=');
+  $result = $query->execute();
+  return $result->fetchAll();
+}
+
+/** 
+ * Utility function to get a show node's upcoming airings.
+ */
+function om_show_upcoming_airings($node, $limit = 4) {
   $output = array();
-  $query = db_select('field_data_field_om_show_id', 'node');
-  $query->join('field_data_field_om_airing_channel', 'channel', 'node.entity_id=channel.entity_id');
-  $query->join('field_data_field_om_airing_dates', 'dates', 'node.entity_id=dates.entity_id');
+  $query = db_select('field_data_field_om_show_id', 'airing_node');
+  $query->join('field_data_field_om_airing_channel', 'channel', 'airing_node.entity_id=channel.entity_id');
+  $query->join('field_data_field_om_airing_dates', 'dates', 'airing_node.entity_id=dates.entity_id');
+  $query->join('node', 'n', 'airing_node.field_om_show_id_value=n.nid');
   $query->fields('dates', array('field_om_airing_dates_value'));
   $query->fields('channel', array('field_om_airing_channel_tid'));
-  $query->condition('node.field_om_show_id_value', $node->nid, '=');
+  $query->fields('n', array('nid', 'title'));
+  $query->condition('airing_node.field_om_show_id_value', $node->nid, '=');
   $query->condition('dates.field_om_airing_dates_value', time(), '>=');
   $query->orderBy('dates.field_om_airing_dates_value', 'ASC');
-  $query->range(0, 4);
+  $query->range(0, $limit);
   $resource = $query->execute();
   while ($row = $resource->fetchAssoc()) {
     $term = taxonomy_term_load($row['field_om_airing_channel_tid']);
     if (is_object($term)) {
-      $output[] = array('airing' => date('n/d g:ia', $row['field_om_airing_dates_value']), 'channel' => $term->name);
+      $output[] = array(
+        'nid' => $row['nid'],
+        'title' => $row['title'], 
+        'airing' => date('n/d g:ia', $row['field_om_airing_dates_value']), 
+        'channel' => $term->name
+      );
     }
   }
   return $output; 
 }
 
+/**
+ * Get all of a user's upcoming airings.
+ */
+function om_show_upcoming_airings_user($user = FALSE) {
+  $output = array();
+  $shows = om_show_get_users_shows($user);
+  foreach($shows AS $show) {
+    $airings = om_show_upcoming_airings($show);
+    foreach ($airings as $airing) {
+      $key = strtotime($airing['airing']);
+      if (!empty($output[$key])) {
+        $output[$key] = array();
+      }
+      $output[$key][] = $airing;
+    } 
+  }
+  ksort($output);
+  return($output);
+}

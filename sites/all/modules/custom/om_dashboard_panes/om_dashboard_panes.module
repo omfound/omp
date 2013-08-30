@@ -82,6 +82,17 @@ function om_dashboard_panes_om_dashboard_panes() {
       ),
       'dependency' => 'om_show'
     ),
+    'om_upcoming_airings' => array(
+      'title' => t('Upcoming Airings'),
+      'theme' => array(
+        'om_upcoming_airings_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_upcoming_airings_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_broadcast_schedule'
+    ),
   );
 }
 
@@ -119,18 +130,6 @@ function _om_dashboard_class_sort($a, $b) {
     }
   }
   return 1;
-}
-
-function om_dashboard_panes_get_users_shows($user = NULL) {
-  if (empty($user)) {
-    global $user;
-  }
-  $query = db_select('node', 'node');
-  $query->fields('node', array('nid', 'title', 'created'));
-  $query->condition('uid', $user->uid, '=');
-  $query->condition('type', 'om_show', '=');
-  $result = $query->execute();
-  return $result->fetchAll();
 }
 
 function om_dashboard_panes_get_users_reservations($user = NULL) {
