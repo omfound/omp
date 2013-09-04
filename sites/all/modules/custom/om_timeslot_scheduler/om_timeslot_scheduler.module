@@ -415,6 +415,7 @@ function _om_timeslot_scheduler_implement_rules(&$context) {
       );
     }
   }
+  dsm($run['timeslots']);
   $context['results']['run'] = $run;
 }
 
