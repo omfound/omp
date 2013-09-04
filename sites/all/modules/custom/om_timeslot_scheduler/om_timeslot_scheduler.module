@@ -443,7 +443,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
     $timeslot->gaps = $gap_set;
     $run['timeslots'][$key] = $timeslot;
   }
-  dsm($run);
 }
 
 /**
@@ -881,7 +880,6 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   array_walk($normal, '_om_timeslot_scheduler_merge_array', array(&$airings));
   array_walk($intruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
   array_walk($extruding, '_om_timeslot_scheduler_merge_array', array(&$airings));
-  dsm($airings);
   $gaps = array();
   $gaps[] = array(
     'start' => $start,
