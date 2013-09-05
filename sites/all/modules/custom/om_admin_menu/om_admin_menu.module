@@ -178,7 +178,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'admin/structure/taxonomy/product_categories',
   );
   $content['menu']['reservations']['locations'] = array(
-    '#title' => t('Manage Equipment Locations'),
+    '#title' => t('Manage Locations'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/equipment_locations',
   );
