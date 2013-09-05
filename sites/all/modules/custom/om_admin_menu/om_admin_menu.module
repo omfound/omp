@@ -136,6 +136,12 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'administer_reservations',
   );
+  $content['menu']['reservations']['view_reservations'] = array(
+    '#title' = t('Manage Reservations'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'administer_reservations',
+    '#weight' => -55,
+  ); 
   $content['menu']['reservations']['view_products'] = array(
     '#title' => t('View Products'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
@@ -192,10 +198,16 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/cr/settings',
   );
-  $content['menu']['reservations']['configuration'] = array(
+  $content['menu']['reservations']['inventory'] = array(
     '#title' => t('View Current Inventory'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/om/reports/inventory',
+   );
+  $content['menu']['reservations']['global_config'] = array(
+    '#title' => t('Admin Global Config'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce/cr/settings',
+    '#weight' => 50
    );
 
   //Schedule Administrators
