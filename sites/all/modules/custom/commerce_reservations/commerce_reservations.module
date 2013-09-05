@@ -431,7 +431,6 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            dsm(commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3));
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
@@ -469,6 +468,9 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
   $output = '';
   if ($value2){
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
+    if ($date == '2013-09-11') {
+      dsm($array2);
+    }
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
     //GIANT hack need to find problem later 5/22 10:00 pm to 8/21 2:00pm
