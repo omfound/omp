@@ -182,11 +182,6 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/equipment_locations',
   );
-  $content['menu']['reservations']['productterms'] = array(
-    '#title' => t('Manage Product Terms'),
-    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
-    '#href' => 'admin/structure/taxonomy/reservable_product',
-  );
   $content['menu']['reservations']['accessories'] = array(
     '#title' => t('Manage Accessories'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
