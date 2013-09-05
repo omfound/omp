@@ -148,9 +148,9 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   $content['menu']['reservations']['view_product_displays'] = array(
     '#title' => t('View Product Displays'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
-    '#href' => 'commerce-reservations-displays?keys=&field_crp_category_tid=All&type=reservable_product_display',
+    '#href' => 'admin/commerce-reservations-displays',
     '#options' => array(
-      'query' => array('field_crp_category_tid' => 'All', 'type' => 'reservable_product_display'),
+      'query' => array('keys' => '', 'field_crp_category_tid' => 'All', 'type' => 'reservable_product_display'),
     ),
     '#weight' => -47,
   );
