@@ -107,6 +107,10 @@ body.page-reservations #main-content #squeeze{
 	line-height: 26px;
 }
 
+#block-views-calendar-product-view-block .view-empty {
+  padding-left: 10px;
+}
+
 #block-views-calendar-product-view-block .views-exposed-form .views-exposed-widgets {
 	/*width: 280px;*/
   width: auto;
