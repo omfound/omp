@@ -468,7 +468,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
   $output = '';
   if ($value2){
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
-    if ($date == '2013-09-11') {
+    if ($date == '2013-09-12') {
       dsm($index);
       dsm($array2);
     }
