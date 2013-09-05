@@ -137,13 +137,22 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'administer_reservations',
   );
   $content['menu']['reservations']['view_products'] = array(
-    '#title' => t('View Reservation Products'),
+    '#title' => t('View Products'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/products/list',
     '#options' => array(
       'query' => array('sku' => '', 'type' => 'reservable_product'),
     ),
     '#weight' => -50,
+  );
+  $content['menu']['reservations']['view_product_displays'] = array(
+    '#title' => t('View Product Displays'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'commerce-reservations-displays?keys=&field_crp_category_tid=All&type=reservable_product_display',
+    '#options' => array(
+      'query' => array('field_crp_category_tid' => 'All', 'type' => 'reservable_product_display'),
+    ),
+    '#weight' => -47,
   );
   $content['menu']['reservations']['add_product'] = array(
     '#title' => t('Add Reservation Product'),
