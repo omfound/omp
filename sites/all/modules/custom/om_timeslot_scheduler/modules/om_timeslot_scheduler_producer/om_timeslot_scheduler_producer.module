@@ -406,6 +406,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
           // Check for adult content
           if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
             $can_schedule = om_timeslot_scheduler_producer_show_can_be_scheduled($show, $gap['start']);
+            dsm($show);
             if ($can_schedule == TRUE) {
               $list_items[] = array(
                 '#prefix' => '<li>',
