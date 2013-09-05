@@ -137,7 +137,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'administer_reservations',
   );
   $content['menu']['reservations']['view_reservations'] = array(
-    '#title' = t('Manage Reservations'),
+    '#title' => t('Manage Reservations'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'administer_reservations',
     '#weight' => -55,
