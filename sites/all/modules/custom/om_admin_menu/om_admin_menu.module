@@ -140,9 +140,9 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('View Reservation Products'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/products/list',
-      '#options' => array(
-        'query' => array('sku' => '', 'type' => 'reservable_product'),
-      ),
+    '#options' => array(
+      'query' => array('sku' => '', 'type' => 'reservable_product'),
+    ),
     '#weight' => -50,
   );
   $content['menu']['reservations']['add_product'] = array(
@@ -155,7 +155,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Add Reservation Display'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'node/add/reservable-product-display',
-    '#weight' => -40',
+    '#weight' => -40,
   );
   $content['menu']['reservations']['certifications'] = array(
     '#title' => t('Manage Certifications'),
