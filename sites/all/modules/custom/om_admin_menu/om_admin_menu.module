@@ -166,11 +166,12 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'node/add/reservable-product-display',
     '#weight' => -40,
   );
+  /**
   $content['menu']['reservations']['certifications'] = array(
     '#title' => t('Manage Certifications'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/certifications',
-  );
+  );**/
   $content['menu']['reservations']['categories'] = array(
     '#title' => t('Manage Categories'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
