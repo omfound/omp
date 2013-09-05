@@ -16,20 +16,20 @@
 
 #content .embed-tray .section {
   float: left;
-  padding: 0 15px 10px 11px;
+  padding: 0 0 15px 11px;
   margin: 0 15px 0 0;
 }
+/**
 .no-sidebars #content .embed-tray .section {
   float: left;
   padding: 0 15px 0 11px;
   margin: 0 15px 0 0;
   width: 185px;
   border-right: solid 1px white;
-}
+}**/
 
 .embed-tray form {
   margin-top: 5px;
-  padding-bottom: 30px;
 }
 
 .start-end {
@@ -42,13 +42,14 @@
   margin: 5px 0 5px 0;
 }
 
+/**
 .no-sidebars #content .embed-tray .embeds {
   width: 416px;
   position: relative;
   border: none;
   margin: 0;
   padding: 0;
-}
+}**/
 
 .embed-tray input {
   font-family: georgia;
