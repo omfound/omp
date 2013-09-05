@@ -155,13 +155,13 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#weight' => -47,
   );
   $content['menu']['reservations']['add_product'] = array(
-    '#title' => t('Add Reservation Product'),
+    '#title' => t('Add Product'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/products/add/reservable-product',
     '#weight' => -45,
   );
   $content['menu']['reservations']['view_product_displays'] = array(
-    '#title' => t('Add Reservation Display'),
+    '#title' => t('Add Product Display'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'node/add/reservable-product-display',
     '#weight' => -40,
