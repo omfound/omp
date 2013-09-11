@@ -8,6 +8,8 @@ function om_timeslot_scheduler_preprocess_timeslot_node_form(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variables) {
+  dsm('theme values');
+  dsm($variables);
   $dates = date('Y-m-d G:i', $variables['run_info']->start);
   $dates .= date(' \a\n\d Y-m-d G:i', $variables['run_info']->end);
   $voc = om_playback_servers_get_channel_vocabulary();
