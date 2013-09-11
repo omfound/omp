@@ -33,10 +33,14 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
         dsm('in here doing stuff');
       }
       $item = node_load($schedule_item->show_id);
+      if ($schedule_item->show_id == 44998) {
+        dsm('loaded node');
+        dsm($item);
+      }
       if (empty($item->start)) {
-        if ($item->nid == '45780') {
-          dsm('saving item..');
-        }
+      if ($schedule_item->show_id == 44998) {
+        dsm('saving item to '.$timeslot->nid);
+      }
         $item->start = $schedule_item->start;
         $item->end = $schedule_item->end;
         $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
