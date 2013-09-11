@@ -606,15 +606,15 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   // START Section 3.2: Schedule Show lt 30m
                   // Otherwise shchedule shows < 30 min
                   else {
+                      if ($timeslot->nid == 29516) {
+                        dsm('show that could pass');
+                      }
                     if ($show_completion + $spacer > $mini_gap['end']) {
                       continue;
                     }
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
-                      if ($timeslot->nid == 29516) {
-                        dsm('show that could pass');
-                      }
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
                       //brian
                       //if ($timeslot->nid == 29516) {
