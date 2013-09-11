@@ -553,6 +553,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               $used = 0;
               if ($timeslot->nid == 29516) {
                 dsm($gap_parts);
+                dsm('process start: '.$process_start);
+                dsm('spacer: '.$spacer);
+                dsm('gap end: '.$gap['end']);
               }
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
                 $loop_start = time();
@@ -561,6 +564,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+                dsm('show completion: '.$show_completion);
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
