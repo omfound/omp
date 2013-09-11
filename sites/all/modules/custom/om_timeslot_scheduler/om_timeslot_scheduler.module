@@ -615,6 +615,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
+                      //brian
+                      if ($timeslot->nid == 29516) {
+                        dsm('passed adult hours check');
+                      }
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
