@@ -630,6 +630,11 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
+                        if ($timeslot->nid == 29516) {
+                          dsm('SCHEDULED: ');
+                          dsm($show);
+                          dsm('INCREASING PROCESS START');
+                        }
                         $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
                         $used = $rank;
                         unset($timeslot->om_timeslot_showlist[$rank]);
