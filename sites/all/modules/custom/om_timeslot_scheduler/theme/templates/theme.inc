@@ -32,6 +32,7 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
       if ($schedule_item->show_id == 44998) {
         dsm('in here doing stuff');
       }
+      unset($item);
       $item = node_load($schedule_item->show_id);
       if ($schedule_item->show_id == 44998) {
         dsm('loaded node');
