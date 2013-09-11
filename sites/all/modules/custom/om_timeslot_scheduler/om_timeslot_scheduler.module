@@ -565,6 +565,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
                 }
+                if ($timeslot->nid == 29516) {
+                  dsm('process start: '.$process_start);
+                }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
                 if ($timeslot->nid == 29516) {
                   dsm('initial show completion: '.$show_completion);
