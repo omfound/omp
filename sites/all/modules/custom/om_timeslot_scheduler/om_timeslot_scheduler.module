@@ -674,6 +674,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
       }// end foreach date range in timeslots
     }// end if this ts has a showlist
     $run['timeslots'][$key] = $timeslot;
+    dsm($run);
   }// end foreach timeslot
 }
 
