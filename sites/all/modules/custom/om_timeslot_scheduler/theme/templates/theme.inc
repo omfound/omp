@@ -8,8 +8,6 @@ function om_timeslot_scheduler_preprocess_timeslot_node_form(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variables) {
-  dsm('before process');
-  dsm($variables);
   $dates = date('Y-m-d G:i', $variables['run_info']->start);
   $dates .= date(' \a\n\d Y-m-d G:i', $variables['run_info']->end);
   $voc = om_playback_servers_get_channel_vocabulary();
@@ -29,18 +27,8 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
         $variables['schedule_results'][$schedule_item->timeslot_id]['timeslot'] = $timeslot;
         $variables['schedule_results'][$schedule_item->timeslot_id]['shows'] = array();
       }
-      if ($schedule_item->show_id == 44998) {
-        dsm('in here doing stuff');
-      }
       $item = node_load($schedule_item->show_id, null, true);
-      if ($schedule_item->show_id == 44998) {
-        dsm('loaded node');
-        dsm($item);
-      }
       if (empty($item->start)) {
-      if ($schedule_item->show_id == 44998) {
-        dsm('saving item to '.$timeslot->nid);
-      }
         $item->start = $schedule_item->start;
         $item->end = $schedule_item->end;
         $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
@@ -56,8 +44,6 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
     $return = l('Return', 'om_timeslot_scheduler');
     $variables['message'] = t('No scheduling results were generated for !dates on channel !channel. !return to scheduling.', array('!dates' => $dates, '!channel' => $channel, '!return' => $return));
   }
-  dsm('after process');
-  dsm($variables);
 }
 
 function _om_timeslot_scheduler_node_form() {
