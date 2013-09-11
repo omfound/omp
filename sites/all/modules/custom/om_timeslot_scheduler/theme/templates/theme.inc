@@ -8,7 +8,7 @@ function om_timeslot_scheduler_preprocess_timeslot_node_form(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variables) {
-  dsm('theme values');
+  dsm('before process');
   dsm($variables);
   $dates = date('Y-m-d G:i', $variables['run_info']->start);
   $dates .= date(' \a\n\d Y-m-d G:i', $variables['run_info']->end);
@@ -46,6 +46,8 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
     $return = l('Return', 'om_timeslot_scheduler');
     $variables['message'] = t('No scheduling results were generated for !dates on channel !channel. !return to scheduling.', array('!dates' => $dates, '!channel' => $channel, '!return' => $return));
   }
+  dsm('after process');
+  dsm($variables);
 }
 
 function _om_timeslot_scheduler_node_form() {
