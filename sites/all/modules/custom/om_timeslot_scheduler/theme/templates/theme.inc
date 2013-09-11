@@ -30,8 +30,8 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
         $variables['schedule_results'][$schedule_item->timeslot_id]['shows'] = array();
       }
       $item = node_load($schedule_item->show_id);
-      if ($item->nid == '45780') {
-        dsm('loading item..');
+      if (!$item) {
+        dsm($schedule_item->show_id);
       }
       if (empty($item->start)) {
         if ($item->nid == '45780') {
