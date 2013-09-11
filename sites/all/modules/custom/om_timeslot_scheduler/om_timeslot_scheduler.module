@@ -566,6 +566,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+                dsm('initial show completion: '.$show_completion);
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   if ($timeslot->nid == 29516) {
