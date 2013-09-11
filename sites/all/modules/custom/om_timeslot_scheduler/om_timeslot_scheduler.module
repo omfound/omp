@@ -555,9 +555,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 dsm($gap_parts);
               }
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
-                if ($timeslot->nid == 29516) {
-                  dsm($all_shows[$show_nid]);
-                }
                 $loop_start = time();
                 $show = $all_shows[$show_nid];
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
@@ -582,11 +579,12 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                         continue;
                       }
                     }
-                    $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    $temp_end = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
+                      dsm($show);
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
