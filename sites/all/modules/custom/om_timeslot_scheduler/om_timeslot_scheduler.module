@@ -556,19 +556,14 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 dsm('process start: '.$process_start);
                 dsm('spacer: '.$spacer);
                 dsm('gap end: '.$gap['end']);
+                $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
+                dsm($adult_hours);
               }
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
                 $loop_start = time();
                 $show = $all_shows[$show_nid];
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
-                }
-                if ($timeslot->nid == 29516) {
-                  if ($is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value'])) {
-                    dsm($show_nid.' = adult');
-                  }else{
-                    dsm($show_nid.' != adult');
-                  }
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
                 // If a show is less than the end of the gap
