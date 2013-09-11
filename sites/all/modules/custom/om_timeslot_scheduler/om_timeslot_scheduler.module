@@ -607,7 +607,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   // Otherwise shchedule shows < 30 min
                   else {
                       if ($timeslot->nid == 29516) {
-                        dsm('show that could pass');
+                        dsm('show completion: '.$show_completion);
+                        dsm('mini gap end: '.$mini_gap['end']);
                       }
                     if ($show_completion + $spacer > $mini_gap['end']) {
                       continue;
