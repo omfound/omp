@@ -584,9 +584,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
-                      dsm($show);
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
+                        dsm($show);
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                         $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                         $process_start = ($process_start - ($process_start % 1800)) + 1800;
