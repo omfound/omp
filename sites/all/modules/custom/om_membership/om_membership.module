@@ -947,7 +947,7 @@ function om_membership_role_form() {
   foreach ($form['roles'] as $key => $info) {
     if (is_numeric($key)) {
       if (strpos(strtolower($info['#role']), 'membership') === false) {
-        unset($form['roles'][$key]; 
+        unset($form['roles'][$key]); 
       }
     }
   }
