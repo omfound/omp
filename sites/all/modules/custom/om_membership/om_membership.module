@@ -1034,3 +1034,7 @@ function om_membership_user_role_edit_access($role) {
 
   return user_access('administer permissions');
 }
+
+function om_membership_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);
+}
