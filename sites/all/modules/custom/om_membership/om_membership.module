@@ -953,9 +953,17 @@ function om_membership_role_form() {
   }
 
   dsm($form);
-  dsm($form['#theme'][0]);
+  $form['#theme'][0] = 'membership_admin_roles';
   return $form;
   //dsm($form); 
+}
+
+function om_membership_theme() {
+  return array(
+    'membership_admin_roles' => array(
+      'render element' => 'form',
+    ),
+  );
 }
 
 function theme_membership_admin_roles($variables) {
