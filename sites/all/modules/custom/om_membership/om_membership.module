@@ -957,7 +957,7 @@ function om_membership_role_form() {
   }
 
   $form['#theme'][0] = 'membership_admin_roles';
-  $form['add']['#submit'][] = 'om_membership_admin_roles_submit';
+  $form['add']['#submit'][0] = 'om_membership_admin_role_submit';
   $form['add']['#validate'][] = 'om_membership_admin_roles_validate';
   dsm($form);
   return $form;
@@ -968,10 +968,22 @@ function om_membership_admin_roles_validate($form, &$form_state) {
   watchdog('brian', '<pre>'.print_r($form_state, TRUE).'</pre>');
 }
 
-function om_membership_admin_roles_submit($form, &$form_state) {
-  unset($form_state['rebuild']);
-  unset($_GET['destination']);
+function om_membership_admin_role_submit($form, &$form_state) {
+  $role = (object) $form_state['values'];
+  if (strpos(strtolower($role->name), 'membership') !== false) {
+    if ($form_state['values']['op'] == t('Save role')) {
+      user_role_save($role);
+      drupal_set_message(t('The role has been renamed.'));
+    }
+    elseif ($form_state['values']['op'] == t('Add role')) {
+      user_role_save($role);
+      drupal_set_message(t('The role has been added.'));
+    }
+  }else{
+    drupal_set_message(t('The role could not be added.'));
+  }
   $form_state['redirect'] = 'admin/config/om/membership/roles';
+  return;
 }
 
 function theme_membership_admin_roles($variables) {
