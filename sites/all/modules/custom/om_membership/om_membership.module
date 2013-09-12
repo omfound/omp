@@ -989,3 +989,8 @@ function theme_membership_admin_roles($variables) {
 
   return $output;
 }
+
+
+function om_membership_menu_alter(&$items) {
+  dsm($items);
+}
