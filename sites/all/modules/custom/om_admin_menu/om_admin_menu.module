@@ -81,6 +81,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'reports/class-registrations',
   );
+  $content['menu']['classes']['class_categories'] = array(
+    '#title' => t('Manage categories'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/structure/taxonomy/class_categories',
+  );
 
   //Membership Administrators
   $content['menu']['membership'] = array(
