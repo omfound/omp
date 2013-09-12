@@ -982,7 +982,7 @@ function theme_membership_admin_roles($variables) {
   }
   $rows[] = array(array('data' => drupal_render($form['name']) . drupal_render($form['add']), 'colspan' => 4, 'class' => 'edit-name'));
 
-  drupal_add_tabledrag('user-roles', 'order', 'sibling', 'role-weight');
+  //drupal_add_tabledrag('user-roles', 'order', 'sibling', 'role-weight');
 
   $output = $intro;
   $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'user-roles')));
