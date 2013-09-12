@@ -957,6 +957,7 @@ function om_membership_role_form() {
 
   $form['#theme'][0] = 'membership_admin_roles';
   $form['#action'] .= '?destination=admin/config/om/membership/roles';
+  dsm($form);
   return $form;
 }
 
