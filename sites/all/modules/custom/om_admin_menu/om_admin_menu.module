@@ -2,6 +2,7 @@
 
 
 function om_admin_menu_admin_menu_output_build(&$content) {
+  dsm($content);
   $paid_memberships = om_admin_menu_paid_memberships();
   $paid_memberships[] = 'Content Administrator';
 
