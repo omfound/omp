@@ -104,12 +104,17 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'admin/structure/taxonomy/membership_features',
   );
   $content['menu']['membership']['member_products'] = array(
-    '#title' => t('Member Levels'),
+    '#title' => t('View Member Levels'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/products/list',
     '#options' => array(
       'query' => array('sku' => '', 'type' => 'membership_plan'),
     ),
+  );
+  $content['menu']['membership']['add_level'] = array(
+    '#title' => t('Add Member Level'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/commerce/products/add/membership-plan',
   );
 
   //Content Administrators
