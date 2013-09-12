@@ -964,9 +964,8 @@ function om_membership_role_form() {
 }
 
 function om_membership_admin_roles_validate($form, &$form_state) {
-  dsm($form_state);
+  form_set_error('name', t('Validation Fail'));
   watchdog('brian', '<pre>'.print_r($form_state, TRUE).'</pre>');
-  return false;
 }
 
 function om_membership_admin_roles_submit($form, &$form_state) {
