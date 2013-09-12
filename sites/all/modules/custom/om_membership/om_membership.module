@@ -943,6 +943,14 @@ function om_membership_role_form() {
   //may need user.admin.inc
   module_load_include('inc', 'user', 'user.admin');
   $form = drupal_get_form('user_admin_roles');
+
+  foreach ($form['roles'] as $key => $info) {
+    if (is_numeric($key)) {
+      if (strpos(strtolower($info['#role']), 'membership') === false) {
+        unset($form['roles'][$key]; 
+      }
+    }
+  }
   dsm($form);
   return $form;
   //dsm($form); 
