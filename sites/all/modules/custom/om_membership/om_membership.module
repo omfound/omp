@@ -1037,15 +1037,20 @@ function om_membership_user_role_edit_access($role) {
 
 function om_membership_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
-    dsm($form);
-    if ($form['#id'] == 'views-exposed-form-classes-page') {
-      if (empty($_GET['field_class_location_tax_tid'])) {
+    if ($form['#id'] == 'views-exposed-form-classes-page' || $form['#id'] == 'views-exposed-form-calendar-product-view-block') {
+      if ($form['#id'] == 'views-exposed-form-classes-page') {
+        $field_name = 'field_class_location_tax_tid';
+      }
+      if ($form['#id'] == 'views-exposed-form-calendar-product-view-block') {
+        $field_name = 'field_crp_location_tid';
+      }
+      if (empty($_GET[$field_name])) {
         global $user;
         $contact_info = profile2_load_by_user($user, 'contact_info');
         if (!empty($contact_info->field_station[LANGUAGE_NONE][0]['tid'])) {
-          $station_tid = $contact_info->field_station[LANGUAGE_NONE][0]['tid'];
-          if (!empty($form['field_class_location_tax_tid']['#options'][$station_tid])) {
-            $form_state['input']['field_class_location_tax_tid'] = $station_tid;
+          $location_tid = $contact_info->field_station[LANGUAGE_NONE][0]['tid'];
+          if (!empty($form[$field_name]['#options'][$location_tid])) {
+            $form_state['input'][$field_name] = $location_tid;
           }
         }
       }
