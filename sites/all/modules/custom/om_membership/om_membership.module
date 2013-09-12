@@ -952,7 +952,6 @@ function om_membership_role_form() {
     }
   }
 
-  $form['#theme'][0] = 
   dsm($form);
   dsm($form['#theme'][0]);
   return $form;
