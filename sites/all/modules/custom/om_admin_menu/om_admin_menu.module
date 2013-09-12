@@ -115,12 +115,13 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     ),
     '#weight' => -20,
   );
+  /**
   $content['menu']['membership']['add_level'] = array(
     '#title' => t('Add Member Level'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/products/add/membership-plan',
     '#weight' => -10,
-  );
+  );**/
 
   //Content Administrators
   $content['menu']['content'] = array(
