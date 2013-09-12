@@ -955,10 +955,8 @@ function om_membership_role_form() {
     }
   }
 
-  dsm($form);
   $form['#theme'][0] = 'membership_admin_roles';
   return $form;
-  //dsm($form); 
 }
 
 function theme_membership_admin_roles($variables) {
@@ -992,5 +990,21 @@ function theme_membership_admin_roles($variables) {
 
 
 function om_membership_menu_alter(&$items) {
-  dsm($items);
+  $items['admin/people/permissions/roles/edit/%user_role']['access callback'] = 'om_membership_user_role_edit_access';
+  $items['admin/people/permissions/roles/delete/%user_role']['access callback'] = 'om_membership_user_role_edit_access';
+}
+
+function om_membership_user_role_edit_access($role) {
+  // Prevent the system-defined roles from being altered or removed.
+  if ($role->rid == DRUPAL_ANONYMOUS_RID || $role->rid == DRUPAL_AUTHENTICATED_RID) {
+    return FALSE;
+  }
+
+  if (strpos(strtolower($role), 'membership')) {
+    if (user_access('administer permissions') || user_access('administer om membership')) {
+      return true;
+    }
+  }
+
+  return user_access('administer permissions');
 }
