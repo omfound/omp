@@ -1040,7 +1040,11 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
     if ($form['#id'] == 'views-exposed-form-classes-page') {
       global $user;
       $contact_info = profile2_load_by_user($user, 'contact_info');
-      dsm($contact_info);
+      if (!empty($contact_info->field_station[LANGUAGE_NONE][0]['tid'])) {
+        $station_tid = $contact_info->field_station[LANGUAGE_NONE][0]['tid'];
+        dsm($station_tid);
+        dsm($form);
+      }
       //$location = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
     }
   }
