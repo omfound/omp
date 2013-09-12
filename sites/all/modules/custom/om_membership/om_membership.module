@@ -956,8 +956,6 @@ function om_membership_role_form() {
   }
 
   $form['#theme'][0] = 'membership_admin_roles';
-  $form['#action'] .= '?destination=admin/config/om/membership/roles';
-  dsm($form);
   return $form;
 }
 
@@ -965,6 +963,7 @@ function theme_membership_admin_roles($variables) {
   $form = $variables['form'];
 
   $header = array(t('Name'), t('Weight'), array('data' => t('Operations'), 'colspan' => 2));
+  $link_options = array('query' => array('destination' => 'admin/config/om/membership/roles'));
   foreach (element_children($form['roles']) as $rid) {
     $name = $form['roles'][$rid]['#role']->name;
     $row = array();
@@ -976,7 +975,7 @@ function theme_membership_admin_roles($variables) {
     else {
       $row[] = check_plain($name);
       $row[] = drupal_render($form['roles'][$rid]['weight']);
-      $row[] = l(t('edit role'), 'admin/people/permissions/roles/edit/' . $rid);
+      $row[] = l(t('edit role'), 'admin/people/permissions/roles/edit/' . $rid, $link_options);
     }
     $rows[] = array('data' => $row, 'class' => array('draggable'));
   }
