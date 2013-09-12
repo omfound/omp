@@ -941,6 +941,7 @@ function om_membership_broken_memberships() {
 
 function om_membership_role_form() {
   //may need user.admin.inc
+  module_load_include('inc', 'user', 'user.admin');
   $form = drupal_get_form('user_admin_roles');
   return $form;
   //dsm($form); 
