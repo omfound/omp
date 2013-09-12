@@ -959,6 +959,7 @@ function om_membership_role_form() {
   $form['#theme'][0] = 'membership_admin_roles';
   $form['add']['#submit'][0] = 'om_membership_admin_role_submit';
   $form['add']['#validate'][] = 'om_membership_admin_roles_validate';
+  unset($form['add']['#process']);
   dsm($form);
   return $form;
 }
