@@ -1000,7 +1000,7 @@ function om_membership_user_role_edit_access($role) {
     return FALSE;
   }
 
-  if (strpos(strtolower($role), 'membership')) {
+  if (strpos(strtolower($role->name), 'membership')) {
     if (user_access('administer permissions') || user_access('administer om membership')) {
       return true;
     }
