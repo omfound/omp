@@ -943,6 +943,7 @@ function om_membership_role_form() {
   //may need user.admin.inc
   module_load_include('inc', 'user', 'user.admin');
   $form = drupal_get_form('user_admin_roles');
+  dsm($form);
   return $form;
   //dsm($form); 
 }
