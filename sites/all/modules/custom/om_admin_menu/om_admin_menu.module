@@ -120,6 +120,12 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     ),
     '#weight' => -20,
   );
+  $content['menu']['people']['find_people'] = array(
+    '#title' => t('Search Users'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'search/user',
+    '#weight' => 40,
+  );
   /**
   $content['menu']['membership']['add_level'] = array(
     '#title' => t('Add Member Level'),
