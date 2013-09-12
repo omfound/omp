@@ -60,6 +60,11 @@ function om_membership_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK
   );
+  $items['admin/config/om/membership/roles'] = array(
+    'page callback' => 'om_membership_role_form',
+    'access arguments' => array('administer om membership'),
+   'type' => MENU_CALLBACK 
+  );
   return $items;
 }
 
@@ -932,4 +937,10 @@ function om_membership_broken_memberships() {
   }
 
   return $suspect_orders;
+}
+
+function om_membership_role_form() {
+  //may need user.admin.inc
+  $form = drupal_get_form('user_admin_roles');
+  dsm($form); 
 }
