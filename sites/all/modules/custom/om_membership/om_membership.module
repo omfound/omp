@@ -962,8 +962,8 @@ function om_membership_role_form() {
 
 function theme_membership_admin_roles($variables) {
   $form = $variables['form'];
-  $header = '<div>You can add, edit or remove membership roles below. <strong>Your membership role name must contain the word membership.</strong></div>';
-  $header .= array(t('Name'), t('Weight'), array('data' => t('Operations'), 'colspan' => 2));
+  $intro = '<div>You can add, edit or remove membership roles below. <strong>Your membership role name must contain the word membership.</strong></div>';
+  $header = array(t('Name'), t('Weight'), array('data' => t('Operations'), 'colspan' => 2));
   $link_options = array('query' => array('destination' => 'admin/config/om/membership/roles'));
   foreach (element_children($form['roles']) as $rid) {
     $name = $form['roles'][$rid]['#role']->name;
@@ -984,7 +984,8 @@ function theme_membership_admin_roles($variables) {
 
   drupal_add_tabledrag('user-roles', 'order', 'sibling', 'role-weight');
 
-  $output = theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'user-roles')));
+  $output = $intro;
+  $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'user-roles')));
   $output .= drupal_render_children($form);
 
   return $output;
