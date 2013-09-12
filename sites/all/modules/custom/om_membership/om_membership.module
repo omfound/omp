@@ -1044,6 +1044,7 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
         $station_tid = $contact_info->field_station[LANGUAGE_NONE][0]['tid'];
         if (!empty($form['field_class_location_tax_tid']['#options'][$station_tid])) {
           $form['field_class_location_tax_tid']['#default_vaue'] = $station_tid;
+          dsm($form);
         }
       }
       //$location = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
