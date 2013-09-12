@@ -944,6 +944,7 @@ function om_membership_broken_memberships() {
 
 function om_membership_role_form() {
   //may need user.admin.inc
+  drupal_set_title('Membership Roles');
   module_load_include('inc', 'user', 'user.admin');
   $form = drupal_get_form('user_admin_roles');
 
@@ -961,8 +962,8 @@ function om_membership_role_form() {
 
 function theme_membership_admin_roles($variables) {
   $form = $variables['form'];
-
-  $header = array(t('Name'), t('Weight'), array('data' => t('Operations'), 'colspan' => 2));
+  $header = '<div>You can add, edit or remove membership roles below. <strong>Your membership role name must contain the word membership.</strong></div>';
+  $header .= array(t('Name'), t('Weight'), array('data' => t('Operations'), 'colspan' => 2));
   $link_options = array('query' => array('destination' => 'admin/config/om/membership/roles'));
   foreach (element_children($form['roles']) as $rid) {
     $name = $form['roles'][$rid]['#role']->name;
