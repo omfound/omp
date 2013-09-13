@@ -554,6 +554,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
               foreach($timeslot->om_timeslot_showlist AS $rank => $show_nid) {
                 $loop_start = time();
                 $show = $all_shows[$show_nid];
+                if ($timeslot->nid == '29357') {
+                  dsm($show);
+                }
                 if (empty($show->field_om_show_duration) || $show->field_om_show_duration['und'][0]['value'] == 0) {
                   continue;
                 }
