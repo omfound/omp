@@ -1,9 +1,6 @@
 <?php
 class leastAiredShowInProjectSchedulingRule extends timeslotSchedulingRule {
   public function executeRule($timeslot) {
-    if ($timeslot->nid == '29396') {
-      dsm($timeslot);
-    }
     $shows = array();
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
