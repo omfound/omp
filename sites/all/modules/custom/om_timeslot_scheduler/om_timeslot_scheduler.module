@@ -538,6 +538,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             $gap_parts[0]['start'] = $process_start;
             // END Section 2 break gap into smaller gaps
             // START Section 3 Schedule Assembly
+            dsm($gap['end']);
             foreach($gap_parts AS $gap_key => $mini_gap) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
@@ -558,6 +559,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+                if ($timeslot->tid == '29494') {
+                  dsm($show);
+                  dsm($show_completion);
+                }
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
