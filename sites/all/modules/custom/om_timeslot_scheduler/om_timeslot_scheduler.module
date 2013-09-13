@@ -452,7 +452,6 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
  *  array standard context reference provided by batch process. Now includes run information from prior steps.
  */
 function _om_timeslot_scheduler_build_schedule(&$context) {
-  dsm($context);
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
   if (empty($run['timeslots'])) {
@@ -538,9 +537,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
             $gap_parts[0]['start'] = $process_start;
             // END Section 2 break gap into smaller gaps
             // START Section 3 Schedule Assembly
-            if ($timeslot->nid == '29494') {
-              dsm($gap['end']);
-            }
             foreach($gap_parts AS $gap_key => $mini_gap) {
               // This loop allows for scheduling of shows that are larger than a single mini gap.
               // If this has happened we need to skip all mini gaps until we are in the clear again.
@@ -562,11 +558,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
                
-                if ($timeslot->nid == '29494') {
-                  dsm($show);
-                  dsm($process_start);
-                  dsm($show_completion);
-                }
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
@@ -594,6 +585,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                         $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                        //here it sets process start to the next 30 minute gap
+                        //due to this, if the timeslot is 2hrs, and a 1:33 minute show is scheduled into it
+                        //nothing will be scheduled in the last gap.
                         $process_start = ($process_start - ($process_start % 1800)) + 1800;
                         $next_start = $process_start;
                         $used = $rank;
