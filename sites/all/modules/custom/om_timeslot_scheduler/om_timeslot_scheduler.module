@@ -454,6 +454,7 @@ function _om_timeslot_scheduler_get_gaps(&$context) {
 function _om_timeslot_scheduler_build_schedule(&$context) {
   $context['message'] = t('Assembling a schedule.');
   $run = $context['results']['run'];
+  dsm($run);
   if (empty($run['timeslots'])) {
     return;
   }
