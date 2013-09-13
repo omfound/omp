@@ -564,6 +564,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                
                 if ($timeslot->nid == '29494') {
                   dsm($show);
+                  dsm($process_start);
                   dsm($show_completion);
                 }
                 // If a show is less than the end of the gap
