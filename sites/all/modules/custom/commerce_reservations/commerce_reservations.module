@@ -1554,6 +1554,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
   //brian code goes here
   $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  dsm($available_products);
   foreach ($available_products as $available_nid) {
     $available_node = node_load($available_nid);
     $product_options[] = $available_node->sku;
