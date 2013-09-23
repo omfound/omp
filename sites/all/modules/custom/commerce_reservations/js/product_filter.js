@@ -137,6 +137,7 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
+        console.log('rendering event');
         $('.fullcalendar').fullCalendar('select', selectionEvent.start, selectionEvent.end, false);
       } else{
         $('.date-status').html('<p class="error">Please pick a date and time that is before your end date and time.</p>');
