@@ -44,6 +44,10 @@ Drupal.cr = Drupal.cr || {};
 
         //Populate details pane and calendar with defaults
         Drupal.behaviors.product_filter.loadProductForm(pid, nid);
+
+        //Make sure any defaults are taken into account
+        console.log('triggering change manually');
+        $('.start-date-wrapper .form-select').trigger("change");
       });
     },
 
@@ -64,9 +68,6 @@ Drupal.cr = Drupal.cr || {};
             $preloader.attr('src', 'sites/all/modules/custom/commerce_reservations/js/images/ajax-loader.gif');
             $('.view-footer .form-item-quantity').append($preloader);
             $('.view-footer .form-item-quantity img').hide();
-
-            //Fire off change once to insure overlap detection
-            Drupal.behaviors.product_filter.addDateSelectionToCalendar;
 
             //Update calendar selections when values in date picker are changed
             $('.start-date-wrapper .form-select').focus(function(){
