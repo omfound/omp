@@ -46,8 +46,8 @@ Drupal.cr = Drupal.cr || {};
         Drupal.behaviors.product_filter.loadProductForm(pid, nid);
 
         //Make sure any defaults are taken into account
-        console.log('triggering change manually');
-        $('.start-date-wrapper .form-select').change();
+        console.log('triggering zechanges manually');
+        Drupal.behaviors.product_filter.addDateSelectionToCalendar;
       });
     },
 
