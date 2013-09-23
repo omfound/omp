@@ -17,6 +17,7 @@ function openmedia_preprocess_html(&$variables) {
 }
 
 function openmedia_preprocess_page(&$variables) {
+  dsm($variables);
   if ($_GET['q'] == 'classes') {
     $options = array(
       'type' => 'file',
