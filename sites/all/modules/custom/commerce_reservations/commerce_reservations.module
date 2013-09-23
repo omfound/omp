@@ -470,13 +470,14 @@ function commerce_reservations_get_closed_times(){
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
-    if ($date == '2013-09-26') {
-      dsm($index);
-      $index = $index + 3;
-    }
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
+    if ($date == '2013-09-26') {
+      dsm($index);
+      dsm($start_date);
+      dsm($end_date);
+    }
     //GIANT hack need to find problem later 5/22 10:00 pm to 8/21 2:00pm
     if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" ' . 'end = "' . $end_date . '"></div>';
