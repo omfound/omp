@@ -65,6 +65,9 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer .form-item-quantity').append($preloader);
             $('.view-footer .form-item-quantity img').hide();
 
+            //Fire off change once to insure overlap detection
+            Drupal.behaviors.product_filter.addDateSelectionToCalendar;
+
             //Update calendar selections when values in date picker are changed
             $('.start-date-wrapper .form-select').focus(function(){
               previousStart = $(this).val();
