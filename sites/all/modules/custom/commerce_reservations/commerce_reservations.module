@@ -472,9 +472,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
   if ($value2){
     if ($date == '2013-09-26') {
       dsm($index);
-      dsm($value);
-      dsm($value2);
-      dsm($value3);
+      $index = $index + 2;
     }
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
