@@ -474,6 +474,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
     if ($date == '2013-09-26') {
+      dsm($array2);
       dsm($index);
       dsm($start_date);
       dsm($end_date);
