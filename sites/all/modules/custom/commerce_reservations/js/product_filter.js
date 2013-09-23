@@ -47,7 +47,7 @@ Drupal.cr = Drupal.cr || {};
 
         //Make sure any defaults are taken into account
         console.log('triggering change manually');
-        $('.start-date-wrapper .form-select').trigger("change");
+        $('.start-date-wrapper .form-select').change();
       });
     },
 
