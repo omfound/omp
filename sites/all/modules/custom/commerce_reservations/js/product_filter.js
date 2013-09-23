@@ -44,10 +44,6 @@ Drupal.cr = Drupal.cr || {};
 
         //Populate details pane and calendar with defaults
         Drupal.behaviors.product_filter.loadProductForm(pid, nid);
-
-        //Make sure any defaults are taken into account
-        console.log('triggering zechanges manually');
-        Drupal.behaviors.product_filter.addDateSelectionToCalendar;
       });
     },
 
@@ -89,6 +85,9 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
+
+            //fire add date for default values
+            Drupal.behaviors.product_filter.addDateSelectionToCalendar();
           }
       });
     },
@@ -137,7 +136,6 @@ Drupal.cr = Drupal.cr || {};
           }
         });
         $('.fullcalendar').fullCalendar('renderEvent', selectionEvent, true);
-        console.log('rendering event');
         $('.fullcalendar').fullCalendar('select', selectionEvent.start, selectionEvent.end, false);
       } else{
         $('.date-status').html('<p class="error">Please pick a date and time that is before your end date and time.</p>');
