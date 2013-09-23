@@ -1552,8 +1552,14 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
-  $product_options = array();
-  $product_options[] = $line_item->line_item_label;
+
+  $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  foreach ($available_products as $available_id) {
+    $available_item = commerce_product_load($available_id);
+    $product_options[] = $available_item->sku;
+  }
+  //$product_options = array();
+  //$product_options[] = $line_item->line_item_label;
   /**
   foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
     $product_sku = $product_wrapper->sku->value();
@@ -2378,4 +2384,19 @@ function commerce_reservations_available_product_id($product_id, $start_date, $e
   }
 
   return false;
+}
+
+function commerce_reservations_items_on_hand($product_id, $start_date, $end_date) {
+  $display_nid = commerce_reservations_entity_display_lookup($product_id);
+  $display_node = node_load($display_nid);
+
+  $available = array();
+  foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
+    $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
+    if ($checkout_status != 'Checked Out' && $checkout_status != 'Overdue') {
+      $available[] = $info['product_id'];
+    }
+  }
+
+  return $available;
 }
