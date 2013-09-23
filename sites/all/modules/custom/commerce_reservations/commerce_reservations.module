@@ -433,8 +433,6 @@ function commerce_reservations_get_closed_times(){
             $value2 = variable_get($variable2);
             //Odd situation where Thursdays need to set index back 1
             //brian here
-            dsm('Thursday fix active');
-            dsm($date);
             $index_fix = $index-1;
             print commerce_reservations_generate_date_feed_item($date, $index_fix, $value, $value2, $value3, 3); 
           }
@@ -472,6 +470,12 @@ function commerce_reservations_get_closed_times(){
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
+    if ($date == '2013-09-26') {
+      dsm($index);
+      dsm($value);
+      dsm($value2);
+      dsm($value3);
+    }
     $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
