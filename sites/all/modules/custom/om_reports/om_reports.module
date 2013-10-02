@@ -1,0 +1,21 @@
+<?php
+/**
+ * This is the main module that aggregates all Open Media System Reports and configures them for access via the menu hook
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function om_reports_menu(){
+	
+	return om_reports();
+}
+
+/**
+ * Get all open Media System Reports
+ */
+
+function om_reports() {
+  $all_reports = module_invoke_all('om_get_reports');
+  return $all_reports;
+}
