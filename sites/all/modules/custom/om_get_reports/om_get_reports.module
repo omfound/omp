@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_om_get_reports()
+ */
+function om_get_reports() {
+
+  $reports['admin/om/reports/dummyreport'] = array(
+    'title' => 'Open Media Reports',
+    'description' => 'Dummy Page for Open Media Reports.',
+    'page callback' => 'om_get_reports_dummy_page',
+    'access arguments' => array('access content'),
+    'type'=> MENU_CALLBACK,
+  );
+  return reports;
+}
+

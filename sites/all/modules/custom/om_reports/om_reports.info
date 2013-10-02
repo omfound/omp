@@ -1,0 +1,4 @@
+name = Open Media Reports
+description = This hook provides access to all  Open Media System reports via the drupal menuing system.
+core = 7.x
+package = Open Media System
