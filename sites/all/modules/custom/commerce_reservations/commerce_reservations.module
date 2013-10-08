@@ -7,6 +7,11 @@
 
 include_once('commerce_reservations.features.inc');
 
+/**
+ * Include Open Media System Equipment Reservation Reports
+ */
+include_once('commerce_reservations.om_reports.inc');
+
 /*
  * Implements hook_permission()
  */
