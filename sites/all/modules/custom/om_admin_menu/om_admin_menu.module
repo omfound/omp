@@ -27,6 +27,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-show',
 	);
+    $content['menu']['shows']['report_00'] = array(
+    '#title' => t('Show and Themes Report'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'admin/om/reports/show/showsandthemes',
+  );
   $content['menu']['projects'] = array(
     '#title' => t('Projects'),
     '#access' => om_admin_menu_role_access($paid_memberships),
@@ -81,6 +86,16 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'reports/class-registrations',
   );
+  $content['menu']['classes']['report_00'] = array(
+    '#title' => t('Classes Sold Report'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/om/reports/classes/classes_sold',
+  );
+  $content['menu']['classes'] ['report_01']= array(
+    '#title' => t('Classes Offered Report'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/om/reports/classes/classes_offered',
+  );
 
   //Membership Administrators
   $content['menu']['membership'] = array(
@@ -97,6 +112,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Create Membership Order'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/orders/add',
+  );
+   $content['menu']['membership']['report_00'] = array(
+    '#title' => t('Basic Membership Report'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/om/reports/membership/membership',
   );
 
   //Content Administrators
@@ -208,6 +228,16 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/cr/settings',
     '#weight' => 50
+   );
+  $content['menu']['reservations']['report_00'] = array(
+    '#title' => t('Equipment Reservations Report'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/om/reports/reservations/reservations',
+   );
+  $content['menu']['reservations']['report_01'] = array(
+    '#title' => t('Equipment Inventory Report'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/om/reports/reservations/inventory',
    );
 
   //Schedule Administrators
