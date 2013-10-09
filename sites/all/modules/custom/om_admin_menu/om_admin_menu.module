@@ -218,11 +218,6 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/cr/settings',
   );
-  $content['menu']['reservations']['inventory'] = array(
-    '#title' => t('View Current Inventory'),
-    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
-    '#href' => 'admin/om/reports/inventory',
-   );
   $content['menu']['reservations']['global_config'] = array(
     '#title' => t('Admin Global Config'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
