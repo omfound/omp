@@ -25,7 +25,7 @@ function om_classes_om_reports_classes_help($path, $arg) {
  */
 function om_classes_om_get_reports() {
   $reports['admin/om/reports/classes/classes_sold'] = array(
-    'title' => 'Classes Sold Report',
+    'title' => 'Class Registration Report',
     'page callback' => 'om_classes_om_classesreport_page',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK);

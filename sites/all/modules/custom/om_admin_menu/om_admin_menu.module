@@ -87,7 +87,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'reports/class-registrations',
   );
   $content['menu']['classes']['report_00'] = array(
-    '#title' => t('Classes Sold Report'),
+    '#title' => t('Class Registrations Report'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'admin/om/reports/classes/classes_sold',
   );
