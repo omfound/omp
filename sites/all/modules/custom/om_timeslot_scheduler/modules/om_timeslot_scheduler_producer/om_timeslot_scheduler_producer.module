@@ -276,6 +276,7 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
     return $render;
   } 
   $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
+  dsm($timeslots);
   // Not sure why but this page title gets set to 'home'
   drupal_set_title('Schedule Your Show');
   // @TODO move these steps to theme function.
