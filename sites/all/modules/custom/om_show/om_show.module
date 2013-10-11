@@ -559,7 +559,3 @@ function om_show_upcoming_airings_user($user = FALSE) {
   ksort($output);
   return($output);
 }
-
-function om_show_views_pre_execute(&$view) {
-  dsm($view);
-}
