@@ -10,6 +10,11 @@
   * Implement hook_help.
   *
   * Displays help and module information.
+  *
+  * @param path
+  *    Which path of the site we're using to display help
+  * @param arg
+  *    Array that holds the current path as returned from arg() function
   */
  
 function commerce_reservations_om_reports_inventory_help($path, $arg) {
@@ -119,12 +124,12 @@ function commerce_reservations_om_reports_inventory() {
     }
 
     $rows[] = array(
-      array('data' => t($reservable_product_wrapper->title->value())),
-      array('data' => t($onhand_count - $checkout_count - $unavailable_count)),
-      array('data' => t($checkout_count)),
-      array('data' => t($unavailable_count)),
-      array('data' => t(count($reservable_product_wrapper->field_crp_product_reference->raw())))
-    );
+            array('data' => t($reservable_product_wrapper->title->value())),
+            array('data' => t($onhand_count - $checkout_count - $unavailable_count)),
+            array('data' => t($checkout_count)),
+            array('data' => t($unavailable_count)),
+            array('data' => t(count($reservable_product_wrapper->field_crp_product_reference->raw())))
+        );
 }
 
 
@@ -225,12 +230,10 @@ function commerce_reservations_om_reservationreportoutput($s_date, $e_date) {
   $grand_total_hours = 0;
   $grand_total_count = 0;
   $get_reservations = array();
-  
   // Loop through each record and get title, determine the number of reservations, and total hours used.
   foreach ($results as $record) {
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $record->line_item_id);
     $start_end_hours = array();
-    
     //$get_reservations = array();
     $hours_used =0;
     $get_reservations = $line_item_wrapper->field_reservation_dates->value();
@@ -240,7 +243,6 @@ function commerce_reservations_om_reservationreportoutput($s_date, $e_date) {
       }
       $hours_used = (strtotime($start_end_hours[$start_time_index]) - strtotime($start_end_hours[$end_time_index]))/3600;
     }
-    
     //If reservation is between query start and end date add to report
     if (strtotime($start_end_hours[$start_time_index]) >= strtotime($start_date) && strtotime($start_end_hours[$end_time_index]) < strtotime($end_date)) {
       $title = $record->title;
@@ -254,10 +256,10 @@ function commerce_reservations_om_reservationreportoutput($s_date, $e_date) {
           $grand_total_hours = $grand_total_hours + $total_hours_used;
           $grand_total_count = $grand_total_count + $count;
           $rows[] = array(
-            array('data' => t($old_title)),
-            array('data' => t($count)),
-            array('data' => t($total_hours_used))
-          );
+               array('data' => t($old_title)),
+               array('data' => t($count)),
+               array('data' => t($total_hours_used))
+                );
         }
         $init = 1;
         $next = 0;
@@ -267,22 +269,20 @@ function commerce_reservations_om_reservationreportoutput($s_date, $e_date) {
       $old_title = $title;
     }
   }
-  
   //print_r($old_title.",".$count.",".$total_hours_used."\n");
   $grand_total_hours = $grand_total_hours + $total_hours_used;
   $grand_total_count = $grand_total_count + $count;
   $rows[] = array(
-    array('data' => t($old_title)),
-    array('data' => t($count)),
-    array('data' => t($total_hours_used))
-  );
-  
-  // Write Summary Row
+        array('data' => t($old_title)),
+        array('data' => t($count)),
+        array('data' => t($total_hours_used))
+    );
+    // Write Summary Row
   $rows[] = array(
-    array('data' => t('<b>GRAND TOTAL</b>')),
-    array('data' => t('<b>'.$grand_total_count.'</b>')),
-    array('data' => t('<b>'.$grand_total_hours.'</b>'))
-  );
+        array('data' => t('<b>GRAND TOTAL</b>')),
+        array('data' => t('<b>'.$grand_total_count.'</b>')),
+        array('data' => t('<b>'.$grand_total_hours.'</b>'))
+    );
 
   return theme('table', array('header' => $header, 'rows' => $rows));
 
