@@ -244,29 +244,31 @@ function commerce_reservations_om_reservationreportoutput($s_date, $e_date) {
       $hours_used = (strtotime($start_end_hours[$start_time_index]) - strtotime($start_end_hours[$end_time_index]))/3600;
     }
     //If reservation is between query start and end date add to report
-    if (strtotime($start_end_hours[$start_time_index]) >= strtotime($start_date) && strtotime($start_end_hours[$end_time_index]) < strtotime($end_date)) {
-      $title = $record->title;
-      if ($old_title == $title) {
-        $next =1;
-        $total_hours_used = $total_hours_used + $hours_used;
-        $count = ++$count;
-      }
-      else {
-        if ($init != 0) {
-          $grand_total_hours = $grand_total_hours + $total_hours_used;
-          $grand_total_count = $grand_total_count + $count;
-          $rows[] = array(
-               array('data' => t($old_title)),
-               array('data' => t($count)),
-               array('data' => t($total_hours_used))
-                );
+    if (isset($start_end_hours[$start_time_index])){
+      if (strtotime($start_end_hours[$start_time_index]) >= strtotime($start_date) && strtotime($start_end_hours[$end_time_index]) < strtotime($end_date)) {
+        $title = $record->title;
+        if ($old_title == $title) {
+          $next =1;
+          $total_hours_used = $total_hours_used + $hours_used;
+          $count = ++$count;
         }
-        $init = 1;
-        $next = 0;
-        $count = 1;
-        $total_hours_used = $hours_used;
+        else {
+          if ($init != 0) {
+            $grand_total_hours = $grand_total_hours + $total_hours_used;
+            $grand_total_count = $grand_total_count + $count;
+            $rows[] = array(
+                 array('data' => t($old_title)),
+                 array('data' => t($count)),
+                 array('data' => t($total_hours_used))
+                  );
+          }
+          $init = 1;
+          $next = 0;
+          $count = 1;
+          $total_hours_used = $hours_used;
+        }
+        $old_title = $title;
       }
-      $old_title = $title;
     }
   }
   //print_r($old_title.",".$count.",".$total_hours_used."\n");
