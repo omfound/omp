@@ -312,6 +312,7 @@ function om_agenda_manager_parse_agenda($text) {
   $active = false;
   $agenda_lines = array(); 
   foreach ($lines as $key => $info) {
+    dsm($info);
     foreach ($start_matches as $start_match) {
       if (strpos($info, $start_match) !== false) {
         $active = true;
