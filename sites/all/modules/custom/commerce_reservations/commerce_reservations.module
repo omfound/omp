@@ -471,6 +471,10 @@ function commerce_reservations_get_closed_times(){
   print '</div>'; 
 }
 
+function commerce_reservations_variable_get_timezone_adjusted($variable) {
+
+}
+
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
@@ -649,6 +653,7 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
   $startDate = strtotime($startDate);
   $endDate = strtotime($endDate);
   $dateArr = array();
+  date_default_timezone_set(date_default_timezone());
   do {
     if(date("w", $startDate) != $weekdayNumber){
       $startDate += (24 * 3600); // add 1 day
@@ -2391,11 +2396,12 @@ function commerce_reservations_entity_presave($entity, $type) {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
+    /**
     $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
     if (!$available_items) {
       drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
       drupal_exit();
-    }
+    }**/
     $exclude_id = null;
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
