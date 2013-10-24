@@ -2369,7 +2369,7 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
     $reservation_count = 0;
     foreach ($display_node->field_crp_product_reference['und'] as $key => $info) {
       $reservations = commerce_reservations_product_reservations($info['product_id'], $start_date, $end_date, $exclude_id = null);
-      $reservations_count = $reservations_count + count($reservations);
+      $reservation_count = $reservation_count + count($reservations);
     }
   }else{
     $max_quantity = 0;
