@@ -2359,6 +2359,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
 }
 
 function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
+  dsm($product_id.$start_date.$end_date);
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
   dsm($reservations);
   $display = commerce_reservations_entity_display_lookup($product_id);
