@@ -2360,6 +2360,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
 
 function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  dsm($reservations);
   $display = commerce_reservations_entity_display_lookup($product_id);
   $display_node = node_load($display);
   if (!empty($display_node->field_crp_product_reference['und'])) {
@@ -2384,8 +2385,6 @@ function commerce_reservations_entity_presave($entity, $type) {
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
     $available_items = commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null);
-    dsm($entity);
-    dsm($available_items);
     if (!$available_items) {
       $entity = null;
       drupal_set_message('This product is not avaiable for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
