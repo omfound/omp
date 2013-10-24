@@ -557,6 +557,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+               
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
@@ -575,7 +576,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                         continue;
                       }
                     }
-                    $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    $temp_end = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
@@ -584,6 +585,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                         $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                        //here it sets process start to the next 30 minute gap
+                        //due to this, if the timeslot is 2hrs, and a 1:33 minute show is scheduled into it
+                        //nothing will be scheduled in the last gap. This same process does not happen on shows
+                        //less than 30 minutes.
                         $process_start = ($process_start - ($process_start % 1800)) + 1800;
                         $next_start = $process_start;
                         $used = $rank;

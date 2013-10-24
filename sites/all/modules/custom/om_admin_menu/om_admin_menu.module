@@ -113,7 +113,12 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/orders/add',
   );
-   $content['menu']['membership']['report_00'] = array(
+  $content['menu']['membership']['benefits'] = array(
+    '#title' => t('Member Grid Benefits'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/structure/taxonomy/membership_features',
+  );
+  $content['menu']['membership']['report_00'] = array(
     '#title' => t('Basic Membership Report'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/om/reports/membership/membership',

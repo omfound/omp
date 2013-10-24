@@ -71,7 +71,7 @@ function commerce_reservations_init(){
 
       if ($minutes > 10) {
         $cart = l('Click here to review your order and continue', 'cart');
-        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning');
+        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
       } 
     }
   }
@@ -471,6 +471,10 @@ function commerce_reservations_get_closed_times(){
   print '</div>'; 
 }
 
+function commerce_reservations_variable_get_timezone_adjusted($variable) {
+
+}
+
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
@@ -649,6 +653,7 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
   $startDate = strtotime($startDate);
   $endDate = strtotime($endDate);
   $dateArr = array();
+  date_default_timezone_set(date_default_timezone());
   do {
     if(date("w", $startDate) != $weekdayNumber){
       $startDate += (24 * 3600); // add 1 day
@@ -1557,8 +1562,14 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
-  $product_options = array();
-  $product_options[] = $line_item->line_item_label;
+
+  $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  foreach ($available_products as $available_id) {
+    $available_item = commerce_product_load($available_id);
+    $product_options[] = $available_item->sku;
+  }
+  //$product_options = array();
+  //$product_options[] = $line_item->line_item_label;
   /**
   foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
     $product_sku = $product_wrapper->sku->value();
@@ -2317,6 +2328,19 @@ function commerce_reservations_build_form($form_id) {
 }
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
+  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  foreach ($reservations as $reservation) {
+    if (is_null($reservation->field_checkout_status_value)) {
+        return 'Pending Reservation';  
+    }else{
+      return $reservation->field_checkout_status_value;
+    }
+  }
+  
+  return 'Available';
+}
+
+function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
   $product = commerce_product_load($product_id);
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
@@ -2327,19 +2351,40 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
       DATE_ADD(field_data_field_reservation_dates.field_reservation_dates_value, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date 
       OR
       DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date
+      OR
+      (DATE_ADD(field_data_field_reservation_dates.field_reservation_dates_value, INTERVAL 1 SECOND) < :start_date AND
+       DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) > :end_date)
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
+  $reservations = array();
   foreach ($results as $result) {
     if ($exclude_id != $result->line_item_id) {
-      if (is_null($result->field_checkout_status_value)) {
-        return 'Pending Reservation';  
-      }else{
-        return $result->field_checkout_status_value;
-      }
+      $reservations[$result->line_item_id] = $result;
     }
   }
-  
-  return 'Available';
+
+  return $reservations;
+}
+
+function commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null) {
+  $display = commerce_reservations_entity_display_lookup($product_id);
+  $display_node = node_load($display);
+  if (!empty($display_node->field_crp_product_reference['und'])) {
+    $max_quantity = count($display_node->field_crp_product_reference['und']);
+    $reservation_count = 0;
+    foreach ($display_node->field_crp_product_reference['und'] as $key => $info) {
+      $reservations = commerce_reservations_product_reservations($info['product_id'], $start_date, $end_date, $exclude_id = null);
+      $reservation_count = $reservation_count + count($reservations);
+    }
+  }else{
+    $max_quantity = 0;
+    $reservation_count = 1;
+  }
+  if ($reservation_count >= $max_quantity) {
+    return 0;
+  }else{
+    return $max_quantity - $reservation_count;
+  }
 }
 
 //TODO: BRIAN an odd situation can occur if a checkout contains overlapping reservations
@@ -2351,6 +2396,12 @@ function commerce_reservations_entity_presave($entity, $type) {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
+    /**
+    $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
+    if (!$available_items) {
+      drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
+      drupal_exit();
+    }**/
     $exclude_id = null;
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
@@ -2383,4 +2434,19 @@ function commerce_reservations_available_product_id($product_id, $start_date, $e
   }
 
   return false;
+}
+
+function commerce_reservations_items_on_hand($product_id, $start_date, $end_date) {
+  $display_nid = commerce_reservations_entity_display_lookup($product_id);
+  $display_node = node_load($display_nid);
+
+  $available = array();
+  foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
+    $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
+    if ($checkout_status != 'Checked Out' && $checkout_status != 'Overdue') {
+      $available[] = $info['product_id'];
+    }
+  }
+
+  return $available;
 }
