@@ -2405,3 +2405,7 @@ function commerce_reservations_items_on_hand($product_id, $start_date, $end_date
 
   return $available;
 }
+
+function commerce_reservations_commerce_cart_product_add($order, $product, $quantity, $line_item) {
+  dsm($line_item);
+}
