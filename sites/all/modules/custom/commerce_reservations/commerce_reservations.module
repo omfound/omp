@@ -2347,6 +2347,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
       OR
       DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date
     )";
+  dsm($start_date.' : '.$end_date.' : '.$product->sku);
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   $reservations = array();
   foreach ($results as $result) {
@@ -2359,7 +2360,6 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
 }
 
 function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
-  dsm($product_id.' : '.$start_date.' : '.$end_date.' : '.$exclude_id);
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
   dsm($reservations);
   $display = commerce_reservations_entity_display_lookup($product_id);
