@@ -2327,9 +2327,8 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
   foreach ($reservations as $reservation) {
     if (is_null($reservation->field_checkout_status_value)) {
         return 'Pending Reservation';  
-      }else{
-        return $reservation->field_checkout_status_value;
-      }
+    }else{
+      return $reservation->field_checkout_status_value;
     }
   }
   
