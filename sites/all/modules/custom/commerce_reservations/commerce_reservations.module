@@ -2350,6 +2350,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
       (DATE_ADD(field_data_field_reservation_dates.field_reservation_dates_value, INTERVAL 1 SECOND) < :start_date AND
        DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) > :end_date)
     )";
+  dsm($start_date.' : '.$end_date.' : '.$product->sku);
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
   $reservations = array();
   foreach ($results as $result) {
@@ -2361,7 +2362,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
   return $reservations;
 }
 
-function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
+function commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null) {
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
   $display = commerce_reservations_entity_display_lookup($product_id);
   $display_node = node_load($display);
@@ -2386,7 +2387,7 @@ function commerce_reservations_entity_presave($entity, $type) {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
-    $available_items = commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null);
+    $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
     if (!$available_items) {
       drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
       drupal_goto('reservations');
