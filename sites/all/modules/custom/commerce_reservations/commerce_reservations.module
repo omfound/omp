@@ -2394,7 +2394,7 @@ function commerce_reservations_entity_presave($entity, $type) {
     $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
     if (!$available_items) {
       drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
-      drupal_goto('reservations');
+      //drupal_goto('reservations');
     }
     $exclude_id = null;
     if (!empty($entity->line_item_id)) {
