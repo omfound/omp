@@ -2359,7 +2359,7 @@ function commerce_reservations_product_reservations($product_id, $start_date, $e
 }
 
 function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
-  dsm($product_id.$start_date.$end_date);
+  dsm($product_id.' : '.$start_date.' : '.$end_date);
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
   dsm($reservations);
   $display = commerce_reservations_entity_display_lookup($product_id);
@@ -2388,7 +2388,7 @@ function commerce_reservations_entity_presave($entity, $type) {
     $available_items = commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null);
     if (!$available_items) {
       $entity = null;
-      drupal_set_message('This product is not avaiable for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
+      drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
     }
     $exclude_id = null;
     if (!empty($entity->line_item_id)) {
