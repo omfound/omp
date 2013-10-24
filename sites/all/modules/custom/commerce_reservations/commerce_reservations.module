@@ -2371,6 +2371,10 @@ function commerce_reservations_entity_presave($entity, $type) {
         $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $swap_product_id;
         $entity->line_item_label = $swap_product->sku;
       }
+      else {
+        $entity = null;
+        drupal_set_message('This product is not avaiable for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
+      }
     }
   }
 }
@@ -2404,8 +2408,4 @@ function commerce_reservations_items_on_hand($product_id, $start_date, $end_date
   }
 
   return $available;
-}
-
-function commerce_reservations_commerce_cart_product_add($order, $product, $quantity, $line_item) {
-  dsm($line_item);
 }
