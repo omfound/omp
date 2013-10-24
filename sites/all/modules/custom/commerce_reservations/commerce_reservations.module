@@ -2362,6 +2362,7 @@ function commerce_reservations_entity_presave($entity, $type) {
       $exclude_id = $entity->line_item_id;
     }
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
+    dsm($checkout_status);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
