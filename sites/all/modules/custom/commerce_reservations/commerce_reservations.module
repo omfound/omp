@@ -2323,6 +2323,20 @@ function commerce_reservations_build_form($form_id) {
 }
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
+  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  foreach ($reservations as $reservation) {
+    if (is_null($reservation->field_checkout_status_value)) {
+        return 'Pending Reservation';  
+      }else{
+        return $reservation->field_checkout_status_value;
+      }
+    }
+  }
+  
+  return 'Available';
+}
+
+function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
   $product = commerce_product_load($product_id);
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
@@ -2335,17 +2349,30 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
       DATE_SUB(field_data_field_reservation_dates.field_reservation_dates_value2, INTERVAL 1 SECOND) BETWEEN :start_date AND :end_date
     )";
   $results = db_query($query, array(':start_date' => $start_date, ':end_date' => $end_date, ':sku' => $product->sku));
+  $reservations = array();
   foreach ($results as $result) {
     if ($exclude_id != $result->line_item_id) {
-      if (is_null($result->field_checkout_status_value)) {
-        return 'Pending Reservation';  
-      }else{
-        return $result->field_checkout_status_value;
-      }
+      $reservations[$result->line_item_id] = $result;
     }
   }
-  
-  return 'Available';
+
+  return $reservations;
+}
+
+function commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null) {
+  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  $display = commerce_reservations_entity_display_lookup($product_id);
+  $display_node = node_load($display);
+  if (!empty($display_node->field_crp_product_reference['und'])) {
+    $max_quantity = count($display_node->field_crp_product_reference['und']);
+  }else{
+    $max_quantity = 1;
+  }
+  if (count($reservations) >= $max_quantity) {
+    return 0;
+  }else{
+    return $max_quantity - count($reservations);
+  }
 }
 
 //TODO: BRIAN an odd situation can occur if a checkout contains overlapping reservations
@@ -2357,26 +2384,25 @@ function commerce_reservations_entity_presave($entity, $type) {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
     $start_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value'];
     $end_date = $entity->field_reservation_dates[LANGUAGE_NONE][0]['value2'];
+    $available_items = commerce_reservations_product_availability($product_id, $start_date, $end_date, $exclude_id = null);
+    dsm($available_items);
+    if (!$available_items) {
+      $entity = null;
+      drupal_set_message('This product is not avaiable for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
+    }
     $exclude_id = null;
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
     }
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
-    dsm($checkout_status);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
       $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
       if ($swap_product_id) {
-        dsm($swap_product_id);
         $swap_product = commerce_product_load($swap_product_id);
         $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $swap_product_id;
         $entity->line_item_label = $swap_product->sku;
-      }
-      else {
-        dsm('CANCELING');
-        $entity = null;
-        drupal_set_message('This product is not avaiable for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
       }
     }
   }
