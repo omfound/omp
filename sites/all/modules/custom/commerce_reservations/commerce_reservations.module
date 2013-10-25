@@ -2423,15 +2423,18 @@ function commerce_reservations_entity_presave($entity, $type) {
 }
 
 function commerce_reservations_check_availability($form, &$form_state) {
-  dsm($form_state['line_item']);
-  //if ($product->type == 'reservable_product') {
-    /**
-    $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
-    if (!$available_items) {
-      drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
-      drupal_goto('reservations');
-    }**/
-  //}
+  if ($form_state['line_item']->type == 'reservable_product') {
+    $available_items = commerce_reservations_product_quantity_available(
+      $form_state['line_item']->commerce_product[LANGUAGE_NONE][0]['product_id'],
+      $form_state['line_item']->field_reservation_dates[LANGUAGE_NONE][0]['value'], 
+      $form_state['line_item']->field_reservation_dates[LANGUAGE_NONE][0]['value2']);
+
+    if ($available_items < $form_state['line_item']['quantity']) {
+      form_set_error($name = NULL, $message = '', $limit_validation_errors = NULL);
+      $message = t('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
+      form_set_error(NULL, $message);
+    }
+  }
 }
 
 function commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids = array()) {
