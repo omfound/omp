@@ -2432,6 +2432,7 @@ function commerce_reservations_check_availability($form, &$form_state) {
     if ($available_items < $form_state['line_item']->quantity) {
       $message = t('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.');
       form_set_error('quantity', $message);
+      drupal_goto('reservations');
     }
   }
 }
