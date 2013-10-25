@@ -2421,7 +2421,7 @@ function commerce_reservations_entity_presave($entity, $type) {
   }
 }
 
-function commerce_reservations_commerce_cart_product_prepare($order, $product, $line_item->quantity) {
+function commerce_reservations_commerce_cart_product_prepare($order, $product, $quantity) {
   dsm($product);
   /**
   $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
