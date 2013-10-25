@@ -2429,7 +2429,7 @@ function commerce_reservations_check_availability($form, &$form_state) {
       $form_state['line_item']->field_reservation_dates[LANGUAGE_NONE][0]['value'], 
       $form_state['line_item']->field_reservation_dates[LANGUAGE_NONE][0]['value2']);
 
-    if ($available_items < $form_state['line_item']['quantity']) {
+    if ($available_items < $form_state['line_item']->quantity) {
       form_set_error($name = NULL, $message = '', $limit_validation_errors = NULL);
       $message = t('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
       form_set_error(NULL, $message);
