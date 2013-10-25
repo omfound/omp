@@ -2423,7 +2423,7 @@ function commerce_reservations_entity_presave($entity, $type) {
 }
 
 function commerce_reservations_check_availability($form, &$form_state) {
-  dsm($form_state);
+  dsm($form_state['line_item']);
   //if ($product->type == 'reservable_product') {
     /**
     $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
