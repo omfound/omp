@@ -248,6 +248,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       unset($form['quantity']['#size']);
       $form['submit']['#value'] = 'Add Rental to Shopping Cart'; 
       $form['#validate'][] = 'commerce_reservations_fix_quantity';
+      $form['#validate'][] = 'commerce_reservations_check_availability';
       $form['#submit'][] = 'commerce_reservations_redirect_add';
     }
   }
@@ -2421,14 +2422,16 @@ function commerce_reservations_entity_presave($entity, $type) {
   }
 }
 
-function commerce_reservations_commerce_cart_product_prepare($order, $product, $quantity) {
-  dsm($product);
-  /**
-  $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
-  if (!$available_items) {
-    drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
-    drupal_goto('reservations');
-  }**/
+function commerce_reservations_check_availability($form, &$form_state) {
+  dsm($form_state);
+  //if ($product->type == 'reservable_product') {
+    /**
+    $available_items = commerce_reservations_product_quantity_available($product_id, $start_date, $end_date, $exclude_id = null);
+    if (!$available_items) {
+      drupal_set_message('This product is not available for checkout during the time you selected. Please be sure to allow the reservation calendar to load fully before attempting to select your time.', 'error');
+      drupal_goto('reservations');
+    }**/
+  //}
 }
 
 function commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids = array()) {
