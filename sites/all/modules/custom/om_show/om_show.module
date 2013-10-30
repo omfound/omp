@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Include Open Media System Show Reports
+ */
+include_once('om_show.om_reports.inc');
+
+/**
  * Implementation of hook_menu()
  */
 function om_show_menu() {

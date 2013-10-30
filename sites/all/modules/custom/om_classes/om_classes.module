@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Include Open Media System Class Reports
+ */
+include_once('om_classes.om_reports.inc');
+
+/**
 ** Implements hook_menu
 **/
 function om_classes_menu() {
