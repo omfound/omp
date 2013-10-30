@@ -1,0 +1,3 @@
+(function($) {
+  // Coming soon
+}(jQuery));

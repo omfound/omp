@@ -30,6 +30,14 @@ function om_show_permission() {
   );
 }
 
+function om_show_preprocess_page(&$variables) {
+  if (is_object($variables['node']) && $variables['node']->type == 'om_show') {
+    if (variable_get('om_show_adult_ratings', 0)) {
+
+    }
+  }
+}
+
 /**
  * Implements hook_theme
  */
@@ -94,6 +102,19 @@ function om_show_admin_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Default video player height for logged in users'),
     '#default_value' => variable_get('om_show_video_height_user', 338),
+  );
+  $tree = taxonomy_get_tree(14);
+  $options = array();
+  foreach ($tree AS $term) {
+    $options[$term->tid] = $term->name;
+  }
+  $form['om_show_adult_ratings'] = array(
+    '#type' => 'select',
+    '#title' => t('Adult content prompt'),
+    '#description' => t('Select which ratings should generate an adult content prompt.'),
+    '#default_value' => variable_get('om_show_adult_ratings', FALSE),
+    '#options' => $options,
+    '#multiple' => TRUE
   );
   return system_settings_form($form);
 }
