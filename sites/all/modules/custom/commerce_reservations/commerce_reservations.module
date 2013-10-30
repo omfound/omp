@@ -253,7 +253,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
   }
   //Make the quantity non-editable on the cart if the line item is a reservable product
-  if ($form_id == 'views_form_commerce_cart_form_default'){
+  if ($form_id == 'views_form_commerce_cart_form_default') {
     $index = 0;
     foreach($form['edit_quantity'] as $quantity_field){
       if (isset($quantity_field['#line_item_id'])){
@@ -2349,6 +2349,7 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
 }
 
 function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
+  dsm($product_id.' : '.$start_date.' : '.$end_date);
   $product = commerce_product_load($product_id);
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value FROM {commerce_line_item} 
