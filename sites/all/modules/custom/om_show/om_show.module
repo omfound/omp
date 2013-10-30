@@ -35,10 +35,10 @@ function om_show_permission() {
   );
 }
 
-function om_show_preprocess_page(&$variables) {
-  if (is_object($variables['node']) && $variables['node']->type == 'om_show') {
+function om_show_preprocess_node(&$variables) {
+  if (!empty($variables['node']) && $variables['node']->type == 'om_show') {
     if (variable_get('om_show_adult_ratings', 0)) {
-
+      
     }
   }
 }
