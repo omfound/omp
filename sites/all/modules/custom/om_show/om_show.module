@@ -37,8 +37,13 @@ function om_show_permission() {
 
 function om_show_preprocess_node(&$variables) {
   if (!empty($variables['node']) && $variables['node']->type == 'om_show') {
-    if (variable_get('om_show_adult_ratings', 0)) {
-      
+    if ($ratings = variable_get('om_show_adult_ratings', 0)) {
+      if (!empty($variables['node']->field_om_rating[$variables['node']->language][0])) {
+        if (in_array($variables['node']->field_om_rating[$variables['node']->language][0]['tid'], $ratings)) {
+          drupal_add_library('system', 'jquery.cookie');
+          drupal_add_js(drupal_get_path('module', 'om_show') . '/js/adult-content-confirmation.js', array('type' => 'file', 'group' => JS_DEFAULT));
+        }
+      }
     }
   }
 }
