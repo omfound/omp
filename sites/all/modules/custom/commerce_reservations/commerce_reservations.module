@@ -2349,7 +2349,6 @@ function commerce_reservations_product_checkout_status($product_id, $start_date,
 }
 
 function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
-  dsm($product_id.' : '.$start_date.' : '.$end_date);
   $product = commerce_product_load($product_id);
   $query = "
     SELECT commerce_line_item.line_item_id, field_data_field_checkout_status.field_checkout_status_value,
@@ -2397,7 +2396,11 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
       $reservation_count = $reservation_count + count($reservations);
     }
     $overlaps = check_overlaps($all_reservations, $all_reservations);
-    dsm($overlaps);
+    foreach ($overlaps as $overlap) {
+      if ($overlap['count'] > $reservation_count) { 
+        $reservation_count = $overlap['count'];
+      }
+    }
   }else{
     $max_quantity = 0;
     $reservation_count = 1;
