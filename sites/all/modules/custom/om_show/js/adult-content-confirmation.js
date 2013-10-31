@@ -1,8 +1,8 @@
 (function($) {
   Drupal.behaviors.adultContentPrompt = {
     attach: function(context) {
-      //var $target = $('.node', context);
-      //adultContentPrompt.attach($target);
+      var $target = $('.node', context);
+      adultContentPrompt.attach($target);
       console.log(adultContentPrompt);
     }
   };
