@@ -9,6 +9,7 @@
     var userStatus; // tri-state: accepted, declined, challenge
     var p = {};
     p.attach = function($target) {
+      console.log(getUserStatus());
       if (getUserStatus() == 'challenge' || getUserStatus() == 'declined') {
         challenge($target);
       }
