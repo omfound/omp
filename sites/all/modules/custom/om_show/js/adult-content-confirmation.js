@@ -3,7 +3,6 @@
     attach: function(context) {
       var $target = $('.node', context);
       adultContentPrompt.attach($target);
-      console.log(adultContentPrompt);
     }
   };
   var adultContentPrompt = (function () {
@@ -35,7 +34,7 @@
       setCookie('denied');
       userStatus = 'denied';
       var $prompt = promptFactory();
-      $('.adult-content-prompt').replace($prompt);
+      $('.adult-content-prompt').replaceWith($prompt);
     }
     function getUserStatus() {
       if (!userStatus) {
