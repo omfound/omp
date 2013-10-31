@@ -53,14 +53,14 @@
       }
       if (getUserStatus() == 'challenge') {
         $message =  $('<div/>').addClass('prompt-message')
-          .text('This video contains adult content. Do you wish to proceed?');
+          .text('This video contains adult content. Clicking cancel will block adult content across the site. Do you wish to proceed?');
         $message.prepend($strong);
         $interfaceWrapper = $('<div/>').addClass('prompt-interface-wrapper clearfix');
         $yes = $('<div/>').addClass('prompt-interface prompt-yes')
           .text('Proceed')
           .click(handleYes);
         $no = $('<div/>').addClass('prompt-interface prompt-no')
-          .text('Return to Home Page')
+          .text('Cancel and Return to Home Page')
           .click(handleNo);
         $interfaceWrapper.append($yes);
         $interfaceWrapper.append($no);
