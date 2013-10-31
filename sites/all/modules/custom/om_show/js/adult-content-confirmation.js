@@ -60,7 +60,7 @@
           .text('Proceed')
           .click(handleYes);
         $no = $('<div/>').addClass('prompt-interface prompt-no')
-          .text('Return to Shows')
+          .text('Return to Home Page')
           .click(handleNo);
         $interfaceWrapper.append($yes);
         $interfaceWrapper.append($no);
