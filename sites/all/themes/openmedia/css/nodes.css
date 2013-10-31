@@ -342,6 +342,14 @@
 }
 
 /**
+ * Adult Content Popup
+ */
+.node-type-om-show .node .adult-content-prompt  {
+  width: 710px;
+  height: 500px;
+}
+
+/**
  * Show && Project Node Forms
  **/
 body.page-node-add-om-show .form-item label,
