@@ -25,7 +25,6 @@
     function challenge($target) {
       var $prompt = promptFactory();
       $target.prepend($prompt);
-      $prompt.height($target.height());
     }
     function handleYes() {
       setCookie('accepted');
@@ -36,7 +35,6 @@
       userStatus = 'denied';
       var $prompt = promptFactory();
       $('.adult-content-prompt').replaceWith($prompt);
-      $prompt.height($prompt.parents().height());
     }
     function getUserStatus() {
       if (!userStatus) {
