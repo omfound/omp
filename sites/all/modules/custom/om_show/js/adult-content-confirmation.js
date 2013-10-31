@@ -33,8 +33,7 @@
     function handleNo() {
       setCookie('denied');
       userStatus = 'denied';
-      var $prompt = promptFactory();
-      $('.adult-content-prompt').replaceWith($prompt);
+      window.location = '/';
     }
     function getUserStatus() {
       if (!userStatus) {
