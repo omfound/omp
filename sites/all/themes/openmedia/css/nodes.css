@@ -347,6 +347,7 @@
  */
 .node-type-om-show .node .adult-content-prompt  {
   width: 710px;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
