@@ -56,10 +56,10 @@
         $message =  $('<div/>').addClass('prompt-message clearfix')
           .text('This video contains adult content. Do you wish to proceed?');
         $message.prepend($strong);
-        $yes = $('<div/>').addClass('prompt-inteface prompt-yes')
+        $yes = $('<div/>').addClass('prompt-interface prompt-yes')
           .text('Proceed')
           .click(handleYes);
-        $no = $('<div/>').addClass('prompt-inteface prompt-no')
+        $no = $('<div/>').addClass('prompt-interface prompt-no')
           .text('Return to Shows')
           .click(handleNo);
         $message.append($yes);
