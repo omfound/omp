@@ -53,17 +53,19 @@
         $prompt.append($message);
       }
       if (getUserStatus() == 'challenge') {
-        $message =  $('<div/>').addClass('prompt-message clearfix')
+        $message =  $('<div/>').addClass('prompt-message')
           .text('This video contains adult content. Do you wish to proceed?');
         $message.prepend($strong);
+        $interfaceWrapper = $('<div/>').addClass('prompt-interface-wrapper clearfix');
         $yes = $('<div/>').addClass('prompt-interface prompt-yes')
           .text('Proceed')
           .click(handleYes);
         $no = $('<div/>').addClass('prompt-interface prompt-no')
           .text('Return to Shows')
           .click(handleNo);
-        $message.append($yes);
-        $message.append($no);
+        $interfaceWrapper.append($yes);
+        $interfaceWrapper.append($no);
+        $message.append($interfaceWrapper);
         $prompt.append($message);
       }
       return $prompt;
