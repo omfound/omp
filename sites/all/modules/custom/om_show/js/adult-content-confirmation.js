@@ -45,7 +45,7 @@
     }
     function promptFactory() {
       var $prompt = $('<div/>').addClass('adult-content-prompt');
-      var $strong = $('<strong/>').addClass('adult-content-strong').text('Warning:');
+      var $strong = $('<strong/>').addClass('adult-content-strong').text('Warning: ');
       if (getUserStatus() == 'denied') {
         $message = $('<div/>').addClass('prompt-message')
           .text('This video contains adult content and is not available at this time.');
