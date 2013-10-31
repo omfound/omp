@@ -45,14 +45,17 @@
     }
     function promptFactory() {
       var $prompt = $('<div/>').addClass('adult-content-prompt');
+      var $strong = $('<strong/>').addClass('adult-content-strong').text('warning');
       if (getUserStatus() == 'denied') {
         $message = $('<div/>').addClass('prompt-message')
           .text('This video contains adult content and is not available at this time.');
+        $message.prepend($strong);
         $prompt.append($message);
       }
       if (getUserStatus() == 'challenge') {
         $message =  $('<div/>').addClass('prompt-message')
           .text('This video contains adult content. Do you wish to proceed?');
+        $message.prepend($strong);
         $yes = $('<div/>').addClass('prompt-inteface prompt-yes')
           .text('Proceed')
           .click(handleYes);
