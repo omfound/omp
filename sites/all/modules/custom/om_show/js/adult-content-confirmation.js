@@ -6,11 +6,10 @@
     }
   };
   var adultContentPrompt = (function () {
-    var userStatus; // tri-state: accepted, declined, challenge
+    var userStatus; // tri-state: accepted, denied, challenge
     var p = {};
     p.attach = function($target) {
-      console.log(getUserStatus());
-      if (getUserStatus() == 'challenge' || getUserStatus() == 'declined') {
+      if (getUserStatus() == 'challenge' || getUserStatus() == 'denied') {
         challenge($target);
       }
     }
@@ -46,7 +45,7 @@
     }
     function promptFactory() {
       var $prompt = $('<div/>').addClass('adult-content-prompt');
-      if (getUserStatus() == 'declined') {
+      if (getUserStatus() == 'denied') {
         $message = $('<div/>').addClass('prompt-message')
           .text('This video contains adult content and is not available at this time.');
         $prompt.append($message);
