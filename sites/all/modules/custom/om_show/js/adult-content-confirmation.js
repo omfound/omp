@@ -6,7 +6,7 @@
       console.log(adultContentPrompt);
     }
   };
-  var adultContentPrompt = function() {
+  var adultContentPrompt = (function () {
     var userStatus; // tri-state: accepted, declined, challenge
     var p = {};
     p.attach = function($target) {
@@ -72,5 +72,5 @@
       $prompt.remove();
     }
     return p;
-  };
+  }());;
 }(jQuery));
