@@ -53,7 +53,7 @@
         $prompt.append($message);
       }
       if (getUserStatus() == 'challenge') {
-        $message =  $('<div/>').addClass('prompt-message')
+        $message =  $('<div/>').addClass('prompt-message clearfix')
           .text('This video contains adult content. Do you wish to proceed?');
         $message.prepend($strong);
         $yes = $('<div/>').addClass('prompt-inteface prompt-yes')
