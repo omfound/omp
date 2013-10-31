@@ -347,10 +347,10 @@
  */
 .node-type-om-show .node .adult-content-prompt  {
   width: 710px;
-  height: 500px;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
   background: rgba(255, 255, 255, .75);
 }
 
