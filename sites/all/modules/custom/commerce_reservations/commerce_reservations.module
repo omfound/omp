@@ -651,10 +651,10 @@ function commerce_reservations_views_post_execute(&$view){
 }
 
 function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber){
+  date_default_timezone_set(date_default_timezone());
   $startDate = strtotime($startDate);
   $endDate = strtotime($endDate);
   $dateArr = array();
-  date_default_timezone_set(date_default_timezone());
   do {
     if(date("w", $startDate) != $weekdayNumber){
       $startDate += (24 * 3600); // add 1 day
@@ -664,10 +664,10 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
 
   while($startDate <= $endDate){
     //daylight savings adjustment
-    //if (!date("I", $startDate)) {
-      $dateCopy = $startDate + (24 * 3600);
+    /if (!date("I", $startDate)) {
+      //$dateCopy = $startDate + (24 * 3600);
     //}else{
-      //$dateCopy = $startDate;
+      $dateCopy = $startDate;
     //}
     $dateArr[] = date('Y-m-d', $dateCopy);
     $startDate += (7 * 24 * 3600); // add 7 days
