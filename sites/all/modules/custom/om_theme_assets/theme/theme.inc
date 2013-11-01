@@ -38,8 +38,7 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
     }
     if (variable_get('om_profile_link', TRUE)) {
       $options['attributes']['class'] = array('om-profile');
-      $clean_name = strtolower(str_replace(' ', '-', $user->name));
-      $links[] = l('Profile', 'users/' . $clean_name, $options);
+      $links[] = l('Profile', 'user/' . $user->uid, $options);
     }
   }
   else {

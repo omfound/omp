@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Include Open Media System Show Reports
+ */
+include_once('om_show.om_reports.inc');
+
+/**
  * Implementation of hook_menu()
  */
 function om_show_menu() {
@@ -28,6 +33,19 @@ function om_show_permission() {
       'description' => t('Administer OMP functionality for the show interface.'),
     )
   );
+}
+
+function om_show_preprocess_node(&$variables) {
+  if (!empty($variables['node']) && $variables['node']->type == 'om_show') {
+    if ($ratings = variable_get('om_show_adult_ratings', 0)) {
+      if (!empty($variables['node']->field_om_rating[$variables['node']->language][0])) {
+        if (in_array($variables['node']->field_om_rating[$variables['node']->language][0]['tid'], $ratings)) {
+          drupal_add_library('system', 'jquery.cookie');
+          drupal_add_js(drupal_get_path('module', 'om_show') . '/js/adult-content-confirmation.js', array('type' => 'file', 'group' => JS_DEFAULT));
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -94,6 +112,19 @@ function om_show_admin_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Default video player height for logged in users'),
     '#default_value' => variable_get('om_show_video_height_user', 338),
+  );
+  $tree = taxonomy_get_tree(14);
+  $options = array();
+  foreach ($tree AS $term) {
+    $options[$term->tid] = $term->name;
+  }
+  $form['om_show_adult_ratings'] = array(
+    '#type' => 'select',
+    '#title' => t('Adult content prompt'),
+    '#description' => t('Select which ratings should generate an adult content prompt.'),
+    '#default_value' => variable_get('om_show_adult_ratings', FALSE),
+    '#options' => $options,
+    '#multiple' => TRUE
   );
   return system_settings_form($form);
 }
