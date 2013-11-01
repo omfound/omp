@@ -855,7 +855,7 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
-  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
+  $query->join('field_data_field_om_show_project', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $start, '>=');
@@ -868,7 +868,7 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
-  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
+  $query->join('field_data_field_om_show_project', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $start, '<=');
@@ -881,7 +881,7 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
   $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
-  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
+  $query->join('field_data_field_om_show_project', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
   $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $end, '<=');
