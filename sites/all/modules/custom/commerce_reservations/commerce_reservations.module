@@ -663,18 +663,10 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
   while(date("w", $startDate) != $weekdayNumber);
 
   while($startDate <= $endDate){
-    //daylight savings adjustment
-    //if (!date("I", $startDate)) {
-      //$dateCopy = $startDate + (24 * 3600);
-    //}else{
-      $dateCopy = $startDate;
-    if (date("w", $startDate) === 0) {
-      dsm(date('Y-m-d', $dateCopy));
-    }
-    //}
-    $dateArr[] = date('Y-m-d', $dateCopy);
+    $dateArr[] = date('Y-m-d', $startDate);
     $startDate += (7 * 24 * 3600); // add 7 days
   }
+  dsm($dateArr);
   return($dateArr);
 }
 
