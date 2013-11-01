@@ -651,7 +651,9 @@ function commerce_reservations_views_post_execute(&$view){
 }
 
 function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber){
-  date_default_timezone_set(date_default_timezone());
+  //we dont want to deal with timezones in here
+  date_default_timezone_set('UTC');
+
   $startDate = strtotime($startDate);
   $endDate = strtotime($endDate);
   $dateArr = array();
@@ -666,7 +668,6 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
     $dateArr[] = date('Y-m-d', $startDate);
     $startDate += (7 * 24 * 3600); // add 7 days
   }
-  dsm($dateArr);
   return($dateArr);
 }
 
