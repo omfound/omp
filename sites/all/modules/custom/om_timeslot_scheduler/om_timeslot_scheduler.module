@@ -466,7 +466,8 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
         if (($date['value'] >= $run['start'] && $date['value2'] <= $run['end']) || ($date['value'] <= $run['start'] && $date['value2'] >= $run['start']) || ($date['value'] <= $run['end'] && $date['value2'] >= $run['end'])) {
-          foreach($timeslot->gaps[$date['value']] AS $gap) {
+          dsm($timeslot->gaps);
+          foreach($timeslot->gaps['gaps'][$date['value']] AS $gap) {
             // $process_start is the place holder for moving forward.
             $process_start = $gap['start'];
             $process_end = $gap['end'];
@@ -853,7 +854,10 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   // Get normal airings
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
+  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $start, '>=');
   $query->condition('field_om_airing_dates_value2', $end, '<=');
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
@@ -863,7 +867,10 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   // Get airings that intrude on the front of the timeslot
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
+  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $start, '<=');
   $query->condition('field_om_airing_dates_value2', $start, '>');
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
@@ -873,7 +880,10 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
   // Get airings that extrude from the end of the timeslot
   $query = db_select('field_data_field_om_airing_dates', 'airing_dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'airing_dates.entity_id=airing_channel.entity_id');
+  $query->join('field_data_field_om_show_id', 'airing_show', 'airing_dates.entity_id=airing_show.entity_id');
+  $query->join('field_om_show_project_nid', 'airing_project', 'airing_show.field_om_show_id_value=airing_project.entity_id');
   $query->fields('airing_dates', array('field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->fields('airing_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_dates_value', $end, '<=');
   $query->condition('field_om_airing_dates_value2', $end, '>');
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
@@ -901,7 +911,8 @@ function om_timeslot_scheduler_get_gaps($channel_tid, $start, $end) {
     foreach($airings AS $airing) {
       array_walk($gaps, '_om_timeslot_scheduler_handle_gaps', array('start' => $airing->field_om_airing_dates_value, 'end' => $airing->field_om_airing_dates_value2, 'gaps' => &$gaps));
     }
-    return $gaps;
+    // Since we are collecting all airing data send it along too.
+    return array('airings' => $airings, 'gaps' => $gaps);
   }
 }
 
