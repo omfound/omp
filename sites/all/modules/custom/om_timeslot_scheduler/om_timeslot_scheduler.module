@@ -838,7 +838,7 @@ function _om_timeslot_scheduler_get_project_nid($nid) {
     $query->condition('project.entity_type', $nid, '=');
     $resource = $query->execute();
     while($result = $resource->fetchAssoc()) {
-      $all_projects[$nid] = $result['field_om_show_project_nid']
+      $all_projects[$nid] = $result['field_om_show_project_nid'];
       return $result['field_om_show_project_nid'];
     }
     return FALSE;
