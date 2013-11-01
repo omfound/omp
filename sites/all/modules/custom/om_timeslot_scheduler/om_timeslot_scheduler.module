@@ -828,7 +828,7 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
 }
 
 function _om_timeslot_scheduler_get_project_nid($nid) {
-  $all_projects = &$drupal_static(__FUNCTION__);
+  $all_projects = &drupal_static(__FUNCTION__);
   if (empty($all_projects)) {
     $all_projects = array();
   }
