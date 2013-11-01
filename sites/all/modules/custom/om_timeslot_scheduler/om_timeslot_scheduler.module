@@ -459,6 +459,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $all_shows = om_timeslot_scheduler_load_all_shows();
   $all_airings = om_broadcast_schedule_get_airings_by_date_range($run['start'], $run['end'], $run['channel_tid']);
+  dsm($all_airings);
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
