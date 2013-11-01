@@ -477,7 +477,7 @@ function commerce_reservations_variable_get_timezone_adjusted($variable) {
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
-    $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
+    $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
     dsm($start_date . ' : ' . $end_date);
