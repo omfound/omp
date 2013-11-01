@@ -668,6 +668,9 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
       //$dateCopy = $startDate + (24 * 3600);
     //}else{
       $dateCopy = $startDate;
+    if (date("w", $startDate) === 0) {
+      dsm(date('Y-m-d', $dateCopy));
+    }
     //}
     $dateArr[] = date('Y-m-d', $dateCopy);
     $startDate += (7 * 24 * 3600); // add 7 days
