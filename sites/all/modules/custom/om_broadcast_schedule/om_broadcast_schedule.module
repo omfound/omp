@@ -578,8 +578,10 @@ function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
   $query->join('field_data_field_om_show_id', 'show_ref', 'dates.entity_id=show_ref.entity_id');
+  $query->join('field_data_field_om_show_project', 'show_project', 'show_ref.field_om_show_id_value=show_project.entity_id');
   $query->fields('dates', array('entity_id'));
   $query->fields('show_ref', array('field_om_show_id_value'));
+  $query->fields('show_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
     $and_1 = db_and();
     $and_1->condition('field_om_airing_dates_value', $start, '>=');
