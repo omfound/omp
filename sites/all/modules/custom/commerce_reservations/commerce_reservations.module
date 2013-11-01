@@ -437,9 +437,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            //Odd situation where Thursdays need to set index back 1
-            $index_fix = $index-1;
-            print commerce_reservations_generate_date_feed_item($date, $index_fix, $value, $value2, $value3, 3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
         case 'Friday':
