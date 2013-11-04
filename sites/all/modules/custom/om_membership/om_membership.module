@@ -241,7 +241,7 @@ function om_membership_add_membership_and_transfer($pid) {
 
   if($user->uid != 0) {
     //this user already has an account, go straight to checkout
-    drupal_goto('checkout');
+    drupal_goto('/checkout');
   }
   drupal_goto('membership/signup');
 }
