@@ -437,9 +437,7 @@ function commerce_reservations_get_closed_times(){
           $value3 = variable_get($variable3);
           foreach($array as $index => $date){
             $value2 = variable_get($variable2);
-            //Odd situation where Thursdays need to set index back 1
-            $index_fix = $index-1;
-            print commerce_reservations_generate_date_feed_item($date, $index_fix, $value, $value2, $value3, 3); 
+            print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
         case 'Friday':
@@ -479,7 +477,7 @@ function commerce_reservations_variable_get_timezone_adjusted($variable) {
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   if ($value2){
-    $array2 = getDateForSpecificDayBetweenDates('today', '+3 month', $date_modifier);
+    $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
     //GIANT hack need to find problem later 5/22 10:00 pm to 8/21 2:00pm
@@ -651,10 +649,12 @@ function commerce_reservations_views_post_execute(&$view){
 }
 
 function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber){
+  //we dont want to deal with timezones in here
+  date_default_timezone_set('UTC');
+
   $startDate = strtotime($startDate);
   $endDate = strtotime($endDate);
   $dateArr = array();
-  date_default_timezone_set(date_default_timezone());
   do {
     if(date("w", $startDate) != $weekdayNumber){
       $startDate += (24 * 3600); // add 1 day
@@ -663,13 +663,7 @@ function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
   while(date("w", $startDate) != $weekdayNumber);
 
   while($startDate <= $endDate){
-    //daylight savings adjustment
-    if (!date("I", $startDate)) {
-      $dateCopy = $startDate + (24 * 3600);
-    }else{
-      $dateCopy = $startDate;
-    }
-    $dateArr[] = date('Y-m-d', $dateCopy);
+    $dateArr[] = date('Y-m-d', $startDate);
     $startDate += (7 * 24 * 3600); // add 7 days
   }
   return($dateArr);
