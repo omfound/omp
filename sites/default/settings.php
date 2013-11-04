@@ -238,7 +238,7 @@ $databases['legacy']['default'] = array(
 
 $databases['legacy-civi']['default'] = array(
   'driver' => 'mysql',
-  'database' => 'dom_prod_civi', // this is the name used to define the SOURCE_DATABASE constant above
+  'database' => 'dom_civi_prod', // this is the name used to define the SOURCE_DATABASE constant above
   'username' => 'civi-mig',
   'password' => 'wNdYC9mdHxEzx72F',
   'host' => '129.19.150.4',
