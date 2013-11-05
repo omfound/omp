@@ -90,6 +90,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Manage categories'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'admin/structure/taxonomy/class_categories',
+  );
   $content['menu']['classes']['report_00'] = array(
     '#title' => t('Class Registrations Report'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
