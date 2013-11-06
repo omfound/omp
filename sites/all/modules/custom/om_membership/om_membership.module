@@ -236,12 +236,13 @@ function om_membership_add_membership_and_transfer($pid) {
   }
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
     // Add membershipt to cart.
+    watchdog('brian', 'adding to cart: '.$pid);
     commerce_cart_product_add_by_id($pid, 1);
   }
 
   if($user->uid != 0) {
     //this user already has an account, go straight to checkout
-    drupal_goto('/checkout');
+    drupal_goto('checkout');
   }
   drupal_goto('membership/signup');
 }
