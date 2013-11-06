@@ -234,10 +234,8 @@ function om_membership_add_membership_and_transfer($pid) {
       }
     }
   }
-  watchdog('brian', '<pre>'.print_r($user_memberships, TRUE).'</pre>');
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
     // Add membershipt to cart.
-    watchdog('brian', 'adding to cart: '.$pid);
     commerce_cart_product_add_by_id($pid, 1);
   }
 
@@ -319,6 +317,7 @@ function _om_membership_compare_vocs($a, $b) {
  *    Array of commerce product instances.
  */
 function om_membership_get_user_membership_products($user, $active = TRUE) {
+  if (!$user->uid) { return array(); }
   $products = array();
   $orders = om_membership_get_user_membership_orders($user, $active);
   if (!empty($orders)) {
