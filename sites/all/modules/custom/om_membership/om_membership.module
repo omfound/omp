@@ -325,6 +325,7 @@ function _om_membership_compare_vocs($a, $b) {
  *    Array of commerce product instances.
  */
 function om_membership_get_user_membership_products($user, $active = TRUE) {
+  if (!$user->uid) { return array(); }
   $products = array();
   $orders = om_membership_get_user_membership_orders($user, $active);
   if (!empty($orders)) {

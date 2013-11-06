@@ -459,6 +459,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $all_shows = om_timeslot_scheduler_load_all_shows();
   $all_airings = om_broadcast_schedule_get_airings_by_date_range($run['start'], $run['end'], $run['channel_tid']);
+  $all_projects = array();
+  foreach ($all_airings AS $airing) {
+    $all_projects[] = $airing['field_om_show_project_nid'];
+  }
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
@@ -583,6 +587,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
+                        $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                      }
+                      if ($already_aired == FALSE) { 
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                         $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                         //here it sets process start to the next 30 minute gap
@@ -608,6 +615,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
+                        $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                      }
+                      if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
                         $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
                         $used = $rank;
@@ -632,6 +642,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
                       if ($branding_show_completion <= $mini_gap['end']) {
                         $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $branding_list);
+                        if ($already_aired == FALSE) {
+                          $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                        }
                         if ($already_aired == FALSE) {
                           $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
                           $process_start += $banding_item->field_om_show_duration['und'][0]['value'];
@@ -812,6 +825,27 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
     'duration' => $end - $start,
     'show' => $show
   );
+}
+
+function _om_timeslot_scheduler_get_project_nid($nid) {
+  $all_projects = &drupal_static(__FUNCTION__);
+  if (empty($all_projects)) {
+    $all_projects = array();
+  }
+  if (empty($all_projects[$nid])) {
+    $query = db_select('field_data_field_om_show_project', 'project');
+    $query->fields('project', array('field_om_show_project_nid'));
+    $query->condition('project.entity_type', $nid, '=');
+    $resource = $query->execute();
+    while($result = $resource->fetchAssoc()) {
+      $all_projects[$nid] = $result['field_om_show_project_nid'];
+      return $result['field_om_show_project_nid'];
+    }
+    return FALSE;
+  }
+  else {
+   return $all_projects[$nid];
+  }
 }
 
 /**
@@ -1289,4 +1323,9 @@ function om_timeslot_scheduler_show_is_in_airing_list($airing_list, $show) {
     }
   }
   return FALSE;
+}
+
+function om_timeslot_scheduler_show_is_in_project_list($project_list, $show) {
+  $p_nid = _om_timeslot_scheduler_get_project_nid($show->nid);
+  return in_array($p_nid, $project_list);
 }
