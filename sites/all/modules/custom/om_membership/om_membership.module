@@ -234,6 +234,7 @@ function om_membership_add_membership_and_transfer($pid) {
       }
     }
   }
+  watchdog('brian', '<pre>'.print_r($user_memberships, TRUE).'</pre>');
   if (empty($user_memberships) || (!empty($user_memberships) && $user_memberships->product_id != $pid)) {
     // Add membershipt to cart.
     watchdog('brian', 'adding to cart: '.$pid);
