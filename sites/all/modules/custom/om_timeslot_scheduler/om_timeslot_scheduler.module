@@ -1225,7 +1225,7 @@ function om_timeslot_scheduler_load_all_shows() {
   $query->fields('availability', array('field_scheduling_availability_value')); 
   $resource = $query->execute();
   while ($result = $resource->fetchObject()) {
-    if ($result->field_om_show_aired_value == 'not-available') {
+    if ($result->field_scheduling_availability_value == 'not-available') {
       continue;
     }
     if (!empty($result)) {
