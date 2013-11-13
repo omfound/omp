@@ -1215,7 +1215,7 @@ function om_timeslot_scheduler_load_all_shows() {
   $all_shows = array();
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
-  $query->join('field_data_field_scheduling_availability', 'availability', 'n.nid=availability.entity_id');
+  $query->leftJoin('field_data_field_scheduling_availability', 'availability', 'n.nid=availability.entity_id');
   $query->leftJoin('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
   $query->leftJoin('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
   $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
