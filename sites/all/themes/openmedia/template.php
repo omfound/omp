@@ -17,6 +17,15 @@ function openmedia_preprocess_html(&$variables) {
 }
 
 function openmedia_preprocess_page(&$variables) {
+  if ($variables['is_front']) {
+    if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
+      if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
+        drupal_add_js('sites/all/libraries/masonry/jquery.masonry.min.js', $options);
+        $options['group'] = JS_DEFAULT;
+        drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-grid.js', $options);
+      }
+    }
+  }
   if ($_GET['q'] == 'classes') {
     $options = array(
       'type' => 'file',

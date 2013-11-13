@@ -51,7 +51,9 @@
   background-color: #FFFFFF;
 }
 
-#content .omp-grid .views-row-start {
+#content .omp-grid .views-row-start, 
+body.front .view-classes .views-row-start
+{
   margin: 0;
 }
 

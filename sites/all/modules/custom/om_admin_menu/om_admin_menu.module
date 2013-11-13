@@ -86,6 +86,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'reports/class-registrations',
   );
+  $content['menu']['classes']['class_categories'] = array(
+    '#title' => t('Manage categories'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/structure/taxonomy/class_categories',
+  );
   $content['menu']['classes']['report_00'] = array(
     '#title' => t('Class Registrations Report'),
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
@@ -107,16 +112,34 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Manage Members'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'reports/members',
+    '#weight' => -50,
   );
   $content['menu']['membership']['add'] = array(
     '#title' => t('Create Membership Order'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/orders/add',
+    '#weight' => -40,
   );
   $content['menu']['membership']['benefits'] = array(
     '#title' => t('Member Grid Benefits'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/structure/taxonomy/membership_features',
+    '#weight' => -30,
+  );
+  $content['menu']['membership']['member_products'] = array(
+    '#title' => t('View Member Levels'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/commerce/products/list',
+    '#options' => array(
+      'query' => array('sku' => '', 'type' => 'membership_plan'),
+    ),
+    '#weight' => -20,
+  );
+  $content['menu']['admin/people']['find_people'] = array(
+    '#title' => t('Search Users'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'search/user',
+    '#weight' => 40,
   );
   $content['menu']['membership']['report_00'] = array(
     '#title' => t('Basic Membership Report'),

@@ -85,6 +85,9 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
+
+            //fire add date for default values
+            Drupal.behaviors.product_filter.addDateSelectionToCalendar();
           }
       });
     },
