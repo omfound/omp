@@ -197,6 +197,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'password' => $pbs->password
       );
       $data = array_merge($data, $auth);
+      drupal_set_message('<pre>' . print_r($data, TRUE) . '</pre>');
       return $client->{$function}($data);
     }
     catch(Exception $e) {
