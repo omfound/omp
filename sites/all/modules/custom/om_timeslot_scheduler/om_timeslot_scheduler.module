@@ -1332,7 +1332,5 @@ function om_timeslot_scheduler_show_is_in_airing_list($airing_list, $show) {
 
 function om_timeslot_scheduler_show_is_in_project_list($project_list, $show) {
   $p_nid = _om_timeslot_scheduler_get_project_nid($show->nid);
-  dsm($show->nid);
-  dsm($p_nid);
   return in_array($p_nid, $project_list);
 }
