@@ -471,6 +471,9 @@ function om_agenda_manager_live_button($theme) {
     $button .= '<div class="om-live-button stream-online">';
     $live_node = node_load($theme['live_nid']);
     $options = array('attributes' => array('class' => 'om-live-button-content'));
+    if (!empty($_GET['iframe_mode'])) {
+      $options['attributes']['target'] = '_blank';
+    }
     $button .= l($theme['theme'].' Currently In Session', 'node/'.$live_node->nid, $options);
     $button .= '</div>';
   }else{
