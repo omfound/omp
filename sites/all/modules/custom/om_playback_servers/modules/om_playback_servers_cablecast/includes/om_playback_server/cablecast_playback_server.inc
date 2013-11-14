@@ -41,7 +41,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         );
       }
       if (!empty($show->field_license[$show->language][0])) {
-        $term = taxonomy_term_load($show->field_license[$show->language][0]);
+        $term = taxonomy_term_load($show->field_license[$show->language][0]['tid']);
         $params['CustomFields'][] = array(
           'CustomField' => array(
             'Name' => 'Archive-CC-License',
