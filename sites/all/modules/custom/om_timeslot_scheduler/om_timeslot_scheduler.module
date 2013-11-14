@@ -463,9 +463,6 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   foreach ($all_airings AS $airing) {
     $all_projects[] = $airing['field_om_show_project_nid'];
   }
-  dsm($run['start']);
-  dsm($run['end']);
-  dsm($run['channel_tid']);
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
