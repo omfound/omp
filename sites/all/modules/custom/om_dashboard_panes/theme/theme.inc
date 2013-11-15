@@ -99,13 +99,31 @@ function om_dashboard_panes_preprocess_om_class_registration_pane(&$variables) {
 /**
  * Implements hook_preprocess_hook
  */
+function om_dashboard_panes_preprocess_om_switch_user_pane(&$variables) {
+  $devel_switch = block_load('devel', 'switch_user');
+  $rendered_devel_switch = drupal_render(_block_get_renderable_array(_block_render_blocks(array($devel_switch))));
+  $variables['switch_block'] = $rendered_devel_switch;
+  $variables['title'] = t('Switch User');
+}
+
+/**
+ * Implements hook_preprocess_hook
+ */
 function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
   $options = array('attributes' => array('class' => array('blue-button')));
   $reservations = om_dashboard_panes_get_users_reservations();
   if(!empty($reservations)) {
     $reservations_output = '<table><tr><th>Start Date</th><th>Item</th></tr>';
-    foreach($reservations as $res) {
-      $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td></tr>';
+    foreach($reservations as $key => $res) {
+      if (drupal_valid_path('cr/res_cancel/'.$key)) {
+        $link_options = array(
+          'query' => drupal_get_destination(),
+        );
+        $cancel_link = l('Cancel Reservation', 'cr/res_cancel/' . $key, $link_options);
+        $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td><td>' . $cancel_link . '</td></tr>';
+      }else{
+        $reservations_output .= '<tr><td>' . $res->start_date . '</td><td>' . $res->title . '</td><td></td></tr>';
+      }
     }
     $reservations_output .= '</table>';
   } else {
@@ -121,11 +139,18 @@ function om_dashboard_panes_preprocess_om_reservations_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
   $variables['title'] = t('Shows');
-  $shows = om_dashboard_panes_get_users_shows();
+  if (function_exists('om_show_get_users_shows')) {
+    $shows = om_show_get_users_shows();
+  }
   $options = array('attributes' => array('class' => array('blue-button')));
   if (!empty($shows)) {
     $show_output = '<table><tr><th>Title</th><th>Date Created</th></tr>';
+    $count = 0;
     foreach ($shows AS $show) {
+      if ($count > 9) {
+        continue;
+      }
+      $count ++;
       $created = date('D n/j/y', $show->created);
       $title = l($show->title, 'node/' . $show->nid);
       $show_output .= '<tr><td>' . $created . '</td><td>' . $title . '</td></tr>';
@@ -133,9 +158,20 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     $show_output .= "</table>";
     $variables['show_output'] = $show_output;
     $variables['add_link'] = l('Add a New Show', 'node/add/om_show', $options);
+    $variables['all_shows'] = l('My Shows', 'user/shows', $options);
   }
   else {
     $link = l('Make One Now', 'node/add/om_show', $options);
     $variables['message'] = t('You haven\'t created any shows yet. !now', array('!now' => $link));
   }
+}
+
+/**
+ * Implements hook_preprocess_hook
+ */
+function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
+  global $user;
+  $variables['title'] = t('Upcoming Airings');
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
+  $variables['all_airings'] = l('See All Airings', 'upcoming-airings', array('attributes' => array('class' => array('blue-button'))));
 }

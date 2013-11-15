@@ -9,7 +9,15 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     var options = {}; 
     options.disableResizing = true;
     options.eventClick = function(event){
-      return false;
+      if (!Drupal.settings.commerce_reservations.staff) {
+        return false;
+      }else{
+        if (event.url) {
+          window.open(event.url);
+          return false;
+        }
+        return false;
+      }
     }  
     options.eventMouseover = function(event){
     }
@@ -59,7 +67,22 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 event.textColor = 'white';
                 dom_id: this.dom_id;
                 $(".fullcalendar").fullCalendar('renderEvent', event, false);
-            });
+              });
+
+              $('div.closed_dates', data).each(function(index){
+                event = new Object();
+                event.title = 'Closed';
+                event.start = $(this).attr('date')+' 00:00:00';
+                event.end = $(this).attr('date')+' 23:59:59';
+                event.allDay = false;
+                event.className = 'closed-date';
+                event.color = '#56a4da';
+                event.backgroundColor = '#ac3d33';
+                event.eventBorderColor = '#56a4da';
+                event.textColor = 'white';
+                dom_id: this.dom_id;
+                $(".fullcalendar").fullCalendar('renderEvent', event, false);
+              });
           }
         });
       }
@@ -72,7 +95,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       dateInvalid = false;
       dateDiff = Math.abs(end - start);
       dateDiffHours = dateDiff / (1000*60*60);
-      //alert('hours: '+dateDiffHours);
 
       if (!allDay){
         dontCheck = false;
@@ -127,6 +149,13 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   $('.view-footer .form-submit').hide();
                   dateInvalid = true;
                 }
+              }
+              if (Drupal.settings.commerce_reservations.maximum_length != 0) {
+                if (dateDiffHours > Drupal.settings.commerce_reservations.maximum_length) {
+                  $('.date-status').html('<p class = "error">You cannot make a reservation greater than '+Drupal.settings.commerce_reservations.maximum_length+' hours.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }  
               }
             }
 

@@ -59,6 +59,18 @@ function om_dashboard_panes_om_dashboard_panes() {
       ),
       'dependency' => 'commerce_reservations'
     ),
+    'switch_user' => array(
+      'title' => t('Switch User'),
+      'theme' => array(
+        'om_switch_user_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_switch_user_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'devel',
+      'access' => 'switch users'
+    ),
     'shows' => array(
       'title' => t('User Shows'),
       'theme' => array(
@@ -69,6 +81,17 @@ function om_dashboard_panes_om_dashboard_panes() {
         )
       ),
       'dependency' => 'om_show'
+    ),
+    'om_upcoming_airings' => array(
+      'title' => t('Upcoming Airings'),
+      'theme' => array(
+        'om_upcoming_airings_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_upcoming_airings_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_broadcast_schedule'
     ),
   );
 }
@@ -109,18 +132,6 @@ function _om_dashboard_class_sort($a, $b) {
   return 1;
 }
 
-function om_dashboard_panes_get_users_shows($user = NULL) {
-  if (empty($user)) {
-    global $user;
-  }
-  $query = db_select('node', 'node');
-  $query->fields('node', array('nid', 'title', 'created'));
-  $query->condition('uid', $user->uid, '=');
-  $query->condition('type', 'om_show', '=');
-  $result = $query->execute();
-  return $result->fetchAll();
-}
-
 function om_dashboard_panes_get_users_reservations($user = NULL) {
   if (empty($user)) {
     global $user;
@@ -130,8 +141,8 @@ function om_dashboard_panes_get_users_reservations($user = NULL) {
     WHERE cli.type = :type
     and uid=:uid', array(':type' => 'reservable_product', ':uid' => $user->uid));
   $reservations = array();
-  // from UTC to Mountain time
-  $offset = -6*60*60;
+  // trying to get timezone offset programmatically so it will adjust for Daylight savings
+  $offset = date("Z");
   foreach($result as $row) {
     $line_item = commerce_line_item_load($row->line_item_id);
     $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);

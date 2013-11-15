@@ -149,12 +149,11 @@ function om_broadcast_schedule_manual_sync_form($form, &$form_state) {
  * Manual sync submit handler - starts a batch process
  */
 function om_broadcast_schedule_manual_sync($form, &$form_state) {
-
   $start = strtotime($form_state['values']['om_broadcast_schedule_start']);
   $end = strtotime($form_state['values']['om_broadcast_schedule_end']);
   // Setup Batch Process For Manual Sync
   $function = 'om_broadcast_schedule_sync_schedule';
-  $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end);
+  $batch = $function($form_state['values']['om_broadcast_schedule_channels'], $start, $end, 'manual_sync');
   batch_set($batch);
 }
 
@@ -170,9 +169,8 @@ function om_broadcast_schedule_manual_sync($form, &$form_state) {
  * @param $end
  *   end timestamp of window to begin updating
  */
-function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
-  $steps = om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end);
-  
+function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end, $mode) {
+  $steps = om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end, $mode); 
   $batch = array(
     'operations' => $steps,
     'finished' => '_om_broadcast_schedule_batch_complete',
@@ -196,12 +194,13 @@ function om_broadcast_schedule_sync_schedule($channel_tid, $start, $end) {
  * @returns array of function names/relative arguments.
  *
  */
-function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end) {
+function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end, $mode) {
   $rounded_days = om_broadcast_schedule_round_to_days($start, $end);
   $info = array(
     'channel_tid' => $channel_tid,
     'start' => $rounded_days['start'],
-    'end' => $rounded_days['end']
+    'end' => $rounded_days['end'],
+    'mode' => $mode
   );
   $steps = array(
     array('_om_broadcast_schedule_get_pbs_airings', array($info)),
@@ -241,7 +240,7 @@ function _om_broadcast_schedule_get_pbs_airings($run_info, &$context) {
       $context['results']['airing_values'] = $airing_array;
     }
   }
-  $context['message'] = t('Getting Airings From PBS.');
+  $context['message'] = t('Getting airings from playback server.');
 }
 
 /**
@@ -278,7 +277,7 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
   }
-  $context['message'] = t('Match Airings on Drupal site.');
+  $context['message'] = t('Matching airings on Drupal site.');
 }
 
 /**
@@ -288,7 +287,7 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
   foreach ($context['results']['delete_airings'] AS $airing) {
     om_broadcast_schedule_delete_airing_node($airing);
   }
-  $context['message'] = t('Purge unmatched airing nodes.');
+  $context['message'] = t('Purging unmatched airing nodes.');
 }
 
 /**
@@ -296,6 +295,7 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
  */
 function _om_broadcast_schedule_create_new(&$context) {
   foreach ($context['results']['create_airings'] AS $airing) {
+    $airing['mode'] = $context['results']['run_info']['mode'];
     om_broadcast_schedule_create_airing_node($airing);
   }
   $context['message'] = t('Create new airing nodes.');
@@ -325,6 +325,7 @@ function om_broadcast_schedule_create_airing_node($airing) {
   $node->field_om_airing_dates['und'][0]['value'] = $airing['start'];
   $node->field_om_airing_dates['und'][0]['value2'] = $airing['end'];
   $node->field_om_airing_channel['und'][0]['tid'] = $airing['channel_tid'];
+  $node->field_scheduling_mode['und'][0]['value'] = $airing['mode'];
   om_broadcast_schedule_airing_node_save($node);
 
   if (!empty($node->nid)) {
@@ -510,7 +511,6 @@ function om_broadcast_schedule_airing_node_save(stdClass $node) {
   }
   catch (Exception $e) {
     $transaction->rollback();
-    watchdog_exception('om_broadcast_schedule', $e);
     throw $e;
   }
 }
@@ -545,7 +545,6 @@ function om_broadcast_schedule_airing_node_delete_multiple($nids) {
     }
     catch (Exception $e) {
       $transaction->rollback();
-      watchdog_exception('om_broadcast_schedule', $e);
       throw $e;
     }
     // Clear the page and block and node_load_multiple caches.
@@ -579,22 +578,28 @@ function om_broadcast_schedule_get_airings_by_date_range($start, $end, $channel_
   $query = db_select('field_data_field_om_airing_dates', 'dates');
   $query->join('field_data_field_om_airing_channel', 'airing_channel', 'dates.entity_id=airing_channel.entity_id');
   $query->join('field_data_field_om_show_id', 'show_ref', 'dates.entity_id=show_ref.entity_id');
+  $query->join('field_data_field_om_show_project', 'show_project', 'show_ref.field_om_show_id_value=show_project.entity_id');
   $query->fields('dates', array('entity_id'));
   $query->fields('show_ref', array('field_om_show_id_value'));
+  $query->fields('show_project', array('field_om_show_project_nid'));
   $query->condition('field_om_airing_channel_tid', $channel_tid, '=');
     $and_1 = db_and();
     $and_1->condition('field_om_airing_dates_value', $start, '>=');
     $and_1->condition('field_om_airing_dates_value2', $end, '<=');
     $and_2 = db_and();
     $and_2->condition('field_om_airing_dates_value', $start, '>=');
-    $and_2->condition('field_om_airing_dates_value2', $start, '<=');
+    $and_2->condition('field_om_airing_dates_value', $end, '<=');
     $and_3 = db_and();
-    $and_3->condition('field_om_airing_dates_value', $end, '>=');
+    $and_3->condition('field_om_airing_dates_value2', $start, '>=');
     $and_3->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_airing_dates_value', $start, '<=');
+    $and_4->condition('field_om_airing_dates_value2', $end, '>=');
     $or = db_or();
     $or->condition($and_1);
     $or->condition($and_2);
     $or->condition($and_3);
+    $or->condition($and_4);
   $query->condition($or);
   $resource = $query->execute();
   while ($result = $resource->fetchAssoc()) {

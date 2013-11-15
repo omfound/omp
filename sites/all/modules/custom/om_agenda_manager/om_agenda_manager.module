@@ -12,12 +12,6 @@ function om_agenda_manager_permission() {
   );
 }
 
-function om_agenda_manager_theme_registry_alter(&$theme_registry) {
-  if (!empty($theme_registry['node__om_show'])) {
-    $theme_registry['node__om_show']['template'] = 'node--om_show--gov';
-  }
-}
-
 function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] == 'views-exposed-form-archived-sessions-page-2') {
@@ -84,7 +78,22 @@ function om_agenda_manager_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['jwplayer/test/%node'] = array(
+    'title' => 'JWPlayer Test',
+    'description' => 'JWPlayer Test',
+    'page callback' => 'om_agenda_manager_test',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
+}
+
+function om_agenda_manager_test($node) { 
+  drupal_add_js(drupal_get_path('module', 'om_agenda_manager') . '/js/jwplayer-test.js', array('type' => 'file', 'group' => JS_DEFAULT));
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
+  return '<div id="jwplayer-test"></div>';
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
@@ -151,6 +160,7 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     }
     $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
     $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
+    $output .= '<guid>'.$point['seconds'].'</guid>';
     $output .= '</item>';
   }
   $output .= '</channel>';
@@ -284,7 +294,9 @@ function om_agenda_manager_legacy_agenda_items($items) {
 function om_agenda_manager_parse_agenda($text) {
   //TODO: eventually need to support multiple options here
   //BASIC for Thornton
-  $start_match = '1. CALL TO ORDER';
+  $start_matches = array(
+    '1. ',
+  );
   $end_match = 'ADJOURNMENT';
   
   //break text into lines
@@ -293,8 +305,10 @@ function om_agenda_manager_parse_agenda($text) {
   $active = false;
   $agenda_lines = array(); 
   foreach ($lines as $key => $info) {
-    if (strpos($info, $start_match) !== false) {
-      $active = true;
+    foreach ($start_matches as $start_match) {
+      if (strpos($info, $start_match) !== false) {
+        $active = true;
+      }
     }
 
     if ($active) {

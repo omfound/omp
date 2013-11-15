@@ -82,16 +82,13 @@ function om_migration_update_cablecast_files() {
   $resource = $query->execute();
   while($result = $resource->fetchObject()) {
     if (!empty($result->entity_id) && !empty($result->field_om_show_playback_server_id_value)) {
-      $new_record = new stdClass();
-      $new_record->entity_type = 'node';
-      $new_record->bundle = 'om_show';
-      $new_record->deleted = 0;
-      $new_record->entity_id = $result->entity_id;
-      $new_record->revision_id = $result->entity_id;
-      $new_record->language = 'und';
-      $new_record->delta = 0;
-      $new_record->field_om_show_broadcast_file_uri = 'cablecast://' . $result->field_om_show_playback_server_id_value;
-      drupal_write_record('field_data_field_om_show_broadcast_file', $new_record);
+      $node = node_load($result->entity_id);
+      $node->field_om_show_broadcast_file[$node->language] = array(
+        0 => array(
+          'uri' => 'cablecast://' . $result->field_om_show_playback_server_id_value
+        )
+      );
+      node_save($node);
     }
   }
 }
@@ -146,4 +143,148 @@ function om_migration_update_voting() {
     }
   }
   return array();
+}
+
+/** 
+ * Implements hook_permission
+ */
+function om_migration_permission() {
+  return array(
+    'administer open media migration' => array(
+      'title' => t('Administer Open Media Migration'),
+      'description' => t('Access administration pages related to migrations.'),
+    ),
+  );
+}
+/**
+ * Implements hook_menu
+ */
+function om_migration_menu() {
+  $items = array();
+  $items['admin/content/migrate/cablecast_category_map'] = array(
+    'title' => t('Cablecast Category to OMP Theme Map'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_migration_cablecast_taxonomy_map_form'),
+    'access arguments' => array('administer open media migration'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 400
+  );
+  $items['admin/content/migrate/cablecast_cache'] = array(
+    'title' => t('Cablecast Migration Cache'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_migration_build_cablecast_migration_cache_form'),
+    'access arguments' => array('administer open media migration'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 500,
+  );
+  return $items;
+}
+/**
+ * Build a little migration helper form.
+ */
+function om_migration_cablecast_taxonomy_map_form($form, $form_state) {
+  $form = array();
+  $form['mapping_description'] = array(
+    '#markup' => t('This page allows you to map categories from your Cablecast to Themes in the Open Media System.')
+  );
+  $pbsid = variable_get('default_cablecast');
+  if (empty($pbsid)) {
+    throw new Exception('No default Cablecast has been set.');
+  }
+  $pbs = om_playback_servers_load($pbsid);
+  $pbs = array_shift($pbs); 
+  $controller = om_playback_servers_entity_get_controller($pbs);
+  $categories = $controller->get_categories($pbs);
+  $defaults = variable_get('cablecast_category_mapping', array());
+  if (!empty($categories->GetCategoriesResult->Category)) {
+    $theme_vocabulary = taxonomy_vocabulary_machine_name_load('themes');
+    $theme_taxonomy = taxonomy_get_tree($theme_vocabulary->vid);
+    $taxonomy_options = array('none' => 'none');
+    foreach ($theme_taxonomy AS $term) {
+      $taxonomy_options[$term->tid] = $term->name;
+    }
+    foreach ($categories->GetCategoriesResult->Category AS $category) {
+      $key = str_replace(' ', '_', strtolower($category->Name));
+      $form[$key] = array(
+        '#type' => 'select',
+        '#title' => $category->Name,
+        '#default_value' => !empty($defaults[$key]) ? $defaults[$key] : FALSE,
+        '#options' => $taxonomy_options
+      );
+    }
+  }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save Mapping')
+  );
+  $form['#submit'] = array('om_migration_cablecast_taxonomy_map_form_submit');
+  return $form;
+}
+/**
+ * Handler for that form.
+ */
+function om_migration_cablecast_taxonomy_map_form_submit($form, &$form_state) {
+  $values = array();
+  $ignore = array('form_build_id', 'submit', 'op', 'form_token', 'form_id');
+  foreach ($form_state['values'] AS $key => $value) {
+    if (!in_array($key, $ignore) && $value != FALSE) {
+      $values[$key] = $value;
+    }
+  }
+  variable_set('cablecast_category_mapping', $values);
+}
+
+function om_migration_build_cablecast_migration_cache_form($form, $form_state) {
+  $cache = cache_get('cablecast_migration', 'cache'); 
+  $record_count = count($cache->data);
+  $form['cache_markup'] = array(
+    '#prefix' => '<p>',
+    '#markup' => t('The Cablecast migration cache currently has !count record(s) stored.', array('!count' => $record_count)),
+    '#suffix' => '</p>'
+  );
+  $form['cache_build'] = array(
+    '#type' => 'submit',
+    '#value' => t('Build Cache'),
+    '#suffix' => t('The following process may take a few minutes.')
+  );
+  $form['#submit'] = array('om_migration_build_cablecast_migration_cache_form_submit');
+  return $form;
+}
+
+function om_migration_build_cablecast_migration_cache_form_submit(&$form, &$form_state) {
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $batch = array(
+    'title' => t('Building Cablecast cache...'),
+    'operations' => array(
+      array('_om_migration_build_cablecast_cache', array()),
+      array('_om_migration_validate_cablecast_cache', array())
+    )
+  );
+  batch_set($batch);
+}
+
+function _om_migration_build_cablecast_cache(&$context) {
+  $context['message'] = t('Adding cache records...');
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $pbs = om_migration_get_default_cablecast(); 
+  $cache_controller = new CablecastMigrationCache($pbs);
+  $cache_controller->collectResults();
+}
+
+function _om_migration_validate_cablecast_cache(&$context) {
+  $context['message'] = t('Validating cache records...');
+  require_once(drupal_get_path('module', 'om_migration') . '/includes/cablecast.inc');
+  $pbs = om_migration_get_default_cablecast();
+  $cache_controller = new CablecastMigrationCache($pbs);
+  $cache_controller->validateResults(); 
+}
+
+function om_migration_get_default_cablecast() {
+  $pbsid = variable_get('default_cablecast');
+  if (empty($pbsid)) {
+    throw new Exception('No default Cablecast has been set.');
+  }
+  $pbs = om_playback_servers_load($pbsid);
+  $pbs = array_shift($pbs);
+  return $pbs;
 }

@@ -1,0 +1,6 @@
+name = Open Media Payment Options
+description = Additional options for the payment module
+core = 7.x
+package = Open Media System
+dependencies[] = payment 
+php = 5.2.4

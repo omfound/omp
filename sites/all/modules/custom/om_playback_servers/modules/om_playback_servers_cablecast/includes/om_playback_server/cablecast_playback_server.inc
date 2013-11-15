@@ -29,13 +29,20 @@ class cablecastPlaybackServerController extends playbackServerController {
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
+        'CustomFields' => array(),
       );
+
       if (isset($show->field_archive_transfer[$show->language]) && $show->field_archive_transfer[$show->language][0]['value'] == 1) {
-        $params['CustomFields'] = array(
-          'CustomField' => array(
-            'Name' => 'Archive-Upload',
-            'Value' => 'x'
-          )
+        $params['CustomFields'][] = array(
+          'Name' => 'Archive-Upload',
+          'Value' => 'x'
+        );
+      }
+      if (!empty($show->field_license[$show->language][0])) {
+        $term = taxonomy_term_load($show->field_license[$show->language][0]['tid']);
+        $params['CustomFields'][] = array(
+          'Name' => 'Archive-CC-License',
+          'Value' => $term->name
         );
       }
       return $this->soap_request($pbs, 'CreateNewShowRecord', $params);
@@ -230,7 +237,12 @@ class cablecastPlaybackServerController extends playbackServerController {
   public function get_formats($pbs) {
     return $this->soap_request($pbs, 'GetFormats', array('LocationID' => $pbs->location_id));
   }
-  
+  /**
+   * Get a list of all categories from the pbs location.
+   */
+  public function get_categories($pbs) {
+    return $this->soap_request($pbs, 'GetCategories', array('ChannelID' => $pbs->location_id));
+  }  
   /**
    * Get a list of all files with filter criteria.
    */

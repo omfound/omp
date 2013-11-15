@@ -163,6 +163,13 @@ function om_timeslot_scheduler_form_om_timeslot_event_node_form_alter(&$form, &$
   }
   $form['field_om_timeslot_rule']['und']['#options'] += $options;
   
+  if (arg(2) == 'edit') {
+    $node = menu_get_object();
+    if (!empty($node->field_om_timeslot_rule[$node->language])) {
+      $form['field_om_timeslot_rule']['und']['#default_value'] = $node->field_om_timeslot_rule[$node->language][0]['value'];
+    }
+  }
+  
   // For the create timeslot block
   if (arg(0) == 'om_timeslot_scheduler') {
     $form['#action'] .= '?destination=om_timeslot_scheduler';
@@ -296,7 +303,7 @@ function om_timeslot_scheduler_schedule_window($channel_tid, $start, $end) {
  */
 function _om_timeslot_scheduler_schedule_window($run) {
   // Get steps for updating airings from om_broadcast_schedule.
-  $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end']);
+  $steps = om_broadcast_schedule_schedule_sync_steps($run['channel_tid'], $run['start'], $run['end'], 'bulk');
   // Add scheduling steps.
   $steps[] = array('_om_timeslot_scheduler_get_timeslots', array($run));
   $steps[] = array('_om_timeslot_scheduler_implement_rules', array());
@@ -330,15 +337,19 @@ function _om_timeslot_scheduler_get_timeslots($run, &$context) {
     $and_1->condition('field_om_timeslot_date_value', $run['start'], '>=');
     $and_1->condition('field_om_timeslot_date_value2', $run['end'], '<=');
     $and_2 = db_and();
-    $and_2->condition('field_om_timeslot_date_value', $run['start'], '<=');
-    $and_2->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_2->condition('field_om_timeslot_date_value', $run['start'], '>=');
+    $and_2->condition('field_om_timeslot_date_value', $run['end'], '<=');
     $and_3 = db_and();
-    $and_3->condition('field_om_timeslot_date_value', $run['end'], '<=');
-    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '>=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['start'], '>=');
+    $and_3->condition('field_om_timeslot_date_value2', $run['end'], '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_timeslot_date_value', $run['start'], '<=');
+    $and_4->condition('field_om_timeslot_date_value2', $run['end'], '>=');
     $or = db_or();
     $or->condition($and_1);
     $or->condition($and_2);
     $or->condition($and_3);
+    $or->condition($and_4);
   $query->condition($or);
   $query->condition('field_om_timeslot_channel_tid', $run['channel_tid'], '=');
   $query->condition('field_om_timeslot_automation_value', 1, '=');
@@ -448,6 +459,10 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $all_shows = om_timeslot_scheduler_load_all_shows();
   $all_airings = om_broadcast_schedule_get_airings_by_date_range($run['start'], $run['end'], $run['channel_tid']);
+  $all_projects = array();
+  foreach ($all_airings AS $airing) {
+    $all_projects[] = $airing['field_om_show_project_nid'];
+  }
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
   foreach ($run['timeslots'] AS $key => $timeslot) {
@@ -546,6 +561,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                   continue;
                 }
                 $show_completion = $process_start + $show->field_om_show_duration['und'][0]['value'];
+               
                 // If a show is less than the end of the gap
                 if ($show_completion + $spacer <= $gap['end']) {
                   // If a show is longer than 30 min allow it an opportunity to be scheduled.
@@ -564,15 +580,22 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                         continue;
                       }
                     }
-                    $temp_end = $temp_start +  $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                    $temp_end = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
+                        $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                      }
+                      if ($already_aired == FALSE) { 
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($temp_start, $temp_end, $show);
                         $process_start = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
+                        //here it sets process start to the next 30 minute gap
+                        //due to this, if the timeslot is 2hrs, and a 1:33 minute show is scheduled into it
+                        //nothing will be scheduled in the last gap. This same process does not happen on shows
+                        //less than 30 minutes.
                         $process_start = ($process_start - ($process_start % 1800)) + 1800;
                         $next_start = $process_start;
                         $used = $rank;
@@ -591,6 +614,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
+                      if ($already_aired == FALSE) {
+                        $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                      }
                       if ($already_aired == FALSE) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
                         $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
@@ -616,6 +642,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                       $branding_show_completion = $process_start + $banding_item->field_om_show_duration['und'][0]['value'];
                       if ($branding_show_completion <= $mini_gap['end']) {
                         $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $branding_list);
+                        if ($already_aired == FALSE) {
+                          $already_aired = om_timeslot_scheduler_show_is_in_project_list($all_projects, $show);
+                        }
                         if ($already_aired == FALSE) {
                           $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $branding_show_completion, $banding_item);
                           $process_start += $banding_item->field_om_show_duration['und'][0]['value'];
@@ -707,7 +736,7 @@ function om_timeslot_scheduler_process_complete_page($pid) {
   $cache_items = array();
   $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
   if ($run_info[0]->process_status == 1) {
-    $message = t('Warning this schedule has already been committed!');
+    $message = t('Warning this schedule has already been committed! It may not be committed again.');
     drupal_set_message($message, 'warning');
   }
   $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
@@ -719,45 +748,48 @@ function om_timeslot_scheduler_process_complete_page($pid) {
  */
 function _om_timeslot_scheduler_process_commit(&$form, $form_state) {
   $pid = $form_state['values']['om_timeslot_scheduler_commit_schedule_pid'];
-  om_timeslot_scheduler_process_commit($pid, TRUE);
+  om_timeslot_scheduler_process_commit($pid, TRUE, 'bulk');
 }
 
 /**
  * Commit the schedule and move the user to the completion page.
  */
-function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE) {
+function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE, $mode = 'bulk') {
   $run_info = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_process');
-  $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
-  $pbs = array_shift(om_playback_servers_get_pbs_by_term($run_info[0]->channel_tid));
-  $controller = om_playback_servers_entity_get_controller($pbs);
-  foreach($cache_items AS $item) {
-    $meta_data = array();
-    $show_node = node_load($item->show_id);
-    $lang = $show_node->language;
-    // If a station had more than one type of playback server they would get stuck here
-    // Would have to find a solution that allows pbs to claim fields.
-    if (!empty($show_node->field_om_show_broadcast_file)) {
-      $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
-      if (!empty($meta_data)) {
-        $meta_data = array_merge((array)$meta_data, (array)$item);
-        $result = $controller->create_airing($pbs, $meta_data);
-        if (isset($result['ScheduleID'])) {
-          $airing = array(
-            'title' => $show_node->title,
-            'start' => $item->start,
-            'end' => $item->end,
-            'channel_tid' => $run_info[0]->channel_tid,
-            'show_id' => $show_node->nid,
-            'uid' => $result['ScheduleID'],
-          );
-          if (isset($show_node->field_om_show_aired[$lang][0]['value'])) {
-            $show_node->field_om_show_aired[$lang][0]['value'] ++;
+  if ($run_info[0]->process_status == 0) {
+    $cache_items = om_timeslot_scheduler_get_entries($pid, 'om_timeslot_scheduler_cache');
+    $pbs = array_shift(om_playback_servers_get_pbs_by_term($run_info[0]->channel_tid));
+    $controller = om_playback_servers_entity_get_controller($pbs);
+    foreach($cache_items AS $item) {
+      $meta_data = array();
+      $show_node = node_load($item->show_id);
+      $lang = $show_node->language;
+      // If a station had more than one type of playback server they would get stuck here
+      // Would have to find a solution that allows pbs to claim fields.
+      if (!empty($show_node->field_om_show_broadcast_file)) {
+        $meta_data = $controller->metadata_record_from_uri($pbs, $show_node->field_om_show_broadcast_file[$lang][0]['uri']);
+        if (!empty($meta_data)) {
+          $meta_data = array_merge((array)$meta_data, (array)$item);
+          $result = $controller->create_airing($pbs, $meta_data);
+          if (isset($result['ScheduleID'])) {
+            $airing = array(
+              'title' => $show_node->title,
+              'start' => $item->start,
+              'end' => $item->end,
+              'channel_tid' => $run_info[0]->channel_tid,
+              'show_id' => $show_node->nid,
+              'uid' => $result['ScheduleID'],
+              'mode' => $mode
+            );
+            if (isset($show_node->field_om_show_aired[$lang][0]['value'])) {
+              $show_node->field_om_show_aired[$lang][0]['value'] ++;
+            }
+            else {
+              $show_node->field_om_show_aired[$lang][0]['value'] = 1;
+            }
+            node_save($show_node);
+            om_broadcast_schedule_create_airing_node($airing);
           }
-           else {
-            $show_node->field_om_show_aired[$lang][0]['value'] = 1;
-          }
-          node_save($show_node);
-          om_broadcast_schedule_create_airing_node($airing);
         }
       }
     }
@@ -793,6 +825,27 @@ function _om_timeslot_scheduler_build_schedule_item($start, $end, $show) {
     'duration' => $end - $start,
     'show' => $show
   );
+}
+
+function _om_timeslot_scheduler_get_project_nid($nid) {
+  $all_projects = &drupal_static(__FUNCTION__);
+  if (empty($all_projects)) {
+    $all_projects = array();
+  }
+  if (empty($all_projects[$nid])) {
+    $query = db_select('field_data_field_om_show_project', 'project');
+    $query->fields('project', array('field_om_show_project_nid'));
+    $query->condition('project.entity_id', $nid, '=');
+    $resource = $query->execute();
+    while($result = $resource->fetchAssoc()) {
+      $all_projects[$nid] = $result['field_om_show_project_nid'];
+      return $result['field_om_show_project_nid'];
+    }
+    return FALSE;
+  }
+  else {
+   return $all_projects[$nid];
+  }
 }
 
 /**
@@ -1162,14 +1215,19 @@ function om_timeslot_scheduler_load_all_shows() {
   $all_shows = array();
   $query = db_select('node', 'n');
   $query->join('field_data_field_om_show_duration', 'duration', 'n.nid=duration.entity_id');
+  $query->leftJoin('field_data_field_scheduling_availability', 'availability', 'n.nid=availability.entity_id');
   $query->leftJoin('field_data_field_om_show_aired', 'air_count', 'n.nid=air_count.entity_id');
   $query->leftJoin('field_data_field_om_rating', 'rating', 'n.nid=rating.entity_id');
   $query->fields('n', array('title', 'created', 'uid', 'nid', 'vid', 'language'));
   $query->fields('duration', array('field_om_show_duration_value'));
   $query->fields('air_count', array('field_om_show_aired_value'));
   $query->fields('rating', array('field_om_rating_tid'));
+  $query->fields('availability', array('field_scheduling_availability_value')); 
   $resource = $query->execute();
   while ($result = $resource->fetchObject()) {
+    if ($result->field_scheduling_availability_value == 'not-available') {
+      continue;
+    }
     if (!empty($result)) {
       if (isset($result->field_om_show_duration_value)) {
         $result->field_om_show_duration = array(
@@ -1270,4 +1328,9 @@ function om_timeslot_scheduler_show_is_in_airing_list($airing_list, $show) {
     }
   }
   return FALSE;
+}
+
+function om_timeslot_scheduler_show_is_in_project_list($project_list, $show) {
+  $p_nid = _om_timeslot_scheduler_get_project_nid($show->nid);
+  return in_array($p_nid, $project_list);
 }

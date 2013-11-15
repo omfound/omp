@@ -251,3 +251,7 @@
   height: 29px;
   margin-left: 5px;
 }
+
+#switch-user-pane .form-item {
+  margin-top: 5px;
+}

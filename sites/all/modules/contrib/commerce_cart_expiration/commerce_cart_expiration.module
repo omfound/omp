@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Provides a time-based cart expiration feature.
+ */
+
+/**
+ * Implements hook_cron().
+ */
+function commerce_cart_expiration_cron() {
+  // Invoke our cron Rules event.
+  rules_invoke_all('commerce_cart_expiration_cron');
+}
+
+/**
+ * Retrieves expired cart orders.
+ *
+ * @param int $interval
+ *   Time span (in seconds) until shopping carts are considered expired.
+ * @param int $limit
+ *   Number of expired carts to get.
+ *
+ * @return array
+ *   An array of commerce order IDs. When no results are found, an empty array
+ *   is returned.
+ */
+function commerce_cart_expiration_get_expired_carts($interval, $limit = 0) {
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'commerce_order', '=')
+    ->propertyCondition('status', array_keys(commerce_order_statuses(array('cart' => TRUE))), 'IN')
+    ->propertyCondition('changed', REQUEST_TIME - $interval, '<');
+
+  if ($limit) {
+    $query->range(0, $limit);
+  }
+
+  $result = $query->execute();
+
+  return !empty($result) ? array_keys(reset($result)) : array();
+}

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Implements hook_permission
  */
@@ -94,13 +93,35 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#weight' => 3,
   );
 
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_airings_markup'] = array(
+    '#markup' => "<p>The Number of Producer Schedulings and Days fields are used to allow a certain number of producer schedulings per time period (x schedulings in y days). Alternatively, either field may be set to 0 with the results described below.</p>",
+    '#weight' => 4
+
+  );
+
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_airings'] = array(
     '#title' => t('Number of Producer Schedulings'),
-    '#description' => 'Enter the number of times a producer may schedule their show. <em>Enter 0 for unlimited.</em>',
+    '#description' => t('Enter 0 to indicate no limit.'),
     '#type' => 'textfield',
     '#default_value' => variable_get('om_timeslot_scheduler_producer_airings', 1),
-    '#multiple' => TRUE,
-    '#weight' => 3,
+    '#weight' => 5.1,
+  );
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_days'] = array(
+    '#title' => t('Days'),
+    '#type' => 'textfield',
+    '#description' => t('Enter 0 to indicate no time i.e. a producer may schedule their show once ever.'),
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_days', 0),
+    '#weight' => 5.2,
+  );
+
+  $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_limit_by'] = array(
+    '#title' => t('Limit by Project or Show'),
+    '#description' => t('Limit producer scheduling to airings per project or per show.'),
+    '#type' => 'select',
+    '#options' => array('project' => 'project', 'show' => 'show'),
+    '#default_value' => variable_get('om_timeslot_scheduler_producer_limit_by', 'show'),
+    '#weight' => 5.3,
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_themes'] = array(
@@ -109,7 +130,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#type' => 'radios',
     '#options' => array('Disabled', 'Enabled'),
     '#default_value' => variable_get('om_timeslot_scheduler_producer_themes', 1),
-    '#weight' => 4,
+    '#weight' => 6,
   );
 
   $form['om_timeslot_scheduler_admin']['om_timeslot_scheduler_producer_info']['om_timeslot_scheduler_producer_range'] = array(
@@ -117,7 +138,7 @@ function om_timeslot_scheduler_producer_form_om_timeslot_scheduler_admin_form_al
     '#description' => 'How many weeks out should producers be able to schedule?',
     '#type' => 'textfield',
     '#default_value' => variable_get('om_timeslot_scheduler_producer_range', 3),
-    '#weight' => 4,
+    '#weight' => 6,
   );
   
 }
@@ -131,12 +152,9 @@ function om_timeslot_scheduler_producer_tab_access($node) {
       return TRUE;
     }
     else if (user_access('schedule own shows')) {
-      $airings_per_show = variable_get('om_timeslot_scheduler_producer_airings', 1);
       global $user;
       if ($user->uid == $node->uid) {
-        if (empty($node->field_om_show_aired[$node->language][0]['value']) || $airings_per_show == 0 || $node->field_om_show_aired[$node->language][0]['value'] < $airings_per_show) {
-          return TRUE;
-        }
+        return TRUE;
       }
     }
   }
@@ -148,7 +166,7 @@ function om_timeslot_scheduler_producer_tab_access($node) {
 function om_timeslot_scheduler_producer_schedule($node) {
   $channels = variable_get('om_timeslot_scheduler_producer_channels', NULL);
   if ($channels == NULL) {
-    $message = t('Your station\'s website is not set up for producer scheduling. Please contact your station personnel.');
+    $message = t('Your station\'s website is not set up for producer scheduling. Please contact station personnel.');
     $render = array(
       'no_channel_response' => array(
         '#prefix' => '<p>',
@@ -158,7 +176,18 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
     return $render;
   }
-  $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
+  if ($node->field_scheduling_availability[$node->language][0]['value'] == 'not-available') {
+    $message = t('Your show has been flagged as not available for scheduling. Please contact station personnel.');
+    $render = array(
+      'no_channel_response' => array(
+        '#prefix' => '<p>',
+        '#markup' => $message,
+        '#suffix' => '</p>',
+      ),
+    );
+    return $render;
+  } 
+ $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
   $form_render = drupal_render($form);
     $render = array(
       'no_channel_response' => array(
@@ -169,6 +198,7 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
   return $render;
 }
+
 /**
  * Build a basic channel selector form for producers here.
  */
@@ -234,7 +264,7 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $start = time();
   $end = time() + variable_get('om_timeslot_scheduler_producer_range', 3) * 604800;
   $function = 'om_broadcast_schedule_sync_schedule';
-  $batch = $function($channel_tid, $start, $end);
+  $batch = $function($channel_tid, $start, $end, 'producer');
   batch_set($batch);
   batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');
 }
@@ -244,7 +274,20 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
  *   and turn it into a usable page.
  */
 function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
+  $can_air = om_timeslot_scheduler_producer_show_can_be_scheduled($show);
+  if ($can_air == FALSE) {
+    $message = om_timeslot_scheduler_producer_generate_warning();
+    $render = array(
+      'restricted_airing_message' => array(
+        '#prefix' => '<p>',
+        '#markup' => $message,
+        '#suffix' => '</p>',
+      ),
+    );
+    return $render;
+  } 
   $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
+  watchdog('brian', 'timeslots: <pre>'.print_r($timeslots, TRUE).'</pre>');
   // Not sure why but this page title gets set to 'home'
   drupal_set_title('Schedule Your Show');
   // @TODO move these steps to theme function.
@@ -346,7 +389,6 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   $query->condition('nid', $timeslot_nid, '=');
   $result = $query->execute();
   $title = $result->fetchAll();
-
   $date_options = array(
     'header' => array(
       '#prefix' => '<p>',
@@ -375,11 +417,23 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
           $adult_hours = om_timeslot_scheduler_get_adult_hours($gap['start']);
           // Check for adult content
           if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
-            $list_items[] = array(
-              '#prefix' => '<li>',
-              '#markup' => l(date('h:i:s',  $gap['start']), 'show/' . $show->nid . '/commit-schedule/' . $gap['start'] . '/' . $gap['end'] . '/' . $channel_tid . '/'. $timeslot_nid .'/' . $pid),
-              '#suffix' => '</li>',
-            );
+            $can_schedule = om_timeslot_scheduler_producer_show_can_be_scheduled($show, $gap['start']);
+            if ($can_schedule == TRUE) {
+              $end = $gap['start'] + $show->field_om_show_duration[$show->language][0]['value'];
+              $list_items[] = array(
+                '#prefix' => '<li>',
+                '#markup' => l(date('h:i:s',  $gap['start']), 'show/' . $show->nid . '/commit-schedule/' . $gap['start'] . '/' . $end . '/' . $channel_tid . '/'. $timeslot_nid .'/' . $pid),
+                '#suffix' => '</li>',
+              );
+            }
+            else {
+              $airing_restriction = TRUE;
+              $list_items[] = array(
+                '#prefix' => '<li>',
+                '#markup' => 'Not available for scheduling at this time*',
+                '#suffix' => '</li>',
+              );
+            }
           }
         }
       }
@@ -398,6 +452,16 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
         )
       );
     }
+  }
+  if (!empty($airing_restriction)) {
+    $message = '* ' . om_timeslot_scheduler_producer_generate_warning();
+    $date_options['date_options']['value'][] = array(
+      'restriction' => array(
+        '#prefix' => '<strong>',
+        '#markup' => $message,
+        '#suffix' => '</strong>'
+      )
+    );
   }
   if (empty($date_options['date_options']['value'])) {
     $date_options['date_options']['value'][] = array(
@@ -485,8 +549,20 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   // Commit results
   $meta_data['start'] = $start;
-  $controller->create_airing($pbs, $meta_data);
-
+  $result = $controller->create_airing($pbs, $meta_data);
+  // Create airing
+  if (isset($result['ScheduleID'])) {
+    $airing = array(
+      'title' => date('m/d/y G:ia', $start),
+      'start' => $start,
+      'end' => $end,
+      'channel_tid' => $channel_tid,
+      'show_id' => $show->nid,
+      'uid' => $result['ScheduleID'],
+      'mode' => 'producer'
+    );
+    om_broadcast_schedule_create_airing_node($airing);
+  }
   om_timeslot_scheduler_process_complete($pid);
 
   $message = t('Summary');
@@ -525,7 +601,7 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
 
   $series = array();
   $themes = array();
-
+  
   // @TODO Change field_om_theme_tax to real field
   $project_nid = $show->field_om_show_project['und'][0]['nid'];
 
@@ -544,7 +620,6 @@ function om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
   $query->condition('field_om_timeslot_producer_value', '1', '=');
   $result = $query->execute();
   $series = $result->fetchAll();
-
   if (isset($show->field_om_theme['und'][0]['tid'])) {
     $project_theme = $show->field_om_theme['und'][0]['tid'];
     // Shows with same theme.
@@ -628,4 +703,150 @@ function om_timeslot_scheduler_producer_timeslots_dates($timeslot_nid) {
     }
   }// End While
   return $output;
+}
+
+/**
+ * Find all airings for a single show in a given date range.
+ *
+ * @param nid int project node id
+ *
+ * @param start timestamp start
+ *
+ * @param end timestamp end
+ *
+ * @returns array of all airings
+ */
+function om_timeslot_scheduler_producer_airings_per_show_in_range($nid, $start, $end) {
+  $query = db_select('field_data_field_om_show_id', 'airing');
+  $query->join('node', 'n', 'airing.entity_id=n.nid');
+  $query->join('field_data_field_om_airing_dates', 'dates', 'airing.entity_id=dates.entity_id');
+  $query->fields('dates', array('entity_id', 'field_om_airing_dates_value', 'field_om_airing_dates_value2'));
+  $query->condition('airing.field_om_show_id_value', $nid, '=');
+  $query->condition('n.type', 'om_airing', '='); 
+    $and_1 = db_and();
+    $and_1->condition('field_om_airing_dates_value', $start, '>=');
+    $and_1->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_2 = db_and();
+    $and_2->condition('field_om_airing_dates_value', $start, '>=');
+    $and_2->condition('field_om_airing_dates_value', $end, '<=');
+    $and_3 = db_and();
+    $and_3->condition('field_om_airing_dates_value2', $start, '>=');
+    $and_3->condition('field_om_airing_dates_value2', $end, '<=');
+    $and_4 = db_and();
+    $and_4->condition('field_om_airing_dates_value', $start, '<=');
+    $and_4->condition('field_om_airing_dates_value2', $end, '>=');
+    $or = db_or();
+    $or->condition($and_1);
+    $or->condition($and_2);
+    $or->condition($and_3);
+    $or->condition($and_4);
+  $query->condition($or);
+  $query->orderBy('field_om_airing_dates_value', 'ASC');
+  $resource = $query->execute();
+  return $resource->fetchAll();
+}
+
+/**
+ * Find all airings for every show in a project in a given date range.
+ *
+ * @param nid int project node id
+ *
+ * @param start timestamp start
+ *
+ * @param end timestamp end
+ *
+ * @returns array of all airings
+ */
+function om_timeslot_scheduler_producer_airings_per_project_in_range($nid, $start, $end) {
+  $query = db_select('field_data_field_om_show_project', 'project');
+  $query->fields('project', array('entity_id'));
+  $query->condition('field_om_show_project_nid', $nid, '=');
+  $resource = $query->execute();
+  $airings = array();
+  while($row = $resource->fetchAssoc()) {
+    $new_airings = om_timeslot_scheduler_producer_airings_per_show_in_range($row['entity_id'], $start, $end);
+    foreach ($new_airings AS $airing) {
+      $airings[] = $airing;
+    }
+  }
+  return $airings;
+}
+
+/**
+ * Determine if a show can be scheduled given the configuration variables.
+ */
+function om_timeslot_scheduler_producer_show_can_be_scheduled($node, $date = '') {
+  global $user;
+  if ($user->uid == 1 || user_access('perform scheduling tasks') || user_access('administer om timeslot scheduler')) {
+    return TRUE;
+  }
+  // Get vars
+  $days = variable_get('om_timeslot_scheduler_producer_days', 0);
+  $airings_allowed = variable_get('om_timeslot_scheduler_producer_airings', 3);
+  if ($airings_allowed == 0) {
+    return TRUE;
+  }
+  // If the limit per # of days is 0 and airings allowed > 0 check all airings ever.
+  if ($days == 0) {
+    $end = strtotime('2099-01-01T00:00:00');
+    $airings = om_timeslot_scheduler_producer_check_show($node, 0, $end);
+    if (count($airings) >= $airings_allowed) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+  if (!empty($date)) {
+    // If there is a limit per days calculate range and check.
+    $range = om_timeslot_scheduler_producer_calculate_date_range($date, $days);
+    $airings = om_timeslot_scheduler_producer_check_show($node, $range['start'], $range['end']);
+    if (count($airings) >= $airings_allowed) {
+      return FALSE;
+    }
+  }
+  return TRUE;  
+}
+
+/**
+ * Use the om_timeslot_scheduler_producer_limit_by variable to run the appropriate airing check.
+ */
+function om_timeslot_scheduler_producer_check_show($node, $start, $end) {
+  $limit_by = variable_get('om_timeslot_scheduler_producer_limit_by', 'show');
+  if ($limit_by == 'show') {
+    $airings = om_timeslot_scheduler_producer_airings_per_show_in_range($node->nid, $start, $end);
+  }
+  else {
+    $airings = om_timeslot_scheduler_producer_airings_per_project_in_range($node->field_om_show_project[$node->language][0]['nid'], $start, $end);
+  }
+  return $airings;
+}
+
+/**
+ * Produce a start/end array given a date and the number of days.
+ */
+function om_timeslot_scheduler_producer_calculate_date_range($date, $days) {
+  $days = $days * 86400;
+  return array(
+    'start' => $date - $days,
+    'end' => $date,
+  );
+}
+
+/**
+ * Determine the proper warning to issue for a scheduling violation.
+ * Could use a configuration item for this too.
+ *
+ * @returns string
+ */
+function om_timeslot_scheduler_producer_generate_warning() {
+  $limit_by = variable_get('om_timeslot_scheduler_producer_limit_by', 'show');
+  $days = variable_get('om_timeslot_scheduler_producer_days', 0);
+  $airings_allowed = variable_get('om_timeslot_scheduler_producer_airings', 3);
+  $link = l('Back to show.', 'node/' . arg(1));
+  if ($days == 0) {
+    $message = t('Your station only allows !airings scheduling(s) per !type. It appears this !type has exceeded the limit. If you feel this is an error please contact station personel. !back', array('!airings' => $airings_allowed, '!type' => $limit_by, '!back' => $link));
+  }
+  if ($days > 0) {
+    $message = t('Your station only allows !airings scheduling(s) per !type every !days days. It appears this !type has exceeded the limit. If you feel this is an error please contact station personel. !back', array('!airings' => $airings_allowed, '!type' => $limit_by, '!days' => $days, '!back' => $link));
+  }
+  return $message;
 }

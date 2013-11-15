@@ -38,8 +38,7 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
     }
     if (variable_get('om_profile_link', TRUE)) {
       $options['attributes']['class'] = array('om-profile');
-      $clean_name = strtolower(str_replace(' ', '-', $user->name));
-      $links[] = l('Profile', 'users/' . $clean_name, $options);
+      $links[] = l('Profile', 'user/' . $user->uid, $options);
     }
   }
   else {
@@ -127,4 +126,8 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   $variables['title_color'] = variable_get('title_color', '');
   
   $variables['info_tag_color'] = variable_get('info_tag_color', '');
+  $variables['show_page_left_width'] = variable_get('show_page_left_width', '');
+  $variables['show_page_right_width'] = variable_get('show_page_right_width', '');
+  $variables['show_page_left_width_user'] = variable_get('show_page_left_width_user', '');
+  $variables['show_page_right_width_user'] = variable_get('show_page_right_width_user', '');
 }

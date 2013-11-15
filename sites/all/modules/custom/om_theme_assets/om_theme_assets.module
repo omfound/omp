@@ -270,6 +270,7 @@ function om_theme_assets_show_status_images() {
   $fids['live'] = variable_get('show_live', FALSE); 
   $fids['ondemand'] = variable_get('show_ondemand', FALSE); 
 
+  $show_status_images = array();
   foreach ($fids as $key => $fid) {
     if (is_numeric($fid)) {
       $show_file = file_load($fid);
