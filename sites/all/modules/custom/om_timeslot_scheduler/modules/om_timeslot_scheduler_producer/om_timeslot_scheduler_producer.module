@@ -403,7 +403,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   );
   // Find out if the show is adult
   if (!empty($show->field_om_rating[$show->language])) {
-    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
+    $is_adult = om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
   }
   else {
     $is_adult = FALSE;

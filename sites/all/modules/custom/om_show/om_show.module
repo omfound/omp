@@ -590,3 +590,22 @@ function om_show_upcoming_airings_user($user = FALSE) {
   ksort($output);
   return($output);
 }
+
+/**
+ * Check to see if a rating term is considered adult.
+ *   We call taxonomy_term_load many times, but drupal core statically caches this call.
+ *   So it should be ok.
+ * @param $tid
+ *   int term id
+ *
+ * @return bool
+ */
+function om_show_scheduler_rating_is_adult($tid) {
+  $adult_terms = array('TV-MA');
+  $term = taxonomy_term_load($tid);
+  if (is_object($term)) {
+    return in_array($term->name, $adult_terms);
+  }
+  return FALSE;
+}
+
