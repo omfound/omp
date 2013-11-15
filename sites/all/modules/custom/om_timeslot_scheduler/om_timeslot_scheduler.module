@@ -1026,7 +1026,7 @@ function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
 }
 
 /**
- * Utility function get all rule plguins or a specific rule plugin if a name is given.
+ * Utility function get all rule plugins or a specific rule plugin if a name is given.
  */
 function om_timeslot_scheduler_entity_get_rules($rule_name = NULL) {
   if (empty($rule_name)) {
