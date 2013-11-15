@@ -473,6 +473,7 @@ function om_agenda_manager_live_button($theme) {
     $options = array('attributes' => array('class' => 'om-live-button-content'));
     if (!empty($_GET['iframe_mode'])) {
       $options['attributes']['target'] = '_blank';
+      $options['query']['iframe_mode'] = 'true';
     }
     $button .= l($theme['theme'].' Currently In Session', 'node/'.$live_node->nid, $options);
     $button .= '</div>';
