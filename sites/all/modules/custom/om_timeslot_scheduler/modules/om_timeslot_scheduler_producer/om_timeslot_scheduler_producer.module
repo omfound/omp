@@ -166,7 +166,7 @@ function om_timeslot_scheduler_producer_tab_access($node) {
 function om_timeslot_scheduler_producer_schedule($node) {
   $channels = variable_get('om_timeslot_scheduler_producer_channels', NULL);
   if ($channels == NULL) {
-    $message = t('Your station\'s website is not set up for producer scheduling. Please contact your station personnel.');
+    $message = t('Your station\'s website is not set up for producer scheduling. Please contact station personnel.');
     $render = array(
       'no_channel_response' => array(
         '#prefix' => '<p>',
@@ -176,7 +176,18 @@ function om_timeslot_scheduler_producer_schedule($node) {
     );
     return $render;
   }
-  $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
+  if ($node->field_scheduling_availability[$node->language][0]['value'] == 'not-available') {
+    $message = t('Your show has been flagged as not available for scheduling. Please contact station personnel.');
+    $render = array(
+      'no_channel_response' => array(
+        '#prefix' => '<p>',
+        '#markup' => $message,
+        '#suffix' => '</p>',
+      ),
+    );
+    return $render;
+  } 
+ $form = drupal_get_form('om_timeslot_scheduler_producer_channel_form', $channels);
   $form_render = drupal_render($form);
     $render = array(
       'no_channel_response' => array(
@@ -276,6 +287,7 @@ function _om_timeslot_scheduler_producer_timeslots($show, $channel_tid) {
     return $render;
   } 
   $timeslots = om_timeslot_scheduler_producer_timeslots($show, $channel_tid);
+  watchdog('brian', 'timeslots: <pre>'.print_r($timeslots, TRUE).'</pre>');
   // Not sure why but this page title gets set to 'home'
   drupal_set_title('Schedule Your Show');
   // @TODO move these steps to theme function.
@@ -407,9 +419,10 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
           if ($is_adult == FALSE || ($is_adult == TRUE && $gap['start'] >= $adult_hours['start'] && $gap['end'] <= $adult_hours['end'])) {
             $can_schedule = om_timeslot_scheduler_producer_show_can_be_scheduled($show, $gap['start']);
             if ($can_schedule == TRUE) {
+              $end = $gap['start'] + $show->field_om_show_duration[$show->language][0]['value'];
               $list_items[] = array(
                 '#prefix' => '<li>',
-                '#markup' => l(date('h:i:s',  $gap['start']), 'show/' . $show->nid . '/commit-schedule/' . $gap['start'] . '/' . $gap['end'] . '/' . $channel_tid . '/'. $timeslot_nid .'/' . $pid),
+                '#markup' => l(date('h:i:s',  $gap['start']), 'show/' . $show->nid . '/commit-schedule/' . $gap['start'] . '/' . $end . '/' . $channel_tid . '/'. $timeslot_nid .'/' . $pid),
                 '#suffix' => '</li>',
               );
             }
@@ -536,8 +549,20 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   // Commit results
   $meta_data['start'] = $start;
-  $controller->create_airing($pbs, $meta_data);
-
+  $result = $controller->create_airing($pbs, $meta_data);
+  // Create airing
+  if (isset($result['ScheduleID'])) {
+    $airing = array(
+      'title' => date('m/d/y G:ia', $start),
+      'start' => $start,
+      'end' => $end,
+      'channel_tid' => $channel_tid,
+      'show_id' => $show->nid,
+      'uid' => $result['ScheduleID'],
+      'mode' => 'producer'
+    );
+    om_broadcast_schedule_create_airing_node($airing);
+  }
   om_timeslot_scheduler_process_complete($pid);
 
   $message = t('Summary');

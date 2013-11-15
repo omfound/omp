@@ -27,6 +27,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-show',
 	);
+    $content['menu']['shows']['report_00'] = array(
+    '#title' => t('Show and Themes Report'),
+    '#access' => om_admin_menu_role_access($paid_memberships),
+    '#href' => 'admin/om/reports/show/showsandthemes',
+  );
   $content['menu']['projects'] = array(
     '#title' => t('Projects'),
     '#access' => om_admin_menu_role_access($paid_memberships),
@@ -81,6 +86,21 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Class Administrator')),
     '#href' => 'reports/class-registrations',
   );
+  $content['menu']['classes']['class_categories'] = array(
+    '#title' => t('Manage categories'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/structure/taxonomy/class_categories',
+  );
+  $content['menu']['classes']['report_00'] = array(
+    '#title' => t('Class Registrations Report'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/om/reports/classes/classes_sold',
+  );
+  $content['menu']['classes'] ['report_01']= array(
+    '#title' => t('Classes Offered Report'),
+    '#access' => om_admin_menu_role_access(array('Class Administrator')),
+    '#href' => 'admin/om/reports/classes/classes_offered',
+  );
 
   //Membership Administrators
   $content['menu']['membership'] = array(
@@ -92,11 +112,39 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#title' => t('Manage Members'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'reports/members',
+    '#weight' => -50,
   );
   $content['menu']['membership']['add'] = array(
     '#title' => t('Create Membership Order'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),
     '#href' => 'admin/commerce/orders/add',
+    '#weight' => -40,
+  );
+  $content['menu']['membership']['benefits'] = array(
+    '#title' => t('Member Grid Benefits'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/structure/taxonomy/membership_features',
+    '#weight' => -30,
+  );
+  $content['menu']['membership']['member_products'] = array(
+    '#title' => t('View Member Levels'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/commerce/products/list',
+    '#options' => array(
+      'query' => array('sku' => '', 'type' => 'membership_plan'),
+    ),
+    '#weight' => -20,
+  );
+  $content['menu']['admin/people']['find_people'] = array(
+    '#title' => t('Search Users'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'search/user',
+    '#weight' => 40,
+  );
+  $content['menu']['membership']['report_00'] = array(
+    '#title' => t('Basic Membership Report'),
+    '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+    '#href' => 'admin/om/reports/membership/membership',
   );
 
   //Content Administrators
@@ -136,43 +184,57 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'administer_reservations',
   );
+  $content['menu']['reservations']['view_reservations'] = array(
+    '#title' => t('Manage Reservations'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'administer_reservations',
+    '#weight' => -55,
+  ); 
   $content['menu']['reservations']['view_products'] = array(
-    '#title' => t('View Reservation Products'),
+    '#title' => t('View Products'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/products/list',
-      '#options' => array(
-        'query' => array('sku' => '', 'type' => 'reservable_product'),
-      ),
+    '#options' => array(
+      'query' => array('sku' => '', 'type' => 'reservable_product'),
+    ),
+    '#weight' => -50,
+  );
+  $content['menu']['reservations']['view_displays'] = array(
+    '#title' => t('View Product Displays'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/commerce-displays',
+    '#options' => array(
+      'query' => array('keys' => '', 'field_crp_category_tid' => 'All', 'type' => 'reservable_product_display'),
+    ),
+    '#weight' => -47,
   );
   $content['menu']['reservations']['add_product'] = array(
-    '#title' => t('Add Reservation Product'),
+    '#title' => t('Add Product'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/products/add/reservable-product',
+    '#weight' => -45,
   );
   $content['menu']['reservations']['view_product_displays'] = array(
-    '#title' => t('Add Reservation Display'),
+    '#title' => t('Add Product Display'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'node/add/reservable-product-display',
+    '#weight' => -40,
   );
+  /**
   $content['menu']['reservations']['certifications'] = array(
     '#title' => t('Manage Certifications'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/certifications',
-  );
+  );**/
   $content['menu']['reservations']['categories'] = array(
     '#title' => t('Manage Categories'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/product_categories',
   );
   $content['menu']['reservations']['locations'] = array(
-    '#title' => t('Manage Equipment Locations'),
+    '#title' => t('Manage Locations'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/structure/taxonomy/equipment_locations',
-  );
-  $content['menu']['reservations']['productterms'] = array(
-    '#title' => t('Manage Product Terms'),
-    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
-    '#href' => 'admin/structure/taxonomy/reservable_product',
   );
   $content['menu']['reservations']['accessories'] = array(
     '#title' => t('Manage Accessories'),
@@ -184,10 +246,21 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
     '#href' => 'admin/commerce/cr/settings',
   );
-  $content['menu']['reservations']['configuration'] = array(
-    '#title' => t('View Current Inventory'),
+  $content['menu']['reservations']['global_config'] = array(
+    '#title' => t('Admin Global Config'),
     '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
-    '#href' => 'admin/om/reports/inventory',
+    '#href' => 'admin/commerce/cr/settings',
+    '#weight' => 50
+   );
+  $content['menu']['reservations']['report_00'] = array(
+    '#title' => t('Equipment Reservations Report'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/om/reports/reservations/reservations',
+   );
+  $content['menu']['reservations']['report_01'] = array(
+    '#title' => t('Equipment Inventory Report'),
+    '#access' => om_admin_menu_role_access(array('Reservations Administrator')),
+    '#href' => 'admin/om/reports/reservations/inventory',
    );
 
   //Schedule Administrators
@@ -209,7 +282,7 @@ function om_admin_menu_admin_menu_output_build(&$content) {
   $content['menu']['scheduling']['timeslots'] = array(
     '#title' => t('Timeslots'),
     '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
-    '#href' => 'om_timeslot_schedule',
+    '#href' => 'om_timeslot_scheduler',
   );
 }
 
@@ -259,6 +332,8 @@ function om_admin_menu_paid_memberships() {
     'Berkeley Based Non-Profit',
     'Berkeley ASUC Group / Club',
     'Non-Resident Group, Business or Non-Profit',
+    'Equipment Access Membership',
+    'Equipment and Training Access Membership',
 	);
 
   return $paid_memberships;
@@ -271,4 +346,22 @@ function om_admin_menu_menu_alter(&$items) {
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access arguments'] = array(3);
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access callback'] = 'taxonomy_term_edit_access';
   $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name/add']['access arguments'] = array(3);
+  $items['devel/switch']['access callback'] = 'om_admin_menu_devel_switch_user_access';
+}
+
+/**
+ * Ovveride of devel switch access check to make it so users
+ * cannot switch to user 1 or administrative users
+ */
+function om_admin_menu_devel_switch_user_access($name) {
+  if (user_access('switch users')) {
+    if (drupal_valid_token(@$_GET['token'], "devel/switch/$name|" . @$_GET['destination'], TRUE)) {
+      $account = user_load_by_name($name);
+      if ($account->uid != 1 && !in_array('administrator', $account->roles)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }

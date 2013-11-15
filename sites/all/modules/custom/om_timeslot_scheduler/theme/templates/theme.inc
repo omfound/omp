@@ -27,16 +27,18 @@ function om_timeslot_scheduler_preprocess_timeslot_schedule_completion(&$variabl
         $variables['schedule_results'][$schedule_item->timeslot_id]['timeslot'] = $timeslot;
         $variables['schedule_results'][$schedule_item->timeslot_id]['shows'] = array();
       }
-      $item = node_load($schedule_item->show_id);
+      $item = node_load($schedule_item->show_id, null, true);
       if (empty($item->start)) {
         $item->start = $schedule_item->start;
         $item->end = $schedule_item->end;
         $variables['schedule_results'][$timeslot->nid]['shows'][$item->nid] = $item;
       }
     }
-    $form = drupal_get_form('om_timeslot_scheduler_commit_schedule_form', arg(2));
-    $form = drupal_render($form);
-    $variables['commit_form'] = $form;
+    if (($variables['run_info']->process_status != 1)) {
+      $form = drupal_get_form('om_timeslot_scheduler_commit_schedule_form', arg(2));
+      $form = drupal_render($form);
+      $variables['commit_form'] = $form;
+    }
   }
   else {
     $return = l('Return', 'om_timeslot_scheduler');

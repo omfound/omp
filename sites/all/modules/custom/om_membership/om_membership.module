@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include Open Media System Membership Reports
+ */
+
+include_once('om_membership.om_reports.inc');
+/**
  * Implements hook_permission
  */
 function om_membership_permission() {
@@ -60,6 +65,11 @@ function om_membership_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK
   );
+  $items['admin/config/om/membership/roles'] = array(
+    'page callback' => 'om_membership_role_form',
+    'access arguments' => array('administer om membership'),
+   'type' => MENU_CALLBACK 
+  );
   return $items;
 }
 
@@ -90,7 +100,10 @@ function om_membership_theme($existing, $type, $theme, $path) {
       'path' => $path . '/theme',
       'template' => 'om_membership_checkout_completion',
       'file' => 'theme.inc'
-    )
+    ),
+    'membership_admin_roles' => array(
+      'render element' => 'form',
+    ),
   );
 }
 
@@ -312,6 +325,7 @@ function _om_membership_compare_vocs($a, $b) {
  *    Array of commerce product instances.
  */
 function om_membership_get_user_membership_products($user, $active = TRUE) {
+  if (!$user->uid) { return array(); }
   $products = array();
   $orders = om_membership_get_user_membership_orders($user, $active);
   if (!empty($orders)) {
@@ -932,4 +946,120 @@ function om_membership_broken_memberships() {
   }
 
   return $suspect_orders;
+}
+
+function om_membership_role_form() {
+  //may need user.admin.inc
+  drupal_set_title('Membership Roles');
+  module_load_include('inc', 'user', 'user.admin');
+  $form = drupal_get_form('user_admin_roles');
+
+  foreach ($form['roles'] as $key => $info) {
+    if (is_numeric($key)) {
+      if (strpos(strtolower($info['#role']->name), 'membership') === false) {
+        unset($form['roles'][$key]); 
+      }
+    }
+  }
+
+  $form['#theme'][0] = 'membership_admin_roles';
+  //BRIAN: these dont work so give up for now
+  $form['add']['#submit'][0] = 'om_membership_admin_role_submit';
+  $form['add']['#validate'][] = 'om_membership_admin_roles_validate';
+  return $form;
+}
+
+function om_membership_admin_roles_validate($form, &$form_state) {
+  form_set_error('name', t('Validation Fail'));
+}
+
+function om_membership_admin_role_submit($form, &$form_state) {
+  $role = (object) $form_state['values'];
+  if (strpos(strtolower($role->name), 'membership') !== false) {
+    if ($form_state['values']['op'] == t('Save role')) {
+      user_role_save($role);
+      drupal_set_message(t('The role has been renamed.'));
+    }
+    elseif ($form_state['values']['op'] == t('Add role')) {
+      user_role_save($role);
+      drupal_set_message(t('The role has been added.'));
+    }
+  }else{
+    drupal_set_message(t('The role could not be added.'));
+  }
+  $form_state['redirect'] = 'admin/config/om/membership/roles';
+  return;
+}
+
+function theme_membership_admin_roles($variables) {
+  $form = $variables['form'];
+  $intro = '<div>You can add, edit or remove membership roles below. <strong>All membership roles must contain the word membership!</strong></div>';
+  $header = array(t('Name'), array('data' => t('Operations'), 'colspan' => 2));
+  $link_options = array('query' => array('destination' => 'admin/config/om/membership/roles'));
+  foreach (element_children($form['roles']) as $rid) {
+    $name = $form['roles'][$rid]['#role']->name;
+    $row = array();
+    if (in_array($rid, array(DRUPAL_ANONYMOUS_RID, DRUPAL_AUTHENTICATED_RID))) {
+      $row[] = t('@name <em>(locked)</em>', array('@name' => $name));
+      $row[] = '';
+    }
+    else {
+      $row[] = check_plain($name);
+      $row[] = l(t('edit role'), 'admin/people/permissions/roles/edit/' . $rid, $link_options);
+    }
+    $rows[] = array('data' => $row, 'class' => array('draggable'));
+  }
+  $rows[] = array(array('data' => drupal_render($form['name']) . drupal_render($form['add']), 'colspan' => 4, 'class' => 'edit-name'));
+
+  //drupal_add_tabledrag('user-roles', 'order', 'sibling', 'role-weight');
+
+  $output = $intro;
+  $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'user-roles')));
+  $output .= drupal_render_children($form);
+
+  return $output;
+}
+
+
+function om_membership_menu_alter(&$items) {
+  $items['admin/people/permissions/roles/edit/%user_role']['access callback'] = 'om_membership_user_role_edit_access';
+  $items['admin/people/permissions/roles/delete/%user_role']['access callback'] = 'om_membership_user_role_edit_access';
+}
+
+function om_membership_user_role_edit_access($role) {
+  // Prevent the system-defined roles from being altered or removed.
+  if ($role->rid == DRUPAL_ANONYMOUS_RID || $role->rid == DRUPAL_AUTHENTICATED_RID) {
+    return FALSE;
+  }
+
+  if (strpos(strtolower($role->name), 'membership')) {
+    if (user_access('administer permissions') || user_access('administer om membership')) {
+      return true;
+    }
+  }
+
+  return user_access('administer permissions');
+}
+
+function om_membership_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    if ($form['#id'] == 'views-exposed-form-classes-page' || $form['#id'] == 'views-exposed-form-calendar-product-view-block' || $form['#id'] == 'views-exposed-form-classes-page-1') {
+      if ($form['#id'] == 'views-exposed-form-classes-page' || $form['#id'] == 'views-exposed-form-classes-page-1') {
+        $field_name = 'field_class_location_tax_tid';
+      }
+      if ($form['#id'] == 'views-exposed-form-calendar-product-view-block') {
+        $field_name = 'field_crp_location_tid';
+      }
+      if (empty($_GET[$field_name])) {
+        global $user;
+        $contact_info = profile2_load_by_user($user, 'contact_info');
+        if (!empty($contact_info->field_station[LANGUAGE_NONE][0]['tid'])) {
+          $location_tid = $contact_info->field_station[LANGUAGE_NONE][0]['tid'];
+          if (!empty($form[$field_name]['#options'][$location_tid])) {
+            $form_state['input'][$field_name] = $location_tid;
+          }
+        }
+      }
+    }
+  }
 }

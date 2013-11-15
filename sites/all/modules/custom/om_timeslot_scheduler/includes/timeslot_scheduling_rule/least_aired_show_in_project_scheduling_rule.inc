@@ -5,9 +5,8 @@ class leastAiredShowInProjectSchedulingRule extends timeslotSchedulingRule {
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'om_show', '=');
-    // These two lines specific to Local Show Rule.
     $query->join('field_data_field_om_show_project', 'project', 'project.entity_id=n.nid');
-    $query->condition('field_om_show_project_nid', $timeslot->nid, '=');
+    $query->condition('field_om_show_project_nid', $timeslot->field_om_timeslot_project[$timeslot->language][0]['nid'], '=');
     // Join to broadcast uri to ensure show has neccesary media.
     $query->join('field_data_field_om_show_broadcast_file', 'broadcast_file', 'broadcast_file.entity_id=n.nid');
     $result = $query->execute();

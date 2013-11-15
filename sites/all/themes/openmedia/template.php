@@ -17,6 +17,15 @@ function openmedia_preprocess_html(&$variables) {
 }
 
 function openmedia_preprocess_page(&$variables) {
+  if ($variables['is_front']) {
+    if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
+      if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
+        drupal_add_js('sites/all/libraries/masonry/jquery.masonry.min.js', $options);
+        $options['group'] = JS_DEFAULT;
+        drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-grid.js', $options);
+      }
+    }
+  }
   if ($_GET['q'] == 'classes') {
     $options = array(
       'type' => 'file',
@@ -240,7 +249,9 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['video_info'] = $video_info;
 
   $options = array('attributes' => array('class' => array('inset-button', 'edit-button')), 'html' => TRUE);
-  $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid, $options);
+  if (drupal_valid_path('node/'.$variables['node']->nid.'/edit')) {
+    $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid.'/edit', $options);
+  }
   // Show details area (name and picture are already included in vars)
   $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
   $stats = statistics_get($variables['node']->nid);
@@ -291,6 +302,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings', array('show' => $variables['node']));
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
@@ -593,6 +605,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       'class' => 'checkout_button',
     ),
   );
+
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
   switch ($status) {
     case 'Awaiting Checkout':
@@ -611,6 +624,17 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   } 
   $link_options['attributes']['class'] = array('cr_button', 'cr_contract_button');
   $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
+  if ($payment_info = openmedia_order_payment_info($variables['row']->commerce_line_item_order_id)) {
+    $link_options = array(
+      'query' => drupal_get_destination(),
+      'attributes' => array(
+        'class' => 'payment_link',
+      ),
+    );
+    $variables['cr']['payment'] = l($payment_info['status'], 'payment/'.$payment_info['id'].'/edit', $link_options);
+  }else{
+    $variables['cr']['payment'] = t('No Payment');
+  }
 }
 
 /**
@@ -647,7 +671,7 @@ function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
       if (!empty($vars['fields']['field_om_show_video']->content)) {
-        if ($url = internet_archive_thumb_from_file_url(strip_tags($vars['fields']['field_om_show_video']->content))) {
+        if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
           if (!empty($_SERVER['HTTP_X_SSL'])) {
             $url = str_replace('http', 'https', $url);
           }
@@ -663,12 +687,32 @@ function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
   }
 }
 
-function openmedia_order_payment_status($order_id) {
+function openmedia_order_payment_info($order_id) {
   $query = "
-    SELECT status 
+    SELECT status, remote_id 
     FROM {commerce_payment_transaction}
     WHERE commerce_payment_transaction.order_id = :oid";
 
-  $status = db_query($query, array(':oid' => $order_id))->fetchField();
-  return $status;
+  $results = db_query($query, array(':oid' => $order_id));
+
+  $info = array();
+  foreach ($results as $result) {
+    $info['status'] = $result->status;
+    $info['id'] = $result->remote_id;
+  }
+  
+  return $info;
+}
+
+function openmedia_preprocess_views_view_field(&$variables) {
+  if ($variables['view']->name == 'upcoming_airings') {
+    if (is_numeric($variables['output']) && $variables['field']->field == 'field_om_show_id') { 
+      $query = db_select('node', 'n');
+      $query->condition('nid', $variables['output']);
+      $query->fields('n', array('nid', 'title'));
+      $resource = $query->execute();
+      $result = $resource->fetchAssoc();
+      $variables['output'] = l($result['title'], 'node/' . $result['nid']);
+    }
+  }
 }

@@ -5,7 +5,6 @@ Drupal.cr = Drupal.cr || {};
 (function ($)  {
   Drupal.behaviors.product_filter = {
     attach: function (context, settings) {
-
       //basepath to site
       var basePath = Drupal.settings.basePath;
       if (basePath == "/"){
@@ -22,6 +21,7 @@ Drupal.cr = Drupal.cr || {};
       Drupal.behaviors.product_filter.hideCalendar();
 
       //The user has selected a reservable item
+      $(item).unbind();
       $(item).mousedown(function() {
         //show the calendar
         Drupal.behaviors.product_filter.showCalendar();
@@ -38,7 +38,7 @@ Drupal.cr = Drupal.cr || {};
 
         //Render the current selection based on date picker values
         $(".fullcalendar").ajaxStop(function() {
-          Drupal.behaviors.product_filter.addDateSelectionToCalendar();
+          Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
           $(this).unbind("ajaxStop");
         });
 
@@ -85,6 +85,9 @@ Drupal.cr = Drupal.cr || {};
                 $(this).unbind("ajaxStop");
               });
             });
+
+            //fire add date for default values
+            Drupal.behaviors.product_filter.addDateSelectionToCalendar();
           }
       });
     },
@@ -189,6 +192,7 @@ Drupal.cr = Drupal.cr || {};
       //activate preloader on quantity form
       $('.view-footer .form-item-quantity img').show();
       $('.view-footer .date-details').addClass('preloader-active');
+      $('.view-footer input#edit-submit').hide();
 
       //load item reservations
       $.ajax(
@@ -197,6 +201,7 @@ Drupal.cr = Drupal.cr || {};
           success : function (data) {
             $('.view-footer .date-details').removeClass('preloader-active');
             $('.view-footer .form-item-quantity img').hide();
+            $('.view-footer input#edit-submit').show();
 
             $('#content #content-inner .no-certification-message').remove();
             not_cert = $('#not_certified', data);
@@ -324,9 +329,14 @@ Drupal.cr = Drupal.cr || {};
     this.textColor = '#fff';
     this.field = $reservation.attr('field'); 
     this.index = $reservation.attr('index');
+
     this.eid = $reservation.attr('eid');
     this.entity_type = $reservation.attr('entity_type');
-    this.url = $reservation.attr('href');
+    if (Drupal.settings.commerce_reservations.staff) {
+      this.url = 'administer_reservations?field_last_name_value=&field_reservation_dates_value%5Bvalue%5D%5Bdate%5D=&field_reservation_dates_value2%5Bvalue%5D%5Bdate%5D=&field_checkout_status_value%5B%5D=Awaiting+Checkout&field_checkout_status_value%5B%5D=No+Show&field_checkout_status_value%5B%5D=Checked+Out&field_checkout_status_value%5B%5D=Checked+In&field_checkout_status_value%5B%5D=Overdue&line_item_id='+$reservation.attr('eid');
+    }else{
+      this.url = $reservation.attr('href');
+    }
     this.className = 'overlap';
     this.editable = true;
     this.color = '#912711';

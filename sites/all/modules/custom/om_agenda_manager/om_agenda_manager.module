@@ -12,12 +12,6 @@ function om_agenda_manager_permission() {
   );
 }
 
-function om_agenda_manager_theme_registry_alter(&$theme_registry) {
-  if (!empty($theme_registry['node__om_show'])) {
-    $theme_registry['node__om_show']['template'] = 'node--om_show--gov';
-  }
-}
-
 function om_agenda_manager_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] == 'views-exposed-form-archived-sessions-page-2') {
