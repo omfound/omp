@@ -600,7 +600,7 @@ function om_show_upcoming_airings_user($user = FALSE) {
  *
  * @return bool
  */
-function om_show_scheduler_rating_is_adult($tid) {
+function om_show_rating_is_adult($tid) {
   $adult_terms = array('TV-MA');
   $term = taxonomy_term_load($tid);
   if (is_object($term)) {
