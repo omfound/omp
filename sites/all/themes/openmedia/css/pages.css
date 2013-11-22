@@ -24,6 +24,7 @@ body {
 body.iframe-mode {
   background-color: #FFF;
   background-image: none;
+  overflow-x: hidden;
 }
 
 .iframe-mode #footer-wrapper {
