@@ -292,7 +292,6 @@ function om_clickable_agenda_change_session_status() {
   if (empty($_POST['sessionUpdate'])) {
     $json = drupal_json_decode($_POST['sessionStatus']);
     print_r($json);
-    die('TESTING');
     om_agenda_manager_livestream_update($json);
   }
 }

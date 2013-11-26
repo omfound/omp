@@ -197,7 +197,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   saveSessionStatus : function() {
     var values = this.get('sessionStatus');
     var modelPost = {'sessionStatus' : JSON.stringify(values)};
-    cosole.log("P: ");
+    console.log("P: ");
     console.log(modelPost);
     $.ajax({
       type : 'post',
