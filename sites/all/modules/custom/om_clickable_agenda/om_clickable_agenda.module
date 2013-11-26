@@ -191,7 +191,7 @@ function agenda_manager_form($form, &$form_state, $node) {
 
   $form['session_controls']['time_container'] = array(
     '#type' => 'textfield',
-    '#default_value' => $session_seconds,
+    '#default_value' => formatTimeHuman($session_seconds),
     '#attributes' => array('id' => array('timer-wrapper'))
   );
   $form['session_controls']['session_toggle'] = array(
