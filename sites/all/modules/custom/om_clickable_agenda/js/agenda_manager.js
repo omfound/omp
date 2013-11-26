@@ -121,7 +121,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   startTimer : function() {
     if (this.sessionControllerView.timeInput) {
-      var start = this.sessionControllerView.formatTimeTimestamp(this.sessionControllerView.timeInput.val());
+      var start = formatTimeTimestamp(this.sessionControllerView.timeInput.val());
       this.set('currentTime', start);
     }
     this.timerInterval = setInterval(this.calcTime, 1005);
@@ -187,7 +187,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       data.title = new Date().getTime();
     }
-    data['node_data_field_cue_seconds_field_cue_seconds_value'] = this.sessionControllerView.formatTimeTimestamp(this.sessionControllerView.timeInput.val());
+    data['node_data_field_cue_seconds_field_cue_seconds_value'] = formatTimeTimestamp(this.sessionControllerView.timeInput.val());
     data['node_data_field_session_reference_field_session_reference_nid'] = this.get('currentNid');
     this.cuePointList.add(data);
     this.cuePointListView.updateView(this.cuePointList.models);
@@ -478,31 +478,8 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     if (typeof(time) == 'string') {
       time = parseInt(time);
     }
-    time = this.formatTimeHuman(time);
+    time = formatTimeHuman(time);
     this.timeInput.val(time);
-  },
-  formatTimeHuman : function(time) {
-    s = time%60;
-    m = Math.floor((time%3600)/60);
-    h = Math.floor((time%86400)/3600);
-    s = s < 10 ? "0" + s : s;
-    m = m < 10 ? "0" + m : m;
-    h = h < 10 ? "0" + h : h;
-    return h + ':' + m + ':' + s;
-  },
-  formatTimeTimestamp : function(time) {
-    var stamp = 0;
-    var timeParts = time.split(":");
-    if (timeParts[0]) {
-      stamp += parseInt(timeParts[0]) * 3600;
-    }
-    if (timeParts[1]) {
-      stamp += parseInt(timeParts[1]) * 60;
-    }
-    if (timeParts[2] * 1000) {
-      stamp += parseInt(timeParts[2]);
-    }
-    return stamp;
   },
   sessionControllerSubmit : function(e) {
     e.preventDefault();
@@ -543,4 +520,33 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
     **/
   }
 });
+
+/**
+ * Private helper functions
+ */
+function formatTimeHuman : function(time) {
+  s = time%60;
+  m = Math.floor((time%3600)/60);
+  h = Math.floor((time%86400)/3600);
+  s = s < 10 ? "0" + s : s;
+  m = m < 10 ? "0" + m : m;
+  h = h < 10 ? "0" + h : h;
+  return h + ':' + m + ':' + s;
+}
+
+function formatTimeTimestamp : function(time) {
+  var stamp = 0;
+  var timeParts = time.split(":");
+  if (timeParts[0]) {
+    stamp += parseInt(timeParts[0]) * 3600;
+  }
+  if (timeParts[1]) {
+    stamp += parseInt(timeParts[1]) * 60;
+  }
+  if (timeParts[2] * 1000) {
+    stamp += parseInt(timeParts[2]);
+  }
+  return stamp;
+};
+
 })(jQuery, Drupal, this, this.document);
