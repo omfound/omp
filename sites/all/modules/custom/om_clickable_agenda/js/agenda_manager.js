@@ -121,7 +121,8 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
   },
   startTimer : function() {
     if (this.sessionControllerView.timeInput) {
-      this.set('currentTime', parseInt(this.sessionControllerView.timeInput.val()));
+      var start = this.sessionControllerView.formatTimeTimestamp(this.sessionControllerView.timeInput.val());
+      this.set('currentTime', start);
     }
     this.timerInterval = setInterval(this.calcTime, 1000);
     if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
@@ -186,7 +187,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       data.title = new Date().getTime();
     }
-    data['node_data_field_cue_seconds_field_cue_seconds_value'] = this.sessionControllerView.timeInput.val();
+    data['node_data_field_cue_seconds_field_cue_seconds_value'] = this.sessionControllerView.formatTimeTimestamp(this.sessionControllerView.timeInput.val());
     data['node_data_field_session_reference_field_session_reference_nid'] = this.get('currentNid');
     this.cuePointList.add(data);
     this.cuePointListView.updateView(this.cuePointList.models);
@@ -477,7 +478,59 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     if (typeof(time) == 'string') {
       time = parseInt(time);
     }
+    time = formatTimeHuman(time);
     this.timeInput.val(time);
+  },
+  formatTimeHuman(time) {
+    var hours = minutes = seconds = difference = 0;
+    if (time >= 36000000) {
+      hours = time / 36000000;
+      difference = (hours % 1) * 36000000;
+      hours = Math.round(hours);
+    }
+    if (time >= 60000) {
+      if (difference > 0) {
+        minutes = difference / 60000;
+      }
+      else {
+        minutes = time / 60000;
+      }
+      difference = (minutes % 1) * 60000;
+      minutes = Math.round(minutes);
+    }
+    if (time >= 1000) {
+      if (difference > 0) {
+        seconds = difference / 1000;
+      }
+      else {
+        seconds = time / 1000;
+      }
+      seconds = Math.round(seconds);
+    }
+    if (hours.toString().length == 1) {
+      hours = "0" + hours.toString();
+    }
+    if (minutes.toString().length == 1) {
+      minutes = "0" + minutes.toString();
+    }
+    if (seconds.toString().length == 1) {
+      seconds = "0" + seconds.toString();
+    }
+    return hours + ":" + minutes + ":" + seconds;
+  },
+  formatTimeTimestamp(time) {
+    var stamp = 0;
+    var timeParts = time.split(":");
+    if (timeParts[0]) {
+      stamp += parseInt(timeParts[0]) * 36000000;
+    }
+    if (timeParts[1]) {
+      stamp += parseInt(timeParts[1]) * 60000;
+    }
+    if (timeParts[2] * 1000) {
+      stamp += parseInt(timeParts[2]) * 1000;
+    }
+    return stamp;
   },
   sessionControllerSubmit : function(e) {
     e.preventDefault();
