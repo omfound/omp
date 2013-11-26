@@ -478,57 +478,29 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     if (typeof(time) == 'string') {
       time = parseInt(time);
     }
-    time = this.formatTimeHuman(time * 1000);
+    time = this.formatTimeHuman(time);
     this.timeInput.val(time);
   },
   formatTimeHuman : function(time) {
-    var hours = minutes = seconds = difference = 0;
-    if (time >= 36000000) {
-      hours = time / 36000000;
-      difference = (hours % 1) * 36000000;
-      hours = Math.round(hours);
-    }
-    if (time >= 60000) {
-      if (difference > 0) {
-        minutes = difference / 60000;
-      }
-      else {
-        minutes = time / 60000;
-      }
-      difference = (minutes % 1) * 60000;
-      minutes = Math.round(minutes);
-    }
-    if (time >= 1000) {
-      if (difference > 0) {
-        seconds = difference / 1000;
-      }
-      else {
-        seconds = time / 1000;
-      }
-      seconds = Math.round(seconds);
-    }
-    if (hours.toString().length == 1) {
-      hours = "0" + hours.toString();
-    }
-    if (minutes.toString().length == 1) {
-      minutes = "0" + minutes.toString();
-    }
-    if (seconds.toString().length == 1) {
-      seconds = "0" + seconds.toString();
-    }
-    return hours + ":" + minutes + ":" + seconds;
+    s = time%60;
+    m = Math.floor((time%3600)/60);
+    h = Math.floor((time%86400)/3600);
+    s = s < 10 ? "0" + s : s;
+    m = m < 10 ? "0" + m : m;
+    h = h < 10 ? "0" + h : h;
+    return h + ':' + m + ':' + s;
   },
   formatTimeTimestamp : function(time) {
     var stamp = 0;
     var timeParts = time.split(":");
     if (timeParts[0]) {
-      stamp += parseInt(timeParts[0]) * 36000000;
+      stamp += parseInt(timeParts[0]) * 3600;
     }
     if (timeParts[1]) {
-      stamp += parseInt(timeParts[1]) * 60000;
+      stamp += parseInt(timeParts[1]) * 60;
     }
     if (timeParts[2] * 1000) {
-      stamp += parseInt(timeParts[2]) * 1000;
+      stamp += parseInt(timeParts[2]);
     }
     return stamp;
   },
