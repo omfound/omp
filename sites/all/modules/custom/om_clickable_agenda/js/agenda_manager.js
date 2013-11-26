@@ -124,7 +124,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       var start = this.sessionControllerView.formatTimeTimestamp(this.sessionControllerView.timeInput.val());
       this.set('currentTime', start);
     }
-    this.timerInterval = setInterval(this.calcTime, 1000);
+    this.timerInterval = setInterval(this.calcTime, 1005);
     if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
       // Also clear database record
       var obj = {'nid' : this.get('currentNid')};
@@ -479,7 +479,6 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
       time = parseInt(time);
     }
     time = this.formatTimeHuman(time);
-    console.log(time);
     this.timeInput.val(time);
   },
   formatTimeHuman : function(time) {
