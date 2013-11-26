@@ -444,5 +444,5 @@ function formatTimeHuman($time) {
   $s = ensure2Digit($time%60);
   $m = ensure2Digit(floor(($time%3600)/60));
   $h = ensure2Digit(floor(($time%86400)/3600));
-  return "$M:$d:$h:$m:$s";
+  return "$h:$m:$s";
 }
