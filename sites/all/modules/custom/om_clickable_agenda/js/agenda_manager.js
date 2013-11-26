@@ -397,7 +397,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
     if (mode == 'view') {
       var $domElement = $('<div/>').addClass('cue-point-list-item clearfix');
       var $title = $('<div/>').addClass('cue-point-title').text(model.get('node_revisions_body'));
-      var $time = $('<div/>').addClass('cue-point-seconds').text(model.get('node_data_field_cue_seconds_field_cue_seconds_value'));
+      var $time = $('<div/>').addClass('cue-point-seconds').text(formatTimeHuman(model.get('node_data_field_cue_seconds_field_cue_seconds_value')));
       var $edit = $('<div/>').addClass('ca-grey-button action-edit cue-point-edit').text('edit');
       $edit.click(this.editClickHandler);
       $delete = $('<div/>').addClass('ca-grey-button action-delete cue-point-edit').text('delete');
@@ -409,7 +409,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
     else if (mode == 'edit') {
       var $domElement = $('<div/>').addClass('cue-point-list-item clearfix');
       var $title = $('<textarea/>').addClass('cue-point-title').attr({'value' : model.get('node_revisions_body')});
-      var $time = $('<textarea/>').addClass('cue-point-seconds').attr({'value' : model.get('node_data_field_cue_seconds_field_cue_seconds_value')});
+      var $time = $('<textarea/>').addClass('cue-point-seconds').attr({'value' : formatTimeHuman(model.get('node_data_field_cue_seconds_field_cue_seconds_value'))});
       var $edit = $('<div/>').addClass('ca-grey-button action-save cue-point-edit').text('save');
       $edit.click(this.saveInlineForm);
       $delete = $('<div/>').addClass('ca-grey-button action-delete cue-point-edit').text('delete');
@@ -423,7 +423,7 @@ Drupal.agendaManger.Views.cuePointView = Backbone.View.extend({
     this.trigger('cuePointView:inlineEdit');
   },
   saveInlineForm : function(e) {
-    var values = {'title' : $(this.domElement).find('.cue-point-title').val(), 'node_revisions_body' : $(this.domElement).find('.cue-point-title').val(), 'node_data_field_cue_seconds_field_cue_seconds_value' : $(this.domElement).find('.cue-point-seconds').val()};
+    var values = {'title' : $(this.domElement).find('.cue-point-title').val(), 'node_revisions_body' : $(this.domElement).find('.cue-point-title').val(), 'node_data_field_cue_seconds_field_cue_seconds_value' : formatTimeTimestamp($(this.domElement).find('.cue-point-seconds').val())};
     this.trigger('cuePointView:submit', values);
     this.trigger('cuePointView:inlineEdit');
   },
@@ -524,6 +524,10 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
 /**
  * Private helper functions
  */
+
+/**
+ * Convert arbitrary seconds to HH:MM:SS format.
+ */
 function formatTimeHuman(time) {
   s = time%60;
   m = Math.floor((time%3600)/60);
@@ -534,6 +538,9 @@ function formatTimeHuman(time) {
   return h + ':' + m + ':' + s;
 }
 
+/**
+ * Convert HH:MM:SS back to arbitrary seconds (not a timestamp).
+ */
 function formatTimeTimestamp(time) {
   var stamp = 0;
   var timeParts = time.split(":");
