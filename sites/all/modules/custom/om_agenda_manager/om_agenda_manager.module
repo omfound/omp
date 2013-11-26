@@ -370,7 +370,6 @@ function om_agenda_manager_livestream_types() {
 }
 
 function om_agenda_manager_livestream_update($session_status) {
-  die('we make it here');
   foreach ($session_status as $theme_nid => $info) {
     $loaded_term = taxonomy_term_load($theme_nid);
     if ($info['live_nid']) {
