@@ -201,10 +201,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
       type : 'post',
       url : '/change-session-status',
       data : modelPost,
-      success: function(data) {
-        console.log("R: ");
-        console.log(data);
-      }
     });
   }
 });
