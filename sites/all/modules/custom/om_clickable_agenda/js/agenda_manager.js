@@ -478,7 +478,9 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     if (typeof(time) == 'string') {
       time = parseInt(time);
     }
+    console.log(time);
     time = this.formatTimeHuman(time);
+    console.log(time);
     this.timeInput.val(time);
   },
   formatTimeHuman : function(time) {
