@@ -47,8 +47,8 @@ function om_agenda_manager_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/config/om/agenda-manager'] = array(
-    'title' => 'Site Configuration',
-    'description' => 'Agenda Manager Configuration options',
+    'title' => t('Agenda Manger Administration'),
+    'description' => t('Configuration options for the agenda manger interface.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_agenda_manager_admin_form'),
     'access arguments' => array('administer agenda manager'),
@@ -192,6 +192,12 @@ function om_agenda_manager_admin_form() {
     '#type' => 'textarea',
     '#title' => 'Text to display on Live Page',
     '#default_value' => variable_get('om_agenda_status_desc', ''),
+  );
+
+  $form['om_agenda_clear_video_field'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Empty show video field ("web video") upon resetting live broadcast.'),
+    '#default_value' => variable_get('om_agenda_clear_video_field', ''),
   );
 
   return system_settings_form($form); 
@@ -373,11 +379,9 @@ function om_agenda_manager_livestream_update($session_status) {
   foreach ($session_status as $theme_nid => $info) {
     $loaded_term = taxonomy_term_load($theme_nid);
     if ($info['live_nid'] && $info['status'] == 1) {
-      print " first option";
       $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'] = $info['live_nid']; 
     }
     else{
-      print " we go here";
       if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
         $node = node_load($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']);
         $node->field_om_show_video[$node->language][0]['value'] = "";
