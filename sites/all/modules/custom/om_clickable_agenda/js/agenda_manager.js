@@ -481,7 +481,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     time = formatTimeHuman(time);
     this.timeInput.val(time);
   },
-  formatTimeHuman(time) {
+  formatTimeHuman : function(time) {
     var hours = minutes = seconds = difference = 0;
     if (time >= 36000000) {
       hours = time / 36000000;
@@ -518,7 +518,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
     }
     return hours + ":" + minutes + ":" + seconds;
   },
-  formatTimeTimestamp(time) {
+  formatTimeTimestamp : function(time) {
     var stamp = 0;
     var timeParts = time.split(":");
     if (timeParts[0]) {
