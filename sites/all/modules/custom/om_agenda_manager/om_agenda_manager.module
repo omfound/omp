@@ -376,13 +376,14 @@ function om_agenda_manager_livestream_types() {
 }
 
 function om_agenda_manager_livestream_update($session_status) {
+  $clear_show_video_field = variable_get('om_agenda_clear_video_field', FALSE);
   foreach ($session_status as $theme_nid => $info) {
     $loaded_term = taxonomy_term_load($theme_nid);
     if ($info['live_nid'] && $info['status'] == 1) {
       $loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'] = $info['live_nid']; 
     }
     else{
-      if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id'])) {
+      if (!empty($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']) && !empty($clear_show_video_field)) {
         $node = node_load($loaded_term->field_om_live_show[LANGUAGE_NONE][0]['target_id']);
         $node->field_om_show_video[$node->language][0]['value'] = "";
         node_save($node);
