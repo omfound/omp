@@ -524,7 +524,7 @@ Drupal.agendaManger.Views.sessionStatus = Backbone.View.extend({
 /**
  * Private helper functions
  */
-function formatTimeHuman : function(time) {
+function formatTimeHuman(time) {
   s = time%60;
   m = Math.floor((time%3600)/60);
   h = Math.floor((time%86400)/3600);
@@ -534,7 +534,7 @@ function formatTimeHuman : function(time) {
   return h + ':' + m + ':' + s;
 }
 
-function formatTimeTimestamp : function(time) {
+function formatTimeTimestamp(time) {
   var stamp = 0;
   var timeParts = time.split(":");
   if (timeParts[0]) {
