@@ -432,7 +432,7 @@ function _om_clickable_agenda_delete_custom_session() {
   }
 }
 
-function formatTimeHuman(time) {
+function formatTimeHuman($time) {
     $hours = $minutes = $seconds = $difference = 0;
     if (time >= 36000000) {
       $hours = $time / 36000000;
