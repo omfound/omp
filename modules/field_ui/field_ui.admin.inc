@@ -1908,6 +1908,8 @@ function field_ui_field_edit_form($form, &$form_state, $instance) {
   }
 
   $has_data = field_has_data($field);
+  // #HACK #LK
+  $has_data = FALSE;
   if ($has_data) {
     $description = '<p>' . t('These settings apply to the %field field everywhere it is used. Because the field already has data, some settings can no longer be changed.', array('%field' => $instance['label'])) . '</p>';
   }
