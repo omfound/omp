@@ -191,7 +191,7 @@ function agenda_manager_form($form, &$form_state, $node) {
 
   $form['session_controls']['time_container'] = array(
     '#type' => 'textfield',
-    '#default_value' => $session_seconds,
+    '#default_value' => formatTimeHuman($session_seconds),
     '#attributes' => array('id' => array('timer-wrapper'))
   );
   $form['session_controls']['session_toggle'] = array(
@@ -430,4 +430,19 @@ function _om_clickable_agenda_delete_custom_session() {
     $session_query = (object)drupal_json_decode($_POST['sessionQuery']);
     om_clickable_agenda_delete_custom_session($session_query);
   }
+}
+
+function ensure2Digit($number) {
+  if($number < 10) {
+    $number = '0' . $number;
+  }
+  return $number;
+}
+
+
+function formatTimeHuman($time) {
+  $s = ensure2Digit($time%60);
+  $m = ensure2Digit(floor(($time%3600)/60));
+  $h = ensure2Digit(floor(($time%86400)/3600));
+  return "$h:$m:$s";
 }
