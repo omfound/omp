@@ -157,11 +157,11 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     }
     $show_output .= "</table>";
     $variables['show_output'] = $show_output;
-    $variables['add_link'] = l('Add a New Show', 'node/add/om_show', $options);
+    $variables['add_link'] = l('Add a New Show', 'node/add/om-show', $options);
     $variables['all_shows'] = l('My Shows', 'user/shows', $options);
   }
   else {
-    $link = l('Make One Now', 'node/add/om_show', $options);
+    $link = l('Make One Now', 'node/add/om-show', $options);
     $variables['message'] = t('You haven\'t created any shows yet. !now', array('!now' => $link));
   }
 }
