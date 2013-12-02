@@ -1580,8 +1580,8 @@ function field_ui_field_settings_form($form, &$form_state, $instance) {
 
   // See if data already exists for this field.
   // If so, prevent changes to the field settings.
-  //$has_data = field_has_data($field); 
-  $has_data = FALSE;
+  $has_data = field_has_data($field); 
+  
   if ($has_data) {
     $form['field']['#description'] = '<div class="messages error">' . t('There is data for this field in the database. The field settings can no longer be changed.') . '</div>' . $form['field']['#description'];
   }
@@ -1909,6 +1909,7 @@ function field_ui_field_edit_form($form, &$form_state, $instance) {
   }
 
   $has_data = field_has_data($field);
+  $has_data = FALSE;
   if ($has_data) {
     $description = '<p>' . t('These settings apply to the %field field everywhere it is used. Because the field already has data, some settings can no longer be changed.', array('%field' => $instance['label'])) . '</p>';
   }
