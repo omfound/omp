@@ -56,6 +56,7 @@ function _omp_perform_redirect() {
       $redirect .= $domain_info['redirect'];
     }
     else {
+      die('here');
       // Otherwise correct the current path if anything is wrong.
       $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
       $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
