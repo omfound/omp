@@ -39,8 +39,7 @@ function _omp_return_aliases() {
 function _omp_perform_redirect() {
   // Get current host key
   $current_host = _omp_clean_host();
-  die($current_host);
-  /*$domain_info = _omp_return_current_domain_info($current_host);
+  $domain_info = _omp_return_current_domain_info($current_host);
   // If no domain info is available do nothing.
   if (!empty($domain_info)) {
     // If we are dealing with an alias redirect to the correct form of that alias.
@@ -95,7 +94,7 @@ function _omp_perform_redirect() {
       header('Location: ' . $redirect);
       exit(); 
     }
-  }*/
+  }
 }
 
 /**
