@@ -39,6 +39,7 @@ function _omp_return_aliases() {
 function _omp_perform_redirect() {
   // Get current host key
   $current_host = _omp_clean_host();
+  die($current_host);
   $domain_info = _omp_return_current_domain_info($current_host);
   // If no domain info is available do nothing.
   if (!empty($domain_info)) {
@@ -56,7 +57,6 @@ function _omp_perform_redirect() {
       $redirect .= $domain_info['redirect'];
     }
     else {
-      die('here');
       // Otherwise correct the current path if anything is wrong.
       $request_contains_www = is_numeric(strpos($_SERVER['HTTP_HOST'], 'www')) ? TRUE : FALSE;
       $request_is_secure = !empty($_SERVER['HTTP_X_SSL']) && $_SERVER['HTTP_X_SSL'] == 'ON' ? TRUE : FALSE;
