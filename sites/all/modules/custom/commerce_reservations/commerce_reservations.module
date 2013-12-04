@@ -2328,6 +2328,7 @@ function commerce_reservations_build_form($form_id) {
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  dsm($reservations);
   foreach ($reservations as $reservation) {
     if (is_null($reservation->field_checkout_status_value)) {
         return 'Pending Reservation';  
