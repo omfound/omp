@@ -1639,6 +1639,7 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
+  $original_product = commerce_product_load($form_state['values']['opi']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   dsm($product);
   dsm($form_state['values']);
@@ -1651,9 +1652,9 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
       foreach ($existing_reservations as $line_item_id => $info) {
         //swap all reservations at same time period with the other sku
         $line_item = commerce_line_item_load($line_item_id);
-        $line_item->line_item_label = $product->sku;
-        $line_item->data['context']['product_ids'][0] = $product->product_id;
-        $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'] = $product->product_id;
+        $line_item->line_item_label = $original_product->sku;
+        $line_item->data['context']['product_ids'][0] = $original_product->product_id;
+        $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'] = $original_product->product_id;
         commerce_line_item_save($line_item);
       }
     }
