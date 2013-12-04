@@ -1567,16 +1567,12 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
 
   $invalid_status = array('Checked Out', 'Overdue', 'Pending Reservation', 'Awaiting Checkout');
   $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $invalid_status);
-
+  $product_options = array();
+  $product_options[] = $line_item->line_item_label;
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
     $product_options[] = $available_item->sku;
   }
-
-  /**
-  $product_options = array();
-  $product_options[] = $line_item->line_item_label;
-  **/
 
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
@@ -2472,7 +2468,6 @@ function commerce_reservations_items_on_hand($product_id, $start_date, $end_date
   $available = array();
   foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
     $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
-    dsm($checkout_status);
     if (!in_array($checkout_status, $invalid_status)) {
       $available[] = $info['product_id'];
     }
