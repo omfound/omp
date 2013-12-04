@@ -1647,6 +1647,13 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
     dsm('CHOSE DIFFERENT SKY!');
     $existing_reservations = commerce_reservations_product_reservations($product->product_id, $form_state['values']['start_date'], $form_state['values']['end_date']);
     dsm($existing_reservations);
+    if (!empty($existing_reservations)) {
+      foreach ($existing_reservations as $line_item_id => $info) {
+        //need to swap to the other sku
+        $line_item = commerce_line_item_load($line_item_id);
+        dsm($line_item);
+      }
+    }
     $form_state['redirect'] = 'administer_reservations';
     return;
   }
