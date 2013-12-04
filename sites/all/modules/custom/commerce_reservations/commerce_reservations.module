@@ -1612,6 +1612,14 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
       '#options' => $accessories,
     );
   }
+  $form['start_date'] = array(
+    '#type' => 'hidden',
+    '#value' => $date_array['value'],
+  );
+  $form['end_date'] = array(
+    '#type' => 'hidden',
+    '#value' => $date_array['value2'],
+  );
   $form['opi'] = array(
     '#type' => 'hidden',
     '#value' => $line_item->commerce_product['und'][0]['product_id'],
@@ -1635,7 +1643,10 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   dsm($product);
   dsm($form_state['values']);
   if ($product->product_id != $form_state['values']['opi']) {
+    //here we need to alter the order that is assigned to this since we chose a diff sku
     dsm('CHOSE DIFFERENT SKY!');
+    $existing_reservations = commerce_reservations_product_reservations($product->product_id, $form_state['values']['start_date'], $form_state['values']['end_date']);
+    dsm($existing_reservations);
     $form_state['redirect'] = 'administer_reservations';
     return;
   }
