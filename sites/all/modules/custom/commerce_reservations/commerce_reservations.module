@@ -2328,16 +2328,20 @@ function commerce_reservations_build_form($form_id) {
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
-  dsm($reservations);
+  $reservation_status = 'Available';
   foreach ($reservations as $reservation) {
-    if (is_null($reservation->field_checkout_status_value)) {
-        return 'Pending Reservation';  
-    }else{
+    if ($reservation->field_checkout_status_value == 'Checked Out' || $reservation->field_checkout_status_value == 'Overdue') {
       return $reservation->field_checkout_status_value;
+    }
+
+    if (is_null($reservation->field_checkout_status_value)) {
+        $reservation_status = 'Pending Reservation';
+    }else{
+      $reservation_status = $reservation->field_checkout_status_value;
     }
   }
   
-  return 'Available';
+  return $reservation_status;
 }
 
 function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
@@ -2468,7 +2472,6 @@ function commerce_reservations_items_on_hand($product_id, $start_date, $end_date
   $available = array();
   foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
     $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
-    dsm($checkout_status);
     if (!in_array($checkout_status, $invalid_status)) {
       $available[] = $info['product_id'];
     }
