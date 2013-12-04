@@ -1900,9 +1900,11 @@ function commerce_reservations_line_item_checkin_missing_accessories_text ($miss
 function commerce_reservations_line_item_checkin_update_line_item ($line_item_wrapper, $accessories) {
   $line_item_wrapper->field_checkout_status->set('Checked In');
   $returned_accessories = array();
-  foreach ($accessories as $index => $item){
-    if ($item) {
-      $returned_accessories[] = $index;
+  if (!empty($returned_accessories)) {
+    foreach ($accessories as $index => $item){
+      if ($item) {
+        $returned_accessories[] = $index;
+      }
     }
   }
   if (count($returned_accessories) > 0) {
