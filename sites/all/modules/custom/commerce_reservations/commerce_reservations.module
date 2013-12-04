@@ -1565,7 +1565,9 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
 
-  $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  //$available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  $available_products = commerce_reservations_items_on_hand($product_id, $start_date, $end_date, $invalid_status = array());
+
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
     $product_options[] = $available_item->sku;
@@ -1639,22 +1641,7 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
-  $original_product = commerce_product_load($form_state['values']['opi']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-  if ($product->product_id != $form_state['values']['opi']) {
-    //here we need to alter the order that is assigned to this since we chose a diff sku
-    $existing_reservations = commerce_reservations_product_reservations($product->product_id, $form_state['values']['start_date'], $form_state['values']['end_date']);
-    if (!empty($existing_reservations)) {
-      foreach ($existing_reservations as $line_item_id => $info) {
-        //swap all reservations at same time period with the other sku
-        $line_item = commerce_line_item_load($line_item_id);
-        $line_item->line_item_label = $original_product->sku;
-        $line_item->data['context']['product_ids'][0] = $original_product->product_id;
-        $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'] = $original_product->product_id;
-        commerce_line_item_save($line_item);
-      }
-    }
-  }
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');
@@ -2478,14 +2465,14 @@ function commerce_reservations_available_product_id($product_id, $start_date, $e
   return false;
 }
 
-function commerce_reservations_items_on_hand($product_id, $start_date, $end_date) {
+function commerce_reservations_items_on_hand($product_id, $start_date, $end_date, $invalid_status = array('Checked Out', 'Overdue')) {
   $display_nid = commerce_reservations_entity_display_lookup($product_id);
   $display_node = node_load($display_nid);
 
   $available = array();
   foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
     $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
-    if ($checkout_status != 'Checked Out' && $checkout_status != 'Overdue') {
+    if (!in_array($checkout_status, $invalid_status)) {
       $available[] = $info['product_id'];
     }
   }
