@@ -2467,6 +2467,7 @@ function commerce_reservations_items_on_hand($product_id, $start_date, $end_date
   $available = array();
   foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
     $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
+    dsm($checkout_status);
     if (!in_array($checkout_status, $invalid_status)) {
       $available[] = $info['product_id'];
     }
