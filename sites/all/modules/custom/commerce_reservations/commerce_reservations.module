@@ -1565,10 +1565,9 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
 
-  $invalid_status = array('Checked Out', 'Overdue', 'Pending Reservation', 'Awaiting Checkout');
+  $invalid_status = array('Checked Out', 'Overdue');
   $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $invalid_status);
   $product_options = array();
-  $product_options[] = $line_item->line_item_label;
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
     $product_options[] = $available_item->sku;
