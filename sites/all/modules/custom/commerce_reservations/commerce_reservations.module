@@ -1634,7 +1634,7 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   dsm($product);
   dsm($form_state['values']);
-  if ($product->id != $form_state['values']['opi']) {
+  if ($product->product_id != $form_state['values']['opi']) {
     dsm('CHOSE DIFFERENT SKY!');
     $form_state['redirect'] = 'administer_reservations';
     return;
