@@ -397,7 +397,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   }
 }
 
-function commerce_reservations_deny_product_access(&$user, &$product_display, &$product, $message) {
+function commerce_reservations_deny_product_access($user, $product_display, $product, $message) {
   dsm('setting denial message');
   watchdog('brian', 'setting denial message');
   $product_display->user_access = false;
