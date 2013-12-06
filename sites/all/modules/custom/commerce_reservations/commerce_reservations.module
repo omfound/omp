@@ -511,17 +511,19 @@ function calendar_filter($pid, $node, $quantity = 0){
   $product = commerce_product_load($pid);
   $display_nid = commerce_reservations_entity_display_lookup($pid);
   $display_node = node_load($display_nid);
+  $display_node->user_access = true;
+  $display_node->user_access_message = ''; 
 
   //product access checks
   if (module_exists('rules')) {
-    dsm('firing reserve product event');
-    $display_node->user_access = true;
-    $display_node->user_access_message = ''; 
     rules_invoke_event('om_membership_reserve_product', $user, $display_node, $product);
   }
 
-  dsm($display_node);
-
+  if (!$display_node->user_access) {
+    print '<div><div id = "no-access">'.$display_node->user_access_message.'</div></div>';
+    return;
+  }
+  
   $is_certified = TRUE;
   if ($product->field_certifications_required['und']){
     foreach($product->field_certifications_required['und'] as $product_cert){

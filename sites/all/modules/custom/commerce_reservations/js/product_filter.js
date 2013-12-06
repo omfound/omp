@@ -204,22 +204,12 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer input#edit-submit').show();
 
             $('#content #content-inner .no-certification-message').remove();
-            not_cert = $('#not_certified', data);
-            if (not_cert.length > 0){
-              //Hide calendar and display appropriate certificate message
-              Drupal.behaviors.product_filter.notCertifiedMessage();
-
-	            allowCommercial = $('#allow_commercial', data);
-	            if (allowCommercial.length > 0){
-		            $('#content #content-inner').append('<div class = "commercial-message"><p>You may also reserve this item as a commercial rental, at the commercial rates.</p><div class = "commercial-button">Commercial Reservation</div></div>');
-		            $('.commercial-button').mousedown(function(){
-		              $('#left-side .field-name-field-commercial-reservation input').attr('checked', 'checked');
-		              $('.no-certification-message').hide();
-		              $('.commercial-message').hide();
-                  Drupal.behaviors.product_filter.addReservations(data);
-		            });
-	            }
-            } else{
+            no_access = $('#no-access', data);
+            if (no_access.length > 0) {
+              //Hide calendar and display appropriate message
+              Drupal.behaviors.product_filter.noAccessMessage();
+            }
+            else {
               Drupal.behaviors.product_filter.addReservations(data);
             }
           }
@@ -254,6 +244,13 @@ Drupal.cr = Drupal.cr || {};
       }
     },
     //end notCertifiedMessage function
+
+    //start noAccessMessage function
+    noAccessMessage:function() {
+      $('#content #content-inner').append('<div class= "no-certification-message"><p>'+$('#no-access').html()+'</p></div>');
+      $('.view-reservation-calendar').css('visibility', 'hidden');
+      $('#content').css('height', 'auto');
+    },
 
     //start showItemDetails function
     showItemDetails:function($item) {
