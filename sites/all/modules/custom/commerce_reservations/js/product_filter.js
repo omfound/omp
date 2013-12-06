@@ -205,6 +205,7 @@ Drupal.cr = Drupal.cr || {};
 
             $('#content #content-inner .no-certification-message').remove();
             no_access = $('#no-access', data);
+            console.log(no_access);
             if (no_access.length > 0) {
               //Hide calendar and display appropriate message
               Drupal.behaviors.product_filter.noAccessMessage();
@@ -247,6 +248,8 @@ Drupal.cr = Drupal.cr || {};
 
     //start noAccessMessage function
     noAccessMessage:function() {
+      console.log('firing access');
+      console.log($('#no-access'));
       $('#content #content-inner').append('<div class= "no-certification-message"><p>'+$('#no-access').html()+'</p></div>');
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#content').css('height', 'auto');
