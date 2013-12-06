@@ -33,7 +33,7 @@ class cablecastFile {
   }
   /**
    * Given a cc uri return the filename.
-   **/
+   */
   public function get_original_file_name($uri) {
     $show_id = $this->get_show_id($uri);
     $controller = om_playback_servers_entity_get_controller($this->pbs);
@@ -199,5 +199,13 @@ class cablecastFile {
        }
      }
      return FALSE;
+  }
+  public function get_file_validity($uri) {
+    $show_id = $this->get_show_id($uri);
+    $controller = om_playback_servers_entity_get_controller($this->pbs);
+    dsm($this->pbs);
+    dsm($show_id); 
+    $meta_data = $controller->check_file_status($this->pbs, $show_id);
+    dsm($meta_data);     
   }
 }
