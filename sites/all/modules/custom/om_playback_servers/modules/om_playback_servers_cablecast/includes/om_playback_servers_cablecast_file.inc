@@ -203,7 +203,7 @@ class cablecastFile {
   public function get_file_validity($uri) {
     $show_id = $this->get_show_id($uri);
     $controller = om_playback_servers_entity_get_controller($this->pbs);
-    $meta_data = $controller->get_digital_files($this->pbs, array('RestrictToShowID' => $show_id));
+    $meta_data = $controller->get_digital_files($this->pbs, array('RestrictToShowID' => $show_id, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE));
     dsm($meta_data);     
   }
 }
