@@ -29,6 +29,8 @@ function commerce_reservations_rules_event_info() {
       ),
     )
   );
+
+  return $items;
 }
 
 /**
