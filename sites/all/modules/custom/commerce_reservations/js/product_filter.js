@@ -230,21 +230,6 @@ Drupal.cr = Drupal.cr || {};
     },
     //end addReservations function
 
-    //start notCertifiedMessage function
-    notCertifiedMessage:function() {
-      logged_in = $('.logged-in');
-      if (logged_in.length > 0){
-        $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../classes">Take a Class!</a></div>');
-        $('.view-reservation-calendar').css('visibility', 'hidden');
-        $('#content').css('height', 'auto');
-      }  else{
-        $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member. To reserve equipment please login or signup as a member.</p><a href = "../membership">Login or Become a Member!</a></div>');
-        $('.view-reservation-calendar').css('visibility', 'hidden');
-        $('#content').css('height', 'auto');
-      }
-    },
-    //end notCertifiedMessage function
-
     //start noAccessMessage function
     noAccessMessage:function(no_access) {
       $('#content #content-inner').append('<div class="no-access"><div class="no-access-message"><p>'+$(no_access).find("#no-access-message").html()+'</p></div></div>');
