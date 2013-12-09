@@ -533,6 +533,7 @@ function calendar_filter($pid, $node, $quantity = 0){
       $error_output .= '</div>';
     }
     $error_output .= '</div>';
+    dsm($error_output);
     print $error_output;
     return;
   }
