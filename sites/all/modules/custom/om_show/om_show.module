@@ -614,6 +614,7 @@ function om_show_cablecast_update_show_statuses() {
   $cablecast_file = new cablecastFile();
   $batch_size = 100;
   $watermark = variable_get('om_show_status_progress', 1);
+  dsm($watermark);
   $query = db_select('node', 'n'); 
   $query->fields('n', array('nid'));
   $query->condition('type', 'om_show', '=');
@@ -623,7 +624,9 @@ function om_show_cablecast_update_show_statuses() {
   while($row = $resource->fetchAssoc()) {
     $node = node_load($row['nid']);
     if (!empty($node->field_om_show_broadcast_file[$node->language])) {
+      dsm($row['nid']);
       $node->field_cablecast_file_status[$node->language][0]['value'] = (int) $cablecast_file->get_file_validity($node->field_om_show_broadcast_file[$node->language][0]['uri']);
     } 
   }
+  variable_set('om_show_status_progress', $watermark + $batch_size);
 }
