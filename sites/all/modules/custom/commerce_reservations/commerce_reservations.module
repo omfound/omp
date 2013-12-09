@@ -521,6 +521,7 @@ function calendar_filter($pid, $node, $quantity = 0){
 
   if (!$display_node->user_access) {
     $error_output = '';
+    $error_output .= '<div>';
     $error_output .= '<div id="no-access">';
     $error_output .= '<div id="no-access-message">';
     $error_output .= $display_node->user_access_message;
@@ -532,7 +533,7 @@ function calendar_filter($pid, $node, $quantity = 0){
       $error_output .= '</a>';
       $error_output .= '</div>';
     }
-    $error_output .= '</div>';
+    $error_output .= '</div></div>';
     print $error_output;
     return;
   }

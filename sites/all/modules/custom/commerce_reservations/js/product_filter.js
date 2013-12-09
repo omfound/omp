@@ -203,7 +203,7 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer .date-details').removeClass('preloader-active');
             $('.view-footer .form-item-quantity img').hide();
             $('.view-footer input#edit-submit').show();
-            no_access = $(data);
+            no_access = $('#no-access', data);
             $('#content #content-inner .no-access').remove();
             if (no_access.length > 0) {
               //Hide calendar and display appropriate message
