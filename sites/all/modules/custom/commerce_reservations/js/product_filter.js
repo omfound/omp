@@ -249,7 +249,7 @@ Drupal.cr = Drupal.cr || {};
     noAccessMessage:function(no_access) {
       $('#content #content-inner').append('<div class="no-access"><div class="no-access-message"><p>'+$(no_access).find("#no-access-message").html()+'</p></div></div>');
       if ($(no_access).find('#no-access-button').length) {
-        $('.no-access').append('<div class="no-access-buttom">'+$(no_access).find('#no-access-button').html()+'</div>');
+        $('.no-access').append('<div class="no-access-button">'+$(no_access).find('#no-access-button').html()+'</div>');
       }
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#content').css('height', 'auto');
