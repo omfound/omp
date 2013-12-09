@@ -640,19 +640,8 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
   $pay_later = false;
   foreach ($membership_orders as $key => $info) {
-    if ($info->payment_method == 'pay_later') {
-      $pay_later = true;
-    }
-    else{
-      $pay_later = false;
-    }
-  }
- 
-  if ($pay_later) {
-    $variables['cr']['membership_payment'] = 'pay_later';
-  }
-  else {
-    $variables['cr']['membership_payment'] = 'paid';
+    $variables['cr']['membership_payment'] = $info->payment_method;
+    $varialbes['cr']['membership_payment_id'] = $info->payment_id;
   }
 }
 
