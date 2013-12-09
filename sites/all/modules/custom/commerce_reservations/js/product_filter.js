@@ -205,7 +205,7 @@ Drupal.cr = Drupal.cr || {};
 
             no_access = $('#no-access', data);
             console.log(no_access);
-            $('#content #content-inner .no-access-message').remove();
+            //$('#content #content-inner .no-access-message').remove();
             if (no_access.length > 0) {
               //Hide calendar and display appropriate message
               Drupal.behaviors.product_filter.noAccessMessage(no_access);
