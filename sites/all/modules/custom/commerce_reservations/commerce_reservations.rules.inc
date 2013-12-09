@@ -406,6 +406,11 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
 }
 
 function om_membership_deny_product_access($user, $product_display, $product, $message, $button_text, $button_link) {
+  //If multiple denials happen, we only take the first
+  if ($product_display->user_access === false) {
+    return; 
+  }
+
   $product_display->user_access = false;
   $product_display->user_access_message = $message;
   if (!empty($button_link) && !empty($button_text)) {
