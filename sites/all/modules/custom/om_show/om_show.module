@@ -610,7 +610,7 @@ function om_show_rating_is_adult($tid) {
 }
 
 function om_show_cablecast_update_show_statuses() {
-  require_once("/custom/om_playback_servers/modules/om_playback_servers_cablecast/includes/om_playback_servers_cablecast_file.inc"); 
+  require_once("sites/all/modules/custom/om_playback_servers/modules/om_playback_servers_cablecast/includes/om_playback_servers_cablecast_file.inc"); 
   $cablecast_file = new cablecastFile();
   $batch_size = 100;
   $watermark = variable_get('om_show_status_progress', 1);
