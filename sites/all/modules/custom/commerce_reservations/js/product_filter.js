@@ -204,6 +204,7 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer input#edit-submit').show();
 
             no_access = $('#no-access', data);
+            console.log(no_access);
             $('#content #content-inner .no-access-message').remove();
             if (no_access.length > 0) {
               //Hide calendar and display appropriate message
