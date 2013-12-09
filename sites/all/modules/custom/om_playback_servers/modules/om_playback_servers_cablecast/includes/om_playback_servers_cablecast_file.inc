@@ -211,6 +211,6 @@ class cablecastFile {
         $status = TRUE;
       }
     }
+    return $status;
   }
-  return $status;
 }
