@@ -636,7 +636,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     $variables['cr']['payment'] = t('No Payment');
   }
 
-  dsm($variables);
+  dsm($variables->row);
   //$variables['cr']['payment_method'] = $memberships = om_membership_get_user_membership_orders($user, $active = TRUE);
 }
 
