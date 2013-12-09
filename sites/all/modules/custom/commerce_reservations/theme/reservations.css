@@ -666,6 +666,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .no-certification-message, 
+.no-access,
 .commercial-message{
 	min-height: 23px;
   background-color: #912A1B;
@@ -675,7 +676,6 @@ body.page-reservations #main-content #squeeze{
   padding-left: 20px;
   margin-bottom: 15px;
   margin-top: 20px;
-  height: 25px;
   text-shadow: none;
   font-size: 1.2em;
 }
@@ -686,6 +686,9 @@ body.page-reservations #main-content #squeeze{
 .no-certification-message a,
 .no-certification-message a:link,
 .no-certification-message a:visited,
+.no-access a,
+.no-access a:link,
+.no-access a:visited,
 .commercial-message .commercial-button{
 	font-family:  Helvetica, Arial,sans-serif;
 	font-size: 12px;
@@ -713,6 +716,7 @@ body.page-reservations #main-content #squeeze{
   margin-right: 40px;
 }
 .no-certification-message a:hover,
+.no-access a:hover,
 .commercial-message .commercial-button:hover{
 	text-shadow: 0 0 10px #FFFFFF;
 	background:#acf4f9);
