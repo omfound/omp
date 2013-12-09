@@ -203,7 +203,7 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer .date-details').removeClass('preloader-active');
             $('.view-footer .form-item-quantity img').hide();
             $('.view-footer input#edit-submit').show();
-
+            console.log(data);
             no_access = $('#no-access', data);
             console.log(no_access);
             //$('#content #content-inner .no-access-message').remove();
