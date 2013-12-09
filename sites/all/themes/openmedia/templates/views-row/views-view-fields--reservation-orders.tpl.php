@@ -63,6 +63,9 @@
       </td>
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
+        <?php if ($cr['membership_payment'] != 'paid') { ?>
+          <br />Membership not paid!
+        <?php } ?>
       </td>
       <td class="checkout-options">
       <?php if ($checkedout) { ?>
@@ -77,9 +80,5 @@
       <?php } ?>
     </td>
     </tr>
-    
-    <?php if ($cr['membership_payment'] != 'paid') { ?>
-      <tr class="pay-later">According to the system, the member who made the order above chose "pay-later" when they purchased their membership and have not yet made their payment.</tr>
-    <?php } ?>
   </table>
 </div>
