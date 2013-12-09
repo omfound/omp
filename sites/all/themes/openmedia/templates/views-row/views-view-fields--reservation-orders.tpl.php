@@ -14,7 +14,11 @@
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
   </tr>
+  <?php if ($cr['membership_payment'] != 'paid') { ?>
+  <tr class="pay-later">
+  <?php }else{ ?>
   <tr>
+  <?php } ?>
     <td class="item-name">
       <?php print $fields['line_item_title']->content . '</br>';?>
     </td>

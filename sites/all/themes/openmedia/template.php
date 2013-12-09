@@ -636,8 +636,24 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     $variables['cr']['payment'] = t('No Payment');
   }
 
-  dsm($variables['row']);
-  //$variables['cr']['payment_method'] = $memberships = om_membership_get_user_membership_orders($user, $active = TRUE);
+  $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
+  $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
+  $pay_later = false;
+  foreach ($membership_orders as $key => $info) {
+    if ($info->payment_method == 'pay_later') {
+      $pay_later = true;
+    }
+    else{
+      $pay_later = false;
+    }
+  }
+ 
+  if ($pay_later) {
+    $variables['cr']['membership_payment'] = 'pay_later';
+  }
+  else {
+    $variables['cr']['membership_payment'] = 'paid';
+  }
 }
 
 /**
