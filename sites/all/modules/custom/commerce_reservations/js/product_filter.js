@@ -247,9 +247,7 @@ Drupal.cr = Drupal.cr || {};
 
     //start noAccessMessage function
     noAccessMessage:function(no_access) {
-      console.log('firing access');
-      console.log(no_access);
-      $('#content #content-inner').append('<div class= "no-certification-message"><p>'+$(no_access).html()+'</p></div>');
+      $('#content #content-inner').append('<div class= "no-access-message"><p>'+$(no_access).html()+'</p></div>');
       $('.view-reservation-calendar').css('visibility', 'hidden');
       $('#content').css('height', 'auto');
     },
