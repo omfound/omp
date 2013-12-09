@@ -95,9 +95,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       dateInvalid = false;
       dateDiff = Math.abs(end - start);
       dateDiffHours = dateDiff / (1000*60*60);
-      console.log(start);
       if (!allDay){
-        console.log('not all day');
         dontCheck = false;
         today = new Date();
         if (start < today){
@@ -121,6 +119,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //if staff ignore hours
             if (!Drupal.settings.commerce_reservations.staff) {
               //Check for closed days
+              console.log(array[i].className);
               if (array[i].className == 'closed-all-day'){
                 if (array[i].start.getDate() == start.getDate()){
                   if (array[i].start.getMonth() == start.getMonth()){
