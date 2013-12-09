@@ -76,5 +76,10 @@
         <?php } ?>
       <?php } ?>
     </td>
+    </tr>
+    
+    <?php if ($cr['membership_payment'] != 'paid') { ?>
+      <tr class="pay-later">According to the system, the member who made the order above chose "pay-later" when they purchased their membership and have not yet made their payment.</tr>
+    <?php } ?>
   </table>
 </div>
