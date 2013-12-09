@@ -119,8 +119,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //if staff ignore hours
             if (!Drupal.settings.commerce_reservations.staff) {
               //Check for closed days
-              console.log(array[i].className);
-              if (array[i].className == 'closed-all-day'){
+              if (array[i].className == 'closed-date'){
                 if (array[i].start.getDate() == start.getDate()){
                   if (array[i].start.getMonth() == start.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
