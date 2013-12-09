@@ -5,9 +5,7 @@
  */
 function commerce_reservations_rules_event_info() {
   $items = array();
-  // Provide an event for membership expiration.
-  // Then any steps may be taken.
-  $items['om_membership_reserve_product'] = array(
+  $items['om_membership_product_access'] = array(
     'label' => t('When a user attempts to reserve a product'),
     'group' => 'Commerce Reservations',
     'variables' => array(
@@ -117,7 +115,7 @@ function commerce_reservations_rules_action_info() {
     ),
   );
 
-  $actions['commerce_reservations_deny_product_access'] = array(
+  $actions['om_membership_deny_product_access'] = array(
     'label' => t('Deny access to a particular product'),
     'group' => t('Commerce Reservations Rules'),
     'parameter' => array(
@@ -407,7 +405,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   }
 }
 
-function commerce_reservations_deny_product_access($user, $product_display, $product, $message, $button_text, $button_link) {
+function om_membership_deny_product_access($user, $product_display, $product, $message, $button_text, $button_link) {
   $product_display->user_access = false;
   $product_display->user_access_message = $message;
   if (!empty($button_link) && !empty($button_text)) {

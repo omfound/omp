@@ -516,7 +516,7 @@ function calendar_filter($pid, $node, $quantity = 0){
 
   //product access checks
   if (module_exists('rules')) {
-    rules_invoke_event('om_membership_reserve_product', $user, $display_node, $product);
+    rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
   }
 
   if (!$display_node->user_access) {
