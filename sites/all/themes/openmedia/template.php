@@ -635,6 +635,9 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   }else{
     $variables['cr']['payment'] = t('No Payment');
   }
+
+  dsm($variables);
+  //$variables['cr']['payment_method'] = $memberships = om_membership_get_user_membership_orders($user, $active = TRUE);
 }
 
 /**
