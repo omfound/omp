@@ -618,7 +618,7 @@ function om_show_cablecast_update_show_statuses() {
   $query = db_select('node', 'n'); 
   $query->fields('n', array('nid'));
   $query->condition('type', 'om_show', '=');
-  $query->condition('nid', $watermark, '>');
+  $query->condition('nid', $watermark, '<');
   $query->range(0, $batch_size);
   $resource = $query->execute();
   while($row = $resource->fetchAssoc()) {
