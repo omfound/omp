@@ -201,9 +201,16 @@ class cablecastFile {
      return FALSE;
   }
   public function get_file_validity($uri) {
+    $status = FALSE;
     $show_id = $this->get_show_id($uri);
     $controller = om_playback_servers_entity_get_controller($this->pbs);
     $meta_data = $controller->get_digital_files($this->pbs, array('RestrictToShowID' => $show_id, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE));
-    dsm($meta_data);     
+    if (!empty($meta_data->GetDigitalFilesResult) && !empty($meta_data->GetDigitalFilesResult->DigitalFileInfo)) {
+      $meta_data = array_shift($meta_data->GetDigitalFilesResult->DigitalFileInfo);
+      if (is_object($meta_data) && $meta_data->IsValid === TRUE) {
+        $status = TRUE;
+      }
+    }
   }
+  return $status;
 }
