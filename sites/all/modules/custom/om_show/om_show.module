@@ -631,3 +631,7 @@ function om_show_cablecast_update_show_statuses() {
   }
   variable_set('om_show_status_progress', $watermark + $batch_size);
 }
+
+function om_show_cron() {
+  om_show_cablecast_update_show_statuses();
+}
