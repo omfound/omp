@@ -816,6 +816,10 @@ body.page-reservations #main-content #squeeze{
   width: 350px;
 }
 
+.section-administer-reservations .pay-later {
+  background-color: #FFF5F4;
+}
+
 .checkout_status_bad{
 	color: #912a1b;
 	font-weight: bold;
