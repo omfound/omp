@@ -626,7 +626,8 @@ function om_show_cablecast_update_show_statuses() {
     if (!empty($node->field_om_show_broadcast_file[$node->language])) {
       dsm($row['nid']);
       $node->field_cablecast_file_status[$node->language][0]['value'] = (int) $cablecast_file->get_file_validity($node->field_om_show_broadcast_file[$node->language][0]['uri']);
-    } 
+    }
+    node_save($node); 
   }
   variable_set('om_show_status_progress', $watermark + $batch_size);
 }
