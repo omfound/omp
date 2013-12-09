@@ -138,7 +138,17 @@ function commerce_reservations_rules_action_info() {
       'message' => array(
         'type' => 'text',
         'label' => t('Denial message'),
-        'description' => t('This message will be displayed to the user to explain why they cannot access the product.'),
+        'description' => t('This message will be displayed to the user to explain why they cannot access the product'),
+      ),
+      'button_text' => array(
+        'type' => 'text',
+        'label' => t('Button Text'),
+        'description' => t('Text to include on the action button if applicable'),
+      ),
+      'button_link' => array(
+        'type' => 'text',
+        'label' => t('Button Link'),
+        'description' => t('Link for the action button if applicable'),
       ),
     ),
   );
@@ -397,7 +407,11 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   }
 }
 
-function commerce_reservations_deny_product_access($user, $product_display, $product, $message) {
+function commerce_reservations_deny_product_access($user, $product_display, $product, $message, $button_text, $button_link) {
   $product_display->user_access = false;
   $product_display->user_access_message = $message;
+  if (!empty($button_link) && !empty($button_text)) {
+    $product_display->user_access_blink = $button_link;
+    $product_display->user_access_btext = $button_text;
+  }
 }

@@ -520,7 +520,20 @@ function calendar_filter($pid, $node, $quantity = 0){
   }
 
   if (!$display_node->user_access) {
-    print '<div><div id = "no-access">'.$display_node->user_access_message.'</div></div>';
+    $error_output = '';
+    $error_output .= '<div id="no-access">';
+    $error_output .= '<div id="no-access-message">';
+    $error_output .= $display_node->user_access_message;
+    $error_output .= '</div>';
+    if (!empty($display_node->user_access_blink) && !empty($display_node->user_access_btext)) {
+      $error_output .= '<div id="no-access-button">';
+      $error_output .= '<a href="'.$display_node->user_access_blink.'">';
+      $error_output .= $display_node->user_access_btext;
+      $error_output .= '</a>';
+      $error_output .= '</div>';
+    }
+    $error_output .= '</div>';
+    print $error_output;
     return;
   }
   
