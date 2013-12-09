@@ -95,12 +95,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
       dateInvalid = false;
       dateDiff = Math.abs(end - start);
       dateDiffHours = dateDiff / (1000*60*60);
-      if (allDay) {
-        console.log('allday');
-        console.log(start);
-        console.log(end);
-      }
+      console.log(start);
       if (!allDay){
+        console.log('not all day');
         dontCheck = false;
         today = new Date();
         if (start < today){
