@@ -6,7 +6,7 @@
 function commerce_reservations_rules_event_info() {
   $items = array();
   $items['om_membership_product_access'] = array(
-    'label' => t('When a user attempts to reserve a product'),
+    'label' => t('When a user attempts to access a product for checkout'),
     'group' => 'Commerce Reservations',
     'variables' => array(
       'user' => array(
