@@ -1082,3 +1082,16 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 }
+
+function om_membership_membership_expiration_date($line_item_id) {
+  $line_item = commerce_line_item_load($line_item_id);
+  $order = commerce_order_load($line_item->order_id);
+  $product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
+  $exp = $order->created + ($product->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+  return $exp;
+}
+
+function om_membership_views_pre_render(&$view) {
+  dsm($view);
+  dsm($view->result);
+}
