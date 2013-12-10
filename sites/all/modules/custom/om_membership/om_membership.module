@@ -1099,7 +1099,7 @@ function om_membership_views_pre_render(&$view) {
   if ($view->name == 'membership_report') {
     foreach ($view->result as $key => $info) {
       $exp = om_membership_membership_expiration_date($view->result[$key]->line_item_id);
-      if ($exp !== 0) {
+      if ($exp > 0) {
         $formatted_date = date('Ymd', $exp);
       }else{
         $formatted_date = 'lifetime';
