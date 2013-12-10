@@ -1087,7 +1087,11 @@ function om_membership_membership_expiration_date($line_item_id) {
   $line_item = commerce_line_item_load($line_item_id);
   $order = commerce_order_load($line_item->order_id);
   $product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
-  $exp = $order->created + ($product->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+  if ($product->field_duration[LANGUAGE_NONE][0]['value'] > 0) {
+    $exp = $order->created + ($product->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+  }else{
+    $exp = 'lifetime';
+  }
   return $exp;
 }
 
@@ -1095,7 +1099,11 @@ function om_membership_views_pre_render(&$view) {
   if ($view->name == 'membership_report') {
     foreach ($view->result as $key => $info) {
       $exp = om_membership_membership_expiration_date($view->result[$key]->line_item_id);
-      $formatted_date = date('Ymd', $exp);
+      if ($exp != 'lifetime') {
+        $formatted_date = date('Ymd', $exp);
+      }else{
+        $formatted_date = $exp;
+      }
       $view->result[$key]->line_item_id = $formatted_date;
     }
   }
