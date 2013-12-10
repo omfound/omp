@@ -1092,6 +1092,11 @@ function om_membership_membership_expiration_date($line_item_id) {
 }
 
 function om_membership_views_pre_render(&$view) {
-  dsm($view);
-  dsm($view->result);
+  if ($view->name == 'membership_report') {
+    foreach ($view->result as $key => $info) {
+      $exp = om_membership_membership_expiration_date($view->result[$key]->line_item_id);
+      $formatted_date = date('Ymd', $exp);
+      $view->result[$key]->line_item_id = $formatted_date;
+    }
+  }
 }
