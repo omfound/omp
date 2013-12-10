@@ -1102,6 +1102,7 @@ function om_membership_views_pre_render(&$view) {
       if ($exp > 0) {
         $formatted_date = date('Ymd', $exp);
       }else{
+        dsm('lifetime');
         $formatted_date = 'lifetime';
       }
       $view->result[$key]->line_item_id = $formatted_date;
