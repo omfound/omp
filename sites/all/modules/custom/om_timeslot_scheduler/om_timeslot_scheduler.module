@@ -790,6 +790,9 @@ function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE, $mode = 'b
             node_save($show_node);
             om_broadcast_schedule_create_airing_node($airing);
           }
+          else {
+            watchdog('scheduling_weirdness', 'It does happen: ' . $show_node->nid  . '-'  . $item->start);
+          }
         }
       }
     }
