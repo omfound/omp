@@ -384,7 +384,26 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
       }
     }
   }
+
+  foreach ($memberships as $key => $info) {
+    $payment_method = om_membership_order_payment_method($info->order_id);
+    $memberships[$key]->payment_method = $payment_method['name'];
+    $memberships[$key]->payment_id = $payment_method['pid'];
+  }
+
   return $memberships;
+}
+
+function om_membership_order_payment_method($order_id) {
+  $query = "
+    SELECT payment_method.name, payment.pid 
+    FROM {commerce_payment_transaction}
+    JOIN {payment_commerce} ON commerce_payment_transaction.transaction_id = payment_commerce.transaction_id
+    JOIN {payment} ON payment.pid = payment_commerce.pid
+    JOIN {payment_method} ON payment.pmid = payment_method.pmid
+    WHERE commerce_payment_transaction.order_id = :order_id";
+  $result = db_query($query, array(':order_id' => $order_id))->fetchAssoc();
+  return $result;
 }
 
 /**
@@ -1060,6 +1079,32 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
           }
         }
       }
+    }
+  }
+}
+
+function om_membership_membership_expiration_date($line_item_id) {
+  $line_item = commerce_line_item_load($line_item_id);
+  $order = commerce_order_load($line_item->order_id);
+  $product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
+  if ($product->field_duration[LANGUAGE_NONE][0]['value']) {
+    $exp = $order->created + ($product->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+  }else{
+    $exp = 0;
+  }
+  return $exp;
+}
+
+function om_membership_views_pre_render(&$view) {
+  if ($view->name == 'membership_report') {
+    foreach ($view->result as $key => $info) {
+      $exp = om_membership_membership_expiration_date($view->result[$key]->line_item_id);
+      if ($exp > 0) {
+        $formatted_date = date('Ymd', $exp);
+      }else{
+        $formatted_date = 99999999;
+      }
+      $view->result[$key]->line_item_id = $formatted_date;
     }
   }
 }
