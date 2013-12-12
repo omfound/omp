@@ -36,6 +36,8 @@ function commerce_registration_views_data_alter(&$data) {
       'handler' => 'CommerceRegistrationHandlerFieldRegistrationEntity',
     ),
     'filter' => array(
+      'title' => t('Attached Commerce Product'),
+      'help' => t('The commerce product this registration is associated to.'),
       'handler' => 'views_handler_filter_string',
     ),
   );
