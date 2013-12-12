@@ -28,11 +28,10 @@ function commerce_registration_views_data_alter(&$data) {
       'handler' => 'views_handler_filter_numeric',
     ),
   );
-  $product_entity = entity_get_info('commerce_product');
   $data['registration']['entity_id'] = array(
     'relationship' => array(
-      'base' => $product_entity['base table'],
-      'field' => $product_entity['entity keys']['id'],
+      'base' => 'commerce_product',
+      'base field' => 'product_id',
       'handler' => 'views_handler_relationship',
       'label' => t('Commerce Product'),
     ),
