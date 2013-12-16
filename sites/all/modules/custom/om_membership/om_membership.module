@@ -1097,6 +1097,7 @@ function om_membership_membership_expiration_date($line_item_id) {
 
 function om_membership_views_pre_render(&$view) {
   if ($view->name == 'membership_report') {
+    dsm($view->result);
     foreach ($view->result as $key => $info) {
       $exp = om_membership_membership_expiration_date($view->result[$key]->line_item_id);
       if ($exp > 0) {
@@ -1106,5 +1107,33 @@ function om_membership_views_pre_render(&$view) {
       }
       $view->result[$key]->line_item_id = $formatted_date;
     }
+  }
+}
+
+function om_membership_default_address($uid) {
+  $query = "
+    SELECT * 
+    FROM {field_data_commerce_customer_address} 
+    JOIN {commerce_addressbook_defaults} ON commerce_addressbook_defaults.profile_id = field_data_commerce_customer_address.entity_id 
+    WHERE commerce_addressbook_defaults.uid = :uid";
+
+  $address = db_query($query, array(':uid' => $uid))->fetchAssoc();
+  if (!empty($address)) {
+    $output = '';
+    $output .= $address['commerce_customer_address_name_line'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_thoroughfare'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_locality'];
+    $output .= " ";
+    $output .= $address['commerce_customer_address_administrative_area'];
+    $output .= " ";
+    $output .= $address['commerce_customer_address_postal_code'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_country'];
+    return $output;
+  }
+  else {
+    return false;
   }
 }
