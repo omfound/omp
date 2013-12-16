@@ -1109,7 +1109,9 @@ function om_membership_views_pre_render(&$view) {
 
       if (!empty($view->result[$key]->profile_users_uid)) {
         $address_info = om_membership_default_address($view->result[$key]->profile_users_uid);
-        $view->result[$key]->field_commerce_customer_billing[0]['rendered']['#markup'] = $address_info;
+        if (!empty($address_info)) {
+          $view->result[$key]->field_commerce_customer_billing[0]['rendered']['#markup'] = $address_info;
+        }
       }
     }
   }
