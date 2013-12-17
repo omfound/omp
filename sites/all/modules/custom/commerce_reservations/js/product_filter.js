@@ -202,24 +202,13 @@ Drupal.cr = Drupal.cr || {};
             $('.view-footer .date-details').removeClass('preloader-active');
             $('.view-footer .form-item-quantity img').hide();
             $('.view-footer input#edit-submit').show();
-
-            $('#content #content-inner .no-certification-message').remove();
-            not_cert = $('#not_certified', data);
-            if (not_cert.length > 0){
-              //Hide calendar and display appropriate certificate message
-              Drupal.behaviors.product_filter.notCertifiedMessage();
-
-	            allowCommercial = $('#allow_commercial', data);
-	            if (allowCommercial.length > 0){
-		            $('#content #content-inner').append('<div class = "commercial-message"><p>You may also reserve this item as a commercial rental, at the commercial rates.</p><div class = "commercial-button">Commercial Reservation</div></div>');
-		            $('.commercial-button').mousedown(function(){
-		              $('#left-side .field-name-field-commercial-reservation input').attr('checked', 'checked');
-		              $('.no-certification-message').hide();
-		              $('.commercial-message').hide();
-                  Drupal.behaviors.product_filter.addReservations(data);
-		            });
-	            }
-            } else{
+            no_access = $('#no-access', data);
+            $('#content #content-inner .no-access').remove();
+            if (no_access.length > 0) {
+              //Hide calendar and display appropriate message
+              Drupal.behaviors.product_filter.noAccessMessage(no_access);
+            }
+            else {
               Drupal.behaviors.product_filter.addReservations(data);
             }
           }
@@ -240,20 +229,15 @@ Drupal.cr = Drupal.cr || {};
     },
     //end addReservations function
 
-    //start notCertifiedMessage function
-    notCertifiedMessage:function() {
-      logged_in = $('.logged-in');
-      if (logged_in.length > 0){
-        $('#content #content-inner').append('<div class = "no-certification-message"><p>You do not have the proper certifications to reserve this item.</p><a href = "../classes">Take a Class!</a></div>');
-        $('.view-reservation-calendar').css('visibility', 'hidden');
-        $('#content').css('height', 'auto');
-      }  else{
-        $('#content #content-inner').append('<div class = "no-certification-message"><p>You are not logged in as a member. To reserve equipment please login or signup as a member.</p><a href = "../membership">Login or Become a Member!</a></div>');
-        $('.view-reservation-calendar').css('visibility', 'hidden');
-        $('#content').css('height', 'auto');
+    //start noAccessMessage function
+    noAccessMessage:function(no_access) {
+      $('#content #content-inner').append('<div class="no-access"><div class="no-access-message"><p>'+$(no_access).find("#no-access-message").html()+'</p></div></div>');
+      if ($(no_access).find('#no-access-button').length) {
+        $('.no-access').append('<div class="no-access-button">'+$(no_access).find('#no-access-button').html()+'</div>');
       }
+      $('.view-reservation-calendar').css('visibility', 'hidden');
+      $('#content').css('height', 'auto');
     },
-    //end notCertifiedMessage function
 
     //start showItemDetails function
     showItemDetails:function($item) {

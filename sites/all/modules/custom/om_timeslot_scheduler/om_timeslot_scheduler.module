@@ -583,7 +583,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     $temp_end = $temp_start + $show->field_om_show_duration['und'][0]['value'] + $spacer;
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($temp_start);
-                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    $is_adult = om_show_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $temp_start >= $adult_hours['start'] && $temp_end <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
@@ -611,7 +611,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                     }
                     // Adult hours check
                     $adult_hours = om_timeslot_scheduler_get_adult_hours($process_start);
-                    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
+                    $is_adult = om_show_rating_is_adult($show->field_om_rating[$show->language][0]['value']);
                     if ($is_adult == FALSE || ($is_adult == TRUE && $process_start >= $adult_hours['start'] && $show_completion <= $adult_hours['end'])) {
                       $already_aired = om_timeslot_scheduler_show_is_in_airing_list($all_airings, $show);
                       if ($already_aired == FALSE) {
@@ -1026,7 +1026,7 @@ function _om_timeslot_scheduler_handle_gaps(&$val, $key, &$data) {
 }
 
 /**
- * Utility function get all rule plguins or a specific rule plugin if a name is given.
+ * Utility function get all rule plugins or a specific rule plugin if a name is given.
  */
 function om_timeslot_scheduler_entity_get_rules($rule_name = NULL) {
   if (empty($rule_name)) {
@@ -1261,26 +1261,6 @@ function om_timeslot_scheduler_load_all_shows() {
   }
   if (!empty($all_shows)) {
     return $all_shows;
-  }
-  return FALSE;
-}
-
-/**
- * Check to see if a rating term is considered adult.
- *   We call taxonomy_term_load many times, but drupal core statically caches this call.
- *   So it should be ok.
- * @param $tid
- *   int term id
- *
- * @return bool
- */
-function om_timeslot_scheduler_rating_is_adult($tid) {
-  $adult_terms = array('TV-MA');
-  $term = taxonomy_term_load($tid);
-  if (is_object($term)) {
-    if (in_array($term->name, $adult_terms)) {
-      return TRUE;
-    }
   }
   return FALSE;
 }

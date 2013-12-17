@@ -68,12 +68,12 @@
 
 .cue-point-list-item textarea.cue-point-seconds {
   float: left;
-  width: 41px;
+  width: 65px;
 }
 
 .cue-point-list-item .cue-point-seconds {
   float: left;
-  width: 35px;
+  width: 55px;
   text-align: center;
 }
 
@@ -136,8 +136,8 @@
 
 #timer-wrapper {
   font-size: 28px;
-  width: 212px;
-  height: 48px;
+  width: 205px;
+  height: 42px;
   display: block;
 }
 

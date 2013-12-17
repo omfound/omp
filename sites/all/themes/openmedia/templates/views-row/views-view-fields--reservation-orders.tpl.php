@@ -14,7 +14,11 @@
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
   </tr>
+  <?php if ($cr['membership_payment'] == 'pay_later') { ?>
+  <tr class="pay-later">
+  <?php }else{ ?>
   <tr>
+  <?php } ?>
     <td class="item-name">
       <?php print $fields['line_item_title']->content . '</br>';?>
     </td>
@@ -59,6 +63,9 @@
       </td>
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
+        <?php if ($cr['membership_payment'] == 'pay_later') { ?>
+          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership not paid!</a>
+        <?php } ?>
       </td>
       <td class="checkout-options">
       <?php if ($checkedout) { ?>
@@ -72,5 +79,6 @@
         <?php } ?>
       <?php } ?>
     </td>
+    </tr>
   </table>
 </div>
