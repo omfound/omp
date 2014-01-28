@@ -187,7 +187,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       data.title = new Date().getTime();
     }
-    console.log(this.sessionControllerView.timeInput.val());
     data['node_data_field_cue_seconds_field_cue_seconds_value'] = formatTimeTimestamp(this.sessionControllerView.timeInput.val());
     data['node_data_field_session_reference_field_session_reference_nid'] = this.get('currentNid');
     this.cuePointList.add(data);
@@ -545,6 +544,7 @@ function formatTimeHuman(time) {
 function formatTimeTimestamp(time) {
   var stamp = 0;
   var timeParts = time.split(":");
+  console.log(timeParts);
   if (timeParts[0]) {
     stamp += parseInt(timeParts[0]) * 3600;
   }
