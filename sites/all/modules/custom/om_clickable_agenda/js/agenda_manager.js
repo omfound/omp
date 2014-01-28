@@ -483,8 +483,8 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
   },
   sessionControllerSubmit : function(e) {
     e.preventDefault();
-    var values = {'node_revisions_body' : $(this.el).find('#edit-add-bill-box').val()};
     console.log(values);
+    var values = {'node_revisions_body' : $(this.el).find('#edit-add-bill-box').val()};
     this.trigger('sessionController:submit', values);
   },
   toggleSelect : function() {
