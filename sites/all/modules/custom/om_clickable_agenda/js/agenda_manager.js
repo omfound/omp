@@ -187,6 +187,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     else {
       data.title = new Date().getTime();
     }
+    console.log(this.sessionControllerView.timeInput.val());
     data['node_data_field_cue_seconds_field_cue_seconds_value'] = formatTimeTimestamp(this.sessionControllerView.timeInput.val());
     data['node_data_field_session_reference_field_session_reference_nid'] = this.get('currentNid');
     this.cuePointList.add(data);
@@ -484,8 +485,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
   sessionControllerSubmit : function(e) {
     e.preventDefault();
     var values = {'node_revisions_body' : $(this.el).find('#edit-add-bill-box').val()};
-    console.log(values); 
-    //this.trigger('sessionController:submit', values);
+    this.trigger('sessionController:submit', values);
   },
   toggleSelect : function() {
     /**
