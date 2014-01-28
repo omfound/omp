@@ -181,6 +181,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.trigger('timeChange', this.get('currentTime'));
   },
   newCuePointHelper : function(data) {
+    console.log(data);
     if (data['node_revisions_body']) {
       data.title = data['node_revisions_body'];
     }
@@ -542,7 +543,6 @@ function formatTimeHuman(time) {
  * Convert HH:MM:SS back to arbitrary seconds (not a timestamp).
  */
 function formatTimeTimestamp(time) {
-  alert(time);
   var stamp = 0;
   var timeParts = time.split(":");
   if (timeParts[0]) {
@@ -554,7 +554,6 @@ function formatTimeTimestamp(time) {
   if (timeParts[2] * 1000) {
     stamp += parseInt(timeParts[2]);
   }
-  alert(stamp);
   return stamp;
 };
 
