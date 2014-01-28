@@ -181,7 +181,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.trigger('timeChange', this.get('currentTime'));
   },
   newCuePointHelper : function(data) {
-    console.log(data);
     if (data['node_revisions_body']) {
       data.title = data['node_revisions_body'];
     }
@@ -485,6 +484,7 @@ Drupal.agendaManger.Views.sessionController = Backbone.View.extend({
   sessionControllerSubmit : function(e) {
     e.preventDefault();
     var values = {'node_revisions_body' : $(this.el).find('#edit-add-bill-box').val()};
+    console.log(values);
     this.trigger('sessionController:submit', values);
   },
   toggleSelect : function() {
