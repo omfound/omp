@@ -545,16 +545,14 @@ function formatTimeTimestamp(time) {
   var stamp = 0;
   var timeParts = time.split(":");
   if (timeParts[0]) {
-    stamp += parseInt(timeParts[0]) * 3600;
+    stamp += parseInt(timeParts[0], 10) * 3600;
   }
   if (timeParts[1]) {
-    stamp += parseInt(timeParts[1]) * 60;
+    stamp += parseInt(timeParts[1], 10) * 60;
   }
-  //if (timeParts[2] * 1000) {
   if (timeParts[2]) {
-    stamp += parseInt(timeParts[2]);
+    stamp += parseInt(timeParts[2], 10);
   }
-  console.log(stamp);
   return stamp;
 };
 
