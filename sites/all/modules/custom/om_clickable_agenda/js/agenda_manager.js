@@ -554,6 +554,7 @@ function formatTimeTimestamp(time) {
   if (timeParts[2]) {
     stamp += parseInt(timeParts[2]);
   }
+  console.log(stamp);
   return stamp;
 };
 
