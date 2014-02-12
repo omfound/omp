@@ -60,7 +60,7 @@ function om_volunteer_log_form_update_hours_submit($form, $form_state) {
     $log_entry->uid = $form_state['tab_user']->uid;
     $log_entry->hours = $form_state['values']['total_hours'];
     $log_entry->reported_by_uid = $user->uid;
-    om_volunteer_write_log_entry($log_entry); 
+    //om_volunteer_write_log_entry($log_entry); 
   }
 }
 
