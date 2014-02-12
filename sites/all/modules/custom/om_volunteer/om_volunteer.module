@@ -20,7 +20,7 @@ function om_volunteer_menu() {
     'access callback' => 'om_volunteer_access_check',
     'access arguments' => array(1),
     'file' => 'form.inc',
-    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes/form.inc',
+    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes',
     'type' => MENU_LOCAL_TASK
   );
   return $items;
