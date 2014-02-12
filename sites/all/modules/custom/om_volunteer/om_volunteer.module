@@ -49,7 +49,7 @@ function om_volunteer_write_log_entry($entry) {
 
 function om_volunteer_write_sum_entry($entry) {
   if (is_object($entry)) {
-    if (isset($entry->vlid)) {
+    if (isset($entry->vsid)) {
       drupal_write_record('volunteer_sum', $entry, 'vsid');
     }
     return drupal_write_record('volunteer_sum', $entry);
