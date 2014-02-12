@@ -1,8 +1,8 @@
 <?php
 
 function om_volunteer_log_form($form, $form_state, $user) {
-  dsm($user);
-  $total = 0;
+  $sum_entry = om_volunteer_get_sum_entry_by_uid(); 
+  $total = !empty($sum_entry) ? $sum_entry->hours : 0;
   $form = array();
   $help = variable_get('om_volunteer_log_form_help', FALSE);
   if (!empty($help)) {
@@ -20,7 +20,7 @@ function om_volunteer_log_form($form, $form_state, $user) {
     $form['total_hours_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Update'),
-      '#submit' => 'om_volunteer_log_form_update_hours_submit'
+      '#submit' => array('om_volunteer_log_form_update_hours_submit')
     );
   }
   else {
@@ -38,7 +38,7 @@ function om_volunteer_log_form($form, $form_state, $user) {
   $form['log_hours_submit'] = array(
     '#type' => 'submit',
     '#value' => t('Log Hours'),
-    '#submit' => 'om_volunteer_log_form_log_hours_submit'
+    '#submit' => array('om_volunteer_log_form_log_hours_submit')
   ); 
   return $form;
 }
