@@ -62,5 +62,5 @@ function om_volunteer_get_sum_entry_by_uid($uid) {
   $query->fields('volunteer', array());
   $query->condition('uid', $uid, '=');
   $resource = $query->execute();
-  return $resource->fetachObject();
+  return $resource->fetchObject();
 }
