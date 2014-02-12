@@ -1,6 +1,7 @@
 <?php
 
 function om_volunteer_log_form($form, $form_state, $user) {
+  dsm($user);
   $total = 0;
   $form = array();
   $help = variable_get('om_volunteer_log_form_help', FALSE);
