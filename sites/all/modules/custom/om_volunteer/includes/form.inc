@@ -50,14 +50,13 @@ function om_volunteer_log_form_update_hours_submit($form, $form_state) {
     $change = $form_state['values']['total_hours'];
     if (!empty($form_state['sum_entry'])) {
       $change = $form_state['values']['total_hours'] - $form_state['sum_entry']->hours;
-      dsm($change);
       if ($change == 0) {
         return;
       }
     }
     $sum_entry = !empty($form_state['sum_entry']) ? $form_state['sum_entry'] : new stdClass();
     $sum_entry->uid = $form_state['tab_user']->uid;
-    $sum_entry->hours = $form_state['values']['total_hours']; 
+    $sum_entry->hours = $change; 
     om_volunteer_write_sum_entry($sum_entry);
     global $user;
     $log_entry = new stdClass();
