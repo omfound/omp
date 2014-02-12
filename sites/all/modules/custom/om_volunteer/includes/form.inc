@@ -1,7 +1,7 @@
 <?php
 
 function om_volunteer_log_form($form, $form_state, $user) {
-  $sum_entry = om_volunteer_get_sum_entry_by_uid(); 
+  $sum_entry = om_volunteer_get_sum_entry_by_uid($user->uid); 
   $total = !empty($sum_entry) ? $sum_entry->hours : 0;
   $form = array();
   $help = variable_get('om_volunteer_log_form_help', FALSE);
