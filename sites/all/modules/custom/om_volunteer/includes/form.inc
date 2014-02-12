@@ -39,6 +39,7 @@ function om_volunteer_log_form($form, $form_state, $user) {
     '#value' => t('Log Hours'),
     '#submit' => 'om_volunteer_log_form_log_hours_submit'
   ); 
+  return $form;
 }
 
 function om_volunteer_log_form_log_hours_submit($form, $form_state) {
