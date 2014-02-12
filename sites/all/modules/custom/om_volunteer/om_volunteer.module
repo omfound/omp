@@ -50,8 +50,7 @@ function om_volunteer_write_log_entry($entry) {
 function om_volunteer_write_sum_entry($entry) {
   if (is_object($entry)) {
     if (isset($entry->vsid)) {
-      dsm("HEY DURPUL WE GO HERE");
-      drupal_write_record('volunteer_sum', $entry, 'vsid');
+      return drupal_write_record('volunteer_sum', $entry, array('vsid'));
     }
     return drupal_write_record('volunteer_sum', $entry);
   }
