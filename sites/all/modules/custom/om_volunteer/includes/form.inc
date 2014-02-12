@@ -50,6 +50,7 @@ function om_volunteer_log_form_update_hours_submit($form, $form_state) {
     $change = $form_state['values']['total_hours'];
     if (!empty($form_state['sum_entry'])) {
       $change = $form_state['values']['total_hours'] - $form_state['sum_entry']->hours;
+      dsm($change);
       if ($change == 0) {
         return;
       }
