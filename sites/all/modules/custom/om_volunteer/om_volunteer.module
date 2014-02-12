@@ -56,3 +56,11 @@ function om_volunteer_write_sum_entry($entry) {
   }
   return FALSE;
 }
+
+function om_volunteer_get_sum_entry_by_uid($uid) {
+  $query = db_query('volunteer_sum', 'volunteer');
+  $query->fields('volunteer', array());
+  $query->condition('uid', $uid, '=');
+  $resource = $query->execute();
+  return $resource->fetachObject();
+}
