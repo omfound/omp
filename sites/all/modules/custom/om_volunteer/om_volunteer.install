@@ -1,6 +1,6 @@
 <?php
 
-function om_volunteer_install() {
+function om_volunteer_schema() {
   $schema = array();
   $schema['volunteer_sum'] = array(
     'description' => 'Volunteer log entries.',
