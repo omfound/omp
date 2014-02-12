@@ -17,7 +17,7 @@ function om_volunteer_menu() {
     'title' => t('Log Volunteer Hours'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('om_volunteer_log_form', 1),
-    'access callback' => 'om_volunteer_access_check'
+    'access callback' => 'om_volunteer_access_check',
     'access arguments' => array(1),
     'file' => 'form.inc',
     'file path' => drupal_get_path('module', 'om_volunteer') . '/includes/form.inc'
