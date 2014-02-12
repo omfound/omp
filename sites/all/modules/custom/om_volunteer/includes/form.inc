@@ -16,7 +16,7 @@ function om_volunteer_log_form($form, $form_state, $user) {
       '#type' => 'textfield',
       '#default_value' => $total
     );
-    $form['log_hours_submit'] = array(
+    $form['total_hours_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Update'),
       '#submit' => 'om_volunteer_log_form_update_hours_submit'
