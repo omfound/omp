@@ -19,8 +19,8 @@ function om_volunteer_schema() {
       ),
       'hours' => array(
         'description' => 'Float hours',
-        'type' => 'float',
-        'size' => 'small',
+        'type' => 'varchar',
+        'size' => 10,
         'not null' => TRUE,
       )
     ),
@@ -43,8 +43,8 @@ function om_volunteer_schema() {
       ),
       'hours' => array(
         'description' => 'Float hours',
-        'type' => 'float',
-        'size' => 'small',
+        'type' => 'varchar',
+        'size' => 10,
         'not null' => TRUE,
       ),
       'reported_by_uid' => array(
