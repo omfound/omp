@@ -1,1 +1,57 @@
-<?php 
+<?php
+
+function om_volunteer_permissions() {
+  return array(
+    'aminister open media volunteer' => array(
+      'title' => 'Administer Open Media Volunteer',
+    ),
+    'log volunteer hours' => array(
+      'title' => 'Log own volunteer hours'
+    )
+  );
+}
+
+function om_volunteer_menu() {
+  $items = array();
+  $items['user/%user/volunteer'] = array(
+    'title' => t('Log Volunteer Hours'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_volunteer_log_form', 1),
+    'access callback' => 'om_volunteer_access_check'
+    'access arguments' => array(1),
+    'file' => 'form.inc',
+    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes/form.inc'
+  );
+  return $items;
+}
+
+function om_volunteer_access_check($menu_object) {
+  if (user_access('aminister open media volunteer')) {
+    return TRUE;
+  }
+  global $user;
+  if (user_access('log volunteer hours') && $menu_object->uid == $user->uid) {
+    return TRUE;
+  }
+}
+
+function om_volunteer_write_log_entry($entry) {
+  if (is_object($entry)) {
+    $entry->time_logged = time();
+    if (isset($entry->vlid)) {
+      drupal_write_record('volunteer_log', $entry, 'vlid');
+    }
+    return drupal_write_record('volunteer_log', $entry);
+  }
+  return FALSE;
+}
+
+function om_volunteer_write_sum_entry($entry) {
+  if (is_object($entry)) {
+    if (isset($entry->vlid)) {
+      drupal_write_record('volunteer_sum', $entry, 'vsid');
+    }
+    return drupal_write_record('volunteer_sum', $entry);
+  }
+  return FALSE;
+}
