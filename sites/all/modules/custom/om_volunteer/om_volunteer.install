@@ -56,7 +56,7 @@ function om_volunteer_schema() {
       'time_logged' => array(
         'description' => 'Timestamp when log was created',
         'type' => 'int',
-        'size' => 'medium',
+        'size' => 'big',
         'not null' => TRUE, 
       )
     ),
