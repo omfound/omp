@@ -83,20 +83,27 @@ function _om_volunteer_apply_discount($amount) {
   $l = LANGUAGE_NONE;
   global $user;
   $order = commerce_cart_order_load($user->uid);
-  $line_item = entity_create('commerce_line_item', array(
-    'type' => 'product',
-    'line_item_label' => t('Volunteer Discount'),
-    'quantity' => 1,
-  ));
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+  $line_item = commerce_line_item_new('volunteer_discount', $order->order_id); 
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  // Set the unit price on the line item object.
-  $basePrice = commerce_price_field_data_auto_creation();
-  $basePrice['amount'] = $amount;
-  $line_item_wrapper->commerce_unit_price = $basePrice;
-  // Save the line item now so we get its ID.
-  $line_item = commerce_line_item_save($line_item);
-  // Add it to the order's line item reference value.
-  $order_wrapper->commerce_line_items[] = $line_item;
+  $line_item->quantity = 1;
+  $line_item->line_item_label = t('Volunteer Discount');
+  $line_item_wrapper->commerce_total->amount = 0;
+  $line_item_wrapper->commerce_unit_price->amount = $amount;
+  $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+  $currCode = $order->commerce_order_total[LANGUAGE_NONE][0]['currency_code'];
+    $line_item_wrapper->commerce_unit_price->value(),
+      'base_price',
+		array(
+			'amount' => $amount,
+			'currency_code' => $currCode,
+			'data' => array(),
+		),
+		TRUE
+	);
+	$line_item = commerce_line_item_save($line_item);
+	// Add it to the order's line item reference value.
+	$order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($order);
 }
 
