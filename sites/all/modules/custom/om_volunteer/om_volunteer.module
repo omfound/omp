@@ -45,7 +45,7 @@ function om_volunteer_access_check($menu_object) {
   }
 }
 
-function om_volunteer_form_views_form_commerce_cart_form_default_alter($form, $form_state) {
+function om_volunteer_form_views_form_commerce_cart_form_default_alter(&$form, $form_state) {
   $active = variable_get('volunteer_exchange_allowed', 0);
   if ($active == 1) {
     _om_volunteer_use_hours_form($form);
