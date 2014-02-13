@@ -98,14 +98,14 @@ function _om_volunteer_apply_discount($ammount) {
             $discount,
             TRUE
           );
-      //commerce_line_item_save($line_item);
+      commerce_line_item_save($line_item);
       if ($difference <= 0) {
         return 0;
       }
-      $amount = $difference;
+      $ammount = $difference;
     }
   }
-  return $amount;
+  return $ammount;
 }
 
 function om_volunteer_write_log_entry($entry) {
