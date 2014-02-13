@@ -100,8 +100,6 @@ function om_volunteer_admin_form($form, $form_state) {
     '#title' => t('Volunteer Hour Exchange Rate'),
     '#description' => t('Enter a dollar value for volunteer hours'),
     '#default_value' => variable_get('volunteer_exchange_rate', 0),
-    '#prefix' => '$',
-    '#suffix' => '/hour'
   );
   return system_settings_form($form);
 }
