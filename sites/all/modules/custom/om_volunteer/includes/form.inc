@@ -37,6 +37,7 @@ function om_volunteer_log_form($form, &$form_state, $user) {
     '#type' => 'textfield',
     '#default_value' => 0
   );
+
   $form['log_hours_submit'] = array(
     '#type' => 'submit',
     '#value' => t('Log Hours'),
@@ -93,11 +94,14 @@ function om_volunteer_admin_form($form, $form_state) {
     '#default_value' => variable_get('volunteer_exchange_allowed', 0),
     '#return_value' => 1
   );
+
   $form['volunteer_exchange_rate'] = array(
     '#type' => 'textfield',
     '#title' => t('Volunteer Hour Exchange Rate'),
     '#description' => t('Enter a dollar value for volunteer hours'),
     '#default_value' => variable_get('volunteer_exchange_rate', 0),
+    '#prefix' => '$',
+    '#suffix' => '/hour'
   );
   return system_settings_form($form);
 }
