@@ -78,36 +78,26 @@ function _om_volunteer_use_hours_form_submit($form, $form_state) {
   _om_volunteer_apply_discount(10);
 }
 
-function _om_volunteer_apply_discount($ammount) {
-  $ammount *= 100;
+function _om_volunteer_apply_discount($amount) {
+  $amount *= 100;
   $l = LANGUAGE_NONE;
   global $user;
   $order = commerce_cart_order_load($user->uid);
-  foreach ($order->commerce_line_items[$l] AS $id) {
-    if (is_numeric($id['line_item_id'])) {
-      $line_item = commerce_line_item_load($id['line_item_id']);
-      $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
-      $discount = array(
-        'amount' => -1000,
-        'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
-        'data' => array(),
-      );
-      $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
-            $line_item->commerce_total[$l][0],
-            'base_price',
-            $discount,
-            TRUE
-          );
-      $line_item->commerce_unit_price[$l][0]['amount'] = 1000;
-      dsm($line_item);
-      commerce_line_item_save($line_item);
-      if ($difference <= 0) {
-        return 0;
-      }
-      $amount = $difference;
-    }
-  }
-  return $amount;
+  $line_item = entity_create('commerce_line_item', array(
+    'type' => 'product',
+    'line_item_label' => t('Volunteer Discount'),
+    'quantity' => 1,
+  ));
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  // Set the unit price on the line item object.
+  $basePrice = commerce_price_field_data_auto_creation();
+  $basePrice['amount'] = $amount;
+  $line_item_wrapper->commerce_unit_price = $basePrice;
+  // Save the line item now so we get its ID.
+  $line_item = commerce_line_item_save($line_item);
+  // Add it to the order's line item reference value.
+  $order_wrapper->commerce_line_items[] = $line_item;
+  commerce_order_save($order);
 }
 
 function om_volunteer_write_log_entry($entry) {
