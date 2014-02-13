@@ -45,6 +45,10 @@ function om_volunteer_access_check($menu_object) {
   }
 }
 
+function om_volunteer_form_alter($form, $form_state, $form_id) {
+  dsm($form_id);
+}
+
 function om_volunteer_write_log_entry($entry) {
   if (is_object($entry)) {
     $entry->time_logged = time();
