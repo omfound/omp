@@ -92,7 +92,7 @@ function _om_volunteer_apply_discount($ammount) {
       'data' => array(),
     );
     $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
-          $line_item->commerce_total[$l][0]['amount'],
+          $line_item->commerce_total[$l][0],
           'base_price',
           $discount,
           TRUE
