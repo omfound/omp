@@ -84,24 +84,26 @@ function _om_volunteer_apply_discount($ammount) {
   global $user;
   $order = commerce_cart_order_load($user->uid);
   foreach ($order->commerce_line_items[$l] AS $id) {
-    $line_item = commerce_line_item_load($id);
-    $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
-    $discount = array(
-      'amount' => $ammount - $difference,
-      'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
-      'data' => array(),
-    );
-    $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
-          $line_item->commerce_total[$l][0],
-          'base_price',
-          $discount,
-          TRUE
-        );
-    //commerce_line_item_save($line_item);
-    if ($difference <= 0) {
-      return 0;
+    if (is_numeric($id)) {
+      $line_item = commerce_line_item_load($id);
+      $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
+      $discount = array(
+        'amount' => $ammount - $difference,
+        'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
+        'data' => array(),
+      );
+      $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
+            $line_item->commerce_total[$l][0],
+            'base_price',
+            $discount,
+            TRUE
+          );
+      //commerce_line_item_save($line_item);
+      if ($difference <= 0) {
+        return 0;
+      }
+      $amount = $difference;
     }
-    $amount = $difference;
   }
   return $amount;
 }
