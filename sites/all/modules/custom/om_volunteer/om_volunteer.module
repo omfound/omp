@@ -84,6 +84,7 @@ function _om_volunteer_apply_discount($ammount) {
   global $user;
   $order = commerce_cart_order_load($user->uid);
   foreach ($order->commerce_line_items[$l] AS $id) {
+    dsm($id);
     if (is_numeric($id)) {
       dsm('we go here');
       $line_item = commerce_line_item_load($id);
