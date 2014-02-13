@@ -85,7 +85,9 @@ function _om_volunteer_apply_discount($ammount) {
   $order = commerce_cart_order_load($user->uid);
   foreach ($order->commerce_line_items[$l] AS $id) {
     if (is_numeric($id)) {
+      dsm('we go here');
       $line_item = commerce_line_item_load($id);
+      dsm($line_item);
       $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
       $discount = array(
         'amount' => -$difference,
