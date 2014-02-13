@@ -79,13 +79,31 @@ function _om_volunteer_use_hours_form_submit($form, $form_state) {
 }
 
 function _om_volunteer_apply_discount($ammount) {
+  $ammount *= 100;
+  $l = LANGUAGE_NONE;
   global $user;
   $order = commerce_cart_order_load($user->uid);
-  dsm($order);
-  foreach ($order->commerce_line_items[LANGUAGE_NONE] AS $id) {
+  foreach ($order->commerce_line_items[$l] AS $id) {
     $line_item = commerce_line_item_load($id);
-    dsm($line_item);
+    $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
+    $discount = array(
+      'amount' => $ammount - $difference,
+      'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
+      'data' => array(),
+    );
+    $line_item->commerce_unit_price->[$l][0]['data'] = commerce_price_component_add(
+          $line_item->commerce_total[$l][0]['amount'],
+          'base_price',
+          $discount,
+          TRUE
+        );
+    commerce_line_item_save($line_item);
+    if ($difference <= 0) {
+      return 0;
+    }
+    $amount = $difference;
   }
+  return $amount;
 }
 
 function om_volunteer_write_log_entry($entry) {
