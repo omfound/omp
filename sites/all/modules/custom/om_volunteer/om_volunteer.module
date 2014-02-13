@@ -98,6 +98,7 @@ function _om_volunteer_apply_discount($ammount) {
             $discount,
             TRUE
           );
+      $line_item->commerce_unit_price[$l][0]['amount'] = 1000;
       dsm($line_item);
       commerce_line_item_save($line_item);
       if ($difference <= 0) {
