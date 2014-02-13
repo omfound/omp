@@ -45,8 +45,37 @@ function om_volunteer_access_check($menu_object) {
   }
 }
 
-function om_volunteer_form_alter($form, $form_state, $form_id) {
-  dsm($form_id);
+function om_volunteer_form_views_form_commerce_cart_form_default_alter($form, $form_state) {
+  $active = variable_get('volunteer_exchange_allowed', 0);
+  if ($active == 1) {
+    _om_volunteer_use_hours_form($form);
+  }
+}
+
+function _om_volunteer_use_hours_form(&$form) {
+  global $user;
+  $sum_entry = om_volunteer_get_sum_entry_by_uid($user->uid);
+  $exchange = variable_get('volunteer_exchange_rate', 0);
+  $form['markup'] = array(
+    '#markup' => t('You have !number hours available for redemption. At !exchange/hour', array('!number', $sum_entry->hours, '!exchange' => $exchange)),
+    '#weight' => -1000
+  );
+  $form['use_hours'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Redeem hours'),
+    '#default_value' => 0,
+    '#weight' => -999
+  );
+  $form['use_hours_submit'] => array(
+    '#type' => 'submit',
+    '#value' => t('Apply Hours'),
+    '#submit' => array('_om_volunteer_use_hours_form_submit'),
+    '#weight' => -998
+  );
+}
+
+function _om_volunteer_use_hours_form_submit($form, $form_state) {
+
 }
 
 function om_volunteer_write_log_entry($entry) {
