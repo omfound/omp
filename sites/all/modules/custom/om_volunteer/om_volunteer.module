@@ -75,13 +75,16 @@ function _om_volunteer_use_hours_form(&$form) {
 }
 
 function _om_volunteer_use_hours_form_submit($form, $form_state) {
-  _om_volunteer_apply_discount($ammount);
+  _om_volunteer_apply_discount(10);
 }
 
 function _om_volunteer_apply_discount($ammount) {
   global $user;
   $order = commerce_cart_order_load($user->uid);
-  dsm($order); 
+  foreach ($order->commerce_line_items AS $id) {
+    $line_item = commerce_line_item_load($id);
+    console.log($line_item);
+  }
 }
 
 function om_volunteer_write_log_entry($entry) {
