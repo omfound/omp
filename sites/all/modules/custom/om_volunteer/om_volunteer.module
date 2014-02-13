@@ -84,31 +84,28 @@ function _om_volunteer_apply_discount($ammount) {
   global $user;
   $order = commerce_cart_order_load($user->uid);
   foreach ($order->commerce_line_items[$l] AS $id) {
-    dsm($id);
     if (is_numeric($id['line_item_id'])) {
-      dsm('we go here');
       $line_item = commerce_line_item_load($id['line_item_id']);
-      dsm($line_item);
       $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
       $discount = array(
-        'amount' => -$difference,
+        'amount' => $ammount - $difference,
         'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
         'data' => array(),
       );
-      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
-      $line_item_meta->commerce_unit_price->value(),
-        'base_price',
-        $discount,
-        TRUE
-      );
+      $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
+            $line_item->commerce_total[$l][0],
+            'base_price',
+            $discount,
+            TRUE
+          );
+      commerce_line_item_save($line_item);
       if ($difference <= 0) {
         return 0;
       }
-      $ammount = $difference;
+      $amount = $difference;
     }
   }
-  return $ammount;
+  return $amount;
 }
 
 function om_volunteer_write_log_entry($entry) {
