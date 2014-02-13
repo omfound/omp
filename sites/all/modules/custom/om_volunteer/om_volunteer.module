@@ -23,6 +23,15 @@ function om_volunteer_menu() {
     'file path' => drupal_get_path('module', 'om_volunteer') . '/includes',
     'type' => MENU_LOCAL_TASK
   );
+  $items['admin/config/om/volunteer'] = array(
+    'title' => t('Administer Open Media Volunteer'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_volunteer_admin_form'),
+    'access arguments' => array('aminister open media volunteer'),
+    'file' => 'form.inc',
+    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes',
+    'type' => MENU_NORMAL_ITEM
+  );
   return $items;
 }
 

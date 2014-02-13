@@ -85,3 +85,19 @@ function om_volunteer_log_form_log_hours_submit($form, $form_state) {
     om_volunteer_write_log_entry($log_entry);
   }
 }
+
+function om_volunteer_admin_form($form, $form_state) {
+  $form['volunteer_exchange_allowed'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow users to exchange volunteer hours for equipment and/or classes'),
+    '#default_value' => variable_get('volunteer_exchange_allowed', 0),
+    '#return_value' => 1
+  );
+  $form['volunteer_exchange_rate'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Volunteer Hour Exchange Rate'),
+    '#description' => t('Enter a dollar value for volunteer hours'),
+    '#default_value' => variable_get('volunteer_exchange_rate', 0),
+  );
+  return system_settings_form($form);
+}
