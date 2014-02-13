@@ -66,7 +66,7 @@ function _om_volunteer_use_hours_form(&$form) {
     '#default_value' => 0,
     '#weight' => -999
   );
-  $form['use_hours_submit'] => array(
+  $form['use_hours_submit'] = array(
     '#type' => 'submit',
     '#value' => t('Apply Hours'),
     '#submit' => array('_om_volunteer_use_hours_form_submit'),
