@@ -88,7 +88,7 @@ function _om_volunteer_apply_discount($ammount) {
       $line_item = commerce_line_item_load($id['line_item_id']);
       $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
       $discount = array(
-        'amount' => $ammount - $difference,
+        'amount' => -10,
         'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
         'data' => array(),
       );
@@ -98,6 +98,7 @@ function _om_volunteer_apply_discount($ammount) {
             $discount,
             TRUE
           );
+      dsm($line_item);
       commerce_line_item_save($line_item);
       if ($difference <= 0) {
         return 0;
