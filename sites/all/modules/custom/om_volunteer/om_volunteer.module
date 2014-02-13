@@ -88,17 +88,17 @@ function _om_volunteer_apply_discount($ammount) {
       $line_item = commerce_line_item_load($id);
       $difference = $ammount - $line_item->commerce_total[$l][0]['amount'];
       $discount = array(
-        'amount' => $ammount - $difference,
+        'amount' => -$difference,
         'currency_code' => $line_item->commerce_total[$l][0]['currency_code'],
         'data' => array(),
       );
-      $line_item->commerce_unit_price[$l][0]['data'] = commerce_price_component_add(
-            $line_item->commerce_total[$l][0],
-            'base_price',
-            $discount,
-            TRUE
-          );
-      commerce_line_item_save($line_item);
+      $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $line_item_meta->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_meta->commerce_unit_price->value(),
+        'base_price',
+        $discount,
+        TRUE
+      );
       if ($difference <= 0) {
         return 0;
       }
