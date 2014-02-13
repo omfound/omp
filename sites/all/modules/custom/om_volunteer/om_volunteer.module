@@ -90,8 +90,8 @@ function _om_volunteer_apply_discount($amount) {
   $line_item->line_item_label = t('Volunteer Discount');
   $line_item_wrapper->commerce_total->amount = 0;
   $line_item_wrapper->commerce_unit_price->amount = $amount;
-  $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
   $currCode = $order->commerce_order_total[LANGUAGE_NONE][0]['currency_code'];
+  $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
     $line_item_wrapper->commerce_unit_price->value(),
       'base_price',
 		array(
