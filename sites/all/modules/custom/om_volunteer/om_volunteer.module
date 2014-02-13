@@ -57,7 +57,7 @@ function _om_volunteer_use_hours_form(&$form) {
   $sum_entry = om_volunteer_get_sum_entry_by_uid($user->uid);
   $exchange = variable_get('volunteer_exchange_rate', 0);
   $form['markup'] = array(
-    '#markup' => t('You have !number hours available for redemption. At !exchange/hour', array('!number', $sum_entry->hours, '!exchange' => $exchange)),
+    '#markup' => t('You have !number hours available for redemption. At $!exchange/hour', array('!number' => $sum_entry->hours, '!exchange' => $exchange)),
     '#weight' => -1000
   );
   $form['use_hours'] = array(
@@ -75,7 +75,13 @@ function _om_volunteer_use_hours_form(&$form) {
 }
 
 function _om_volunteer_use_hours_form_submit($form, $form_state) {
+  _om_volunteer_apply_discount($ammount);
+}
 
+function _om_volunteer_apply_discount($ammount) {
+  global $user;
+  $order = commerce_cart_order_load($user->uid);
+  dsm($order); 
 }
 
 function om_volunteer_write_log_entry($entry) {
