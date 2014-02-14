@@ -691,7 +691,8 @@ function _commerce_userpoints_discount_get_info($order, $code = NULL) {
 
   $worth_of_a_point = commerce_currency_convert(1, $current_code, $total['currency_code']);
   $worth_of_order = commerce_currency_convert($total['amount'], $total['currency_code'], $current_code);
-
+  dsm($worth_of_a_point);
+  dsm($worth_of_order);
   $order_total = commerce_userpoints_discount_get_applicable_order_discount($order); //borked
   $count_applied = ($total['amount'] - $order_total) * -1;
 
