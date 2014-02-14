@@ -1,6 +1,7 @@
 <?php
 
 function om_volunteer_discount_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
+  dsm('test');
   $pane_form = array();
   $pane_form['test'] = array(
     '#markup' => 'TESTING'
