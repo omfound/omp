@@ -644,11 +644,10 @@ function commerce_userpoints_discount_form_commerce_checkout_form_checkout_alter
 function commerce_userpoints_discount_get_applicable_order_discount($order) {
   $order_total = 0;
   $commerce_order_total_field = field_get_items('commerce_order', $order, 'commerce_order_total');
-  //return $commerce_order_total_field[0]['amount'];
+  return $commerce_order_total_field[0]['amount'];
   foreach ($commerce_order_total_field[0]['data']['components'] as $price_component) {
     $var = variable_get('commerce_userpoints_discount_total_price_components');
     if (array_key_exists($price_component['name'], variable_get('commerce_userpoints_discount_total_price_components', array()))) {
-      dsm($price_component['price']['amount']);
       $order_total += intval($price_component['price']['amount']) / variable_get('commerce_userpoints_discount_royalties_multiple', 1);
     }
   }
@@ -691,7 +690,6 @@ function _commerce_userpoints_discount_get_info($order, $code = NULL) {
 
   $worth_of_a_point = commerce_currency_convert(1, $current_code, $total['currency_code']);
   $worth_of_order = commerce_currency_convert($total['amount'], $total['currency_code'], $current_code);
-  dsm($worth_of_a_point);
   dsm($worth_of_order);
   $order_total = commerce_userpoints_discount_get_applicable_order_discount($order); //borked
   $count_applied = ($total['amount'] - $order_total) * -1;
@@ -700,9 +698,11 @@ function _commerce_userpoints_discount_get_info($order, $code = NULL) {
     '%points' => $worth_of_a_point,
     '@order_currency' => commerce_currency_format($worth_of_a_point, $total['currency_code']),
     '@count_needed' => commerce_currency_format($worth_of_order, $current_code),
-    '@count_applied' => $order_total, // borked
+    //'@count_applied' => $order_total, // borked
+    '@count_applied' => $worth_of_order, // borked
     '@count_available' => commerce_currency_format(userpoints_get_current_points(NULL, $current_tid), $current_code),
-    '@total_count_needed' => commerce_currency_format($order_total, $current_code), // borked
+    //'@total_count_needed' => commerce_currency_format($order_total, $current_code), // borked
+    '@total_count_needed' => commerce_currency_format($worth_of_order, $current_code), // borked
   ) + userpoints_translation();
   return $arguments;
 }
