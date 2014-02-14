@@ -702,7 +702,7 @@ function _commerce_userpoints_discount_get_info($order, $code = NULL) {
     '@count_available' => commerce_currency_format(userpoints_get_current_points(NULL, $current_tid), $current_code),
     '@total_count_needed' => commerce_currency_format($order_total, $current_code),
   ) + userpoints_translation();
-
+  dsm($arguments);
   return $arguments;
 }
 
