@@ -1,7 +1,7 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  dsm('test');
+  require_once('/sites/all/modules/custom/om_volunteer/includes/form.inc');
   $pane_form = array();
   $pane_form['info'] = array(
     '#type' => 'container',
@@ -9,11 +9,11 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
       'id' => 'om-volunteer-discount-pane',
     ),
   );
-  $pane_form['info']['test'] = array(
-    '#type' => 'item',
-    '#markup' => 'TESTING'
-  );
+  om_volunteer_use_hours_form($pane_form);
   return $pane_form; 
 }
 
+function om_volunteer_discount_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
+  
+}
 

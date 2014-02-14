@@ -103,3 +103,24 @@ function om_volunteer_admin_form($form, $form_state) {
   );
   return system_settings_form($form);
 }
+
+function om_volunteer_use_hours_form(&$form) {
+  global $user;
+  $sum_entry = om_volunteer_get_sum_entry_by_uid($user->uid);
+  $exchange = variable_get('volunteer_exchange_rate', 0);
+  $form['markup'] = array(
+    '#markup' => t('You have !number hours available for redemption. At $!exchange/hour', array('!number' => $sum_entry->hours, '!exchange' => $exchange)),
+    '#weight' => -1000
+  );
+  $form['use_hours'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Redeem hours'),
+    '#default_value' => 0,
+    '#weight' => -999
+  );
+  $form['use_hours_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Apply Hours'),
+    '#weight' => -998
+  );
+}
