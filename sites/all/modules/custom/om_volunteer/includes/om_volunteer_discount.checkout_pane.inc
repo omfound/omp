@@ -13,6 +13,8 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 }
 
 function om_volunteer_discount_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
+  dsm($order);  
+  $multiple = om_volunteer_get_multiple() * 100;
   
 }
 
@@ -37,4 +39,8 @@ function _om_volunteer_discount_form(&$form) {
     '#type' => 'submit',
     '#value' => 'Apply'
   );
+}
+
+function om_volunteer_get_multiple() {
+  return .1;
 }
