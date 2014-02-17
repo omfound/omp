@@ -298,12 +298,12 @@ function commerce_userpoints_discount_line_item_populate(&$line_item, $order_id,
   if (!($line_item instanceof EntityMetadataWrapper)) {
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   }
-  dsm($currency);
+  $multiple = commerce_userpoints_get_active_multiple();
   $line_item_wrapper->order_id = $order_id;
   $line_item_wrapper->commerce_userpoints_discount_txn = $userpoints_txn['txn_id'];
   $line_item_wrapper->line_item_label = t($label);
   $line_item_wrapper->commerce_unit_price->currency_code = $currency;
-  $line_item_wrapper->commerce_unit_price->amount = intval($userpoints_txn['points']) / variable_get('commerce_userpoints_discount_royalties_multiple', 1);
+  $line_item_wrapper->commerce_unit_price->amount = intval($userpoints_txn['points']) / $multiple;
   $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
     'userpoints',
@@ -642,15 +642,13 @@ function commerce_userpoints_discount_form_commerce_checkout_form_checkout_alter
  *   The total amount of commerce_userpoints_discount enabled price components.
  */
 function commerce_userpoints_discount_get_applicable_order_discount($order) {
-  dsm('wut');
-  dsm($order);
   $order_total = 0;
   $commerce_order_total_field = field_get_items('commerce_order', $order, 'commerce_order_total');
-  return $commerce_order_total_field[0]['amount'];
+  $multiple = commerce_userpoints_get_active_multiple();
   foreach ($commerce_order_total_field[0]['data']['components'] as $price_component) {
     $var = variable_get('commerce_userpoints_discount_total_price_components');
     if (array_key_exists($price_component['name'], variable_get('commerce_userpoints_discount_total_price_components', array()))) {
-      $order_total += intval($price_component['price']['amount']) / variable_get('commerce_userpoints_discount_royalties_multiple', 1);
+      $order_total += intval($price_component['price']['amount']) / $multiple;
     }
   }
   return $order_total;
@@ -755,4 +753,11 @@ function commerce_userpoints_get_active_currency() {
     }
   }
   return FALSE;
+}
+
+function commerce_userpoints_get_active_multiple() {
+  $currency = commerce_userpoints_get_active_currency();
+  if ($currency == TRUE) {
+    return $discount_currency['conversion_rate'] * 1000;
+  }
 }
