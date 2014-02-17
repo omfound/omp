@@ -1,7 +1,6 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  require_once('sites/all/modules/custom/om_volunteer/includes/form.inc');
   $pane_form = array();
   $pane_form['info'] = array(
     '#type' => 'container',
