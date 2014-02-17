@@ -743,3 +743,16 @@ function _commerce_userpoints_discount_update_use_links($order, $code) {
 function _commerce_userpoints_discount_ajax_update_info($form, &$form_state) {
   return $form['commerce_userpoints_discount']['info'];
 }
+
+function commerce_userpoints_get_active_currency() {
+  $all_currencies = commerce_userpoints_currencies();
+  $active_tid = variable_get('commerce_userpoints_discount_default_termid', FALSE);
+  if (!empty($active_tid)) {
+    foreach($all_currencies AS $currency) {
+      if ($currency['tid'] == $active_tid) {
+        return $currency;
+      }
+    }
+  }
+  return FALSE;
+}
