@@ -31,8 +31,7 @@ function om_volunteer_commerce_line_item_type_info() {
     'name' => t('!Points', userpoints_translation()),
     'description' => t('!Points value line item.', userpoints_translation()),
     'add_form_submit_value' => t('Use !points', userpoints_translation()),
-    'base' => 'commerce_userpoints_discount_line_item',
+    'base' => 'volunteer_hours_line_item',
   );
-
   return $line_item_types;
 }
