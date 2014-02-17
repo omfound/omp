@@ -13,6 +13,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 }
 
 function om_volunteer_discount_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
+  dsm('this happens');
   dsm($order);  
   $multiple = om_volunteer_get_multiple() * 100;
   
