@@ -758,6 +758,6 @@ function commerce_userpoints_get_active_currency() {
 function commerce_userpoints_get_active_multiple() {
   $currency = commerce_userpoints_get_active_currency();
   if ($currency == TRUE) {
-    return $currency['conversion_rate'] * 1000;
+    return $currency['conversion_rate'] * 100;
   }
 }
