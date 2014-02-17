@@ -8,7 +8,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
       'id' => 'om-volunteer-discount-pane',
     ),
   );
-  _om_volunteer_discount_form($pane_form, 250);
+  _om_volunteer_discount_form($pane_form);
   return $pane_form; 
 }
 
@@ -16,9 +16,11 @@ function om_volunteer_discount_checkout_form_submit($form, &$form_state, $checko
   
 }
 
-function _om_volunteer_discount_form(&$form, $total_points) {
+function _om_volunteer_discount_form(&$form) {
+  global $user;
+  $total_points = userpoints_get_max_points($user->uid);
   $message_values = array(
-    '!points' =>  100,
+    '!points' =>  $total_points,
     '!point_type' => 'hours',
     '!value' => '$10.00'
   );
