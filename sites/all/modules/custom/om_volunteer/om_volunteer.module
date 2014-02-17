@@ -19,19 +19,3 @@ function om_volunteer_commerce_checkout_pane_info() {
   );
   return $checkout_panes;
 }
-
-/**
- * Implements hook_commerce_line_item_type_info().
- */
-function om_volunteer_commerce_line_item_type_info() {
-  $line_item_types = array();
-  $line_item_types['volunteer_hours'] = array(
-    'type' => 'volunteer_hours',
-    'product' => FALSE,
-    'name' => t('!Points', userpoints_translation()),
-    'description' => t('!Points value line item.', userpoints_translation()),
-    'add_form_submit_value' => t('Use !points', userpoints_translation()),
-    'base' => 'volunteer_hours_line_item',
-  );
-  return $line_item_types;
-}
