@@ -20,7 +20,7 @@ function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
   
 }
 
-function _om_volunteer_discount_form(&$form, $form_state) {
+function _om_volunteer_discount_form(&$form) {
   global $user;
   $total_points = userpoints_get_max_points($user->uid);
   $message_values = array(
