@@ -16,6 +16,10 @@ function om_volunteer_commerce_checkout_pane_info() {
     'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
     'base' => 'om_volunteer_discount',
     'weight' => 10,
+    'callbacks' => array(
+      'om_volunteer_discount_checkout_form',
+      'om_volunteer_discount_checkout_form_submit'
+    )
   );
   return $checkout_panes;
 }
