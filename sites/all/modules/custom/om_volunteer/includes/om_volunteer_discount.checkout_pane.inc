@@ -9,17 +9,18 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
     ),
   );
   _om_volunteer_discount_form($pane_form);
+  $form_state['checkout_pane'] = $checkout_pane;
+  $form_state['order'] = $order;
   return $pane_form; 
 }
 
-function om_volunteer_discount_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
-  dsm('this happens');
-  dsm($order);  
+function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
+  dsm( $form_state['order']);
   $multiple = om_volunteer_get_multiple() * 100;
   
 }
 
-function _om_volunteer_discount_form(&$form) {
+function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
   $total_points = userpoints_get_max_points($user->uid);
   $message_values = array(
@@ -38,7 +39,8 @@ function _om_volunteer_discount_form(&$form) {
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => 'Apply'
+    '#value' => 'Apply',
+    '#submit' => array('om_volunteer_discount_checkout_form_submit')
   );
 }
 
