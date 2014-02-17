@@ -298,7 +298,7 @@ function commerce_userpoints_discount_line_item_populate(&$line_item, $order_id,
   if (!($line_item instanceof EntityMetadataWrapper)) {
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   }
-
+  dsm($userpoints_txn);
   $line_item_wrapper->order_id = $order_id;
   $line_item_wrapper->commerce_userpoints_discount_txn = $userpoints_txn['txn_id'];
   $line_item_wrapper->line_item_label = t($label);
