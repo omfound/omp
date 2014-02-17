@@ -13,7 +13,6 @@ function om_volunteer_commerce_checkout_pane_info() {
     'title' => t('Volunteer Hours Discount'),
     'page' => 'checkout',
     'locked' => TRUE,
-    'product' => FALSE,
     'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
     'base' => 'om_volunteer_discount',
     'weight' => 10,
@@ -28,6 +27,7 @@ function om_volunteer_commerce_line_item_type_info() {
   $line_item_types = array();
   $line_item_types['volunteer_hours'] = array(
     'type' => 'volunteer_hours',
+    'product' => FALSE,
     'name' => t('!Points', userpoints_translation()),
     'description' => t('!Points value line item.', userpoints_translation()),
     'add_form_submit_value' => t('Use !points', userpoints_translation()),
