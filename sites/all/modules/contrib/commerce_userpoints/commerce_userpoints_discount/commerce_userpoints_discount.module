@@ -642,6 +642,8 @@ function commerce_userpoints_discount_form_commerce_checkout_form_checkout_alter
  *   The total amount of commerce_userpoints_discount enabled price components.
  */
 function commerce_userpoints_discount_get_applicable_order_discount($order) {
+  dsm('wut');
+  dsm($order);
   $order_total = 0;
   $commerce_order_total_field = field_get_items('commerce_order', $order, 'commerce_order_total');
   return $commerce_order_total_field[0]['amount'];
