@@ -60,8 +60,7 @@ function commerce_coupon_userpoint_commerce_coupon_type_configure($bundle, $rese
       'display' => array(),
       'settings' => array(
         'min' => '0',
-        'max' => '100',
-        'suffix' => '%',
+        'max' => '1000',
       ),
     );
 
