@@ -1,77 +1,7 @@
 <?php
-
-function om_volunteer_permission() {
-  return array(
-    'aminister open media volunteer' => array(
-      'title' => 'Administer Open Media Volunteer',
-    ),
-    'log volunteer hours' => array(
-      'title' => 'Log own volunteer hours'
-    )
-  );
-}
-
 function om_volunteer_menu() {
   $items = array();
-  $items['user/%user/volunteer'] = array(
-    'title' => t('Log Volunteer Hours'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('om_volunteer_log_form', 1),
-    'access callback' => 'om_volunteer_access_check',
-    'access arguments' => array(1),
-    'file' => 'form.inc',
-    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes',
-    'type' => MENU_LOCAL_TASK
-  );
-  $items['admin/config/om/volunteer'] = array(
-    'title' => t('Administer Open Media Volunteer'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('om_volunteer_admin_form'),
-    'access arguments' => array('aminister open media volunteer'),
-    'file' => 'form.inc',
-    'file path' => drupal_get_path('module', 'om_volunteer') . '/includes',
-    'type' => MENU_NORMAL_ITEM
-  );
   return $items;
-}
-
-function om_volunteer_access_check($menu_object) {
-  if (user_access('aminister open media volunteer')) {
-    return TRUE;
-  }
-  global $user;
-  if (user_access('log volunteer hours') && $menu_object->uid == $user->uid) {
-    return TRUE;
-  }
-}
-
-function om_volunteer_form_views_form_commerce_cart_form_default_alter(&$form, $form_state) {
-  $active = variable_get('volunteer_exchange_allowed', 0);
-  if ($active == 1) {
-    _om_volunteer_use_hours_form($form);
-  }
-}
-
-function _om_volunteer_use_hours_form(&$form) {
-  global $user;
-  $sum_entry = om_volunteer_get_sum_entry_by_uid($user->uid);
-  $exchange = variable_get('volunteer_exchange_rate', 0);
-  $form['markup'] = array(
-    '#markup' => t('You have !number hours available for redemption. At $!exchange/hour', array('!number' => $sum_entry->hours, '!exchange' => $exchange)),
-    '#weight' => -1000
-  );
-  $form['use_hours'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Redeem hours'),
-    '#default_value' => 0,
-    '#weight' => -999
-  );
-  $form['use_hours_submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Apply Hours'),
-    '#submit' => array('_om_volunteer_use_hours_form_submit'),
-    '#weight' => -998
-  );
 }
 
 /**
@@ -83,6 +13,7 @@ function om_volunteer_commerce_checkout_pane_info() {
     'title' => t('Volunteer Hours Discount'),
     'page' => 'checkout',
     'locked' => TRUE,
+    'product' => FALSE,
     'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
     'base' => 'om_volunteer_discount',
     'weight' => 10,
@@ -90,31 +21,18 @@ function om_volunteer_commerce_checkout_pane_info() {
   return $checkout_panes;
 }
 
-function om_volunteer_write_log_entry($entry) {
-  if (is_object($entry)) {
-    $entry->time_logged = time();
-    if (isset($entry->vlid)) {
-      drupal_write_record('volunteer_log', $entry, 'vlid');
-    }
-    return drupal_write_record('volunteer_log', $entry);
-  }
-  return FALSE;
-}
+/**
+ * Implements hook_commerce_line_item_type_info().
+ */
+function om_volunteer_commerce_line_item_type_info() {
+  $line_item_types = array();
+  $line_item_types['volunteer_hours'] = array(
+    'type' => 'volunteer_hours',
+    'name' => t('!Points', userpoints_translation()),
+    'description' => t('!Points value line item.', userpoints_translation()),
+    'add_form_submit_value' => t('Use !points', userpoints_translation()),
+    'base' => 'commerce_userpoints_discount_line_item',
+  );
 
-function om_volunteer_write_sum_entry($entry) {
-  if (is_object($entry)) {
-    if (isset($entry->vsid)) {
-      return drupal_write_record('volunteer_sum', $entry, array('vsid'));
-    }
-    return drupal_write_record('volunteer_sum', $entry);
-  }
-  return FALSE;
-}
-
-function om_volunteer_get_sum_entry_by_uid($uid) {
-  $query = db_select('volunteer_sum', 'volunteer');
-  $query->fields('volunteer', array());
-  $query->condition('uid', $uid, '=');
-  $resource = $query->execute();
-  return $resource->fetchObject();
+  return $line_item_types;
 }
