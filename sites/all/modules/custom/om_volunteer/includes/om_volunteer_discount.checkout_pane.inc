@@ -14,12 +14,6 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
   return $pane_form; 
 }
 
-function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
-  dsm( $form_state['order']);
-  $multiple = om_volunteer_get_multiple() * 100;
-  
-}
-
 function _om_volunteer_discount_form(&$form) {
   global $user;
   $total_points = userpoints_get_max_points($user->uid);
@@ -42,8 +36,4 @@ function _om_volunteer_discount_form(&$form) {
     '#value' => 'Apply',
     '#submit' => array('om_volunteer_discount_checkout_form_submit')
   );
-}
-
-function om_volunteer_get_multiple() {
-  return .1;
 }
