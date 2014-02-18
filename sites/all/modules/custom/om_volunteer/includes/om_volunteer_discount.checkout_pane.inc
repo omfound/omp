@@ -10,7 +10,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
       'id' => 'om-volunteer-discount-pane',
     ),
   );
-  _om_volunteer_discount_form($pane_form);
+  _om_volunteer_discount_form($pane_form, $form_state);
   return $pane_form; 
 }
 
