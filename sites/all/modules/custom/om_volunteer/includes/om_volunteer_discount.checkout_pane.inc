@@ -17,7 +17,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
   $total_points = userpoints_get_max_points($user->uid);
-  $order_total = $form_state['order']->commerce_order_total[$l][0]['amount'];
+  $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
   $multiple = om_volunteer_get_multiple() * 100;
   $required_points = intval($order_total / $multiple);
   $message_values = array(
