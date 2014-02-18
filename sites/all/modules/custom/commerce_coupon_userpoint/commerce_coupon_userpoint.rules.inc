@@ -50,33 +50,35 @@ function commerce_coupon_userpoint_rules_action_info() {
 }
 
 function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_order, $amount, $component_name, $currency_code) {
-  dsm('coupon firing...');
-  dsm($coupon);
-  if (!($commerce_order instanceof EntityMetadataWrapper)) {
-    $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
-  }
+  if ($coupon->type == 'commerce_coupon_userpoint') {
+    dsm('coupon firing...');
+    dsm($coupon);
+    if (!($commerce_order instanceof EntityMetadataWrapper)) {
+      $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
+    }
 
-  dsm($commerce_order);
-  $line_item = commerce_coupon_line_item_new($coupon, $commerce_order->order_id->raw());
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+    dsm($commerce_order);
+    $line_item = commerce_coupon_line_item_new($coupon, $commerce_order->order_id->raw());
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 
-  // Set the unit price on the line item object.
-  $line_item_wrapper->commerce_unit_price->amount = $amount * -1;
-  $line_item_wrapper->commerce_unit_price->currency_code = $currency_code;
+    // Set the unit price on the line item object.
+    $line_item_wrapper->commerce_unit_price->amount = $amount * -1;
+    $line_item_wrapper->commerce_unit_price->currency_code = $currency_code;
 
-  // Add the base price to the components array.
-  if ($coupon->is_active && !commerce_price_component_load($line_item_wrapper->commerce_unit_price->value(), $component_name)) {
-    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+    // Add the base price to the components array.
+    if ($coupon->is_active && !commerce_price_component_load($line_item_wrapper->commerce_unit_price->value(), $component_name)) {
+      $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
         $line_item_wrapper->commerce_unit_price->value(), $component_name, $line_item_wrapper->commerce_unit_price->value(), TRUE, FALSE
-    );
+      );
+    }
+
+    commerce_line_item_save($line_item);
+    dsm($line_item);
+
+    $commerce_order->commerce_line_items[] = $line_item;
+    dsm($commerce_order);
+
+    return array('commerce_coupon_line_item' => $line_item);
   }
-
-  dsm($line_item);
-  return;
-  commerce_line_item_save($line_item);
-
-  $commerce_order->commerce_line_items[] = $line_item;
-
-  return array('commerce_coupon_line_item' => $line_item);
 }
 
