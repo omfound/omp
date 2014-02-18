@@ -1,3 +1,5 @@
+<?php
+
 /**
  * Implements hook_rules_action_info().
  */
