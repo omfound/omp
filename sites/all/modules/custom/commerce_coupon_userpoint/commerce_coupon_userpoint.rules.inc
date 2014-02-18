@@ -50,6 +50,8 @@ function commerce_coupon_userpoint_rules_action_info() {
 }
 
 function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_order, $amount, $component_name, $currency_code) {
+  dsm('coupon firing...');
+  return;
   if (!($commerce_order instanceof EntityMetadataWrapper)) {
     $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
   }
