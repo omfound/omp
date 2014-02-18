@@ -60,6 +60,7 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
  * to execute if the user wants to apply points.
  */
 function om_volunteer_discount_pane_form_submit($form, &$form_state) {
+  dsm($form_state);
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
