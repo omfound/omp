@@ -1,8 +1,6 @@
 <?php
-function om_volunteer_menu() {
-  $items = array();
-  return $items;
-}
+
+require_once('sites/all/modules/custom/om_volunteer/includes/om_volunteer_discount.checkout_pane.inc');
 
 /**
  * Implements hook_commerce_checkout_pane_info().
@@ -16,6 +14,19 @@ function om_volunteer_commerce_checkout_pane_info() {
     'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
     'base' => 'om_volunteer_discount',
     'weight' => 10,
+    'callbacks' => array(
+      'checkout_form' => 'om_volunteer_discount_checkout_form',
+    )
   );
   return $checkout_panes;
 }
+
+
+function om_volunteer_get_multiple() {
+  return 10;
+}
+
+function om_volunteer_apply_points() {
+
+}
+
