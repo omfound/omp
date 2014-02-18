@@ -75,6 +75,7 @@ function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_or
     commerce_line_item_save($line_item);
     dsm($line_item);
 
+    return;
     $commerce_order->commerce_line_items[] = $line_item;
     dsm($commerce_order);
 
