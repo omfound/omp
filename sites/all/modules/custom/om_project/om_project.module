@@ -581,7 +581,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
   $id = $query->getMetaData('id');
   if (trim($id) == '_node_reference_potential_references_standard') {
     $field = $query->getMetaData('field');
-    if ($field['field_name'] == 'field_om_show_project') {
+    if ($field['field_name'] == 'field_om_show_project' && !user_access('administer project')) {
       om_project_add_membership_or($query);
     }
   }
