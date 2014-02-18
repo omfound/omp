@@ -451,7 +451,7 @@ function om_project_node_access($node, $op, $account) {
         }
         break;
       case 'update':
-        if ($user_is_member == TRUE) {
+        if ($user_is_member == TRUE || $user_is_admin == TRUE) {
           return NODE_ACCESS_ALLOW;
         }
         break;
