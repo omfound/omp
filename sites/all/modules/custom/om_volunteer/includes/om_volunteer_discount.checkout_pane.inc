@@ -27,7 +27,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '!required' => $required_points
   );
   $message = t('You have !points !point_type available for use. Each !point_type is worth !value.', $message_values);
-  $message .= "<br/>" . t('!point_type to completely fulfill this order: !required');
+  $message .= "<br/>" . t('!point_type to completely fulfill this order: !required', $message_values);
   $form['message'] = array(
     '#markup' => $message 
   );
@@ -40,7 +40,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Apply',
-    '#submit' => array('om_volunteer_discount_checkout_form_submit')
+    '#submit' => array('om_volunteer_discount_pane_form_submit')
   );
 }
 
@@ -53,7 +53,11 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
   } 
 }
 
-function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
+/**
+ * This is NOT the commerce pane form submit handler. We only want ours
+ * to execute if the user wants to apply points.
+ */
+function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
