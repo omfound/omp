@@ -77,6 +77,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   else {
     $user_points_used = $form_state['values']['om_volunteer_discount']['apply_points'];
   }
+  dsm($user_points_used);
   $options = array(
     'uid' => $user->uid,
     'points' => -$user_points_used,
