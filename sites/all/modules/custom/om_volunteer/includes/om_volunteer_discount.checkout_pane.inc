@@ -62,6 +62,8 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
  * to execute if the user wants to apply points.
  */
 function om_volunteer_discount_pane_form_submit($form, &$form_state) {
+  // @TODO Check to see if the order already has a points transaction and see 
+  // if the user can apply more points.
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
@@ -81,7 +83,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
     'uid' => $user->uid,
     'points' => -$user_points_used,
     'tid' => $term->tid,
-    'display' => FALSE
+    'display' => TRUE
   );
   userpoints_userpointsapi($options);
   om_volunteer_apply_points();
