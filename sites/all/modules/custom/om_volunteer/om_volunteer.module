@@ -18,15 +18,36 @@ function om_volunteer_commerce_checkout_pane_info() {
     'weight' => 10,
     'callbacks' => array(
       'checkout_form' => 'om_volunteer_discount_checkout_form',
-      'checkout_form_submit' => 'om_volunteer_discount_checkout_form_submit'
     )
   );
   return $checkout_panes;
 }
-         
+
+/**
+ * Pane submit handler stored here so DERP form api will not get confused.
+ */       
 function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
-  dsm( $form_state['order']);
+  global $user;
+  $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
+  $order_total = $form_state['order']->commerce_order_total[$l][0]['amount'];
+  $order_total_points = $order_total / $multiple;
+  $user_max_points = userpoints_get_max_points($user->uid);
+  $user_points_used = 0;
+  if ($form_state['values']['apply_points'] > $order_total_points) {
+    $user_points_used = $order_total_points;
+  }
+  else {
+    $user_points_used = $form_state['values']['apply_points'];
+  }
+  $term = taxonomy_get_term_by_name('Volunteer Hours');
+  $options = array(
+    'uid' => $user->uid,
+    'points' => -$user_points_used,
+    'tid' => $term->tid,
+    'display' => FALSE
+  );
+  userpoints_userpointsapi($options);
 }
 
 function om_volunteer_get_multiple() {
