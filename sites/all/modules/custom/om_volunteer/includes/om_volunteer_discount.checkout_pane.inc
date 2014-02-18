@@ -46,6 +46,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
 }
 
 function om_volunteer_validate_points($element, &$form_state, $form) {
+  dsm($form_state);
   global $user;
   $term = taxonomy_get_term_by_name('Volunteer Hours');
   $term = array_shift($term);
