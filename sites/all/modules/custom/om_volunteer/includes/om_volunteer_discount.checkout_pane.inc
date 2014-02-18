@@ -14,7 +14,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
   return $pane_form; 
 }
 
-function _om_volunteer_discount_form(&$form) {
+function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
   $total_points = userpoints_get_max_points($user->uid);
   $order_total = $form_state['order']->commerce_order_total[$l][0]['amount'];
