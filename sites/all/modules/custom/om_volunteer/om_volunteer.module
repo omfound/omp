@@ -36,7 +36,7 @@ function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
-  $order_total = $form_state['order']->commerce_order_total[$l][0]['amount']m
+  $order_total = $form_state['order']->commerce_order_total[$l][0]['amount'];
   $order_total_points = $order_total / $multiple;
   $term = taxonomy_get_term_by_name('Volunteer Hours');
   $term = array_shift($term);
