@@ -27,6 +27,7 @@ function om_volunteer_commerce_checkout_pane_info() {
  * Pane submit handler stored here so DERP form api will not get confused.
  */       
 function om_volunteer_discount_checkout_form_submit($form, &$form_state) {
+  dsm($form_state['values']);
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
