@@ -57,7 +57,6 @@ function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_or
       $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
     }
 
-    dsm($commerce_order->commerce_line_items);
     $line_item = commerce_coupon_line_item_new($coupon, $commerce_order->order_id->raw());
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 
@@ -75,9 +74,7 @@ function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_or
     commerce_line_item_save($line_item);
     dsm($line_item);
 
-    return;
     $commerce_order->commerce_line_items[] = $line_item;
-    dsm($commerce_order);
 
     return array('commerce_coupon_line_item' => $line_item);
   }
