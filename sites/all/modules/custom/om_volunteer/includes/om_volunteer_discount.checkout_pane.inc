@@ -27,6 +27,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '!required' => $required_points
   );
   $message = t('You have !points !point_type available for use. Each !point_type is worth !value.', $message_values);
+  $message_values['!point_type'] = ucwords($message_values['!point_type']);
   $message .= "<br/>" . t('!point_type to completely fulfill this order: !required', $message_values);
   $form['message'] = array(
     '#markup' => $message 
