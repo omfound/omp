@@ -16,7 +16,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 
 function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
-  $total_points = userpoints_get_max_points($user->uid);
+  $total_points = userpoints_get_current_points($user->uid);
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
   $multiple = om_volunteer_get_multiple() * 100;
   $required_points = intval($order_total / $multiple);
@@ -50,7 +50,7 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
     global $user;
     $term = taxonomy_get_term_by_name('Volunteer Hours');
     $term = array_shift($term);
-    $user_max_points = userpoints_get_max_points($user->uid, $term->tid);
+    $user_max_points = userpoints_get_current_points($user->uid, $term->tid);
     if ($element['#value'] > $user_max_points ) {
       form_error($element, "You have $user_max_points available for redemption.");
     } 
@@ -69,7 +69,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   $order_total_points = $order_total / $multiple;
   $term = taxonomy_get_term_by_name('Volunteer Hours');
   $term = array_shift($term);
-  $user_max_points = userpoints_get_max_points($user->uid, $term->tid);
+  $user_max_points = userpoints_get_current_points($user->uid, $term->tid);
   $user_points_used = 0;
   if ($form_state['values']['om_volunteer_discount']['apply_points'] > $order_total_points) {
     $user_points_used = $order_total_points;
@@ -77,7 +77,6 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   else {
     $user_points_used = $form_state['values']['om_volunteer_discount']['apply_points'];
   }
-  dsm($user_points_used);
   $options = array(
     'uid' => $user->uid,
     'points' => -$user_points_used,
