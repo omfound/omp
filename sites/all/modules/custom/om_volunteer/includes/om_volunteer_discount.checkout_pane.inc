@@ -46,14 +46,15 @@ function _om_volunteer_discount_form(&$form, $form_state) {
 }
 
 function om_volunteer_validate_points($element, &$form_state, $form) {
-  dsm($form_state);
-  global $user;
-  $term = taxonomy_get_term_by_name('Volunteer Hours');
-  $term = array_shift($term);
-  $user_max_points = userpoints_get_max_points($user->uid, $term->tid);
-  if ($element['#value'] > $user_max_points ) {
-    form_error($element, "You have $user_max_points available for redemption.");
-  } 
+  if ($form_state['triggering_element']['#value'] == 'Apply') {
+    global $user;
+    $term = taxonomy_get_term_by_name('Volunteer Hours');
+    $term = array_shift($term);
+    $user_max_points = userpoints_get_max_points($user->uid, $term->tid);
+    if ($element['#value'] > $user_max_points ) {
+      form_error($element, "You have $user_max_points available for redemption.");
+    } 
+  }
 }
 
 /**
@@ -61,7 +62,6 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
  * to execute if the user wants to apply points.
  */
 function om_volunteer_discount_pane_form_submit($form, &$form_state) {
-  dsm($form_state);
   global $user;
   $l = LANGUAGE_NONE;
   $multiple = om_volunteer_get_multiple() * 100;
