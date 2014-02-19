@@ -26,7 +26,7 @@ function om_volunteer_get_multiple() {
   return 10;
 }
 
-function om_volunteer_apply_points($order, $user_points_used) {
+function om_volunteer_apply_points($commerce_order, $user_points_used) {
   $coupon = commerce_coupon_load_by_code('OMPUP');
   $amount = $user_points_used * .1;
   $currency_code = 'USD';
