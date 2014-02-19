@@ -79,20 +79,13 @@ function commerce_coupon_userpoint_commerce_coupon_type_configure($bundle, $rese
  * Gets the right amount value to display it in the coupon "log" view.
  */
 function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
-  // Get the price component.
-  if ($coupon->type == 'commerce_coupon_userpoint') {
-    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
-    $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
-
-    $amount = 0;
-    $components = commerce_price_component_load($order_wrapper->commerce_order_total->value(), $coupon_wrapper->price_component_name->value());
-    foreach ($components as $component) {
-      watchdog('brian', '<pre>'.print_r($component['price']).'</pre>');
-      $amount += $component['price']['amount'] * -1;
+  $amount = 0;
+  foreach ($order->commerce_line_items[LANGUAGE_NONE] as $key => $info) {
+    $line_item = commerce_line_item_load($info['line_item_id']);
+    if ($line_item->type == 'commerce_coupon' && $line_item->commerce_coupon_reference[LANGUAGE_NONE][0]['target_id'] == $coupon->coupon_id) {
+      $total = $line_item->commerce_total[LANGUAGE_NONE][0]['amount'] * -1;
+      $amount = commerce_currency_format($total, $line_item->commerce_total[LANGUAGE_NONE][0]['currency_code'], $coupon);
     }
-
-    dsm($amount);
-    $amount = commerce_currency_format($amount, $order_wrapper->commerce_order_total->currency_code->value(), $coupon);
   }
 }
 
