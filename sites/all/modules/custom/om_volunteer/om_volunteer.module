@@ -55,6 +55,7 @@ function om_volunteer_apply_points($commerce_order, $user_points_used) {
   dsm($line_item);
 
   $commerce_order_wrapper->commerce_line_items[] = $line_item;
+  dsm($commerce_order);
   commerce_order_save($commerce_order);
 
 }
