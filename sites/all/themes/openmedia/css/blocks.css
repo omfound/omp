@@ -36,7 +36,7 @@
   height: 50px;
   padding: 10px;
   background: transparent url(../images/form-popup-bg.png) top left no-repeat;
-  z-index: 1;
+  z-index: 11;
 }
 
 #block-om-theme-assets-om-site-search .container-inline {
