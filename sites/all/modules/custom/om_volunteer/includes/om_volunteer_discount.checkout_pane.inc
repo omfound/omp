@@ -73,6 +73,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   $term = array_shift($term);
   $user_max_points = userpoints_get_current_points($user->uid, $term->tid);
   $user_points_used = 0;
+  dsm($form_state);
   if ($form_state['values']['om_volunteer_discount']['apply_points'] > $order_total_points) {
     $user_points_used = $order_total_points;
   }
