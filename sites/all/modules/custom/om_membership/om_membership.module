@@ -430,9 +430,11 @@ function om_membership_get_currently_selected_membership($user) {
     $line_items = $order_meta->commerce_line_items->value();
     foreach ($line_items AS $line_item) {
       $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $product = $line_item_meta->commerce_product->value();
-      if ($product->type == 'membership_plan') {
-        $memberships[] = $line_item;
+      if (!empty($line_item_meta->commerce_product)) {
+        $product = $line_item_meta->commerce_product->value();
+        if ($product->type == 'membership_plan') {
+          $memberships[] = $line_item;
+        }
       }
     }
   }
@@ -598,13 +600,15 @@ function om_membership_order_contains_membership($commerce_order, $paid_only = f
     $line_items = $order_metadata->commerce_line_items->value();
     foreach ($line_items AS $line_item) {
       $line_item_metadata = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $product = $line_item_metadata->commerce_product->value();
-      if (is_object($product) && $product->type == 'membership_plan') {
-        if (!$paid_only) {
-          $memberships[] = $product;
-	}
-	elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
-          $memberships[] = $product;
+      if (!empty($line_item_metadata->commerce_product)) {
+        $product = $line_item_metadata->commerce_product->value();
+        if (is_object($product) && $product->type == 'membership_plan') {
+          if (!$paid_only) {
+            $memberships[] = $product;
+	        }
+	        elseif ($product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
+            $memberships[] = $product;
+          }
         }
       }
     }
