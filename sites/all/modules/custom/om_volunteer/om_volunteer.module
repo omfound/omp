@@ -27,12 +27,9 @@ function om_volunteer_get_multiple() {
 }
 
 function om_volunteer_apply_points($commerce_order, $user_points_used) {
-  dsm('user points: '.$user_points_used);
   $coupon = commerce_coupon_load_by_code('OMPUP');
   rules_invoke_event('commerce_coupon_redeem', $coupon, $commerce_order);
-
-  //$amount = $user_points_used * .1;
-  $amount = 50;
+  $amount = $user_points_used * $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'] * 100;
   $currency_code = 'USD';
   $component_name = 'base_price';
 
