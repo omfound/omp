@@ -90,42 +90,9 @@ function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount
       $amount += $component['price']['amount'] * -1;
     }
 
+    dsm($amount);
     $amount = commerce_currency_format($amount, $order_wrapper->commerce_order_total->currency_code->value(), $coupon);
   }
-}
-
-/**
- * Implements hook_commerce_cart_line_item_refresh().
- */
-function commerce_coupon_userpoint_commerce_cart_line_item_refresh($line_item, $order_wrapper) {
-  dsm($line_item);
-  /**
-  if ($cloned_line_item->type == 'commerce_coupon') {
-    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $cloned_line_item);
-    $coupon_id = $line_item_wrapper->commerce_coupon_reference->value();
-    $coupon = commerce_coupon_load($coupon_id);
-
-    if ($coupon->type == 'commerce_coupon_userpoint') {
-      $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
-
-      $amount = commerce_price_wrapper_value($coupon_wrapper, 'commerce_coupon_userpoint_ratio', TRUE);
-      $price_component_name = 'commerce_coupon_' . $coupon->type . '_' . $coupon_wrapper->commerce_coupon_code->value();
-
-      // Remove the component type and add it again for this coupon code.
-      $line_item_wrapper->commerce_unit_price->data = commerce_price_component_delete($line_item_wrapper->commerce_unit_price->value(), $price_component_name);
-
-      if ($coupon->is_active) {
-        $line_item_wrapper->commerce_unit_price->amount = $amount['amount'] * -1;
-        $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-          $line_item_wrapper->commerce_unit_price->value(),
-          $price_component_name,
-          $line_item_wrapper->commerce_unit_price->value(),
-          TRUE,
-          FALSE
-        );
-      }
-    }
-  }**/
 }
 
 /**
