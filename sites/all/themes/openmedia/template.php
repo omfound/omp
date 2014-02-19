@@ -75,6 +75,7 @@ function openmedia_preprocess_page(&$variables) {
     $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
   }
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/submit-once.js', array('type' => 'file', 'group' => JS_DEFAULT));
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-search.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
 /**
