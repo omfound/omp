@@ -26,9 +26,12 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '!value' => '$10.00',
     '!required' => $required_points
   );
-  $message = t('You have !points !point_type available for use. Each !point_type is worth !value.', $message_values);
-  $message_values['!point_type'] = ucwords($message_values['!point_type']);
-  $message .= "<br/>" . t('!point_type to completely fulfill this order: !required', $message_values);
+  $message = "<strong>" . t('Volunteer Hours Available:') . "</strong><br/>";
+  $message .= t("You have !points hours available for use.", $message_values);
+  $message .= "<strong>" . t('Exchange Rate:') . "</strong><br/>";
+  $message .= t("1 hour = !value", $message_values);
+  $message .= "<strong>" . t('Current Order:') . "</strong><br/>";
+  $message .= t("!required hours required to pay for order in full.", $message_values);
   $form['message'] = array(
     '#markup' => $message 
   );
