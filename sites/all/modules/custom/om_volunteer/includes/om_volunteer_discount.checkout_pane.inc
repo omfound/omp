@@ -90,4 +90,5 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   );
   userpoints_userpointsapi($options);
   om_volunteer_apply_points($form_state['order'], $user_points_used);
+  $form_state['rebuild'] = TRUE;
 }
