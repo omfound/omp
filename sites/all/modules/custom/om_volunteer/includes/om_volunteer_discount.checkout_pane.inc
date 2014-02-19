@@ -26,11 +26,11 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '!value' => '$10.00',
     '!required' => $required_points
   );
-  $message = "<strong>" . t('Volunteer Hours Available:') . "</strong><br/>";
+  $message = "<div class='bold'>" . t('Volunteer Hours Available:') . "</div>";
   $message .= t("You have !points hours available for use.", $message_values);
-  $message .= "<strong>" . t('Exchange Rate:') . "</strong><br/>";
+  $message .= "<div class='bold'>" . t('Exchange Rate:') . "</div>";
   $message .= t("1 hour = !value", $message_values);
-  $message .= "<strong>" . t('Current Order:') . "</strong><br/>";
+  $message .= "<div class='bold'>" . t('Current Order:') . "</div>";
   $message .= t("!required hours required to pay for order in full.", $message_values);
   $form['message'] = array(
     '#markup' => $message 
