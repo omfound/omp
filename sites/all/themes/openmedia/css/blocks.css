@@ -28,7 +28,11 @@
 }
 
 #block-om-theme-assets-om-site-search #search-block-form {
-  display: none;
+  position: absolute;
+  width: 175px;
+  height: 50px;
+  padding: 10px;
+  background: transparent url(../images/form-popup-bg.png) bottom center no-repeat;
 }
 
 #block-om-theme-assets-om-round-social-media {
