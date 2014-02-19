@@ -1,4 +1,13 @@
 <?php
+function om_project_permission() {
+  return array(
+    'administer project' => array(
+      'title' => t('Administer Project')
+    )
+  );
+}
+
+
 /**
  * Implementation of hook_menu().
  */
@@ -419,16 +428,21 @@ function om_project_node_access($node, $op, $account) {
     $user_is_member = FALSE;
     $user_is_admin = FALSE;
     $user_had_access = FALSE;
-    $members = om_project_get_project_members($node->nid);
-    if (!empty($members)) {
-      foreach($members AS $member) {
-        if ($member->uid == $account->uid) {
-          $user_is_member = TRUE;
-          if ($member->isadmin == 1) {
-            $user_is_admin = TRUE;
+    if (!user_access('administer project')) {
+      $members = om_project_get_project_members($node->nid);
+      if (!empty($members)) {
+        foreach($members AS $member) {
+          if ($member->uid == $account->uid) {
+            $user_is_member = TRUE;
+            if ($member->isadmin == 1) {
+              $user_is_admin = TRUE;
+            }
           }
         }
-      }
+      } 
+    }
+    else {
+      $user_is_admin = TRUE;
     }
     switch ($op) {
       case 'delete':
@@ -437,7 +451,7 @@ function om_project_node_access($node, $op, $account) {
         }
         break;
       case 'update':
-        if ($user_is_member == TRUE) {
+        if ($user_is_member == TRUE || $user_is_admin == TRUE) {
           return NODE_ACCESS_ALLOW;
         }
         break;
@@ -567,7 +581,7 @@ function om_project_query_alter(QueryAlterableInterface $query) {
   $id = $query->getMetaData('id');
   if (trim($id) == '_node_reference_potential_references_standard') {
     $field = $query->getMetaData('field');
-    if ($field['field_name'] == 'field_om_show_project') {
+    if ($field['field_name'] == 'field_om_show_project' && !user_access('administer project')) {
       om_project_add_membership_or($query);
     }
   }
