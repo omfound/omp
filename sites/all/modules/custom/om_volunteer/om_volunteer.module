@@ -26,7 +26,37 @@ function om_volunteer_get_multiple() {
   return 10;
 }
 
-function om_volunteer_apply_points() {
+function om_volunteer_apply_points($commerce_order, $user_points_used) {
+  $coupon = commerce_coupon_load_by_code('OMPUP');
+  $amount = $user_points_used * .1;
+  $currency_code = 'USD';
+  $component_name = 'base_price';
+
+  dsm('coupon firing...');
+  dsm($coupon);
+  dsm($commerce_order);
+  $commerce_order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+
+  $line_item = commerce_coupon_line_item_new($coupon, $commerce_order_wrapper->order_id->raw());
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+
+  // Set the unit price on the line item object.
+  $line_item_wrapper->commerce_unit_price->amount = $amount * -1;
+  $line_item_wrapper->commerce_unit_price->currency_code = $currency_code;
+
+  // Add the base price to the components array.
+  if ($coupon->is_active && !commerce_price_component_load($line_item_wrapper->commerce_unit_price->value(), $component_name)) {
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(), $component_name, $line_item_wrapper->commerce_unit_price->value(), TRUE, FALSE
+    );
+  }
+
+  commerce_line_item_save($line_item);
+  dsm($line_item);
+
+  $commerce_order_wrapper->commerce_line_items[] = $line_item;
+  dsm($commerce_order);
+  commerce_order_save($commerce_order);
 
 }
 
