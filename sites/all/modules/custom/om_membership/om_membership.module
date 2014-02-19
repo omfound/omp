@@ -430,9 +430,11 @@ function om_membership_get_currently_selected_membership($user) {
     $line_items = $order_meta->commerce_line_items->value();
     foreach ($line_items AS $line_item) {
       $line_item_meta = entity_metadata_wrapper('commerce_line_item', $line_item);
-      $product = $line_item_meta->commerce_product->value();
-      if ($product->type == 'membership_plan') {
-        $memberships[] = $line_item;
+      if (!empty($line_item_meta->commerce_product)) {
+        $product = $line_item_meta->commerce_product->value();
+        if ($product->type == 'membership_plan') {
+          $memberships[] = $line_item;
+        }
       }
     }
   }
