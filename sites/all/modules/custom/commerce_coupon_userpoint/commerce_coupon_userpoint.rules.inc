@@ -53,6 +53,7 @@ function commerce_coupon_action_create_up_coupon_line_item($coupon, $commerce_or
   if ($coupon->type == 'commerce_coupon_userpoint') {
     dsm('coupon firing...');
     dsm($coupon);
+    dsm($commerce_order);
     if (!($commerce_order instanceof EntityMetadataWrapper)) {
       $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
     }
