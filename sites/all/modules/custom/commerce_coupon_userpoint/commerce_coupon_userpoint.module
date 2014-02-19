@@ -79,9 +79,8 @@ function commerce_coupon_userpoint_commerce_coupon_type_configure($bundle, $rese
  * Gets the right amount value to display it in the coupon "log" view.
  */
 function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
-  watchdog('brian', 'testing');
-  dsm($amount);
-  dsm($coupon);
+  watchdog('brian', '<pre>'.print_r($coupon, TRUE).'</pre>');
+  watchdog('brian', 'amount: '.$amount);
   // Get the price component.
   if ($coupon->type == 'commerce_coupon_userpoint') {
     $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
