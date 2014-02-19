@@ -1109,6 +1109,41 @@ function om_membership_views_pre_render(&$view) {
         $formatted_date = 99999999;
       }
       $view->result[$key]->line_item_id = $formatted_date;
+
+      if (!empty($view->result[$key]->profile_users_uid)) {
+        $address_info = om_membership_default_address($view->result[$key]->profile_users_uid);
+        if (!empty($address_info)) {
+          $view->result[$key]->field_commerce_customer_billing[0]['rendered']['#markup'] = $address_info;
+        }
+      }
     }
+  }
+}
+
+function om_membership_default_address($uid) {
+  $query = "
+    SELECT * 
+    FROM {field_data_commerce_customer_address} 
+    JOIN {commerce_addressbook_defaults} ON commerce_addressbook_defaults.profile_id = field_data_commerce_customer_address.entity_id 
+    WHERE commerce_addressbook_defaults.uid = :uid";
+
+  $address = db_query($query, array(':uid' => $uid))->fetchAssoc();
+  if (!empty($address)) {
+    $output = '';
+    $output .= $address['commerce_customer_address_name_line'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_thoroughfare'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_locality'];
+    $output .= " ";
+    $output .= $address['commerce_customer_address_administrative_area'];
+    $output .= " ";
+    $output .= $address['commerce_customer_address_postal_code'];
+    $output .= "\n";
+    $output .= $address['commerce_customer_address_country'];
+    return $output;
+  }
+  else {
+    return false;
   }
 }
