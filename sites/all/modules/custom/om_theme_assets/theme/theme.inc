@@ -131,3 +131,9 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   $variables['show_page_left_width_user'] = variable_get('show_page_left_width_user', '');
   $variables['show_page_right_width_user'] = variable_get('show_page_right_width_user', '');
 }
+
+function om_theme_assets_preprocess_om_site_search(&$variables) {
+  $form = drupal_get_form('search_block_form');
+  $form = drupal_render($form);
+  $variables['search_form'] = $form; 
+}

@@ -143,6 +143,11 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
       'path' => $path . '/theme',
       'template' => 'om_theme_dynamic_css',
       'file' => 'theme.inc'
+    ),
+    'om_site_search' => array( 
+      'path' => $path . '/theme',
+      'template' => 'om_site_search',
+      'file' => 'theme.inc'
     )
   );
 }
