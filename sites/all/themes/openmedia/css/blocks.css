@@ -11,6 +11,26 @@
   padding: 12px 0 10px 0;
 }
 
+/**
+ * Site search
+ */
+#block-om-theme-assets-om-site-links {
+  float: left;
+  padding: 18px 0 10px 0;
+}
+
+.icon-search {
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: transparent url(../images/omp-search.png) top left no-repeat;
+  text-indent: -999em;
+}
+
+#block-om-theme-assets-om-site-search #search-block-form {
+  display: none;
+}
+
 #block-om-theme-assets-om-round-social-media {
   float: left;
   padding: 18px 0 10px 0;
