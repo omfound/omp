@@ -98,7 +98,7 @@ function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount
  * Implements hook_commerce_cart_line_item_refresh().
  */
 function commerce_coupon_userpoint_commerce_cart_line_item_refresh($cloned_line_item, $order_wrapper) {
-  dsm('testing');
+  dsm($cloned_line_item);
   if ($cloned_line_item->type == 'coupon') {
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $cloned_line_item);
     $coupon_id = $line_item_wrapper->commerce_coupon_reference->value();
