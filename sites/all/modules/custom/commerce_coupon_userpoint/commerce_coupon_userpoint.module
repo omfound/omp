@@ -86,7 +86,7 @@ function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount
 
     $amount = 0;
     $components = commerce_price_component_load($order_wrapper->commerce_order_total->value(), $coupon_wrapper->price_component_name->value());
-    watchdog('brian', '<pre>'.print_r($components, TRUE).'</pre>');
+    watchdog('brian', '<pre>'.print_r($components).'</pre>');
     foreach ($components as $component) {
       $amount += $component['price']['amount'] * -1;
     }
