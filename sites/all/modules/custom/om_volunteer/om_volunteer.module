@@ -35,11 +35,9 @@ function om_volunteer_apply_points($commerce_order, $user_points_used) {
   dsm('coupon firing...');
   dsm($coupon);
   dsm($commerce_order);
-  if (!($commerce_order instanceof EntityMetadataWrapper)) {
-    $commerce_order = entity_metadata_wrapper('commerce_order', $commerce_order);
-  }
+  $commerce_order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
 
-  $line_item = commerce_coupon_line_item_new($coupon, $commerce_order->order_id->raw());
+  $line_item = commerce_coupon_line_item_new($coupon, $commerce_order_wrapper->order_id->raw());
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
 
   // Set the unit price on the line item object.
@@ -56,8 +54,7 @@ function om_volunteer_apply_points($commerce_order, $user_points_used) {
   commerce_line_item_save($line_item);
   dsm($line_item);
 
-  $commerce_order->commerce_line_items[] = $line_item;
-  dsm($commerce_order);
+  $commerce_order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($commerce_order);
 
 }
