@@ -28,6 +28,7 @@
 }
 
 #block-om-theme-assets-om-site-search #search-block-form {
+  display: none;
   position: absolute;
   left: -98px;
   top: 32px;
