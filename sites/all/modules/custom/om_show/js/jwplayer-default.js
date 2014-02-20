@@ -1,6 +1,7 @@
 (function ($, Drupal, window, document, undefined) {
   Drupal.behaviors.jwDefault = {
     attach : function() {
+      console.log("IS THIS THE ONE?");
       var i;
       jwplayer.key="LbV5colrtkrBDNQUDLcd08vwBs7psJqbdJTVTYyxrAM=";
 
