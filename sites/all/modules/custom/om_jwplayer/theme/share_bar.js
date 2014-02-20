@@ -167,6 +167,7 @@ Drupal.behaviors.shareBar = {
    // NB: here I've hard coded ids for the tray and used the ambiguous player call.
    // This is due to the previous "frameworking" and lack of selectability other than arbitrary id.
    // For now this limits one tray to a page.
+   console.log("TEST");
    $target = $('#session-video-embed-tray', context);
    $target.once('jwplayer-share-bar',
      function() {
