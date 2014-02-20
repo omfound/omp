@@ -51,7 +51,7 @@ function om_dashboard_panes_om_dashboard_panes() {
     'volunteer-credit' => array(
       'title' => t('Volunteer Credit'),
       'theme' => array(
-        'om_membership_pane' => array(
+        'om_volunteer_pane' => array(
           'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
           'template' => 'om_volunteer_pane',
           'file' => 'theme.inc'
