@@ -175,3 +175,12 @@ function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
   $variables['all_airings'] = l('See All Airings', 'upcoming-airings', array('attributes' => array('class' => array('blue-button'))));
 }
+
+function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
+  global $user;
+  $multiple = om_volunteer_get_multiple();
+  $total = userpoints_get_current_points($user->uid);
+  $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour', array('!multiple' => $multiple)) . '</p>';
+  $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
+  $variables['message'] = $message;  
+}
