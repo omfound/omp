@@ -168,18 +168,22 @@ Drupal.behaviors.shareBar = {
    // This is due to the previous "frameworking" and lack of selectability other than arbitrary id.
    // For now this limits one tray to a page.
    $target = $('#session-video-embed-tray', context);
-   if (typeof(jwplayer) == 'function') {
-     player = jwplayer();
-   }
-   else {
-     player = {
-       config : {
-         width : 960,
-         height : 338
+   $target.once('jwplayer-share-bar',
+     function() {
+       if (typeof(jwplayer) == 'function') {
+         player = jwplayer();
        }
-     };
-   }
-   var tray = new Drupal.shareBar.views.shareBar(player, $target);
-  }
+       else {
+         player = {
+           config : {
+             width : 960,
+             height : 338
+           }
+         };
+       }
+       var tray = new Drupal.shareBar.views.shareBar(player, $target);
+      }
+    }
+  );
 }
 })(jQuery, Drupal, this, this.document);
