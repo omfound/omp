@@ -22,12 +22,12 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'user/shows',
   );
-	$content['menu']['shows']['add'] = array(
+  $content['menu']['shows']['add'] = array(
     '#title' => t('Submit new show'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'node/add/om-show',
-	);
-    $content['menu']['shows']['report_00'] = array(
+  );
+  $content['menu']['shows']['report_00'] = array(
     '#title' => t('Show and Themes Report'),
     '#access' => om_admin_menu_role_access($paid_memberships),
     '#href' => 'admin/om/reports/show/showsandthemes',
@@ -141,6 +141,14 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#href' => 'search/user',
     '#weight' => 40,
   );
+  if (module_exists('om_volunteer')) {
+    $content['menu']['admin/people']['volunteer_hours'] = array(
+      '#title' => t('Volunteer Hours'),
+      '#access' => om_admin_menu_role_access(array('Membership Administrator')),
+      '#href' => 'admin/config/people/userpoints',
+      '#weight' => 41,
+    );
+  }
   $content['menu']['membership']['report_00'] = array(
     '#title' => t('Basic Membership Report'),
     '#access' => om_admin_menu_role_access(array('Membership Administrator')),

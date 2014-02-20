@@ -14,6 +14,11 @@ function _omp_return_domains() {
     'ssl_enabled' => TRUE,
     'www_enabled' => TRUE
   );
+  // CMA
+  $domains['cmaportal.ompnetwork.org'] = array(
+    'ssl_enabled' => TRUE,
+    'www_enabled' => FALSE
+  );
   return $domains;
 }
 
