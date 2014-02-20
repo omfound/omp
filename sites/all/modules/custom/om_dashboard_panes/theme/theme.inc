@@ -177,6 +177,7 @@ function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
 }
 
 function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
+  $variables['title'] = t('Volunteer Credit');
   global $user;
   $multiple = om_volunteer_get_multiple();
   $total = userpoints_get_current_points($user->uid);
