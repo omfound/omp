@@ -181,7 +181,7 @@ function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
   global $user;
   $multiple = om_volunteer_get_multiple();
   $total = userpoints_get_current_points($user->uid);
-  $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour', array('!multiple' => $multiple)) . '</p>';
+  $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour.', array('!multiple' => $multiple)) . '</p>';
   $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
   $variables['message'] = $message;  
 }
