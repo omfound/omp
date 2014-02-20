@@ -75,6 +75,7 @@ function openmedia_preprocess_page(&$variables) {
     $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
   }
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/submit-once.js', array('type' => 'file', 'group' => JS_DEFAULT));
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-search.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
 /**
@@ -634,6 +635,14 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     $variables['cr']['payment'] = l($payment_info['status'], 'payment/'.$payment_info['id'].'/edit', $link_options);
   }else{
     $variables['cr']['payment'] = t('No Payment');
+  }
+
+  $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
+  $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
+  $pay_later = false;
+  foreach ($membership_orders as $key => $info) {
+    $variables['cr']['membership_payment'] = $info->payment_method;
+    $variables['cr']['membership_payment_id'] = $info->payment_id;
   }
 }
 

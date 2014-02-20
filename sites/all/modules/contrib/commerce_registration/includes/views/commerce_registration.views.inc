@@ -18,7 +18,7 @@ function commerce_registration_views_data_alter(&$data) {
     'title' => t('Commerce Order ID'),
     'help' => t('The Commerce Order ID Number.'),
     'field' => array(
-      'handler' => 'views_handler_field_numeric',
+      'handler' => 'views_handler_field_commerce_product',
       'click sortable' => TRUE,
     ),
     'sort' => array(
@@ -27,6 +27,16 @@ function commerce_registration_views_data_alter(&$data) {
     'filter' => array(
       'handler' => 'views_handler_filter_numeric',
     ),
+  );
+  $data['registration']['entity_id'] = array(
+    'relationship' => array(
+      'base' => 'commerce_product',
+      'base field' => 'product_id',
+      'handler' => 'views_handler_relationship',
+      'label' => t('Commerce Product'),
+    ),
+    'title' => t('Registration Commerce Product'),
+    'help' => t('The Commerce Product associated with this registration.'),
   );
   $data['registration']['registration_attached_entity'] = array(
     'real field' => 'entity_id',
