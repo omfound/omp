@@ -20,6 +20,10 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
   $multiple = om_volunteer_get_multiple();
   $required_points = intval($order_total / ($multiple * 100));
+  $default_points = $required_points;
+  if ($total_points < $required_points) {
+    $default_points = $total_points;
+  }
   $message_values = array(
     '!points' =>  $total_points,
     '!point_type' => 'hours',
@@ -38,7 +42,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $form['apply_points'] = array(
     '#type' => 'textfield',
     '#title' => t('Apply Hours'),
-    '#default_value' => $required_points,
+    '#default_value' => $default_points,
     '#element_validate' => array('om_volunteer_validate_points')
   );
   $form['submit'] = array(
