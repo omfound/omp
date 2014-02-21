@@ -122,6 +122,9 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
+    $channel_term = taxonomy_term_load($pbs->channel);
+    $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
+    $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
@@ -131,8 +134,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       'RunBump'     => 0, //int</RunBump>
       'CGExempt'    => FALSE, //boolean</CGExempt>
       'BugText'     => '', //string</BugText>
-      'CrawlText'   => !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : '', //string</CrawlText>
-      'CrawlLength' => !empty($schedule_info['TotalSeconds']) ? $schedule_info['TotalSeconds'] : '', //int</CrawlLength>
+      'CrawlText'   => !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : $default_crawl, //string</CrawlText>
+      'CrawlLength' => !empty($schedule_info['TotalSeconds']) ? $schedule_info['TotalSeconds'] : $default_crawl_duration, //int</CrawlLength>
     );
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {
