@@ -649,7 +649,6 @@ function om_membership_user_org_membership($user) {
     JOIN {field_data_field_invitations} 
     ON field_data_field_invitations.entity_id=profile.pid 
     WHERE field_invitations_value=:email';
-
   $result = db_query($query, array(':email' => $user->mail));
   $org_admin = $result->fetchField();
   if (!empty($org_admin)) {
@@ -664,7 +663,6 @@ function om_membership_user_org_membership($user) {
       return $org_membership;
     }
   }
-
   return false;
 }
 
@@ -1065,6 +1063,7 @@ function om_membership_user_role_edit_access($role) {
 }
 
 function om_membership_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] == 'views-exposed-form-classes-page' || $form['#id'] == 'views-exposed-form-calendar-product-view-block' || $form['#id'] == 'views-exposed-form-classes-page-1') {
       if ($form['#id'] == 'views-exposed-form-classes-page' || $form['#id'] == 'views-exposed-form-classes-page-1') {
@@ -1147,3 +1146,4 @@ function om_membership_default_address($uid) {
     return false;
   }
 }
+
