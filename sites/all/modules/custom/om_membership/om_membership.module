@@ -1098,7 +1098,7 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function om_membership_alter_node_form(&$form) {
-  $form = array();
+  $form['#access'] = FALSE;
   drupal_set_message('It appears you have not payed for your membership yet. Please contact station personnel.', 'warning');
 }
 
