@@ -122,6 +122,7 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
+    dsm($schedule_info);
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
