@@ -649,7 +649,6 @@ function om_membership_user_org_membership($user) {
     JOIN {field_data_field_invitations} 
     ON field_data_field_invitations.entity_id=profile.pid 
     WHERE field_invitations_value=:email';
-
   $result = db_query($query, array(':email' => $user->mail));
   $org_admin = $result->fetchField();
   if (!empty($org_admin)) {
@@ -664,7 +663,6 @@ function om_membership_user_org_membership($user) {
       return $org_membership;
     }
   }
-
   return false;
 }
 
@@ -1085,6 +1083,23 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
+  if ($form_id == 'om_show_node_form' || $form_id == 'om_project_node_form') {
+    if (!user_access('administer nodes')) {
+      global $user;
+      $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
+      foreach ($membership_orders as $key => $info) {
+        if ($info->payment_method == 'pay_later') {
+          om_membership_alter_node_form($form);
+          continue;
+        }
+      }
+    }
+  }
+}
+
+function om_membership_alter_node_form(&$form) {
+  $form['#access'] = FALSE;
+  drupal_set_message('It appears you have not payed for your membership yet. Please contact station personnel.', 'warning');
 }
 
 function om_membership_membership_expiration_date($line_item_id) {
@@ -1147,3 +1162,4 @@ function om_membership_default_address($uid) {
     return false;
   }
 }
+
