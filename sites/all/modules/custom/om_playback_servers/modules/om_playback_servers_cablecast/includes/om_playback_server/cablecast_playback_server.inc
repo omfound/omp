@@ -122,7 +122,6 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
-    dsm($schedule_info);
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
@@ -132,8 +131,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       'RunBump'     => 0, //int</RunBump>
       'CGExempt'    => FALSE, //boolean</CGExempt>
       'BugText'     => '', //string</BugText>
-      'CrawlText'   => '', //string</CrawlText>
-      'CrawlLength' => 0, //int</CrawlLength>
+      'CrawlText'   => !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : '', //string</CrawlText>
+      'CrawlLength' => !empty($schedule_info['TotalSeconds']) ? $schedule_info['TotalSeconds'] : '', //int</CrawlLength>
     );
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {
