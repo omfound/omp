@@ -9,9 +9,9 @@ class cablecastPlaybackServerController extends playbackServerController {
       $metadata = array($metadata);
     }
     foreach ($metadata AS $show) {
-      if (function_exists('om_show_scheduler_rating_is_adult')) {
+      if (function_exists('om_show_rating_is_adult')) {
         if (!empty($show->field_om_rating[$show->language][0])) {
-          if (om_show_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
+          if (om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
             $show->title . ' [ADULT]';
           }
         }
