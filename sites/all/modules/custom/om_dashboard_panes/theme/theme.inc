@@ -50,6 +50,15 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       $variables['membership_end'] = date('D j/n/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+      if ($org_membership = om_membership_user_org_membership($user)) {
+        $org_message = '';
+        $profile = profile2_by_uid_load($org_membership['order']->uid, 'manage_organizational_membership');
+        if (!empty($profile->field_organization_name[LANGUAGE_NONE])) {
+          $message_options = array('!org' => l($profile->field_organization_name[LANGUAGE_NONE][0]['value'], 'user/' . $org_membership['order']->uid));
+          $org_message .= t('Your membership is provided by !org.', $message_options);
+        }
+        $variables['org_message'] = $org_message;
+      }
     }
     else {
       $no_membership = TRUE;

@@ -120,8 +120,8 @@ function om_show_admin_form($form, &$form_state) {
   }
   $form['om_show_adult_ratings'] = array(
     '#type' => 'select',
-    '#title' => t('Adult content prompt'),
-    '#description' => t('Select which ratings should generate an adult content prompt.'),
+    '#title' => t('Adult content rating'),
+    '#description' => t('Select which ratings should be considered adult. Used for adult content prompt and scheduling.'),
     '#default_value' => variable_get('om_show_adult_ratings', FALSE),
     '#options' => $options,
     '#multiple' => TRUE
@@ -600,11 +600,13 @@ function om_show_upcoming_airings_user($user = FALSE) {
  *
  * @return bool
  */
-function om_show_rating_is_adult($tid) {
-  $adult_terms = array('TV-MA');
-  $term = taxonomy_term_load($tid);
+function om_show_rating_is_adult($term) {
+  if (is_numeric($term)) {
+    $term = taxonomy_term_load($term);
+  }
+  $adult_terms = variable_get('om_show_adult_ratings', array());
   if (is_object($term)) {
-    return in_array($term->name, $adult_terms);
+    return in_array($term->tid, $adult_terms);
   }
   return FALSE;
 }
