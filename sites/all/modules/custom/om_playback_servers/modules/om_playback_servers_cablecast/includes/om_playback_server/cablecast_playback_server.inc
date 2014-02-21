@@ -9,10 +9,11 @@ class cablecastPlaybackServerController extends playbackServerController {
       $metadata = array($metadata);
     }
     foreach ($metadata AS $show) {
+      $title = $show->title;
       if (function_exists('om_show_rating_is_adult')) {
         if (!empty($show->field_om_rating[$show->language][0])) {
           if (om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
-            $show->title .= ' [ADULT]';
+            $title .= ' [ADULT]';
           }
         }
       }
@@ -20,8 +21,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
-        'Title'         => $show->title,
-        'CGTitle'       => $show->title, //string</CGTitle>
+        'Title'         => $title,
+        'CGTitle'       => $title, //string</CGTitle>
         'ProjectID'     => 0, //int</ProjectID>
         'CGExempt'      => 'false', //boolean</CGExempt>
         'ProducerID'    => 0, //int</ProducerID>
