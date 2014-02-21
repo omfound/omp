@@ -33,7 +33,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
         'CrawlLengthInSeconds' => 0,
-        'CrawlText' => '',
+        'CrawlText' => !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '',
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
