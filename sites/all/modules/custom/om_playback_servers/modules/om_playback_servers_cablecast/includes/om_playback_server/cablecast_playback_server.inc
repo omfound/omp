@@ -12,7 +12,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       if (function_exists('om_show_rating_is_adult')) {
         if (!empty($show->field_om_rating[$show->language][0])) {
           if (om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
-            $show->title . ' [ADULT]';
+            $show->title .= ' [ADULT]';
           }
         }
       }
