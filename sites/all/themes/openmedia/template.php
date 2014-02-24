@@ -741,6 +741,6 @@ function openmedia_render_fivestar_widget($nid) {
     'tag' => 'vote',
     'style' => 'average', // options are average, dual, smart, user
     'widget' => array('name' => 'default', 'css' => 'default'),
-  }
+  );
   return render(drupal_get_form('fivestar_custom_widget', $node->field_om_voting_on_video['und'][0], $settings));
 }
