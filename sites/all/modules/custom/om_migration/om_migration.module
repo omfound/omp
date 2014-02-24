@@ -310,5 +310,5 @@ function om_migration_creative_commons_lookup($uri) {
   if (isset($map[$uri])) {
     return $map[$uri];
   }
-  return FALSE:
+  return FALSE;
 }
