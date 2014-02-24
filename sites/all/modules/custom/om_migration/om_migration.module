@@ -288,3 +288,27 @@ function om_migration_get_default_cablecast() {
   $pbs = array_shift($pbs);
   return $pbs;
 }
+
+function om_migration_creative_commons_lookup($uri) {
+  $map = array(
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/us/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/' => 2079,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/us/' => 2079,
+    'by-nc-sa' => 2079,
+    'http://creativecommons.org/licenses/by-nc/3.0/' => 2077,
+    'http://creativecommons.org/licenses/by-nc/3.0/us/' => 2077,
+    'http://creativecommons.org/licenses/by-nd/3.0/' => 2080,
+    'http://creativecommons.org/licenses/by-nd/3.0/us/' => 2080,
+    'http://creativecommons.org/licenses/by-sa/3.0/' => 2081,
+    'http://creativecommons.org/licenses/by-sa/3.0/us/' => 2081,
+    'http://creativecommons.org/licenses/by/3.0/' => 2076,
+    'http://creativecommons.org/licenses/by/3.0/us/' => 2076,
+    'http://creativecommons.org/licenses/publicdomain/' => 2082,
+    'http://creativecommons.org/licenses/publicdomain/3.0/us/' => 2082
+  );
+  if (isset($map[$uri])) {
+    return $map[$uri];
+  }
+  return FALSE:
+}
