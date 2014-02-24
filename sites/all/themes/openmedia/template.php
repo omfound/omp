@@ -725,3 +725,22 @@ function openmedia_preprocess_views_view_field(&$variables) {
     }
   }
 }
+
+function openmedia_render_fivestar_widget($nid) {
+  $node = node_load($nid);
+  $settings = array(
+    'content_type' => 'node',
+    'content_id' => $nid,
+    'entity' => $node,
+    'stars' => 5,
+    'field_name' => 'field_om_voting_on_video',
+    'autosubmit' => TRUE,
+    'allow_clear' => FALSE,
+    'langcode' => $node->language,
+    'text' => 'none', // options are none, average, smart, user, and dual
+    'tag' => 'vote',
+    'style' => 'average', // options are average, dual, smart, user
+    'widget' => array('name' => 'default', 'css' => 'default'),
+  }
+  return render(drupal_get_form('fivestar_custom_widget', $node->field_om_voting_on_video['und'][0], $settings));
+}
