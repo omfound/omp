@@ -3,7 +3,6 @@
 <?php $widget = openmedia_render_fivestar_widget($row->nid); ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
-  <?php print $widget; ?>
 </div>
 <div class="counter-tray divider">
   <div class="inner clearfix">
@@ -27,5 +26,6 @@
         <?php print $rating_5; ?>/5
       </div>
     <?php } ?>
+    <?php print $widget; ?>
   </div>
 </div>
