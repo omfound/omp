@@ -288,3 +288,70 @@ function om_migration_get_default_cablecast() {
   $pbs = array_shift($pbs);
   return $pbs;
 }
+
+function om_migration_creative_commons_lookup($uri) {
+  $map = array(
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/us/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/' => 2079,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/us/' => 2079,
+    'by-nc-sa' => 2079,
+    'http://creativecommons.org/licenses/by-nc/3.0/' => 2077,
+    'http://creativecommons.org/licenses/by-nc/3.0/us/' => 2077,
+    'http://creativecommons.org/licenses/by-nd/3.0/' => 2080,
+    'http://creativecommons.org/licenses/by-nd/3.0/us/' => 2080,
+    'http://creativecommons.org/licenses/by-sa/3.0/' => 2081,
+    'http://creativecommons.org/licenses/by-sa/3.0/us/' => 2081,
+    'http://creativecommons.org/licenses/by/3.0/' => 2076,
+    'http://creativecommons.org/licenses/by/3.0/us/' => 2076,
+    'http://creativecommons.org/licenses/publicdomain/' => 2082,
+    'http://creativecommons.org/licenses/publicdomain/3.0/us/' => 2082
+  );
+  if (isset($map[$uri])) {
+    return $map[$uri];
+  }
+  return FALSE;
+}
+
+function om_migration_creative_commons_migration($batch_size = 5000) {
+
+}
+
+function om_migration_build_cache($batch_size) {
+  $count = variable_get('om_migration_creative_commons_progress', 0);
+  variable_set('om_migration_creative_commons_progress', $count + $batch_size);  
+  $cache = cache_get('om_migration_creative_commons', 'cache');
+  $cache = !empty($cache) ? $cache : array();
+  $records = om_migration_get_creative_commons_records('http://archive.denveropenmedia.org', 'migrate/creative-commons', $count, $batch_size);
+  $cache = array_merge($cache, $records);
+  $cache = serialize($cache);
+  cache_set('om_migration_creative_commons',  $cache, 'cache');
+  drupal_set_message(t('Updated cache for records !from to !to', array('!from' => $count, '!to' => $count + $batch_size)));
+}
+
+function om_migration_load_node_by_legacy_id($legacy_id) {
+  $query = db_query('field_data_field_old_show_id', 'legacy');
+  $query->fields('legacy', array('entity_id'));
+  $query->condition('field_old_show_id_value', $legacy_id, '=');
+  $resource = $query->execute();
+  $output = array();
+  while($row = $resource->fetchAssoc()) {
+    $output[] = node_load($row['entity_id']);
+  }
+  return $output;
+}
+
+function om_migration_get_creative_commons_records($host, $endpoint, $start = 0, $end = 150) {
+  $ch = curl_init();
+  $url = array($host, $endpoint, $start, $end);
+  $url = implode('/', $url);
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  $data = curl_exec($ch);
+  curl_close($ch);
+  dsm($data);
+  if (is_string($data)) {
+    $data = drupal_json_decode($data);
+  }
+  return $data;
+}
