@@ -41,6 +41,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
         continue;
       }
     }
+    dsm($products);
     $products = array_shift($products);
     dsm($products);
     if (!empty($products)) {
