@@ -45,7 +45,7 @@
 .omp-grid .ajax-progress-throbber {
   display: block;
   position: absolute;
-  right: 42px;
+  right: 20px;
 }
 
 .view-classes .views-row {
