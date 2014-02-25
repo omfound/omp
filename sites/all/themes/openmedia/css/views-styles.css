@@ -40,6 +40,13 @@
   -o-transition: background 0.5s linear;
   transition: background 0.5s linear;
 }
+
+.omp-grid .ajax-progress-throbber {
+  display: block;
+  position: absolute;
+  right: 42px;
+}
+
 .view-classes .views-row {
   height: auto;
 }
