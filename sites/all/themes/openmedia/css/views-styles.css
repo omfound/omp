@@ -19,6 +19,7 @@
 }
 
 .omp-grid .views-row {
+  position: relative;
   float: left;
   margin-left: 42px;
   margin-bottom: 20px;
