@@ -68,7 +68,7 @@ body.front .view-classes .views-row-start {
 .omp-grid .views-row img {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
-  height: inherit;
+  height: 135px;
 }
 
 .omp-grid .views-row .title,
