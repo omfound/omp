@@ -1,6 +1,6 @@
 <?php $rating_5 = round(($row->votingapi_cache_node_percent_vote_average_value / 100) * 5); ?>
 <?php print $fields['field_show_thumbnail']->content; ?>
-<? $widget = openmedia_render_fivestar_widget($row->nid); ?>
+<?php $widget = openmedia_render_fivestar_widget($row->nid); ?>
 <div class="title">
   <?php print $fields['title']->content; ?>
 </div>
