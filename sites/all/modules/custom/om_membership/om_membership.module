@@ -559,7 +559,6 @@ function om_membership_user_memberships($user, $paid_only = false) {
     else {
       $paid_matches = array();
       foreach ($matches as $rid => $info) {
-        dsm($info->product->commerce_price);
         if ($info->product->commerce_price[LANGUAGE_NONE][0]['amount'] > 0) {
           $paid_matches[$rid] = $info;
         }
