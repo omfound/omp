@@ -53,8 +53,8 @@ function om_show_preprocess_node(&$variables) {
  */
 function om_show_theme($existing, $type, $theme, $path) {
   return array(
-    'om_show_upcoming_airings' => array(
-      'template' => 'om_show_upcoming_airings',
+    'om_show_upcoming_airings_display' => array(
+      'template' => 'om_show_upcoming_airings_display',
       'variables' => array('show' => FALSE),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
