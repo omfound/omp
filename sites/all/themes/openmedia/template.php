@@ -729,6 +729,5 @@ function openmedia_preprocess_views_view_field(&$variables) {
 function openmedia_render_fivestar_widget($nid) {
   $node = node_load($nid);
   $node_view = node_view($node);
-  dsm($node_view);
-  return '';
+  return drupal_render($node_view['field_om_voting_on_video']);
 }
