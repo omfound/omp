@@ -20,7 +20,8 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   if (empty($memberships)) {
     if (!$org_membership = om_membership_user_org_membership($user)) {
       $no_membership = TRUE;
-    }else{
+    }
+    else{
       //stuff will go here
       $product_meta = entity_metadata_wrapper('commerce_product', $org_membership['product']);
       $variables['membership_type'] = $org_membership['product']->title;
@@ -41,6 +42,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       }
     }
     $products = array_shift($products);
+    dsm($products);
     if (!empty($products)) {
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
