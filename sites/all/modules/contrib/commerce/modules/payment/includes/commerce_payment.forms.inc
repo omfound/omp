@@ -214,13 +214,15 @@ function commerce_payment_order_transaction_add_form_submit($form, &$form_state)
   // If the "Add payment" button was clicked...
   if (end($form_state['triggering_element']['#array_parents']) == 'add_payment') {
     // Store the payment method in the form state and rebuild the form.
+    dsm("We go here.");
     $form_state['payment_method'] = commerce_payment_method_instance_load($form_state['values']['payment_method']);
+    dsm($form_state['payment_method']);
     $form_state['rebuild'] = TRUE;
   }
   else {
     $payment_method = $form_state['payment_method'];
     $order = $form_state['order'];
-
+    dsm("Nope we go here.");
     // Delegate submit to the payment method callback.
     if ($callback = commerce_payment_method_callback($payment_method, 'submit_form_submit')) {
       $charge = array(
