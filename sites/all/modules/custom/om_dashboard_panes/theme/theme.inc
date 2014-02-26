@@ -41,9 +41,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
         continue;
       }
     }
-    dsm($products);
     $products = array_shift($products);
-    dsm($products);
     if (!empty($products)) {
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
