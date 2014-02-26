@@ -18,6 +18,8 @@
   <tr class="pay-later">
   <?php }elseif ($cr['membership_payment'] == 'none') { ?>
   <tr class="no-membership">
+  <?php }elseif ($cr['membership_payment'] == 'admin') { ?>
+  <tr class="admin-grant">
   <?php }else{ ?>
   <tr>
   <?php } ?>
@@ -71,6 +73,9 @@
         <?php } ?>
         <?php if ($cr['membership_payment'] == 'none') { ?>
           <br />User has no membership!
+        <?php } ?>
+        <?php if ($cr['membership_payment'] == 'admin') { ?>
+          <br />Admin Grant
         <?php } ?>
       </td>
       <td class="checkout-options">

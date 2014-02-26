@@ -640,7 +640,6 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
   $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
   $pay_later = false;
-  dsm($membership_orders);
   if (!empty($membership_orders)) {
     foreach ($membership_orders as $key => $info) {
       $variables['cr']['membership_payment'] = $info->payment_method;

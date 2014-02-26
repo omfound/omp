@@ -389,9 +389,16 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
 
   foreach ($memberships as $key => $info) {
     $payment_method = om_membership_order_payment_method($info->order_id);
-    dsm($payment_method);
-    $memberships[$key]->payment_method = $payment_method['name'];
-    $memberships[$key]->payment_id = $payment_method['pid'];
+    if (!empty($payment_method)) {
+      $memberships[$key]->payment_method = $payment_method['name'];
+      $memberships[$key]->payment_id = $payment_method['pid'];
+      $memberships[$key]->payment_status = $payment_method['status'];
+    }
+    else {
+      $memberships[$key]->payment_method = 'admin';
+      $memberships[$key]->payment_id = 'admin';
+      $memberships[$key]->payment_status = 'completed';
+    }
   }
 
   return $memberships;
