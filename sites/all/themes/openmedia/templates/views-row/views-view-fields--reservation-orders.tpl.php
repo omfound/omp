@@ -70,14 +70,11 @@
         <?php print $cr['payment']; ?> 
         <?php if ($cr['membership_payment'] == 'pay_later') { ?>
           <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
-        <?php } ?>
-        <?php elseif ($cr['membership_payment'] == 'none') { ?>
+        <?php }elseif ($cr['membership_payment'] == 'none') { ?>
           <br />Membership: No Membership!
-        <?php } ?>
-        <?php elseif ($cr['membership_payment'] == 'admin') { ?>
+        <?php }elseif ($cr['membership_payment'] == 'admin') { ?>
           <br />Membership: Created by Admin
-        <?php } ?>
-        <?php else { ?>
+        <?php }else { ?>
           <br />Membership: Paid
         <?php } ?>
       </td>
