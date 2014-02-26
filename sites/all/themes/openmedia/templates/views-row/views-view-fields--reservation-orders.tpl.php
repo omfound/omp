@@ -63,6 +63,7 @@
         </div>
       <?php }?>
       </td>
+      <?php dsm($cr); ?>
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
         <?php if ($cr['membership_payment'] == 'pay_later') { ?>
