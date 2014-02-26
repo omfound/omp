@@ -640,9 +640,17 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
   $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
   $pay_later = false;
-  foreach ($membership_orders as $key => $info) {
-    $variables['cr']['membership_payment'] = $info->payment_method;
-    $variables['cr']['membership_payment_id'] = $info->payment_id;
+  if (!empty($membership_orders)) {
+    foreach ($membership_orders as $key => $info) {
+      $variables['cr']['membership_payment'] = $info->payment_method;
+      $variables['cr']['membership_payment_id'] = $info->payment_id;
+      $variables['cr']['membership_payment_status'] = $info->status;
+    }
+  }
+  else {
+    $variables['cr']['membership_payment'] = 'none';
+    $variables['cr']['membership_payment_id'] = 'none';
+    $variables['cr']['membership_payment_status'] = 'none';
   }
 }
 
