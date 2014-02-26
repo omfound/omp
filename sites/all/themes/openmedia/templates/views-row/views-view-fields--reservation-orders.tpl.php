@@ -69,13 +69,16 @@
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
         <?php if ($cr['membership_payment'] == 'pay_later') { ?>
-          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership not paid!</a>
+          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php } ?>
-        <?php if ($cr['membership_payment'] == 'none') { ?>
-          <br />User has no membership!
+        <?php elseif ($cr['membership_payment'] == 'none') { ?>
+          <br />Membership: No Membership!
         <?php } ?>
-        <?php if ($cr['membership_payment'] == 'admin') { ?>
-          <br />Admin Grant
+        <?php elseif ($cr['membership_payment'] == 'admin') { ?>
+          <br />Membership: Created by Admin
+        <?php } ?>
+        <?php else { ?>
+          <br />Membership: Paid
         <?php } ?>
       </td>
       <td class="checkout-options">
