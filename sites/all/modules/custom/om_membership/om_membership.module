@@ -725,12 +725,12 @@ function om_membership_grant_user_role($commerce_order) {
         user_save($order_user);
       }
       else {
-        $last_membership = count($existing_memberships) - 1;
-        $membership_products = om_membership_order_contains_membership($existing_memberships[$last_membership]);
+        $last_membership = array_shift($existing_memberships);
+        $membership_products = om_membership_order_contains_membership($last_membership);
         $existing_product = $membership_products[0];
         $product_metadata = entity_metadata_wrapper('commerce_product', $existing_product);
         $update_period = $product_metadata->field_update_period->value() * 86400;
-        $exp = $existing_memberships[$last_membership]->created + ($product_metadata->field_duration->value() * 31688800);
+        $exp = $last_membership->created + ($product_metadata->field_duration->value() * 31688800);
         if (time() + $update_period >= $exp) {
           // This is the Update portion of the code.
           // Here we want to find the membership furthest into the future && chain this one onto that one.

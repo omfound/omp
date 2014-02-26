@@ -53,8 +53,8 @@ function om_show_preprocess_node(&$variables) {
  */
 function om_show_theme($existing, $type, $theme, $path) {
   return array(
-    'om_show_upcoming_airings' => array(
-      'template' => 'om_show_upcoming_airings',
+    'om_show_upcoming_airings_display' => array(
+      'template' => 'om_show_upcoming_airings_display',
       'variables' => array('show' => FALSE),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
@@ -552,7 +552,16 @@ function om_show_upcoming_airings($node, $limit = 4) {
   $query->fields('dates', array('field_om_airing_dates_value'));
   $query->fields('channel', array('field_om_airing_channel_tid'));
   $query->fields('n', array('nid', 'title'));
-  $query->condition('airing_node.field_om_show_id_value', $node->nid, '=');
+  if (is_array($node)) {
+    $nids = array();
+    foreach($node AS $addition) {
+      $nids[] = $addition->nid;
+    }
+    $query->condition('airing_node.field_om_show_id_value', $nids, 'IN');
+  }
+  else {
+    $query->condition('airing_node.field_om_show_id_value', $node->nid, '=');
+  }
   $query->condition('dates.field_om_airing_dates_value', time(), '>=');
   $query->orderBy('dates.field_om_airing_dates_value', 'ASC');
   $query->range(0, $limit);
@@ -577,17 +586,17 @@ function om_show_upcoming_airings($node, $limit = 4) {
 function om_show_upcoming_airings_user($user = FALSE) {
   $output = array();
   $shows = om_show_get_users_shows($user);
-  foreach($shows AS $show) {
-    $airings = om_show_upcoming_airings($show);
+  if (!empty($shows)) {
+    $airings = om_show_upcoming_airings($shows);
     foreach ($airings as $airing) {
       $key = strtotime($airing['airing']);
-      if (!empty($output[$key])) {
+     if (!empty($output[$key])) {
         $output[$key] = array();
       }
       $output[$key][] = $airing;
-    } 
+    }
+    ksort($output);
   }
-  ksort($output);
   return($output);
 }
 
