@@ -151,9 +151,11 @@ class cablecastFile {
       if (is_object($meta_data['CustomFields']->CustomField)) {
         $meta_data['CustomFields']->CustomField = array($meta_data['CustomFields']->CustomField);
       }
-      foreach ($meta_data['CustomFields']->CustomField AS $field) {
-        if ($field->Name == 'Archive-URL') {
-          return $field->Value;
+      if (!empty($meta_data['CustomFields'])) {
+        foreach ($meta_data['CustomFields']->CustomField AS $field) {
+          if ($field->Name == 'Archive-URL') {
+            return $field->Value;
+          }
         }
       }
     }

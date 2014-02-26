@@ -303,7 +303,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
-  $variables['upcoming_airings'] = theme('om_show_upcoming_airings', array('show' => $variables['node']));
+  $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
@@ -724,4 +724,10 @@ function openmedia_preprocess_views_view_field(&$variables) {
       $variables['output'] = l($result['title'], 'node/' . $result['nid']);
     }
   }
+}
+
+function openmedia_render_fivestar_widget($nid) {
+  $node = node_load($nid);
+  $node_view = node_view($node);
+  return drupal_render($node_view['field_om_voting_on_video']);
 }
