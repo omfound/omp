@@ -389,7 +389,7 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
 
   $payment_status_options = payment_statuses_info();
   foreach ($memberships as $key => $info) {
-    $memberships[$key]->payment = om_membership_order_payment_details($order_id);
+    $memberships[$key]->payment = om_membership_order_payment_details($info->order_id);
   }
 
   return $memberships;
