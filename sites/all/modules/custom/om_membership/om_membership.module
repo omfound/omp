@@ -389,17 +389,7 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
 
   $payment_status_options = payment_statuses_info();
   foreach ($memberships as $key => $info) {
-    $payment_method = om_membership_order_payment_method($info->order_id);
-    if (!empty($payment_method)) {
-      $memberships[$key]->payment_method = $payment_method['name'];
-      $memberships[$key]->payment_id = $payment_method['pid'];
-      $memberships[$key]->payment_status = $payment_method['status'];
-    }
-    else {
-      $memberships[$key]->payment_method = 'admin';
-      $memberships[$key]->payment_id = 'admin';
-      $memberships[$key]->payment_status = 'completed';
-    }
+    $memberships[$key]->payment = om_membership_order_payment_details($order_id);
   }
 
   return $memberships;
@@ -413,10 +403,9 @@ function om_membership_order_payment_details($order_id) {
       'method' => $payment_method['name'],
       'id' => $payment_method['pid'],
       'status' => $payment_method['status'],
-
     );
     if (array_key_exists($payment_method['status'], $payment_status_options)) {
-      $payment_details['payment'] = $payment_status_options[$payment_method['status']]->parent;
+      $payment_details['paid'] = $payment_status_options[$payment_method['status']]->parent;
     }
   }
   else {
@@ -1121,7 +1110,7 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
       global $user;
       $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
       foreach ($membership_orders as $key => $info) {
-        if ($info->payment_method == 'pay_later') {
+        if (!empty($info->payment) && $info->payment['paid'] == 'payment_status_money_transferred') {
           om_membership_alter_node_form($form);
           continue;
         }
