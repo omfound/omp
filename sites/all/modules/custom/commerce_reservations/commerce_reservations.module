@@ -55,7 +55,7 @@ function commerce_reservations_taxonomy_title(&$form, &$form_state){
 function commerce_reservations_init(){
   $path = drupal_get_path('module', 'commerce_reservations');
   if (arg(0) == 'reservations'){
-    //drupal_add_js($path . '/js/commerce_reservations.fullcalendar.js', array('type' => 'file', 'weight' => 1));
+    drupal_add_js($path . '/js/commerce_reservations.fullcalendar.js', array('type' => 'file', 'weight' => 1));
     drupal_add_js($path . '/js/product_filter.js', array('type' => 'file', 'weight' => 2));
     drupal_add_css($path . '/theme/reservations.css');
   }
