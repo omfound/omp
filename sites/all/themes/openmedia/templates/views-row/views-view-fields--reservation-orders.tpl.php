@@ -72,7 +72,7 @@
         <?php }elseif (empty($cr['payment_details'])) { ?>
           <br />Membership: Created by Admin
         <?php }elseif (!empty($cr['payment_details']) && $cr['payment_details']['method'] == 'pay_later') { ?>
-          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
+          <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php }else { ?>
           <br />Membership: Paid
         <?php } ?>
