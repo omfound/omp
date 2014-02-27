@@ -387,12 +387,14 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
     }
   }
 
+  $payment_status_options = payment_statuses_info();
   foreach ($memberships as $key => $info) {
     $payment_method = om_membership_order_payment_method($info->order_id);
     if (!empty($payment_method)) {
       $memberships[$key]->payment_method = $payment_method['name'];
       $memberships[$key]->payment_id = $payment_method['pid'];
       $memberships[$key]->payment_status = $payment_method['status'];
+      $memberships[$key]->payment
     }
     else {
       $memberships[$key]->payment_method = 'admin';
@@ -402,6 +404,27 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
   }
 
   return $memberships;
+}
+
+function om_membership_order_payment_details($order_id) {
+  $payment_status_options = payment_statuses_info();
+  $payment_method = om_membership_order_payment_method($info->order_id);
+  if (!empty($payment_method)) {
+    $payment_details = array(
+      'method' => $payment_method['name'],
+      'id' => $payment_method['pid'],
+      'status' => $payment_method['status'],
+
+    );
+    if (array_key_exists($payment_method['status'], $payment_status_options)) {
+      $payment_details['payment'] = $payment_status_options[$payment_method['status']]->parent;
+    }
+  }
+  else {
+    return false;
+  }
+
+  return $payment_details;
 }
 
 function om_membership_order_payment_method($order_id) {

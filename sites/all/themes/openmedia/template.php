@@ -639,13 +639,12 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
 
   $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
   $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
-  dsm($membership_orders);
   $pay_later = false;
   if (!empty($membership_orders)) {
     foreach ($membership_orders as $key => $info) {
       $variables['cr']['membership_payment'] = $info->payment_method;
       $variables['cr']['membership_payment_id'] = $info->payment_id;
-      $variables['cr']['membership_payment_status'] = $info->status;
+      $variables['cr']['membership_payment_status'] = $info->payment_status;
     }
   }
   else {

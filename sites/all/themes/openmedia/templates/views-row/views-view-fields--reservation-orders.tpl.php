@@ -65,11 +65,9 @@
         </div>
       <?php }?>
       </td>
-      <?php dsm($cr); ?>
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
         <?php if ($cr['membership_payment'] == 'pay_later') { ?>
-          <?php dsm($cr); ?>
           <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php }elseif ($cr['membership_payment'] == 'none') { ?>
           <br />Membership: No Membership!
