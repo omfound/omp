@@ -35,6 +35,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
       });
       } else if(view.name == 'agendaWeek'){
+        /**
         //check if closed times have already been added
         closedSet = false;
         allEvents = $('.fullcalendar').fullCalendar('clientEvents');
@@ -85,7 +86,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               });
           }
         });
-      }
+      }**/
     }
     }
     options.selectable = true;
