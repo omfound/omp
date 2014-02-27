@@ -74,7 +74,7 @@
         <?php }elseif ($cr['payment_details']['method'] == 'pay_later' && $cr['payment_details']['paid'] != 'payment_status_money_transferred') { ?>
           <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php }else { ?>
-          <br />Membership: Paid
+        <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid</a>
         <?php } ?>
       </td>
       <td class="checkout-options">
