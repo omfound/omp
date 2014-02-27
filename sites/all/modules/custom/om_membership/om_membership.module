@@ -407,7 +407,7 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
 
 function om_membership_order_payment_details($order_id) {
   $payment_status_options = payment_statuses_info();
-  $payment_method = om_membership_order_payment_method($info->order_id);
+  $payment_method = om_membership_order_payment_method($order_id);
   if (!empty($payment_method)) {
     $payment_details = array(
       'method' => $payment_method['name'],
