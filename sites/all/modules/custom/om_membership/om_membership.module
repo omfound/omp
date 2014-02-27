@@ -394,7 +394,6 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
       $memberships[$key]->payment_method = $payment_method['name'];
       $memberships[$key]->payment_id = $payment_method['pid'];
       $memberships[$key]->payment_status = $payment_method['status'];
-      $memberships[$key]->payment
     }
     else {
       $memberships[$key]->payment_method = 'admin';
