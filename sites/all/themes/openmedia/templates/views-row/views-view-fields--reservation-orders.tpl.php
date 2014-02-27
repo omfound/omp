@@ -16,7 +16,7 @@
   </tr>
   <?php if (empty($cr['payment_details'])) { ?>
   <tr class="no-membership">
-  <?php }elseif ($cr['payment_details']['method'] == 'pay_later') { ?>
+  <?php }elseif ($cr['payment_details']['method'] == 'pay_later' && $cr['payment_details']['paid'] != 'payment_status_money_transferred') { ?>
     <tr class="pay-later">
   <?php }elseif ($cr['payment_details']['method'] == 'admin') { ?>
     <tr class="admin-grant">
