@@ -14,14 +14,14 @@
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
   </tr>
-  <?php if ($cr['membership_payment'] == 'pay_later') { ?>
-  <tr class="pay-later">
-  <?php }elseif ($cr['membership_payment'] == 'none') { ?>
+  <?php if (empty($cr['payment_details'])) { ?>
   <tr class="no-membership">
-  <?php }elseif ($cr['membership_payment'] == 'admin') { ?>
-  <tr class="admin-grant">
+  <?php }elseif ($cr['payment_details']['method'] == 'pay_later') { ?>
+    <tr class="pay-later">
+  <?php }elseif ($cr['payment_details']['method'] == 'admin') { ?>
+    <tr class="admin-grant">
   <?php }else{ ?>
-  <tr>
+    <tr>
   <?php } ?>
     <td class="item-name">
       <?php print $fields['line_item_title']->content . '</br>';?>
@@ -67,12 +67,12 @@
       </td>
       <td class="payment-status">
         <?php print $cr['payment']; ?> 
-        <?php if ($cr['membership_payment'] == 'pay_later') { ?>
-          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
-        <?php }elseif ($cr['membership_payment'] == 'none') { ?>
+        <?php if (!$cr['membership']) { ?>
           <br />Membership: No Membership!
-        <?php }elseif ($cr['membership_payment'] == 'admin') { ?>
+        <?php }elseif (empty($cr['payment_details'])) { ?>
           <br />Membership: Created by Admin
+        <?php }elseif (!empty($cr['payment_details']) && $cr['payment_details']['method'] == 'pay_later') { ?>
+          <br /><a href="/payment/<?php print $cr['membership_payment_id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php }else { ?>
           <br />Membership: Paid
         <?php } ?>

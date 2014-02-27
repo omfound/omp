@@ -642,15 +642,12 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $pay_later = false;
   if (!empty($membership_orders)) {
     foreach ($membership_orders as $key => $info) {
-      $variables['cr']['membership_payment'] = $info->payment_method;
-      $variables['cr']['membership_payment_id'] = $info->payment_id;
-      $variables['cr']['membership_payment_status'] = $info->payment_status;
+      $variables['cr']['payment_details'] = $info->payment;
     }
+    $variables['cr']['membership'] = true;
   }
   else {
-    $variables['cr']['membership_payment'] = 'none';
-    $variables['cr']['membership_payment_id'] = 'none';
-    $variables['cr']['membership_payment_status'] = 'none';
+    $variables['cr']['membership'] = false;
   }
 }
 
