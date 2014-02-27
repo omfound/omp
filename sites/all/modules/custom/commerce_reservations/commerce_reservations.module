@@ -617,8 +617,10 @@ function commerce_reservations_views_post_execute(&$view){
       //pass the array of reservations to the check_overlaps function
       $overlaps = check_overlaps($reservations, $reservations);
       $result = new stdClass();
-      foreach($view->result[0] as $key => $value){
-        $result->{$key} = $value;
+      if (!empty($view->result)) {
+        foreach($view->result[0] as $key => $value){
+          $result->{$key} = $value;
+        }
       }
       $array_size = sizeof($view->result);
       for ($i = 0; $i < $array_size; $i++){
