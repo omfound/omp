@@ -71,7 +71,7 @@
           <br />Membership: No Membership!
         <?php }elseif (empty($cr['payment_details'])) { ?>
           <br />Membership: Created by Admin
-        <?php }elseif (!empty($cr['payment_details']) && $cr['payment_details']['method'] == 'pay_later') { ?>
+        <?php }elseif ($cr['payment_details']['method'] == 'pay_later' && $cr['payment_details']['paid'] != 'payment_status_money_transferred') { ?>
           <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid Later / Not Paid!</a>
         <?php }else { ?>
           <br />Membership: Paid
