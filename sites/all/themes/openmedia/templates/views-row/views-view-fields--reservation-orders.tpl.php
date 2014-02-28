@@ -66,15 +66,17 @@
       <?php }?>
       </td>
       <td class="payment-status">
+        <?php print '<strong>Order:</strong><br />'; ?>
         <?php print $cr['payment']; ?> 
+        <?php print '<br /><strong>Membership:</strong><br />'; ?>
         <?php if (!$cr['membership']) { ?>
-          <br />Membership: No Membership!
+          No Membership!
         <?php }elseif (empty($cr['payment_details'])) { ?>
-          <br />Membership: Created by Admin
+          Created by Admin
         <?php }elseif ($cr['payment_details']['method'] == 'pay_later' && $cr['payment_details']['paid'] != 'payment_status_money_transferred') { ?>
-          <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid Later / Not Paid!</a>
+          <a href="/payment/<?php print $cr['payment_details']['id']; ?>">Paid Later / Not Paid!</a>
         <?php }else { ?>
-        <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid</a>
+         <a href="/payment/<?php print $cr['payment_details']['id']; ?>">Paid</a>
         <?php } ?>
       </td>
       <td class="checkout-options">
