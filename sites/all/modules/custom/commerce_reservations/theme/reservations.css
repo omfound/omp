@@ -775,37 +775,8 @@ body.page-reservations #main-content #squeeze{
 	margin-top: 10px;
 }
 
-.section-administer-reservations .cr_button { 
-  color: #fff; 
-  background-color: #85B740;
-  float: right;
-  font-size: 10px; 
-  font-weight: bold; 
-  text-transform: uppercase; 
-  padding: 15px 6px 6px 6px; 
-  cursor: pointer; font-family: Arial, Helvetica, sans-serif; 
-  line-height: 19px;
-  width: 60px;
-  text-align: center;
-  text-decoration: none;
-  margin-right: 10px;
-  box-shadow: inset -2px -2px 10px grey;
-  height: 30px;
-}
-
-.section-administer-reservations .cr_cancel_button {
-  background-color: #E64A4E;
-  width: 80px;
-  height: 40px;
-  padding-top: 5px;
-}
-
-.section-administer-reservations .cr_noshow_button {
-  background-color: #3394D1;
-}
-
-.section-administer-reservations .cr_button:hover {
-  background-position: 0 -50px; 
+.section-administer-reservations .btn {
+  margin: 5px;
 }
 
 .section-administer-reservations #edit-line-item-id-wrapper {
