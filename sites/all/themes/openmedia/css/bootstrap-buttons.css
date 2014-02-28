@@ -5,8 +5,8 @@
  */
 
 a.btn,
-a:link.button,
-a:visited.button
+a:link.btn,
+a:visited.btn
 {
   color: #fff;
   text-decoration: none;
