@@ -783,6 +783,14 @@ body.page-reservations #main-content #squeeze{
   width: 125px;
 }
 
+.section-administer-reservations td.user-info {
+  width: 65px;
+}
+
+.section-administer-reservations td.checkout-status {
+  width: 100px;
+}
+
 .section-administer-reservations #edit-line-item-id-wrapper {
   display: none;
 }
