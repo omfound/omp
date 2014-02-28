@@ -24,7 +24,7 @@
   <?php } ?>
     <td class="item-name">
       <?php $link_options = array('query' => drupal_get_destination());?>
-      <?php print l($fields['line_item_title']->content, 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
+      <?php print l(strip_tags($fields['line_item_title']->content), 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
     </td>
     <td class = "user-info">
       <?php $user = user_load($fields['uid']->raw);?>
