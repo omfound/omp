@@ -9,7 +9,6 @@
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order</th>
-  <th class="line-item-title">Item</th>
   <th class = "checkout-status-title">Status</th>
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
@@ -24,7 +23,8 @@
     <tr>
   <?php } ?>
     <td class="item-name">
-      <?php print $fields['line_item_title']->content . '</br>';?>
+      <?php $link_options = array('query' => drupal_get_destination());?>
+      <?php print l($fields['line_item_title']->content, 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
     </td>
     <td class = "user-info">
       <?php $user = user_load($fields['uid']->raw);?>
@@ -45,10 +45,6 @@
     <td class = "order-link">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print $fields['view_order']->content; ?>
-    </td>
-    <td class = "line-item-link">
-      <?php $link_options = array('query' => drupal_get_destination());?>
-      <?php print l('view', 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
