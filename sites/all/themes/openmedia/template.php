@@ -611,14 +611,16 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   );
 
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
+  $link_options['attributes']['class'] = array('btn', 'btn-primary');
+  $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
   switch ($status) {
     case 'Awaiting Checkout':
-      $link_options['attributes']['class'] = array('btn', 'btn-danger');
-      $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
-      $link_options['attributes']['class'] = array('btn', 'btn-warning');
-      $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-warning');
+      $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-danger');
+      $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
       break;
     case 'Checked Out':
     case 'Overdue':
@@ -626,8 +628,6 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
-  $link_options['attributes']['class'] = array('btn', 'btn-primary');
-  $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
   if ($payment_info = openmedia_order_payment_info($variables['row']->commerce_line_item_order_id)) {
     $link_options = array(
       'query' => drupal_get_destination(),
