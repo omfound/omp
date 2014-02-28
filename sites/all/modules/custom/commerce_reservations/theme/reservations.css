@@ -775,7 +775,7 @@ body.page-reservations #main-content #squeeze{
 	margin-top: 10px;
 }
 
-.section-administer-reservations .btn {
+.section-administer-reservations a.btn {
   margin: 5px;
 }
 
