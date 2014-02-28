@@ -321,7 +321,7 @@ function om_migration_build_cache($batch_size) {
   $count = variable_get('om_migration_creative_commons_progress', 0);
   variable_set('om_migration_creative_commons_progress', $count + $batch_size);  
   $cache = cache_get('om_migration_creative_commons', 'cache');
-  $cache = !empty($cache) ? $cache->data : array();
+  $cache = !empty($cache) && is_array($cache->data) ? $cache->data : array();
   $records = om_migration_get_creative_commons_records('http://archive.denveropenmedia.org', 'migrate/creative-commons', $count, $batch_size);
   $cache = array_merge($cache, $records);
   $cache = serialize($cache);
