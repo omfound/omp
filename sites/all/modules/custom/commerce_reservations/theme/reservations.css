@@ -779,6 +779,10 @@ body.page-reservations #main-content #squeeze{
   margin: 5px;
 }
 
+.section-administer-reservations td.item-name {
+  width: 125px;
+}
+
 .section-administer-reservations #edit-line-item-id-wrapper {
   display: none;
 }
