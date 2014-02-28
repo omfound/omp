@@ -387,21 +387,41 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
     }
   }
 
+  $payment_status_options = payment_statuses_info();
   foreach ($memberships as $key => $info) {
-    $payment_method = om_membership_order_payment_method($info->order_id);
-    $memberships[$key]->payment_method = $payment_method['name'];
-    $memberships[$key]->payment_id = $payment_method['pid'];
+    $memberships[$key]->payment = om_membership_order_payment_details($info->order_id);
   }
 
   return $memberships;
 }
 
+function om_membership_order_payment_details($order_id) {
+  $payment_status_options = payment_statuses_info();
+  $payment_method = om_membership_order_payment_method($order_id);
+  if (!empty($payment_method)) {
+    $payment_details = array(
+      'method' => $payment_method['name'],
+      'id' => $payment_method['pid'],
+      'status' => $payment_method['status'],
+    );
+    if (array_key_exists($payment_method['status'], $payment_status_options)) {
+      $payment_details['paid'] = $payment_status_options[$payment_method['status']]->parent;
+    }
+  }
+  else {
+    return false;
+  }
+
+  return $payment_details;
+}
+
 function om_membership_order_payment_method($order_id) {
   $query = "
-    SELECT payment_method.name, payment.pid 
+    SELECT payment_method.name, payment.pid, payment_status_item.status 
     FROM {commerce_payment_transaction}
     JOIN {payment_commerce} ON commerce_payment_transaction.transaction_id = payment_commerce.transaction_id
     JOIN {payment} ON payment.pid = payment_commerce.pid
+    JOIN {payment_status_item} ON payment_status_item.psiid = payment.psiid_last
     JOIN {payment_method} ON payment.pmid = payment_method.pmid
     WHERE commerce_payment_transaction.order_id = :order_id";
   $result = db_query($query, array(':order_id' => $order_id))->fetchAssoc();
@@ -1090,7 +1110,7 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
       global $user;
       $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
       foreach ($membership_orders as $key => $info) {
-        if ($info->payment_method == 'pay_later') {
+        if (!empty($info->payment) && $info->payment['paid'] == 'payment_status_money_transferred') {
           om_membership_alter_node_form($form);
           continue;
         }

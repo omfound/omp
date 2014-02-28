@@ -599,6 +599,9 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 }
 
 function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
+  //add bootstrap button css
+  drupal_add_css('sites/all/themes/openmedia/css/bootstrap-buttons.css');
+
   //generate utility buttons
   $link_options = array(
     'query' => drupal_get_destination(),
@@ -610,20 +613,20 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
   switch ($status) {
     case 'Awaiting Checkout':
-      $link_options['attributes']['class'] = array('cr_button', 'cr_cancel_button');
+      $link_options['attributes']['class'] = array('btn', 'btn-danger');
       $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
-      $link_options['attributes']['class'] = array('cr_button', 'cr_noshow_button');
+      $link_options['attributes']['class'] = array('btn', 'btn-warning');
       $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
-      $link_options['attributes']['class'] = array('cr_button', 'cr_checkout_button');
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
       break;
     case 'Checked Out':
     case 'Overdue':
-      $link_options['attributes']['class'] = array('cr_button', 'cr_checkin_button');
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
-  $link_options['attributes']['class'] = array('cr_button', 'cr_contract_button');
+  $link_options['attributes']['class'] = array('btn', 'btn-primary');
   $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
   if ($payment_info = openmedia_order_payment_info($variables['row']->commerce_line_item_order_id)) {
     $link_options = array(
@@ -640,9 +643,14 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
   $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
   $pay_later = false;
-  foreach ($membership_orders as $key => $info) {
-    $variables['cr']['membership_payment'] = $info->payment_method;
-    $variables['cr']['membership_payment_id'] = $info->payment_id;
+  if (!empty($membership_orders)) {
+    foreach ($membership_orders as $key => $info) {
+      $variables['cr']['payment_details'] = $info->payment;
+    }
+    $variables['cr']['membership'] = true;
+  }
+  else {
+    $variables['cr']['membership'] = false;
   }
 }
 
