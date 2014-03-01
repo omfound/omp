@@ -776,7 +776,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .section-administer-reservations th {
-  border-bottom: 1px dashed blue;
+  border-bottom: 1px dashed black;
 }
 
 .section-administer-reservations td {
