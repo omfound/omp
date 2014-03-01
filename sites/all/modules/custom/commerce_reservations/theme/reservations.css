@@ -775,6 +775,10 @@ body.page-reservations #main-content #squeeze{
 	margin-top: 10px;
 }
 
+.section-administer-reservations th {
+  border-bottom: 1px dashed blue;
+}
+
 .section-administer-reservations td {
   vertical-align: top;
 }
