@@ -746,14 +746,14 @@ body.page-reservations #main-content #squeeze{
 .section-administer-reservations .reservation{
   padding: 10px;
   background: white;
-  border-left: 1px dashed grey;
-  border-right: 1px dashed grey;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
 }
 .section-administer-reservations .views-row-first .reservation {
-  border-top: 1px dashed grey;
+  border-top: 1px solid grey;
 }
 .section-administer-reservations .views-row-last .reservation {
-  border-bottom: 1px dashed grey;
+  border-bottom: 1px solid grey;
 }
 
 .section-administer-reservations .reservation-overdue{
