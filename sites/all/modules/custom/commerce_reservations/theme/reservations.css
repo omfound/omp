@@ -734,12 +734,20 @@ body.page-reservations #main-content #squeeze{
 	background-color: whiteSmoke;
 }
 
+.section-administer-reservations table {
+  margin-bottom: 0px;
+}
+
+.section-administer-reservations span.date-display-single {
+  display: block;
+  margin-top: 30px;
+}
+
 .section-administer-reservations .reservation{
   padding: 10px;
   background: white;
   border-left: 1px dashed grey;
   border-right: 1px dashed grey;
-  border-bottom: 1px dashed blue;
 }
 .section-administer-reservations .views-row-first .reservation {
   border-top: 1px dashed grey;
