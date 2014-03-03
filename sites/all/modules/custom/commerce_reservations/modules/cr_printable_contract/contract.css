@@ -27,6 +27,7 @@ body {
 			#cost th {
 				padding: 5px;
 				vertical-align: top;
+        width: 10px;
 				}
 			
 			#cost .even td ,
