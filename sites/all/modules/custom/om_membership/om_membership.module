@@ -1109,6 +1109,9 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
     if (!user_access('administer nodes')) {
       global $user;
       $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
+      print '<pre>';
+      print_r($membership_orders);
+      print '</pre>';
       foreach ($membership_orders as $key => $info) {
         if (!empty($info->payment) && $info->payment['paid'] == 'payment_status_money_transferred') {
           om_membership_alter_node_form($form);
