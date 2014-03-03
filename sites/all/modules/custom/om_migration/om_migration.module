@@ -320,12 +320,12 @@ function om_migration_creative_commons_migration($batch_size = 5000) {
 function om_migration_build_cache($batch_size) {
   $count = variable_get('om_migration_creative_commons_progress', 0);
   variable_set('om_migration_creative_commons_progress', $count + $batch_size);  
-  $cache = cache_get('om_migration_creative_commons', 'cache');
+  $cache = cache_get('om_migration_creative_commons', 'cache_filter');
   $cache = !empty($cache) ? unserialize($cache->data) : array();
   $records = om_migration_get_creative_commons_records('http://archive.denveropenmedia.org', 'migrate/creative-commons', $count, $batch_size);
   $cache = array_merge($cache, $records);
   $cache = serialize($cache);
-  cache_set('om_migration_creative_commons',  $cache, 'cache', time() + 3153600);
+  cache_set('om_migration_creative_commons',  $cache, 'cache_filter', time() + 3153600);
   drupal_set_message(t('Updated cache for records !from to !to', array('!from' => $count, '!to' => $count + $batch_size)));
 }
 
