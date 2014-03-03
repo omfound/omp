@@ -313,8 +313,28 @@ function om_migration_creative_commons_lookup($uri) {
   return FALSE;
 }
 
-function om_migration_creative_commons_migration() {
-
+function om_migration_creative_commons_migration($batch_start = 0, $batch_size = 500) {
+  $trial = 0;
+  $records = om_migration_get_creative_commons_records('http://archive.denveropenmedia.org', 'migrate/creative-commons', $batch_start, $batch_size);
+  foreach ($records AS $item) {
+    $nodes = om_migration_load_node_by_legacy_id($legacy_id);
+    foreach ($nodes AS $node) {
+      $tid = om_migration_creative_commons_lookup($item['license_uri']);
+      if (!empty($tid) {
+        $node->field_license[LANGUAGE_NONE] = !empty($node->field_license[LANGUAGE_NONE]) ? $node->field_license[LANGUAGE_NONE] : array();
+        $node->field_license[LANGUAGE_NONE][] = array('tid' => $tid);
+        if ($trial < 10) {
+          dsm($item);
+          dsm($node);
+          dsm('--------------');
+          $trial ++;
+        }
+        else {
+          return;
+        }
+      }
+    }
+  } 
 }
 
 function om_migration_load_node_by_legacy_id($legacy_id) {
