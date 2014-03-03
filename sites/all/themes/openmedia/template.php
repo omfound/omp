@@ -610,8 +610,6 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     ),
   );
 
-  dsm($variables['row']);
-
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
   $link_options['attributes']['class'] = array('btn', 'btn-primary');
   $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
@@ -630,14 +628,23 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
-  if ($payment_info = openmedia_order_payment_info($variables['row']->commerce_line_item_order_id)) {
+  if ($payment_info = om_membership_order_payment_details($variables['row']->commerce_line_item_order_id)) {
     $link_options = array(
       'query' => drupal_get_destination(),
       'attributes' => array(
         'class' => 'payment_link',
       ),
     );
-    $variables['cr']['payment'] = l($payment_info['status'], 'payment/'.$payment_info['id'].'/edit', $link_options);
+    if ($payment_info['paid'] == 'payment_status_money_transferred') {
+      $payment_label = 'Paid';
+    }
+    else if ($payment_info['method'] == 'admin') {
+      $payment_label = 'Created by Admin';
+    }
+    else if ($payment_info['method'] == 'pay_later') {
+      $payment_label = 'Paid Later / Not Paid!';
+    }
+    $variables['cr']['payment'] = l($payment_label, 'payment/'.$payment_info['id'].'/edit', $link_options);
   }else{
     $variables['cr']['payment'] = t('No Payment');
   }
