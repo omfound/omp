@@ -387,7 +387,13 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
     }
   }
 
+  //check for org membership and add if applicable
+  $org_info = om_membership_user_org_membership($user);
+
   $payment_status_options = payment_statuses_info();
+  print '<pre>';
+  print_r($org_info);
+  print '</pre>';
   foreach ($memberships as $key => $info) {
     $memberships[$key]->payment = om_membership_order_payment_details($info->order_id);
   }
