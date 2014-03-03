@@ -29,7 +29,7 @@ $logourl = theme_get_setting('logo_path', '');
               <th>SKU</th>
               <th>Checkout Date</th>
               <th>Return Date</th>
-              <th>Cost</th>
+              <th class="item-cost">Cost</th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +50,7 @@ $logourl = theme_get_setting('logo_path', '');
     <td><?php print $sku; ?></td>
     <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value'].' UTC')); ?></td>
     <td><?php print date("F j, Y, g:i a", strtotime($item->field_reservation_dates['und'][0]['value2'].' UTC')); ?></td>
-    <td><?php echo $cost; ?></td>
+    <td class="item-cost"><?php echo $cost; ?></td>
   </tr>
   <?php
     $even_odd = ($even_odd == 'even') ? 'odd' : 'even';

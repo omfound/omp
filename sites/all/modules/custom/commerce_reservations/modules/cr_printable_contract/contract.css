@@ -1,3 +1,6 @@
+td#item-cost {
+  width: 75px;
+}
 body {
 	background: #fff;
 	color: #000;
