@@ -9,7 +9,6 @@
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order</th>
-  <th class="line-item-title">Item</th>
   <th class = "checkout-status-title">Status</th>
   <th class = "payment-status">Payment</th>
   <th class = "checkout-options">Options</th>
@@ -24,7 +23,8 @@
     <tr>
   <?php } ?>
     <td class="item-name">
-      <?php print $fields['line_item_title']->content . '</br>';?>
+      <?php $link_options = array('query' => drupal_get_destination());?>
+      <?php print l(strip_tags($fields['line_item_title']->content), 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
     </td>
     <td class = "user-info">
       <?php $user = user_load($fields['uid']->raw);?>
@@ -46,10 +46,6 @@
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print $fields['view_order']->content; ?>
     </td>
-    <td class = "line-item-link">
-      <?php $link_options = array('query' => drupal_get_destination());?>
-      <?php print l('view', 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
-    </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
         <div class = "checkout_status_bad">
@@ -66,15 +62,17 @@
       <?php }?>
       </td>
       <td class="payment-status">
+        <?php print '<strong>Order:</strong><br />'; ?>
         <?php print $cr['payment']; ?> 
+        <?php print '<br /><strong>Membership:</strong><br />'; ?>
         <?php if (!$cr['membership']) { ?>
-          <br />Membership: No Membership!
+          No Membership!
         <?php }elseif (empty($cr['payment_details'])) { ?>
-          <br />Membership: Created by Admin
+          Created by Admin
         <?php }elseif ($cr['payment_details']['method'] == 'pay_later' && $cr['payment_details']['paid'] != 'payment_status_money_transferred') { ?>
-          <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid Later / Not Paid!</a>
+          <a href="/payment/<?php print $cr['payment_details']['id']; ?>">Paid Later / Not Paid!</a>
         <?php }else { ?>
-        <br /><a href="/payment/<?php print $cr['payment_details']['id']; ?>">Membership: Paid</a>
+         <a href="/payment/<?php print $cr['payment_details']['id']; ?>">Paid</a>
         <?php } ?>
       </td>
       <td class="checkout-options">
