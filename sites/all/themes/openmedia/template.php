@@ -610,7 +610,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     ),
   );
 
-  dsm($variables);
+  dsm($variables['row']);
 
   $status = $variables['row']->field_field_checkout_status[0]['raw']['value'];
   $link_options['attributes']['class'] = array('btn', 'btn-primary');
