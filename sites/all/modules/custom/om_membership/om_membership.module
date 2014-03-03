@@ -389,11 +389,22 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
 
   //check for org membership and add if applicable
   $org_info = om_membership_user_org_membership($user);
+  if (!empty($org_info)) {
+     $order = $org_info['order'];
+     $product = $org_info['product'];
+     $order_metadata = entity_metadata_wrapper('commerce_order', $order);
+     $product_metadata = entity_metadata_wrapper('commerce_product', $product);
+     $exp = $order->created + ($product_metadata->field_duration->value() * 31688800);
+     $now = time();
+     if ($now > $order->created && $now < $exp) {
+       $memberships[] = $order;
+	   }
+	   elseif (!$product_metadata->field_duration->value()) {
+	     $memberships[] = $order;
+	   }
+  }
 
   $payment_status_options = payment_statuses_info();
-  print '<pre>';
-  print_r($org_info);
-  print '</pre>';
   foreach ($memberships as $key => $info) {
     $memberships[$key]->payment = om_membership_order_payment_details($info->order_id);
   }
