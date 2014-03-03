@@ -1,3 +1,6 @@
+td.item-cost {
+  width: 75px;
+}
 body {
 	background: #fff;
 	color: #000;
@@ -27,7 +30,6 @@ body {
 			#cost th {
 				padding: 5px;
 				vertical-align: top;
-        width: 10px;
 				}
 			
 			#cost .even td ,
