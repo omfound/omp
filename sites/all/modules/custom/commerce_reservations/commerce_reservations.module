@@ -539,7 +539,7 @@ function calendar_filter($pid, $node, $quantity = 0){
   }
   
   $is_certified = TRUE;
-  if ($product->field_certifications_required['und']){
+  if ($product->field_certifications_required['und'] && $user->uid != 1){
     foreach($product->field_certifications_required['und'] as $product_cert){
       if (!array_key_exists($product_cert['rid'], $account->roles)) {
 	      $is_certified = FALSE;
