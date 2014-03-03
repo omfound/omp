@@ -320,7 +320,7 @@ function om_migration_creative_commons_migration($batch_start = 0, $batch_size =
     $nodes = om_migration_load_node_by_legacy_id($legacy_id);
     foreach ($nodes AS $node) {
       $tid = om_migration_creative_commons_lookup($item['license_uri']);
-      if (!empty($tid) {
+      if (!empty($tid)) {
         $node->field_license[LANGUAGE_NONE] = !empty($node->field_license[LANGUAGE_NONE]) ? $node->field_license[LANGUAGE_NONE] : array();
         $node->field_license[LANGUAGE_NONE][] = array('tid' => $tid);
         if ($trial < 10) {
