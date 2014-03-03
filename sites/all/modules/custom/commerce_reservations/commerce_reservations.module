@@ -2076,12 +2076,17 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
     foreach ($display_node->field_crp_product_reference['und'] as $key => $info) {
       $reservations = commerce_reservations_product_reservations($info['product_id'], $start_date, $end_date, $exclude_id = null);
       foreach ($reservations as $reservation) {
-        $all_reservations[] = array(
-          'start' => strtotime($reservation->field_reservation_dates_value),
-          'end' => strtotime($reservation->field_reservation_dates_value2),
-          'line_id_array' => array($reservation->line_item_id),
-          'count' => 1
-        );
+        if (is_null($reservation->field_checkout_status_value) || 
+        $reservation->field_checkout_status_value == 'Checked Out' || 
+        $reservation->field_checkout_status_value == 'Overdue' ||
+        $reservation->field_checkout_status_value == 'Awaiting Checkout') {
+          $all_reservations[] = array(
+            'start' => strtotime($reservation->field_reservation_dates_value),
+            'end' => strtotime($reservation->field_reservation_dates_value2),
+            'line_id_array' => array($reservation->line_item_id),
+            'count' => 1
+          );
+        }
       }
     }
     $overlaps = check_overlaps($all_reservations, $all_reservations);
