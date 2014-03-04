@@ -627,12 +627,12 @@ function om_membership_role_product($rid) {
 
 function om_membership_all_membership_orders() {
   $query = "
-    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
+    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, MAX(commerce_order.created) 
     FROM commerce_line_item 
     JOIN commerce_product ON commerce_line_item.line_item_label = commerce_product.sku 
     JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
     JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
-    WHERE commerce_product.type = 'membership_plan'";
+    WHERE commerce_product.type = 'membership_plan' GROUP BY commerce_order.uid";
 
   $results = db_query($query);
   $membership_orders = array();
