@@ -30,7 +30,7 @@ class DrupalCommerceEntityController extends DrupalDefaultEntityController imple
 
     if (isset($this->entityInfo['locking mode']) && $this->entityInfo['locking mode'] == 'pessimistic') {
       watchdog('nasty', 'Issuing lock query');
-      watchdog('nasty', '<pre>'.print_r(debug_watchdog(), TRUE).'</pre>');
+      watchdog('nasty', '<pre>'.print_r(debug_backtrace(), TRUE).'</pre>');
       // In pessimistic locking mode, we issue the load query with a FOR UPDATE
       // clause. This will block all other load queries to the loaded objects
       // but requires us to start a transaction.
