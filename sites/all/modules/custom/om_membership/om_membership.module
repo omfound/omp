@@ -627,20 +627,21 @@ function om_membership_role_product($rid) {
 
 function om_membership_all_membership_orders() {
   $query = "
-    SELECT DISTINCT(commerce_line_item.order_id) 
+    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
     JOIN commerce_product ON commerce_line_item.line_item_label = commerce_product.sku 
+    JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
+    JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
     WHERE commerce_product.type = 'membership_plan'";
 
   $results = db_query($query);
   $membership_orders = array();
 
   foreach ($results as $order) {
-    $membership_orders[] = $order->order_id;
+    $membership_orders[$order->uid] = $order;
   }
 
-  $all_orders = commerce_order_load_multiple($membership_orders);
-  return $all_orders;
+  return $membership_orders;
 }
 
 /**
