@@ -598,7 +598,3 @@ if (!function_exists('_omp_perform_redirect')) {
   require_once('domains.inc');
 }
 _omp_perform_redirect();
-
-if (function_exists('newrelic_ignore_transaction')) {
-  newrelic_ignore_transaction();
-}
