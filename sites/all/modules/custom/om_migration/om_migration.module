@@ -356,11 +356,3 @@ function om_migration_get_creative_commons_records($host, $endpoint, $start = 0,
   }
   return $data;
 }
-
-function om_migration_cron() {
-  $progress = variable_get('om_migration_creative_commons_progress', 0);
-  watchdog('om_migration', 'CREATIVE COMMONS BATCH: ' . $progress);
-  $batch_size = 20;
-  om_migration_creative_commons_migration($progress, $batch_size);
-  variable_set('om_migration_creative_commons_progress', $progress + $batch_size);
-}
