@@ -71,7 +71,7 @@ function drush_om_migration_dom_creative_commons() {
     drush_log('Start option required --start', 'error');
     return;
   }
-  $batch_size = drush_get_option('batch_size')
+  $batch_size = drush_get_option('batch_size');
   if (empty($batch_size)) {
     drush_log('Batch Size option required --batch_size', 'error');
     return;
