@@ -7815,7 +7815,9 @@ function entity_create_stub_entity($entity_type, $ids) {
  * @see EntityFieldQuery
  */
 function entity_load($entity_type, $ids = FALSE, $conditions = array(), $reset = FALSE) {
-  var_dump(debug_backtrace());
+  print '<pre>';
+  print_r(debug_backtrace());
+  print '</pre>';
   if ($reset) {
     entity_get_controller($entity_type)->resetCache();
   }
