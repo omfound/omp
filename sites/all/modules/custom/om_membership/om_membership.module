@@ -638,7 +638,7 @@ function om_membership_all_membership_orders() {
   $membership_orders = array();
 
   foreach ($results as $order) {
-    $membership_orders[$order->uid] = $order;
+    $membership_orders[$order->uid][] = $order;
   }
 
   return $membership_orders;
