@@ -543,7 +543,7 @@ function om_membership_get_expired_memberships_enhanced() {
     while ($row = $resource->fetchObject()) {
       if (empty($users[$row->uid])) {
         if (!array_key_exists($row->uid, $active_memberships)) {
-          $users[] = user_load($row->uid);
+          $users[$row->uid] = user_load($row->uid);
         }
       }
     }
