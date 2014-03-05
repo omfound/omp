@@ -586,6 +586,7 @@ function om_membership_add_membership_roles($active_memberships = false) {
     if (!empty($order_info->field_associated_role_rid)) {
       $role = user_role_load($order_info->field_associated_role_rid); 
       if (!empty($role)) {
+        unset($user);
         $user = user_load($uid);
         if (!empty($user)) {
           om_membership_remove_user_role($user);
