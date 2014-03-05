@@ -646,7 +646,7 @@ function om_membership_role_product($rid) {
   return false;
 }
 
-function om_membership_get_active_memberships() {
+function om_membership_get_active_memberships($uid = false) {
   $query = "
     SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
@@ -655,7 +655,14 @@ function om_membership_get_active_memberships() {
     JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
     WHERE commerce_product.type = 'membership_plan'";
 
-  $results = db_query($query);
+  if (!empty($uid) && is_numeric($uid)) {
+    $query .= " AND commerce_order.uid = :uid";
+    $results = db_query($query, array(':uid' => $uid));
+  }
+  else {
+    $results = db_query($query);
+  }
+
   $membership_orders = array();
 
   foreach ($results as $order) {
