@@ -531,6 +531,27 @@ function om_membership_get_expired_memberships() {
   return $users;
 }
 
+function om_membership_get_expired_memberships_enhanced() {
+  $active_memberships = om_membership_get_active_memberships();
+  $users = array();
+  $roles = om_membership_return_membership_roles();
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      if (empty($users[$row->uid])) {
+        if (!array_key_exists($row->uid, $active_memberships)) {
+          $users[] = user_load($row->uid);
+        }
+      }
+    }
+  }
+
+  return $users;
+}
+
 /**
  * Ensure that all users have the membership types they are supposed to.
  */
