@@ -552,6 +552,34 @@ function om_membership_get_expired_memberships_enhanced() {
   return $users;
 }
 
+function om_membership_expire_membership_roles($expired_users = false) {
+  if (empty($expired_users)) {
+    $expired_users = om_membership_get_expired_memberships_enhanced();
+  }
+  foreach ($expired_users as $uid => $user) {
+    om_membership_remove_user_role($user);
+  } 
+}
+
+function om_membership_add_membership_roles($active_memberships) {
+  if (empty($active_memberships)) {
+    $active_memberships = om_membership_get_active_memberships();
+  }
+  foreach ($active_memberships as $uid => $order_info) {
+    if (!empty($order_info->field_associated_role_rid)) {
+      $role = user_role_load($order_info->field_associated_role_rid); 
+      if (!empty($role)) {
+        $user = user_load($uid);
+        if (!empty($user)) {
+          om_membership_remove_user_role($user);
+          $user->roles[$role->rid] = $role->name;
+          user_save($user);
+        }
+      }
+    }
+  }
+}
+
 /**
  * Ensure that all users have the membership types they are supposed to.
  */
@@ -648,10 +676,11 @@ function om_membership_role_product($rid) {
 
 function om_membership_get_active_memberships($uid = false) {
   $query = "
-    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
+    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_associated_role.field_associated_role_rid, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
     JOIN commerce_product ON commerce_line_item.line_item_label = commerce_product.sku 
     JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
+    JOIN field_data_field_associated_role ON field_data_field_associated_role.entity_id = commerce_product.product_id
     JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
     WHERE commerce_product.type = 'membership_plan'";
 
