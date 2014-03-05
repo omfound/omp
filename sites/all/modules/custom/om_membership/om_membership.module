@@ -552,6 +552,23 @@ function om_membership_get_expired_memberships_enhanced() {
   return $users;
 }
 
+function om_memberships_role_users() {
+  $roles = om_membership_return_membership_roles();
+  $role_users = array();
+
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      $role_users[$role->name][$row->uid] = $row->uid;
+    }
+  }
+
+  return $role_users;
+}
+
 function om_membership_expire_membership_roles($expired_users = false) {
   if (empty($expired_users)) {
     $expired_users = om_membership_get_expired_memberships_enhanced();
