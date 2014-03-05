@@ -721,6 +721,11 @@ function om_membership_get_active_memberships($uid = false) {
   $now = time();
   foreach ($membership_orders as $uid => $info) {
     foreach ($info as $key => $membership) {
+      //skip if created date is beyond now
+      if ($membership->created > $now) {
+        continue;
+      }
+
       //calculate expiration timestamp
       if (!empty($membership->field_duration_value)) {
         $exp = $membership->created + ($membership->field_duration_value * 31688800);
