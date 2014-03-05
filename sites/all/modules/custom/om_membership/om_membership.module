@@ -625,7 +625,7 @@ function om_membership_role_product($rid) {
   return false;
 }
 
-function om_membership_all_membership_orders() {
+function om_membership_get_active_memberships() {
   $query = "
     SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
@@ -641,9 +641,25 @@ function om_membership_all_membership_orders() {
     $membership_orders[$order->uid][] = $order;
   }
 
+  //limit to just the latest active membership purchased
   $latest_memberships = array();
+  $now = time();
   foreach ($membership_orders as $uid => $info) {
     foreach ($info as $key => $membership) {
+      //calculate expiration timestamp
+      if (!empty($membership->field_duration_value)) {
+        $exp = $membership->created + ($membership->field_duration_value * 31688800);
+      }
+      else { 
+        $exp = 0;
+      }
+
+      //skip if expired
+      if ($exp < $now) {
+        continue;
+      }
+
+      //skip if not the newest active membership
       if (empty($latest_memberships[$uid])) {
         $latest_memberships[$uid] = $membership;
       }
