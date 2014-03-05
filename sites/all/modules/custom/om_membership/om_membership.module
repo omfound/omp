@@ -561,7 +561,7 @@ function om_membership_expire_membership_roles($expired_users = false) {
   } 
 }
 
-function om_membership_add_membership_roles($active_memberships) {
+function om_membership_add_membership_roles($active_memberships = false) {
   if (empty($active_memberships)) {
     $active_memberships = om_membership_get_active_memberships();
   }
