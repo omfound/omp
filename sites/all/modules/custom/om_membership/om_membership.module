@@ -1048,19 +1048,20 @@ function om_membership_url_inbound_alter(&$path, $original_path, $path_language)
  * Implements hook_cron
  */
 function om_membership_cron() {
-  /**
+  $users = om_membership_get_expired_memberships_enhanced();
   if (module_exists('rules')) {
     // Get expirees
-    $users = om_membership_get_expired_memberships();
     foreach ($users AS $user) {
       rules_invoke_event('om_membership_on_expiration', $user);
     }
     // Adjust any incorrect or outdated membership records.
-    om_membership_adjust_existing_memberships();
+
+    om_membership_expire_membership_roles($users);
+    om_membership_add_membership_roles();
   }
+
   // Ensure that relationships between org member admins and subs are correct.
   om_membership_validate_all_org_sub_members();
-  **/
 }
 
 /**
