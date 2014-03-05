@@ -528,6 +528,8 @@ function om_membership_get_expired_memberships() {
       }
     }
   }
+  watchdog('usercount', count($users));
+  watchdog('usercount', '<pre>'.print_r($users, TRUE).'</pre>');
   return $users;
 }
 
