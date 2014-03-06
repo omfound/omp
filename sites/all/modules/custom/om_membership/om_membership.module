@@ -1067,7 +1067,7 @@ function om_membership_cron() {
   }
 
   // Ensure that relationships between org member admins and subs are correct.
-  //om_membership_validate_all_org_sub_members();
+  om_membership_validate_all_org_sub_members();
 }
 
 /**
