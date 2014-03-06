@@ -628,6 +628,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
+  /**
   if ($payment_info = om_membership_order_payment_details($variables['row']->commerce_line_item_order_id)) {
     $link_options = array(
       'query' => drupal_get_destination(),
@@ -647,7 +648,7 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     $variables['cr']['payment'] = l($payment_label, 'payment/'.$payment_info['id'].'/edit', $link_options);
   }else{
     $variables['cr']['payment'] = t('No Payment');
-  }
+  }**/
 
   $user = user_load($variables['row']->commerce_order_commerce_line_item_uid);
   //$membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
