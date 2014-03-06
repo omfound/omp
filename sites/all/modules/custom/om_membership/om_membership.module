@@ -355,6 +355,13 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
  */
 function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $memberships = array();
+  $active_memberships = om_membership_get_active_memberships($user->uid);
+  if (!empty($active_memberships)) {
+    $memberships[] = commerce_order_load($active_memberships[$user->uid]->order_id);
+  }
+
+  /** Using new active membership function
+  $memberships = array();
   $acceptable_statuses = array('processing', 'completed', 'checked out');
   // Here we may want to make this something like -- anything other than pending.
   $orders = commerce_order_load_multiple(array(), array('uid' => $user->uid));
@@ -385,6 +392,11 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
         }
       }
     }
+  }**/
+
+  //check for org membership and add if applicable
+  if (empty($memberships)) {
+    //BRIAN HERE NOW 
   }
 
   //check for org membership and add if applicable
@@ -819,11 +831,18 @@ function om_membership_user_org_membership($user) {
   $org_admin = $result->fetchField();
   if (!empty($org_admin)) {
     $admin = user_load($org_admin);
+    $active_memberships = om_membership_get_active_memberships($admin->uid);
+    if (!empty($active_memberships)) {
+      $admin_product = commerce_product_load($active_memberships[$admin->uid]->product_id);
+      $admin_order = commerce_order_load($active_memberships[$admin->uid]->order_id);
+    }
+    /**
     $admin_memberships = om_membership_get_user_membership_products($admin); 
     $admin_orders = om_membership_get_user_membership_orders($admin);
     $admin_order = array_shift($admin_orders);
     $admin_product = array_shift($admin_memberships);
-    if (!empty($admin_product) && !empty($admin_order)) {
+    **/
+    if (!empty($admin_product) && $admin_product->sku == 'membership-organizational' && !empty($admin_order)) {
       $org_membership['product'] = $admin_product;
       $org_membership['order'] = $admin_order;
       return $org_membership;
