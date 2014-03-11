@@ -1,5 +1,7 @@
 <?php
 
+watchdog('leo_drush', 'Included?');
+
 /**
  * Implements hook_drush_help()
  */
