@@ -1,7 +1,5 @@
 <?php
 
-watchdog('leo_drush', 'Included?');
-
 /**
  * Implements hook_drush_help()
  */
@@ -22,7 +20,6 @@ function om_migration_drush_help($command) {
  * Implements hook_drush_command()
  */
 function om_migration_drush_command() {
-  watchdog('leo_drush', 'Hello!?!?');
   $items = array();
   $items['dom-migration-files'] = array(
     'description' => dt('Run Cablecast id updates.'),
