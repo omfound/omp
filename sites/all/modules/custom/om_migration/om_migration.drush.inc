@@ -65,7 +65,7 @@ function drush_om_migration_dom_migration_voting() {
   drush_log('Voting table updated with legacy data.', 'success');
 }
 
-function drush_om_migration_dom_creative_commons() {
+function drush_dom_creative_commons() {
   $start = drush_get_option('start');
   if (empty($start)) {
     drush_log('Start option required --start', 'error');
