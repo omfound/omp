@@ -1,4 +1,5 @@
 <?php
+require_once('sites/all/modules/custom/commerce_order_project/includes/commerce_order_project.checkout_pane.inc');
 
 function commerce_order_project_checkout_pane_info() {
   $panes['commerce_order_project'] = array(
@@ -8,6 +9,7 @@ function commerce_order_project_checkout_pane_info() {
     'file' => 'includes/commerce_order_project.checkout_pane.inc',
     'base' => 'commerce_order_project_pane',
   );
+
   return $panes;
 }
 
