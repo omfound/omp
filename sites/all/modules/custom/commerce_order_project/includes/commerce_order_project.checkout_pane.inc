@@ -11,7 +11,7 @@ function commerce_order_project_pane_settings_form($checkout_pane) {
 
 function commerce_order_project_pane_checkout_form($form, $form_state, $checkout_pane, $order) {
   $checkout_form['commerce_order_project_reference'] = array(
-    '#type' => 'textfield',
+    '#type' => 'select',
     '#title' => t('Project Reference'),
     '#options' => commerce_order_project_user_project_options($order->uid),
   );
