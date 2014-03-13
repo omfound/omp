@@ -6,6 +6,7 @@ function commerce_order_project_pane_settings_form($checkout_pane) {
     '#title' => t('Enable project reference field on checkout?'),
     '#default_value' => variable_get('commerce_order_project_enabled'),
   );
+  return $form;
 }
 
 function commerce_order_project_pane_checkout_form($form, $form_state, $checkout_pane, $order) {
