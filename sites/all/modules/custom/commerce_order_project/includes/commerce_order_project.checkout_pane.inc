@@ -13,7 +13,7 @@ function commerce_order_project_pane_checkout_form($form, $form_state, $checkout
   if ($options = commerce_order_project_user_project_options($order->uid)) {
     $checkout_form['commerce_order_project_reference'] = array(
       '#type' => 'select',
-      '#title' => t('Project Reference'),
+      '#title' => t('Please associate your order with a project:'),
       '#options' => commerce_order_project_user_project_options($order->uid),
     );
     return $checkout_form;
