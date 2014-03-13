@@ -16,6 +16,7 @@ function commerce_order_project_pane_checkout_form($form, $form_state, $checkout
       '#type' => 'select',
       '#title' => t('Please associate your order with a project:'),
       '#options' => commerce_order_project_user_project_options($order->uid),
+      '#default' => $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'] ? $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'] : '',
     );
     return $checkout_form;
   }
