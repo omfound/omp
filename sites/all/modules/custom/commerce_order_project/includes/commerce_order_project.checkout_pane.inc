@@ -10,6 +10,7 @@ function commerce_order_project_pane_settings_form($checkout_pane) {
 }
 
 function commerce_order_project_pane_checkout_form($form, $form_state, $checkout_pane, $order) {
+  dsm($order);
   if ($options = commerce_order_project_user_project_options($order->uid)) {
     $checkout_form['commerce_order_project_reference'] = array(
       '#type' => 'select',
@@ -24,6 +25,8 @@ function commerce_order_project_pane_checkout_form($form, $form_state, $checkout
 }
 
 function commerce_order_project_pane_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
-  dsm($order);
-  dsm($form_state['values']);
+  if (!empty($form_state['values']['commerce_order_project']['commerce_order_project_reference'])) {
+    $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'] = $form_state['values']['commerce_order_project']['commerce_order_project_reference'];
+    commerce_order_save($order);
+  }
 }
