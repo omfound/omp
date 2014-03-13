@@ -2,7 +2,7 @@
 
 function commerce_order_project_commerce_checkout_pane_info() {
   $panes['commerce_order_project'] = array(
-    'title' => t('Project Reference'),
+    'title' => t('Project Information'),
     'page' => 'checkout',
     'weight' => 10,
     'file' => 'includes/commerce_order_project.checkout_pane.inc',
