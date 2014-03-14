@@ -50,7 +50,7 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
           $reg_key = key($class);
           if($reg_key) {
             if($first_name) {
-              dsm($form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE]);
+              dsm($form['registration_information'][$class_key][$reg_key]['field_first_name']);
               //$form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
             }
             if($last_name) {
