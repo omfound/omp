@@ -98,7 +98,7 @@ function commerce_checkout_form($form, &$form_state, $order, $checkout_page) {
   $visible_panes = 0;
 
   // Add any enabled checkout panes for this page to the form.
-  dsm(commerce_checkout_panes(array('enabled' => TRUE, 'page' => $checkout_page['page_id']));
+  dsm(commerce_checkout_panes(array('enabled' => TRUE, 'page' => $checkout_page['page_id'])));
   foreach (commerce_checkout_panes(array('enabled' => TRUE, 'page' => $checkout_page['page_id'])) as $pane_id => $checkout_pane) {
     if ($callback = commerce_checkout_pane_callback($checkout_pane, 'checkout_form')) {
       // Generate the pane form.
