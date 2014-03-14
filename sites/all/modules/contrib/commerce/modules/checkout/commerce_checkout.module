@@ -691,7 +691,6 @@ function commerce_checkout_pane_reset($pane_id) {
  *     not be found.
  */
 function commerce_checkout_pane_callback($checkout_pane, $callback) {
-  dsm($callback);
   // Include the checkout pane file if specified.
   if (!empty($checkout_pane['file'])) {
     $parts = explode('.', $checkout_pane['file']);
