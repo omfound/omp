@@ -10,7 +10,6 @@
  * Redirects invalid checkout attempts or displays the checkout form if valid.
  */
 function commerce_checkout_router($order, $checkout_page = NULL) {
-  dsm($checkout_page);
   $checkout_pages = commerce_checkout_pages();
 
   // If no checkout page is specified, default to the first one.
@@ -56,6 +55,7 @@ function commerce_checkout_router($order, $checkout_page = NULL) {
     drupal_set_title($checkout_page['title']);
   }
 
+  dsm('commerce_checkout_form_' . $checkout_page['page_id']);
   return drupal_get_form('commerce_checkout_form_' . $checkout_page['page_id'], $order, $checkout_page);
 }
 
