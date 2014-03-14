@@ -67,7 +67,6 @@ function commerce_checkout_router($order, $checkout_page = NULL) {
  *   The checkout page object representing the current step in checkout.
  */
 function commerce_checkout_form($form, &$form_state, $order, $checkout_page) {
-  dsm('testing');
   global $user;
 
   $form['#attached']['css'][] = drupal_get_path('module', 'commerce_checkout') .'/theme/commerce_checkout.base.css';
@@ -100,6 +99,7 @@ function commerce_checkout_form($form, &$form_state, $order, $checkout_page) {
 
   // Add any enabled checkout panes for this page to the form.
   foreach (commerce_checkout_panes(array('enabled' => TRUE, 'page' => $checkout_page['page_id'])) as $pane_id => $checkout_pane) {
+    dsm($checkout_pane);
     if ($callback = commerce_checkout_pane_callback($checkout_pane, 'checkout_form')) {
       // Generate the pane form.
       $pane_form = $callback($form, $form_state, $checkout_pane, $order);
