@@ -11,6 +11,7 @@
  */
 function commerce_checkout_router($order, $checkout_page = NULL) {
   $checkout_pages = commerce_checkout_pages();
+  dsm($checkout_pages);
 
   // If no checkout page is specified, default to the first one.
   if (empty($checkout_page)) {
