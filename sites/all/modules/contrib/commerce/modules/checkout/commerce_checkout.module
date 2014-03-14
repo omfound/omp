@@ -471,7 +471,6 @@ function commerce_checkout_pages() {
     }
   }
 
-  dsm($checkout_pages);
   return $checkout_pages;
 }
 
@@ -493,13 +492,13 @@ function commerce_checkout_first_checkout_page() {
  */
 function commerce_checkout_page_load($page_id) {
   $checkout_pages = commerce_checkout_pages();
-
   // If a page was specified that does not exist, return FALSE.
   if (empty($checkout_pages[$page_id])) {
     return FALSE;
   }
 
   // Otherwise, return the specified page.
+  dsm($checkout_pages[$page_id]);
   return $checkout_pages[$page_id];
 }
 
