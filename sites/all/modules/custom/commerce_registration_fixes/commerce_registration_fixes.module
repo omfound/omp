@@ -49,9 +49,8 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
           reset($class);
           $reg_key = key($class);
           if($reg_key) {
-            if($first_name) {
-              dsm($form['registration_information'][$class_key][$reg_key]['field_first_name']);
-              //$form['registration_information'][$class_key][$reg_key]['field_first_name']['und'][0]['value']['#default_value'] = $first_name; 
+            if($first_name && is_array($form['registration_information'][$class_key][$reg_key]['field_first_name'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_first_name']['und'][0]['value']['#default_value'] = $first_name; 
             }
             if($last_name) {
               //$form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
