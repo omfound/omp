@@ -55,7 +55,6 @@ function commerce_checkout_router($order, $checkout_page = NULL) {
     drupal_set_title($checkout_page['title']);
   }
 
-  dsm('commerce_checkout_form_' . $checkout_page['page_id']);
   return drupal_get_form('commerce_checkout_form_' . $checkout_page['page_id'], $order, $checkout_page);
 }
 
@@ -68,6 +67,7 @@ function commerce_checkout_router($order, $checkout_page = NULL) {
  *   The checkout page object representing the current step in checkout.
  */
 function commerce_checkout_form($form, &$form_state, $order, $checkout_page) {
+  dsm('testing');
   global $user;
 
   $form['#attached']['css'][] = drupal_get_path('module', 'commerce_checkout') .'/theme/commerce_checkout.base.css';
