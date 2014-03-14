@@ -8,7 +8,6 @@
  * Commerce checkout pane form builder callback.
  */
 function commerce_registration_information_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  watchdog('brian', 'in pane');
   global $user;
   $pane_form = array();
   $show_form = FALSE;
