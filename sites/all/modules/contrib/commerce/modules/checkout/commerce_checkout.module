@@ -455,7 +455,6 @@ function commerce_checkout_pages() {
     foreach ($checkout_pages as &$checkout_page) {
       // Look for any checkout panes assigned to this page.
       $checkout_panes = commerce_checkout_panes(array('page' => $checkout_page['page_id'], 'enabled' => TRUE));
-      dsm($checkout_panes);
 
       // If this is the completion page or at least one pane was found...
       if ($checkout_page['page_id'] == 'complete' || !empty($checkout_panes)) {
@@ -472,6 +471,7 @@ function commerce_checkout_pages() {
     }
   }
 
+  dsm($checkout_pages);
   return $checkout_pages;
 }
 
