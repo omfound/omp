@@ -55,7 +55,7 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
             if($phone && is_array($form['registration_information'][$class_key][$reg_key]['field_phone_number'])) {
               $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
             }
-	          if(!empty($form['registration_information'][$class_key][$reg_key]['register_for'])) {
+	          if(is_array($form['registration_information'][$class_key][$reg_key]['register_for'])) {
               $form['registration_information'][$class_key][$reg_key]['register_for']['#default_value'] = 'registration_registrant_type_me';
 	          }
           }
