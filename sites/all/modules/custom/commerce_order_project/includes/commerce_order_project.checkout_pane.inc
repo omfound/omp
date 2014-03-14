@@ -11,11 +11,17 @@ function commerce_order_project_pane_settings_form($checkout_pane) {
 
 function commerce_order_project_pane_checkout_form($form, $form_state, $checkout_pane, $order) {
   if ($options = commerce_order_project_user_project_options($order->uid)) {
+    if (!empty($order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'])) {
+      $default = $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'];
+    }
+    else {
+      $default = '';
+    }
     $checkout_form['commerce_order_project_reference'] = array(
       '#type' => 'select',
       '#title' => t('Please associate your order with a project:'),
       '#options' => commerce_order_project_user_project_options($order->uid),
-      '#default' => $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'] ? $order->field_commerce_order_project[LANGUAGE_NONE][0]['target_id'] : '',
+      '#default' => $default,
     );
     return $checkout_form;
   }
