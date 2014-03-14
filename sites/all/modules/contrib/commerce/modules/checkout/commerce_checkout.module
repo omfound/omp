@@ -498,7 +498,6 @@ function commerce_checkout_page_load($page_id) {
   }
 
   // Otherwise, return the specified page.
-  dsm($checkout_pages[$page_id]);
   return $checkout_pages[$page_id];
 }
 
@@ -699,6 +698,7 @@ function commerce_checkout_pane_callback($checkout_pane, $callback) {
   }
 
   // If the specified callback function exists, return it.
+  dsm($checkout_pane['callbacks']);
   if (!empty($checkout_pane['callbacks'][$callback]) &&
       function_exists($checkout_pane['callbacks'][$callback])) {
     return $checkout_pane['callbacks'][$callback];
