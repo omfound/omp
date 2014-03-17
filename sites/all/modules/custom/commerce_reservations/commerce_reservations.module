@@ -281,7 +281,11 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
 
   if ($form_id == 'reservable_product_display_node_form') {
     $availability_items = commerce_reservations_availabity_form_items($form_state);
-    $form += $availability_items;
+    $form['reservable_product_availability'] = array(
+      '#type' => 'fieldset',
+      '#weight' => 50,
+    );
+    $form['reservable_product_availability'] += $availability_items;
     dsm($form);
   }
 }
