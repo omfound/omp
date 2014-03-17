@@ -1794,7 +1794,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
   $total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
   $form = array();
 
-  $form[$item_key . 'cr_max_reservation_length'] = array(
+  $form['cr_max_reservation_length'] = array(
     '#type' => 'textfield',
     '#title' => t('Maximum hours for a single reservation:'),
     '#default_value' => commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $key_nid),
