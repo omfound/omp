@@ -280,7 +280,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 
   if ($form_id == 'reservable_product_display_node_form') {
-    $availability_items = commerce_reservations_availabity_form_items($form_state);
+    $availability_items = commerce_reservations_availability_form_items($form_state);
     $form['reservable_product_availability'] = array(
       '#type' => 'fieldset',
       '#weight' => 50,
@@ -289,7 +289,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       '#collapsed' => TRUE,
     );
     $form['reservable_product_availability'] += $availability_items;
-    $form['#submit'][] = 'commerce_reservations_settings_form_submit'; 
+    $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
   }
 }
 
@@ -1733,7 +1733,7 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#title' => t('Warn users after 10 minutes of an incomplete order'),
     '#default_value' => variable_get('cr_expired_cart_warning', 0),
   );
-  $availability_items = commerce_reservations_availabity_form_items($form_state);
+  $availability_items = commerce_reservations_availability_form_items($form, &$form_state);
   $form += $availability_items;
   $form['submit'] = array(
     '#type' => 'submit',
@@ -1742,22 +1742,65 @@ function commerce_reservations_settings_form($form, &$form_state){
   return $form;
 }
 
+function commerce_reservations_availability_var_get($key, $default, $nid = null) {
+  if (!empty($nid)) {
+    if (!empty(variable_get($nid . '_' . $key, $default))) {
+      return variable_get($nid . '_' . $key, $default);
+    }
+  }
+  else {
+    return variable_get($key, $default);
+  }
+}
 
-function commerce_reservations_availabity_form_items($form_state) {
-  $total = variable_get('cr_closed_total');
+function commerce_reservations_availability_var_set($key, $value, $nid = null) {
+  if (!empty($nid)) {
+    if (!empty(variable_get($nid . '_' . $key, FALSE))) {
+      variable_set($nid . '_' . $key, $value);
+    }
+    elseif (!is_null(variable_get($key, NULL)) && $value != variable_get($key, NULL)) {
+      variable_set($nid . '_' . $key, $value);
+    } 
+  }
+  else {
+    variable_set($key, $value);
+  }
+
+  return;
+}
+
+function commerce_reservations_availability_var_del($key, $nid = null) {
+  if (!empty($nid)) {
+    variable_del($nid . '_' . $key);
+  }
+  else {
+    variable_del($key);
+  }
+  return;
+}
+
+function commerce_reservations_availability_form_items($form, &$form_state) {
+  if (!empty($form['nid']['#value']) && is_numeric($form['nid']['#value'])) {
+    $key_nid = $form['nid']['#value'];
+  }
+  else {
+    $key_nid = false;
+  }
+
+  $total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
   $form = array();
 
-  $form['cr_max_reservation_length'] = array(
+  $form[$item_key . 'cr_max_reservation_length'] = array(
     '#type' => 'textfield',
     '#title' => t('Maximum hours for a single reservation:'),
-    '#default_value' => variable_get('cr_max_reservation_length', 0),
+    '#default_value' => commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $key_nid),
     '#description' => t('Enter 0 for no limit'),
   );
 
   $old_dates = array();
   for ($i = 0; $i < $total; $i++){
     $variable = 'cr_closed_dates_' . $i;
-    $old_dates[] = variable_get($variable);
+    $old_dates[] = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
   }
   $form['closed_dates'] = array(
     '#prefix' => '<div id="closed_dates">', 
@@ -1811,7 +1854,7 @@ function commerce_reservations_availabity_form_items($form_state) {
   $closed_days = array();
   foreach ($days as $day){
     $variable = 'cr_' . $day;
-    $setting = variable_get($variable);
+    $setting = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
     if ($setting == 'closed'){
       $closed_days[] = $day;
     }  
@@ -1840,7 +1883,7 @@ function commerce_reservations_availabity_form_items($form_state) {
       '#suffix' => '</div>',
     );
     $variable = 'cr_' . $day . '_hours';
-    $value = variable_get($variable);
+    $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
     if ($value){
       $value = $value['open'];
       $value_array = explode(':', $value);
@@ -1860,7 +1903,7 @@ function commerce_reservations_availabity_form_items($form_state) {
       '#description' => t('e.g. 10:30 am'),
       '#default_value' => $time_string,
     );
-    $value = variable_get($variable);
+    $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
     if ($value){
       $value = $value['closed'];
       $value_array = explode(':', $value);
@@ -1885,15 +1928,58 @@ function commerce_reservations_availabity_form_items($form_state) {
   return $form;
 }
 
+function commerce_reservations_availability_items_submit($form, &$form_state) {
+  if (!empty($form['nid']['#value']) && is_numeric($form['nid']['#value'])) {
+    $key_nid = $form['nid']['#value'] . '_';
+  }
+  else {
+    $key_nid = FALSE;
+  }
+
+  //max reservation length
+  commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
+  $total = 0;
+  $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
+  for ($i = 0; $i < $old_total; $i++){
+    $variable = 'cr_closed_dates_' . $i;
+    commerce_reservations_availability_var_get($variable, $key_nid);
+  }
+  foreach($form_state['input'] as $key => $value){
+    if (substr($key, 0,5) == 'dates'){
+      if (!empty($value['date'])){
+        $variable = 'cr_closed_' . $key;
+        $var_val = $value['date'];
+        commerce_reservations_availability_var_set($variable, $var_val, $key_nid);
+        $total++;
+      }
+    }
+  }
+  commerce_reservations_availability_var_set('cr_closed_total', $total, $key_nid);
+  foreach ($form_state['input']['weekend_days'] as $key => $value){
+    $day = 'cr_' . $key;
+    $variable = $day . '_hours';
+    if ($value){
+      commerce_reservations_availability_var_set($day, 'closed', $key_nid);
+      commerce_reservations_availability_var_del($variable, $key_nid);
+    } else{
+      commerce_reservations_availability_var_set($day, 'open', $key_nid);
+      $index_open = 'open_' . strtolower($key);
+      $index_closed = 'close_' . strtolower($key);
+      $hours = array(
+        'open' => $form_state['input'][$index_open],
+        'closed' => $form_state['input'][$index_closed],
+      );
+      commerce_reservations_availability_var_set($variable, $hours, $key_nid);
+    }
+  }
+}
+
 function commerce_reservations_settings_form_submit($form, &$form_state){
-  dsm($form);
-  dsm($form_state);
   if ($form_state['values']['allow_commercial'] == 1){
 	  variable_set('cr_allow_commercial', 1);
   } else{
 	  variable_set('cr_allow_commercial', 0);
   }
-  variable_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], 0);
   variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
 
   if ($form_state['input']['email_confirm']){
@@ -1906,40 +1992,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
       variable_del($email);
     }
   }
-  $total = 0;
-  $old_total = variable_get('cr_closed_total');
-  for ($i = 0; $i < $old_total; $i++){
-    $variable = 'cr_closed_dates_' . $i;
-    variable_del($variable);
-  }
-  foreach($form_state['input'] as $key => $value){
-    if (substr($key, 0,5) == 'dates'){
-      if (!empty($value['date'])){
-        $variable = 'cr_closed_' . $key;
-        $var_val = $value['date'];
-        variable_set($variable, $var_val);
-        $total++;
-      }
-    }
-  }
-  variable_set('cr_closed_total', $total);
-  foreach ($form_state['input']['weekend_days'] as $key => $value){
-    $day = 'cr_' . $key;
-    $variable = $day . '_hours';
-    if ($value){
-      variable_set($day, 'closed');
-      variable_del($variable);
-    } else{
-      variable_set($day, 'open');
-      $index_open = 'open_' . strtolower($key);
-      $index_closed = 'close_' . strtolower($key);
-      $hours = array(
-        'open' => $form_state['input'][$index_open],
-        'closed' => $form_state['input'][$index_closed],
-      );
-      variable_set($variable, $hours);
-    }
-  }
+
+  commerce_reservations_availability_items_submit($form, &$form_state);
 }
 
 /*
