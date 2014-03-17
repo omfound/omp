@@ -1739,6 +1739,14 @@ function commerce_reservations_settings_form($form, &$form_state){
 function commerce_reservations_availabity_form_items($form_state) {
   $total = variable_get('cr_closed_total');
   $form = array();
+
+  $form['cr_max_reservation_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum hours for a single reservation:'),
+    '#default_value' => variable_get('cr_max_reservation_length', 0),
+    '#description' => t('Enter 0 for no limit'),
+  );
+
   $old_dates = array();
   for ($i = 0; $i < $total; $i++){
     $variable = 'cr_closed_dates_' . $i;
