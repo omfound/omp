@@ -289,7 +289,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       '#collapsed' => TRUE,
     );
     $form['reservable_product_availability'] += $availability_items;
-    dsm($form);
+    $form['#submit'][] = 'commerce_reservations_settings_form_submit'; 
   }
 }
 
@@ -1886,6 +1886,8 @@ function commerce_reservations_availabity_form_items($form_state) {
 }
 
 function commerce_reservations_settings_form_submit($form, &$form_state){
+  dsm($form);
+  dsm($form_state);
   if ($form_state['values']['allow_commercial'] == 1){
 	  variable_set('cr_allow_commercial', 1);
   } else{
