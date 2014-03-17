@@ -279,7 +279,11 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     } 
   }
 
-  dsm($form_id);
+  if ($form_id == 'reservable_product_display_node_form') {
+    $availability_items = commerce_reservations_availabity_form_items($form_state);
+    $form += $availability_items;
+    dsm($form);
+  }
 }
 
 function commerce_reservations_redirect_add($form, &$form_state) {
