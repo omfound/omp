@@ -284,6 +284,8 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     $form['reservable_product_availability'] = array(
       '#type' => 'fieldset',
       '#weight' => 50,
+      '#title' => t('Availability Overrides'),
+      '#collapsed' => true,
     );
     $form['reservable_product_availability'] += $availability_items;
     dsm($form);
