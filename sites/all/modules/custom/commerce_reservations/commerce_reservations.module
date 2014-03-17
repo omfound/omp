@@ -1758,6 +1758,7 @@ function commerce_reservations_availability_var_get($key, $default, $nid = null)
 }
 
 function commerce_reservations_availability_var_set($key, $value, $nid = null) {
+  dsm($key . ' | ' . $value . ' | ' . $nid);
   if (!empty($nid)) {
     $nid_var = variable_get($nid . '_' . $key, NULL);
     $g_var = variable_get($key, NULL);
