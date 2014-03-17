@@ -280,7 +280,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 
   if ($form_id == 'reservable_product_display_node_form') {
-    $availability_items = commerce_reservations_availability_form_items($form_state);
+    $availability_items = commerce_reservations_availability_form_items($form, $form_state);
     $form['reservable_product_availability'] = array(
       '#type' => 'fieldset',
       '#weight' => 50,
@@ -1997,7 +1997,7 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
     }
   }
 
-  commerce_reservations_availability_items_submit($form, &$form_state);
+  commerce_reservations_availability_items_submit($form, $form_state);
 }
 
 /*
