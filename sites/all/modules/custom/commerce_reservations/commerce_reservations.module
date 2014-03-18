@@ -1879,7 +1879,8 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
   foreach ($days as $day){
     $variable = 'cr_' . $day;
     $setting = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
-    if (!empty(commerce_reservations_availability_attributes($variable, $key_nid))) {
+    $temp_attributes = commerce_reservations_availability_attributes($variable, $key_nid);
+    if (!empty($temp_attributes)) {
       $closed_attributes = commerce_reservations_availability_attributes($variable, $key_nid);
     }
     if ($setting == 'closed'){
