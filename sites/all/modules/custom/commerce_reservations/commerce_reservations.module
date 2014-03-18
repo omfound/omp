@@ -2037,6 +2037,7 @@ function more_dates_js($form, &$form_state){
   $closed_dates['#tree'] = false;
   $closed_dates['#parents'] = array('closed_dates');
   $closed_dates['#array_parents'] = array('closed_dates');
+  $closed_dates['#weight'] = 0.005;
   $closed_dates['#processed'] = false;
   $closed_dates['#required'] = false;
   $closed_dates['#attributes'] = array();
