@@ -288,6 +288,9 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
+    if (commerce_reservations_availability_is_overridden($form)) {
+      $form['reservable_product_availability']['#collapsed'] = FALSE;
+    }
     $form['reservable_product_availability'] += $availability_items;
     $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
   }
@@ -1798,6 +1801,20 @@ function commerce_reservations_availability_var_del($key, $nid = null) {
     variable_del($key);
   }
   return;
+}
+
+function commerce_reservations_availability_is_overridden($form) {
+  array_walk_recursive($form, 'commerce_reservations_availability_is_overridden_test');
+  if ($form['availability_overridden'] == true) {
+    return true;
+  }
+  return false;
+}
+
+function commerce_reservations_availability_is_overridden_test(&$item, $key) {
+  if ($key == '#attributes' && !empty($item)) {
+    $item['availability_overridden'] = true;
+  }
 }
 
 function commerce_reservations_availability_form_items($form, &$form_state) {
