@@ -1854,9 +1854,9 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
           $date_key = 'dates_' . $index;
           $form['closed_dates'][$date_key] = array(
             '#type' => 'date_popup',
-    '#date_format' => 'm-d-Y',
-    '#title' => t('Select a holiday or other day the station is closed.'),
-    '#default_value' => '',
+            '#date_format' => 'm-d-Y',
+            '#title' => t('Select a holiday or other day the station is closed.'),
+            '#default_value' => '',
           );
         }
       }
@@ -2032,6 +2032,7 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
  */
  
 function more_dates_js($form, &$form_state){
+  dsm($form);
   return $form['closed_dates'];
 }
 
