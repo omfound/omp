@@ -2035,6 +2035,7 @@ function more_dates_js($form, &$form_state){
   $temp_form_state = array();
   $temp_form_state['triggering_element']['#value'] = 'add another'; 
   $available_form = drupal_build_form('commerce_reservations_availability_form_items', $temp_form_state);
+  dsm($form);
   dsm($form_state);
   return $available_form['closed_dates'];
 }
