@@ -33,6 +33,9 @@ Drupal.cr = Drupal.cr || {};
         var nid = $(this).find('.nid .field-content').text();
         var pid = $(this).find('.pid .field-content').text(); 
 
+        //Add closed times / dates based on this item
+        Drupal.behaviors.product_filter.addClosedDatesTimesToCalendar(nid, pid, 1, basePath);
+
         //Add existing reservations for this item to calendar
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
@@ -177,6 +180,55 @@ Drupal.cr = Drupal.cr || {};
     },
     //end hideItemFields function
 
+    //start addClosedDatesTimesToCalendar function
+    addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
+      console.log('refreshing closed times');
+      $(".fullcalendar").fullCalendar('removeEvents', function(event){
+        if (event.className == 'closed-time' || event.className == 'closed-date'){
+          return true;
+        }
+      });
+
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'closed_times/',
+        cache : false,
+        success : function (data) {
+          counter = 0;
+          $('div.closed-time', data).each(function(index){
+            event = new Object();
+            event.title = 'Closed';
+            event.start = $(this).attr('start');
+            event.end = $(this).attr('end');
+            event.allDay = false;
+            event.className = 'closed-time';
+            event.color = '#56a4da';
+            event.backgroundColor = '#ac3d33';
+            event.eventBorderColor = '#56a4da';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+          });
+
+          $('div.closed_dates', data).each(function(index){
+            event = new Object();
+            event.title = 'Closed';
+            event.start = $(this).attr('date')+' 00:00:00';
+            event.end = $(this).attr('date')+' 23:59:59';
+            event.allDay = false;
+            event.className = 'closed-date';
+            event.color = '#56a4da';
+            event.backgroundColor = '#ac3d33';
+            event.eventBorderColor = '#56a4da';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+          });
+        }
+      });
+    },
+    //end addClosedDatesTimesToCalendar function
+
     //start addItemReservationsToCalendar function
     addItemReservationsToCalendar:function(nid, pid, quantity, basePath) {
       //remove all current events from calendar
@@ -195,7 +247,6 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer input#edit-submit').hide();
 
       //load item reservations
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
