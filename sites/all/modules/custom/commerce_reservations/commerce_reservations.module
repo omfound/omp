@@ -2041,6 +2041,8 @@ function more_dates_js($form, &$form_state){
   $closed_dates['#title_display'] = 'before';
   $closed_dates['#id'] = 'edit-closed-dates';
   $closed_dates['#sorted'] = TRUE;
+  dsm($closed_dates);
+  dsm($form['closed_dates']);
   return $closed_dates;
 }
 
