@@ -361,4 +361,5 @@ body.front h2.block-title {
  
 .form-item .form-value-override {
   border-color: rgb(0, 168, 255);
+  background-color: rgb(0, 168, 255);
 }
