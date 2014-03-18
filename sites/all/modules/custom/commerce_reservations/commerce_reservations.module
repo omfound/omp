@@ -1742,18 +1742,32 @@ function commerce_reservations_settings_form($form, &$form_state){
   return $form;
 }
 
-function commerce_reservations_availability_var_get($key, $default, $nid = null) {
+function commerce_reservations_availability_is_global($key, $nid = null) {
   if (!empty($nid)) {
     $nid_var = variable_get($nid . '_' . $key, NULL);
     if (!empty($nid_var)) {
-      return variable_get($nid . '_' . $key);
-    }
-    else {
-      return variable_get($key, $default);
+      return false;
     }
   }
-  else {
+
+  return true;
+}
+
+function commerce_reservations_availability_var_get($key, $default, $nid = null) {
+  if (commerce_reservations_availability_is_global($key, $nid)) {
     return variable_get($key, $default);
+  }
+  else {
+    return variable_get($nid . '_' . $key);
+  }
+}
+
+function commerce_reservations_availability_attributes($key, $nid = null) {
+  if (commerce_reservations_availability_is_global($key, $nid)) {
+    return array();
+  }
+  else {
+    return array('class' => array('form-value-override'));
   }
 }
 
@@ -1802,6 +1816,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#title' => t('Maximum hours for a single reservation:'),
     '#default_value' => commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $key_nid),
     '#description' => t('Enter 0 for no limit'),
+    '#attributes' => commerce_reservations_availability_attributes('cr_max_reservation_length', $key_nid),
   );
 
   $old_dates = array();
@@ -1827,6 +1842,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
       '#date_format' => 'm-d-Y',
       '#title' => t('Select a holiday or other day the station is closed.'),
       '#default_value' => $date_string,
+      '#attributes' => commerce_reservations_availability_attributes('cr_closed_dates_' . $i, $key_nid),
     );
   }
   if (array_key_exists('triggering_element', $form_state)){
@@ -1859,9 +1875,13 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
   );
   $days = commerce_reservations_week_days();
   $closed_days = array();
+  $closed_attributes = array();
   foreach ($days as $day){
     $variable = 'cr_' . $day;
     $setting = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
+    if (!empty(commerce_reservations_availability_attributes($variable, $key_nid))) {
+      $closed_attributes = commerce_reservations_availability_attributes($variable, $key_nid);
+    }
     if ($setting == 'closed'){
       $closed_days[] = $day;
     }  
@@ -1871,6 +1891,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#title' => t('Please select which days you are closed on a weekly basis. (ie. weekends)'),
     '#options' => $days,
     '#default_value' => $closed_days,
+    '#attributes' => $closed_attributes,
   );
   $form['operation_hours'] = array(
     '#type' => 'fieldset',
@@ -1909,6 +1930,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
       '#title' => t($title_open),
       '#description' => t('e.g. 10:30 am'),
       '#default_value' => $time_string,
+      '#attributes' => commerce_reservations_availability_attributes($variable, $key_nid),
     );
     $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
     if ($value){
@@ -1929,6 +1951,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
       '#description' => t('e.g. 8:30 pm'),
       '#title' => t($title_close),
       '#default_value' => $time_string,
+      '#attributes' => commerce_reservations_availability_attributes($variable, $key_nid),
     );
   }
 
