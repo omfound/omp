@@ -359,3 +359,6 @@ body.front h2.block-title {
   width: 800px;
 }
  
+.form-value-override {
+  border-color: red;
+}
