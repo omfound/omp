@@ -2035,6 +2035,8 @@ function more_dates_js($form, &$form_state){
   $available_form = commerce_reservations_availability_form_items($form, $form_state);
   $closed_dates = $available_form['closed_dates'];
   $closed_dates['#tree'] = false;
+  $closed_dates['#parents'] = array('closed_dates');
+  $closed_dates['#array_parents'] = array('closed_dates');
   $closed_dates['#processed'] = false;
   $closed_dates['#required'] = false;
   $closed_dates['#attributes'] = array();
