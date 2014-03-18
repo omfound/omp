@@ -2034,7 +2034,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
 function more_dates_js($form, &$form_state){
   dsm($form);
   dsm($form_state);
-  return $form['closed_dates'];
+  //return $form['closed_dates'];
+  return $form;
 }
 
 /* 
