@@ -2033,6 +2033,7 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
  
 function more_dates_js($form, &$form_state){
   $available_form = commerce_reservations_availability_form_items($form, $form_state);
+  //$drupal_available_form = drupal_prepare_form($form_id, &$form, &$form_state)
   $closed_dates = $available_form['closed_dates'];
   $closed_dates['#tree'] = false;
   $closed_dates['#parents'] = array('closed_dates');
@@ -2045,7 +2046,7 @@ function more_dates_js($form, &$form_state){
   $closed_dates['#id'] = 'edit-closed-dates';
   $closed_dates['#sorted'] = TRUE;
   dsm($closed_dates);
-  dsm($form['closed_dates']);
+  dsm($form);
   return $closed_dates;
 }
 
