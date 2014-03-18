@@ -2032,7 +2032,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
  */
  
 function more_dates_js($form, &$form_state){
-  return $form;
+  return '';
+  //return $form;
 }
 
 /* 
