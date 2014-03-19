@@ -183,6 +183,7 @@ Drupal.cr = Drupal.cr || {};
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
       console.log('refreshing closed times');
+      console.log(basePath + 'closed_times/' + nid);
       $(".fullcalendar").fullCalendar('removeEvents', function(event){
         if (event.className == 'closed-time' || event.className == 'closed-date'){
           return true;
@@ -191,7 +192,7 @@ Drupal.cr = Drupal.cr || {};
 
       var basePath = Drupal.settings.basePath;
       $.ajax(
-      {url : basePath + 'closed_times/',
+      {url : basePath + 'closed_times/' + nid,
         cache : false,
         success : function (data) {
           counter = 0;
