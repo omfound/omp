@@ -1818,6 +1818,12 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#prefix' => '<div id="closed_dates">', 
     '#suffix' => '</div>',
   );
+  if ($key_nid) {
+    $closed_dates_label = t('Add dates that this item is unavailable');
+  }
+  else {
+    $closed_dates_label = t('Select a holiday or other day the station is closed.');
+  }
   for ($i = 0; $i < $total + 1; $i++){
     $key = 'dates_' . $i;
     if ($i < $total){
@@ -1827,10 +1833,11 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     } else {
       $date_string = '';
     }
+
     $form['closed_dates'][$key] = array(
       '#type' => 'date_popup',
       '#date_format' => 'm-d-Y',
-      '#title' => t('Select a holiday or other day the station is closed.'),
+      '#title' => $closed_dates_label,
       '#default_value' => $date_string,
     );
   }
@@ -1844,7 +1851,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
           $form['closed_dates'][$date_key] = array(
             '#type' => 'date_popup',
             '#date_format' => 'm-d-Y',
-            '#title' => t('Select a holiday or other day the station is closed.'),
+            '#title' => $closed_dates_label,
             '#default_value' => '',
           );
         }
@@ -1872,15 +1879,30 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
       $closed_days[] = $day;
     }  
   }
+
+  if ($key_nid) {
+    $closed_days_label = t('Select days that this item is never available');
+  }
+  else {
+    $closed_days_label = t('Select days that the location is closed.');
+  }
   $form['weekend_days'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Please select which days you are closed on a weekly basis. (ie. weekends)'),
+    '#title' => $closed_days_label,
     '#options' => $days,
     '#default_value' => $closed_days,
   );
+
+
+  if ($key_nid) {
+    $hours_op_label = t('Hours this item is available');
+  }
+  else {
+    $hours_op_label = t('Hours of operation');
+  }
   $form['operation_hours'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Hours of Operation'),
+    '#title' => $hours_op_label,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
@@ -1889,8 +1911,8 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     $div = '<div id = "' . $lower_day . '">';
     $open_day = 'open_' . $lower_day;
     $close_day = 'close_' . $lower_day;
-    $title_open = 'Select the time the station opens on ' . $day;
-    $title_close = 'Select the time the station closes on ' . $day;
+    $title_open = 'Start availability on ' . $day;
+    $title_close = 'End availability on ' . $day;
     $form['operation_hours'][$lower_day] = array(
       '#prefix' => $div,
       '#suffix' => '</div>',
