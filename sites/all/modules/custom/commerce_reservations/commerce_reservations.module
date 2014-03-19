@@ -407,9 +407,6 @@ function commerce_reservations_get_closed_times($display_nid = false){
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     if ($value && !empty($value['open']) && !empty($value['closed'])){
-      print '<pre>';
-      print_r($value);
-      print '</pre>';
       switch($day){
         case 'Sunday':
           $array = getDateForSpecificDayBetweenDates('today', '+3 month', 0);
@@ -503,6 +500,7 @@ function commerce_reservations_get_closed_times($display_nid = false){
 
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
+  //BRIAN HERE I THINK MAYBE NEED TO CHECK FOR EMPTY OPEN CLOSE
   if ($value2){
     $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
