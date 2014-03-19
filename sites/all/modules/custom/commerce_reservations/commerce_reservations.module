@@ -407,6 +407,9 @@ function commerce_reservations_get_closed_times($display_nid = false){
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     if ($value && !empty($value['open']) && !empty($value['closed'])){
+      print '<pre>';
+      print_r($value);
+      print '</pre>';
       switch($day){
         case 'Sunday':
           $array = getDateForSpecificDayBetweenDates('today', '+3 month', 0);
