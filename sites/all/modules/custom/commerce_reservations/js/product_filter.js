@@ -207,13 +207,13 @@ Drupal.cr = Drupal.cr || {};
 
       var basePath = Drupal.settings.basePath;
       $.ajax(
-      {url : basePath + 'closed_times/' + nid,
+      {url : basePath + 'closed_times/',
         cache : false,
         success : function (data) {
           counter = 0;
           $('div.closed-time', data).each(function(index){
             event = new Object();
-            event.title = 'Not Available';
+            event.title = 'Closed';
             event.start = $(this).attr('start');
             event.end = $(this).attr('end');
             event.allDay = false;
@@ -228,11 +228,48 @@ Drupal.cr = Drupal.cr || {};
 
           $('div.closed_dates', data).each(function(index){
             event = new Object();
-            event.title = 'Not Available';
+            event.title = 'Closed';
             event.start = $(this).attr('date')+' 00:00:00';
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
             event.className = 'closed-date';
+            event.color = '#56a4da';
+            event.backgroundColor = '#ac3d33';
+            event.eventBorderColor = '#56a4da';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+          });
+        }
+      });
+
+      $.ajax(
+      {url : basePath + 'closed_times/' + nid,
+        cache : false,
+        success : function (data) {
+          counter = 0;
+          $('div.closed-time', data).each(function(index){
+            event = new Object();
+            event.title = 'Unavailable';
+            event.start = $(this).attr('start');
+            event.end = $(this).attr('end');
+            event.allDay = false;
+            event.className = 'unavailable-time';
+            event.color = '#56a4da';
+            event.backgroundColor = '#ac3d33';
+            event.eventBorderColor = '#56a4da';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+          });
+
+          $('div.closed_dates', data).each(function(index){
+            event = new Object();
+            event.title = 'Unavailable';
+            event.start = $(this).attr('date')+' 00:00:00';
+            event.end = $(this).attr('date')+' 23:59:59';
+            event.allDay = false;
+            event.className = 'unavailable-date';
             event.color = '#56a4da';
             event.backgroundColor = '#ac3d33';
             event.eventBorderColor = '#56a4da';

@@ -110,7 +110,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (array.length >= 1 && dontCheck == false){
           for(i in array){
             //Check for overlaps
-            if (array[i].className == 'overlap'){
+            if (array[i].className == 'overlap' || array[i].className == 'unavailable-date' || array[i].className == 'unavailable-time'){
               if(!(array[i].start >= end || array[i].end <= start)){
                 $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
                 $('.view-footer .form-submit').hide();
