@@ -1906,6 +1906,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  
   foreach ($days as $day){
     $lower_day = strtolower($day);
     $div = '<div id = "' . $lower_day . '">';
@@ -1919,8 +1920,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     );
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
-    dsm($value);
-    if ($value){
+    if ($value && !empty($value['open']) && !empty($value['closed'])){
       $value = $value['open'];
       $value_array = explode(':', $value);
       $minute_array = explode(' ', $value_array[1]);
@@ -1940,7 +1940,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
       '#default_value' => $time_string,
     );
     $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
-    if ($value){
+    if ($value && !empty($value['open']) && !empty($value['closed'])){
       $value = $value['closed'];
       $value_array = explode(':', $value);
       $minute_array = explode(' ', $value_array[1]);
