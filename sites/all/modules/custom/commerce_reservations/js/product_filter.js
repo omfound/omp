@@ -225,7 +225,7 @@ Drupal.cr = Drupal.cr || {};
             event.eventBorderColor = '#00';
             event.textColor = 'white';
             dom_id: this.dom_id;
-            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
 
           $('div.closed_dates', data).each(function(index){
@@ -240,7 +240,7 @@ Drupal.cr = Drupal.cr || {};
             event.eventBorderColor = '#000';
             event.textColor = 'white';
             dom_id: this.dom_id;
-            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
         }
       });
@@ -263,7 +263,7 @@ Drupal.cr = Drupal.cr || {};
             event.eventBorderColor = '#3990C9';
             event.textColor = 'white';
             dom_id: this.dom_id;
-            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
 
           $('div.closed_dates', data).each(function(index){
@@ -278,7 +278,7 @@ Drupal.cr = Drupal.cr || {};
             event.eventBorderColor = '#3990C9';
             event.textColor = 'white';
             dom_id: this.dom_id;
-            $(".fullcalendar").fullCalendar('renderEvent', event, false);
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
         }
       });
