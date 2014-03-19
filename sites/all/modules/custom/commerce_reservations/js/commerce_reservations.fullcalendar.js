@@ -48,6 +48,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
           }
         }
         if (!closedSet) {
+          console.log('fires again');
           /**
           var basePath = Drupal.settings.basePath;
 	        $.ajax(
