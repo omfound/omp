@@ -206,6 +206,7 @@ Drupal.cr = Drupal.cr || {};
       });
 
       var basePath = Drupal.settings.basePath;
+      console.log(basePath + 'closed_times/');
       $.ajax(
       {url : basePath + 'closed_times/',
         cache : false,
@@ -243,6 +244,7 @@ Drupal.cr = Drupal.cr || {};
         }
       });
 
+      console.log(basePath + 'closed_times/' + nid);
       $.ajax(
       {url : basePath + 'closed_times/' + nid,
         cache : false,
