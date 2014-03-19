@@ -119,7 +119,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             }
 
             //if staff ignore hours
-            if (!Drupal.settings.commerce_reservations.staff) {
+            //if (!Drupal.settings.commerce_reservations.staff) {
               //Check for closed days
               if (array[i].className == 'closed-date'){
                 if (array[i].start.getDate() == start.getDate()){
@@ -158,7 +158,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
-            }
+            //}
 
           }
         }
