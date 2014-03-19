@@ -186,6 +186,7 @@ Drupal.cr = Drupal.cr || {};
     //start updateMaxReservationLimit function
     updateMaxReservationLimit:function(nid, pid, quantity, basePath) {
       var basePath = Drupal.settings.basePath;
+      console.log('cr/max_hours/' + nid);
       $.ajax(
       {url : basePath + 'cr/max_hours/' + nid,
         cache : false,
