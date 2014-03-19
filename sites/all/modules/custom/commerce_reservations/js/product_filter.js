@@ -196,7 +196,7 @@ Drupal.cr = Drupal.cr || {};
           counter = 0;
           $('div.closed-time', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = 'Not Available';
             event.start = $(this).attr('start');
             event.end = $(this).attr('end');
             event.allDay = false;
@@ -211,7 +211,7 @@ Drupal.cr = Drupal.cr || {};
 
           $('div.closed_dates', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = 'Not Available';
             event.start = $(this).attr('date')+' 00:00:00';
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
