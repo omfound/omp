@@ -1764,15 +1764,7 @@ function commerce_reservations_availability_var_get($key, $default, $nid = null)
 
 function commerce_reservations_availability_var_set($key, $value, $nid = null) {
   if (!empty($nid)) {
-    $nid_var = variable_get($nid . '_' . $key, NULL);
-    $g_var = variable_get($key, NULL);
-
-    if (!is_null($nid_var)) {
-      variable_set($nid . '_' . $key, $value);
-    }
-    elseif ($value != $g_var) {
-      variable_set($nid . '_' . $key, $value);
-    } 
+    variable_set($nid . '_' . $key, $value);
   }
   else {
     variable_set($key, $value);
