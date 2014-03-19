@@ -38,7 +38,6 @@ Drupal.cr = Drupal.cr || {};
 
         //Add closed times / dates based on this item
         Drupal.behaviors.product_filter.addClosedDatesTimesToCalendar(nid, pid, 1, basePath);
-        console.log("add closed fired");
 
         //Add existing reservations for this item to calendar
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
@@ -187,7 +186,6 @@ Drupal.cr = Drupal.cr || {};
     //start updateMaxReservationLimit function
     updateMaxReservationLimit:function(nid, pid, quantity, basePath) {
       var basePath = Drupal.settings.basePath;
-      console.log('cr/max_hours/' + nid);
       $.ajax(
       {url : basePath + 'cr/max_hours/' + nid,
         cache : false,
@@ -207,7 +205,6 @@ Drupal.cr = Drupal.cr || {};
       //});
 
       var basePath = Drupal.settings.basePath;
-      console.log(basePath + 'closed_times/');
       $.ajax(
       {url : basePath + 'closed_times/',
         cache : false,
@@ -245,7 +242,6 @@ Drupal.cr = Drupal.cr || {};
         }
       });
 
-      console.log(basePath + 'closed_times/' + nid);
       $.ajax(
       {url : basePath + 'closed_times/' + nid,
         cache : false,
