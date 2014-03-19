@@ -200,9 +200,9 @@ Drupal.cr = Drupal.cr || {};
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
       $(".fullcalendar").fullCalendar('removeEvents', function(event){
-        if (event.className == 'closed-time' || event.className == 'closed-date'){
-          return true;
-        }
+        //if (event.className == 'closed-time' || event.className == 'closed-date'){
+          //return true;
+        //}
       });
 
       var basePath = Drupal.settings.basePath;
