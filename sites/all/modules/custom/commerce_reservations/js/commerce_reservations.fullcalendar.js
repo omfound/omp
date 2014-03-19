@@ -48,6 +48,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
           }
         }
         if (!closedSet) {
+          /**
           var basePath = Drupal.settings.basePath;
 	        $.ajax(
           {url : basePath + 'closed_times/',
@@ -85,6 +86,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               });
           }
         });
+        **/
       }
     }
     }
