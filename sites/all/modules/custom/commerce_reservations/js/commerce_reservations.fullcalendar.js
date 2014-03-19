@@ -38,6 +38,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         //check if closed times have already been added
         closedSet = false;
         allEvents = $('.fullcalendar').fullCalendar('clientEvents');
+        /**
         for (var ii = 0; ii <= 10; ii++) {
           if (typeof allEvents[ii] != 'undefined') {
             if (allEvents[ii].hasOwnProperty('title')) {
@@ -46,7 +47,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               }
             }
           }
-        }
+        }**/
         if (!closedSet) {
           console.log('fires again');
           /**
