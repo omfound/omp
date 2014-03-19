@@ -188,6 +188,7 @@ function commerce_reservations_menu(){
   );
   $items['closed_times'] = array(
     'page callback' => 'commerce_reservations_get_closed_times',
+    'page arguments' => array(1),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -333,12 +334,12 @@ function commerce_reservations_fix_quantity($form, &$form_state) {
 }
 
 //Get the closed dates and times so we can add them to the calendar
-function commerce_reservations_get_closed_times(){
-  $total = variable_get('cr_closed_total');
+function commerce_reservations_get_closed_times($display_nid = false){
+  $total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $display_nid);
   $closed_dates = array();
   for ($i = 0; $i < $total; $i++){
     $variable = 'cr_closed_dates_' . $i;
-    $date = variable_get($variable);
+    $date = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     $array = explode('-', $date);
     $closed_dates[] = $array[2] . '-' . $array[0] . '-' . $array[1];
   }
@@ -346,8 +347,8 @@ function commerce_reservations_get_closed_times(){
   $closed_days = array();
   foreach ($days as $day){
     $variable = 'cr_' . $day;
-    if (variable_get($variable) == 'closed'){
-      $closed_days[$day] = variable_get($variable);
+    if (commerce_reservations_availability_var_get($variable, NULL, $display_nid) == 'closed'){
+      $closed_days[$day] = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     }
   }
   $all_days_closed = array();
@@ -393,7 +394,7 @@ function commerce_reservations_get_closed_times(){
   print '<div class = "closed-times-wrapper">';
   foreach ($days as $day){
     $variable = 'cr_' . $day . '_hours';
-    $value = variable_get($variable);
+    $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     if ($value){
       switch($day){
         case 'Sunday':
@@ -402,9 +403,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Monday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 6); 
           }
           break;
@@ -414,9 +415,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Tuesday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 0); 
           }
           break;
@@ -426,9 +427,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Wednesday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 1); 
           }
           break;
@@ -438,9 +439,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Thursday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 2); 
           }
           break;
@@ -450,9 +451,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Friday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
@@ -462,9 +463,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Saturday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 4); 
           }
           break;
@@ -474,9 +475,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Sunday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 5); 
           }
           break;

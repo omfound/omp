@@ -49,7 +49,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         }
         if (!closedSet) {
           var basePath = Drupal.settings.basePath;
-          console.log(Drupal.settings);
 	        $.ajax(
           {url : basePath + 'closed_times/',
             cache : false,
