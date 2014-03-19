@@ -194,7 +194,7 @@ function commerce_reservations_menu(){
   );
   $items['cr/max_hours'] = array(
     'page callback' => 'commerce_reservations_get_max_hours',
-    'page arguments' => array(1),
+    'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );

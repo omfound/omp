@@ -191,8 +191,7 @@ Drupal.cr = Drupal.cr || {};
       {url : basePath + 'cr/max_hours/' + nid,
         cache : false,
         success : function (data) {
-          console.log(data);
-          //update it here
+          Drupal.settings.commerce_reservations.maximum_length = parseInt(data);
         }
       });
     },
