@@ -182,8 +182,6 @@ Drupal.cr = Drupal.cr || {};
 
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
-      console.log('refreshing closed times');
-      console.log(basePath + 'closed_times/' + nid);
       $(".fullcalendar").fullCalendar('removeEvents', function(event){
         if (event.className == 'closed-time' || event.className == 'closed-date'){
           return true;
@@ -198,7 +196,7 @@ Drupal.cr = Drupal.cr || {};
           counter = 0;
           $('div.closed-time', data).each(function(index){
             event = new Object();
-            event.title = 'Closed';
+            event.title = 'Unavailable';
             event.start = $(this).attr('start');
             event.end = $(this).attr('end');
             event.allDay = false;
@@ -213,7 +211,7 @@ Drupal.cr = Drupal.cr || {};
 
           $('div.closed_dates', data).each(function(index){
             event = new Object();
-            event.title = 'Closed';
+            event.title = 'Unavailable';
             event.start = $(this).attr('date')+' 00:00:00';
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
