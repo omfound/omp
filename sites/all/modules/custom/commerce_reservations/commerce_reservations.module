@@ -192,6 +192,12 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/max_hours'] = array(
+    'page callback' => 'commerce_reservations_get_max_hours',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['cr/product_form/%'] = array(
     'page callback' => 'commerce_reservations_add_to_cart_form',
     'page arguments' => array(2),
@@ -331,6 +337,11 @@ function commerce_reservations_fix_quantity($form, &$form_state) {
   if (!empty($form_state['input']['quantity']) && is_numeric($form_state['input']['quantity'])) {
     $form_state['values']['quantity'] = $form_state['input']['quantity'];
   }
+}
+
+function commerce_reservations_get_max_hours($nid) {
+  $hours = commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $nid);
+  print $hours;
 }
 
 //Get the closed dates and times so we can add them to the calendar

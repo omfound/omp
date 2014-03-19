@@ -33,6 +33,9 @@ Drupal.cr = Drupal.cr || {};
         var nid = $(this).find('.nid .field-content').text();
         var pid = $(this).find('.pid .field-content').text(); 
 
+        //Update max reservation time
+        Drupal.behaviors.product_filter.updateMaxReservationLimit(nid, pid, 1, basePath);
+
         //Add closed times / dates based on this item
         Drupal.behaviors.product_filter.addClosedDatesTimesToCalendar(nid, pid, 1, basePath);
 
@@ -179,6 +182,20 @@ Drupal.cr = Drupal.cr || {};
       $('#block-views-calendar-product-view-block .commercial-cost').hide();
     },
     //end hideItemFields function
+
+    //start updateMaxReservationLimit function
+    updateMaxReservationLimit:function(nid, pid, quantity, basePath) {
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'cr/max_hours/' + nid,
+        cache : false,
+        success : function (data) {
+          console.log(data);
+          //update it here
+        }
+      });
+    },
+    //end updateMaxReservationLimit function
 
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
