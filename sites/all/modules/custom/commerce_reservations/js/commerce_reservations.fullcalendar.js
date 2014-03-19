@@ -29,6 +29,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
     }
     options.viewDisplay = function(view) {
       if(view.name == 'month'){
+        console.log('wut');
 	      $('.fullcalendar').fullCalendar('removeEvents', function(event){
         if (event.className == 'closed-time'){
           return true;
