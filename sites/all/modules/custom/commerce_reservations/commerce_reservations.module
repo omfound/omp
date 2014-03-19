@@ -1972,7 +1972,6 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
     $variable = 'cr_closed_dates_' . $i;
     commerce_reservations_availability_var_get($variable, $key_nid);
   }
-  dsm($form_state['input']);
   foreach($form_state['input'] as $key => $value){
     if (substr($key, 0,5) == 'dates'){
       if (!empty($value['date'])){
