@@ -243,7 +243,7 @@ Drupal.cr = Drupal.cr || {};
         }
       });
 
-      console.log(closed_times/' + nid);
+      console.log('closed_times/' + nid);
       $.ajax(
       {url : basePath + 'closed_times/' + nid,
         cache : false,
