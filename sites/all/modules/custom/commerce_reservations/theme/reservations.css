@@ -911,7 +911,3 @@ body.page-reservations #main-content #squeeze{
   display: none;
 }
 /** end date picker **/
-
-.fc-event {
-  background-color: #991314;
-}
