@@ -501,8 +501,7 @@ function commerce_reservations_get_closed_times($display_nid = false){
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   //BRIAN HERE I THINK MAYBE NEED TO CHECK FOR EMPTY OPEN CLOSE
-  dsm($value2);
-  if ($value2){
+  if ($value2 && !empty($value2['open'] && !empty($value2['closed'])){
     $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
@@ -515,7 +514,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
-  if (!$value3){
+  if (!$value3 || empty($value3['open']) || empty($value3['closed'])){
     $start_date = commerce_reservations_format_calendar_date($date . ' ' . $value['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' 11:59 pm');
     if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
