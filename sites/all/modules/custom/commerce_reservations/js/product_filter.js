@@ -198,11 +198,11 @@ Drupal.cr = Drupal.cr || {};
 
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
-      //$(".fullcalendar").fullCalendar('removeEvents', function(event){
-        //if (event.className == 'closed-time' || event.className == 'closed-date'){
-          //return true;
-        //}
-      //});
+      $(".fullcalendar").fullCalendar('removeEvents', function(event){
+        if (event.className == 'closed-time' || event.className == 'closed-date' || event.className == 'unavailable-date' || event.className == 'unavailable-time') {
+          return true;
+        }
+      });
 
       var basePath = Drupal.settings.basePath;
       $.ajax(
