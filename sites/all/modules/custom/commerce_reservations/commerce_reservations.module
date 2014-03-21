@@ -501,6 +501,7 @@ function commerce_reservations_get_closed_times($display_nid = false){
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
   //BRIAN HERE I THINK MAYBE NEED TO CHECK FOR EMPTY OPEN CLOSE
+  dsm($value2);
   if ($value2){
     $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
