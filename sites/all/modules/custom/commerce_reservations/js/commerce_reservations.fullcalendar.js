@@ -95,7 +95,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               }
               if (Drupal.settings.commerce_reservations.reservation_window != 0) {
                 var endDateWindow = new Date(end);
-                if (end > Drupal.settings.commerce_reservations.reservation_window) {
+                if (end > endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window)) {
                   $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' beyond today.</p>');
                   $('.view-footer .form-submit').hide();
                   dateInvalid = true;
