@@ -93,11 +93,10 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
-              console.log('WINDOW: '+Drupal.settings.commerce_reservations.reservation_window);
               if (Drupal.settings.commerce_reservations.reservation_window != 0) {
                 var endDateWindow = new Date();
                 if (end > endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window)) {
-                  $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' beyond today.</p>');
+                  $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' days past today.</p>');
                   $('.view-footer .form-submit').hide();
                   dateInvalid = true;
                 }
