@@ -1,0 +1,34 @@
+<?php
+
+function commerce_order_project_commerce_checkout_pane_info() {
+  $panes['commerce_order_project'] = array(
+    'title' => t('Project Information'),
+    'page' => 'checkout',
+    'weight' => 10,
+    'file' => 'includes/commerce_order_project.checkout_pane.inc',
+    'base' => 'commerce_order_project_pane',
+  );
+
+  return $panes;
+}
+
+function commerce_order_project_user_project_options($uid) {
+  $options[] = array(
+    'field' => 'uid',
+    'value' => $uid,
+    'operator' => '='
+  );
+  $projects = om_project_membership_load($options);
+
+  $project_options = array();
+  if (!empty($projects)) {
+    foreach ($projects as $key => $info) {
+      $project_node = node_load($info->entity_id); 
+      if (!empty($project_node)) {
+        $project_options[$project_node->nid] = $project_node->title; 
+      }
+    }
+  }
+
+  return $project_options;
+}
