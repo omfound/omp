@@ -39,7 +39,7 @@ function om_migration_drush_command() {
   $items['dom-creative-commons'] = array(
     'description' => dt('Run Creative Commons updates'),
     'aliases' => array('dcc'),
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL
   );
   return $items;
 }
