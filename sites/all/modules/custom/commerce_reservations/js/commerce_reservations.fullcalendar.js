@@ -99,7 +99,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 console.log('today: '+today);
                 console.log('window: '+Drupal.settings.commerce_reservations.reservation_window);
                 var endDateWindow = new Date(end);
-                console.log('added: '+endDateWindow.addDays(5));
+                console.log('added: '+endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window));
+                console.log('final: '+endDateWindow);
                 /**
                 if (dateDiffHours > Drupal.settings.commerce_reservations.maximum_length) {
                   $('.date-status').html('<p class = "error">You cannot make a reservation greater than '+Drupal.settings.commerce_reservations.maximum_length+' hours.</p>');
