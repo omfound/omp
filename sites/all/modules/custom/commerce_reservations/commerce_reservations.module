@@ -344,7 +344,7 @@ function commerce_reservations_get_max_hours($nid) {
     $hours = variable_get('cr_max_reservation_length', 0);
   }
   else {
-    $hours = variable_get($nid . '_' . $key);
+    $hours = variable_get($nid . '_' . 'cr_max_reservation_length');
   }
   print $hours;
 }
