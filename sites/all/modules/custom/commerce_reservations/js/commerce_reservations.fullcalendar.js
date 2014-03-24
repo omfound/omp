@@ -93,6 +93,17 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
+              if (Drupal.settings.commerce_reservations.reservation_window != 0) {
+                console.log(start);
+                console.log(end);
+                console.log(today);
+                /**
+                if (dateDiffHours > Drupal.settings.commerce_reservations.maximum_length) {
+                  $('.date-status').html('<p class = "error">You cannot make a reservation greater than '+Drupal.settings.commerce_reservations.maximum_length+' hours.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }**/
+              }
             }
 
           }
