@@ -373,7 +373,11 @@ function commerce_reservations_get_max_quantity($nid) {
 }
 
 function commerce_reservations_get_reservation_window($nid) {
-  print commerce_reservations_get_glocal($nid, 'cr_reservation_window');
+  $days = commerce_reservations_get_glocal($nid, 'cr_reservation_window');
+  if (empty($days) || $days > 90) {
+    $days = 90;
+  }
+  print $days;
 }
 
 //Get the closed dates and times so we can add them to the calendar
@@ -1845,8 +1849,8 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
   $form['cr_reservation_window'] = array(
     '#type' => 'textfield',
     '#title' => t('How many days out can reservations be made?'),
-    '#default_value' => commerce_reservations_availability_var_get('cr_reservation_window', 0, $key_nid),
-    '#description' => t('This number cannot exceed [enter value]'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_reservation_window', 90, $key_nid),
+    '#description' => t('Currently this number cannot exceed 90 days'),
     '#size' => 10,
   );
 
