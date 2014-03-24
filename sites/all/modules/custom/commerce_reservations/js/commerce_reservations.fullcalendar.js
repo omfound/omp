@@ -94,9 +94,11 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 }  
               }
               if (Drupal.settings.commerce_reservations.reservation_window != 0) {
-                console.log(start);
-                console.log(end);
-                console.log(today);
+                console.log('start: '+start);
+                console.log('end: '+end);
+                console.log('today: '+today);
+                console.log('window: '+Drupal.settings.commerce_reservations.reservation_window);
+                console.log('added: '+start.addDays(5));
                 /**
                 if (dateDiffHours > Drupal.settings.commerce_reservations.maximum_length) {
                   $('.date-status').html('<p class = "error">You cannot make a reservation greater than '+Drupal.settings.commerce_reservations.maximum_length+' hours.</p>');
@@ -202,4 +204,10 @@ function addZero(time){
     time = "0" + time;
   }
   return time;
+}
+
+Date.prototype.addDays = function(days) {
+  var dat = new Date(this.valueOf());
+  dat.setDate(dat.getDate() + days);
+  return dat;
 }
