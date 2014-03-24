@@ -19,8 +19,6 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         return false;
       }
     }  
-    options.eventMouseover = function(event){
-    }
     options.dayClick = function(date, allDay, jsEvent, view){
       if (view.name == 'month'){
         $('.fullcalendar').fullCalendar('changeView', 'agendaWeek');

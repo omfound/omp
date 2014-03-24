@@ -242,6 +242,13 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }else{
         $max_quantity = 1;
       }
+
+      //check against quantity ovverrides
+      $quantity_limit = commerce_reservations_get_max_quantity($display_node->nid);
+      if (!empty($quantity_limit) && $quantity_limit < $max_quantity) {
+        $max_quantity = $quantity_limit;
+      }
+
       $options = array();
       for ($i = $max_quantity; $i > 0; $i--){
         $options[] = $i;
@@ -349,6 +356,19 @@ function commerce_reservations_get_max_hours($nid) {
     $hours = variable_get($nid . '_' . 'cr_max_reservation_length');
   }
   print $hours;
+}
+
+function commerce_reservations_get_max_quantity($nid) {
+  $nid_value = variable_get($nid . '_' . 'cr_max_quantity', null);
+
+  if (is_null($nid_value) || !is_numeric($nid_value)) {
+    $quantity = variable_get('cr_max_quantity', 0);
+  }
+  else {
+    $quantity = variable_get($nid . '_' . 'cr_max_quantity');
+  }
+
+  return $quantity;
 }
 
 //Get the closed dates and times so we can add them to the calendar
@@ -1808,6 +1828,13 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#description' => t('Enter 0 for no limit'),
   );
 
+  $form['cr_max_quantity'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum number of an item that can be checked out in a single reservation:'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_max_quantity', 0, $key_nid),
+    '#description' => t('Enter 0 for no limit'),
+  );
+
   $old_dates = array();
   for ($i = 0; $i < $total; $i++){
     $variable = 'cr_closed_dates_' . $i;
@@ -1973,6 +2000,9 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
 
   //max reservation length
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
+  //max quantity 
+  commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
+
   $total = 0;
   $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
   for ($i = 0; $i < $old_total; $i++){
