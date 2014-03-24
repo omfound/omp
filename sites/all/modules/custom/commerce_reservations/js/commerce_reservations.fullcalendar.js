@@ -95,9 +95,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
               }
               console.log('WINDOW: '+Drupal.settings.commerce_reservations.reservation_window);
               if (Drupal.settings.commerce_reservations.reservation_window != 0) {
-                var endDateWindow = new Date(end);
-                console.log('END: '+end);
-                console.log('LIMIT: '+endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window));
+                var endDateWindow = new Date();
                 if (end > endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window)) {
                   $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' beyond today.</p>');
                   $('.view-footer .form-submit').hide();
