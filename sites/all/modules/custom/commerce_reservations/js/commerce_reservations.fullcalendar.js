@@ -93,6 +93,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
+              console.log('WINDOW: '+Drupal.settings.commerce_reservations.reservation_window);
               if (Drupal.settings.commerce_reservations.reservation_window != 0) {
                 var endDateWindow = new Date(end);
                 console.log('END: '+end);
