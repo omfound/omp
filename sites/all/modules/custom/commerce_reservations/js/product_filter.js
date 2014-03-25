@@ -121,7 +121,7 @@ Drupal.cr = Drupal.cr || {};
       endMonth = $('.end-date-wrapper .date-month .form-select').val();
       endMonth = parseInt(endMonth) - 1;
       endDay = $('.end-date-wrapper .date-day .form-select').val();
-      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.end-date-wrapper .date-ampm .form-select').val() != 12){
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
         endHour = parseInt(endHour) + 12;
       } else{
