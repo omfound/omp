@@ -98,5 +98,13 @@ function om_classes_get_registrations($user) {
 }
 
 function om_classes_preprocess_user_profile(&$variables) {
+  $org_profile = profile2_by_uid_load($variables['elements']['#account']->uid, 'manage_organizational_membership');
+  //$orders = commerce_order_load_multiple(array(), array('uid' => $user_id));
   dsm($variables);
+  dsm($org_profile);
+
+}
+
+function om_classes_org_membership_orders() {
+
 }
