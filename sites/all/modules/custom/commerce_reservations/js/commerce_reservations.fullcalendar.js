@@ -112,7 +112,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (startHour > 12){
 	        startHour = startHour - 12;
 	        ampm = 'pm';
-        } else{
+        } else if (startHour == 12) {
+          ampm = 'pm';
+        } else {
 	        ampm = 'am';
         }
         startMinutes = start.getMinutes();
@@ -133,6 +135,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         endHour = end.getHours();
         if (endHour > 12){
 	        endHour = endHour - 12;
+	        ampm = 'pm';
+        } else if (endHour == 12) {
 	        ampm = 'pm';
         } else{
 	        ampm = 'am';
