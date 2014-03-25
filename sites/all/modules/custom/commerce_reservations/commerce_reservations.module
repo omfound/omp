@@ -198,6 +198,12 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/res_window'] = array(
+    'page callback' => 'commerce_reservations_get_reservation_window',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['cr/product_form/%'] = array(
     'page callback' => 'commerce_reservations_add_to_cart_form',
     'page arguments' => array(2),
@@ -225,7 +231,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   if (in_array('Staff Member', $user->roles)) {
     $commerce_reservations['staff'] = true;
   }
-  $commerce_reservations['maximum_length'] = variable_get('cr_max_reservation_length', 0);
   drupal_add_js(array('commerce_reservations' => $commerce_reservations), 'setting');
 
   $my_form_id = substr($form_id, 0, 30);
@@ -346,29 +351,33 @@ function commerce_reservations_fix_quantity($form, &$form_state) {
   }
 }
 
-function commerce_reservations_get_max_hours($nid) {
-  $nid_value = variable_get($nid . '_' . 'cr_max_reservation_length', null);
+function commerce_reservations_get_glocal($nid, $key) {
+  $nid_value = variable_get($nid . '_' . $key, null);
 
   if (is_null($nid_value) || !is_numeric($nid_value)) {
-    $hours = variable_get('cr_max_reservation_length', 0);
+    $value = variable_get($key, 0);
   }
   else {
-    $hours = variable_get($nid . '_' . 'cr_max_reservation_length');
+    $value = variable_get($nid . '_' . $key);
   }
-  print $hours;
+
+  return $value;
+}
+
+function commerce_reservations_get_max_hours($nid) {
+  print commerce_reservations_get_glocal($nid, 'cr_max_reservation_length');
 }
 
 function commerce_reservations_get_max_quantity($nid) {
-  $nid_value = variable_get($nid . '_' . 'cr_max_quantity', null);
+  return commerce_reservations_get_glocal($nid, 'cr_max_quantity');
+}
 
-  if (is_null($nid_value) || !is_numeric($nid_value)) {
-    $quantity = variable_get('cr_max_quantity', 0);
+function commerce_reservations_get_reservation_window($nid) {
+  $days = commerce_reservations_get_glocal($nid, 'cr_reservation_window');
+  if (empty($days) || $days > 90) {
+    $days = 90;
   }
-  else {
-    $quantity = variable_get($nid . '_' . 'cr_max_quantity');
-  }
-
-  return $quantity;
+  print $days;
 }
 
 //Get the closed dates and times so we can add them to the calendar
@@ -1826,6 +1835,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#title' => t('Maximum hours for a single reservation:'),
     '#default_value' => commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $key_nid),
     '#description' => t('Enter 0 for no limit'),
+    '#size' => 10,
   );
 
   $form['cr_max_quantity'] = array(
@@ -1833,6 +1843,15 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     '#title' => t('Maximum number of an item that can be checked out in a single reservation:'),
     '#default_value' => commerce_reservations_availability_var_get('cr_max_quantity', 0, $key_nid),
     '#description' => t('Enter 0 for no limit'),
+    '#size' => 10,
+  );
+
+  $form['cr_reservation_window'] = array(
+    '#type' => 'textfield',
+    '#title' => t('How many days out can reservations be made?'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_reservation_window', 90, $key_nid),
+    '#description' => t('Currently this number cannot exceed 90 days'),
+    '#size' => 10,
   );
 
   $old_dates = array();
@@ -1998,10 +2017,9 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
     $key_nid = FALSE;
   }
 
-  //max reservation length
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
-  //max quantity 
   commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
+  commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
 
   $total = 0;
   $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);

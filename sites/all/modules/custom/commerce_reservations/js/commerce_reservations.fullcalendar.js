@@ -93,6 +93,14 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
+              if (Drupal.settings.commerce_reservations.reservation_window != 0) {
+                var endDateWindow = new Date();
+                if (end > endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window)) {
+                  $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' days past today.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }
+              }
             }
 
           }
@@ -104,7 +112,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (startHour > 12){
 	        startHour = startHour - 12;
 	        ampm = 'pm';
-        } else{
+        } else if (startHour == 12) {
+          ampm = 'pm';
+        } else {
 	        ampm = 'am';
         }
         startMinutes = start.getMinutes();
@@ -125,6 +135,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         endHour = end.getHours();
         if (endHour > 12){
 	        endHour = endHour - 12;
+	        ampm = 'pm';
+        } else if (endHour == 12) {
 	        ampm = 'pm';
         } else{
 	        ampm = 'am';
@@ -191,4 +203,10 @@ function addZero(time){
     time = "0" + time;
   }
   return time;
+}
+
+Date.prototype.addDays = function(days) {
+  var dat = new Date(this.valueOf());
+  dat.setDate(dat.getDate() + days);
+  return dat;
 }

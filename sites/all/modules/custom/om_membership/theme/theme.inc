@@ -331,7 +331,7 @@ function om_membership_preprocess_om_membership_checkout_completion(&$variables)
     }
   }
   else {
-    $home = l('home', '<front>');
-    $variables['message'] = t("No memberships were found on this account. There must have been an error. Return !home.", array('!home' => $home));
+    $account_link = l('account', 'user/' . $user->uid);
+    $variables['message'] = t("Thanks! Your membership has been activated! Return to your !account. Please contact station personnel if you have any questions.", array('!account' => $account_link));
   }
 }

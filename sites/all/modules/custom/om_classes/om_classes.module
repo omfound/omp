@@ -96,3 +96,25 @@ function om_classes_get_registrations($user) {
     return false;
   }
 }
+
+function om_classes_preprocess_user_profile(&$variables) {
+  $org_profile = profile2_by_uid_load($variables['elements']['#account']->uid, 'manage_organizational_membership');
+  $org_users = array();
+  $org_users[] = $variables['elements']['#account'];
+
+  if (!empty($org_profile->field_invitations['und'])) {
+    foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
+      if (!empty($invitation['value'])) {
+        $org_users[] = user_load_by_mail($invitation['value']);
+      }
+    } 
+  }
+
+  dsm($org_users);
+  //$orders = commerce_order_load_multiple(array(), array('uid' => $user_id));
+  dsm($variables);
+}
+
+function om_classes_org_membership_orders() {
+
+}

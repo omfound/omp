@@ -33,8 +33,9 @@ Drupal.cr = Drupal.cr || {};
         var nid = $(this).find('.nid .field-content').text();
         var pid = $(this).find('.pid .field-content').text(); 
 
-        //Update max reservation time
+        //Update max reservation time & reservation window
         Drupal.behaviors.product_filter.updateMaxReservationLimit(nid, pid, 1, basePath);
+        Drupal.behaviors.product_filter.updateReservationWindow(nid, pid, 1, basePath);
 
         //Add closed times / dates based on this item
         Drupal.behaviors.product_filter.addClosedDatesTimesToCalendar(nid, pid, 1, basePath);
@@ -107,7 +108,7 @@ Drupal.cr = Drupal.cr || {};
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
       startMonth = parseInt(startMonth) - 1;
       startDay = $('.start-date-wrapper .date-day .form-select').val();
-      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.start-date-wrapper .date-hour .form-select').val() != 12){
         startHour = $('.start-date-wrapper .date-hour .form-select').val();
         startHour = parseInt(startHour) + 12;
       } else{
@@ -120,7 +121,7 @@ Drupal.cr = Drupal.cr || {};
       endMonth = $('.end-date-wrapper .date-month .form-select').val();
       endMonth = parseInt(endMonth) - 1;
       endDay = $('.end-date-wrapper .date-day .form-select').val();
-      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm'){
+      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.end-date-wrapper .date-hour .form-select').val() != 12){
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
         endHour = parseInt(endHour) + 12;
       } else{
@@ -195,6 +196,19 @@ Drupal.cr = Drupal.cr || {};
       });
     },
     //end updateMaxReservationLimit function
+    
+    //start updateReservationWindow function
+    updateReservationWindow:function(nid, pid, quantity, basePath) {
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'cr/res_window/' + nid,
+        cache : false,
+        success : function (data) {
+          Drupal.settings.commerce_reservations.reservation_window = parseInt(data);
+        }
+      });
+    },
+    //end updateReservationWindow function
 
     //start addClosedDatesTimesToCalendar function
     addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
