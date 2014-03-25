@@ -33,6 +33,13 @@ Drupal.cr = Drupal.cr || {};
         var nid = $(this).find('.nid .field-content').text();
         var pid = $(this).find('.pid .field-content').text(); 
 
+        //Update max reservation time & reservation window
+        Drupal.behaviors.product_filter.updateMaxReservationLimit(nid, pid, 1, basePath);
+        Drupal.behaviors.product_filter.updateReservationWindow(nid, pid, 1, basePath);
+
+        //Add closed times / dates based on this item
+        Drupal.behaviors.product_filter.addClosedDatesTimesToCalendar(nid, pid, 1, basePath);
+
         //Add existing reservations for this item to calendar
         Drupal.behaviors.product_filter.addItemReservationsToCalendar(nid, pid, 1, basePath);
 
@@ -177,6 +184,117 @@ Drupal.cr = Drupal.cr || {};
     },
     //end hideItemFields function
 
+    //start updateMaxReservationLimit function
+    updateMaxReservationLimit:function(nid, pid, quantity, basePath) {
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'cr/max_hours/' + nid,
+        cache : false,
+        success : function (data) {
+          Drupal.settings.commerce_reservations.maximum_length = parseInt(data);
+        }
+      });
+    },
+    //end updateMaxReservationLimit function
+    
+    //start updateReservationWindow function
+    updateReservationWindow:function(nid, pid, quantity, basePath) {
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'cr/res_window/' + nid,
+        cache : false,
+        success : function (data) {
+          Drupal.settings.commerce_reservations.reservation_window = parseInt(data);
+        }
+      });
+    },
+    //end updateReservationWindow function
+
+    //start addClosedDatesTimesToCalendar function
+    addClosedDatesTimesToCalendar:function(nid, pid, quantity, basePath) {
+      $(".fullcalendar").fullCalendar('removeEvents', function(event){
+        if (event.className == 'closed-time' || event.className == 'closed-date' || event.className == 'unavailable-date' || event.className == 'unavailable-time') {
+          return true;
+        }
+      });
+
+      var basePath = Drupal.settings.basePath;
+      $.ajax(
+      {url : basePath + 'closed_times/',
+        cache : false,
+        success : function (data) {
+          counter = 0;
+          $('div.closed-time', data).each(function(index){
+            event = new Object();
+            event.title = 'Closed';
+            event.start = $(this).attr('start');
+            event.end = $(this).attr('end');
+            event.allDay = false;
+            event.className = 'closed-time';
+            event.color = '#56a4da';
+            event.backgroundColor = '#000';
+            event.eventBorderColor = '#00';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+
+          $('div.closed_dates', data).each(function(index){
+            event = new Object();
+            event.title = 'Closed';
+            event.start = $(this).attr('date')+' 00:00:00';
+            event.end = $(this).attr('date')+' 23:59:59';
+            event.allDay = false;
+            event.className = 'closed-date';
+            event.color = '#56a4da';
+            event.backgroundColor = '#000';
+            event.eventBorderColor = '#000';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+        }
+      });
+
+      $.ajax(
+      {url : basePath + 'closed_times/' + nid,
+        cache : false,
+        success : function (data) {
+          counter = 0;
+          $('div.closed-time', data).each(function(index){
+            event = new Object();
+            event.title = 'Unavailable';
+            event.start = $(this).attr('start');
+            event.end = $(this).attr('end');
+            event.allDay = false;
+            event.className = 'unavailable-time';
+            event.color = '#56a4da';
+            event.backgroundColor = '#3990C9';
+            event.eventBorderColor = '#3990C9';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+
+          $('div.closed_dates', data).each(function(index){
+            event = new Object();
+            event.title = 'Unavailable';
+            event.start = $(this).attr('date')+' 00:00:00';
+            event.end = $(this).attr('date')+' 23:59:59';
+            event.allDay = false;
+            event.className = 'unavailable-date';
+            event.color = '#56a4da';
+            event.backgroundColor = '#3990C9';
+            event.eventBorderColor = '#3990C9';
+            event.textColor = 'white';
+            dom_id: this.dom_id;
+            $(".fullcalendar").fullCalendar('renderEvent', event, true);
+          });
+        }
+      });
+    },
+    //end addClosedDatesTimesToCalendar function
+
     //start addItemReservationsToCalendar function
     addItemReservationsToCalendar:function(nid, pid, quantity, basePath) {
       //remove all current events from calendar
@@ -195,7 +313,6 @@ Drupal.cr = Drupal.cr || {};
       $('.view-footer input#edit-submit').hide();
 
       //load item reservations
-      console.log(basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity);
       $.ajax(
         {url : basePath + 'res-cal/' + pid + '/' + nid + '/' + quantity,
           cache : false,
@@ -309,8 +426,8 @@ Drupal.cr = Drupal.cr || {};
     this.base = Drupal.cr.calendarEvent;
     this.base(title, start, end);
     this.className = 'overlap';
-    this.backgroundColor = '#912711';
-    this.eventBorderColor = '#912711';
+    this.backgroundColor = '#991314';
+    this.eventBorderColor = '#991314';
     this.textColor = '#fff';
     this.field = $reservation.attr('field'); 
     this.index = $reservation.attr('index');
