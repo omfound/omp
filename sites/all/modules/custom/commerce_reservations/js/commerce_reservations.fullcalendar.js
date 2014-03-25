@@ -136,6 +136,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (endHour > 12){
 	        endHour = endHour - 12;
 	        ampm = 'pm';
+        } else if (endHour == 12) {
+	        ampm = 'pm';
         } else{
 	        ampm = 'am';
         }
