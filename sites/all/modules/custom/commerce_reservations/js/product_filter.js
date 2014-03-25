@@ -102,15 +102,13 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateSelectionToCalendar function
     addDateSelectionToCalendar:function() {
-      console.log('Adding date to calendar...');
       //get start date values from date picker
       previousStart = $('.start-date-wrapper .form-select').val();
       startYear = $('.start-date-wrapper .date-year .form-select').val();
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
       startMonth = parseInt(startMonth) - 1;
       startDay = $('.start-date-wrapper .date-day .form-select').val();
-      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.start-date-wrapper .date-ampm .form-select').val() != 12){
-        console.log($('.start-date-wrapper .date-ampm .form-select').val());
+      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.start-date-wrapper .date-hour .form-select').val() != 12){
         startHour = $('.start-date-wrapper .date-hour .form-select').val();
         startHour = parseInt(startHour) + 12;
       } else{
@@ -123,8 +121,7 @@ Drupal.cr = Drupal.cr || {};
       endMonth = $('.end-date-wrapper .date-month .form-select').val();
       endMonth = parseInt(endMonth) - 1;
       endDay = $('.end-date-wrapper .date-day .form-select').val();
-      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.end-date-wrapper .date-ampm .form-select').val() != 12){
-        console.log($('.end-date-wrapper .date-ampm .form-select').val());
+      if ($('.end-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.end-date-wrapper .date-hour .form-select').val() != 12){
         endHour = $('.end-date-wrapper .date-hour .form-select').val();
         endHour = parseInt(endHour) + 12;
       } else{
