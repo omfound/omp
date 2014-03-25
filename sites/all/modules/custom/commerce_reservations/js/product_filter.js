@@ -102,6 +102,7 @@ Drupal.cr = Drupal.cr || {};
 
     //start addDateSelectionToCalendar function
     addDateSelectionToCalendar:function() {
+      console.log('Adding date to calendar...');
       //get start date values from date picker
       previousStart = $('.start-date-wrapper .form-select').val();
       startYear = $('.start-date-wrapper .date-year .form-select').val();
