@@ -355,6 +355,13 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
  */
 function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $memberships = array();
+  $active_memberships = om_membership_get_active_memberships($user->uid);
+  if (!empty($active_memberships)) {
+    $memberships[] = commerce_order_load($active_memberships[$user->uid]->order_id);
+  }
+
+  /** Using new active membership function
+  $memberships = array();
   $acceptable_statuses = array('processing', 'completed', 'checked out');
   // Here we may want to make this something like -- anything other than pending.
   $orders = commerce_order_load_multiple(array(), array('uid' => $user->uid));
@@ -385,23 +392,43 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
         }
       }
     }
+  }**/
+
+
+  //check for org membership and add if applicable
+  if (empty($memberships)) {
+    $org_info = om_membership_user_org_membership($user);
+    if (!empty($org_info)) {
+      $memberships[] = $org_info['order'];
+    }
   }
 
+  $payment_status_options = payment_statuses_info();
   foreach ($memberships as $key => $info) {
-    $payment_method = om_membership_order_payment_method($info->order_id);
-    if (!empty($payment_method)) {
-      $memberships[$key]->payment_method = $payment_method['name'];
-      $memberships[$key]->payment_id = $payment_method['pid'];
-      $memberships[$key]->payment_status = $payment_method['status'];
-    }
-    else {
-      $memberships[$key]->payment_method = 'admin';
-      $memberships[$key]->payment_id = 'admin';
-      $memberships[$key]->payment_status = 'completed';
-    }
+    $memberships[$key]->payment = om_membership_order_payment_details($info->order_id);
   }
 
   return $memberships;
+}
+
+function om_membership_order_payment_details($order_id) {
+  $payment_status_options = payment_statuses_info();
+  $payment_method = om_membership_order_payment_method($order_id);
+  if (!empty($payment_method)) {
+    $payment_details = array(
+      'method' => $payment_method['name'],
+      'id' => $payment_method['pid'],
+      'status' => $payment_method['status'],
+    );
+    if (array_key_exists($payment_method['status'], $payment_status_options)) {
+      $payment_details['paid'] = $payment_status_options[$payment_method['status']]->parent;
+    }
+  }
+  else {
+    return false;
+  }
+
+  return $payment_details;
 }
 
 function om_membership_order_payment_method($order_id) {
@@ -503,6 +530,73 @@ function om_membership_get_expired_memberships() {
   return $users;
 }
 
+function om_membership_get_expired_memberships_enhanced() {
+  $active_memberships = om_membership_get_active_memberships();
+  $users = array();
+  $roles = om_membership_return_membership_roles();
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      if (empty($users[$row->uid])) {
+        if (!array_key_exists($row->uid, $active_memberships)) {
+          $users[$row->uid] = user_load($row->uid);
+        }
+      }
+    }
+  }
+
+  return $users;
+}
+
+function om_memberships_role_users() {
+  $roles = om_membership_return_membership_roles();
+  $role_users = array();
+
+  foreach ($roles AS $rid => $role) {
+    $query = db_select('users_roles', 'roles');
+    $query->fields('roles', array('uid'));
+    $query->condition('roles.rid', $rid, '=');
+    $resource = $query->execute();
+    while ($row = $resource->fetchObject()) {
+      $role_users[$role->name][$row->uid] = $row->uid;
+    }
+  }
+
+  return $role_users;
+}
+
+function om_membership_expire_membership_roles($expired_users = false) {
+  if (empty($expired_users)) {
+    $expired_users = om_membership_get_expired_memberships_enhanced();
+  }
+  foreach ($expired_users as $uid => $user) {
+    om_membership_remove_user_role($user);
+  } 
+}
+
+function om_membership_add_membership_roles($active_memberships = false) {
+  if (empty($active_memberships)) {
+    $active_memberships = om_membership_get_active_memberships();
+  }
+  foreach ($active_memberships as $uid => $order_info) {
+    if (!empty($order_info->field_associated_role_rid)) {
+      $role = user_role_load($order_info->field_associated_role_rid); 
+      if (!empty($role)) {
+        unset($user);
+        $user = user_load($uid);
+        if (!empty($user->uid)) {
+          om_membership_remove_user_role($user);
+          $user->roles[$role->rid] = $role->name;
+          user_save($user);
+        }
+      }
+    }
+  }
+}
+
 /**
  * Ensure that all users have the membership types they are supposed to.
  */
@@ -597,6 +691,66 @@ function om_membership_role_product($rid) {
   return false;
 }
 
+function om_membership_get_active_memberships($uid = false) {
+  $query = "
+    SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_associated_role.field_associated_role_rid, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
+    FROM commerce_line_item 
+    JOIN commerce_product ON commerce_line_item.line_item_label = commerce_product.sku 
+    JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
+    JOIN field_data_field_associated_role ON field_data_field_associated_role.entity_id = commerce_product.product_id
+    JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
+    WHERE commerce_product.type = 'membership_plan'";
+
+  if (!empty($uid) && is_numeric($uid)) {
+    $query .= " AND commerce_order.uid = :uid";
+    $results = db_query($query, array(':uid' => $uid));
+  }
+  else {
+    $results = db_query($query);
+  }
+
+  $membership_orders = array();
+
+  foreach ($results as $order) {
+    $membership_orders[$order->uid][] = $order;
+  }
+
+  //limit to just the latest active membership purchased
+  $latest_memberships = array();
+  $now = time();
+  foreach ($membership_orders as $uid => $info) {
+    foreach ($info as $key => $membership) {
+      //skip if created date is beyond now
+      if ($membership->created > $now) {
+        continue;
+      }
+
+      //calculate expiration timestamp
+      if (!empty($membership->field_duration_value)) {
+        $exp = $membership->created + ($membership->field_duration_value * 31688800);
+      }
+      else { 
+        $exp = 0;
+      }
+
+      //skip if expired
+      if (!empty($exp) && $exp < $now) {
+        continue;
+      }
+
+      //skip if not the newest active membership
+      if (empty($latest_memberships[$uid])) {
+        $latest_memberships[$uid] = $membership;
+      }
+      elseif ($membership->created > $latest_memberships[$uid]->created) {
+        $latest_memberships[$uid] = $membership;
+      }
+    }
+  }
+
+  return $latest_memberships;
+}
+
 /**
  * If a commerce_order object contains membership line items return those items.
  *  @param $commerce_order stdClass()
@@ -664,11 +818,18 @@ function om_membership_user_org_membership($user) {
   $org_admin = $result->fetchField();
   if (!empty($org_admin)) {
     $admin = user_load($org_admin);
+    $active_memberships = om_membership_get_active_memberships($admin->uid);
+    if (!empty($active_memberships)) {
+      $admin_product = commerce_product_load($active_memberships[$admin->uid]->product_id);
+      $admin_order = commerce_order_load($active_memberships[$admin->uid]->order_id);
+    }
+    /**
     $admin_memberships = om_membership_get_user_membership_products($admin); 
     $admin_orders = om_membership_get_user_membership_orders($admin);
     $admin_order = array_shift($admin_orders);
     $admin_product = array_shift($admin_memberships);
-    if (!empty($admin_product) && !empty($admin_order)) {
+    **/
+    if (!empty($admin_product) && $admin_product->sku == 'membership-organizational' && !empty($admin_order)) {
       $org_membership['product'] = $admin_product;
       $org_membership['order'] = $admin_order;
       return $org_membership;
@@ -893,15 +1054,18 @@ function om_membership_url_inbound_alter(&$path, $original_path, $path_language)
  * Implements hook_cron
  */
 function om_membership_cron() {
+  $users = om_membership_get_expired_memberships_enhanced();
   if (module_exists('rules')) {
     // Get expirees
-    $users = om_membership_get_expired_memberships();
     foreach ($users AS $user) {
       rules_invoke_event('om_membership_on_expiration', $user);
     }
     // Adjust any incorrect or outdated membership records.
-    om_membership_adjust_existing_memberships();
+
+    om_membership_expire_membership_roles($users);
+    om_membership_add_membership_roles();
   }
+
   // Ensure that relationships between org member admins and subs are correct.
   om_membership_validate_all_org_sub_members();
 }
@@ -1099,7 +1263,7 @@ function om_membership_form_alter(&$form, &$form_state, $form_id) {
       global $user;
       $membership_orders = om_membership_get_user_membership_orders($user, $active = TRUE);
       foreach ($membership_orders as $key => $info) {
-        if ($info->payment_method == 'pay_later') {
+        if (!empty($info->payment) && $info->payment['paid'] == 'payment_status_money_not_transferred') {
           om_membership_alter_node_form($form);
           continue;
         }
