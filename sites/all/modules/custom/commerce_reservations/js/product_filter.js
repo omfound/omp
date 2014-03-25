@@ -108,7 +108,7 @@ Drupal.cr = Drupal.cr || {};
       startMonth = $('.start-date-wrapper .date-month .form-select').val();
       startMonth = parseInt(startMonth) - 1;
       startDay = $('.start-date-wrapper .date-day .form-select').val();
-      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm'){
+      if ($('.start-date-wrapper .date-ampm .form-select').val() == 'pm' && $('.start-date-wrapper .date-ampm .form-select').val() != 12){
         startHour = $('.start-date-wrapper .date-hour .form-select').val();
         startHour = parseInt(startHour) + 12;
       } else{
