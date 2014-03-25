@@ -96,3 +96,7 @@ function om_classes_get_registrations($user) {
     return false;
   }
 }
+
+function om_classes_preprocess_user_profile(&$variables) {
+  dsm($variables);
+}
