@@ -220,6 +220,7 @@
   width: 550px;
   margin-bottom: 20px;
   line-height: 0;
+  clear: left;
 }
 
 #session-video-embed-tray {
