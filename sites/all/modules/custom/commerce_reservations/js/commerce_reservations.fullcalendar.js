@@ -19,74 +19,11 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         return false;
       }
     }  
-    options.eventMouseover = function(event){
-    }
     options.dayClick = function(date, allDay, jsEvent, view){
       if (view.name == 'month'){
         $('.fullcalendar').fullCalendar('changeView', 'agendaWeek');
         $('.fullcalendar').fullCalendar('gotoDate', date);
       }
-    }
-    options.viewDisplay = function(view) {
-      if(view.name == 'month'){
-	      $('.fullcalendar').fullCalendar('removeEvents', function(event){
-        if (event.className == 'closed-time'){
-          return true;
-        }
-      });
-      } else if(view.name == 'agendaWeek'){
-        //check if closed times have already been added
-        closedSet = false;
-        allEvents = $('.fullcalendar').fullCalendar('clientEvents');
-        for (var ii = 0; ii <= 10; ii++) {
-          if (typeof allEvents[ii] != 'undefined') {
-            if (allEvents[ii].hasOwnProperty('title')) {
-              if (allEvents[ii].title == 'Closed') {
-                closedSet = true;
-              }
-            }
-          }
-        }
-        if (!closedSet) {
-          var basePath = Drupal.settings.basePath;
-	        $.ajax(
-          {url : basePath + 'closed_times/',
-            cache : false,
-            success : function (data) {
-              counter = 0;
-              $('div.closed-time', data).each(function(index){
-                event = new Object();
-                event.title = 'Closed';
-                event.start = $(this).attr('start');
-                event.end = $(this).attr('end');
-                event.allDay = false;
-                event.className = 'closed-time';
-                event.color = '#56a4da';
-                event.backgroundColor = '#ac3d33';
-                event.eventBorderColor = '#56a4da';
-                event.textColor = 'white';
-                dom_id: this.dom_id;
-                $(".fullcalendar").fullCalendar('renderEvent', event, false);
-              });
-
-              $('div.closed_dates', data).each(function(index){
-                event = new Object();
-                event.title = 'Closed';
-                event.start = $(this).attr('date')+' 00:00:00';
-                event.end = $(this).attr('date')+' 23:59:59';
-                event.allDay = false;
-                event.className = 'closed-date';
-                event.color = '#56a4da';
-                event.backgroundColor = '#ac3d33';
-                event.eventBorderColor = '#56a4da';
-                event.textColor = 'white';
-                dom_id: this.dom_id;
-                $(".fullcalendar").fullCalendar('renderEvent', event, false);
-              });
-          }
-        });
-      }
-    }
     }
     options.selectable = true;
     options.selectHelper = true;
@@ -108,7 +45,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (array.length >= 1 && dontCheck == false){
           for(i in array){
             //Check for overlaps
-            if (array[i].className == 'overlap'){
+            if (array[i].className == 'overlap' || array[i].className == 'unavailable-date' || array[i].className == 'unavailable-time'){
               if(!(array[i].start >= end || array[i].end <= start)){
                 $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
                 $('.view-footer .form-submit').hide();
@@ -156,6 +93,14 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                   dateInvalid = true;
                 }  
               }
+              if (Drupal.settings.commerce_reservations.reservation_window != 0) {
+                var endDateWindow = new Date();
+                if (end > endDateWindow.addDays(Drupal.settings.commerce_reservations.reservation_window)) {
+                  $('.date-status').html('<p class = "error">You cannot make a reservation more than '+Drupal.settings.commerce_reservations.reservation_window+' days past today.</p>');
+                  $('.view-footer .form-submit').hide();
+                  dateInvalid = true;
+                }
+              }
             }
 
           }
@@ -167,7 +112,9 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (startHour > 12){
 	        startHour = startHour - 12;
 	        ampm = 'pm';
-        } else{
+        } else if (startHour == 12) {
+          ampm = 'pm';
+        } else {
 	        ampm = 'am';
         }
         startMinutes = start.getMinutes();
@@ -188,6 +135,8 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         endHour = end.getHours();
         if (endHour > 12){
 	        endHour = endHour - 12;
+	        ampm = 'pm';
+        } else if (endHour == 12) {
 	        ampm = 'pm';
         } else{
 	        ampm = 'am';
@@ -254,4 +203,10 @@ function addZero(time){
     time = "0" + time;
   }
   return time;
+}
+
+Date.prototype.addDays = function(days) {
+  var dat = new Date(this.valueOf());
+  dat.setDate(dat.getDate() + days);
+  return dat;
 }

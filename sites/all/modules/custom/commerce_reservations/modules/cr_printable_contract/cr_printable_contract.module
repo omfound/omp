@@ -132,15 +132,6 @@ function cr_printable_contract($order_id) {
     }
   }
 
-  //$timezone = $node->field_cr_date[0]['timezone'];
-  //$timezone_db = $node->field_cr_date[0]['timezone_db'];
-  //$start_date = date_make_date($node->field_cr_date[0]['value'], $timezone_db);
-  //$end_date = date_make_date($node->field_cr_date[0]['value2'], $timezone_db);
-  //date_timezone_set($start_date, timezone_open($timezone));
-  //date_timezone_set($end_date, timezone_open($timezone));
-
-  //$hours = round((intval(date_format($end_date,"U")) - intval(date_format($start_date,"U"))) / 3600, 2);
-
   $order_date = $order->created;
   $hours = 10; 
   $html = theme('cr_printable_contract', array(
