@@ -205,7 +205,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       );
       $data = array_merge($data, $auth);
       dsm($data);
-      return $client->{$function}($data);
+      //return $client->{$function}($data);
     }
     catch(Exception $e) {
       if (is_object($pbs)) {
