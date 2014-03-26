@@ -75,7 +75,7 @@ function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $
     if (empty($items)) {
       $cablecast_file_interface = new cablecastFile();
       $files = $cablecast_file_interface->get_orphaned_files();
-      /*$widget = array(
+      $widget = array(
         '#title' => t('Select a File from Ingest:'),
         '#type' => 'select',
         '#options' => $files,
@@ -83,12 +83,12 @@ function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $
         '#empty_value' => 'none',
         '#required' => $element['#required'],
         '#description' => $element['#description'],
-      );*/
+      );
     }
     else {
-     /* $widget = array(
+      $widget = array(
         '#markup' => '<label>' . t('Broadcast File') . '</label>' . om_playback_servers_cablecast_create_widget_table($items)
-      );*/
+      );
     }
     $element['uri'] = $widget;
     return $element;
