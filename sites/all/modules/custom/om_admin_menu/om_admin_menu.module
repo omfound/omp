@@ -362,10 +362,11 @@ function om_admin_menu_menu_alter(&$items) {
  * cannot switch to user 1 or administrative users
  */
 function om_admin_menu_devel_switch_user_access($name) {
+  global $user;
   if (user_access('switch users')) {
     if (drupal_valid_token(@$_GET['token'], "devel/switch/$name|" . @$_GET['destination'], TRUE)) {
       $account = user_load_by_name($name);
-      if ($account->uid != 1 && !in_array('administrator', $account->roles)) {
+      if (($account->uid != 1 && !in_array('administrator', $account->roles)) || $user->uid == 1) {
         return true;
       }
     }
