@@ -70,7 +70,7 @@ function om_playback_servers_cablecast_field_widget_info() {
  * Implements hook_field_widget_form
  */
 function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  if (user_access('use cablecast media browser')) {
+  /*if (user_access('use cablecast media browser')) {
     drupal_add_css(drupal_get_path('module', 'om_playback_servers_cablecast') . '/css/om_playback_servers_cablecast_file_selector.css');
     if (empty($items)) {
       $cablecast_file_interface = new cablecastFile();
@@ -92,7 +92,7 @@ function om_playback_servers_cablecast_field_widget_form(&$form, &$form_state, $
     }
     $element['uri'] = $widget;
     return $element;
-  }
+  }*/
 }
 
 /**
