@@ -198,15 +198,13 @@ class cablecastPlaybackServerController extends playbackServerController {
       if (!file_exists($temp)) {
         file_put_contents($temp, file_get_contents($endpoint));
       }
-      dsm(file_get_contents($temp));
       $client = new SoapClient($temp);
       $auth = array(
         'username' => $pbs->user,
         'password' => $pbs->password
       );
       $data = array_merge($data, $auth);
-      dsm($data);
-      //return $client->{$function}($data);
+      return $client->{$function}($data);
     }
     catch(Exception $e) {
       if (is_object($pbs)) {
