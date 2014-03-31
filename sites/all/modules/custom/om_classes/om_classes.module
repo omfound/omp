@@ -132,8 +132,8 @@ function om_classes_preprocess_user_profile(&$variables) {
     SELECT * FROM commerce_line_item
     JOIN commerce_order ON commerce_order.order_id = commerce_line_item.order_id
     JOIN commerce_product ON commerce_product.sku = commerce_line_item.sku
-    WHERE order.uid IN (:uids) 
-    AND order.created > :membership_start 
+    WHERE commerce_order.uid IN (:uids) 
+    AND commerce_order.created > :membership_start 
     AND commerce_product.type = 'class'
     ";
 
