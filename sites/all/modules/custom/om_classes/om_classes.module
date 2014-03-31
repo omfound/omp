@@ -114,7 +114,14 @@ function om_classes_preprocess_user_profile(&$variables) {
     $org_users = null;
   }
 
-  dsm($org_users);
-  dsm($org_info);
-  dsm($variables);
+  $org_registrations = array();
+  if (!empty($org_users)) {
+    foreach ($org_users as $key => $org_user) {
+      dsm(om_classes_get_registrations($org_user));
+    }
+  }
+  //dsm($org_users);
+  //dsm($org_info);
+  //dsm($variables);
 }
+
