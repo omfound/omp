@@ -108,13 +108,20 @@ function om_classes_preprocess_user_profile(&$variables) {
         $org_users[] = user_load_by_mail($invitation['value']);
       }
     } 
-    $org_info = om_membership_user_org_membership($user);
+    $org_info = om_membership_user_org_membership($variables['elements']['#account']);
   }
   else {
     $org_users = null;
   }
 
-  dsm($org_users);
-  dsm($org_info);
-  dsm($variables);
+  $org_registrations = array();
+  if (!empty($org_users)) {
+    foreach ($org_users as $key => $org_user) {
+      dsm(om_classes_get_registrations($org_user));
+    }
+  }
+  //dsm($org_users);
+  //dsm($org_info);
+  //dsm($variables);
 }
+
