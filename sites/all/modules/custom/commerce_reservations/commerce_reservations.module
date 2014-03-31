@@ -1733,7 +1733,7 @@ function commerce_reservations_cron(){
   foreach ($line_items as $line_item){
     $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2'] . " UTC");
     if ($end_date < time()){
-      if ($line_item->field_checkout_status['und'][0]['value'] == "Checked Out"){
+      if (!empty($line_item->field_checkout_status['und'][0]) && $line_item->field_checkout_status['und'][0]['value'] == "Checked Out"){
         $line_item->field_checkout_status['und'][0]['value'] = "Overdue";
         commerce_line_item_save($line_item);
       }
