@@ -114,23 +114,39 @@ function om_classes_preprocess_user_profile(&$variables) {
     $org_users = null;
   }
 
+  if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
+    $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+  }
+  else {
+    $membership_end = 0;
+  }
+
   foreach ($org_users as $key => $org_user) {
     $uids[] = $org_user->uid;
   }
 
   dsm($org_info);
   dsm($uids);
-  /**
+
   $query = "
     SELECT * FROM commerce_line_item
     JOIN commerce_order ON commerce_order.order_id = commerce_line_item.order_id
     JOIN commerce_product ON commerce_product.sku = commerce_line_item.sku
-    WHERE order.uid IN (:uids) AND order.created > 
-  $org_registrations = array();
-  if (!empty($org_users)) {
-    foreach ($org_users as $key => $org_user) {
-      dsm(om_classes_get_registrations($org_user));
-    }
-  }**/
+    WHERE order.uid IN (:uids) 
+    AND order.created > :membership_start 
+    AND commerce_product.type = 'class'
+    ";
+
+  if (!empty($membership_end)) {
+    $query .= " AND order.created < :membership_end";
+    $class_orders = db_query($query, array(':uids' => $uids, ':membership_start' => $org_info['order']->created, ':membership_end' => $membership_end));
+  }
+  else {
+    $class_orders = db_query($query, array(':uids' => $uids, ':membership_start' => $org_info['order']->created));
+  }
+
+  foreach ($class_orders as $class_order) {
+    dsm($class_order);
+  }
 }
 
