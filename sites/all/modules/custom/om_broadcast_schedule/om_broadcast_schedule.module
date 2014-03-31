@@ -252,7 +252,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
   $context['results']['delete_airings'] = array();
   // We are going to try and match based on schedule id.
   // NB: if there are other pbs types in the future we may need more criteria here.
-  watchdog('obs', 'Point 1');
   if (!empty($context['results']['airing_values'])) {
     foreach($context['results']['airing_values'] AS $airing) {
       $matched = FALSE;
@@ -271,7 +270,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       }
     }
   }
-  watchdog('obs', 'Point 2');
   // Now select all airings in the current date range and see whether to create/leave alone/delete
   $all_airings = om_broadcast_schedule_get_airings_by_date_range($context['results']['run_info']['start'], $context['results']['run_info']['end'], $context['results']['run_info']['channel_tid']);
   foreach ($all_airings AS $row) {
@@ -279,7 +277,6 @@ function _om_broadcast_schedule_match_drupal_airings(&$context) {
       $context['results']['delete_airings'][] = $row['entity_id'];
     }
   }
-  watchdog('obs', 'Point 3');
   $context['message'] = t('Matching airings on Drupal site.');
 }
 
