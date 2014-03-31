@@ -108,13 +108,13 @@ function om_classes_preprocess_user_profile(&$variables) {
         $org_users[] = user_load_by_mail($invitation['value']);
       }
     } 
+    $org_info = om_membership_user_org_membership($user);
+  }
+  else {
+    $org_users = null;
   }
 
   dsm($org_users);
-  //$orders = commerce_order_load_multiple(array(), array('uid' => $user_id));
+  dsm($org_info);
   dsm($variables);
-}
-
-function om_classes_org_membership_orders() {
-
 }
