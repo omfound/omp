@@ -202,7 +202,7 @@ function om_broadcast_schedule_schedule_sync_steps($channel_tid, $start, $end, $
     'end' => $rounded_days['end'],
     'mode' => $mode
   );
-  dsm($info);
+  die(print_r($info, true));
   $steps = array(
     array('_om_broadcast_schedule_get_pbs_airings', array($info)),
     array('_om_broadcast_schedule_match_drupal_airings', array()),
