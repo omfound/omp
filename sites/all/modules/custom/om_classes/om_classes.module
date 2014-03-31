@@ -125,29 +125,37 @@ function om_classes_preprocess_user_profile(&$variables) {
     $uids[] = $org_user->uid;
   }
 
-  dsm($uids);
-  dsm($membership_end);
-  dsm($org_info['order']->created);
+  $all_classes = dsm(om_classes_user_classes($uids, $org_info['order']->created, $membership_end));
+  dsm($all_classes);
+}
 
+function om_classes_user_classes($uids = array(), $after_date = NULL, $before_date = NULL) {
   $query = "
     SELECT * FROM commerce_line_item
     JOIN commerce_order ON commerce_order.order_id = commerce_line_item.order_id
     JOIN commerce_product ON commerce_product.sku = commerce_line_item.line_item_label
     WHERE commerce_order.uid IN (:uids) 
-    AND commerce_order.created > :membership_start 
     AND commerce_product.type = 'class'
     ";
 
-  if (!empty($membership_end)) {
-    $query .= " AND commerce_order.created < :membership_end";
-    $class_orders = db_query($query, array(':uids' => $uids, ':membership_start' => $org_info['order']->created, ':membership_end' => $membership_end));
+  if (!empty($after_date) || !empty($before_date)) {
+    if (!empty($after_date) && !empty($before_date)) {
+      $query .= " AND commerce_order.created < :before_date";
+      $query .= " AND commerce_order.created > :after_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':after_date' => $after_date, ':before_date' => $before_date));
+    }
+    elseif (!empty($after_date)) {
+      $query .= " AND commerce_order.created > :after_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':after_date' => $after_date));
+    }
+    else {
+      $query .= " AND commerce_order.created < :before_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':before_date' => $before_date));
+    }
   }
   else {
-    $class_orders = db_query($query, array(':uids' => $uids, ':membership_start' => $org_info['order']->created));
+    $class_orders = db_query($query, array(':uids' => $uids));
   }
 
-  foreach ($class_orders as $class_order) {
-    dsm($class_order);
-  }
+  return $class_orders->fetchAllAssoc('line_item_id');
 }
-
