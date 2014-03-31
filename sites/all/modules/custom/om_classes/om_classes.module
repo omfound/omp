@@ -138,7 +138,7 @@ function om_classes_preprocess_user_profile(&$variables) {
     ";
 
   if (!empty($membership_end)) {
-    $query .= " AND order.created < :membership_end";
+    $query .= " AND commerce_order.created < :membership_end";
     $class_orders = db_query($query, array(':uids' => $uids, ':membership_start' => $org_info['order']->created, ':membership_end' => $membership_end));
   }
   else {
