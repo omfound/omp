@@ -125,8 +125,9 @@ function om_classes_preprocess_user_profile(&$variables) {
     $uids[] = $org_user->uid;
   }
 
-  dsm($org_info);
   dsm($uids);
+  dsm($membership_end);
+  dsm($org_info['order']->created);
 
   $query = "
     SELECT * FROM commerce_line_item
