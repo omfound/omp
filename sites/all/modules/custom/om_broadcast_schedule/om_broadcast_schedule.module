@@ -288,7 +288,6 @@ function _om_broadcast_schedule_purge_unmatched(&$context) {
     om_broadcast_schedule_delete_airing_node($airing);
   }
   $context['message'] = t('Purging unmatched airing nodes.');
-  die('step 2');
 }
 
 /**
@@ -300,6 +299,7 @@ function _om_broadcast_schedule_create_new(&$context) {
     om_broadcast_schedule_create_airing_node($airing);
   }
   $context['message'] = t('Create new airing nodes.');
+  die('step 3');
 }
 
 /**
