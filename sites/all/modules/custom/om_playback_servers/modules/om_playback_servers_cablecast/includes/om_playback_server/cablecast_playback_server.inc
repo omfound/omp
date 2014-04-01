@@ -204,7 +204,6 @@ class cablecastPlaybackServerController extends playbackServerController {
         'password' => $pbs->password
       );
       $data = array_merge($data, $auth);
-      dsm($data);
       return $client->{$function}($data);
     }
     catch(Exception $e) {
