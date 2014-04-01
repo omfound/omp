@@ -107,13 +107,7 @@ class cablecastFile {
           $new_file_name = $meta_data->CreateNewShowRecordResult . $file->FileName;
           $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
           $options = array('ID' => $file_id, 'NewName' => $new_file_name);
-          try {
-            $controller->rename_file($this->pbs, $options);
-          }
-          catch (Exception $e) {
-            dsm($e->getMessage());
-            dsm($options);
-          }
+          $controller->rename_file($this->pbs, $options);
           return 'cablecast://' . $meta_data->CreateNewShowRecordResult;
         }
       }
