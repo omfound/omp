@@ -103,14 +103,16 @@ class cablecastFile {
           )
         );
         $meta_data = $controller->create_metadata($this->pbs, $entity);
-        dsm($meta_data);
         if (!empty($meta_data->CreateNewShowRecordResult) && is_numeric($meta_data->CreateNewShowRecordResult)) {
           $new_file_name = $meta_data->CreateNewShowRecordResult . $file->FileName;
           $new_file_name = substr($new_file_name, 0, strripos($new_file_name, '.'));
-          dsm('RENAMED FILE:');
-          dsm($new_file_name);
           $options = array('ID' => $file_id, 'NewName' => $new_file_name);
-          $controller->rename_file($this->pbs, $options);
+          try {
+            $controller->rename_file($this->pbs, $options);
+          }
+          catch (Exception $e) {
+            dsm($e->getMessage());
+          }
           return 'cablecast://' . $meta_data->CreateNewShowRecordResult;
         }
       }
