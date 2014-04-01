@@ -112,6 +112,7 @@ class cablecastFile {
           }
           catch (Exception $e) {
             dsm($e->getMessage());
+            dsm($options);
           }
           return 'cablecast://' . $meta_data->CreateNewShowRecordResult;
         }
