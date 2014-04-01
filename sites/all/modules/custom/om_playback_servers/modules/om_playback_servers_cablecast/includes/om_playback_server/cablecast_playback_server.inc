@@ -137,7 +137,6 @@ class cablecastPlaybackServerController extends playbackServerController {
       'CrawlText'   => !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : $default_crawl, //string</CrawlText>
       'CrawlLength' => !empty($schedule_info['TotalSeconds']) ? $schedule_info['TotalSeconds'] : $default_crawl_duration, //int</CrawlLength>
     );
-    dsm($params);
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {
       return array('ScheduleID' => $response->AddScheduleEventResult);
@@ -205,6 +204,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'password' => $pbs->password
       );
       $data = array_merge($data, $auth);
+      dsm($data);
       return $client->{$function}($data);
     }
     catch(Exception $e) {
