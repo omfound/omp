@@ -97,10 +97,10 @@ function om_classes_get_registrations($user) {
   }
 }
 
-function om_classes_preprocess_user_profile(&$variables) {
-  $org_profile = profile2_by_uid_load($variables['elements']['#account']->uid, 'manage_organizational_membership');
+function om_classes_user_view($account, $view_mode) {
+  $org_profile = profile2_by_uid_load($account->uid, 'manage_organizational_membership');
   $org_users = array();
-  $org_users[] = $variables['elements']['#account'];
+  $org_users[] = $account;
 
   if (!empty($org_profile->field_invitations['und'])) {
     foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
@@ -108,7 +108,7 @@ function om_classes_preprocess_user_profile(&$variables) {
         $org_users[] = user_load_by_mail($invitation['value']);
       }
     } 
-    $org_info = om_membership_user_org_membership($variables['elements']['#account']);
+    $org_info = om_membership_user_org_membership($account);
   }
   else {
     $org_users = null;
@@ -126,17 +126,20 @@ function om_classes_preprocess_user_profile(&$variables) {
   }
 
   $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
-  $variables['elements']['profile_manage_organizational_membership']['view']['profile2']['class_info'] = array(
-  );
   //dsm($variables); 
   //dsm($all_classes);
+  $account->content['org-classes'] = array(
+    'title' => array(
+      '#markup' => '<h3>' . t('Organization Class Use') . '</h3>',
+    ),
+    'class-history' => array(
+      '#markup' => om_classes_build_class_table($all_classes),
+    ),
+    '#weight' => 4,
+  );
 }
 
-function om_classes_user_view($account, $view_mode) {
-  dsm($account);
-}
-
-function om_classes_render_org_classes($classes) {
+function om_classes_build_class_table($classes) {
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
     $output .= t('No classes have been taken under this membership.');
