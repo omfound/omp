@@ -135,7 +135,7 @@ function om_classes_user_view($account, $view_mode) {
     'class-history' => array(
       '#markup' => om_classes_build_class_table($all_classes),
     ),
-    '#weight' => 3,
+    '#weight' => 2.9,
   );
 }
 
