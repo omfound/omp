@@ -114,28 +114,28 @@ function om_classes_user_view($account, $view_mode) {
     $org_users = null;
   }
 
-  if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
-    $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
-  }
-  else {
-    $membership_end = 0;
-  }
+  if (!empty($org_info['order']) && $org_info['order']->uid == $account->uid) {
+    if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
+      $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+    }
+    else {
+      $membership_end = 0;
+    }
 
-  foreach ($org_users as $key => $org_user) {
-    $uids[] = $org_user->uid;
-  }
+    foreach ($org_users as $key => $org_user) {
+      $uids[] = $org_user->uid;
+    }
 
-  $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
-  //dsm($variables); 
-  //dsm($all_classes);
-  $account->content['org-classes'] = array(
-    'title' => array(
-      '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
-    ),
-    'class-history' => array(
-      '#markup' => om_classes_build_class_table($all_classes),
-    ),
-  );
+    $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
+    $account->content['org-classes'] = array(
+      'title' => array(
+        '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
+      ),
+      'class-history' => array(
+        '#markup' => om_classes_build_class_table($all_classes),
+      ),
+    );
+  }
 }
 
 function om_classes_build_class_table($classes) {
