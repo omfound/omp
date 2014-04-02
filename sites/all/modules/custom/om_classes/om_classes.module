@@ -137,6 +137,7 @@ function om_classes_user_view($account, $view_mode) {
     ),
     '#weight' => 2.9,
   );
+  dsm($account);
 }
 
 function om_classes_build_class_table($classes) {
