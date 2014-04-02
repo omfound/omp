@@ -114,6 +114,8 @@ function om_classes_user_view($account, $view_mode) {
     $org_users = null;
   }
 
+  dsm($org_info);
+  dsm($account);
   if (!empty($org_info['order']) && $org_info['order']->uid == $account->uid) {
     if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
       $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
