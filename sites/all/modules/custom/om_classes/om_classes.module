@@ -126,8 +126,36 @@ function om_classes_preprocess_user_profile(&$variables) {
   }
 
   $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
-  dsm($variables); 
-  dsm($all_classes);
+  $variables['elements']['profile_manage_organizational_membership']['view']['profile2']['class_info'] = array(
+  );
+  //dsm($variables); 
+  //dsm($all_classes);
+}
+
+function om_classes_user_view($account, $view_mode) {
+  dsm($account);
+}
+
+function om_classes_render_org_classes($classes) {
+  $output = '<strong>Class History</strong>';
+  if (empty($classes)) {
+    $output .= t('No classes have been taken under this membership.');
+    return $output;
+  }
+
+  $output .= count($classes) . t(' classes have been taken under this membership.');
+  $output .= '<table>';
+  $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
+  foreach ($classes as $class) {
+    $output .= '<tr>';
+    $user = user_load($class->uid);
+    $output .= '<td>' . $user->name . '</td>';
+    $output .= '<td>' . $class->title . '</td>';
+    $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output;
 }
 
 function om_classes_user_classes($uids = array(), $after_date = NULL, $before_date = NULL) {
