@@ -130,12 +130,12 @@ function om_classes_user_view($account, $view_mode) {
   //dsm($all_classes);
   $account->content['org-classes'] = array(
     'title' => array(
-      '#markup' => '<h3>' . t('Organization Class Use') . '</h3>',
+      '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
     ),
     'class-history' => array(
       '#markup' => om_classes_build_class_table($all_classes),
     ),
-    '#weight' => 4,
+    '#weight' => 3,
   );
 }
 
@@ -145,6 +145,7 @@ function om_classes_build_class_table($classes) {
     $output .= t('No classes have been taken under this membership.');
     return $output;
   }
+  $output .= '<br />';
 
   $output .= count($classes) . t(' classes have been taken under this membership.');
   $output .= '<table>';
