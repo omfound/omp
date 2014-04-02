@@ -126,6 +126,7 @@ function om_classes_preprocess_user_profile(&$variables) {
   }
 
   $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
+  dsm($variables); 
   dsm($all_classes);
 }
 
