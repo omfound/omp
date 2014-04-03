@@ -325,7 +325,7 @@ function _om_membership_compare_vocs($a, $b) {
  *    Array of commerce product instances.
  */
 function om_membership_get_user_membership_products($user, $active = TRUE) {
-  if (!is_object($user) && !isset($user->uid)) {
+  if (!is_object($user) || empty($user->uid)) {
     return array();
   }
   $products = array();
@@ -356,6 +356,7 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
 function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $memberships = array();
   $active_memberships = om_membership_get_active_memberships($user->uid);
+
   if (!empty($active_memberships)) {
     $memberships[] = commerce_order_load($active_memberships[$user->uid]->order_id);
   }
@@ -692,6 +693,10 @@ function om_membership_role_product($rid) {
 }
 
 function om_membership_get_active_memberships($uid = false) {
+  if (empty($uid)) {
+    return array();
+  }
+
   $query = "
     SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_associated_role.field_associated_role_rid, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
@@ -699,7 +704,7 @@ function om_membership_get_active_memberships($uid = false) {
     JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
     JOIN field_data_field_associated_role ON field_data_field_associated_role.entity_id = commerce_product.product_id
     JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
-    WHERE commerce_product.type = 'membership_plan'";
+    WHERE commerce_product.type = 'membership_plan' && commerce_order.status = 'completed'";
 
   if (!empty($uid) && is_numeric($uid)) {
     $query .= " AND commerce_order.uid = :uid";
