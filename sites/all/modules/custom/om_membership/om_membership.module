@@ -222,7 +222,6 @@ function om_membership_completion_page() {
 function om_membership_add_membership_and_transfer($pid) {
   global $user;
   // User's memberships
-  print 'testing';
   $user_memberships = om_membership_get_user_membership_products($user);
   $user_memberships = array_shift($user_memberships);
   // Check to see if there is an existing membership in the cart.
@@ -326,15 +325,11 @@ function _om_membership_compare_vocs($a, $b) {
  *    Array of commerce product instances.
  */
 function om_membership_get_user_membership_products($user, $active = TRUE) {
-  if (!is_object($user) && !isset($user->uid)) {
+  if (!is_object($user) || empty($user->uid)) {
     return array();
   }
   $products = array();
   $orders = om_membership_get_user_membership_orders($user, $active);
-  print 'orders:';
-  print '<pre>';
-  print_r($orders);
-  print '</pre>';
   if (!empty($orders)) {
   foreach($orders AS $order) {
     $order_products = om_membership_order_contains_membership($order);
@@ -359,15 +354,8 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
  *    Array of commerce order instances.
  */
 function om_membership_get_user_membership_orders($user, $active = TRUE) {
-  print 'user:';
-  print '<pre>';
-  print_r($user);
-  print '</pre>';
   $memberships = array();
   $active_memberships = om_membership_get_active_memberships($user->uid);
-  print 'active members:';
-  print_r($active_memberships);
-  print '</pre>';
   if (!empty($active_memberships)) {
     $memberships[] = commerce_order_load($active_memberships[$user->uid]->order_id);
   }
@@ -410,10 +398,6 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
   //check for org membership and add if applicable
   if (empty($memberships)) {
     $org_info = om_membership_user_org_membership($user);
-    print 'org info:';
-    print '<pre>';
-    print_r($org_info);
-    print '</pre>';
     if (!empty($org_info)) {
       $memberships[] = $org_info['order'];
     }
@@ -708,6 +692,10 @@ function om_membership_role_product($rid) {
 }
 
 function om_membership_get_active_memberships($uid = false) {
+  if (is_empty($uid)) {
+    return array();
+  }
+
   $query = "
     SELECT commerce_line_item.order_id, commerce_product.product_id, commerce_line_item.line_item_id, field_data_field_associated_role.field_associated_role_rid, field_data_field_duration.field_duration_value, commerce_order.uid, commerce_order.created 
     FROM commerce_line_item 
