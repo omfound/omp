@@ -361,6 +361,9 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
 function om_membership_get_user_membership_orders($user, $active = TRUE) {
   $memberships = array();
   $active_memberships = om_membership_get_active_memberships($user->uid);
+  print 'active members:';
+  print_r($active_memberships);
+  print '</pre>';
   if (!empty($active_memberships)) {
     $memberships[] = commerce_order_load($active_memberships[$user->uid]->order_id);
   }
