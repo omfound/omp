@@ -403,6 +403,10 @@ function om_membership_get_user_membership_orders($user, $active = TRUE) {
   //check for org membership and add if applicable
   if (empty($memberships)) {
     $org_info = om_membership_user_org_membership($user);
+    print 'org info:';
+    print '<pre>';
+    print_r($org_info);
+    print '</pre>';
     if (!empty($org_info)) {
       $memberships[] = $org_info['order'];
     }
