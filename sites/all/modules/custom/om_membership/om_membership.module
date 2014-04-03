@@ -222,9 +222,11 @@ function om_membership_completion_page() {
 function om_membership_add_membership_and_transfer($pid) {
   global $user;
   // User's memberships
-  dsm('testing');
+  print 'testing';
   $user_memberships = om_membership_get_user_membership_products($user);
-  dsm($user_memberships);
+  print '<pre>';
+  print_r($user_memberships);
+  print '</pre>';
   $user_memberships = array_shift($user_memberships);
   // Check to see if there is an existing membership in the cart.
   $existing_memberships = om_membership_get_currently_selected_membership($user);
