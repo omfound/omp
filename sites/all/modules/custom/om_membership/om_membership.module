@@ -224,9 +224,6 @@ function om_membership_add_membership_and_transfer($pid) {
   // User's memberships
   print 'testing';
   $user_memberships = om_membership_get_user_membership_products($user);
-  print '<pre>';
-  print_r($user_memberships);
-  print '</pre>';
   $user_memberships = array_shift($user_memberships);
   // Check to see if there is an existing membership in the cart.
   $existing_memberships = om_membership_get_currently_selected_membership($user);
@@ -334,6 +331,10 @@ function om_membership_get_user_membership_products($user, $active = TRUE) {
   }
   $products = array();
   $orders = om_membership_get_user_membership_orders($user, $active);
+  print 'orders:';
+  print '<pre>';
+  print_r($orders);
+  print '</pre>';
   if (!empty($orders)) {
   foreach($orders AS $order) {
     $order_products = om_membership_order_contains_membership($order);
