@@ -692,7 +692,7 @@ function om_membership_role_product($rid) {
 }
 
 function om_membership_get_active_memberships($uid = false) {
-  if (is_empty($uid)) {
+  if (empty($uid)) {
     return array();
   }
 
