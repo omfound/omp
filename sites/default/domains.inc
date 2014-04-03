@@ -88,12 +88,12 @@ function _omp_perform_redirect() {
       }
     }
     // Perform redirect
-    /*if (!empty($redirect)) { 
+    if (!empty($redirect)) { 
       $redirect .=  $_SERVER['REQUEST_URI'];
       header('HTTP/1.0 301 Moved Permanently');
       header('Location: ' . $redirect);
       exit(); 
-    }*/
+    }
   }
 }
 
