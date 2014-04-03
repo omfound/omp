@@ -5242,8 +5242,6 @@ function drupal_page_set_cache() {
  *   TRUE if cron ran successfully.
  */
 function drupal_cron_run() {
-  $all_cron_start = time();
-  watchdog('omp', 'Cron run started at ' . date("F j, Y, g:i a"));
   // Allow execution to continue even if the request gets canceled.
   @ignore_user_abort(TRUE);
 
@@ -5280,8 +5278,6 @@ function drupal_cron_run() {
 
     // Iterate through the modules calling their cron handlers (if any):
     foreach (module_implements('cron') as $module) {
-      $module_cron_start = time();
-      watchdog('omp', $module . ' cron started at ' . date("F j, Y, g:i a"));
       // Do not let an exception thrown by one module disturb another.
       try {
         module_invoke($module, 'cron');
@@ -5289,15 +5285,11 @@ function drupal_cron_run() {
       catch (Exception $e) {
         watchdog_exception('cron', $e);
       }
-      $module_cron_end = time() - $module_cron_start;
-      watchdog('omp', $module . ' cron duration ' . $module_cron_end . ' completed at ' . date("F j, Y, g:i a"));
     }
 
     // Record cron time.
     variable_set('cron_last', REQUEST_TIME);
     watchdog('cron', 'Cron run completed.', array(), WATCHDOG_NOTICE);
-    $all_cron_seconds = time() - $all_cron_start;
-    watchdog('omp', 'Cron completed at ' . date("F j, Y, g:i a"). ', duration: '.$all_cron_seconds);
 
     // Release cron lock.
     lock_release('cron');
