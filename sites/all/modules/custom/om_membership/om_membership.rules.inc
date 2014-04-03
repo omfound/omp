@@ -251,6 +251,9 @@ function om_membership_upsell_discount($commerce_line_item) {
       $current_membership_orders = $current_membership_orders[0];
       $current_memberships = om_membership_order_contains_membership($current_membership_orders);
       $current_memberships = array_pop($current_memberships);
+      print 'current memberships<pre>';
+      print_r($current_memberships);
+      print '</pre>';
       // Current membership
       $current_membership_metadata = entity_metadata_wrapper('commerce_product', $current_memberships);
       $current_membership_price = $current_membership_metadata->commerce_price->value();
