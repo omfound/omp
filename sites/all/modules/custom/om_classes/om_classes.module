@@ -122,13 +122,12 @@ function om_classes_user_view($account, $view_mode) {
         $org_users[] = user_load_by_mail($invitation['value']);
       }
     } 
+
   }
   else {
     $org_users = null;
   }
 
-  dsm($org_info);
-  dsm($account);
   if (!empty($org_info['order']) && $org_info['order']->uid == $account->uid) {
     if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
       $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
@@ -142,6 +141,8 @@ function om_classes_user_view($account, $view_mode) {
     }
 
     $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
+    usort($all_classes, 'om_classes_org_classes_sort');
+
     $account->content['org-classes'] = array(
       'title' => array(
         '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
@@ -151,6 +152,13 @@ function om_classes_user_view($account, $view_mode) {
       ),
     );
   }
+}
+
+function om_classes_org_classes_sort($a, $b) {
+  if ($a->created == $b->created) {
+    return 0;
+  }
+  return ($a->created < $b->created) ? -1 : 1;
 }
 
 function om_classes_build_class_table($classes) {
