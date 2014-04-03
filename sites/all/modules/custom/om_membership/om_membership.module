@@ -707,7 +707,7 @@ function om_membership_get_active_memberships($uid = false) {
     JOIN field_data_field_duration ON field_data_field_duration.entity_id = commerce_product.product_id
     JOIN field_data_field_associated_role ON field_data_field_associated_role.entity_id = commerce_product.product_id
     JOIN commerce_order ON commerce_line_item.order_id = commerce_order.order_id
-    WHERE commerce_product.type = 'membership_plan'";
+    WHERE commerce_product.type = 'membership_plan' && commerce_order.status != 'cart'";
 
   if (!empty($uid) && is_numeric($uid)) {
     $query .= " AND commerce_order.uid = :uid";
