@@ -98,10 +98,23 @@ function om_classes_get_registrations($user) {
 }
 
 function om_classes_user_view($account, $view_mode) {
+  //only for org admins
+  if(om_membership_validate_org_admin_member($account)) {
+    $product = om_membership_get_user_membership_products($user);
+    if (!empty($product)) {
+      $product = array_shift($product);
+      dsm($product);
+    }
+  }
+  else {
+    return;
+  }
+
   $org_profile = profile2_by_uid_load($account->uid, 'manage_organizational_membership');
   $org_users = array();
   $org_users[] = $account;
 
+  om_membership_validate_org_admin_member($account);
   if (!empty($org_profile->field_invitations['und'])) {
     foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
       if (!empty($invitation['value'])) {
