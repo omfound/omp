@@ -100,7 +100,7 @@ function om_classes_get_registrations($user) {
 function om_classes_user_view($account, $view_mode) {
   //only for org admins
   if(om_membership_validate_org_admin_member($account)) {
-    $product = om_membership_get_user_membership_products($user);
+    $product = om_membership_get_user_membership_products($account);
     if (!empty($product)) {
       $product = array_shift($product);
       dsm($product);
