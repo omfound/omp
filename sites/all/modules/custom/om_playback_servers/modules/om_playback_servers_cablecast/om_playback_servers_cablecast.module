@@ -153,6 +153,26 @@ function om_playback_servers_cablecast_update_vod_field() {
   }
 }
 
+function om_playback_servers_cablecast_default_channel_crawl_info($tid, $show) {
+  $output = array();
+  if (is_numeric($tid)) {
+    $term = taxonomy_term_load($tid);
+    $l = LANGUAGE_NONE;
+     if (!empty($term->field_default_text_crawl[$l])) {
+       $crawl_text = $term->field_default_text_crawl[$l][0]['value'];
+       if (is_object($show)) {
+         $crawl_text = str_replace(array('[show-title]', '[show-nid]'), array($show->title, $show->nid), $crawl_text);
+       }
+       $output['text'] = $crawl_text;
+       $output['duration'] = 0;
+       if (!empty($term->field_default_crawl_duration[$l])) {
+         $output['duration'] = $term->field_default_crawl_duration[$l][0]['value'];
+       }
+     }
+  }
+  return $output;
+}
+
 /**
  * Implements hook_cron
  */
