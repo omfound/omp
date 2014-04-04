@@ -254,7 +254,10 @@ function om_timeslot_scheduler_producer_channel_form($form, $form_state, $channe
  * Submit handler for the above form.
  */
 function om_timeslot_scheduler_producer_channel_form_submit($form, $form_state) {
-  drupal_goto('show/' . arg(1) . '/update_airings/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
+  // @TODO #LK Doing a whole airing refresh here is currently too much of a performance hit.
+  // drupal_goto('show/' . arg(1) . '/update_airings/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
+  // For now we skip airign update.
+  drupal_goto('show/' . arg(1) . '/timeslots/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
 }
 
 /**
@@ -266,7 +269,7 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $function = 'om_broadcast_schedule_sync_schedule';
   $batch = $function($channel_tid, $start, $end, 'producer');
   batch_set($batch);
-  batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');
+  batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, 'batch', 'drupal_goto');
 }
 
 /**

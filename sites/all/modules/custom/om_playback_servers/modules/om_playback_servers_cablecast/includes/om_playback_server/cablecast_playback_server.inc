@@ -18,6 +18,16 @@ class cablecastPlaybackServerController extends playbackServerController {
         }
       }
       $reel = $this->create_reel($pbs, $show);
+      $crawl_duration = 0;
+      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '';
+      if (!empty($crawl_text)) {
+        $crawl_duration = $file->field_om_show_duration[$show->language][0]['value'];
+      }
+      if (empty($crawl_text)) {
+        $crawl_info = om_playback_servers_cablecast_default_channel_crawl_info($pbs->tid, $show);
+        $crawl_text = $crawl_info['text'];
+        $crawl_duration = $crawl_info['duration'];
+      }
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
@@ -32,8 +42,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
-        'CrawlLengthInSeconds' => 0,
-        'CrawlText' => !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '',
+        'CrawlLengthInSeconds' => $crawl_duration,
+        'CrawlText' => $crawl_text,
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
