@@ -18,8 +18,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         }
       }
       $reel = $this->create_reel($pbs, $show);
-      $crawl_duration = (int) 0;
-      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : (string) '';
+      $crawl_duration = 0;
+      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '';
       if (!empty($crawl_text)) {
         $crawl_duration = $file->field_om_show_duration[$show->language][0]['value'];
       }
@@ -44,8 +44,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
-        'CrawlLengthInSeconds' => $crawl_duration,
-        'CrawlText' => $crawl_text,
+        'CrawlLengthInSeconds' => if (!empty($crawl_duration)) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
+        'CrawlText' => if (!empty($crawl_text)) ? $crawl_text : 0,
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
