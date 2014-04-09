@@ -28,6 +28,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         $crawl_text = $crawl_info['text'];
         $crawl_duration = $crawl_info['duration'];
       }
+      dsm($crawl_duration);
+      dsm($crawl_text);
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
