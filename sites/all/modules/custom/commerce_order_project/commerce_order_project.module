@@ -18,11 +18,11 @@ function commerce_order_project_user_project_options($uid) {
     'value' => $uid,
     'operator' => '='
   );
-  $projects = om_project_membership_load($options);
+  $member_projects = om_project_membership_load($options);
 
   $project_options = array();
-  if (!empty($projects)) {
-    foreach ($projects as $key => $info) {
+  if (!empty($member_projects)) {
+    foreach ($member_projects as $key => $info) {
       $project_node = node_load($info->entity_id); 
       if (!empty($project_node)) {
         $project_options[$project_node->nid] = $project_node->title; 
@@ -30,5 +30,19 @@ function commerce_order_project_user_project_options($uid) {
     }
   }
 
+  $query = "SELECT nid FROM {node} WHERE type = 'om_project' AND uid = :uid";
+  $results = db_query($query, array(':uid' => $uid));
+  if (!empty($results)) {
+    foreach ($results as $key => $info) {
+      $project_node = node_load($info->nid);
+      if (!empty($project_node)) {
+        $project_options[$info->nid] = $project_node->title;
+      }
+    }
+  }
+
+  asort($project_options);
   return $project_options;
 }
+
+
