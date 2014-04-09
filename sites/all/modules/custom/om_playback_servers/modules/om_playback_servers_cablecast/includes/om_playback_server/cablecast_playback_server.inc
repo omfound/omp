@@ -18,8 +18,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         }
       }
       $reel = $this->create_reel($pbs, $show);
-      $crawl_duration = 0;
-      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '';
+      $crawl_duration = (int) 0;
+      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : (string) '';
       if (!empty($crawl_text)) {
         $crawl_duration = $file->field_om_show_duration[$show->language][0]['value'];
       }
