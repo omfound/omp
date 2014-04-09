@@ -44,8 +44,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
-        'CrawlLengthInSeconds' => if (!empty($crawl_duration)) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
-        'CrawlText' => if (!empty($crawl_text)) ? $crawl_text : 0,
+        'CrawlLengthInSeconds' => !empty($crawl_duration) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
+        'CrawlText' => !empty($crawl_text) ? $crawl_text : 0,
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
