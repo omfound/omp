@@ -223,6 +223,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       else {
         $message =  'Cablecast Playback Server: malformed playback server entity: ' . $e->getMessage();
       }
+      drupal_set_message($message, 'error');
       throw new Exception($message);
     }
   }
