@@ -42,8 +42,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
-        'CrawlLengthInSeconds' => $crawl_duration,
-        'CrawlText' => $crawl_text,
+        'CrawlLengthInSeconds' => !empty($crawl_duration) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
+        'CrawlText' => !empty($crawl_text) ? $crawl_text : 0,
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
@@ -223,6 +223,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       else {
         $message =  'Cablecast Playback Server: malformed playback server entity: ' . $e->getMessage();
       }
+      drupal_set_message($message, 'error');
       throw new Exception($message);
     }
   }
