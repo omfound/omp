@@ -218,6 +218,6 @@ function om_classes_user_classes($uids = array(), $after_date = NULL, $before_da
 function om_classes_query_alter($query) {
   if ($query->hasTag('class_meta')) {
     watchdog('brian', 'query: <pre>'.print_r($query, TRUE).'</pre>');
-    //$query->groupBy('n.title');
+    $query->groupBy('node.title');
   }
 }
