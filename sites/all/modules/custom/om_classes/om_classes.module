@@ -214,3 +214,9 @@ function om_classes_user_classes($uids = array(), $after_date = NULL, $before_da
 
   return $class_orders->fetchAllAssoc('line_item_id');
 }
+
+function om_classes_query_alter($query) {
+  if ($query->hasTag('micro_limit')) {
+    $query->groupBy('n.title');
+  }
+}
