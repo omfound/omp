@@ -217,6 +217,7 @@ function om_classes_user_classes($uids = array(), $after_date = NULL, $before_da
 
 function om_classes_query_alter($query) {
   if ($query->hasTag('class_meta')) {
-    $query->groupBy('n.title');
+    dsm($query);
+    //$query->groupBy('n.title');
   }
 }
