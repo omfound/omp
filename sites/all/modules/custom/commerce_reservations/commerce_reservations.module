@@ -566,6 +566,7 @@ function commerce_reservations_format_calendar_date($date_string) {
 
 //This is the ajax function which provides our view filter based on product id
 function calendar_filter($pid, $node, $quantity = 0){
+  watchdog('brian', 'firing calendar filter');
   global $user;
   $account = user_load($user->uid);
   $product = commerce_product_load($pid);
