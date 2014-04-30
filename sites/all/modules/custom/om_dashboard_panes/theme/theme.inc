@@ -25,10 +25,10 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       //stuff will go here
       $product_meta = entity_metadata_wrapper('commerce_product', $org_membership['product']);
       $variables['membership_type'] = $org_membership['product']->title;
-      $variables['membership_start'] = date('D j/n/Y', $org_membership['order']->created);
+      $variables['membership_start'] = date('D n/j/Y', $org_membership['order']->created);
       $year_seconds = 31688800;
       $end = $org_membership['order']->created + ($year_seconds * $product_meta->field_duration->value());
-      $variables['membership_end'] = date('D j/n/Y', $end);
+      $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
     }
