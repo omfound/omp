@@ -38,6 +38,7 @@ function om_classes_order_contains_class($commerce_order) {
       }
     }
   }
+  var_dump($order_metadata);
   return $classes;
 }
 
