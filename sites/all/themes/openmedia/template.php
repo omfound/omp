@@ -243,6 +243,11 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['archive_link'] = $url;
  End of Martys Stuff
 */
+ $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
+ dsm($test_archive);
+  $blah = reset($test_archive);
+  $first_key = key($test_archive);
+  dsm($first_key); 
 
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
