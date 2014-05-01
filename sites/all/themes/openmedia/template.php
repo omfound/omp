@@ -233,11 +233,14 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
 //Link to Archive.org page
-  $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
-  $blah = reset($test_archive);
-  $first_key = key($test_archive);
-  $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
-  $variables['archive_link'] = $archive_link;
+  dsm($variables);
+  if (isset($variables['field_archive_derivatives']['0']['value']) {
+    $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
+    $blah = reset($test_archive);
+    $first_key = key($test_archive);
+    $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
+    $variables['archive_link'] = $archive_link;
+  }
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id);
