@@ -232,6 +232,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $show_status_images = om_theme_assets_show_status_images();
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
+  dsm($url);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id);
