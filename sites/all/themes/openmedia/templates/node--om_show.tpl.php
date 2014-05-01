@@ -70,7 +70,7 @@
         <?php print $upcoming_airings; ?>
       <?php endif; ?>
       <?php if (!empty($archive_link)): ?>
-        <a href="https://archive.org/details/<?php print $archive_link; ?>">File at Archive.org</a>
+        <a href="https://archive.org/details/<?php print $archive_link; ?>">View at Archive.org</a>
       <?php endif; ?>
     </div>
   <?php endif; ?>
