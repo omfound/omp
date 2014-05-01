@@ -175,8 +175,8 @@ function om_classes_build_class_table($classes) {
   foreach ($classes as $class) {
     var_dump($class);
     $output .= '<tr>';
-    $user = $class['mail'];
-    $output .= '<td>' . $user->name . '</td>';
+    $user = $class->mail;
+    $output .= '<td>' . $user . '</td>';
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
     $output .= '</tr>';
