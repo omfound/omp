@@ -234,11 +234,15 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
 //Link to Archive.org page
   if (isset($variables['field_archive_derivatives']['0']['value'])) {
-    $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
-    reset($test_archive);
-    $first_key = key($test_archive);
-    $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
-    $variables['archive_link'] = $archive_link;
+    $string = $variables['field_archive_derivatives']['0']['value'];
+    $json_test = json_test($string);
+    if(empty($json_test) {
+      $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
+      reset($test_archive);
+      $first_key = key($test_archive);
+      $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
+      $variables['archive_link'] = $archive_link;
+    }
   }
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
@@ -312,6 +316,11 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['node_right'] = $social;
   }
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
+}
+
+function json_test($string) {
+  json_decode($string);
+  return (json_last_error() == JSON_ERROR_NONE);
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
