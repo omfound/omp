@@ -151,6 +151,7 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => om_classes_build_class_table($all_classes),
       ),
     );
+  dsm($classes);
   }
 }
 
@@ -162,6 +163,7 @@ function om_classes_org_classes_sort($a, $b) {
 }
 
 function om_classes_build_class_table($classes) {
+  dsm($classes);
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
     $output .= t('No classes have been taken under this membership.');
@@ -181,7 +183,6 @@ function om_classes_build_class_table($classes) {
     $output .= '</tr>';
   }
   $output .= '</table>';
-  dsm($classes);
   return $output;
 }
 
