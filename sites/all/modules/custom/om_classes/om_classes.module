@@ -181,7 +181,8 @@ function om_classes_build_class_table($classes) {
     $output .= '</tr>';
   }
   $output .= '</table>';
-  $output .= dsm('does this go here');
+  $output .= dsm($user);
+  $output .= dsm($classes);
   return $output;
 }
 
