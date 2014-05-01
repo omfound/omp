@@ -153,7 +153,7 @@ function om_classes_user_view($account, $view_mode) {
     );
   var_dump($all_classes);
   drupal_set_message($all_classes);
-  drupal_set_message($all_classes['order_number']);
+  drupal_set_message($all_classes->order_number);
   }
 }
 
