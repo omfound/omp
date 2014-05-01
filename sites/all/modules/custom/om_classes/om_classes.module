@@ -151,8 +151,8 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => om_classes_build_class_table($all_classes),
       ),
     );
-    var_dump($all_classes);
-
+    $blah = drupal_set_message($all_classes);
+    var_dump($blah);
   }
 }
 
