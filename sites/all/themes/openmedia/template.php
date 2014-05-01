@@ -233,10 +233,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
 //Link to Archive.org page
-  dsm($variables);
   if (isset($variables['field_archive_derivatives']['0']['value'])) {
     $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
-    dsm($test_archive);
     reset($test_archive);
     $first_key = key($test_archive);
     $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
