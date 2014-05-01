@@ -232,10 +232,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $show_status_images = om_theme_assets_show_status_images();
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
-  dsm($url);
-  dsm($variables);
- // $test_archive = json_decode($variables->field_archive_derivatives['und']['0']['value']);
- // dsm($test_archive);
+  $test_archive = json_decode($variables['field_archive_derivatives']['0']['value']);
+  dsm($test_archive);
   $variables['archive_link'] = $url;
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
