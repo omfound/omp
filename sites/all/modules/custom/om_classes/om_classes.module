@@ -162,7 +162,6 @@ function om_classes_org_classes_sort($a, $b) {
 }
 
 function om_classes_build_class_table($classes) {
-  drupal_set_message($classes);
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
     $output .= t('No classes have been taken under this membership.');
@@ -174,6 +173,7 @@ function om_classes_build_class_table($classes) {
   $output .= '<table>';
   $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
   foreach ($classes as $class) {
+    drupal_set_message($class);
     $output .= '<tr>';
     $user = user_load($class->uid);
     $output .= '<td>' . $user->name . '</td>';
