@@ -236,7 +236,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   dsm($variables);
   if (isset($variables['field_archive_derivatives']['0']['value'])) {
     $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
-    $blah = reset($test_archive);
+    reset($test_archive);
     $first_key = key($test_archive);
     $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
     $variables['archive_link'] = $archive_link;
