@@ -233,7 +233,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
   dsm($url);
-  $test_archive = json_decode($variables['field_archie_derivatives']['und']['0']['value']);
+  $test_archive = json_decode($variables['field_archive_derivatives']['und']['0']['value']);
   dsm($test_archive);
   $variables['archive_link'] = $url;
   if (!empty($url)) {
