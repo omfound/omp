@@ -38,7 +38,6 @@ function om_classes_order_contains_class($commerce_order) {
       }
     }
   }
-  dsm($classes);
   return $classes;
 }
 
@@ -176,6 +175,7 @@ function om_classes_build_class_table($classes) {
   foreach ($classes as $class) {
     $output .= '<tr>';
     $user = user_load($class->uid);
+    dsm($user);
     $output .= '<td>' . $user->name . '</td>';
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
