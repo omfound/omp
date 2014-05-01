@@ -234,6 +234,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
   $test_archive = json_decode($variables['field_archive_derivatives']['0']['value']);
   dsm($test_archive);
+  $archive_link = $test_archive->metadata->identifier;
+  dsm($archive_link);
   $variables['archive_link'] = $url;
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
