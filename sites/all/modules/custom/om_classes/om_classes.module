@@ -151,6 +151,7 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => om_classes_build_class_table($all_classes),
       ),
     );
+  var_dump($all_classes);
   }
 }
 
@@ -173,7 +174,6 @@ function om_classes_build_class_table($classes) {
   $output .= '<table>';
   $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
   foreach ($classes as $class) {
-    var_dump($class);
     $output .= '<tr>';
     $user = $class->mail;
     $output .= '<td>' . $user . '</td>';
