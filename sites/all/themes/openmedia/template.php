@@ -236,7 +236,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
   if (isset($variables['field_archive_derivatives']['0']['value'])) {
     $string = $variables['field_archive_derivatives']['0']['value'];
     $json_test = json_test($string);
-    if(empty($json_test) {
+    if(empty($json_test)) {
       $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
       reset($test_archive);
       $first_key = key($test_archive);
