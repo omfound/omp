@@ -182,7 +182,7 @@ function om_classes_build_class_table($classes) {
     $user_id = om_classes_find_user($order_number);
     $output .= '<tr>';
     $user = user_load($user_id);
-    $output .= '<td>' . $user->name . '</td>';
+    $output .= '<td>' . l($user->name, 'user/' . $user->uid) . '</td>';
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
     $output .= '</tr>';
