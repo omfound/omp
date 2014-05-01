@@ -69,6 +69,9 @@
       <?php if (!empty($upcoming_airings)): ?>
         <?php print $upcoming_airings; ?>
       <?php endif; ?>
+      <?php if (!empty($archive_link)): ?>
+        <a href="<?php print $archive_link; ?>">File at Archive.org</a>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 </article><!-- /.node -->
