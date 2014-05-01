@@ -166,6 +166,7 @@ function om_classes_find_user($order_number) {
 
 function om_classes_build_class_table($classes) {
   var_dump($classes);
+  drupal_set_message($classes[0]->order_number);
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
     $output .= t('No classes have been taken under this membership.');
