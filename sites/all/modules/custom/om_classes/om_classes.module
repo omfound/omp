@@ -151,9 +151,6 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => om_classes_build_class_table($all_classes),
       ),
     );
-  var_dump($all_classes);
-  drupal_set_message($all_classes);
-  drupal_set_message($all_classes->order_number);
   }
 }
 
@@ -164,7 +161,11 @@ function om_classes_org_classes_sort($a, $b) {
   return ($a->created < $b->created) ? -1 : 1;
 }
 
+function om_classes_find_user($order_number) {
+}
+
 function om_classes_build_class_table($classes) {
+  var_dump($classes);
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
     $output .= t('No classes have been taken under this membership.');
