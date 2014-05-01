@@ -151,6 +151,8 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => om_classes_build_class_table($all_classes),
       ),
     );
+    dsm($all_classes);
+
   }
 }
 
@@ -179,7 +181,6 @@ function om_classes_build_class_table($classes) {
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
     $output .= '</tr>';
-    $output .= dsm($user);
   }
   $output .= '</table>';
   return $output;
