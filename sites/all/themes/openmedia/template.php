@@ -247,8 +247,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
  dsm($test_archive);
   $blah = reset($test_archive);
   $first_key = key($test_archive);
-  dsm($first_key); 
-
+  $test_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
+  dsm($test_link);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id);
