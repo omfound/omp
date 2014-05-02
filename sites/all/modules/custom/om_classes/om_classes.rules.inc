@@ -78,6 +78,7 @@ function om_classes_line_item_is_class($commerce_line_item) {
     }
   }
   return false;
+  dsm('why is false');
 }
 
 /**
