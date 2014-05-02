@@ -67,18 +67,14 @@ function om_classes_rules_condition_info() {
  * Condition handler to detect if a line item is a class
  */
 function om_classes_line_item_is_class($commerce_line_item) {
-  dsm($commerce_line_item);
   if (!empty($commerce_line_item)) {
-    dsm('this fires');
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
     $product = $line_item_meta->commerce_product->value();
     if($product->type == 'class') {
-      dsm('second level fires');
       return true;
     }
   }
   return false;
-  dsm('why is false');
 }
 
 /**
