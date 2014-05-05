@@ -81,6 +81,7 @@ function om_classes_line_item_is_class($commerce_line_item) {
  * Action handler to discount a class based on membership rate.
  */
 function om_classes_discount($commerce_line_item, $component_name, $round_mode) {
+  dsm($commerce_line_item);
   if (!empty($commerce_line_item)) {
     $commerce_order = commerce_order_load($commerce_line_item->order_id);
     $line_item_meta = entity_metadata_wrapper('commerce_line_item', $commerce_line_item);
