@@ -156,12 +156,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
       dsm($product_meta->commerce_price->value());
   if (function_exists('om_membership_get_user_membership_products')) {
     $memberships = om_membership_user_memberships($user, true); 
-    dsm($memberships);
     $discount_message = '';
     if (!empty($memberships)) {
-      dsm($product_meta->field_class_member_price->value());
-      dsm($product_meta->commerce_price->value());
-
+      dsm('testing');
       $price = $product_meta->field_class_member_price->value();
       if ($price != 0) {
         $price = '$' . $price;
