@@ -159,7 +159,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
+      dsm($price);
       if ($price > $product_meta->commerce_price->value()) {
+        dsm('firing new price');
         $price = $product_meta->commerce_price->value();
       }
       if ($price != 0) {
