@@ -91,6 +91,7 @@ function om_classes_discount($commerce_line_item, $component_name, $round_mode) 
     if ($product->field_class_member_price[LANGUAGE_NONE][0]['value']) {
       $updated_price = $product->field_class_member_price[LANGUAGE_NONE][0]['value'] * 100;
       dsm($product);
+      dsm('membership discoun applied');
     }
     else {
       $updated_price = $current_price;
