@@ -152,6 +152,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
   /** --REGISTRATION BOX **/
   $registration_details = array();
   $registration = registration_entity_settings('commerce_product', $product->product_id);
+      dsm($product_meta->field_class_member_price->value());
+      dsm($product_meta->commerce_price->value());
   if (function_exists('om_membership_get_user_membership_products')) {
     $memberships = om_membership_user_memberships($user, true); 
     $discount_message = '';
