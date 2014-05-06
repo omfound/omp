@@ -581,6 +581,7 @@ function calendar_filter($pid, $node, $quantity = 0){
 
   $is_certified = TRUE;
   if ($product->field_certifications_required['und'] && $user->uid != 1){
+    dsm($product->field_certifications_required['und']);
     foreach($product->field_certifications_required['und'] as $product_cert){
       if (!array_key_exists($product_cert['rid'], $account->roles)) {
 	      $is_certified = FALSE;
@@ -594,7 +595,6 @@ function calendar_filter($pid, $node, $quantity = 0){
   }
 
   if (!$display_node->user_access) {
-    dsm('testing this if');
     $error_output = '';
     $error_output .= '<div>';
     $error_output .= '<div id="no-access">';
