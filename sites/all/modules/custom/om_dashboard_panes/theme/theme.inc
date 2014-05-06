@@ -28,9 +28,6 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       $variables['membership_start'] = date('D n/j/Y', $org_membership['order']->created);
       $year_seconds = 31688800;
       $end = $org_membership['order']->created + ($year_seconds * $product_meta->field_duration->value());
-      dsm($end);
-      dsm($product_meta->field_duration->value());
-      dsm($year_seconds);
       $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
@@ -55,6 +52,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       dsm($end);
       dsm($variables['membership_start']);
       $variables['membership_end'] = date('D n/j/Y', $end);
+      dsm($variables['membership_end']);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
       if ($org_membership = om_membership_user_org_membership($user)) {
