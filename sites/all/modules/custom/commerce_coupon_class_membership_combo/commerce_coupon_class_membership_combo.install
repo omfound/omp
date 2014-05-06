@@ -11,6 +11,27 @@ function commerce_coupon_class_membership_combo_install() {
 
   $coupon_type = commerce_coupon_type_create($values);
   commerce_coupon_type_save($coupon_type, TRUE);
+
+  $field_name = 'membership_type';
+  $field = field_info_field($field_name);
+  $instance = field_read_instance('commerce_coupon', $field_name, 'commerce_coupon_combo');
+  if (empty($instance)) {
+    $field_data = array(
+      'field_name' => 'membership_type',
+      'type' => 'select',
+      'cardinality' => 1,
+      'entity_types' => array('commerce_coupon'),
+      'translatable' => FALSE,
+      'locked' => TRUE,
+      'settings' => array(),
+    ); 
+    if (empty($field)) {
+      $field = field_create_field($field_data);
+    }
+    else {
+      $field = field_update_field($field_data);
+    }
+  }
 }
 
 /**
