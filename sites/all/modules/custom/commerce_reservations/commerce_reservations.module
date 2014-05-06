@@ -584,7 +584,8 @@ function calendar_filter($pid, $node, $quantity = 0){
     foreach($product->field_certifications_required['und'] as $product_cert){
       dsm($product_cert);
       dsm($account->roles);
-      dsm(array_keys($account->roles, $product_cert['rid']));
+      $marty_test = $product_cert['rid'];
+      dsm(array_keys($account->roles, $marty_test));
       if (!array_key_exists($product_cert['rid'], $account->roles)) {
 	      $is_certified = FALSE;
 	      break;
