@@ -14,12 +14,10 @@ function om_dashboard_panes_preprocess_om_profile_pane(&$variables) {
  */
 function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   global $user;
-  dsm(om_membership_get_user_membership_orders($user));
   $variables['title'] = t('Membership');
   $memberships = om_membership_get_user_membership_orders($user);
   $no_membership = FALSE;
   if (empty($memberships)) {
-    dsm('if fires');
     if (!$org_membership = om_membership_user_org_membership($user)) {
       $no_membership = TRUE;
     }
@@ -39,7 +37,6 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     }
   }
   else {
-    dsm('else fires');
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
       if ($product->sku == 'membership-user-only') {
@@ -55,6 +52,8 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
       $year_seconds = 31688800;
       $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
+      dsm($end);
+      dsm($variables['membership_start']);
       $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
