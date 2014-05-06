@@ -12,25 +12,44 @@ function commerce_coupon_class_membership_combo_install() {
   $coupon_type = commerce_coupon_type_create($values);
   commerce_coupon_type_save($coupon_type, TRUE);
 
-  $field_name = 'membership_type';
-  $field = field_info_field($field_name);
-  $instance = field_read_instance('commerce_coupon', $field_name, 'commerce_coupon_combo');
-  if (empty($instance)) {
-    $field_data = array(
-      'field_name' => 'membership_type',
-      'type' => 'select',
-      'cardinality' => 1,
-      'entity_types' => array('commerce_coupon'),
-      'translatable' => FALSE,
-      'locked' => TRUE,
-      'settings' => array(),
-    ); 
-    if (empty($field)) {
-      $field = field_create_field($field_data);
-    }
-    else {
-      $field = field_update_field($field_data);
-    }
+// Set the field name.
+$field_name = 'field_coupon_membership';
+ 
+// Make sure the field doesn't already exist.
+if (!field_info_field($field_name)) {      
+  // Create the field.
+  $field = array(
+    'field_name' => $field_name,
+    'type' => 'list_text',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => 'Pizza',
+        1 => 'Hot Wings',
+        2 => 'Carrots',
+        3 => 'Turkey',
+        4 => 'Ice Cream',
+        5 => 'Cake',
+      ),
+    ),
+  );
+  field_create_field($field);
+ 
+  // Create the instance.
+  $instance = array(
+    'field_name' => $field_name,
+    'entity_type' => 'commerce_coupon',
+    'bundle' => 'commerce_coupon_combo',
+    'label' => 'Favorite Food',
+    'description' => 'Select your favorite food.',
+    'required' => TRUE,
+    'widget' => array(
+      'type' => 'options_select',
+      'weight' => 0,
+    ),
+    'display' => array(),
+  );
+ 
+  field_create_instance($instance);
   }
 }
 
