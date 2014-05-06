@@ -578,7 +578,8 @@ function calendar_filter($pid, $node, $quantity = 0){
   if (module_exists('rules') && $user->uid != 1) {
     rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
   }
-
+    $marty_test = rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
+    dsm($marty_test);
   $is_certified = TRUE;
   dsm($product->field_certifications_required['und']);
   if ($product->field_certifications_required['und'] && $user->uid != 1){
