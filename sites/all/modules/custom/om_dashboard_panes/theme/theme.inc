@@ -19,6 +19,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   $memberships = om_membership_get_user_membership_orders($user);
   $no_membership = FALSE;
   if (empty($memberships)) {
+    dsm('if fires');
     if (!$org_membership = om_membership_user_org_membership($user)) {
       $no_membership = TRUE;
     }
@@ -38,6 +39,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     }
   }
   else {
+    dsm('else fires');
     $products = om_membership_get_user_membership_products($user);
     foreach ($products AS $key => $product) {
       if ($product->sku == 'membership-user-only') {
@@ -47,6 +49,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     }
     $products = array_shift($products);
     if (!empty($products)) {
+      dsm('product if fires');
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
       $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
