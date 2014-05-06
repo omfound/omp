@@ -43,17 +43,13 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     }
     $products = array_shift($products);
     if (!empty($products)) {
-      dsm('product if fires');
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
       $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
+      //Why is this variable a year and a coupld of days?
       $year_seconds = 31688800;
       $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
-      dsm($product_meta->field_duration->value());
-      dsm($end);
-      dsm($variables['membership_start']);
       $variables['membership_end'] = date('D n/j/Y', $end);
-      dsm($variables['membership_end']);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
       if ($org_membership = om_membership_user_org_membership($user)) {
