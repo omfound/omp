@@ -13,6 +13,7 @@ function om_dashboard_panes_preprocess_om_profile_pane(&$variables) {
  * Implements hook_preprocess_hook
  */
 function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
+  dsm('does this function fire');
   global $user;
   $variables['title'] = t('Membership');
   $memberships = om_membership_get_user_membership_orders($user);
