@@ -1,8 +1,4 @@
-/*
- * @file
- * Install percentage coupon types and its fields.
- */
-
+<?php
 /**
  * Implements hook_install().
  */
