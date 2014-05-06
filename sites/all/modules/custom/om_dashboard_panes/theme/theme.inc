@@ -49,6 +49,7 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
       $year_seconds = 31688800;
       $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
+      dsm($product_meta->field_duration->value());
       dsm($end);
       dsm($variables['membership_start']);
       $variables['membership_end'] = date('D n/j/Y', $end);
