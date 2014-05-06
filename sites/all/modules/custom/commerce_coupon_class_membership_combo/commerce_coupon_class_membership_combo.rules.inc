@@ -8,7 +8,7 @@
 /**
  * Implements hook_rules_action_info().
  */
-function commerce_coupon_member_discount_rules_action_info() {
+function commerce_coupon_class_membership_combo_rules_action_info() {
   $actions = array();
   $actions['commerce_coupon_class_membership_combo_apply_discount'] = array(
     'label' => t('Apply a member discount to applicable line items'),
