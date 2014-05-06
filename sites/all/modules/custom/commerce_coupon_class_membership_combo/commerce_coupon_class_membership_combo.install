@@ -9,7 +9,7 @@
 function commerce_coupon_class_membership_combo_install() {
   drupal_load('module', 'commerce');
   $values = array(
-    'type' => 'commerce_coupon_class_membership_combo',
+    'type' => 'commerce_coupon_combo',
     'label' => st('Membership Class Combo Discount'),
   );
 
@@ -27,15 +27,15 @@ function commerce_coupon_class_membership_combo_uninstall() {
   // The function commerce_coupon_type_delete() can't be used here because
   // commerce_coupon module might not be enabled anymore at this point.
   db_delete('commerce_coupon_type')
-    ->condition('type', 'commerce_coupon_class_membership_combo')
+    ->condition('type', 'commerce_coupon_combo')
     ->execute();
 
   // Delete all fields that belong to the module's coupon type.
-  commerce_delete_instances('commerce_coupon', 'commerce_coupon_class_membership_combo');
+  commerce_delete_instances('commerce_coupon', 'commerce_coupon_combo');
 
   // Also delete coupons.
   db_delete('commerce_coupon')
-    ->condition('type', 'commerce_coupon_class_membership_combo')
+    ->condition('type', 'commerce_coupon_combo')
     ->execute();
 }
 
@@ -44,7 +44,7 @@ function commerce_coupon_class_membership_combo_uninstall() {
  */
 function commerce_coupon_class_membership_combo_disable() {
   drupal_load('module', 'commerce_coupon');
-  commerce_coupon_type_disable('commerce_coupon_class_membership_combo');
+  commerce_coupon_type_disable('commerce_coupon_combo');
 }
 
 /**
@@ -52,6 +52,6 @@ function commerce_coupon_class_membership_combo_disable() {
  */
 function commerce_coupon_class_membership_combo_enable() {
   drupal_load('module', 'commerce_coupon');
-  commerce_coupon_type_enable('commerce_coupon_class_membership_combo');
+  commerce_coupon_type_enable('commerce_coupon_combo');
 }
 

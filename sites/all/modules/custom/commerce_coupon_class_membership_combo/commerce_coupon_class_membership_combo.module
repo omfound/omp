@@ -12,7 +12,7 @@
  */
 function commerce_coupon_class_membership_combo_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
   // Get the price component.
-  if ($coupon->type == 'commerce_coupon_member_discount') {
+  if ($coupon->type == 'commerce_coupon_combo') {
     $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
     $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
 

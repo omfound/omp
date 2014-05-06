@@ -51,7 +51,7 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
 
-  if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_member_discount') {
+  if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo') {
     $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
     if (!empty($primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'])) {
       $member_price = $primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'];

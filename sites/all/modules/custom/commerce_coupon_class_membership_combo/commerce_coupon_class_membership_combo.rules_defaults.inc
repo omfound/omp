@@ -24,7 +24,7 @@ function commerce_coupon_class_membership_combo_default_rules_configuration() {
 
   $rule
     ->event('commerce_coupon_redeem')
-    ->condition('data_is', array('data:select' => 'coupon:type', 'op' => '=', 'value' => 'commerce_coupon_class_membership_combo'))
+    ->condition('data_is', array('data:select' => 'coupon:type', 'op' => '=', 'value' => 'commerce_coupon_combo'))
     ->condition('entity_has_field', array('entity:select' => 'commerce_order', 'field' => 'commerce_coupon_order_reference'))
     ->condition('data_is', array('data:select' => 'coupon:is-active', 'op' => '=', 'value' => TRUE))
     ->action('list_add', array(
