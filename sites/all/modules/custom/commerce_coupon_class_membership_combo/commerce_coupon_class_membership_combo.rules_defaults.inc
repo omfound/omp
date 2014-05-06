@@ -65,7 +65,7 @@ function commerce_coupon_class_membership_combo_default_rules_configuration() {
 
   $rule->action($loop);
 
-  $rules['commerce_coupon_class_membership_combo_apply_pct_coupons_to_line_item'] = $rule;
+  $rules['commerce_coupon_combo_apply_pct_coupons_to_line_item'] = $rule;
 
   return $rules;
 }
