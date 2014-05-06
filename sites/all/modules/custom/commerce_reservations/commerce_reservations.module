@@ -594,6 +594,7 @@ function calendar_filter($pid, $node, $quantity = 0){
   }
 
   if (!$display_node->user_access) {
+    dsm('testing this if');
     $error_output = '';
     $error_output .= '<div>';
     $error_output .= '<div id="no-access">';
