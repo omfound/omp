@@ -1,5 +1,6 @@
 name = Commerce Coupon Class Membership COMBO
 description = "Performs a WOMBO COMBO on your order granting A FREE MEMBERSHIP AND CLASS."
 dependencies[] = commerce_coupon
+dependencies[] = om_membership
 package = Commerce Coupon
 core = 7.x
