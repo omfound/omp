@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Coupon with percentage field.
+ */
+
+/**
+ * Implements hook_commerce_coupon_granted_amount_alter().
+ *
+ * Gets the right amount value to display it in the coupon "log" view.
+ */
+function commerce_coupon_class_membership_combo_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
+  // Get the price component.
+  if ($coupon->type == 'commerce_coupon_member_discount') {
+    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+    $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
+
+    $amount = 0;
+    $components = commerce_price_component_load($order_wrapper->commerce_order_total->value(), $coupon_wrapper->price_component_name->value());
+    foreach ($components as $component) {
+      $amount += $component['price']['amount'] * -1;
+    }
+
+    $amount = commerce_currency_format($amount, $order_wrapper->commerce_order_total->currency_code->value(), $coupon);
+  }
+}
