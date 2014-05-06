@@ -152,11 +152,17 @@ function openmedia_preprocess_node__class_display(&$variables) {
   /** --REGISTRATION BOX **/
   $registration_details = array();
   $registration = registration_entity_settings('commerce_product', $product->product_id);
+  $commerce_price = $product_meta->commerce_price->value();
+  $commerce_price = $commerce_price['amount'];
+  
   if (function_exists('om_membership_get_user_membership_products')) {
     $memberships = om_membership_user_memberships($user, true); 
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
+      if ($price > $commerce_price) {
+        $price = $commerce_price;
+      }
       if ($price != 0) {
         $price = '$' . $price;
       }
@@ -167,8 +173,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     }
   } 
   if (!isset($price)) {
-    $price = $product_meta->commerce_price->value();
-    $price = $price['amount'];
+    $price = $commerce_price;
     if ($price != 0) {
       $price = '$' . (round(($price / 100), 2));
     }
