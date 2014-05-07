@@ -63,7 +63,7 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
       // Get the price component to use in this price.
       $price_component_name = $coupon_wrapper->price_component_name->value();
       $difference = array(
-        'amount' => $new_price,
+        'amount' => 0,
         'currency_code' => $unit_price['currency_code'],
         'data' => array(),
       );
