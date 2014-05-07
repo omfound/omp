@@ -92,8 +92,6 @@ function _commerce_coupon_class_membership_combo_static_cache_discount($discount
   if (!isset($static_cache)) {
     $static_cache = array();
   }
-  foreach ($discount AS $type) {
-    $static_cache[$type] = TRUE; 
-  }
+  $static_cache[$discount] = TRUE;
   return $static_cache;
 }
