@@ -370,6 +370,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+      dsm($variables['show_grid']);
     }
   }
 }
