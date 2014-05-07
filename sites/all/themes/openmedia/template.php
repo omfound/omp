@@ -366,6 +366,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
   foreach ($shows AS $show_nid) {
+    $vote_info = fivestar_get_votes('node', $show_nid);
+    dsm($vote_info);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
@@ -478,6 +480,7 @@ function openmedia_get_project_child_shows($nid) {
   }
   return $nids;
 }
+
 
 /**
  * Get a rendered thumbnail from a show node id.
