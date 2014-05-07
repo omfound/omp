@@ -302,7 +302,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
       $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
     }
     $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
-    dsm($variables['content']['field_om_voting_on_video']);
   }
   if (function_exists('alternative_rating_show_average')) {
     $bayesian_score = round(alternative_rating_show_average($variables['node']->nid), 2);
@@ -367,8 +366,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
   foreach ($shows AS $show_nid) {
-    $vote_info = fivestar_get_votes('node', $show_nid);
-    dsm($vote_info);
+    $bayesian_score = round(alternative_rating_show_average($show_nid), 2);
+    dsm($bayesian_score);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
