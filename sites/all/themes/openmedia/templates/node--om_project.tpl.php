@@ -1,4 +1,5 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+  <h1> testing project page template</h1>
   <div id="project-top" class="clearfix">
     <div id="project-left">
       <?php if (isset($logo)): ?>
