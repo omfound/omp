@@ -48,10 +48,9 @@ function commerce_coupon_class_membership_combo_rules_action_info() {
 }
 
 function commerce_coupon_class_membership_combo_apply_discount($line_item, $order, $coupon, $component_name, $round_mode) {
-  drupal_set_message('this happens', 'notice');
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
-
+  drupal_set_message("<pre>" . print_r($coupon, true) . "</pre>", 'notice');
   // If coupon is type commerce_coupon_combo
   if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo') {
     $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
