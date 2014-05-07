@@ -48,12 +48,14 @@ function commerce_coupon_class_membership_combo_rules_action_info() {
 }
 
 function commerce_coupon_class_membership_combo_apply_discount($line_item, $order, $coupon, $component_name, $round_mode) {
+  dsm($line_item);
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
 
   if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo') {
     $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
-    if (!empty($primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'])) {
+    if (($primary_product->type == 'membership' && $primary_product->product_id  == $coupon->field_coupon_membership[LANG_NONE][0]['value']) 
+    || $primary_product->type == 'class') {
       $member_price = $primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'];
       $member_price = $member_price*100;
       
