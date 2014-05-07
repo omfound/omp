@@ -53,10 +53,12 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   // If coupon is type commerce_coupon_combo
   if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo' && is_object($line_item)) {
     $primary_product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
+    $is_maxed = _commerce_coupon_class_membership_combo_order_is_maxed($primary_product);
     // If the line item is a membership and matches the type designated by commerce_coupon_combo
     // or the line item is a class.
-    if (($primary_product->type == 'membership_plan' && $primary_product->product_id  == $coupon->field_coupon_membership[LANGUAGE_NONE][0]['value']) 
-    || $primary_product->type == 'class') {
+    if ($is_maxed == FALSE,
+    (($primary_product->type == 'membership_plan' && $primary_product->product_id  == $coupon->field_coupon_membership[LANGUAGE_NONE][0]['value']) 
+    || $primary_product->type == 'class')) {
       $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
       $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
       $new_price = -1 * $unit_price['amount'];
@@ -75,4 +77,23 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
       );
     }  
   }
+}
+
+function _commerce_coupon_class_membership_combo_order_is_maxed($product) {
+  $order_cache = _commerce_coupon_class_membership_combo_static_cache_discount($product->type);
+  if ($order_cache['membership_plan'] == TRUE && $order_cache['class'] == TRUE) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+function _commerce_coupon_class_membership_combo_static_cache_discount($discount) {
+  $static_cache = &drupal_static(__FUNCTION__);
+  if (!isset($static_cache)) {
+    $static_cache = array();
+  }
+  foreach ($discount AS $type) {
+    $static_cache[$type] = TRUE; 
+  }
+  return $static_cache;
 }
