@@ -339,9 +339,8 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         if ($new_price < 0) { $new_price = 0; }
         $price_difference = $new_price - $unit_price['amount'];
       }
-      if ($price_difference > 0) {
-        $price_difference *= .5;
-      }
+      $price_difference *= .5;
+      drupal_set_message($price_difference);
     }
     $difference = array(
       'amount' => $price_difference,
