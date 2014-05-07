@@ -135,6 +135,9 @@ class cablecastPlaybackServerController extends playbackServerController {
   public function create_airing($pbs, $schedule_info = array()) {
     $channel_term = taxonomy_term_load($pbs->channel);
     $default_crawl = !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : '';
+    $show = new stdClass();
+    $show->nid = $schedule_info['nid'];
+    $show->title = $schedule_info['Title'];
     if (empty($default_crawl)) {
       $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
     }
@@ -144,9 +147,6 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (empty($default_crawl_duration)) {
       $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
     }
-    $show = new stdClass();
-    $show->nid = $schedule_info['nid'];
-    $show->title = $schedule_info['Title'];
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
