@@ -28,6 +28,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         $crawl_text = $crawl_info['text'];
         $crawl_duration = $crawl_info['duration'];
       }
+      $crawl_text = om_show_tokenize_crawl_text($crawl_text, $show);
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
@@ -135,6 +136,7 @@ class cablecastPlaybackServerController extends playbackServerController {
     $channel_term = taxonomy_term_load($pbs->channel);
     $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
     $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
+    dsm($schedule_info);
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
