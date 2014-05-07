@@ -51,9 +51,8 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
   // If coupon is type commerce_coupon_combo
-  drupal_set_message("<pre>" . print_r($line_item, true) . "</pre>", 'notice');
-  /*if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo') {
-    $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
+  if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo' && is_object($line_item)) {
+    $primary_product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
     // If the line item is a membership and matches the type designated by commerce_coupon_combo
     // or the line item is a class.
     if (($primary_product->type == 'membership' && $primary_product->product_id  == $coupon->field_coupon_membership[LANG_NONE][0]['value']) 
@@ -75,5 +74,5 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
         $wrapper->commerce_unit_price->value(), $price_component_name, $difference, TRUE
       );
     }  
-  }*/
+  }
 }
