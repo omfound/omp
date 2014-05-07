@@ -323,8 +323,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      // @TODO here we need to check and see if free hours have not covered total expense.
-      // If not, we add a 50% discount for some reason.
       if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
         $new_price = $unit_price['amount'] - ($free_hours*$hourly_rate);
         $price_difference = $new_price - $unit_price['amount'];
@@ -339,9 +337,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         if ($new_price < 0) { $new_price = 0; }
         $price_difference = $new_price - $unit_price['amount'];
       }
-      //drupal_set_message($price_difference);
-      //$price_difference *= .5;
-      //drupal_set_message($price_difference);
+      // Here we need to check and see if free hours have not covered total expense.
+      // If not, we add a 50% discount for some reason.
+      $new_price *= .5;
     }
     $difference = array(
       'amount' => $price_difference,
