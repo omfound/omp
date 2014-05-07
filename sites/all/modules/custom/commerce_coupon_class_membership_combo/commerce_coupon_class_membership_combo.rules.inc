@@ -81,7 +81,7 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
 
 function _commerce_coupon_class_membership_combo_order_is_maxed($product) {
   $order_cache = _commerce_coupon_class_membership_combo_static_cache_discount($product->type);
-  if ($order_cache['membership_plan'] == TRUE && $order_cache['class'] == TRUE) {
+  if (!empty($order_cache['membership_plan']) && !empty($order_cache['class'] == TRUE)) {
     return TRUE;
   }
   return FALSE;
