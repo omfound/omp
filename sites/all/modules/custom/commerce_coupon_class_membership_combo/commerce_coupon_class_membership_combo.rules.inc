@@ -52,32 +52,25 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
 
+  // If coupon is type commerce_coupon_combo
   if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo') {
     $primary_product = commerce_product_load($line_item->data['context']['product_ids'][0]);
+    // If the line item is a membership and matches the type designated by commerce_coupon_combo
+    // or the line item is a class.
     if (($primary_product->type == 'membership' && $primary_product->product_id  == $coupon->field_coupon_membership[LANG_NONE][0]['value']) 
     || $primary_product->type == 'class') {
-      $member_price = $primary_product->field_class_member_price[LANGUAGE_NONE][0]['value'];
-      $member_price = $member_price*100;
-      
-      // Get the price component to use in this price.
-      $price_component_name = $coupon_wrapper->price_component_name->value();
-
       $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
       $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
-
-      // Calculate the updated amount and create a price array representing the
-      // difference between it and the current amount.
-      $current_amount = $unit_price['amount'];
-      $updated_amount = commerce_round($round_mode, $current_amount - $member_price);
-
+      $new_price = -1 * $unit_price['amount'];
+      // Get the price component to use in this price.
+      $price_component_name = $coupon_wrapper->price_component_name->value();
       $difference = array(
-        'amount' => $updated_amount - $current_amount,
+        'amount' => $new_price,
         'currency_code' => $unit_price['currency_code'],
         'data' => array(),
       );
-
       // Set the amount of the unit price and add the difference as a component.
-      $wrapper->commerce_unit_price->amount = $updated_amount;
+      $wrapper->commerce_unit_price->amount = $new_price;
 
       $wrapper->commerce_unit_price->data = commerce_price_component_add(
         $wrapper->commerce_unit_price->value(), $price_component_name, $difference, TRUE
