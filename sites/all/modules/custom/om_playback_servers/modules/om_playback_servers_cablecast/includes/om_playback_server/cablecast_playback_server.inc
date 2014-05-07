@@ -44,7 +44,7 @@ class cablecastPlaybackServerController extends playbackServerController {
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
         'CrawlLengthInSeconds' => !empty($crawl_duration) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
-        'CrawlText' => !empty($crawl_text) ? $crawl_text : 0,
+        'CrawlText' => !empty($crawl_text) ? $crawl_text : '',
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
@@ -134,9 +134,18 @@ class cablecastPlaybackServerController extends playbackServerController {
    */
   public function create_airing($pbs, $schedule_info = array()) {
     $channel_term = taxonomy_term_load($pbs->channel);
-    $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
-    $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
-    dsm($schedule_info);
+    $default_crawl = !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : '';
+    if (empty($default_crawl)) {
+      $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
+    }
+    $default_crawl_duration = !empty($schedule_info['CrawlLengthInSeconds']) ? $schedule_info['CrawlLengthInSeconds'] : 0;
+    if (empty($default_crawl_duration)) {
+      $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
+    }
+    $show = new stdClass();
+    $show->nid = $schedule_info['nid'];
+    $show->title = $schedule_info['Title'];
+    $default_crawl = om_show_tokenize_crawl_text($default_crawl, $show);
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
@@ -146,8 +155,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       'RunBump'     => 0, //int</RunBump>
       'CGExempt'    => FALSE, //boolean</CGExempt>
       'BugText'     => '', //string</BugText>
-      'CrawlText'   => !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : $default_crawl, //string</CrawlText>
-      'CrawlLength' => !empty($schedule_info['TotalSeconds']) ? $schedule_info['TotalSeconds'] : $default_crawl_duration, //int</CrawlLength>
+      'CrawlText'   => $default_crawl, //string</CrawlText>
+      'CrawlLength' => $default_crawl_duration, //int</CrawlLength>
     );
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {

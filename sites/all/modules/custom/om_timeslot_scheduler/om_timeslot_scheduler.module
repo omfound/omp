@@ -763,6 +763,7 @@ function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE, $mode = 'b
     foreach($cache_items AS $item) {
       $meta_data = array();
       $show_node = node_load($item->show_id);
+      $item->nid = $item->show_id;
       $lang = $show_node->language;
       // If a station had more than one type of playback server they would get stuck here
       // Would have to find a solution that allows pbs to claim fields.
