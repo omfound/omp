@@ -366,7 +366,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
   foreach ($shows AS $show_nid) {
-    $bayesian_score = alternative_rating_show_average($show_nid);
+    $bayesian_score = alternative_rating_bayesian_value($show_nid);
     dsm($bayesian_score);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
