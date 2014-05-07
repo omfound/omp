@@ -644,3 +644,9 @@ function om_show_cablecast_update_show_statuses() {
 function om_show_cron() {
   om_show_cablecast_update_show_statuses();
 }
+
+function om_show_tokenize_crawl_text($text, $show) {
+  $tokens = array('[show-nid]', '[show-title]');
+  $replacements = array($show->nid, $show->title);
+  return str_replace($tokens, $replacements, $text);
+}
