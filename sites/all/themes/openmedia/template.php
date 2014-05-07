@@ -324,7 +324,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
-  dsm($variables);
   // Author Info
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
@@ -366,7 +365,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
-  dsm($shows);
   foreach ($shows AS $show_nid) {
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
