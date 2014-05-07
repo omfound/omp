@@ -138,8 +138,8 @@ class cablecastPlaybackServerController extends playbackServerController {
     if (empty($default_crawl)) {
       $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
     }
+    $default_crawl = om_show_tokenize_crawl_text($default_crawl, $show);
     dsm($default_crawl);
-    dsm($channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value']);
     $default_crawl_duration = !empty($schedule_info['CrawlLengthInSeconds']) ? $schedule_info['CrawlLengthInSeconds'] : 0;
     if (empty($default_crawl_duration)) {
       $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
@@ -147,7 +147,6 @@ class cablecastPlaybackServerController extends playbackServerController {
     $show = new stdClass();
     $show->nid = $schedule_info['nid'];
     $show->title = $schedule_info['Title'];
-    $default_crawl = om_show_tokenize_crawl_text($default_crawl, $show);
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
