@@ -48,7 +48,7 @@ function commerce_coupon_class_membership_combo_rules_action_info() {
 }
 
 function commerce_coupon_class_membership_combo_apply_discount($line_item, $order, $coupon, $component_name, $round_mode) {
-  dsm($line_item);
+  drupal_set_message('this happens', 'notice');
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
 
