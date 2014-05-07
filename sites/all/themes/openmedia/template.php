@@ -302,6 +302,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
       $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
     }
     $variables['vote_widget'] = drupal_render($variables['content']['field_om_voting_on_video']);
+    dsm($variables['vote_widget']);
   }
   if (function_exists('alternative_rating_show_average')) {
     $bayesian_score = round(alternative_rating_show_average($variables['node']->nid), 2);
