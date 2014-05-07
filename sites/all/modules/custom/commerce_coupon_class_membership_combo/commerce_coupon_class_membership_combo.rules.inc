@@ -75,25 +75,26 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
       $wrapper->commerce_unit_price->data = commerce_price_component_add(
         $wrapper->commerce_unit_price->value(), $price_component_name, $difference, TRUE
       );
+      _commerce_coupon_class_membership_combo_static_cache_discount($primary_product->type);
     }  
   }
 }
 
 function _commerce_coupon_class_membership_combo_order_is_maxed($product) {
-  $order_cache = _commerce_coupon_class_membership_combo_static_cache_discount($product->type);
-  drupal_set_message($product->type, 'notice');
-  drupal_set_message(print_r($order_cache, true));
+  $order_cache = _commerce_coupon_class_membership_combo_static_cache_discount();
   if (!empty($order_cache['membership_plan']) && !empty($order_cache['class'])) {
     return TRUE;
   }
   return FALSE;
 }
 
-function _commerce_coupon_class_membership_combo_static_cache_discount($discount) {
+function _commerce_coupon_class_membership_combo_static_cache_discount($discount = '') {
   $static_cache = &drupal_static(__FUNCTION__);
   if (!isset($static_cache)) {
     $static_cache = array();
   }
-  $static_cache[$discount] = TRUE;
+  if (!empty($discount)) {
+    $static_cache[$discount] = TRUE;
+  }
   return $static_cache;
 }
