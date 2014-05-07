@@ -56,8 +56,8 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
     $is_maxed = _commerce_coupon_class_membership_combo_order_is_maxed($primary_product);
     // If the line item is a membership and matches the type designated by commerce_coupon_combo
     // or the line item is a class.
-    if ($is_maxed == FALSE,
-    (($primary_product->type == 'membership_plan' && $primary_product->product_id  == $coupon->field_coupon_membership[LANGUAGE_NONE][0]['value']) 
+    if ($is_maxed == FALSE
+    && (($primary_product->type == 'membership_plan' && $primary_product->product_id  == $coupon->field_coupon_membership[LANGUAGE_NONE][0]['value']) 
     || $primary_product->type == 'class')) {
       $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
       $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
