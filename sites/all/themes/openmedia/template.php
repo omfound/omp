@@ -366,8 +366,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
+  dsm($shows);
   foreach ($shows AS $show_nid) {
-    dsm($show_nid);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
