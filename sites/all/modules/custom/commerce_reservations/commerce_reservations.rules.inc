@@ -308,9 +308,11 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
 
     if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
       $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
-    }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
+    }
+    elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
       $hourly_rate = $product->commerce_price['und'][0]['amount'];
-    }else {
+    }
+    else {
       return;
     }
 
@@ -321,17 +323,24 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
+      // @TODO here we need to check and see if free hours have not covered total expense.
+      // If not, we add a 50% discount for some reason.
       if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
         $new_price = $unit_price['amount'] - ($free_hours*$hourly_rate);
         $price_difference = $new_price - $unit_price['amount'];
-      }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      }
+      elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
         if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
           $new_price = 0;
-        }else{
+        }
+        else {
           $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
         }
         if ($new_price < 0) { $new_price = 0; }
         $price_difference = $new_price - $unit_price['amount'];
+      }
+      if ($price_difference > 0) {
+        $price_difference *= .5;
       }
     }
     $difference = array(
