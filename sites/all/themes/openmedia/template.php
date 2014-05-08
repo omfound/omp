@@ -371,12 +371,12 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $bayesian_score = alternative_rating_bayesian_value($show_nid);
     array_push($score_array, $bayesian_score);
     dsm($score_array);
-    dsm($bayesian_score);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
     }
   }
+  dsm(max($score_array));
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
