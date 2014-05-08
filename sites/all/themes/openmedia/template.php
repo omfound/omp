@@ -376,7 +376,12 @@ function openmedia_preprocess_node__om_project(&$variables) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
     }
   }
-  dsm(max($score_array));
+  $highest_show = (max($score_array));
+  foreach ($shows AS $score_test) {
+    if (alternative_rating_bayesian_value($show_nid) == $highest_show) {
+      dsm($show_nid);
+    }
+  }
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
