@@ -369,19 +369,14 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $score_array = array();
   foreach ($shows AS $show_nid) {
     $bayesian_score = alternative_rating_bayesian_value($show_nid);
-    array_push($score_array, $bayesian_score);
-    dsm($score_array);
+    $score_array = array_fill_keys($show_nid, $bayesian_score);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
     }
   }
+  dsm($score_array);
   $highest_show = (max($score_array));
-  foreach ($shows AS $score_test) {
-    if (alternative_rating_bayesian_value($show_nid) == $highest_show) {
-      dsm($show_nid);
-    }
-  }
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
