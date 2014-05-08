@@ -365,8 +365,12 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
+  
+  $score_array = array();
   foreach ($shows AS $show_nid) {
     $bayesian_score = alternative_rating_bayesian_value($show_nid);
+    array_push($score_array, $bayesian_score);
+    dsm($score_array);
     dsm($bayesian_score);
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
