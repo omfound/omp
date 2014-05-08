@@ -377,7 +377,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   dsm($score_array);
   $highest_show = (max($score_array));
-  dsm($highest_show);
+  $highest_score_nid = array_search($highest_show, $score_array);
+  dsm($highest_score_nid);
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
