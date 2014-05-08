@@ -369,7 +369,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $score_array = array();
   foreach ($shows AS $show_nid) {
     $bayesian_score = alternative_rating_bayesian_value($show_nid);
-    $score_array = array_fill_keys($show_nid, $bayesian_score);
+    $score_array[$show_nid] = $bayesian_score; 
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
