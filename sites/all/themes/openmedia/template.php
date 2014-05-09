@@ -380,6 +380,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
   dsm($node_load);
+  dsm(drupal_render($node_load->field_om_show_video));
   $variables['video'] = drupal_render($node_load->field_om_show_video);
   dsm($variables['video']);
 }
