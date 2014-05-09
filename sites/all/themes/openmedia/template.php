@@ -227,6 +227,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_node__om_show(&$variables) {
+  dsm($variables);
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
     $file = file_load($variables['picture']);
