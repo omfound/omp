@@ -316,9 +316,10 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
-  dsm('gets called on project page om_show_jwplayer_include');
-  $node = menu_get_object();
+function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338, $node = FALSE) {
+  if (empty($node)) {
+    $node = menu_get_object();
+  }
   if (!is_object($node)) {
     $nid = $node['nid'];
     $show_field = $node['field_om_show_video'];
@@ -343,7 +344,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
   if ($youtube_info['live_status'] || empty($show_field)) {
-    dsm('youtube return');
     return;
   }
 
@@ -382,7 +382,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }
   }
-  dsm('right before add_js');
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
