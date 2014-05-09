@@ -317,6 +317,7 @@ function om_show_reload($form, $form_state) {
 }
 
 function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
+  dsm('gets called on project page om_show_jwplayer_include');
   $node = menu_get_object();
   if (!is_object($node)) {
     $nid = $node['nid'];
@@ -380,7 +381,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }
   }
-
+  dsm('right before add_js');
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
