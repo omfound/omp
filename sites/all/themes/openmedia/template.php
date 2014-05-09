@@ -375,10 +375,11 @@ function openmedia_preprocess_node__om_project(&$variables) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
     }
   }
-  dsm($score_array);
+  //Marty
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
-  dsm($highest_score_nid);
+  $node_load = node_load($highest_score_nid);
+  dsm($node_load);
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
