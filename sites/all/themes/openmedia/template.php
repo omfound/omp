@@ -381,8 +381,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $node_load = node_load($highest_score_nid);
   dsm($node_load);
   dsm($node_load->field_om_show_video);
-  dsm(drupal_render($node_load->field_om_show_video));
-  $variables['video'] = drupal_render($node_load->field_om_show_video);
+  $variables['video'] = om_show_render_video_url($node_load->field_om_show_video['und']['0']['value']);
+  dsm($variables['video']);
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
