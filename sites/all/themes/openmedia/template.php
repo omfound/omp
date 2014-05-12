@@ -323,11 +323,8 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
-function openmedia_preprocess_views_view__project_show_list(&$variables){
-  dsm($variables);
-}
-
 function openmedia_preprocess_node__om_project(&$variables) {
+  dsm($variables);
   // Author Info
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
