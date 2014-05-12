@@ -626,6 +626,11 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
 
 }
 
+function openmedia_preprocess_views_view_unformatted__project_show_list(&$variables) {
+  dsm($variables);
+  dsm('test');
+}
+
 function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
   //add bootstrap button css
   drupal_add_css('sites/all/themes/openmedia/css/bootstrap-buttons.css');
