@@ -324,7 +324,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
-  dsm($variables);
   // Author Info
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
@@ -624,11 +623,6 @@ function openmedia_preprocess_views_view_unformatted(&$variables) {
       break;
   }
 
-}
-
-function openmedia_preprocess_views_view_unformatted__project_show_list(&$variables) {
-  dsm($variables);
-  dsm('test');
 }
 
 function openmedia_preprocess_views_view_fields__reservation_orders(&$variables) {
