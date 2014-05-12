@@ -53,12 +53,4 @@
       <?php endif; ?>
     </div>
   </div>
-  <?php if (!empty($show_grid)): ?>
-    <div id="show-grid" class="divider">
-      <div class="inner">
-        <div class="title bold">Shows in this project:</div>
-        <?php print $show_grid; ?>
-      </div>
-    </div>
-  <?php endif; ?>
 </article><!-- /.node -->
