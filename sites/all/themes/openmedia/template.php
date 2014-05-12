@@ -227,7 +227,6 @@ function openmedia_preprocess_node__class_display(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_node__om_show(&$variables) {
-  dsm($variables);
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
     $file = file_load($variables['picture']);
@@ -324,6 +323,10 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
+function openmedia_preprocess_views_view__project_show_list(&$variables){
+  dsm($variables);
+}
+
 function openmedia_preprocess_node__om_project(&$variables) {
   // Author Info
   // User picture
@@ -380,10 +383,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
-  dsm($node_load);
-  dsm($node_load->field_om_show_video);
   $variables['video'] = om_show_render_video_url($node_load->field_om_show_video['und']['0']['value']);
-  dsm($variables['video']);
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
