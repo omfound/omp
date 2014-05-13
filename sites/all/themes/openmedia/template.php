@@ -324,7 +324,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
-  dsm($variables);
   $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
