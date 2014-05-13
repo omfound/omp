@@ -308,4 +308,17 @@ div.timeslot-theme-wrapper ul li {
   text-align: left;
   border: none;
 }
+/** 
+  * Project View Block.
+*/
+.view-project-show-list .views-row {
+  float: left;
+}
+
+.view-project-show-list .views-field-field-show-thumbnail {
+  box-shadow: 0px 0px 14px 2px #dedede;
+  background: #000000;
+  border: 1px solid #000000;
+}
+
 **/
