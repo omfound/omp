@@ -324,7 +324,7 @@ div.timeslot-theme-wrapper ul li {
   border: 1px solid #000000;
 }
 
-.view-project-show-list .views-field-field-show-thumbnail {
+.view-project-show-list .views-field-field-show-thumbnail img {
   overflow: auto;
   margin: auto;
   position: absolute;
