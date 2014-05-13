@@ -351,4 +351,10 @@ div.timeslot-theme-wrapper ul li {
   bottom: 18px;
   width: 120px;
 }
+
+.node-om-project .project-top {
+  background-color: #7a746b;
+  color: #ffffff;
+}
+
 **/
