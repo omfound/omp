@@ -345,4 +345,10 @@ div.timeslot-theme-wrapper ul li {
   text-decoration: underline;
 }
 
+.view-project-show-list .fivestar-average-text .description {
+  position: relative;
+  left: 100px;
+  bottom: 18px;
+  width: 120px;
+}
 **/
