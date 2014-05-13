@@ -335,4 +335,14 @@ div.timeslot-theme-wrapper ul li {
   bottom: 0;
   right: 0;
 }
+
+.view-project-show-list .views-field-title a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.view-project-show-list .views-field-title a:hover {
+  text-decoration: underline;
+}
+
 **/
