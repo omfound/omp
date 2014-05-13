@@ -2,7 +2,7 @@
   <?php if (isset($video)):?>
   <?php print $video; ?>
   <?php endif; ?>
-  <div id="project-top" class="clearfix">
+  <div id="project-top" class="clearfix project-top">
     <div id="project-left">
       <?php if (isset($logo)): ?>
         <div id="project-logo">
