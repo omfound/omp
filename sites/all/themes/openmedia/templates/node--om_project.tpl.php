@@ -5,6 +5,9 @@
   </div>
   <?php endif; ?>
   <div id="project-top" class="clearfix project-top">
+    <?php if (isset($project_title)): ?> 
+    <?php print $project_title; ?>
+    <?php endif; ?>
     <div id="project-left">
       <?php if (isset($logo)): ?>
         <div id="project-logo">
