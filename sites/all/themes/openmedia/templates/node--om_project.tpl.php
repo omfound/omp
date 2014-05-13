@@ -1,6 +1,8 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if (isset($video)):?>
-  <?php print $video; ?>
+  <div class="project-video">
+    <?php print $video; ?>
+  </div>
   <?php endif; ?>
   <div id="project-top" class="clearfix project-top">
     <div id="project-left">
