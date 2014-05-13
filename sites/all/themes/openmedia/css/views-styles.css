@@ -313,6 +313,8 @@ div.timeslot-theme-wrapper ul li {
 */
 .view-project-show-list .views-row {
   float: left;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .view-project-show-list .views-field-field-show-thumbnail {
