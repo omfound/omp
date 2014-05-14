@@ -380,7 +380,11 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
-  $variables['video'] = om_show_render_video_url($node_load->field_om_show_video['und']['0']['value']);
+  $variables['video'] = theme('video_player' array('id' => 'project-player',
+                                                   'path' => '',
+                                                   'width' => 200,
+                                                   'height' => 200
+                                                   ));
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
