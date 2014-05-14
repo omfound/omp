@@ -51,9 +51,12 @@
         </div>
       </div>
   </div>
+  <div class="middle-project">
+    <div class="project-line"></div>
     <?php if (isset($project_title)): ?>
     <div class="project-lower-title">
       <h2 class="more-from">MORE FROM <?php print $project_title; ?></h2>
     </div>
     <?php endif; ?> 
+  </div>
 </article><!-- /.node -->
