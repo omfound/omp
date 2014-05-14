@@ -362,11 +362,12 @@ div.timeslot-theme-wrapper ul li {
 display: none;
 }
 
-.node-om-project h2.more-from {
+.node-type-om-project .node-om-project h2.more-from {
   background-color: #54474f;
   color: #ffffff;
   text-transform: uppercase;
   text-shadow: none;
+  font-size: 12px;
 }
 
 **/
