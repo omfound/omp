@@ -8,6 +8,11 @@
     <?php if (isset($project_title)): ?> 
     <?php print $project_title; ?>
     <?php endif; ?>
+      <?php if (isset($description)): ?>
+        <div id="project-description">
+          <?php print $description; ?>
+        </div>
+      <?php endif; ?>
       <?php if (isset($logo)): ?>
         <div id="project-logo">
           <?php print $logo; ?>
@@ -48,11 +53,6 @@
       <div id="project-date-author">
         <span class="bold"><?php print $created; ?> by <?php print $name; ?></span> - <?php print $view_count; ?>
       </div>
-      <?php if (isset($description)): ?>
-        <div id="project-description">
-          <?php print $description; ?>
-        </div>
-      <?php endif; ?>
     </div>
     <?php if (isset($project_title)): ?>
    <h2>MORE FROM</h2><?php print $project_title; ?>
