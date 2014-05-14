@@ -387,6 +387,10 @@ function openmedia_preprocess_node__om_project(&$variables) {
                                                    ));
 }
 
+function openmedia_preprocess_video_player(&$variables) {
+
+}
+
 function openmedia_theme($existing, $type, $theme, $path) {
   return array(
     'class_registration_box' => array(
