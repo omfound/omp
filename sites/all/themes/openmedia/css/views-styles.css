@@ -367,6 +367,11 @@ div.timeslot-theme-wrapper ul li {
   padding: 18px;
 }
 
+.node-type-om-project #content-inner {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 .node-type-om-project h1#page-title {
   display: none;
 }
