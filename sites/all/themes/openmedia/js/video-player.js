@@ -1,7 +1,7 @@
 (function($){
   Drupal.behaviors.videoPlayer = {
     attach: function(){
-      console.log('WTF');    
+      console.log(Drupal.settings.video_player);    
     }                                 
   };
 })(jQuery);
