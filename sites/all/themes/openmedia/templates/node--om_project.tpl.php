@@ -54,4 +54,7 @@
         </div>
       <?php endif; ?>
     </div>
+    <?php if (isset($project_title)): ?>
+   <h2>MORE FROM</h2><?php print $project_title; ?>
+    <?php endif; ?> 
 </article><!-- /.node -->
