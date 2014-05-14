@@ -381,7 +381,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
   $variables['video'] = theme('video_player', array('id' => 'project-player',
-                                                   'path' => '',
+                                                   'file' => '',
                                                    'width' => 200,
                                                    'height' => 200
                                                    ));
@@ -407,7 +407,7 @@ function openmedia_theme($existing, $type, $theme, $path) {
       'path' => $path . '/templates',
       'template' => 'video_player',
       'variables' => array(
-                       'path' => '',
+                       'file' => '',
                        'width' => '',
                        'height' => '',
                        'id' => '',  
