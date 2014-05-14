@@ -388,7 +388,12 @@ function openmedia_preprocess_node__om_project(&$variables) {
 }
 
 function openmedia_preprocess_video_player(&$variables) {
-
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/video-player.js', array('type' => 'file', 'group' => JS_THEME));
+  $settings = array(
+                   'video_player' => $variables
+                   );
+  drupal_add_js($settings, array('type' => 'setting', 'group' => JS_THEME));
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
