@@ -8,7 +8,6 @@
     <?php if (isset($project_title)): ?> 
     <?php print $project_title; ?>
     <?php endif; ?>
-    <div id="project-left">
       <?php if (isset($logo)): ?>
         <div id="project-logo">
           <?php print $logo; ?>
@@ -46,8 +45,6 @@
           </div>
         <?php endif; ?>
       </div>
-    </div>
-    <div id="project-right">
       <div id="project-date-author">
         <span class="bold"><?php print $created; ?> by <?php print $name; ?></span> - <?php print $view_count; ?>
       </div>
@@ -57,5 +54,4 @@
         </div>
       <?php endif; ?>
     </div>
-  </div>
 </article><!-- /.node -->
