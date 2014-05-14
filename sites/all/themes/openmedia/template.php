@@ -391,7 +391,7 @@ function openmedia_preprocess_video_player(&$variables) {
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/video-player.js', array('type' => 'file', 'group' => JS_THEME));
   $settings = array(
-                   'video_player' => $variables
+                   'video_player' => array($variables)
                    );
   drupal_add_js($settings, array('type' => 'setting', 'group' => JS_THEME));
 }
