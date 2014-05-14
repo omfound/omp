@@ -385,5 +385,16 @@ div.timeslot-theme-wrapper ul li {
   max-width: 450px;
 }
 
+.node-type-om-project .project-line {
+  width: 100%;
+  border-bottom: 1px solid #777777;
+  margin-bottom: -24px;
+}
+
+.node-type-om-project .middle-project {
+  height: 52px;
+  margin: 10px 0px 10px 0px;
+}
+
 **/
 
