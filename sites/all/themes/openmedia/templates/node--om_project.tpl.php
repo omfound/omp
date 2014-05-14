@@ -50,6 +50,8 @@
       </div>
     </div>
     <?php if (isset($project_title)): ?>
-   <h2>MORE FROM</h2><?php print $project_title; ?>
+    <div class="project-lower-title">
+      <h2 class="more-from">MORE FROM<?php print $project_title; ?></h2>
+    </div>
     <?php endif; ?> 
 </article><!-- /.node -->
