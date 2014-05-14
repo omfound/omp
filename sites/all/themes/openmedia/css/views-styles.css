@@ -358,8 +358,8 @@ div.timeslot-theme-wrapper ul li {
   text-shadow:  none;
 }
 
-.node-type-om-project .h1#page-title {
-  display: none;
+.node-type-om-project h1#page-title {
+display: none;
 }
 
 **/
