@@ -380,12 +380,13 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
-  dsm($node_load);
-  $variables['video'] = theme('video_player', array('id' => 'project-player',
-                                                   'file' => '',
+  if(!empty($node_load)) { 
+    $variables['video'] = theme('video_player', array('id' => 'project-player',
+                                                   'file' => "$node_load->field_om_show_video['und']['0']['value']",
                                                    'width' => 200,
                                                    'height' => 200
                                                    ));
+  }
 }
 
 function openmedia_preprocess_video_player(&$variables) {
