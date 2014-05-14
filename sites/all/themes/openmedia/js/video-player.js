@@ -1,5 +1,5 @@
 (function($){
-  Drupal.behaviours.videoPlayer = {
+  Drupal.behaviors.videoPlayer = {
     attach: function(){
       console.log('WTF');    
     }                                 
