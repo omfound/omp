@@ -389,6 +389,16 @@ function openmedia_theme($existing, $type, $theme, $path) {
       'path' => $path . '/templates',
       'template' => 'class_registration_box',
       'variables' => array('registration_details' => array())
+    ),
+    'video_player' => array(
+      'path' => $path . '/templates',
+      'template' => 'video_player',
+      'variables' => array(
+                       'path' => '',
+                       'width' => '',
+                       'height' => '',
+                       'id' => '',  
+                     )
     )
   ); 
 }
