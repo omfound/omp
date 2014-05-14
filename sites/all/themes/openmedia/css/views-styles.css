@@ -352,7 +352,12 @@ div.timeslot-theme-wrapper ul li {
   width: 120px;
 }
 
+.node-om-project .project-video {
+  float:left;
+}
+
 .node-om-project .project-top {
+  float: left;
   background-color: #7a746b;
   color: #ffffff;
   text-shadow:  none;
