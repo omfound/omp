@@ -13,11 +13,6 @@
           <?php print $description; ?>
         </div>
       <?php endif; ?>
-      <?php if (isset($logo)): ?>
-        <div id="project-logo">
-          <?php print $logo; ?>
-        </div>
-      <?php endif; ?>
       <div id="project-metadata">
         <?php if (isset($locally_produced)): ?>
           <div id="project-locally-produced">
