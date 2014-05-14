@@ -380,9 +380,11 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
-  if(!empty($node_load)) { 
+  if(!empty($node_load)) {
+    dsm($node_load->field_om_show_video['und']['0']['value']);
+    $video = $node_load->field_om_show_video['und']['0']['value']; 
     $variables['video'] = theme('video_player', array('id' => 'project-player',
-                                                   'file' => "$node_load->field_om_show_video['und']['0']['value']",
+                                                   'file' => $video,
                                                    'width' => 200,
                                                    'height' => 200
                                                    ));
