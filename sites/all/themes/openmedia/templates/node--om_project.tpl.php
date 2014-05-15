@@ -59,4 +59,13 @@
     </div>
     <?php endif; ?> 
   </div>
+    <?php if (isset($video_title)): ?>
+    <?php print $video_title; ?>
+    <?php endif; ?>
+    <?php if (isset($video_description)): ?>
+    <?php print $video_description; ?>
+    <?php endif; ?>
+    <?php if (isset($video_published)): ?>
+    <?php print $video_published; ?>
+    <?php endif; ?>
 </article><!-- /.node -->
