@@ -324,7 +324,6 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
-  dsm($variables);
   $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
@@ -383,7 +382,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $node_load = node_load($highest_score_nid);
   dsm($node_load);
   if(!empty($node_load)) {
-    dsm($node_load->field_om_show_video['und']['0']['value']);
     $video = $node_load->field_om_show_video['und']['0']['value']; 
     $variables['video'] = theme('video_player', array('id' => 'project-player',
                                                    'file' => $video,
