@@ -324,6 +324,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
+  dsm($variables);
   $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
@@ -380,6 +381,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
+  dsm($node_load);
   if(!empty($node_load)) {
     dsm($node_load->field_om_show_video['und']['0']['value']);
     $video = $node_load->field_om_show_video['und']['0']['value']; 
