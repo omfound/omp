@@ -367,6 +367,10 @@ div.timeslot-theme-wrapper ul li {
   padding: 18px;
 }
 
+.node-om-project .project-top a {
+  color: #ffffff;
+}
+
 .node-type-om-project #content-inner {
   padding-left: 0px;
   padding-right: 0px;
