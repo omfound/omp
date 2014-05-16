@@ -381,9 +381,15 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
   dsm($node_load);
-  $variables['video_title'] = $node_load->title;
+  if (isset($node_load->title)) {
+    $variables['video_title'] = $node_load->title;
+  }
+  if (isset($node_load->body['und']['0']['value'];)) {
   $variables['video_description'] = $node_load->body['und']['0']['value'];
-  $variables['video_published'] = $node_load->field_om_show_date['und']['0']['value'];
+  }
+  if (isset($node_load->field_om_show_date['und']['0']['value')) {
+    $variables['video_published'] = $node_load->field_om_show_date['und']['0']['value'];
+  }
   dsm($variables['video_published']);
   $variables ['video_views'] = $node_load;
   if(!empty($node_load)) {
