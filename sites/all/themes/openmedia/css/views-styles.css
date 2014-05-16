@@ -382,13 +382,11 @@ div.timeslot-theme-wrapper ul li {
   text-transform: uppercase;
   text-shadow: none;
   font-size: 15px !important;
-  max-width: 450px;
 }
 
 .node-type-om-project .project-line {
   width: 100%;
   border-bottom: 1px solid #777777;
-  margin-bottom: -24px;
 }
 
 .node-type-om-project .middle-project {
