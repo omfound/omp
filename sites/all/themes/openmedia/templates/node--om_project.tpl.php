@@ -51,21 +51,23 @@
         </div>
       </div>
   </div>
-    <?php if (isset($video_title)): ?>
-    <div class="featured-video-title">
-      <?php print $video_title; ?>
+    <div class="featured-video-area">
+      <?php if (isset($video_title)): ?>
+      <div class="featured-video-title">
+        <?php print $video_title; ?>
+      </div>
+      <?php endif; ?>
+      <?php if (isset($video_description)): ?>
+      <div class="featured-video-description">
+        <?php print $video_description; ?>
+      </div>
+      <?php endif; ?>
+      <?php if (isset($video_published)): ?>
+      <div class="featured-video-date">
+        <?php print $video_published; ?>
+      </div>
+      <?php endif; ?>
     </div>
-    <?php endif; ?>
-    <?php if (isset($video_description)): ?>
-    <div class="featured-video-description">
-      <?php print $video_description; ?>
-    </div>
-    <?php endif; ?>
-    <?php if (isset($video_published)): ?>
-    <div class="featured-video-date">
-      <?php print $video_published; ?>
-    </div>
-    <?php endif; ?>
   <div class="middle-project">
     <div class="project-line"></div>
     <?php if (isset($project_title)): ?>
