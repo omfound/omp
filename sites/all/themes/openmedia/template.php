@@ -390,7 +390,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
   if (!empty($node_load->field_om_show_date)) {
     $variables['video_published'] = $node_load->field_om_show_date['und']['0']['value'];
   }
-  dsm($variables['video_published']);
   $variables ['video_views'] = $node_load;
   if(!empty($node_load)) {
     $video = $node_load->field_om_show_video['und']['0']['value']; 
