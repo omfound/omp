@@ -69,10 +69,11 @@
       <?php endif; ?>
     </div>
   <div class="middle-project">
-    <div class="project-line"></div>
+    <div class="project-line">
     <?php if (isset($project_title)): ?>
     <div class="project-lower-title">
       <h2 class="more-from">MORE FROM <?php print $project_title; ?></h2>
+    </div>
     </div>
     <?php endif; ?>
   </div>
