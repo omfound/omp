@@ -388,7 +388,8 @@ div.timeslot-theme-wrapper ul li {
   font-size: 15px !important;
   float:left;
   clear:left;
-  padding: 15px;
+  padding: 3px 14px 3px 14px !important;
+  margin-top: -14px !important;
 }
 
 .node-type-om-project .project-line {
@@ -398,7 +399,7 @@ div.timeslot-theme-wrapper ul li {
 
 .node-type-om-project .middle-project {
   height: 52px;
-  margin: 10px 0px 10px 0px;
+  margin: 20px 0px 10px 0px;
 }
 
 **/
