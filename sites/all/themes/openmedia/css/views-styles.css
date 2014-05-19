@@ -402,5 +402,10 @@ div.timeslot-theme-wrapper ul li {
   margin: 20px 0px 10px 0px;
 }
 
+.node-type-om-project .project-label {
+  float: left;
+  margin-right: 5px;
+}
+
 **/
 
