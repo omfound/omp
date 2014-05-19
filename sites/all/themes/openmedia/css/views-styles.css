@@ -407,5 +407,18 @@ div.timeslot-theme-wrapper ul li {
   margin-right: 5px;
 }
 
+.node-type-om-project .project-title {
+  font-size: 20px;
+}
+
+.node-type-om-project .featured-video-area {
+  width: 455px;
+}
+
+.node-type-om-project .featured-video-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 **/
 
