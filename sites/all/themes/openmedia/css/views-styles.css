@@ -386,6 +386,9 @@ div.timeslot-theme-wrapper ul li {
   text-transform: uppercase;
   text-shadow: none;
   font-size: 15px !important;
+  float:left;
+  clear:left;
+  padding: 15px;
 }
 
 .node-type-om-project .project-line {
