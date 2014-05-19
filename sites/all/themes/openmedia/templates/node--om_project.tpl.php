@@ -15,6 +15,9 @@
           </div>
         <?php endif; ?>
         <div id="project-metadata">
+          <div id="project-date-author">
+-           <span class="bold"> Producer: <?php print $name; ?></span>
+-         </div>
           <?php if (isset($rating)): ?>
             <div id="project-rating">
               <div class="bold label">Rating:</div>
