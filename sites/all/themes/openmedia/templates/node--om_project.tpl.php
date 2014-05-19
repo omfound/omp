@@ -7,7 +7,9 @@
     <?php endif; ?>
     <div id="project-top" class="clearfix project-top">
       <?php if (isset($project_title)): ?> 
-      <?php print $project_title; ?>
+      <div class="project-title">
+        <?php print $project_title; ?>
+      </div>
       <?php endif; ?>
         <?php if (isset($description)): ?>
           <div id="project-description">
