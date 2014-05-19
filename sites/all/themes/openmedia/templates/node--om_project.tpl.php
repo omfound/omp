@@ -15,12 +15,6 @@
           </div>
         <?php endif; ?>
         <div id="project-metadata">
-          <?php if (isset($locally_produced)): ?>
-             <div id="project-locally-produced">
-               <div class="bold label">Production:</div>
-               <div class="value"><?php print $locally_produced; ?></div>
-             </div>
-          <?php endif; ?>
           <?php if (isset($rating)): ?>
             <div id="project-rating">
               <div class="bold label">Rating:</div>
@@ -33,21 +27,12 @@
               <div class="value"><?php print $project_language; ?></div>
             </div>
           <?php endif; ?>
-          <?php if (isset($genre)): ?>
-            <div id="project-genre">
-              <div class="bold label">Genre:</div>
-              <div class="value"><?php print $genre; ?></div>
-            </div>
-          <?php endif; ?>
           <?php if (isset($theme)): ?>
             <div id="project-theme">
               <div class="bold label">Theme:</div>
               <div class="value"><?php print $theme; ?></div>
             </div>
           <?php endif; ?>
-        </div>
-        <div id="project-date-author">
-          <span class="bold"><?php print $created; ?> by <?php print $name; ?></span> - <?php print $view_count; ?>
         </div>
       </div>
   </div>
