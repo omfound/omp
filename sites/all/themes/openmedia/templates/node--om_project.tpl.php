@@ -16,23 +16,23 @@
         <?php endif; ?>
         <div id="project-metadata">
           <div id="project-date-author">
--           <span class="bold">Producer: <?php print $name; ?></span>
+-           <span class="bold project-label">Producer: <?php print $name; ?></span>
 -         </div>
           <?php if (isset($rating)): ?>
             <div id="project-rating">
-              <div class="bold label">Rating:</div>
+              <div class="bold label project-label">Rating:</div>
               <div class="value"><?php print $rating; ?></div>
             </div>
           <?php endif; ?>
           <?php if (isset($project_language)): ?>
             <div id="project-language">
-              <div class="bold label">Language:</div>
+              <div class="bold label project-label">Language:</div>
               <div class="value"><?php print $project_language; ?></div>
             </div>
           <?php endif; ?>
           <?php if (isset($theme)): ?>
             <div id="project-theme">
-              <div class="bold label">Theme:</div>
+              <div class="bold label project-label">Theme:</div>
               <div class="value"><?php print $theme; ?></div>
             </div>
           <?php endif; ?>
