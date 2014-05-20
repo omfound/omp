@@ -380,19 +380,19 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_show = (max($score_array));
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
-  dsm($node_load);
   $node_array = node_view($node_load);
   dsm($node_array);
   if (module_exists('fivestar')) {
-    dsm('fivestar exist');
     if (!empty($vote_info['average']['value'])) {
-      dsm('vote info not empty');
       $vote_info = fivestar_get_votes('node', $highest_score_nid);
       $current_vote = round(($vote_info['average']['value'] / 100) * 5);
       $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
     }
     $variables['vote_widget'] = drupal_render($node_array['field_om_voting_on_video']);
-    dsm($variables['vote_widget']);
+  }
+  if (module_exists('om_social')) {
+    $social = theme('om_social_vertical_sharing');
+    $variables['node_right'] = $social;
   }
   if (isset($node_load->title)) {
     $variables['video_title'] = $node_load->title;
