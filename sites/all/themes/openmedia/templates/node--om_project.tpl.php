@@ -64,6 +64,9 @@
         <?php if (isset($vote_widget)):?>
           <?php print $vote_widget; ?>
         <?php endif; ?>
+        <?php if (isset($vote_widget)):?>
+          <?php print $node_right; ?>
+        <?php endif; ?>
       </div>
     </div>
   <div class="middle-project">
