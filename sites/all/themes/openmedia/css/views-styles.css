@@ -421,5 +421,13 @@ div.timeslot-theme-wrapper ul li {
   font-weight: bold;
 }
 
+.node-type-om-project .featured-video-area {
+  float: left;
+}
+
+.node-type-om-project .featured-video-area-right {
+  float: left;
+}
+
 **/
 
