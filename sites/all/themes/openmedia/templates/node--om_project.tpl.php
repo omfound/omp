@@ -1,5 +1,4 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php print $vote_widget; ?>
   <?php if (isset($video)):?>
   <div class="clearfix">
     <div class="project-video">
@@ -57,6 +56,11 @@
       <div class="featured-video-date">
         <?php print $video_published; ?>
       </div>
+      <?php endif; ?>
+    </div>
+    <div class="featured-video-area-right">
+      <?php if (isset($vote_widget)):?>
+        <?php print $vote_widget; ?>
       <?php endif; ?>
     </div>
   <div class="middle-project">
