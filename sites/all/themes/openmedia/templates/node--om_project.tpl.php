@@ -1,4 +1,5 @@
 <article class="node-<?php print $node->nid; ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+  <?php print $node_right; ?>
   <?php if (isset($video)):?>
   <div class="clearfix">
     <div class="project-video">
