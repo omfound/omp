@@ -391,7 +391,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
       $current_vote = round(($vote_info['average']['value'] / 100) * 5);
       $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
     }
-    $variables['vote_widget'] = drupal_render($node_load->field_om_voting_on_video);
+    $variables['vote_widget'] = drupal_render($node_array['field_om_voting_on_video']);
     dsm($variables['vote_widget']);
   }
   if (isset($node_load->title)) {
