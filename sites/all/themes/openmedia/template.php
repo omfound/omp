@@ -17,6 +17,7 @@ function openmedia_preprocess_html(&$variables) {
 }
 
 function openmedia_preprocess_page(&$variables) {
+  drupal_add_library('openmedia', 'typekit');
   if ($variables['is_front']) {
     if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
       if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
@@ -425,6 +426,15 @@ function openmedia_preprocess_video_player(&$variables) {
 
 function openmedia_theme($existing, $type, $theme, $path) {
   return array(
+    'typekit' => array(
+      'title' => 'TypeKit',
+      'website' => 'http://typekit.com',
+      'version' => 1,
+      'js' => array(
+        'https://use.typekit.net/nqe8fpz.js' => array(),
+        drupal_get_path('theme', 'minim') . '/js/typekit.js' => array(),
+      )
+    ),
     'class_registration_box' => array(
       'path' => $path . '/templates',
       'template' => 'class_registration_box',
