@@ -386,11 +386,11 @@ div.timeslot-theme-wrapper ul li {
   color: #ffffff;
   text-transform: uppercase;
   text-shadow: none;
-  font-size: 15px !important;
+  font-size: 19px !important;
   float:left;
   clear:left;
-  padding: 3px 14px 3px 14px !important;
-  margin-top: -14px !important;
+  padding: 5px 14px 2px 14px !important;
+  margin-top: -15px !important;
 }
 
 .node-type-om-project .project-line {
