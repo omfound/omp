@@ -354,7 +354,8 @@ div.timeslot-theme-wrapper ul li {
 
 .node-om-project .project-video {
   float:left;
-  width: 700px;
+  margin: 10px;
+  width: 680px;
   height: 450px;
 }
 
