@@ -409,7 +409,12 @@ div.timeslot-theme-wrapper ul li {
 }
 
 .node-type-om-project .project-title {
-  font-size: 20px;
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.node-type-om-project #project-description p {
+  font-weight: 100;
 }
 
 .node-type-om-project .featured-video-area {
