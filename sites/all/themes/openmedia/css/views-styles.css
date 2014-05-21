@@ -451,6 +451,10 @@ div.timeslot-theme-wrapper ul li {
   font-family: "proxima-nova-extra-condensed" !important;
 }
 
+p.project-published {
+  float: left;
+  font-weight: bold;
+}
 
 **/
 
