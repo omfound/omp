@@ -419,9 +419,12 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   $variables['video_views'] = $node_load;
   dsm($node_load);
+ // 'image' => $img_path
+  $show_thumbnail = drupal_realpath($node_load->field_show_thumbnail['und']['0']['uri']);
   if(!empty($node_load)) {
     $video = $node_load->field_om_show_video['und']['0']['value']; 
     $variables['video'] = theme('video_player', array('id' => 'project-player',
+                                                   'image' => $show_thumbnail,
                                                    'file' => $video,
                                                    'width' => 680,
                                                    'height' => 400
