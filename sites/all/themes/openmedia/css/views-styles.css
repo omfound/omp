@@ -430,7 +430,7 @@ div.timeslot-theme-wrapper ul li {
 }
 
 .extra-condensed {
-  font-family: "proxima-nova-extra-condensed";
+  font-family: "proxima-nova-extra-condensed" !important;
 }
 
 
