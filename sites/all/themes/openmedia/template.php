@@ -423,7 +423,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $video = $node_load->field_om_show_video['und']['0']['value']; 
     $variables['video'] = theme('video_player', array('id' => 'project-player',
                                                    'file' => $video,
-                                                   'width' => 700,
+                                                   'width' => 680,
                                                    'height' => 400
                                                    ));
   }
