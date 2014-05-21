@@ -90,7 +90,7 @@ function openmedia_library() {
         drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
       )
     ),
-  )
+  );
 }
 
 /**
