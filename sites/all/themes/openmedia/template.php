@@ -79,6 +79,20 @@ function openmedia_preprocess_page(&$variables) {
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-search.js', array('type' => 'file', 'group' => JS_DEFAULT));
 }
 
+openmedia_library() {
+  return array(
+    'typekit' => array(
+      'title' => 'TypeKit',
+      'website' => 'http://typekit.com',
+      'version' => 1,
+      'js' => array(
+        'https://use.typekit.net/nqe8fpz.js' => array(),
+        drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
+      )
+    ),
+  )
+}
+
 /**
  * Implements hook_preprocess_HOOK
  */
@@ -426,15 +440,6 @@ function openmedia_preprocess_video_player(&$variables) {
 
 function openmedia_theme($existing, $type, $theme, $path) {
   return array(
-    'typekit' => array(
-      'title' => 'TypeKit',
-      'website' => 'http://typekit.com',
-      'version' => 1,
-      'js' => array(
-        'https://use.typekit.net/nqe8fpz.js' => array(),
-        drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
-      )
-    ),
     'class_registration_box' => array(
       'path' => $path . '/templates',
       'template' => 'class_registration_box',
