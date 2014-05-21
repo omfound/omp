@@ -432,7 +432,7 @@ function openmedia_theme($existing, $type, $theme, $path) {
       'version' => 1,
       'js' => array(
         'https://use.typekit.net/nqe8fpz.js' => array(),
-        drupal_get_path('theme', 'minim') . '/js/typekit.js' => array(),
+        drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
       )
     ),
     'class_registration_box' => array(
