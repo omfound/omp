@@ -7,7 +7,7 @@
     <?php endif; ?>
     <div id="project-top" class="clearfix project-top">
       <?php if (isset($project_title)): ?> 
-      <div class="project-title">
+      <div class="project-title extra-condensed">
         <?php print $project_title; ?>
       </div>
       <?php endif; ?>
@@ -44,7 +44,7 @@
     <div class="clearfix">
       <div class="featured-video-area">
         <?php if (isset($video_title)): ?>
-        <div class="featured-video-title">
+        <div class="featured-video-title extra-condensed">
           <?php print $video_title; ?>
         </div>
         <?php endif; ?>
@@ -72,7 +72,7 @@
     <div class="project-line">
     <?php if (isset($project_title)): ?>
     <div class="project-lower-title">
-      <h2 class="more-from">MORE FROM <?php print $project_title; ?></h2>
+      <h2 class="more-from extra-condensed">MORE FROM <?php print $project_title; ?></h2>
     </div>
     </div>
     <?php endif; ?>
