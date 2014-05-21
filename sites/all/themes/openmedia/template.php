@@ -414,6 +414,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
  if (isset($node_load->body['und']['0']['value'])) {
     $variables['video_description'] = $node_load->body['und']['0']['value'];
   }
+  dsm($node_load->field_om_show_date);
   if (!empty($node_load->field_om_show_date)) {
     $new_date = strtotime($node_load->field_om_show_date['und']['0']['value']);
     dsm($new_date);
@@ -421,7 +422,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $variables['video_published'] = $node_load->field_om_show_date['und']['0']['value'];
   }
   $variables['video_views'] = $node_load;
- // 'image' => $img_path
   $stream_wrapper = file_stream_wrapper_get_instance_by_uri($node_load->field_show_thumbnail['und']['0']['uri']);
   $show_thumbnail = $stream_wrapper->getExternalUrl();
   if(!empty($node_load)) {
