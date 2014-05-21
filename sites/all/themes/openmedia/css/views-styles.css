@@ -431,10 +431,12 @@ div.timeslot-theme-wrapper ul li {
 
 .project-vote-left {
   float: left;
+  margin-left: 115px;
 }
 
 .project-social-right {
   float: left;
+  margin-left: 40px;
 }
 
 .extra-condensed {
