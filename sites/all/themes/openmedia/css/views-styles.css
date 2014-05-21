@@ -429,6 +429,14 @@ div.timeslot-theme-wrapper ul li {
   float: left;
 }
 
+.project-vote-left {
+  float: left;
+}
+
+.project-social-right {
+  float: left;
+}
+
 .extra-condensed {
   font-family: "proxima-nova-extra-condensed" !important;
 }
