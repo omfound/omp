@@ -59,12 +59,16 @@
         </div>
         <?php endif; ?>
       </div>
-      <div class="featured-video-area-right">
+      <div class="featured-video-area-right clearfix">
         <?php if (isset($vote_widget)):?>
-          <?php print $vote_widget; ?>
+          <div class="project-vote-left">
+            <?php print $vote_widget; ?>
+          </div>
         <?php endif; ?>
-        <?php if (isset($vote_widget)):?>
-          <?php print $node_right; ?>
+        <?php if (isset($node_right)):?>
+          <div class="project-social-right">
+            <?php print $node_right; ?>
+          </div>
         <?php endif; ?>
       </div>
     </div>
