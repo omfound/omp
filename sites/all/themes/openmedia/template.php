@@ -842,5 +842,7 @@ function openmedia_render_fivestar_widget($nid) {
 }
 
 function openmedia_preprocess_block(&$variables) {
-  dsm($variables);
+  if ($variables['block_html_id'] == 'block-views-project-show-list-block') {
+    $variables['classes_array'][] = 'clearfix';
+  }
 }
