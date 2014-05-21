@@ -63,6 +63,8 @@
         <?php if (isset($vote_widget)):?>
           <div class="project-vote-left">
             <?php print $vote_widget; ?>
+             <h2>Your Vote Counts!</h2>
+             <a href="help/om_voting/about-om-voting">Learn More About Voting</a>
           </div>
         <?php endif; ?>
         <?php if (isset($node_right)):?>
