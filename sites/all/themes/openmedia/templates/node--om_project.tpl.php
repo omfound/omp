@@ -55,7 +55,7 @@
         <?php endif; ?>
         <?php if (isset($video_published)): ?>
         <div class="featured-video-date">
-          <p>Published:</p><?php print $video_published; ?>
+          <p class="project-published">Published:</p><?php print $video_published; ?>
         </div>
         <?php endif; ?>
       </div>
