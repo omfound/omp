@@ -414,10 +414,12 @@ div.timeslot-theme-wrapper ul li {
 
 .node-type-om-project .featured-video-area {
   width: 455px;
+  margin-left: 18px;
 }
 
 .node-type-om-project .featured-video-title {
-  font-size: 20px;
+  font-size: 24px;
+  color: black;
   font-weight: bold;
 }
 
