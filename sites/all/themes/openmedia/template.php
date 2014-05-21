@@ -396,7 +396,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $highest_score_nid = array_search($highest_show, $score_array);
   $node_load = node_load($highest_score_nid);
   $node_array = node_view($node_load);
-  dsm($node_array);
   if (module_exists('fivestar')) {
     if (!empty($vote_info['average']['value'])) {
       $vote_info = fivestar_get_votes('node', $highest_score_nid);
