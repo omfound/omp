@@ -118,6 +118,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, $form_state) {
+  dsm("TRASH!?!?");
   dsm($form_state);
   return $form['om_volunteer_discount'];
 }
