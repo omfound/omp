@@ -118,5 +118,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, $form_state) {
-  return _om_volunteer_discount_form($form['om_volunteer_discount'], $form_state);
+  print "<pre>";
+  print_r($form_state);
+  print "</pre>";
 }
