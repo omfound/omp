@@ -22,8 +22,8 @@ function om_volunteer_commerce_checkout_pane_info() {
 }
 
 
-function om_volunteer_get_multiple($term) {
-  $coupon = commerce_coupon_load_by_code('Volunteer Credit');
+function om_volunteer_get_multiple($tid) {
+  $coupon = om_volunteer_get_coupon_by_term($tid);
   if (!empty($coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0])) {
     return $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'];
   }

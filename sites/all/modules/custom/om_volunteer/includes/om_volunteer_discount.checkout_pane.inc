@@ -1,8 +1,6 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  dsm($form);
-  dsm($form_state);
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
@@ -19,16 +17,20 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 function _om_volunteer_discount_form(&$form, &$form_state) {
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
-  $total_points = userpoints_get_current_points($user->uid);
+  $active_term = reset($types);
+  if (!empty($form_state['om_volunteer_discount']['point_type'])) {
+     $active_term = $types[$form_state['om_volunteer_discount']['point_type']];
+  }
+  $total_points = userpoints_get_current_points($user->uid, $active_term->tid);
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
-  $multiple = om_volunteer_get_multiple();
+  $multiple = om_volunteer_get_multiple($active_term->tid);
   $required_points = intval($order_total / ($multiple * 100));
   $default_points = $required_points;
   if ($total_points < $required_points) {
     $default_points = $total_points;
   }
   $message_values = array(
-    //'!type' => $active_term->name,
+    '!type' => $active_term->name,
     '!points' =>  $total_points,
     '!point_type' => 'hours',
     '!value' => '$' . $multiple,
@@ -46,7 +48,7 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   $form['point_type'] = array(
     '#type' => 'select',
     '#title' => t('Type of Credit'),
-    //'#default_value' => $default_points,
+    '#default_value' => $active_term->tid,
     '#options' => $types,
     '#ajax' => array(
       'wrapper' => 'edit-om-volunteer-discount',
