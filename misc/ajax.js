@@ -259,7 +259,8 @@ Drupal.ajax.prototype.eventResponse = function (element, event) {
     // Unset the ajax.ajaxing flag here because it won't be unset during
     // the complete response.
     ajax.ajaxing = false;
-    alert("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
+    //alert("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
+    console.log("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
   }
 
   // For radio/checkbox, allow the default event. On IE, this means letting
