@@ -91,10 +91,10 @@ function commerce_coupon_userpoints_add_fields() {
     );
     field_create_instance($instance); 
   }
-  if (!field_info_field('commerce_coupon_userpoint_point_type')) {
+  if (!field_info_field('commerce_coupon_userpoint_type')) {
     // Create the field.
     $field = array(
-      'field_name' => 'commerce_coupon_userpoint_point_type',
+      'field_name' => 'commerce_coupon_userpoint_type',
       'type' => 'list_text',
       'settings' => array(
         'allowed_values' => _commerce_coupon_userpoint_taxonomy_options()
@@ -104,7 +104,7 @@ function commerce_coupon_userpoints_add_fields() {
 
     // Create the instance.
     $instance = array(
-      'field_name' => 'commerce_coupon_userpoint_point_type',
+      'field_name' => 'commerce_coupon_userpoint_type',
       'entity_type' => 'commerce_coupon',
       'bundle' => 'commerce_coupon_userpoint',
       'label' => 'Type of points to use with this coupon:',
