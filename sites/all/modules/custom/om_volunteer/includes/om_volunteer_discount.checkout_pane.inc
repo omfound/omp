@@ -48,6 +48,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $form['message'] = array(
     '#markup' => $message 
   );
+  dsm($active_term);
   $form['point_type'] = array(
     '#type' => 'select',
     '#title' => t('Type of Credit'),
