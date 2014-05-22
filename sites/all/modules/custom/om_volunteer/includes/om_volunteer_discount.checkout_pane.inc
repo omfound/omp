@@ -15,6 +15,8 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 }
 
 function _om_volunteer_discount_form(&$form, &$form_state) {
+  dsm($form);
+  dsm($form_state);
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
   $total_points = userpoints_get_current_points($user->uid);
