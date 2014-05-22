@@ -17,7 +17,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 function _om_volunteer_discount_form(&$form, &$form_state) {
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
-  $active_term = reset($types);
+  $active_term = key($types);
   if (is_numeric($active_term)) {
     $active_term = taxonomy_term_load($active_term);
   }
