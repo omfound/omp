@@ -55,8 +55,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '#default_value' => $active_term->tid,
     '#options' => $types,
     '#ajax' => array(
-      'wrapper' => 'om-volunteer-discount-pane',
-      'method' => 'replace',
+      'wrapper' => 'edit-om-volunteer-discount',
       'callback' => '_om_volunteer_discount_form_ajax'
     )
   );
