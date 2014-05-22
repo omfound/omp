@@ -22,12 +22,22 @@ function om_volunteer_commerce_checkout_pane_info() {
 }
 
 
-function om_volunteer_get_multiple() {
+function om_volunteer_get_multiple($term) {
   $coupon = commerce_coupon_load_by_code('Volunteer Credit');
   if (!empty($coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0])) {
     return $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'];
   }
   return FALSE;
+}
+
+function om_volunteer_get_coupon_by_term($tid) {
+  $query = db_select('field_data_commerce_coupon_userpoint_type', 'term');
+  $query->fields('term', 'entity_id');
+  $query->condition('entity_type', 'commerce_coupon');
+  $query->condition('commerce_coupon_userpoint_type_value', $tid);
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  return !empty($result) ? array_shift($result) : FALSE;
 }
 
 function om_volunteer_apply_points($commerce_order, $user_points_used) {
