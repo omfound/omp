@@ -118,6 +118,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, $form_state) {
-  $form['om_volunteer_discount']['point_type']['#title'] = 'FUMPUS';
-  return $form['om_volunteer_discount'];
+  $element = $form['om_volunteer_discount'];
+  _om_volunteer_discount_form($element, $form_state);
+  return $element;
 }
