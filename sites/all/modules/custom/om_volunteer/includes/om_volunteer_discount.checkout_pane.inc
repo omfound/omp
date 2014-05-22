@@ -14,7 +14,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
   return $pane_form; 
 }
 
-function _om_volunteer_discount_form(&$form, $form_state) {
+function _om_volunteer_discount_form(&$form, &$form_state) {
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
   $total_points = userpoints_get_current_points($user->uid);
@@ -45,7 +45,12 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     '#type' => 'select',
     '#title' => t('Type of Credit'),
     //'#default_value' => $default_points,
-    '#options' => $types
+    '#options' => $types,
+    '#ajax' => array(
+      'wrapper' => 'om-volunteer-discount-pane',
+      'method' => 'replace',
+      'callback' => '_om_volunteer_discount_form_ajax'
+    )
   );
   $form['apply_points'] = array(
     '#type' => 'textfield',
@@ -103,4 +108,8 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   userpoints_userpointsapi($options);
   om_volunteer_apply_points($form_state['order'], $user_points_used);
   $form_state['rebuild'] = TRUE;
+}
+
+function _om_volunteer_discount_form_ajax($form, $form_state) {
+  return $form_state;
 }
