@@ -21,8 +21,8 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   if (is_numeric($active_term)) {
     $active_term = taxonomy_term_load($active_term);
   }
-  if (!empty($form_state['om_volunteer_discount']['point_type'])) {
-     $active_term = $types[$form_state['om_volunteer_discount']['point_type']];
+  if (!empty($form_state['values']['om_volunteer_discount']['point_type'])) {
+     $active_term = $types[$form_state['values']['om_volunteer_discount']['point_type']];
   }
   $total_points = userpoints_get_current_points($user->uid, $active_term->tid);
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
@@ -118,7 +118,5 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, $form_state) {
-  print "<pre>";
-  print_r($form_state['values']['om_volunteer_discount']['point_type']);
-  print "</pre>";
+  return $form['om_volunteer_discount'];
 }
