@@ -6,18 +6,18 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
-  $pane_form['info'] = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'id' => 'om-volunteer-discount-pane',
-    ),
-  );
   _om_volunteer_discount_form($pane_form, $form_state);
   return $pane_form; 
 }
 
 function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
+  $form['info'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'id' => 'om-volunteer-discount-pane',
+    ),
+  );
   $types = _commerce_coupon_userpoint_taxonomy_options();
   $active_term = key($types);
   if (is_numeric($active_term)) {
@@ -47,27 +47,26 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $message .= t("1 hour = !value", $message_values);
   $message .= "<div class='bold'>" . t('Current Order:') . "</div>";
   $message .= t("!required hours required to pay for order in full.", $message_values);
-  $form['message'] = array(
+  $form['info']['message'] = array(
     '#markup' => $message 
   );
-  dsm($active_term);
-  $form['point_type'] = array(
+  $form['info']['point_type'] = array(
     '#type' => 'select',
     '#title' => t('Type of Credit'),
     '#default_value' => $active_term->tid,
     '#options' => $types,
     '#ajax' => array(
-      'wrapper' => 'edit-om-volunteer-discount',
+      'wrapper' => 'om-volunteer-discount-pane',
       'callback' => '_om_volunteer_discount_form_ajax'
     )
   );
-  $form['apply_points'] = array(
+  $form['info']['apply_points'] = array(
     '#type' => 'textfield',
     '#title' => t('Apply Hours'),
     '#default_value' => $default_points,
     '#element_validate' => array('om_volunteer_validate_points')
   );
-  $form['submit'] = array(
+  $form['info']['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Apply',
     '#submit' => array('om_volunteer_discount_pane_form_submit')
@@ -122,5 +121,5 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 function _om_volunteer_discount_form_ajax($form, $form_state) {
   $element = $form['om_volunteer_discount'];
   _om_volunteer_discount_form($element, $form_state);
-  return 'fez';
+  return return $form['om_volunteer_discount']['info'];
 }
