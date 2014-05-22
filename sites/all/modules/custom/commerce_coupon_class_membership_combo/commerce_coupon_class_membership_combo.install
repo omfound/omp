@@ -12,43 +12,43 @@ function commerce_coupon_class_membership_combo_install() {
   $coupon_type = commerce_coupon_type_create($values);
   commerce_coupon_type_save($coupon_type, TRUE);
 
-// Set the field name.
-$field_name = 'field_coupon_membership';
+  // Set the field name.
+  $field_name = 'field_coupon_membership';
  
-$memberships = om_membership_get_plans();
-$options = array();
-foreach ($memberships AS $product) {
-  $options[$product->product_id] = $product->title;
-}
+  $memberships = om_membership_get_plans();
+  $options = array();
+  foreach ($memberships AS $product) {
+    $options[$product->product_id] = $product->title;
+  }
 
-// Make sure the field doesn't already exist.
-if (!field_info_field($field_name)) {      
-  // Create the field.
-  $field = array(
-    'field_name' => $field_name,
-    'type' => 'list_text',
-    'settings' => array(
-      'allowed_values' => $options 
-    ),
-  );
-  field_create_field($field);
+  // Make sure the field doesn't already exist.
+  if (!field_info_field($field_name)) {      
+    // Create the field.
+    $field = array(
+      'field_name' => $field_name,
+      'type' => 'list_text',
+      'settings' => array(
+        'allowed_values' => $options 
+      ),
+    );
+    field_create_field($field);
  
-  // Create the instance.
-  $instance = array(
-    'field_name' => $field_name,
-    'entity_type' => 'commerce_coupon',
-    'bundle' => 'commerce_coupon_combo',
-    'label' => 'Membership Type',
-    'description' => 'Select membership type that should be discounted.',
-    'required' => TRUE,
-    'widget' => array(
-      'type' => 'options_select',
-      'weight' => 3,
-    ),
-    'display' => array(),
-  );
+    // Create the instance.
+    $instance = array(
+      'field_name' => $field_name,
+      'entity_type' => 'commerce_coupon',
+      'bundle' => 'commerce_coupon_combo',
+      'label' => 'Membership Type',
+      'description' => 'Select membership type that should be discounted.',
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'options_select',
+        'weight' => 3,
+      ),
+      'display' => array(),
+    );
  
-  field_create_instance($instance);
+    field_create_instance($instance);
   }
 }
 
