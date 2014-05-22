@@ -1,6 +1,7 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
+  dsm($form_state['storage']['point_type']);
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
@@ -21,7 +22,6 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   if (is_numeric($active_term)) {
     $active_term = taxonomy_term_load($active_term);
   }
-  dsm($form_state['values']['om_volunteer_discount']['point_type']);
   if (!empty($form_state['values']['om_volunteer_discount']['point_type'])) {
      $active_term = $types[$form_state['values']['om_volunteer_discount']['point_type']];
   }
@@ -119,7 +119,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, &$form_state) {
-  die(print_r($form['om_volunteer_discount']['point_type'], true));
-  $form = drupal_rebuild_form($form['#form_id'], $form_state, $form);
+  $form_state['rebuild'] = TRUE;
+  $form_state['storage']['point_type'] = $form['om_volunteer_discount']['point_type']['#value'];
   return $form['om_volunteer_discount'];
 }
