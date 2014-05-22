@@ -117,7 +117,6 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
 }
 
-function _om_volunteer_discount_form_ajax($form, $form_state) {
-  die(print_r($form_state['values']['om_volunteer_discount'], true));
-  return $form['om_volunteer_discount'];
+function _om_volunteer_discount_form_ajax($form, &$form_state) {
+  $form_state['rebuild'] = TRUE;
 }
