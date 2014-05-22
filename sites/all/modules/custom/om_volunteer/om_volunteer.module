@@ -32,7 +32,7 @@ function om_volunteer_get_multiple($term) {
 
 function om_volunteer_get_coupon_by_term($tid) {
   $query = db_select('field_data_commerce_coupon_userpoint_type', 'term');
-  $query->fields('term', 'entity_id');
+  $query->fields('term', array('entity_id'));
   $query->condition('entity_type', 'commerce_coupon');
   $query->condition('commerce_coupon_userpoint_type_value', $tid);
   $resource = $query->execute();
