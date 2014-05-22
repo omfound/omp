@@ -119,7 +119,7 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
 }
 
 function _om_volunteer_discount_form_ajax($form, &$form_state) {
-  die($form['om_volunteer_discount']['point_type']['#value']);
+  die(print_r($form['om_volunteer_discount']['point_type'], true));
   $form = drupal_rebuild_form($form['#form_id'], $form_state, $form);
   return $form['om_volunteer_discount'];
 }
