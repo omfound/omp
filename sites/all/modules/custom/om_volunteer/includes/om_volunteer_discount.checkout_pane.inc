@@ -21,6 +21,7 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   if (is_numeric($active_term)) {
     $active_term = taxonomy_term_load($active_term);
   }
+  dsm($form_state['values']['om_volunteer_discount']['point_type']);
   if (!empty($form_state['values']['om_volunteer_discount']['point_type'])) {
      $active_term = $types[$form_state['values']['om_volunteer_discount']['point_type']];
   }
