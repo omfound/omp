@@ -1,6 +1,8 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
+  dsm($form);
+  dsm($form_state);
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
