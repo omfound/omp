@@ -1,8 +1,6 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  dsm($form);
-  dsm($form_state);
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
@@ -49,7 +47,7 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
     //'#default_value' => $default_points,
     '#options' => $types,
     '#ajax' => array(
-      'wrapper' => 'om-volunteer-discount-pane',
+      'wrapper' => 'edit-om-volunteer-discount',
       'method' => 'replace',
       'callback' => '_om_volunteer_discount_form_ajax'
     )
