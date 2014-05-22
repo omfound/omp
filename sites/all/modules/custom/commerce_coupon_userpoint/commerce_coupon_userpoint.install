@@ -81,7 +81,7 @@ function commerce_coupon_userpoints_add_fields() {
       'field_name' => 'commerce_coupon_userpoint_ratio',
       'entity_type' => 'commerce_coupon',
       'bundle' => 'commerce_coupon_userpoint',
-      'label' => 'How many points are worth one hour:',
+      'label' => 'How many points are worth one hour',
       'required' => TRUE,
       'widget' => array(
         'type' => 'text',
@@ -107,7 +107,7 @@ function commerce_coupon_userpoints_add_fields() {
       'field_name' => 'commerce_coupon_userpoint_type',
       'entity_type' => 'commerce_coupon',
       'bundle' => 'commerce_coupon_userpoint',
-      'label' => 'Type of points to use with this coupon:',
+      'label' => 'Type of points to use with this coupon',
       'required' => TRUE,
       'widget' => array(
         'type' => 'options_select',
