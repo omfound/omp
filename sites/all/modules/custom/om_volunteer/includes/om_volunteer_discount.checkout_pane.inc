@@ -18,6 +18,9 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
   $active_term = reset($types);
+  if (is_numeric($active_term)) {
+    $active_term = taxonomy_term_load($active_term);
+  }
   if (!empty($form_state['om_volunteer_discount']['point_type'])) {
      $active_term = $types[$form_state['om_volunteer_discount']['point_type']];
   }
