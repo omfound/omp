@@ -308,4 +308,153 @@ div.timeslot-theme-wrapper ul li {
   text-align: left;
   border: none;
 }
+/** 
+  * Project View Block.
+*/
+.view-project-show-list .views-row {
+  float: left;
+  margin-left: 13px;
+  margin-right: 13px;
+}
+
+.view-project-show-list .views-field-field-show-thumbnail {
+  position: relative;
+  width: 298px;
+  height: 182px;
+  box-shadow: 0px 0px 14px 2px #dedede;
+  background: #000000;
+  border: 1px solid #000000;
+}
+
+.view-project-show-list .views-field-field-show-thumbnail img {
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.view-project-show-list .views-field-title a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.view-project-show-list .views-field-title a:hover {
+  text-decoration: underline;
+}
+
+.view-project-show-list .fivestar-average-text .description {
+  position: relative;
+  left: 100px;
+  bottom: 18px;
+  width: 120px;
+}
+
+.node-om-project .project-video {
+  float:left;
+  margin: 10px;
+  width: 680px;
+  height: 413px;
+}
+
+.node-om-project .project-top {
+  float: left;
+  background-color: #7a746b;
+  color: #ffffff;
+  text-shadow:  none;
+  width: 244px;
+  padding: 18px;
+  min-height: 374px;
+}
+
+.node-om-project .project-top a {
+  color: #ffffff;
+}
+
+.node-type-om-project #content-inner {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.node-type-om-project h1#page-title {
+  display: none;
+}
+
+.node-type-om-project .node-om-project h2.more-from {
+  background-color: #54474f;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: none;
+  font-size: 19px !important;
+  float:left;
+  clear:left;
+  padding: 5px 14px 2px 14px !important;
+  margin-top: -15px !important;
+}
+
+.node-type-om-project .project-line {
+  width: 100%;
+  border-bottom: 1px solid #777777;
+}
+
+.node-type-om-project .middle-project {
+  height: 52px;
+  margin: 20px 0px 10px 0px;
+}
+
+.node-type-om-project .project-label {
+  float: left;
+  margin-right: 5px;
+}
+
+.node-type-om-project .project-title {
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.node-type-om-project #project-description p {
+  font-weight: 100;
+}
+
+.node-type-om-project .featured-video-area {
+  width: 455px;
+  margin-left: 18px;
+}
+
+.node-type-om-project .featured-video-title {
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+}
+
+.node-type-om-project .featured-video-area {
+  float: left;
+}
+
+.node-type-om-project .featured-video-area-right {
+  float: left;
+}
+
+.project-vote-left {
+  float: left;
+  margin-left: 115px;
+}
+
+.project-social-right {
+  float: left;
+  margin-left: 40px;
+}
+
+.extra-condensed {
+  font-family: "proxima-nova-extra-condensed" !important;
+}
+
+p.project-published {
+  float: left;
+  font-weight: bold;
+}
+
 **/
+
