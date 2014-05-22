@@ -259,8 +259,7 @@ Drupal.ajax.prototype.eventResponse = function (element, event) {
     // Unset the ajax.ajaxing flag here because it won't be unset during
     // the complete response.
     ajax.ajaxing = false;
-    //alert("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
-    console.log("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
+    alert("An error occurred while attempting to process " + ajax.options.url + ": " + e.message);
   }
 
   // For radio/checkbox, allow the default event. On IE, this means letting
@@ -449,7 +448,8 @@ Drupal.ajax.prototype.getEffect = function (response) {
  * Handler for the form redirection error.
  */
 Drupal.ajax.prototype.error = function (response, uri) {
-  alert(Drupal.ajaxError(response, uri));
+  //alert(Drupal.ajaxError(response, uri));
+  console.log(Drupal.ajaxError(response, uri));
   // Remove the progress element.
   if (this.progress.element) {
     $(this.progress.element).remove();
