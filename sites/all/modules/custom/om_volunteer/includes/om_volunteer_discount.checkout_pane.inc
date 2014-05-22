@@ -16,6 +16,7 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 
 function _om_volunteer_discount_form(&$form, $form_state) {
   global $user;
+  $types = _commerce_coupon_userpoint_taxonomy_options();
   $total_points = userpoints_get_current_points($user->uid);
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
   $multiple = om_volunteer_get_multiple();
@@ -25,6 +26,7 @@ function _om_volunteer_discount_form(&$form, $form_state) {
     $default_points = $total_points;
   }
   $message_values = array(
+    //'!type' => $active_term->name,
     '!points' =>  $total_points,
     '!point_type' => 'hours',
     '!value' => '$' . $multiple,
@@ -38,6 +40,12 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   $message .= t("!required hours required to pay for order in full.", $message_values);
   $form['message'] = array(
     '#markup' => $message 
+  );
+  $form['point_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Type of Credit'),
+    //'#default_value' => $default_points,
+    '#options' => $types
   );
   $form['apply_points'] = array(
     '#type' => 'textfield',
