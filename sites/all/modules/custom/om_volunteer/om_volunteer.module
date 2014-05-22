@@ -37,7 +37,12 @@ function om_volunteer_get_coupon_by_term($tid) {
   $query->condition('commerce_coupon_userpoint_type_value', $tid);
   $resource = $query->execute();
   $result = $resource->fetchAll();
-  return !empty($result) ? array_shift($result) : FALSE;
+  $result = !empty($result) ? array_shift($result) : FALSE;
+  $coupon = FALSE;
+  if (!empty($result)) {
+   $coupon = commerce_coupon_load($result->entity_id);
+  }
+  return $coupon;
 }
 
 function om_volunteer_apply_points($commerce_order, $user_points_used) {
