@@ -9,7 +9,9 @@ function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane
 }
 
 function _om_volunteer_discount_form(&$form, $form_state) {
-  dsm($form_state['values']);
+  print "<pre>";
+  print_r($form_state);
+  print "</pre>";
   global $user;
   $form['info'] = array(
     '#type' => 'container',
