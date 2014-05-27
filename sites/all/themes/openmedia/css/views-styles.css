@@ -481,8 +481,12 @@ p.project-published {
 
 .node-type-om-project .project-voting a {
   color: #ffffff;
+  position: relative;
+  left: 28px;
+  bottom: 9px;
+  font-size: 11px;
 }
 
 .node-type-om-project .project-voting h2 {
-  padding: 12px 0px 0px 9px;
+  padding: 12px 0px 0px 9px !important;
 }
