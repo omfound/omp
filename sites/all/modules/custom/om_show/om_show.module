@@ -215,7 +215,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('Remote Upload'),
       '#description' => t('Remote Upload'),
-      '#default_value' => empty($form_state['values']['remote_upload']) ? $node-om_show['remote_upload'] : $form_state['values']['remote_upload'],
+      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
     );
   }
   watchdog('brian', 'in show node');
