@@ -485,13 +485,18 @@ p.project-published {
 }
 
 .node-type-om-project .project-vote-left .fivestar-average-text .on a {
-  background-position: 0 -16px; /* RTL */
+  background-position: 0 -28px; /* RTL */
 }
 
 .node-type-om-project .project-vote-left .fivestar-average-text .hover a, .rating a:hover {
-  background-position: 0 -32px; /* RTL */
+  background-position: 0 -56px; /* RTL */
 }
 
+
+node-type-om-project .project-vote-left .fivestar-widget .cancel, .fivestar-widget .star {
+  width: 31px;
+  height: 28px;
+}
 
 .node-type-om-project .project-voting {
   background: url(../images/vote-red-banner.png) no-repeat 0 0;
