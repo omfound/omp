@@ -498,7 +498,7 @@ p.project-published {
   height: 28px;
 }
 
-.node-type-om-project .project-vote-left fivestar-widget.clearfix.fivestar-widget-5 {
+.node-type-om-project .project-vote-left .fivestar-widget-5 {
   margin-top: 4px;
   margin-left: 1px;
 }
