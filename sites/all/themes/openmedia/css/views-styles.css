@@ -460,10 +460,12 @@ p.project-published {
   background: url(../images/star-new.png) no-repeat 0 0;
 }
 
-.node-type-om-project .fivestar-average-text .hover a, .rating div a:hover {
+.node-type-om-project .fivestar-average-text .hover a, .rating a:hover {
   background-position: 0 -32px; /* RTL */
 }
 
+.node-type-om-project .fivestar-average-text .on a {
+  background-position: 0 -16px; /* RTL */
+}
 
-**/
 
