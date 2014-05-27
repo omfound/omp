@@ -468,7 +468,7 @@ p.project-published {
   background-position: 0 -32px; /* RTL */
 }
 
-.node-type-om-project .five-star-average-text .star {
+.node-type-om-project .five-star-average-text .fivestar-widget .star {
   background: none;
 }
 
