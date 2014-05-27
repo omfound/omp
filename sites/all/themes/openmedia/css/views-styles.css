@@ -512,6 +512,11 @@ p.project-published {
   margin-left: 1px;
 }
 
+.node-type-om-project .project-vote-left .fivestar-summary-average-count {
+  text-align: right;
+  padding-right: 7px;
+}
+
 .node-type-om-project .project-voting {
   background: url(../images/vote-red-banner.png) no-repeat 0 0;
   width: 174px;
