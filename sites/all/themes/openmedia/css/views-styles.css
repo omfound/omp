@@ -493,7 +493,7 @@ p.project-published {
 }
 
 
-.node-type-om-project .project-vote-left .fivestar-widget .cancel, .fivestar-widget .star {
+.node-type-om-project .project-vote-left .fivestar-widget .cancel, .node-type-om-project .project-vote-left .fivestar-widget .star {
   width: 31px;
   height: 28px;
 }
