@@ -446,7 +446,7 @@ div.timeslot-theme-wrapper ul li {
   height: 112px;
 }
 
-.project-vote-left #vertical-facebook, .project-vote-left #vertical-twitter {
+.project-social-right #vertical-facebook, .project-social-right #vertical-twitter {
   margin-top: 7px;
   margin-bottom: 7px;
 }
