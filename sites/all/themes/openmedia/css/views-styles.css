@@ -459,5 +459,11 @@ p.project-published {
 .node-type-om-project .star a {
   background: url(../images/star-new.png) no-repeat 0 0;
 }
+
+.node-type-om-project .hover a, .rating div a:hover {
+  background-position: 0 -32px; /* RTL */
+}
+
+
 **/
 
