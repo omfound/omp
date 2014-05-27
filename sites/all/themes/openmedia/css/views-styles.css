@@ -440,6 +440,10 @@ div.timeslot-theme-wrapper ul li {
 .project-vote-left {
   float: left;
   margin-left: 115px;
+  border: 1px solid grey;
+  position: relative;
+  width: 156px;
+  height: 97px;
 }
 
 .project-social-right {
@@ -477,6 +481,8 @@ p.project-published {
   width: 174px;
   color: #ffffff;
   text-shadow: none;
+  right: -9px;
+  position: absolute;
 }
 
 .node-type-om-project .project-voting a {
