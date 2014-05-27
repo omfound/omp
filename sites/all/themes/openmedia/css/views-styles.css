@@ -456,8 +456,8 @@ p.project-published {
   font-weight: bold;
 }
 
-.node-type-om-project .star a {
-  background: url(../images/star-new.png) no-repeat 0 0 !important;
+.node-type-om-project .fivestar-widget .star a {
+  background: url(../images/star-new.png) no-repeat 0 0;
 }
 **/
 
