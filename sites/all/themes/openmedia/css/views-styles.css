@@ -498,6 +498,11 @@ p.project-published {
   height: 28px;
 }
 
+.node-type-om-project .project-vote-left fivestar-widget.clearfix.fivestar-widget-5 {
+  margin-top: 4px;
+  margin-left: 1px;
+}
+
 .node-type-om-project .project-voting {
   background: url(../images/vote-red-banner.png) no-repeat 0 0;
   width: 174px;
