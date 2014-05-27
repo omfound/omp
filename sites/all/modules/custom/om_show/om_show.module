@@ -222,7 +222,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
   dsm($form);
 }
 
-function om_show_form_upload_callback($form, $form_state {
+function om_show_form_upload_callback($form, $form_state) {
   return $form['container'];
 }
 
