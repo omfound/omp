@@ -191,7 +191,7 @@ function om_show_migrate_flash() {
   drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
 }
 
-function om_show_form_alter(&$form, &$form_state, $form_id) {
+function om_show_form_node_form_alter(&$form, &$form_state, $form_id) {
   dsm($form_id);
 }
 
