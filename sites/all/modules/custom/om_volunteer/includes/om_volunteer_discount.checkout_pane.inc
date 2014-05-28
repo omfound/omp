@@ -34,17 +34,19 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   );
   $form_state['storage']['message_values'] = $message_values;
   _om_volunteer_pane_message($form, $form_state);
-  $form['point_type'] = array(
-    '#type' => 'select',
-    '#title' => t('Type of Credit'),
-    '#default_value' => $active_term->tid,
-    '#options' => $types,
-    '#ajax' => array(
-      'wrapper' => 'om-volunteer-discount-pane-message',
-      'callback' => '_om_volunteer_discount_form_ajax',
-      'method' => 'replace'
-    )
-  );
+  if (count($types) > 1) {
+    $form['point_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Type of Credit'),
+      '#default_value' => $active_term->tid,
+      '#options' => $types,
+      '#ajax' => array(
+        'wrapper' => 'om-volunteer-discount-pane-message',
+        'callback' => '_om_volunteer_discount_form_ajax',
+        'method' => 'replace'
+      )
+    );
+  }
   _om_volunteer_pane_apply_points($form, $form_state, $default_points);
   $form['submit'] = array(
     '#type' => 'submit',
