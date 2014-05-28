@@ -45,8 +45,16 @@ function om_volunteer_get_coupon_by_term($tid) {
   return $coupon;
 }
 
-function om_volunteer_apply_points($commerce_order, $user_points_used) {
-  $coupon = commerce_coupon_load_by_code('Volunteer Credit');
+function om_volunteer_get_default_points($total_points, $required_points) {
+  $default_points = $required_points;
+  if ($total_points < $required_points) {
+    $default_points = $total_points;
+  }
+  return $default_points;
+}
+
+function om_volunteer_apply_points($commerce_order, $user_points_used, $type_tid) {
+  $coupon = om_volunteer_get_coupon_by_term($type_tid);
   rules_invoke_event('commerce_coupon_redeem', $coupon, $commerce_order);
   $amount = $user_points_used * $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'] * 100;
   $currency_code = 'USD';
@@ -72,6 +80,4 @@ function om_volunteer_apply_points($commerce_order, $user_points_used) {
 
   $commerce_order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($commerce_order);
-
 }
-
