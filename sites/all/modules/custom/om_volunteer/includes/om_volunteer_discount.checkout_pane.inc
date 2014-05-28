@@ -47,6 +47,12 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
       )
     );
   }
+  else {
+    $form['point_type'] = array(
+      '#type' => 'hidden',
+      '#value' => $active_term->tid
+    );
+  }
   _om_volunteer_pane_apply_points($form, $form_state, $default_points);
   $form['submit'] = array(
     '#type' => 'submit',
