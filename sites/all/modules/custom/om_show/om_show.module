@@ -192,6 +192,7 @@ function om_show_migrate_flash() {
 }
 
 function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  /**
   $node = $form['#node'];
   $form['upload_method'] = array(
     '#type' => 'checkbox',
@@ -217,9 +218,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       '#description' => t('Remote Upload'),
       '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
     );
-  }
-  watchdog('brian', 'in show node');
-  dsm($form);
+  }**/
 }
 
 function om_show_form_upload_callback($form, $form_state) {
