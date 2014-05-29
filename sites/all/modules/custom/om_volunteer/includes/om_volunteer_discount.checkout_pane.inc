@@ -58,7 +58,7 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   if (count($types) > 1) {
     $form['info']['point_type'] = array(
       '#type' => 'select',
-      '#title' => t('Type of Credit'),
+      '#title' => t('Type of Credit:'),
       '#default_value' => $active_term->tid,
       '#options' => $types,
       '#ajax' => array(
@@ -80,7 +80,7 @@ function _om_volunteer_discount_form(&$form, &$form_state) {
   }
   $form['info']['apply_points'] = array(
     '#type' => 'textfield',
-    '#title' => t('Apply Hours'),
+    '#title' => t('Apply Hours:'),
     '#default_value' => $default_points,
     '#element_validate' => array('om_volunteer_validate_points')
   );
