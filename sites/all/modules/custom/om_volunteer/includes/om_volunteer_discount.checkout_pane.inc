@@ -1,29 +1,29 @@
 <?php
 
 function om_volunteer_discount_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  dsm($form_state);
   $form_state['checkout_pane'] = $checkout_pane;
   $form_state['order'] = $order;
   $pane_form = array();
-  $pane_form['info'] = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'id' => 'om-volunteer-discount-pane',
-    ),
+  $pane_form['#attached'] = array(
+    'js' => array(
+      drupal_get_path('module', 'om_volunteer') . '/om_volunteer.js' => array(
+        'type' => 'file',
+      ),
+    )
   );
   _om_volunteer_discount_form($pane_form, $form_state);
   return $pane_form; 
 }
 
-function _om_volunteer_discount_form(&$form, $form_state) {
+function _om_volunteer_discount_form(&$form, &$form_state) {
   global $user;
   $types = _commerce_coupon_userpoint_taxonomy_options();
   $active_term = key($types);
+  if (!empty($form_state['values']['om_volunteer_discount']['info']['point_type'])) {
+     $active_term = $form_state['values']['om_volunteer_discount']['info']['point_type'];
+  }
   if (is_numeric($active_term)) {
     $active_term = taxonomy_term_load($active_term);
-  }
-  if (!empty($form_state['values']['om_volunteer_discount']['point_type'])) {
-     $active_term = $types[$form_state['values']['om_volunteer_discount']['point_type']];
   }
   $total_points = userpoints_get_current_points($user->uid, $active_term->tid);
   $order_total = $form_state['order']->commerce_order_total[LANGUAGE_NONE][0]['amount'];
@@ -35,38 +35,56 @@ function _om_volunteer_discount_form(&$form, $form_state) {
   }
   $message_values = array(
     '!type' => $active_term->name,
-    '!points' =>  $total_points,
-    '!point_type' => 'hours',
+    '!points' =>  om_volunteer_term_format_plural($active_term, $total_points, 'strtolower'),
     '!value' => '$' . $multiple,
-    '!required' => $required_points
+    '!required' => om_volunteer_term_format_plural($active_term, $required_points, 'strtolower')
   );
-  $message = "<div class='bold'>" . t('Volunteer Hours Available:') . "</div>";
-  $message .= t("You have !points hours available for use.", $message_values);
+  $message = "<div class='bold'>" . t('!term_plural Available:', array('!term_plural' => $active_term->field_type_label_plural[LANGUAGE_NONE][0]['value'])) . "</div>";
+  $message .= t("You have !points available for use.", $message_values);
   $message .= "<div class='bold'>" . t('Exchange Rate:') . "</div>";
   $message .= t("1 hour = !value", $message_values);
   $message .= "<div class='bold'>" . t('Current Order:') . "</div>";
   $message .= t("!required hours required to pay for order in full.", $message_values);
-  $form['message'] = array(
+  // Build the form
+  $form['info'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'id' => 'om-volunteer-discount-pane',
+    ),
+  );
+  $form['info']['message'] = array(
     '#markup' => $message 
   );
-  $form['point_type'] = array(
-    '#type' => 'select',
-    '#title' => t('Type of Credit'),
-    '#default_value' => $active_term->tid,
-    '#options' => $types,
-    '#ajax' => array(
-      'wrapper' => 'edit-om-volunteer-discount',
-      'method' => 'replace',
-      'callback' => '_om_volunteer_discount_form_ajax'
-    )
-  );
-  $form['apply_points'] = array(
+  if (count($types) > 1) {
+    $form['info']['point_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Type of Credit:'),
+      '#default_value' => $active_term->tid,
+      '#options' => $types,
+      '#ajax' => array(
+        'wrapper' => 'om-volunteer-discount-pane',
+        'method' => 'replace',
+        'callback' => '_om_volunteer_discount_form_ajax'
+      )
+    );
+  }
+  else {
+    $form['info']['point_type'] = array(
+      '#type' => 'hidden',
+      '#value' => $active_term->tid
+    );
+  }
+  // NB: This unset is required for textfields (and other elements) to display new default values in ajax rebuild.
+  if (!empty($form_state['input']['om_volunteer_discount'])) {
+    unset($form_state['input']['om_volunteer_discount']['info']['apply_points']);
+  }
+  $form['info']['apply_points'] = array(
     '#type' => 'textfield',
-    '#title' => t('Apply Hours'),
+    '#title' => t('Apply Hours:'),
     '#default_value' => $default_points,
     '#element_validate' => array('om_volunteer_validate_points')
   );
-  $form['submit'] = array(
+  $form['info']['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Apply',
     '#submit' => array('om_volunteer_discount_pane_form_submit')
@@ -76,11 +94,11 @@ function _om_volunteer_discount_form(&$form, $form_state) {
 function om_volunteer_validate_points($element, &$form_state, $form) {
   if ($form_state['triggering_element']['#value'] == 'Apply') {
     global $user;
-    $term = taxonomy_get_term_by_name('Volunteer Hours');
-    $term = array_shift($term);
+    $term = taxonomy_term_load($form_state['values']['om_volunteer_discount']['info']['point_type']);
     $user_max_points = userpoints_get_current_points($user->uid, $term->tid);
     if ($element['#value'] > $user_max_points ) {
-      form_error($element, "You have $user_max_points available for redemption.");
+      $formatted = om_volunteer_term_format_plural($term, $user_max_points, 'strtolower');
+      form_error($element, "You have $formatted available for redemption.");
     } 
   }
 }
@@ -90,22 +108,19 @@ function om_volunteer_validate_points($element, &$form_state, $form) {
  * to execute if the user wants to apply points.
  */
 function om_volunteer_discount_pane_form_submit($form, &$form_state) {
-  // @TODO Check to see if the order already has a points transaction and see 
-  // if the user can apply more points.
   global $user;
   $l = LANGUAGE_NONE;
-  $multiple = om_volunteer_get_multiple() * 100;
+  $term = taxonomy_term_load($form_state['values']['om_volunteer_discount']['info']['point_type']);
+  $multiple = om_volunteer_get_multiple($term->tid) * 100;
   $order_total = $form_state['order']->commerce_order_total[$l][0]['amount'];
   $order_total_points = $order_total / $multiple;
-  $term = taxonomy_get_term_by_name('Volunteer Hours');
-  $term = array_shift($term);
   $user_max_points = userpoints_get_current_points($user->uid, $term->tid);
   $user_points_used = 0;
-  if ($form_state['values']['om_volunteer_discount']['apply_points'] > $order_total_points) {
+  if ($form_state['values']['om_volunteer_discount']['info']['apply_points'] > $order_total_points) {
     $user_points_used = $order_total_points;
   }
   else {
-    $user_points_used = $form_state['values']['om_volunteer_discount']['apply_points'];
+    $user_points_used = $form_state['values']['om_volunteer_discount']['info']['apply_points'];
   }
   $options = array(
     'uid' => $user->uid,
@@ -114,10 +129,13 @@ function om_volunteer_discount_pane_form_submit($form, &$form_state) {
     'display' => TRUE
   );
   userpoints_userpointsapi($options);
-  om_volunteer_apply_points($form_state['order'], $user_points_used);
+  om_volunteer_apply_points($form_state['order'], $user_points_used, $term->tid);
   $form_state['rebuild'] = TRUE;
 }
 
+/** 
+ * Vanilla #ajax callback
+ */
 function _om_volunteer_discount_form_ajax($form, $form_state) {
-  return $form['om_volunteer_discount'];
+  return $form['om_volunteer_discount']['info'];
 }

@@ -440,6 +440,19 @@ div.timeslot-theme-wrapper ul li {
 .project-vote-left {
   float: left;
   margin-left: 115px;
+  border: 1px solid grey;
+  position: relative;
+  width: 156px;
+  height: 112px;
+}
+
+.project-social-right #vertical-facebook {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.project-social-right #vertical-twitter {
+  margin-top: 7px;
 }
 
 .project-social-right {
@@ -456,5 +469,75 @@ p.project-published {
   font-weight: bold;
 }
 
-**/
+.node-type-om-project .fivestar-average-text .star a {
+  background: url(../images/star-new.png) no-repeat 0 0;
+}
 
+.node-type-om-project .fivestar-widget .star, .fivestar-widget .star a {
+  background: url(../images/star-new.png) no-repeat 0 0;
+}
+
+.node-type-om-project .fivestar-average-text .on a {
+  background-position: 0 -16px; /* RTL */
+}
+
+.node-type-om-project .fivestar-average-text .hover a, .rating a:hover {
+  background-position: 0 -32px; /* RTL */
+}
+
+.node-type-om-project .project-vote-left .fivestar-average-text .star a {
+  background: url(../images/big-new-star.png) no-repeat 0 0;
+}
+
+.node-type-om-project .project-vote-left .fivestar-widget .star, .fivestar-widget .star a {
+  background: url(../images/big-new-star.png) no-repeat 0 0;
+}
+
+.node-type-om-project .project-vote-left .fivestar-average-text .on a {
+  background-position: 0 -28px; /* RTL */
+}
+
+.node-type-om-project .project-vote-left .fivestar-average-text .hover a, .rating a:hover {
+  background-position: 0 -56px; /* RTL */
+}
+
+
+.node-type-om-project .project-vote-left .fivestar-widget .cancel, .node-type-om-project .project-vote-left .fivestar-widget .star {
+  width: 31px;
+  height: 28px;
+}
+
+.node-type-om-project .project-vote-left .fivestar-widget-5 {
+  margin-top: 4px;
+  margin-left: 1px;
+}
+
+.node-type-om-project .project-vote-left .fivestar-summary-average-count {
+  text-align: right;
+  padding-right: 7px;
+}
+
+.node-type-om-project .project-voting {
+  background: url(../images/vote-red-banner.png) no-repeat 0 0;
+  width: 174px;
+  color: #ffffff;
+  text-shadow: none;
+  right: -9px;
+  position: absolute;
+}
+
+.node-type-om-project .project-voting a {
+  color: #ffffff;
+  position: relative;
+  left: 27px;
+  bottom: 9px;
+  font-size: 11px;
+}
+
+.node-type-om-project .project-voting h2 {
+  padding: 12px 0px 0px 9px !important;
+}
+
+.node-type-om-project #project-date-author {
+  height: 14px;
+}
