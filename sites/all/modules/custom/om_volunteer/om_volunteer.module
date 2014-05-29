@@ -8,7 +8,7 @@ require_once('sites/all/modules/custom/om_volunteer/includes/om_volunteer_discou
 function om_volunteer_commerce_checkout_pane_info() {
   $checkout_panes = array();
   $checkout_panes['om_volunteer_discount'] = array(
-    'title' => t('Alternative Payment'),
+    'title' => t('Volunteer Hours Discount'),
     'page' => 'checkout',
     'locked' => TRUE,
     'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
@@ -45,16 +45,8 @@ function om_volunteer_get_coupon_by_term($tid) {
   return $coupon;
 }
 
-function om_volunteer_get_default_points($total_points, $required_points) {
-  $default_points = $required_points;
-  if ($total_points < $required_points) {
-    $default_points = $total_points;
-  }
-  return $default_points;
-}
-
-function om_volunteer_apply_points($commerce_order, $user_points_used, $type_tid) {
-  $coupon = om_volunteer_get_coupon_by_term($type_tid);
+function om_volunteer_apply_points($commerce_order, $user_points_used) {
+  $coupon = commerce_coupon_load_by_code('Volunteer Credit');
   rules_invoke_event('commerce_coupon_redeem', $coupon, $commerce_order);
   $amount = $user_points_used * $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'] * 100;
   $currency_code = 'USD';
@@ -80,21 +72,6 @@ function om_volunteer_apply_points($commerce_order, $user_points_used, $type_tid
 
   $commerce_order_wrapper->commerce_line_items[] = $line_item;
   commerce_order_save($commerce_order);
+
 }
 
-function om_volunteer_term_format_plural($term, $count = 0, $tansform_case = FALSE) {
-  $output = FALSE;
-  if (is_numeric($term)) {
-    $term = taxonomy_term_load($term);
-  }
-  if (is_object($term)) {
-    $l = LANGUAGE_NONE;
-    $singular = $term->field_type_label_singular[$l][0]['value'];
-    $plural = $term->field_type_label_plural[$l][0]['value'];
-    $output = format_plural($count, "1 $singular", "@count $plural");
-    if ($tansform_case != FALSE && function_exists($tansform_case)) {
-      $output = $tansform_case($output);
-    }
-  }
-  return $output;
-}
