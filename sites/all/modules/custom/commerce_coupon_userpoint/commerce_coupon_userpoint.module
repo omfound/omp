@@ -119,3 +119,19 @@ function commerce_coupon_userpoint_commerce_coupon_price_component_name_alter(&$
     $price_component_name = 'commerce_coupon_' . $coupon->type . '_' . $coupon_wrapper->commerce_coupon_code->value();
   }
 }
+
+function commerce_coupon_userpoint_get_userpoints_terms() {
+  $voc = taxonomy_vocabulary_machine_name_load('userpoints');
+  return taxonomy_get_tree($voc->vid);
+}
+
+function _commerce_coupon_userpoint_taxonomy_options() {
+  $options = array();
+  $terms = commerce_coupon_userpoint_get_userpoints_terms();
+  if (!empty($terms)) {
+    foreach ($terms AS $term) {
+      $options[$term->tid] = $term->name;
+    }
+  }
+  return $options;
+}

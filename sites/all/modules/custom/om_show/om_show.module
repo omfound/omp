@@ -191,6 +191,40 @@ function om_show_migrate_flash() {
   drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
 }
 
+function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  /**
+  $node = $form['#node'];
+  $form['upload_method'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Check for remote upload'),
+    '#description' => t('Checking this box should enable remote upload'),
+    '#default_value' => $node->om_show['upload_method'],
+    '#ajax' => array(
+      'callback' => 'om_show_form_upload_callback',
+      'wrapper' => 'om-show-upload-method',
+      'effect' => 'fade',
+    ),
+  );
+  
+  $form['container'] = array(
+    '#prefix' => '<div id="om-show-upload-method">',
+    '#suffix' => '</div>',
+  );
+
+  if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
+    $form['container']['remote_upload'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Remote Upload'),
+      '#description' => t('Remote Upload'),
+      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+    );
+  }**/
+}
+
+function om_show_form_upload_callback($form, $form_state) {
+  return $form['container'];
+}
+
 /**
  * Implements hook_form_form_id_alter
  */
@@ -316,8 +350,10 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
-  $node = menu_get_object();
+function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338, $node = FALSE) {
+  if (empty($node)) {
+    $node = menu_get_object();
+  }
   if (!is_object($node)) {
     $nid = $node['nid'];
     $show_field = $node['field_om_show_video'];
@@ -380,7 +416,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }
   }
-
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
@@ -643,4 +678,10 @@ function om_show_cablecast_update_show_statuses() {
 
 function om_show_cron() {
   om_show_cablecast_update_show_statuses();
+}
+
+function om_show_tokenize_crawl_text($text, $show) {
+  $tokens = array('[show-nid]', '[show-title]');
+  $replacements = array($show->nid, $show->title);
+  return str_replace($tokens, $replacements, $text);
 }

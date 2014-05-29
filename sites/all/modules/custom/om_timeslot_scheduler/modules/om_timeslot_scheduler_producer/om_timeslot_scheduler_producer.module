@@ -552,6 +552,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   // Commit results
   $meta_data['start'] = $start;
+  $meta_data['nid'] = $show->nid;
   $result = $controller->create_airing($pbs, $meta_data);
   // Create airing
   if (isset($result['ScheduleID'])) {

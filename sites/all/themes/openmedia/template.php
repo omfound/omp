@@ -17,6 +17,7 @@ function openmedia_preprocess_html(&$variables) {
 }
 
 function openmedia_preprocess_page(&$variables) {
+  drupal_add_library('openmedia', 'typekit');
   if ($variables['is_front']) {
     if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
       if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
@@ -76,6 +77,20 @@ function openmedia_preprocess_page(&$variables) {
   }
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/submit-once.js', array('type' => 'file', 'group' => JS_DEFAULT));
   drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/omp-search.js', array('type' => 'file', 'group' => JS_DEFAULT));
+}
+
+function openmedia_library() {
+  return array(
+    'typekit' => array(
+      'title' => 'TypeKit',
+      'website' => 'http://typekit.com',
+      'version' => 1,
+      'js' => array(
+        'https://use.typekit.net/nqe8fpz.js' => array(),
+        drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
+      )
+    ),
+  );
 }
 
 /**
@@ -152,11 +167,17 @@ function openmedia_preprocess_node__class_display(&$variables) {
   /** --REGISTRATION BOX **/
   $registration_details = array();
   $registration = registration_entity_settings('commerce_product', $product->product_id);
+  $commerce_price = $product_meta->commerce_price->value();
+  $commerce_price = $commerce_price['amount'];
+  
   if (function_exists('om_membership_get_user_membership_products')) {
     $memberships = om_membership_user_memberships($user, true); 
     $discount_message = '';
     if (!empty($memberships)) {
       $price = $product_meta->field_class_member_price->value();
+      if ($price > $commerce_price) {
+        $price = $commerce_price;
+      }
       if ($price != 0) {
         $price = '$' . $price;
       }
@@ -167,8 +188,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     }
   } 
   if (!isset($price)) {
-    $price = $product_meta->commerce_price->value();
-    $price = $price['amount'];
+    $price = $commerce_price;
     if ($price != 0) {
       $price = '$' . (round(($price / 100), 2));
     }
@@ -232,6 +252,18 @@ function openmedia_preprocess_node__om_show(&$variables) {
   $show_status_images = om_theme_assets_show_status_images();
   $video_info = array();
   $url = $variables['content']['field_om_show_video']['#items'][0]['value'];
+//Link to Archive.org page
+  if (isset($variables['field_archive_derivatives']['0']['value'])) {
+    $string = $variables['field_archive_derivatives']['0']['value'];
+    $test_archive = json_decode($variables['field_archive_derivatives']['0']['value'], true);
+    $array_check = is_array($test_archive);
+    if ($array_check == TRUE) {
+      reset($test_archive);
+      $first_key = key($test_archive);
+      $archive_link = $test_archive["$first_key"]['metadata']['identifier']['0'];
+      $variables['archive_link'] = $archive_link;
+    }
+  }
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id);
@@ -307,6 +339,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
+  $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
@@ -348,12 +381,64 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
+  
+  $score_array = array();
   foreach ($shows AS $show_nid) {
+    $bayesian_score = alternative_rating_bayesian_value($show_nid);
+    $score_array[$show_nid] = $bayesian_score; 
     $img = openmedia_get_thumbnail_from_show_nid($show_nid);
     if (!empty($img)) {
       $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
     }
   }
+  //Marty
+  $highest_show = (max($score_array));
+  $highest_score_nid = array_search($highest_show, $score_array);
+  $node_load = node_load($highest_score_nid);
+  $node_array = node_view($node_load);
+  if (module_exists('fivestar')) {
+    if (!empty($vote_info['average']['value'])) {
+      $vote_info = fivestar_get_votes('node', $highest_score_nid);
+      $current_vote = round(($vote_info['average']['value'] / 100) * 5);
+      $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
+    }
+    $variables['vote_widget'] = drupal_render($node_array['field_om_voting_on_video']);
+  }
+  if (module_exists('om_social')) {
+    $social = theme('om_social_vertical_sharing');
+    $variables['node_right'] = $social;
+  }
+  if (isset($node_load->title)) {
+    $variables['video_title'] = $node_load->title;
+  }
+ if (isset($node_load->body['und']['0']['value'])) {
+    $variables['video_description'] = $node_load->body['und']['0']['value'];
+  }
+  if (!empty($node_load->field_om_show_date)) {
+    $new_date = date("m-d-y", strtotime($node_load->field_om_show_date['und']['0']['value']));
+    $variables['video_published'] = $new_date;
+  }
+  $variables['video_views'] = $node_load;
+  $stream_wrapper = file_stream_wrapper_get_instance_by_uri($node_load->field_show_thumbnail['und']['0']['uri']);
+  $show_thumbnail = $stream_wrapper->getExternalUrl();
+  if(!empty($node_load)) {
+    $video = $node_load->field_om_show_video['und']['0']['value']; 
+    $variables['video'] = theme('video_player', array('id' => 'project-player',
+                                                   'image' => $show_thumbnail,
+                                                   'file' => $video,
+                                                   'width' => 680,
+                                                   'height' => 400
+                                                   ));
+  }
+}
+
+function openmedia_preprocess_video_player(&$variables) {
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/video-player.js', array('type' => 'file', 'group' => JS_THEME));
+  $settings = array(
+                   'video_player' => array($variables)
+                   );
+  drupal_add_js($settings, array('type' => 'setting', 'group' => JS_THEME));
 }
 
 function openmedia_theme($existing, $type, $theme, $path) {
@@ -362,6 +447,16 @@ function openmedia_theme($existing, $type, $theme, $path) {
       'path' => $path . '/templates',
       'template' => 'class_registration_box',
       'variables' => array('registration_details' => array())
+    ),
+    'video_player' => array(
+      'path' => $path . '/templates',
+      'template' => 'video_player',
+      'variables' => array(
+                       'file' => '',
+                       'width' => '',
+                       'height' => '',
+                       'id' => '',  
+                     )
     )
   ); 
 }
@@ -461,6 +556,7 @@ function openmedia_get_project_child_shows($nid) {
   }
   return $nids;
 }
+
 
 /**
  * Get a rendered thumbnail from a show node id.
@@ -747,4 +843,10 @@ function openmedia_render_fivestar_widget($nid) {
   $node = node_load($nid);
   $node_view = node_view($node);
   return drupal_render($node_view['field_om_voting_on_video']);
+}
+
+function openmedia_preprocess_block(&$variables) {
+  if ($variables['block_html_id'] == 'block-views-project-show-list-block') {
+    $variables['classes_array'][] = 'clearfix';
+  }
 }

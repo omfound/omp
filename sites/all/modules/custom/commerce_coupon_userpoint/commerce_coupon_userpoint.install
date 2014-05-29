@@ -17,6 +17,7 @@ function commerce_coupon_userpoint_install() {
 
   $coupon_type = commerce_coupon_type_create($values);
   commerce_coupon_type_save($coupon_type, TRUE);
+  commerce_coupon_userpoints_add_fields();
 }
 
 /**
@@ -55,4 +56,65 @@ function commerce_coupon_userpoint_disable() {
 function commerce_coupon_userpoint_enable() {
   drupal_load('module', 'commerce_coupon');
   commerce_coupon_type_enable('commerce_coupon_userpoint');
+}
+
+/**
+ * Add exchange rate and coupon type fields to userpoint coupon.
+ */
+function commerce_coupon_userpoint_update_7100(&$sandbox) {
+  commerce_coupon_userpoints_add_fields();
+  return st('Added commerce_coupon_userpoint_ratio and commerce_coupon_userpoint_type fields to commerce_coupon commerce_coupon_userpoint.');
+}
+
+function commerce_coupon_userpoints_add_fields() {
+  if (!field_info_field('commerce_coupon_userpoint_ratio')) {
+    // Create the field.
+    $field = array(
+      'field_name' => 'commerce_coupon_userpoint_ratio',
+      'type' => 'number_decimal',
+      'settings' => array(),
+    );
+    field_create_field($field);
+
+    // Create the instance.
+    $instance = array(
+      'field_name' => 'commerce_coupon_userpoint_ratio',
+      'entity_type' => 'commerce_coupon',
+      'bundle' => 'commerce_coupon_userpoint',
+      'label' => 'How many points are worth one hour',
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'text',
+        'weight' => 6,
+      ),
+      'display' => array(),
+    );
+    field_create_instance($instance); 
+  }
+  if (!field_info_field('commerce_coupon_userpoint_type')) {
+    // Create the field.
+    $field = array(
+      'field_name' => 'commerce_coupon_userpoint_type',
+      'type' => 'list_text',
+      'settings' => array(
+        'allowed_values' => _commerce_coupon_userpoint_taxonomy_options()
+      ),
+    );
+    field_create_field($field);
+
+    // Create the instance.
+    $instance = array(
+      'field_name' => 'commerce_coupon_userpoint_type',
+      'entity_type' => 'commerce_coupon',
+      'bundle' => 'commerce_coupon_userpoint',
+      'label' => 'Type of points to use with this coupon',
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'options_select',
+        'weight' => 5,
+      ),
+      'display' => array(),
+    );
+    field_create_instance($instance);
+  }
 }

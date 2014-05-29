@@ -161,6 +161,11 @@ function om_classes_org_classes_sort($a, $b) {
   return ($a->created < $b->created) ? -1 : 1;
 }
 
+function om_classes_find_user($order_number) {
+  $load_order = commerce_order_load($order_number);
+  return $load_order->uid;
+}
+
 function om_classes_build_class_table($classes) {
   $output = '<strong>Class History</strong>';
   if (empty($classes)) {
@@ -173,9 +178,11 @@ function om_classes_build_class_table($classes) {
   $output .= '<table>';
   $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
   foreach ($classes as $class) {
+    $order_number = $classes[0]->order_number;
+    $user_id = om_classes_find_user($order_number);
     $output .= '<tr>';
-    $user = user_load($class->uid);
-    $output .= '<td>' . $user->name . '</td>';
+    $user = user_load($user_id);
+    $output .= '<td>' . l($user->name, 'user/' . $user->uid) . '</td>';
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
     $output .= '</tr>';
@@ -213,4 +220,13 @@ function om_classes_user_classes($uids = array(), $after_date = NULL, $before_da
   }
 
   return $class_orders->fetchAllAssoc('line_item_id');
+}
+
+/**
+ * Distinct titles for the class meta view
+ */
+function om_classes_query_alter($query) {
+  if ($query->hasTag('class_meta')) {
+    $query->groupBy('node.title');
+  }
 }

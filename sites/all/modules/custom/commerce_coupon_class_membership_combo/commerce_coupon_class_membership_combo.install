@@ -1,0 +1,92 @@
+<?php
+/**
+ * Implements hook_install().
+ */
+function commerce_coupon_class_membership_combo_install() {
+  drupal_load('module', 'commerce');
+  $values = array(
+    'type' => 'commerce_coupon_combo',
+    'label' => st('Membership Class Combo Discount'),
+  );
+
+  $coupon_type = commerce_coupon_type_create($values);
+  commerce_coupon_type_save($coupon_type, TRUE);
+
+  // Set the field name.
+  $field_name = 'field_coupon_membership';
+ 
+  $memberships = om_membership_get_plans();
+  $options = array();
+  foreach ($memberships AS $product) {
+    $options[$product->product_id] = $product->title;
+  }
+
+  // Make sure the field doesn't already exist.
+  if (!field_info_field($field_name)) {      
+    // Create the field.
+    $field = array(
+      'field_name' => $field_name,
+      'type' => 'list_text',
+      'settings' => array(
+        'allowed_values' => $options 
+      ),
+    );
+    field_create_field($field);
+ 
+    // Create the instance.
+    $instance = array(
+      'field_name' => $field_name,
+      'entity_type' => 'commerce_coupon',
+      'bundle' => 'commerce_coupon_combo',
+      'label' => 'Membership Type',
+      'description' => 'Select membership type that should be discounted.',
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'options_select',
+        'weight' => 3,
+      ),
+      'display' => array(),
+    );
+ 
+    field_create_instance($instance);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function commerce_coupon_class_membership_combo_uninstall() {
+  // Make sure commerce.module is loaded so that commerce_delete_instances()
+  // is available.
+  drupal_load('module', 'commerce');
+  // The function commerce_coupon_type_delete() can't be used here because
+  // commerce_coupon module might not be enabled anymore at this point.
+  db_delete('commerce_coupon_type')
+    ->condition('type', 'commerce_coupon_combo')
+    ->execute();
+
+  // Delete all fields that belong to the module's coupon type.
+  commerce_delete_instances('commerce_coupon', 'commerce_coupon_combo');
+
+  // Also delete coupons.
+  db_delete('commerce_coupon')
+    ->condition('type', 'commerce_coupon_combo')
+    ->execute();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function commerce_coupon_class_membership_combo_disable() {
+  drupal_load('module', 'commerce_coupon');
+  commerce_coupon_type_disable('commerce_coupon_combo');
+}
+
+/**
+ * Implements hook_enable().
+ */
+function commerce_coupon_class_membership_combo_enable() {
+  drupal_load('module', 'commerce_coupon');
+  commerce_coupon_type_enable('commerce_coupon_combo');
+}
+

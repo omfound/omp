@@ -25,10 +25,10 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
       //stuff will go here
       $product_meta = entity_metadata_wrapper('commerce_product', $org_membership['product']);
       $variables['membership_type'] = $org_membership['product']->title;
-      $variables['membership_start'] = date('D j/n/Y', $org_membership['order']->created);
+      $variables['membership_start'] = date('D n/j/Y', $org_membership['order']->created);
       $year_seconds = 31688800;
       $end = $org_membership['order']->created + ($year_seconds * $product_meta->field_duration->value());
-      $variables['membership_end'] = date('D j/n/Y', $end);
+      $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
     }
@@ -45,10 +45,11 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     if (!empty($products)) {
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
-      $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
+      $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
+      //Why is this variable a year and a coupld of days?
       $year_seconds = 31688800;
       $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
-      $variables['membership_end'] = date('D j/n/Y', $end);
+      $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
       if ($org_membership = om_membership_user_org_membership($user)) {
@@ -189,9 +190,13 @@ function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
 function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
   $variables['title'] = t('Volunteer Credit');
   global $user;
-  $multiple = om_volunteer_get_multiple();
-  $total = userpoints_get_current_points($user->uid);
-  $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour.', array('!multiple' => $multiple)) . '</p>';
-  $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
-  $variables['message'] = $message;  
+  // @TODO need to loop through all volunteer taxonomy terms.
+  $term = taxonomy_get_term_by_name('Volunteer Hours');
+  if (!empty($term)) {
+    $multiple = om_volunteer_get_multiple($term->tid);
+    $total = userpoints_get_current_points($user->uid);
+    $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour.', array('!multiple' => $multiple)) . '</p>';
+    $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
+    $variables['message'] = $message;  
+  }
 }
