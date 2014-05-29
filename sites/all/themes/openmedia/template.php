@@ -381,21 +381,23 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
-  
-  $score_array = array();
-  foreach ($shows AS $show_nid) {
-    $bayesian_score = alternative_rating_bayesian_value($show_nid);
-    $score_array[$show_nid] = $bayesian_score; 
-    $img = openmedia_get_thumbnail_from_show_nid($show_nid);
-    if (!empty($img)) {
-      $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+ 
+  if(!empty($shows)) { 
+    $score_array = array();
+    foreach ($shows AS $show_nid) {
+      $bayesian_score = alternative_rating_bayesian_value($show_nid);
+      $score_array[$show_nid] = $bayesian_score; 
+      $img = openmedia_get_thumbnail_from_show_nid($show_nid);
+      if (!empty($img)) {
+        $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+      }
     }
-  }
-  //Marty
-    $highest_show = (max($score_array));
-    $highest_score_nid = array_search($highest_show, $score_array);
-    $node_load = node_load($highest_score_nid);
-    $node_array = node_view($node_load);
+    //Marty
+      $highest_show = (max($score_array));
+      $highest_score_nid = array_search($highest_show, $score_array);
+      $node_load = node_load($highest_score_nid);
+      $node_array = node_view($node_load);
+    }
   if (module_exists('fivestar')) {
     if (!empty($vote_info['average']['value'])) {
       $vote_info = fivestar_get_votes('node', $highest_score_nid);
