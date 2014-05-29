@@ -63,7 +63,7 @@ function commerce_coupon_userpoint_enable() {
  */
 function commerce_coupon_userpoint_update_7100(&$sandbox) {
   commerce_coupon_userpoints_add_fields();
-  return st('Added commerce_coupon_userpoint_ratio and commerce_coupon_userpoint_ratio fields to commerce_coupon commerce_coupon_userpoint.');
+  return st('Added commerce_coupon_userpoint_ratio and commerce_coupon_userpoint_type fields to commerce_coupon commerce_coupon_userpoint.');
 }
 
 function commerce_coupon_userpoints_add_fields() {
