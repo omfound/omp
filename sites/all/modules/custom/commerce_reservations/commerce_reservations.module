@@ -579,8 +579,10 @@ function calendar_filter($pid, $node, $quantity = 0){
     rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
   }
   $is_certified = FALSE;
+  drupal_set_message(print_r($account, TRUE));
   if ($product->field_certifications_required['und'] && $user->uid != 1) {
     foreach($product->field_certifications_required['und'] as $product_cert){
+      drupal_set_message( $product_cert['rid']);
       if (in_array($account->roles, $product_cert['rid'])) {
         $is_certified = TRUE;
         break;
