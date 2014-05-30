@@ -574,9 +574,6 @@ function calendar_filter($pid, $node, $quantity = 0){
   $display_node->user_access = true;
   $display_node->user_access_message = ''; 
 
-  drupal_set_message(print_r($user, TRUE));
-  drupal_set_message(print_r($account, TRUE));
-
   //product access checks
   if (module_exists('rules') && $user->uid != 1) {
     rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
