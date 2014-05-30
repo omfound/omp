@@ -87,7 +87,7 @@ function om_theme_assets_block_view($delta = "") {
     case 'om_footer_block':
       $blocks['content'] = om_theme_assets_footer_block();
       break;
-    case 'om_footer_block':
+    case 'project_of_omf_block':
       if (variable_get('omf_project', FALSE) == 1) {
         $blocks['content'] = om_theme_assets_om_footer_block();
       }
