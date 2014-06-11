@@ -363,3 +363,12 @@ body.front h2.block-title {
   border-color: rgb(0, 168, 255);
   background-color: rgb(0, 168, 255);
 }
+
+/**
+ * Project of OMF
+ */
+.region-footer #block-om-theme-assets-project-of-omf-block {
+  float: right;
+  position: relative;
+  bottom: 5px;
+}
