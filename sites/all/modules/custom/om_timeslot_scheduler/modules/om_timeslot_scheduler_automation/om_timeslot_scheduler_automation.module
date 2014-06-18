@@ -102,6 +102,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
  * Implements hook_cron
  */
 function om_timeslot_scheduler_automation_cron() {
+  watchdog('cron_adv', 'Starting automation cron');
   // Only allow automation on live pantheon environments
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     $seconds_between_jobs = variable_get('om_timeslot_scheduler_automation_cron_frequency', 3600);
@@ -111,4 +112,5 @@ function om_timeslot_scheduler_automation_cron() {
       variable_set('om_timeslot_scheduler_automation_last_cron', time());
     }
   }
+  watchdog('cron_adv', 'Automation cron finished');
 }
