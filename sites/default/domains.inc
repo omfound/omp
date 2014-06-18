@@ -10,7 +10,7 @@ function _omp_return_domains() {
     'www_enabled' => TRUE
   );
   // Berkely Community Media
-  $domains['betv.org'] = array(
+  $domains['bcmtv.org'] = array(
     'ssl_enabled' => TRUE,
     'www_enabled' => TRUE
   );
@@ -29,6 +29,7 @@ function _omp_return_aliases() {
   $aliases = array(
     // Denver Open Media
     'denveropenmedia.com' => 'denveropenmedia.org',
+    'betv.org' => 'bcmtv.org'
   );
   return $aliases;
 }
