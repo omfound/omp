@@ -5246,7 +5246,6 @@ function drupal_page_set_cache() {
  *   TRUE if cron ran successfully.
  */
 function drupal_cron_run() {
-  watchdog('brian', '<pre>'.print_r(debug_backtrace(), TRUE).'</pre>');
   // Allow execution to continue even if the request gets canceled.
   @ignore_user_abort(TRUE);
 
