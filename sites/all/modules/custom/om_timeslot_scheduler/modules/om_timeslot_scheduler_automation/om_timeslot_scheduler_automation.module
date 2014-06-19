@@ -101,6 +101,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
 /**
  * Implements hook_cron
  */
+/** TURNING OFF CRON
 function om_timeslot_scheduler_automation_cron() {
   watchdog('cron_adv', 'Starting automation cron');
   //BRIAN: we never come out of here.... something crazy goes on
@@ -116,3 +117,4 @@ function om_timeslot_scheduler_automation_cron() {
   }
   watchdog('cron_adv', 'Automation cron finished');
 }
+**/
