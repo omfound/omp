@@ -465,13 +465,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
-  watchdog('om_ts', 'Looping through '. count($run['timeslots']) . 'timeslots');
   $timeslot_counter = 0;
   foreach ($run['timeslots'] AS $key => $timeslot) {
     $timeslot_counter++;
-    if (($timeslot_counter % 25) == 0) {
-      watchdog('om_ts', 'On '.$timeslot_counter.' timeslot');
-    }
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
