@@ -65,11 +65,13 @@ function om_timeslot_scheduler_automation_form_om_timeslot_scheduler_admin_form_
  * Loop through all the channels marked for automation and schedule each one.
  */
 function om_timeslot_scheduler_automation_run_scheduling_jobs() {
+  watchdog('om_tsa', 'Starting automation run..');
   $channels = variable_get('om_timeslot_scheduler_automation_channels', '');
   if (!empty($channels)) {
     $start = time() + (variable_get('om_timeslot_scheduler_automation_cron_window', 7) * 86400);
     $end = $start + variable_get('om_timeslot_scheduler_automation_cron_duration', 3600);
     foreach ($channels AS $tid => $name) {
+      watchdog('om_tsa', 'Building schedule for '.$name);
       $run = array(
         'channel_tid' => $tid,
         'start' => $start,
@@ -81,17 +83,26 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       $rounded_times = om_broadcast_schedule_round_to_days($start, $end);
       // perform airing update steps.
       $context = array();
+      watchdog('om_tsa', 'Getting airings');
       _om_broadcast_schedule_get_pbs_airings(array_merge($run, $rounded_times), $context);
+      watchdog('om_tsa', 'Matching drupal airings');
       _om_broadcast_schedule_match_drupal_airings($context);
+      watchdog('om_tsa', 'Purging unmatched');
       _om_broadcast_schedule_purge_unmatched($context);
+      watchdog('om_tsa', 'Creating new airings');
       _om_broadcast_schedule_create_new($context);
       // reset context and perform scheduling steps.
       $context = array();
+      watchdog('om_tsa', 'Getting timeslots');
       _om_timeslot_scheduler_get_timeslots($run, $context);
+      watchdog('om_tsa', 'Getting rules');
       _om_timeslot_scheduler_implement_rules($context);
+      watchdog('om_tsa', 'Getting gaps');
       _om_timeslot_scheduler_get_gaps($context);
+      watchdog('om_tsa', 'Building schedule');
       _om_timeslot_scheduler_build_schedule($context);
       $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), '', TRUE);
+      watchdog('om_tsa', 'Committing schedule');
       om_timeslot_scheduler_process_commit($pid, FALSE, 'automation');
       watchdog('om_tsa', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
     }
