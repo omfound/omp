@@ -594,7 +594,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  */
 # $conf['pressflow_smart_start'] = TRUE;
 
-if (!function_exists('_omp_perform_redirect')) {
+if (!function_exists('_omp_perform_redirect') && php_sapi_name() != 'cli' || (!is_numeric($_SERVER['argc']) && $_SERVER['argc'] <= 0)) {
   require_once('domains.inc');
 }
 _omp_perform_redirect();
