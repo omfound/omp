@@ -106,7 +106,7 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->condition('field_archive_transfer_value', 1, '=');
   $resource = $query_uri->execute();
   while ($result = $resource->fetchAssoc()) {
-    watchdog('om_pbsc', '<pre>'.print_r($resource, TRUE).'</pre>');
+    watchdog('om_pbsc', '<pre>'.print_r($result, TRUE).'</pre>');
     $mp4 = '';
     $derivatives = '';
     $metadata = '';
