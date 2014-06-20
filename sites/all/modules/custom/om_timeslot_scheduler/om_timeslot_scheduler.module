@@ -465,7 +465,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
+  $timeslot_counter = 0;
   foreach ($run['timeslots'] AS $key => $timeslot) {
+    $timeslot_counter++;
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
