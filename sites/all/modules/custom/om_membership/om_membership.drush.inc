@@ -25,5 +25,5 @@ function drush_om_membership_dom_membership_update() {
 
   // Ensure that relationships between org member admins and subs are correct.
   om_membership_validate_all_org_sub_members();
-  drush_log('', 'success');
+  drush_log('Updating membership complete.', 'success');
 }
