@@ -230,5 +230,6 @@ function om_classes_query_alter($query) {
     $query->groupBy('node.title');
     $query->addExpression('MAX(node.nid)', 'max_nid');
     $query->havingCondition('node.nid', 'max_nid');
+    dpq($query);
   }
 }
