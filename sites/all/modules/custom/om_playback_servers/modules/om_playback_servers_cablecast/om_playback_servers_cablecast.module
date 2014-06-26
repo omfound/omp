@@ -115,17 +115,16 @@ function om_playback_servers_cablecast_update_vod_field() {
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
       $item = substr($url, strripos($url, '/'), strlen($url));
       $item = rtrim($item, '/');
-      if (class_exists('internetArchiveDerivativeHandler') && !empty($item)) {
+      /*if (class_exists('internetArchiveDerivativeHandler') && !empty($item)) {
         $ia_handler = new internetArchiveDerivativeHandler();
         $ia_handler->set_item($item);
         $derivatives = $ia_handler->get_derivatives();
         if ($derivatives == FALSE) {
-          dsm('we go here');
           continue;
         }
         $derivatives = drupal_json_encode(array($item => $derivatives));
         $mp4 = $ia_handler->get_derivative('mp4');
-      }
+      }*/
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
