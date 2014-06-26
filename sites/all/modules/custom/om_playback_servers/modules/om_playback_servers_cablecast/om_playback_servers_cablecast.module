@@ -128,7 +128,6 @@ function om_playback_servers_cablecast_update_vod_field() {
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
-        dsm($node);
         if (!empty($mp4)) {
           $node->field_om_show_video = array(
             $node->language => array(
@@ -152,7 +151,13 @@ function om_playback_servers_cablecast_update_vod_field() {
             )
           )
         );
+        try {
         node_save($node);
+        }
+        catch (Exception $e) {
+          dsm("FAILED");
+          dsm($node);
+        }
       }
     }
   }
