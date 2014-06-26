@@ -181,7 +181,7 @@ function om_playback_servers_cablecast_default_channel_crawl_info($tid, $show) {
 /**
  * Implements hook_cron
  */
-/*function om_playback_servers_cablecast_cron() {
+function om_playback_servers_cablecast_cron() {
   om_playback_servers_cablecast_update_vod_field();
   watchdog('om_playback_servers_cablecast', 'Cablecast Playback Server cron ran.');
-}*/
+}
