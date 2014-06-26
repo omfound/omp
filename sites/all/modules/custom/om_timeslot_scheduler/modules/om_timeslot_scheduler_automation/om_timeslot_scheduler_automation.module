@@ -101,7 +101,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
 /**
  * Implements hook_cron
  */
-/*function om_timeslot_scheduler_automation_cron() {
+function om_timeslot_scheduler_automation_cron() {
   watchdog('om_ts', 'Starting automation cron');
   //BRIAN: we never come out of here.... something crazy goes on
   // Only allow automation on live pantheon environments
@@ -114,5 +114,4 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       variable_set('om_timeslot_scheduler_automation_last_cron', time());
     }
   }
-  watchdog('om_ts', 'Automation cron finished');
-}*/
+}
