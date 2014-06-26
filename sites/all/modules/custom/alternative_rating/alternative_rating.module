@@ -323,6 +323,6 @@ function alternative_rating_bayesian_value($nid) {
   return $bayesian;
 }
 
-/*function alternative_rating_cron() {
-	alternative_rating_populate();
-}*/
+function alternative_rating_cron() {
+  alternative_rating_populate();
+}
