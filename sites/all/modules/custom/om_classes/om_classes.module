@@ -227,8 +227,9 @@ function om_classes_user_classes($uids = array(), $after_date = NULL, $before_da
  */
 function om_classes_query_alter($query) {
   if ($query->hasTag('class_meta')) {
-    $query->groupBy('node.title');
-    $query->addExpression('MAX(node.nid)', 'max_nid');
-    $query->havingCondition('node.nid', 'max_nid');
+    $sub_select = db_select('node');
+    $sub_select->addExpression('MAX(node.nid)', 'max_nid');
+    $sub_select->groupBy('node.title');
+    $query->condition('node.nid', $subquery, 'IN');
   }
 }
