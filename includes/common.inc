@@ -5282,7 +5282,6 @@ function drupal_cron_run() {
 
     // Iterate through the modules calling their cron handlers (if any):
     foreach (module_implements('cron') as $module) {
-      $start = time();
       // Do not let an exception thrown by one module disturb another.
       try {
         module_invoke($module, 'cron');
@@ -5290,7 +5289,6 @@ function drupal_cron_run() {
       catch (Exception $e) {
         watchdog_exception('cron', $e);
       }
-      watchdog('leo', $module . ': ' . (time() - $start));
     }
 
     // Record cron time.
