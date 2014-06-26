@@ -128,35 +128,31 @@ function om_playback_servers_cablecast_update_vod_field() {
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
-        if (!empty($mp4)) {
-          $node->field_om_show_video = array(
+        if (is_object($node)) {
+          if (!empty($mp4)) {
+            $node->field_om_show_video = array(
+              $node->language => array(
+                0 => array(
+                  'value' => $mp4
+                )
+              )
+            );
+            $node->field_archive_derivatives = array(
+              $node->language => array(
+                0 => array(
+                  'value' => $derivatives
+                )
+              )
+            );
+          }
+          $node->field_om_show_duration = array(
             $node->language => array(
               0 => array(
-                'value' => $mp4
+                'value' => $metadata['TotalSeconds']
               )
             )
           );
-          $node->field_archive_derivatives = array(
-            $node->language => array(
-              0 => array(
-                'value' => $derivatives
-              )
-            )
-          );
-        }
-        $node->field_om_show_duration = array(
-          $node->language => array(
-            0 => array(
-              'value' => $metadata['TotalSeconds']
-            )
-          )
-        );
-        try {
-        node_save($node);
-        }
-        catch (Exception $e) {
-          dsm("FAILED");
-          dsm($node);
+          node_save($node);
         }
       }
     }
