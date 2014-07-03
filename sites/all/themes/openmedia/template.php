@@ -853,3 +853,7 @@ function openmedia_preprocess_block(&$variables) {
     $variables['classes_array'][] = 'clearfix';
   }
 }
+
+function openmedia_preprocess_user_profile(&$variables) {
+  dsm($variables);
+}
