@@ -854,6 +854,3 @@ function openmedia_preprocess_block(&$variables) {
   }
 }
 
-function openmedia_preprocess_user_profile(&$variables) {
-  dsm($variables);
-}
