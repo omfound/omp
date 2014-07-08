@@ -219,6 +219,9 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
     );
   }**/
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'om_show') . '/js/metadata.js',
+  );
 }
 
 function om_show_form_upload_callback($form, $form_state) {
