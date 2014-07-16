@@ -335,6 +335,11 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  // Link to project
+  if (!empty($variables['node']->field_om_show_project[$variables['node']->language])) {
+    $project = node_load($variables['node']->field_om_show_project[$variables['node']->language][0]['nid']);
+    $variables['project_link'] = l($project->title, 'node/' . $project->nid);
+  }
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 

@@ -25,6 +25,13 @@ function om_project_menu() {
     );
   }
   
+  $items['project-metadata'] = array(
+    'page callback' => 'om_project_metadata_json',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK
+  );
+
   // Set up member management section.
   $items['node/%node/project-membership'] = array(
     'title' => t('Manage Project Members'),
@@ -645,4 +652,30 @@ function om_project_views_query_alter(&$view, &$query) {
       }
     }
   }
+}
+
+function om_project_metadata_json($nid) {
+  $values = array();
+  if (is_numeric($nid)) {
+    $node = node_load($nid);
+    $l = $node->language;
+    $fields = om_project_metadata_fields();
+    foreach($fields AS $field) {
+      if (!empty($node->{$field}[$l])) {
+        $value = $node->{$field}[$l][0];
+        $values[$field] = array_shift($value);
+      }
+    }
+  }
+  print json_encode($values);
+}
+
+function om_project_metadata_fields() {
+  return array(
+    'field_license',
+    'field_om_theme',
+    'field_om_genre',
+    'field_om_rating',
+    'field_om_language',
+  );
 }
