@@ -33,7 +33,7 @@ class cablecastFile {
   }
   /**
    * Given a cc uri return the filename.
-   **/
+   */
   public function get_original_file_name($uri) {
     $show_id = $this->get_show_id($uri);
     $controller = om_playback_servers_entity_get_controller($this->pbs);
@@ -148,12 +148,14 @@ class cablecastFile {
     $meta_data = $this->get_show_record($uri);
     if (!empty($meta_data) && !empty($meta_data['CustomFields'])) {
       // NB: Account for inconsistant returns
-      if (is_object($meta_data['CustomFields']->CustomField)) {
+      if (!empty($meta_data['CustomFields']->CustomField) && is_object($meta_data['CustomFields']->CustomField)) {
         $meta_data['CustomFields']->CustomField = array($meta_data['CustomFields']->CustomField);
       }
-      foreach ($meta_data['CustomFields']->CustomField AS $field) {
-        if ($field->Name == 'Archive-URL') {
-          return $field->Value;
+      if (!empty($meta_data['CustomFields']->CustomField)) {
+        foreach ($meta_data['CustomFields']->CustomField AS $field) {
+          if ($field->Name == 'Archive-URL') {
+            return $field->Value;
+          }
         }
       }
     }
@@ -199,5 +201,18 @@ class cablecastFile {
        }
      }
      return FALSE;
+  }
+  public function get_file_validity($uri) {
+    $status = FALSE;
+    $show_id = $this->get_show_id($uri);
+    $controller = om_playback_servers_entity_get_controller($this->pbs);
+    $meta_data = $controller->get_digital_files($this->pbs, array('RestrictToShowID' => $show_id, 'IncludeInvalidFiles' => TRUE, 'RestrictToOrphanedFiles' => FALSE));
+    if (!empty($meta_data->GetDigitalFilesResult) && !empty($meta_data->GetDigitalFilesResult->DigitalFileInfo)) {
+      $meta_data = array_shift($meta_data->GetDigitalFilesResult->DigitalFileInfo);
+      if (is_object($meta_data) && $meta_data->IsValid === TRUE) {
+        $status = TRUE;
+      }
+    }
+    return $status;
   }
 }

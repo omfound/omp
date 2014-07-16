@@ -188,6 +188,19 @@ function commerce_reservations_menu(){
   );
   $items['closed_times'] = array(
     'page callback' => 'commerce_reservations_get_closed_times',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['cr/max_hours'] = array(
+    'page callback' => 'commerce_reservations_get_max_hours',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['cr/res_window'] = array(
+    'page callback' => 'commerce_reservations_get_reservation_window',
+    'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -218,7 +231,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   if (in_array('Staff Member', $user->roles)) {
     $commerce_reservations['staff'] = true;
   }
-  $commerce_reservations['maximum_length'] = variable_get('cr_max_reservation_length', 0);
   drupal_add_js(array('commerce_reservations' => $commerce_reservations), 'setting');
 
   $my_form_id = substr($form_id, 0, 30);
@@ -235,6 +247,13 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }else{
         $max_quantity = 1;
       }
+
+      //check against quantity ovverrides
+      $quantity_limit = commerce_reservations_get_max_quantity($display_node->nid);
+      if (!empty($quantity_limit) && $quantity_limit < $max_quantity) {
+        $max_quantity = $quantity_limit;
+      }
+
       $options = array();
       for ($i = $max_quantity; $i > 0; $i--){
         $options[] = $i;
@@ -278,6 +297,22 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
       }
     } 
   }
+
+  if ($form_id == 'reservable_product_display_node_form') {
+    $availability_items = commerce_reservations_availability_form_items($form, $form_state);
+    $form['reservable_product_availability'] = array(
+      '#type' => 'fieldset',
+      '#weight' => 50,
+      '#title' => t('Availability Overrides'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+    if (!empty($GLOBALS['availability_override'])) {
+      $form['reservable_product_availability']['#collapsed'] = FALSE;
+    }
+    $form['reservable_product_availability'] += $availability_items;
+    $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
+  }
 }
 
 function commerce_reservations_redirect_add($form, &$form_state) {
@@ -316,13 +351,42 @@ function commerce_reservations_fix_quantity($form, &$form_state) {
   }
 }
 
+function commerce_reservations_get_glocal($nid, $key) {
+  $nid_value = variable_get($nid . '_' . $key, null);
+
+  if (is_null($nid_value) || !is_numeric($nid_value)) {
+    $value = variable_get($key, 0);
+  }
+  else {
+    $value = variable_get($nid . '_' . $key);
+  }
+
+  return $value;
+}
+
+function commerce_reservations_get_max_hours($nid) {
+  print commerce_reservations_get_glocal($nid, 'cr_max_reservation_length');
+}
+
+function commerce_reservations_get_max_quantity($nid) {
+  return commerce_reservations_get_glocal($nid, 'cr_max_quantity');
+}
+
+function commerce_reservations_get_reservation_window($nid) {
+  $days = commerce_reservations_get_glocal($nid, 'cr_reservation_window');
+  if (empty($days) || $days > 90) {
+    $days = 90;
+  }
+  print $days;
+}
+
 //Get the closed dates and times so we can add them to the calendar
-function commerce_reservations_get_closed_times(){
-  $total = variable_get('cr_closed_total');
+function commerce_reservations_get_closed_times($display_nid = false){
+  $total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $display_nid);
   $closed_dates = array();
   for ($i = 0; $i < $total; $i++){
     $variable = 'cr_closed_dates_' . $i;
-    $date = variable_get($variable);
+    $date = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     $array = explode('-', $date);
     $closed_dates[] = $array[2] . '-' . $array[0] . '-' . $array[1];
   }
@@ -330,8 +394,8 @@ function commerce_reservations_get_closed_times(){
   $closed_days = array();
   foreach ($days as $day){
     $variable = 'cr_' . $day;
-    if (variable_get($variable) == 'closed'){
-      $closed_days[$day] = variable_get($variable);
+    if (commerce_reservations_availability_var_get($variable, NULL, $display_nid) == 'closed'){
+      $closed_days[$day] = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
     }
   }
   $all_days_closed = array();
@@ -377,8 +441,8 @@ function commerce_reservations_get_closed_times(){
   print '<div class = "closed-times-wrapper">';
   foreach ($days as $day){
     $variable = 'cr_' . $day . '_hours';
-    $value = variable_get($variable);
-    if ($value){
+    $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
+    if ($value && !empty($value['open']) && !empty($value['closed'])){
       switch($day){
         case 'Sunday':
           $array = getDateForSpecificDayBetweenDates('today', '+3 month', 0);
@@ -386,9 +450,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Monday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 6); 
           }
           break;
@@ -398,9 +462,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Tuesday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 0); 
           }
           break;
@@ -410,9 +474,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Wednesday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 1); 
           }
           break;
@@ -422,9 +486,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Thursday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 2); 
           }
           break;
@@ -434,9 +498,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Friday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 3); 
           }
           break;
@@ -446,9 +510,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Saturday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 4); 
           }
           break;
@@ -458,9 +522,9 @@ function commerce_reservations_get_closed_times(){
           $variable2 = 'cr_' . $previous . '_hours';
           $next = 'Sunday';
           $variable3 = 'cr_' . $next . '_hours';
-          $value3 = variable_get($variable3);
+          $value3 = commerce_reservations_availability_var_get($variable3, NULL, $display_nid);
           foreach($array as $index => $date){
-            $value2 = variable_get($variable2);
+            $value2 = commerce_reservations_availability_var_get($variable2, NULL, $display_nid);
             print commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, 5); 
           }
           break;
@@ -470,13 +534,9 @@ function commerce_reservations_get_closed_times(){
   print '</div>'; 
 }
 
-function commerce_reservations_variable_get_timezone_adjusted($variable) {
-
-}
-
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
   $output = '';
-  if ($value2){
+  if ($value2 && !empty($value2['open']) && !empty($value2['closed'])){
     $array2 = getDateForSpecificDayBetweenDates('today -1 day', '+3 month', $date_modifier);
     $start_date = commerce_reservations_format_calendar_date($array2[$index] . ' ' . $value2['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' ' . $value['open']);
@@ -489,7 +549,7 @@ function commerce_reservations_generate_date_feed_item($date, $index, $value, $v
     if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
     $output .= '<div class = "closed-time" start = "' . $start_date . '" end = "' . $end_date . '"></div>';
   }
-  if (!$value3){
+  if (!$value3 || empty($value3['open']) || empty($value3['closed'])){
     $start_date = commerce_reservations_format_calendar_date($date . ' ' . $value['closed']);
     $end_date = commerce_reservations_format_calendar_date($date . ' 11:59 pm');
     if (strtotime($end_date) - strtotime($start_date) > (24*60*60)) { return; } 
@@ -509,16 +569,52 @@ function calendar_filter($pid, $node, $quantity = 0){
   global $user;
   $account = user_load($user->uid);
   $product = commerce_product_load($pid);
-  $is_certified = TRUE;
-  if ($product->field_certifications_required['und']){
+  $display_nid = commerce_reservations_entity_display_lookup($pid);
+  $display_node = node_load($display_nid);
+  $display_node->user_access = true;
+  $display_node->user_access_message = ''; 
+
+  //product access checks
+  if (module_exists('rules') && $user->uid != 1) {
+    rules_invoke_event('om_membership_product_access', $user, $display_node, $product);
+  }
+  $is_certified = FALSE;
+  if ($product->field_certifications_required['und'] && $user->uid != 1) {
     foreach($product->field_certifications_required['und'] as $product_cert){
-      if (!array_key_exists($product_cert['rid'], $account->roles)) {
-	      $is_certified = FALSE;
-	      break;
+      //if (in_array($account->roles, $product_cert['rid'])) {
+      if (isset($account->roles[$product_cert['rid']])) {
+        $is_certified = TRUE;
+        break;
       }
     }
   }
+  else {
+    $is_certified = TRUE;
+  }
+  if ($display_node->user_access && !$is_certified) {
+    $display_node->user_access_message = 'You do not have the required certification to reserve this item.';
+    $display_node->user_access = false;
+  }
 
+  if (!$display_node->user_access) {
+    $error_output = '';
+    $error_output .= '<div>';
+    $error_output .= '<div id="no-access">';
+    $error_output .= '<div id="no-access-message">';
+    $error_output .= $display_node->user_access_message;
+    $error_output .= '</div>';
+    if (!empty($display_node->user_access_blink) && !empty($display_node->user_access_btext)) {
+      $error_output .= '<div id="no-access-button">';
+      $error_output .= '<a href="'.$display_node->user_access_blink.'">';
+      $error_output .= $display_node->user_access_btext;
+      $error_output .= '</a>';
+      $error_output .= '</div>';
+    }
+    $error_output .= '</div></div>';
+    print $error_output;
+    return;
+  }
+  
   if ($is_certified){
 	  $args = array();
     $display_nid = commerce_reservations_entity_display_lookup($pid);
@@ -588,8 +684,10 @@ function commerce_reservations_views_post_execute(&$view){
       //pass the array of reservations to the check_overlaps function
       $overlaps = check_overlaps($reservations, $reservations);
       $result = new stdClass();
-      foreach($view->result[0] as $key => $value){
-        $result->{$key} = $value;
+      if (!empty($view->result)) {
+        foreach($view->result[0] as $key => $value){
+          $result->{$key} = $value;
+        }
       }
       $array_size = sizeof($view->result);
       for ($i = 0; $i < $array_size; $i++){
@@ -953,94 +1051,6 @@ function commerce_reservations_commercial_check($line_id){
   return FALSE;
 }
 
-/**
- * Implements hook_rules_action_info
- */
-
-function commerce_reservations_rules_action_info() {
-  $actions = array();
-
-  // Prepare an array of arithmetical actions for altering prices.
-  $action_types = array(
-    'commerce_reservations_price_per_hour' => array(
-      'label' => t('Multiply price by hour'),
-    ),
-    'commerce_reservations_price_per_day' => array(
-      'label' => t('Multiply price by day'),
-    ),
-    'commerce_reservations_price_reduction' => array(
-      'label' => t('Reduce price by days or hours specified on product'),
-    ),
-    'commerce_reservations_discount_by_day' => array(
-      'label' => t('Remove days from reservations cost calculation'),
-    ),
-  );
-
-  // Define the action using a common set of parameters.
-  foreach ($action_types as $key => $value) {
-    $actions[$key] = array(
-      'label' => $value['label'],
-      'parameter' => array(
-        'commerce_line_item' => array(
-          'type' => 'commerce_line_item',
-          'label' => t('Line item'),
-        ),
-        'component_name' => array(
-          'type' => 'text',
-          'label' => t('Price component type'),
-          'description' => t('Price components track changes to prices made during the price calculation process, and they are carried over from the unit price to the total price of a line item. When an order total is calculated, it combines all the components of every line item on the order. When the unit price is altered by this action, the selected type of price component will be added to its data array and reflected in the order total display when it is formatted with components showing. Defaults to base price, which displays as the order Subtotal.'),
-          'options list' => 'commerce_line_item_price_component_options_list',
-          'default value' => 'base_price',
-        ),
-        'round_mode' => array(
-          'type' => 'integer',
-          'label' => t('Price rounding mode'),
-          'description' => t('Round the resulting price amount after performing this operation.'),
-          'options list' => 'commerce_round_mode_options_list',
-          'default value' => COMMERCE_ROUND_HALF_UP,
-        )
-      ),
-      'group' => t('Commerce Reservations Rules'),
-    );
-  }
-
-  $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
-    'type' => 'text',
-    'label' => t('Day'),
-  ); 
-  $actions['commerce_reservations_update_checkout_status'] = array(
-    'label' => t('Set all reservable line items to specific status'),
-    'group' => t('Commerce Reservations Rules'),
-    'parameter' => array(
-      'commerce_order' => array(
-        'type' => 'commerce_order',
-        'label' => t('Commerce Order'),
-        'description' => t('All reservations on this order will have their status changed.'),
-      ),
-      'reservation_state' => array(
-        'type' => 'list<text>',
-        'label' => t('Reservation Status'),
-        'description' => t('Reservations will be set to this status.'),
-        'options list' => 'commerce_reservations_status_options',
-      ),
-    ),
-  );
-
-  $actions['commerce_reservations_separate_quantity'] = array(
-    'label' => t('Separate line items with quantity > 1 into multiple line items.'),
-    'group' => t('Commerce Reservations Rules'),
-    'parameter' => array(
-      'commerce_order' => array(
-        'type' => 'commerce_order',
-        'label' => t('Commerce Order'),
-        'description' => t('All reservation line items with quantity > 1 will be separated into multiple line items.'),
-      ),
-    ),
-  );
-
-  return $actions;
-}
-
 function commerce_reservations_hours_days($start, $end) {
   $hours_diff = floor(($end - $start) / 3600);
   if ($hours_diff < 1){
@@ -1063,208 +1073,6 @@ function commerce_reservations_hours_days($start, $end) {
   );
 
   return $hours_days;
-}
-
-function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
-    return;
-  }
-
-  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
-    return;
-  }
-  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-  $hours_days = commerce_reservations_hours_days($start, $end);
-  if ($hours_days['hours']) { 
-    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-    $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-    $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
-
-    if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-      $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
-    }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-      $hourly_rate = $product->commerce_price['und'][0]['amount'];
-    }else {
-      return;
-    }
-
-    //if more than 1 day, discount by 1 day
-    if ($free_hours >= $hours_days['hours']) {
-      //reduce to zero cost if the hours provided are great than the order hours
-      $new_price = 0; 
-      $price_difference = $new_price - $unit_price['amount'];
-    }
-    else {
-      if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-        $new_price = $unit_price['amount'] - ($free_hours*$hourly_rate);
-        $price_difference = $new_price - $unit_price['amount'];
-      }elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-        if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
-          $new_price = 0;
-        }else{
-          $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
-        }
-        if ($new_price < 0) { $new_price = 0; }
-        $price_difference = $new_price - $unit_price['amount'];
-      }
-    }
-    $difference = array(
-      'amount' => $price_difference,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-
-    // Set the amount of the unit price and add the difference as a component.
-    $line_item_wrapper->commerce_unit_price->amount = $new_price;
-    
-    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $line_item_wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-
-  }
-}
-
-function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
-  $day = strtolower($day);
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
-    return;
-  }
-
-  if (empty($line_item->field_reservation_dates['und'][0]["value"]) || empty($line_item->field_reservation_dates['und'][0]["value2"])) {
-    return;
-  }
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-  $start = strtotime($line_item->field_reservation_dates['und'][0]["value"].' UTC');
-  $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"].' UTC');
-  $current_date = $start;
-  $deduct_hours = 0;
-  $deduct_days = 0;
-  while($current_date < $end) {
-    $res_day = strtolower(date('l', $current_date)); 
-    if ($res_day == $day) {
-      $deduct_days = $deduct_days + 1;
-    }
-    $current_date = $current_date + (24*60*60);
-  }
-  if (!empty($deduct_days) && $deduct_days > 0) {
-    if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-      $new_price = $unit_price['amount'] - ($deduct_hours * 24 * $product->commerce_price['und'][0]['amount']);
-    }
-    elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-      $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
-    }
-    if ($new_price < 0) { $new_price = 0; }
-    $price_difference = $new_price - $unit_price['amount'];
-
-    $difference = array(
-      'amount' => $price_difference,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-
-    // Set the amount of the unit price and add the difference as a component.
-    $line_item_wrapper->commerce_unit_price->amount = $new_price;
-  
-    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $line_item_wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-  }
-}
-
-function commerce_reservations_price_per_hour($line_item, $component_name, $round_mode){
-  
-  //First check to make sure the product is a reservable product
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
-    return;
-  }
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-  
-  if (property_exists($line_item, "field_reservation_dates")){
-    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_days = commerce_reservations_hours_days($start, $end);
-    $rate = $product->commerce_price['und'][0]['amount'];
-    $updated_price = $hours_days['hours'] * $rate;
-    $current_amount = $unit_price['amount'];
-    $difference = array(
-      'amount' => $updated_price - $current_amount,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-   
-    // Set the amount of the unit price and add the difference as a component.
-    $line_item_wrapper->commerce_unit_price->amount = $updated_price;
-    
-    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $line_item_wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-  }
-}
-
-function commerce_reservations_price_per_day($line_item, $component_name, $round_mode){
-  
-  //First check to make sure the product is a reservable product
-  $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if ($product->type != 'reservable_product') {
-    return;
-  }
-  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-  
-  if (property_exists($line_item, "field_reservation_dates")){
-    $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
-    $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-    $hours_days = commerce_reservations_hours_days($start, $end);
-    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
-    $day_rate = $product->commerce_price['und'][0]['amount'];
-    
-    $day_cost = $hours_days['days']*$day_rate;
-    if ($hours_days['hours'] > 24) {
-      if ($hours_days['remainder_hours'] < 8) {
-        $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
-      }else{
-        $hour_cost = $day_rate;
-      }
-    }
-
-    if (!empty($hour_cost)) {
-      $updated_price = $day_cost + $hour_cost;
-    }else{
-      $updated_price = $day_cost;
-    }
-
-    $current_amount = $unit_price['amount'];
-    $difference = array(
-      'amount' => $updated_price - $current_amount,
-      'currency_code' => $unit_price['currency_code'],
-      'data' => array(),
-    );
-   
-    // Set the amount of the unit price and add the difference as a component.
-    $line_item_wrapper->commerce_unit_price->amount = $updated_price;
-    
-    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
-      $line_item_wrapper->commerce_unit_price->value(),
-      $component_name,
-      $difference,
-      TRUE
-    );
-  }
 }
 
 function commerce_reservations_status_options () {
@@ -1431,55 +1239,6 @@ function commerce_reservations_email_confirmation($line_item, $component_name, $
   drupal_mail('commerce_reservations', 'res_mail', $user->mail, user_preferred_language($user), $params);
 }
 
-function commerce_reservations_update_checkout_status($order, $reservation_state) {
-  $reservation_state = reset($reservation_state);
-  $line_item_ids = array();
-  foreach ($order->commerce_line_items['und'] as $key => $info) {
-    $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
-  } 
-  $line_items = commerce_line_item_load_multiple($line_item_ids);
-
-  foreach ($line_items as $line_item_id => $line_item) {
-    if ($line_item->type == 'reservable_product') {
-      $line_item->field_checkout_status['und'][0]['value'] = $reservation_state;
-      commerce_line_item_save($line_item);
-    }
-  }
-}
-
-function commerce_reservations_separate_quantity($order) {
-  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
-
-  foreach ($order->commerce_line_items['und'] as $key => $info) {
-    $line_item_ids[$info['line_item_id']] = $info['line_item_id'];
-  } 
-  $line_items = commerce_line_item_load_multiple($line_item_ids);
-
-  foreach ($line_items as $line_item_id => $line_item) {
-    if ($line_item->type == 'reservable_product') {
-      if ($line_item->quantity > 1) {
-        $clone_count = $line_item->quantity - 1;
-        $counter = 1;
-        while ($counter <= $clone_count) {
-          //build a new line item by cloning existing and changing product
-          $new_line_item = clone $line_item;
-          $new_line_item->line_item_id = null;
-          $new_line_item->is_new = TRUE; 
-          $new_line_item->quantity = 1;
-
-          commerce_line_item_save($new_line_item);
-          $order_wrapper->commerce_line_items[] = $new_line_item;
-          $counter++;
-        }
-
-        $line_item->quantity = 1;
-        commerce_line_item_save($line_item);
-        commerce_order_save($order);
-      }
-    }
-  }
-}
-
 function commerce_reservations_mail($key, &$message, $params){
   switch($key) {
     case 'res_mail':
@@ -1565,19 +1324,14 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   $start_date = new DateTime($date_array['value'], new DateTimeZone($date_array['timezone']));
   $end_date = new DateTime($date_array['value2'], new DateTimeZone($date_array['timezone']));
 
-  /**
-  $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2']);
+  $invalid_status = array('Checked Out', 'Overdue');
+  $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $invalid_status);
+  $product_options = array();
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
     $product_options[] = $available_item->sku;
-  }**/
-  $product_options = array();
-  $product_options[] = $line_item->line_item_label;
-  /**
-  foreach ($product_display_wrapper->field_crp_product_reference->getIterator() as $product_wrapper) {
-    $product_sku = $product_wrapper->sku->value();
-    $product_options[] = $product_sku;
-  }**/
+  }
+
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
@@ -1614,6 +1368,18 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
       '#options' => $accessories,
     );
   }
+  $form['start_date'] = array(
+    '#type' => 'hidden',
+    '#value' => $date_array['value'],
+  );
+  $form['end_date'] = array(
+    '#type' => 'hidden',
+    '#value' => $date_array['value2'],
+  );
+  $form['opi'] = array(
+    '#type' => 'hidden',
+    '#value' => $line_item->commerce_product['und'][0]['product_id'],
+  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Checkout')
@@ -1630,17 +1396,6 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
-  /**
-  if ($line_item->line_item_label != $product_wrapper->sku->value()) {
-    //BRIAN HERE
-    dsm('CHOSE DIFFERENT SKU!');
-    $form_state['redirect'] = 'administer_reservations';
-    return;
-  }else{
-    $form_state['redirect'] = 'administer_reservations';
-    dsm('CHOSE SAME SKU!');
-    return;
-  }**/
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
   $line_item_wrapper->field_checkout_status->set('Checked Out');
@@ -1904,9 +1659,11 @@ function commerce_reservations_line_item_checkin_missing_accessories_text ($miss
 function commerce_reservations_line_item_checkin_update_line_item ($line_item_wrapper, $accessories) {
   $line_item_wrapper->field_checkout_status->set('Checked In');
   $returned_accessories = array();
-  foreach ($accessories as $index => $item){
-    if ($item) {
-      $returned_accessories[] = $index;
+  if (!empty($returned_accessories)) {
+    foreach ($accessories as $index => $item){
+      if ($item) {
+        $returned_accessories[] = $index;
+      }
     }
   }
   if (count($returned_accessories) > 0) {
@@ -1981,11 +1738,13 @@ function commerce_reservations_cron(){
   );
   $line_items =  commerce_line_item_load_multiple($line_item_ids = array(), $conditions);
   foreach ($line_items as $line_item){
-    $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2'] . " UTC");
-    if ($end_date < time()){
-      if ($line_item->field_checkout_status['und'][0]['value'] == "Checked Out"){
-        $line_item->field_checkout_status['und'][0]['value'] = "Overdue";
-        commerce_line_item_save($line_item);
+    if (!empty($line_item->field_reservation_dates)) {
+      $end_date = strtotime($line_item->field_reservation_dates['und'][0]['value2'] . " UTC");
+      if ($end_date < time()){
+        if (!empty($line_item->field_checkout_status['und']) && $line_item->field_checkout_status['und'][0]['value'] == "Checked Out"){
+          $line_item->field_checkout_status['und'][0]['value'] = "Overdue";
+          commerce_line_item_save($line_item);
+        }
       }
     }
   }
@@ -2025,21 +1784,100 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#title' => t('Notification should be sent to this email address:'),
     '#default_value' => $email_default,
   );
-  $form['cr_max_reservation_length'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Maximum hours for a single reservation:'),
-    '#default_value' => variable_get('cr_max_reservation_length', 0),
-    '#description' => t('Enter 0 for no limit'),
-  );
   $form['cr_expired_cart_warning'] = array(
     '#type' => 'checkbox',
     '#title' => t('Warn users after 10 minutes of an incomplete order'),
     '#default_value' => variable_get('cr_expired_cart_warning', 0),
   );
+  $availability_items = commerce_reservations_availability_form_items($form, $form_state);
+  $form += $availability_items;
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save Settings',
+  );
+  return $form;
+}
+
+function commerce_reservations_availability_var_get($key, $default, $nid = null) {
+  if ($nid) {
+    return variable_get($nid . '_' . $key);
+  }
+  else {
+    return variable_get($key, $default);
+  }
+}
+
+function commerce_reservations_availability_var_set($key, $value, $nid = null) {
+  if (!empty($nid)) {
+    variable_set($nid . '_' . $key, $value);
+  }
+  else {
+    variable_set($key, $value);
+  }
+
+  return;
+}
+
+function commerce_reservations_availability_var_del($key, $nid = null) {
+  if (!empty($nid)) {
+    variable_del($nid . '_' . $key);
+  }
+  else {
+    variable_del($key);
+  }
+  return;
+}
+
+function commerce_reservations_availability_form_items($form, &$form_state) {
+  if (!empty($form['nid']['#value']) && is_numeric($form['nid']['#value'])) {
+    $key_nid = $form['nid']['#value'];
+  }
+  else {
+    $key_nid = false;
+  }
+
+  $total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
+  $form = array();
+
+  $form['cr_max_reservation_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum hours for a single reservation:'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_max_reservation_length', 0, $key_nid),
+    '#description' => t('Enter 0 for no limit'),
+    '#size' => 10,
+  );
+
+  $form['cr_max_quantity'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum number of an item that can be checked out in a single reservation:'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_max_quantity', 0, $key_nid),
+    '#description' => t('Enter 0 for no limit'),
+    '#size' => 10,
+  );
+
+  $form['cr_reservation_window'] = array(
+    '#type' => 'textfield',
+    '#title' => t('How many days out can reservations be made?'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_reservation_window', 90, $key_nid),
+    '#description' => t('Currently this number cannot exceed 90 days'),
+    '#size' => 10,
+  );
+
+  $old_dates = array();
+  for ($i = 0; $i < $total; $i++){
+    $variable = 'cr_closed_dates_' . $i;
+    $old_dates[] = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
+  }
   $form['closed_dates'] = array(
     '#prefix' => '<div id="closed_dates">', 
     '#suffix' => '</div>',
   );
+  if ($key_nid) {
+    $closed_dates_label = t('Add dates that this item is unavailable');
+  }
+  else {
+    $closed_dates_label = t('Select a holiday or other day the station is closed.');
+  }
   for ($i = 0; $i < $total + 1; $i++){
     $key = 'dates_' . $i;
     if ($i < $total){
@@ -2049,10 +1887,11 @@ function commerce_reservations_settings_form($form, &$form_state){
     } else {
       $date_string = '';
     }
+
     $form['closed_dates'][$key] = array(
       '#type' => 'date_popup',
       '#date_format' => 'm-d-Y',
-      '#title' => t('Select a holiday or other day the station is closed.'),
+      '#title' => $closed_dates_label,
       '#default_value' => $date_string,
     );
   }
@@ -2065,9 +1904,9 @@ function commerce_reservations_settings_form($form, &$form_state){
           $date_key = 'dates_' . $index;
           $form['closed_dates'][$date_key] = array(
             '#type' => 'date_popup',
-    '#date_format' => 'm-d-Y',
-    '#title' => t('Select a holiday or other day the station is closed.'),
-    '#default_value' => '',
+            '#date_format' => 'm-d-Y',
+            '#title' => $closed_dates_label,
+            '#default_value' => '',
           );
         }
       }
@@ -2086,39 +1925,56 @@ function commerce_reservations_settings_form($form, &$form_state){
   );
   $days = commerce_reservations_week_days();
   $closed_days = array();
+  $closed_attributes = array();
   foreach ($days as $day){
     $variable = 'cr_' . $day;
-    $setting = variable_get($variable);
+    $setting = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
     if ($setting == 'closed'){
       $closed_days[] = $day;
     }  
   }
+
+  if ($key_nid) {
+    $closed_days_label = t('Select days that this item is never available');
+  }
+  else {
+    $closed_days_label = t('Select days that the location is closed.');
+  }
   $form['weekend_days'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Please select which days you are closed on a weekly basis. (ie. weekends)'),
+    '#title' => $closed_days_label,
     '#options' => $days,
     '#default_value' => $closed_days,
   );
+
+
+  if ($key_nid) {
+    $hours_op_label = t('Hours this item is available');
+  }
+  else {
+    $hours_op_label = t('Hours of operation');
+  }
   $form['operation_hours'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Hours of Operation'),
+    '#title' => $hours_op_label,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  
   foreach ($days as $day){
     $lower_day = strtolower($day);
     $div = '<div id = "' . $lower_day . '">';
     $open_day = 'open_' . $lower_day;
     $close_day = 'close_' . $lower_day;
-    $title_open = 'Select the time the station opens on ' . $day;
-    $title_close = 'Select the time the station closes on ' . $day;
+    $title_open = 'Start availability on ' . $day;
+    $title_close = 'End availability on ' . $day;
     $form['operation_hours'][$lower_day] = array(
       '#prefix' => $div,
       '#suffix' => '</div>',
     );
     $variable = 'cr_' . $day . '_hours';
-    $value = variable_get($variable);
-    if ($value){
+    $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
+    if ($value && !empty($value['open']) && !empty($value['closed'])){
       $value = $value['open'];
       $value_array = explode(':', $value);
       $minute_array = explode(' ', $value_array[1]);
@@ -2137,8 +1993,8 @@ function commerce_reservations_settings_form($form, &$form_state){
       '#description' => t('e.g. 10:30 am'),
       '#default_value' => $time_string,
     );
-    $value = variable_get($variable);
-    if ($value){
+    $value = commerce_reservations_availability_var_get($variable, NULL, $key_nid);
+    if ($value && !empty($value['open']) && !empty($value['closed'])){
       $value = $value['closed'];
       $value_array = explode(':', $value);
       $minute_array = explode(' ', $value_array[1]);
@@ -2158,11 +2014,56 @@ function commerce_reservations_settings_form($form, &$form_state){
       '#default_value' => $time_string,
     );
   }
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'Save Settings',
-  );
+
   return $form;
+}
+
+function commerce_reservations_availability_items_submit($form, &$form_state) {
+  if (!empty($form['nid']['#value']) && is_numeric($form['nid']['#value'])) {
+    $key_nid = $form['nid']['#value'];
+  }
+  else {
+    $key_nid = FALSE;
+  }
+
+  commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
+  commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
+  commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
+
+  $total = 0;
+  $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
+  for ($i = 0; $i < $old_total; $i++){
+    $variable = 'cr_closed_dates_' . $i;
+    commerce_reservations_availability_var_get($variable, $key_nid);
+  }
+  foreach($form_state['input'] as $key => $value){
+    if (substr($key, 0,5) == 'dates'){
+      if (!empty($value['date'])){
+        $variable = 'cr_closed_' . $key;
+        $var_val = $value['date'];
+        commerce_reservations_availability_var_set($variable, $var_val, $key_nid);
+        $total++;
+      }
+    }
+  }
+  commerce_reservations_availability_var_set('cr_closed_total', $total, $key_nid);
+  foreach ($form_state['input']['weekend_days'] as $key => $value){
+    $day = 'cr_' . $key;
+    $variable = $day . '_hours';
+    if ($value){
+      commerce_reservations_availability_var_set($day, 'closed', $key_nid);
+      commerce_reservations_availability_var_del($variable, $key_nid);
+    } else{
+      commerce_reservations_availability_var_set($day, 'open', $key_nid);
+      $index_open = 'open_' . strtolower($key);
+      $index_closed = 'close_' . strtolower($key);
+      $hours = array(
+        'open' => $form_state['input'][$index_open],
+        'closed' => $form_state['input'][$index_closed],
+      );
+      commerce_reservations_availability_var_set($variable, $hours, $key_nid);
+    }
+  }
 }
 
 function commerce_reservations_settings_form_submit($form, &$form_state){
@@ -2171,7 +2072,6 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
   } else{
 	  variable_set('cr_allow_commercial', 0);
   }
-  variable_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], 0);
   variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
 
   if ($form_state['input']['email_confirm']){
@@ -2184,40 +2084,8 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
       variable_del($email);
     }
   }
-  $total = 0;
-  $old_total = variable_get('cr_closed_total');
-  for ($i = 0; $i < $old_total; $i++){
-    $variable = 'cr_closed_dates_' . $i;
-    variable_del($variable);
-  }
-  foreach($form_state['input'] as $key => $value){
-    if (substr($key, 0,5) == 'dates'){
-      if (!empty($value['date'])){
-        $variable = 'cr_closed_' . $key;
-        $var_val = $value['date'];
-        variable_set($variable, $var_val);
-        $total++;
-      }
-    }
-  }
-  variable_set('cr_closed_total', $total);
-  foreach ($form_state['input']['weekend_days'] as $key => $value){
-    $day = 'cr_' . $key;
-    $variable = $day . '_hours';
-    if ($value){
-      variable_set($day, 'closed');
-      variable_del($variable);
-    } else{
-      variable_set($day, 'open');
-      $index_open = 'open_' . strtolower($key);
-      $index_closed = 'close_' . strtolower($key);
-      $hours = array(
-        'open' => $form_state['input'][$index_open],
-        'closed' => $form_state['input'][$index_closed],
-      );
-      variable_set($variable, $hours);
-    }
-  }
+
+  commerce_reservations_availability_items_submit($form, $form_state);
 }
 
 /*
@@ -2225,6 +2093,10 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
  */
  
 function more_dates_js($form, &$form_state){
+  if (empty($form['closed_dates'])) {
+    return $form['reservable_product_availability']['closed_dates'];
+  }
+
   return $form['closed_dates'];
 }
 
@@ -2332,15 +2204,20 @@ function commerce_reservations_build_form($form_id) {
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
   $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  $reservation_status = 'Available';
   foreach ($reservations as $reservation) {
-    if (is_null($reservation->field_checkout_status_value)) {
-        return 'Pending Reservation';  
-    }else{
+    if ($reservation->field_checkout_status_value == 'Checked Out' || $reservation->field_checkout_status_value == 'Overdue') {
       return $reservation->field_checkout_status_value;
+    }
+
+    if (is_null($reservation->field_checkout_status_value)) {
+        $reservation_status = 'Pending Reservation';
+    }else{
+      $reservation_status = $reservation->field_checkout_status_value;
     }
   }
   
-  return 'Available';
+  return $reservation_status;
 }
 
 function commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null) {
@@ -2381,12 +2258,17 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
     foreach ($display_node->field_crp_product_reference['und'] as $key => $info) {
       $reservations = commerce_reservations_product_reservations($info['product_id'], $start_date, $end_date, $exclude_id = null);
       foreach ($reservations as $reservation) {
-        $all_reservations[] = array(
-          'start' => strtotime($reservation->field_reservation_dates_value),
-          'end' => strtotime($reservation->field_reservation_dates_value2),
-          'line_id_array' => array($reservation->line_item_id),
-          'count' => 1
-        );
+        if (is_null($reservation->field_checkout_status_value) || 
+        $reservation->field_checkout_status_value == 'Checked Out' || 
+        $reservation->field_checkout_status_value == 'Overdue' ||
+        $reservation->field_checkout_status_value == 'Awaiting Checkout') {
+          $all_reservations[] = array(
+            'start' => strtotime($reservation->field_reservation_dates_value),
+            'end' => strtotime($reservation->field_reservation_dates_value2),
+            'line_id_array' => array($reservation->line_item_id),
+            'count' => 1
+          );
+        }
       }
     }
     $overlaps = check_overlaps($all_reservations, $all_reservations);
@@ -2464,14 +2346,14 @@ function commerce_reservations_available_product_id($product_id, $start_date, $e
   return false;
 }
 
-function commerce_reservations_items_on_hand($product_id, $start_date, $end_date) {
+function commerce_reservations_items_on_hand($product_id, $start_date, $end_date, $invalid_status = array('Checked Out', 'Overdue')) {
   $display_nid = commerce_reservations_entity_display_lookup($product_id);
   $display_node = node_load($display_nid);
 
   $available = array();
   foreach ($display_node->field_crp_product_reference[$display_node->language] as $key => $info) {
     $checkout_status = commerce_reservations_product_checkout_status($info['product_id'], $start_date, $end_date);
-    if ($checkout_status != 'Checked Out' && $checkout_status != 'Overdue') {
+    if (!in_array($checkout_status, $invalid_status)) {
       $available[] = $info['product_id'];
     }
   }

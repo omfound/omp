@@ -666,6 +666,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .no-certification-message, 
+.no-access,
 .commercial-message{
 	min-height: 23px;
   background-color: #912A1B;
@@ -675,7 +676,6 @@ body.page-reservations #main-content #squeeze{
   padding-left: 20px;
   margin-bottom: 15px;
   margin-top: 20px;
-  height: 25px;
   text-shadow: none;
   font-size: 1.2em;
 }
@@ -686,6 +686,9 @@ body.page-reservations #main-content #squeeze{
 .no-certification-message a,
 .no-certification-message a:link,
 .no-certification-message a:visited,
+.no-access a,
+.no-access a:link,
+.no-access a:visited,
 .commercial-message .commercial-button{
 	font-family:  Helvetica, Arial,sans-serif;
 	font-size: 12px;
@@ -713,6 +716,7 @@ body.page-reservations #main-content #squeeze{
   margin-right: 40px;
 }
 .no-certification-message a:hover,
+.no-access a:hover,
 .commercial-message .commercial-button:hover{
 	text-shadow: 0 0 10px #FFFFFF;
 	background:#acf4f9);
@@ -730,18 +734,26 @@ body.page-reservations #main-content #squeeze{
 	background-color: whiteSmoke;
 }
 
+.section-administer-reservations table {
+  margin-bottom: 0px;
+}
+
+.section-administer-reservations span.date-display-single {
+  display: block;
+  margin-top: 30px;
+}
+
 .section-administer-reservations .reservation{
   padding: 10px;
   background: white;
-  border-left: 1px dashed grey;
-  border-right: 1px dashed grey;
-  border-bottom: 1px dashed blue;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
 }
 .section-administer-reservations .views-row-first .reservation {
-  border-top: 1px dashed grey;
+  border-top: 1px solid grey;
 }
 .section-administer-reservations .views-row-last .reservation {
-  border-bottom: 1px dashed grey;
+  border-bottom: 1px solid grey;
 }
 
 .section-administer-reservations .reservation-overdue{
@@ -753,7 +765,7 @@ body.page-reservations #main-content #squeeze{
 
 .section-administer-reservations .reservation .reservation-dates,
 .section-administer-reservations #content .view-id-reservation_orders h3 {
-	color: #85B740;
+	color: #000;
   font-weight: bold;
   font-size: 21px;
   font-family: Helvetica, Arial, sans-serif;
@@ -771,37 +783,28 @@ body.page-reservations #main-content #squeeze{
 	margin-top: 10px;
 }
 
-.section-administer-reservations .cr_button { 
-  color: #fff; 
-  background-color: #85B740;
-  float: right;
-  font-size: 10px; 
-  font-weight: bold; 
-  text-transform: uppercase; 
-  padding: 15px 6px 6px 6px; 
-  cursor: pointer; font-family: Arial, Helvetica, sans-serif; 
-  line-height: 19px;
-  width: 60px;
-  text-align: center;
-  text-decoration: none;
-  margin-right: 10px;
-  box-shadow: inset -2px -2px 10px grey;
-  height: 30px;
+.section-administer-reservations th {
+  border-bottom: 1px dashed black;
 }
 
-.section-administer-reservations .cr_cancel_button {
-  background-color: #E64A4E;
-  width: 80px;
-  height: 40px;
-  padding-top: 5px;
+.section-administer-reservations td {
+  vertical-align: top;
 }
 
-.section-administer-reservations .cr_noshow_button {
-  background-color: #3394D1;
+.section-administer-reservations a.btn {
+  margin: 5px;
 }
 
-.section-administer-reservations .cr_button:hover {
-  background-position: 0 -50px; 
+.section-administer-reservations td.item-name {
+  width: 125px;
+}
+
+.section-administer-reservations td.user-info {
+  width: 65px;
+}
+
+.section-administer-reservations td.checkout-status {
+  width: 100px;
 }
 
 .section-administer-reservations #edit-line-item-id-wrapper {
@@ -810,6 +813,11 @@ body.page-reservations #main-content #squeeze{
 
 .section-administer-reservations .checkout-options {
   width: 350px;
+}
+
+.section-administer-reservations .pay-later {
+  background-color: #fffce5;
+  border: 1px solid #ed5;
 }
 
 .checkout_status_bad{

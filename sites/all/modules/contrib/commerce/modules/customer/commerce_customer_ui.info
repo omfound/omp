@@ -10,19 +10,12 @@ dependencies[] = views
 core = 7.x
 configure = admin/commerce/customer-profiles/types
 
-; Module includes
-files[] = includes/commerce_customer_ui.profiles.inc
-files[] = includes/commerce_customer_ui.profile_types.inc
-
-; Views includes
-files[] = includes/views/commerce_customer_ui.views_default.inc
-
 ; Simple tests
 files[] = tests/commerce_customer_ui.test
 
-; Information added by drupal.org packaging script on 2013-02-13
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2014-02-15
+version = "7.x-1.8+40-dev"
 core = "7.x"
 project = "commerce"
-datestamp = "1360749319"
+datestamp = "1392431313"
 

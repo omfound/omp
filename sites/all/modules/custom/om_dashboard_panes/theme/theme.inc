@@ -20,14 +20,15 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
   if (empty($memberships)) {
     if (!$org_membership = om_membership_user_org_membership($user)) {
       $no_membership = TRUE;
-    }else{
+    }
+    else{
       //stuff will go here
       $product_meta = entity_metadata_wrapper('commerce_product', $org_membership['product']);
       $variables['membership_type'] = $org_membership['product']->title;
-      $variables['membership_start'] = date('D j/n/Y', $org_membership['order']->created);
+      $variables['membership_start'] = date('D n/j/Y', $org_membership['order']->created);
       $year_seconds = 31688800;
       $end = $org_membership['order']->created + ($year_seconds * $product_meta->field_duration->value());
-      $variables['membership_end'] = date('D j/n/Y', $end);
+      $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
     }
@@ -44,12 +45,22 @@ function om_dashboard_panes_preprocess_om_membership_pane(&$variables) {
     if (!empty($products)) {
       $product_meta = entity_metadata_wrapper('commerce_product', $products);
       $variables['membership_type'] = $products->title;
-      $variables['membership_start'] = date('D j/n/Y', $memberships[0]->created);
+      $variables['membership_start'] = date('D n/j/Y', $memberships[0]->created);
+      //Why is this variable a year and a coupld of days?
       $year_seconds = 31688800;
       $end = $memberships[0]->created + ($year_seconds * $product_meta->field_duration->value());
-      $variables['membership_end'] = date('D j/n/Y', $end);
+      $variables['membership_end'] = date('D n/j/Y', $end);
       $options = array('attributes' => array('class' => array('blue-button')));
       $variables['upgrade'] = l('Upgrade Your Plan', 'membership', $options);
+      if ($org_membership = om_membership_user_org_membership($user)) {
+        $org_message = '';
+        $profile = profile2_by_uid_load($org_membership['order']->uid, 'manage_organizational_membership');
+        if (!empty($profile->field_organization_name[LANGUAGE_NONE])) {
+          $message_options = array('!org' => l($profile->field_organization_name[LANGUAGE_NONE][0]['value'], 'user/' . $org_membership['order']->uid));
+          $org_message .= t('Your membership is provided by !org.', $message_options);
+        }
+        $variables['org_message'] = $org_message;
+      }
     }
     else {
       $no_membership = TRUE;
@@ -157,11 +168,11 @@ function om_dashboard_panes_preprocess_om_shows_pane(&$variables) {
     }
     $show_output .= "</table>";
     $variables['show_output'] = $show_output;
-    $variables['add_link'] = l('Add a New Show', 'node/add/om_show', $options);
+    $variables['add_link'] = l('Add a New Show', 'node/add/om-show', $options);
     $variables['all_shows'] = l('My Shows', 'user/shows', $options);
   }
   else {
-    $link = l('Make One Now', 'node/add/om_show', $options);
+    $link = l('Make One Now', 'node/add/om-show', $options);
     $variables['message'] = t('You haven\'t created any shows yet. !now', array('!now' => $link));
   }
 }
@@ -174,4 +185,19 @@ function om_dashboard_panes_preprocess_om_upcoming_airings_pane(&$variables) {
   $variables['title'] = t('Upcoming Airings');
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_all', array('user' => $user)); 
   $variables['all_airings'] = l('See All Airings', 'upcoming-airings', array('attributes' => array('class' => array('blue-button'))));
+}
+
+function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
+  $variables['title'] = t('Volunteer Credit');
+  global $user;
+  // @TODO need to loop through all volunteer taxonomy terms.
+  $term = taxonomy_get_term_by_name('Volunteer Hours');
+  if (!empty($term)) {
+    $term = array_shift($term);
+    $multiple = om_volunteer_get_multiple($term->tid);
+    $total = userpoints_get_current_points($user->uid, $term->tid);
+    $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour.', array('!multiple' => $multiple)) . '</p>';
+    $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
+    $variables['message'] = $message;  
+  }
 }

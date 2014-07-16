@@ -44,6 +44,10 @@ function om_theme_assets_block_info() {
     'info' => t('Footer Block'), 
     'cache' => DRUPAL_CACHE_GLOBAL
   );
+  $blocks['project_of_omf_block'] = array(
+    'info' => t('Project of OMF Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
   $blocks['om_round_social_media'] = array(
     'info' => t('Round Social Media Icons'), 
     'cache' => DRUPAL_CACHE_GLOBAL
@@ -67,6 +71,10 @@ function om_theme_assets_block_info() {
     'info' => t('Main Banner'), 
     'cache' => DRUPAL_CACHE_GLOBAL
   );
+  $blocks['om_site_search'] = array(
+    'info' => t('OM Site Search'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
   return $blocks;
 }
 
@@ -78,6 +86,11 @@ function om_theme_assets_block_view($delta = "") {
   switch($delta) {
     case 'om_footer_block':
       $blocks['content'] = om_theme_assets_footer_block();
+      break;
+    case 'project_of_omf_block':
+      if (variable_get('omf_project', FALSE) == 1) {
+        $blocks['content'] = om_theme_assets_om_footer_block();
+      }
       break;
     case 'om_round_social_media':
       $blocks['content'] = theme('om_round_social_media');
@@ -97,6 +110,9 @@ function om_theme_assets_block_view($delta = "") {
       break;
     case 'om_main_banner':
       $blocks['content'] = om_theme_assets_main_banner();
+      break;
+    case 'om_site_search':
+      $blocks['content'] = theme('om_site_search');
       break;
   }
   if (is_numeric(stripos($delta, 'om_callout_block_'))) {
@@ -142,6 +158,11 @@ function om_theme_assets_theme($existing, $type, $theme, $path) {
     'om_theme_dynamic_css' => array(
       'path' => $path . '/theme',
       'template' => 'om_theme_dynamic_css',
+      'file' => 'theme.inc'
+    ),
+    'om_site_search' => array( 
+      'path' => $path . '/theme',
+      'template' => 'om_site_search',
       'file' => 'theme.inc'
     )
   );
@@ -262,6 +283,19 @@ function om_theme_assets_main_banner() {
     }
   }
   return '';
+}
+
+function om_theme_assets_om_footer_block() {
+    global $theme;
+    $path = drupal_get_path('theme', $theme) . '/images/project-omf.png';
+    $image = "<img src='$path' />";
+    $options = array(
+      'attributes' => array(
+        'target' => '_blank'
+      ),
+      'html' => TRUE
+    );
+    return l($image, 'http://openmediafoundation.org', $options);
 }
 
 function om_theme_assets_show_status_images() {

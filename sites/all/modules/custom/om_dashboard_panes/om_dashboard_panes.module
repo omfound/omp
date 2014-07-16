@@ -5,7 +5,7 @@
  * Masonry alternates sides left, right, left, right
  */
 function om_dashboard_panes_om_dashboard_panes() {
-  return array(
+  $panes = array(
     'profile' => array(
       'title' => t('Profile Information'),
       'theme' => array(
@@ -94,6 +94,22 @@ function om_dashboard_panes_om_dashboard_panes() {
       'dependency' => 'om_broadcast_schedule'
     ),
   );
+
+  if (module_exists('om_volunteer')) {
+    $panes['volunteer-credit'] = array(
+      'title' => t('Volunteer Credit'),
+      'theme' => array(
+        'om_volunteer_pane' => array(
+          'path' => drupal_get_path('module', 'om_dashboard_panes') . '/theme',
+          'template' => 'om_volunteer_pane',
+          'file' => 'theme.inc'
+        )
+      ),
+      'dependency' => 'om_volunteer',
+    );
+  }
+
+  return $panes;
 }
 
 function om_dashboard_panes_upcoming_classes($num) {

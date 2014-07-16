@@ -1,0 +1,7 @@
+name = Commerce Order Project 
+description = Provides a checkout pane that associates projects with orders.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce
+dependencies[] = om_project

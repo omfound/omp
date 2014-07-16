@@ -936,7 +936,7 @@ function field_ui_display_overview_form($form, &$form_state, $entity_type, $bund
   $field_label_options = array(
     'above' => t('Above'),
     'inline' => t('Inline'),
-    'hidden' => t('<Hidden>'),
+    'hidden' => '<' . t('Hidden') . '>',
   );
   $extra_visibility_options = array(
     'visible' => t('Visible'),
@@ -992,7 +992,7 @@ function field_ui_display_overview_form($form, &$form_state, $entity_type, $bund
     );
 
     $formatter_options = field_ui_formatter_options($field['type']);
-    $formatter_options['hidden'] = t('<Hidden>');
+    $formatter_options['hidden'] = '<' . t('Hidden') . '>';
     $table[$name]['format'] = array(
       'type' => array(
         '#type' => 'select',
@@ -1581,6 +1581,7 @@ function field_ui_field_settings_form($form, &$form_state, $instance) {
   // See if data already exists for this field.
   // If so, prevent changes to the field settings.
   $has_data = field_has_data($field); 
+  
   if ($has_data) {
     $form['field']['#description'] = '<div class="messages error">' . t('There is data for this field in the database. The field settings can no longer be changed.') . '</div>' . $form['field']['#description'];
   }
@@ -1908,6 +1909,7 @@ function field_ui_field_edit_form($form, &$form_state, $instance) {
   }
 
   $has_data = field_has_data($field);
+  
   if ($has_data) {
     $description = '<p>' . t('These settings apply to the %field field everywhere it is used. Because the field already has data, some settings can no longer be changed.', array('%field' => $instance['label'])) . '</p>';
   }

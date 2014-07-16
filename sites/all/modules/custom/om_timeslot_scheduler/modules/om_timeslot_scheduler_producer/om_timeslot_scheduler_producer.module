@@ -254,7 +254,10 @@ function om_timeslot_scheduler_producer_channel_form($form, $form_state, $channe
  * Submit handler for the above form.
  */
 function om_timeslot_scheduler_producer_channel_form_submit($form, $form_state) {
-  drupal_goto('show/' . arg(1) . '/update_airings/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
+  // @TODO #LK Doing a whole airing refresh here is currently too much of a performance hit.
+  // drupal_goto('show/' . arg(1) . '/update_airings/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
+  // For now we skip airign update.
+  drupal_goto('show/' . arg(1) . '/timeslots/' . $form_state['values']['om_timeslot_scheduler_producer_channel_form_tid']);
 }
 
 /**
@@ -266,7 +269,7 @@ function _om_timeslot_scheduler_update_airings($show, $channel_tid) {
   $function = 'om_broadcast_schedule_sync_schedule';
   $batch = $function($channel_tid, $start, $end, 'producer');
   batch_set($batch);
-  batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, $url = 'batch', $redirect_callback = 'drupal_goto');
+  batch_process('show/' . $show->nid . '/timeslots/' . $channel_tid, 'batch', 'drupal_goto');
 }
 
 /**
@@ -403,7 +406,7 @@ function _om_timeslot_scheduler_producer_timeslot_dates($show, $timeslot_nid, $c
   );
   // Find out if the show is adult
   if (!empty($show->field_om_rating[$show->language])) {
-    $is_adult = om_timeslot_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
+    $is_adult = om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid']);
   }
   else {
     $is_adult = FALSE;
@@ -549,6 +552,7 @@ function _om_timeslot_scheduler_producer_commit_schedule($show, $start, $end, $c
 
   // Commit results
   $meta_data['start'] = $start;
+  $meta_data['nid'] = $show->nid;
   $result = $controller->create_airing($pbs, $meta_data);
   // Create airing
   if (isset($result['ScheduleID'])) {
