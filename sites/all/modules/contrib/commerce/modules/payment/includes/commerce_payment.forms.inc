@@ -36,6 +36,12 @@ function commerce_payment_order_transaction_add_form($form, &$form_state, $order
     if ($balance = commerce_payment_order_balance($order)) {
       $default_amount = $balance['amount'] > 0 ? $balance['amount'] : '';
       $default_currency_code = $balance['currency_code'];
+
+      // Convert the default amount to an acceptable textfield value.
+      $default_amount = commerce_currency_amount_to_decimal($default_amount, $default_currency_code);
+
+      $currency = commerce_currency_load($default_currency_code);
+      $default_amount = number_format($default_amount, $currency['decimals'], '.', '');
     }
     else {
       $default_amount = '';
@@ -45,7 +51,8 @@ function commerce_payment_order_transaction_add_form($form, &$form_state, $order
     $form['payment_terminal']['amount'] = array(
       '#type' => 'textfield',
       '#title' => t('Amount'),
-      '#default_value' => commerce_currency_amount_to_decimal($default_amount, $default_currency_code),
+      '#default_value' => $default_amount,
+      '#required' => TRUE,
       '#size' => 10,
       '#prefix' => '<div class="payment-terminal-amount">',
     );
@@ -76,6 +83,7 @@ function commerce_payment_order_transaction_add_form($form, &$form_state, $order
 
     $form['payment_terminal']['payment_details']['#tree'] = TRUE;
 
+    $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
@@ -212,7 +220,6 @@ function commerce_payment_order_transaction_add_form_submit($form, &$form_state)
   else {
     $payment_method = $form_state['payment_method'];
     $order = $form_state['order'];
-
     // Delegate submit to the payment method callback.
     if ($callback = commerce_payment_method_callback($payment_method, 'submit_form_submit')) {
       $charge = array(

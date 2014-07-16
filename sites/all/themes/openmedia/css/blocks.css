@@ -11,6 +11,47 @@
   padding: 12px 0 10px 0;
 }
 
+/**
+ * Site search
+ */
+#block-om-theme-assets-om-site-search {
+  position: relative;
+  float: right;
+  padding: 24px 0px 10px 10px;
+}
+
+.icon-search {
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: transparent url(../images/omp-search.png) top left no-repeat;
+  text-indent: -999em;
+}
+
+#block-om-theme-assets-om-site-search #search-block-form {
+  display: none;
+  position: absolute;
+  left: -89px;
+  top: 32px;
+  width: 190px;
+  height: 50px;
+  padding: 10px;
+  background: transparent url(../images/form-popup-bg.png) top left no-repeat;
+  z-index: 11;
+}
+
+#block-om-theme-assets-om-site-search .container-inline {
+  margin-top: 20px;
+}
+
+#block-om-theme-assets-om-site-search input.form-text {
+  width: 117px;
+}
+
+#block-om-theme-assets-om-site-search input.form-submit {
+  margin: 0 0 0 3px;
+}
+
 #block-om-theme-assets-om-round-social-media {
   float: left;
   padding: 18px 0 10px 0;

@@ -444,6 +444,11 @@ function om_theme_assets_admin_form() {
     '#type' => 'textfield',
     '#default_value' => variable_get('email', ''),
   );
+  $form['main_footer_fieldset']['omf_project'] = array(
+    '#title' => t('Project of Open Media Foundation Logo'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('omf_project', ''),
+  );
 
   /**
   * Show Pages 

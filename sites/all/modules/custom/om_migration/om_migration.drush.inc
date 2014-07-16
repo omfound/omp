@@ -11,6 +11,8 @@ function om_migration_drush_help($command) {
       return dt('Move lat/lon pairs from legacy location table to geofield table.');
     case 'drush:dom-migration-voting':
       return dt('Move Voting api data from legacy table to new table.');
+    case 'drush:dom-migration-creative-commons':
+      return dt('Move Creative Commons data from legacy table to new table.');
   }
 }
 
@@ -34,6 +36,11 @@ function om_migration_drush_command() {
     'aliases' => array('dmv'),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN
   );
+  $items['dom-creative-commons'] = array(
+    'description' => dt('Run Creative Commons updates'),
+    'aliases' => array('dcc'),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL
+  );
   return $items;
 }
 
@@ -56,4 +63,19 @@ function drush_om_migration_dom_migration_voting() {
   drush_log('Updated voting data.', 'success');
   om_migration_update_voting();
   drush_log('Voting table updated with legacy data.', 'success');
+}
+
+function drush_om_migration_dom_creative_commons() {
+  $start = drush_get_option('start');
+  if (empty($start)) {
+    drush_log('Start option required --start', 'error');
+    return;
+  }
+  $batch_size = drush_get_option('batch_size');
+  if (empty($batch_size)) {
+    drush_log('Batch Size option required --batch_size', 'error');
+    return;
+  }
+  om_migration_creative_commons_migration($start, $batch_size);
+  drush_log('Creative commons migration complete.', 'success');
 }

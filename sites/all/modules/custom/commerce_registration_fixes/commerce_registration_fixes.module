@@ -40,26 +40,31 @@ function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) 
     $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
     $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
     $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
-    //print '<pre>';
-    //print_r($form);
-    //print '</pre>';
-    foreach($form['registration_information'] as $class_key => $class) {
-      if(is_array($class)) {
-        reset($class);
-        $reg_key = key($class);
-        if($reg_key) {
-          if($first_name) {
-            $form['registration_information'][$class_key][$reg_key]['field_first_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $first_name; 
+    if (!empty($form['registration_information'])) {
+      foreach($form['registration_information'] as $class_key => $class) {
+        if(is_array($class)) {
+          reset($class);
+          $reg_key = key($class);
+          if($reg_key) {
+            if($first_name && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_first_name']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_first_name'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_first_name']['und'][0]['value']['#default_value'] = $first_name; 
+            }
+            if($last_name && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_last_name']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_last_name'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
+            }
+            if($phone && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_phone_number']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_phone_number'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
+            }
+	          if(!empty($form['registration_information'][$class_key][$reg_key]['register_for']) && is_array($form['registration_information'][$class_key][$reg_key]['register_for'])) {
+              $form['registration_information'][$class_key][$reg_key]['register_for']['#default_value'] = 'registration_registrant_type_me';
+	          }
           }
-          if($last_name) {
-            $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
-          }
-          if($phone) {
-            $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
-          }
-	  if(!empty($form['registration_information'][$class_key][$reg_key]['register_for'])) {
-            $form['registration_information'][$class_key][$reg_key]['register_for']['#default_value'] = 'registration_registrant_type_me';
-	  }
         }
       }
     }

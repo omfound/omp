@@ -16,6 +16,9 @@
        <div class="label">End of Membership:</div>
        <?php print $membership_end; ?>
      <?php endif; ?>
+     <?php if (!empty($org_message)): ?>
+       <p><?php print $org_message; ?></p>
+     <?php endif; ?>
      <?php if (isset($upgrade)): ?>
        <div class="divider">
          <?php print $upgrade; ?>

@@ -53,8 +53,8 @@ function om_show_preprocess_node(&$variables) {
  */
 function om_show_theme($existing, $type, $theme, $path) {
   return array(
-    'om_show_upcoming_airings' => array(
-      'template' => 'om_show_upcoming_airings',
+    'om_show_upcoming_airings_display' => array(
+      'template' => 'om_show_upcoming_airings_display',
       'variables' => array('show' => FALSE),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
@@ -120,8 +120,8 @@ function om_show_admin_form($form, &$form_state) {
   }
   $form['om_show_adult_ratings'] = array(
     '#type' => 'select',
-    '#title' => t('Adult content prompt'),
-    '#description' => t('Select which ratings should generate an adult content prompt.'),
+    '#title' => t('Adult content rating'),
+    '#description' => t('Select which ratings should be considered adult. Used for adult content prompt and scheduling.'),
     '#default_value' => variable_get('om_show_adult_ratings', FALSE),
     '#options' => $options,
     '#multiple' => TRUE
@@ -189,6 +189,40 @@ function om_show_migrate_flash() {
   }
 
   drupal_set_message('Updated '.$update_count.' shows with flash file paths.');
+}
+
+function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
+  /**
+  $node = $form['#node'];
+  $form['upload_method'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Check for remote upload'),
+    '#description' => t('Checking this box should enable remote upload'),
+    '#default_value' => $node->om_show['upload_method'],
+    '#ajax' => array(
+      'callback' => 'om_show_form_upload_callback',
+      'wrapper' => 'om-show-upload-method',
+      'effect' => 'fade',
+    ),
+  );
+  
+  $form['container'] = array(
+    '#prefix' => '<div id="om-show-upload-method">',
+    '#suffix' => '</div>',
+  );
+
+  if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
+    $form['container']['remote_upload'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Remote Upload'),
+      '#description' => t('Remote Upload'),
+      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+    );
+  }**/
+}
+
+function om_show_form_upload_callback($form, $form_state) {
+  return $form['container'];
 }
 
 /**
@@ -316,8 +350,10 @@ function om_show_reload($form, $form_state) {
   return $form;
 }
 
-function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338) {
-  $node = menu_get_object();
+function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338, $node = FALSE) {
+  if (empty($node)) {
+    $node = menu_get_object();
+  }
   if (!is_object($node)) {
     $nid = $node['nid'];
     $show_field = $node['field_om_show_video'];
@@ -380,7 +416,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }
   }
-
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   drupal_add_js(drupal_get_path('module', 'om_show') . '/js/jwplayer-default.js', array('type' => 'file', 'group' => JS_DEFAULT));
@@ -552,7 +587,16 @@ function om_show_upcoming_airings($node, $limit = 4) {
   $query->fields('dates', array('field_om_airing_dates_value'));
   $query->fields('channel', array('field_om_airing_channel_tid'));
   $query->fields('n', array('nid', 'title'));
-  $query->condition('airing_node.field_om_show_id_value', $node->nid, '=');
+  if (is_array($node)) {
+    $nids = array();
+    foreach($node AS $addition) {
+      $nids[] = $addition->nid;
+    }
+    $query->condition('airing_node.field_om_show_id_value', $nids, 'IN');
+  }
+  else {
+    $query->condition('airing_node.field_om_show_id_value', $node->nid, '=');
+  }
   $query->condition('dates.field_om_airing_dates_value', time(), '>=');
   $query->orderBy('dates.field_om_airing_dates_value', 'ASC');
   $query->range(0, $limit);
@@ -577,17 +621,17 @@ function om_show_upcoming_airings($node, $limit = 4) {
 function om_show_upcoming_airings_user($user = FALSE) {
   $output = array();
   $shows = om_show_get_users_shows($user);
-  foreach($shows AS $show) {
-    $airings = om_show_upcoming_airings($show);
+  if (!empty($shows)) {
+    $airings = om_show_upcoming_airings($shows);
     foreach ($airings as $airing) {
       $key = strtotime($airing['airing']);
-      if (!empty($output[$key])) {
+     if (!empty($output[$key])) {
         $output[$key] = array();
       }
       $output[$key][] = $airing;
-    } 
+    }
+    ksort($output);
   }
-  ksort($output);
   return($output);
 }
 
@@ -600,11 +644,13 @@ function om_show_upcoming_airings_user($user = FALSE) {
  *
  * @return bool
  */
-function om_show_rating_is_adult($tid) {
-  $adult_terms = array('TV-MA');
-  $term = taxonomy_term_load($tid);
+function om_show_rating_is_adult($term) {
+  if (is_numeric($term)) {
+    $term = taxonomy_term_load($term);
+  }
+  $adult_terms = variable_get('om_show_adult_ratings', array());
   if (is_object($term)) {
-    return in_array($term->name, $adult_terms);
+    return in_array($term->tid, $adult_terms);
   }
   return FALSE;
 }
@@ -612,7 +658,7 @@ function om_show_rating_is_adult($tid) {
 function om_show_cablecast_update_show_statuses() {
   require_once("sites/all/modules/custom/om_playback_servers/modules/om_playback_servers_cablecast/includes/om_playback_servers_cablecast_file.inc"); 
   $cablecast_file = new cablecastFile();
-  $batch_size = 100;
+  $batch_size = 25;
   $watermark = variable_get('om_show_status_progress', 1);
   $query = db_select('node', 'n'); 
   $query->fields('n', array('nid'));
@@ -632,4 +678,10 @@ function om_show_cablecast_update_show_statuses() {
 
 function om_show_cron() {
   om_show_cablecast_update_show_statuses();
+}
+
+function om_show_tokenize_crawl_text($text, $show) {
+  $tokens = array('[show-nid]', '[show-title]');
+  $replacements = array($show->nid, $show->title);
+  return str_replace($tokens, $replacements, $text);
 }

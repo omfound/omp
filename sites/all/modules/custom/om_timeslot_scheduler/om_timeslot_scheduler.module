@@ -465,7 +465,9 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
   }
   $spacer = variable_get('om_timeslot_scheduler_time_between_shows', 0);
   $schedule = array();
+  $timeslot_counter = 0;
   foreach ($run['timeslots'] AS $key => $timeslot) {
+    $timeslot_counter++;
     $timeslot_schedule_change = 0;
     if (!empty($timeslot->om_timeslot_showlist)) {
       foreach($timeslot->field_om_timeslot_date['und'] AS $date) {
@@ -763,6 +765,7 @@ function om_timeslot_scheduler_process_commit($pid, $redirect = TRUE, $mode = 'b
     foreach($cache_items AS $item) {
       $meta_data = array();
       $show_node = node_load($item->show_id);
+      $item->nid = $item->show_id;
       $lang = $show_node->language;
       // If a station had more than one type of playback server they would get stuck here
       // Would have to find a solution that allows pbs to claim fields.

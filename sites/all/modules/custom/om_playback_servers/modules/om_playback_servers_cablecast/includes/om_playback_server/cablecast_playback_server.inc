@@ -9,19 +9,31 @@ class cablecastPlaybackServerController extends playbackServerController {
       $metadata = array($metadata);
     }
     foreach ($metadata AS $show) {
-      if (function_exists('om_show_scheduler_rating_is_adult')) {
+      $title = $show->title;
+      if (function_exists('om_show_rating_is_adult')) {
         if (!empty($show->field_om_rating[$show->language][0])) {
-          if (om_show_scheduler_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
-            $show->title . ' [ADULT]';
+          if (om_show_rating_is_adult($show->field_om_rating[$show->language][0]['tid'])) {
+            $title .= ' [ADULT]';
           }
         }
       }
       $reel = $this->create_reel($pbs, $show);
+      $crawl_duration = 0;
+      $crawl_text = !empty($show->field_crawl_text[$show->language][0]) ? $show->field_crawl_text[$show->language][0]['value'] : '';
+      if (!empty($crawl_text)) {
+        $crawl_duration = $file->field_om_show_duration[$show->language][0]['value'];
+      }
+      if (empty($crawl_text)) {
+        $crawl_info = om_playback_servers_cablecast_default_channel_crawl_info($pbs->tid, $show);
+        $crawl_text = $crawl_info['text'];
+        $crawl_duration = $crawl_info['duration'];
+      }
+      $crawl_text = om_show_tokenize_crawl_text($crawl_text, $show);
       // Map drupal fields to cablecast fields.
       $params = array (
         'LocalID'       => '', //string</LocalID>
-        'Title'         => $show->title,
-        'CGTitle'       => $show->title, //string</CGTitle>
+        'Title'         => $title,
+        'CGTitle'       => $title, //string</CGTitle>
         'ProjectID'     => 0, //int</ProjectID>
         'CGExempt'      => 'false', //boolean</CGExempt>
         'ProducerID'    => 0, //int</ProducerID>
@@ -31,8 +43,8 @@ class cablecastPlaybackServerController extends playbackServerController {
         'CustomFields'  => array(),
         'OnDemand'  => FALSE,
         'OnDemandStatus'  => '',
-        'CrawlLengthInSeconds' => 0,
-        'CrawlText' => '',
+        'CrawlLengthInSeconds' => !empty($crawl_duration) ? $crawl_duration : 0, // Check vals again due to CC API's VERY strict type casting.
+        'CrawlText' => !empty($crawl_text) ? $crawl_text : '',
         'BugText' => '',
         'Reels'=> $reel,
         'LocationID' => $pbs->location_id,
@@ -121,6 +133,20 @@ class cablecastPlaybackServerController extends playbackServerController {
    * --Methods dealing with airings.
    */
   public function create_airing($pbs, $schedule_info = array()) {
+    $channel_term = taxonomy_term_load($pbs->channel);
+    $default_crawl = !empty($schedule_info['CrawlText']) ? $schedule_info['CrawlText'] : '';
+    $show = new stdClass();
+    $show->nid = $schedule_info['nid'];
+    $show->title = $schedule_info['Title'];
+    if (empty($default_crawl)) {
+      $default_crawl = !empty($channel_term->field_default_text_crawl) ? $channel_term->field_default_text_crawl[LANGUAGE_NONE][0]['value'] : '';
+    }
+    $default_crawl = om_show_tokenize_crawl_text($default_crawl, $show);
+    dsm($default_crawl);
+    $default_crawl_duration = !empty($schedule_info['CrawlLengthInSeconds']) ? $schedule_info['CrawlLengthInSeconds'] : 0;
+    if (empty($default_crawl_duration)) {
+      $default_crawl_duration = !empty($channel_term->field_default_crawl_duration) ? $channel_term->field_default_crawl_duration[LANGUAGE_NONE][0]['value'] : 0;
+    }
     $params = array(
       'ChannelID'   => $pbs->output, //int</ChannelID>
       'LocationID'  => $pbs->location_id, //int</LocationID>
@@ -130,8 +156,8 @@ class cablecastPlaybackServerController extends playbackServerController {
       'RunBump'     => 0, //int</RunBump>
       'CGExempt'    => FALSE, //boolean</CGExempt>
       'BugText'     => '', //string</BugText>
-      'CrawlText'   => '', //string</CrawlText>
-      'CrawlLength' => 0, //int</CrawlLength>
+      'CrawlText'   => $default_crawl, //string</CrawlText>
+      'CrawlLength' => $default_crawl_duration, //int</CrawlLength>
     );
     $response = $this->soap_request($pbs, 'AddScheduleEvent', $params);
     if (isset($response->AddScheduleEventResult)) {
@@ -194,7 +220,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       if (!file_exists($temp)) {
         file_put_contents($temp, file_get_contents($endpoint));
       }
-      $client = new SoapClient($temp);
+      $client = new SoapClient($temp, array('cache_wsdl' => WSDL_CACHE_NONE));
       $auth = array(
         'username' => $pbs->user,
         'password' => $pbs->password
@@ -209,6 +235,7 @@ class cablecastPlaybackServerController extends playbackServerController {
       else {
         $message =  'Cablecast Playback Server: malformed playback server entity: ' . $e->getMessage();
       }
+      drupal_set_message($message, 'error');
       throw new Exception($message);
     }
   }

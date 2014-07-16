@@ -1,0 +1,69 @@
+<?php
+
+function om_migrate_creative_commons_creative_commons_lookup($uri) {
+  $map = array(
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-nd/3.0/us/' => 2078,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/' => 2079,
+    'http://creativecommons.org/licenses/by-nc-sa/3.0/us/' => 2079,
+    'by-nc-sa' => 2079,
+    'http://creativecommons.org/licenses/by-nc/3.0/' => 2077,
+    'http://creativecommons.org/licenses/by-nc/3.0/us/' => 2077,
+    'http://creativecommons.org/licenses/by-nd/3.0/' => 2080,
+    'http://creativecommons.org/licenses/by-nd/3.0/us/' => 2080,
+    'http://creativecommons.org/licenses/by-sa/3.0/' => 2081,
+    'http://creativecommons.org/licenses/by-sa/3.0/us/' => 2081,
+    'http://creativecommons.org/licenses/by/3.0/' => 2076,
+    'http://creativecommons.org/licenses/by/3.0/us/' => 2076,
+    'http://creativecommons.org/licenses/publicdomain/' => 2082,
+    'http://creativecommons.org/licenses/publicdomain/3.0/us/' => 2082
+  );
+  if (isset($map[$uri])) {
+    return $map[$uri];
+  }
+  return FALSE;
+}
+
+function om_migrate_creative_commons_creative_commons_migration($batch_start = 0, $batch_size = 500) {
+  $trial = 0;
+  $records = om_migrate_creative_commons_get_creative_commons_records('http://archive.denveropenmedia.org', 'migrate/creative-commons', $batch_start, $batch_size);
+  foreach ($records AS $item) {
+    $nodes = om_migrate_creative_commons_load_node_by_legacy_id($item['nid']);
+    foreach ($nodes AS $node) {
+      $tid = om_migrate_creative_commons_creative_commons_lookup($item['license_uri']);
+      if (!empty($tid)) {
+        $node->field_license[LANGUAGE_NONE] = !empty($node->field_license[LANGUAGE_NONE]) ? $node->field_license[LANGUAGE_NONE] : array();
+        $node->field_license[LANGUAGE_NONE][] = array('tid' => $tid);
+        watchdog('om_migrate_creative_commons', 'CREATIVE COMMONS UPDATE: ' . $node->nid);
+        field_attach_update('node', $node);
+        //node_save($node);
+      }
+    }
+  } 
+}
+
+function om_migrate_creative_commons_load_node_by_legacy_id($legacy_id) {
+  $query = db_select('field_data_field_old_show_id', 'legacy');
+  $query->fields('legacy', array('entity_id'));
+  $query->condition('field_old_show_id_value', $legacy_id, '=');
+  $resource = $query->execute();
+  $output = array();
+  while($row = $resource->fetchAssoc()) {
+    $output[] = node_load($row['entity_id']);
+  }
+  return $output;
+}
+
+function om_migrate_creative_commons_get_creative_commons_records($host, $endpoint, $start = 0, $end = 150) {
+  $ch = curl_init();
+  $url = array($host, $endpoint, $start, $end);
+  $url = implode('/', $url);
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  $data = curl_exec($ch);
+  curl_close($ch);
+  if (is_string($data)) {
+    $data = drupal_json_decode($data);
+  }
+  return $data;
+}

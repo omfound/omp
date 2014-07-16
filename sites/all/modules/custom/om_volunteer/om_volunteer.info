@@ -1,0 +1,6 @@
+name = Open Media Volunteer
+description = Use volunteer hours as alternative commerce currency.
+core = 7.x
+package = Open Media System
+dependencies[] = userpoints
+dependencies[] = commerce_coupon_userpoint 

@@ -227,7 +227,9 @@ function alternative_rating_populate() {
     $average = alternative_rating_value($nid);
     $count = alternative_rating_value($nid, 'count');
     $category_tid = alternative_rating_category($nid);
-    $category_average = $categories[$category_tid];
+    if (!empty($category_tid)) {
+      $category_average = $categories[$category_tid];
+    }
 
 		/** We don't think we need category average?
     $bayesian = ($count / ($count + $minimum_votes)) * $average +
@@ -322,5 +324,5 @@ function alternative_rating_bayesian_value($nid) {
 }
 
 function alternative_rating_cron() {
-	alternative_rating_populate();
+  alternative_rating_populate();
 }

@@ -1,13 +1,14 @@
 name = "Commerce product crud test"
 description = "Support module for product related testing."
 package = Testing
+dependencies[] = rules
 version = VERSION
 core = 7.x
 hidden = TRUE
 
-; Information added by drupal.org packaging script on 2013-02-13
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2014-02-15
+version = "7.x-1.8+40-dev"
 core = "7.x"
 project = "commerce"
-datestamp = "1360749319"
+datestamp = "1392431313"
 
