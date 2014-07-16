@@ -493,7 +493,7 @@ function om_agenda_manager_dummy_search($form, $form_state) {
     '#title' => t('Search:'),
     '#type' => 'textfield',
   );
-  $form['dummy_search'] = array(
+  $form['dummy_submit'] = array(
     '#type' => 'submit',
     '#value' => t('submit')
   );
