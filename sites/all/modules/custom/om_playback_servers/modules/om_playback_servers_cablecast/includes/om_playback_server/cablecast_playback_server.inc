@@ -25,8 +25,10 @@ class cablecastPlaybackServerController extends playbackServerController {
       }
       if (empty($crawl_text)) {
         $crawl_info = om_playback_servers_cablecast_default_channel_crawl_info($pbs->tid, $show);
-        $crawl_text = $crawl_info['text'];
-        $crawl_duration = $crawl_info['duration'];
+        if (!empty($crawl_info)) {
+          $crawl_text = $crawl_info['text'];
+          $crawl_duration = $crawl_info['duration'];
+        }
       }
       $crawl_text = om_show_tokenize_crawl_text($crawl_text, $show);
       // Map drupal fields to cablecast fields.
