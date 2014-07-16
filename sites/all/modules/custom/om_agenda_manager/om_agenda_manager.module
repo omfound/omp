@@ -490,8 +490,8 @@ function om_agenda_manager_archive_tabs() {
 function om_agenda_manager_dummy_search($form, $form_state) {
   $form = array();
   $form['dummy_search'] = array(
-    '#title' => t('Search:'),
     '#type' => 'textfield',
+    '#attributes' => array('placeholder' => t('Search'))
   );
   $form['dummy_submit'] = array(
     '#type' => 'submit',
