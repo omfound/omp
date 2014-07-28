@@ -219,6 +219,12 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
     );
   }**/
+  // NB: MAY NEED TO BE TWEAKED WHEN ABOVE AJAX IS ENABLED!
+  if (arg(1) == 'add') { 
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'om_show') . '/js/metadata.js',
+    );
+  }
 }
 
 function om_show_form_upload_callback($form, $form_state) {
@@ -360,7 +366,8 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
     if (!empty($node['field_show_thumbnail'])) {
       $thumb_field = $node['field_show_thumbnail'][$node['language']];
     }
-  }else{
+  }
+  else {
     $nid = $node->nid;
     if (!empty($node->field_om_show_video[$node->language])) {
       $show_field = $node->field_om_show_video[$node->language];
@@ -543,20 +550,30 @@ function om_show_youtube_info($node) {
  * Utility function to select a video image for show nodes from the available options.
  */
 function om_show_video_image($node) {
+  $img_path = '';
   if (!empty($node->field_show_thumbnail)) {
     $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
     if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_nid($node->nid)) {
       $img_path = $image_url;
-    }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
+    }
+    elseif (strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
       $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
       if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
         $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
       }
     }
-  }else{
+  }
+  elseif (!empty($node->field_archive_derivatives[LANGUAGE_NONE])) {
+    $derivatives = json_decode($node->field_archive_derivatives[LANGUAGE_NONE][0]['value']);
+    $images = internet_archive_derivative_thumbnails($derivatives);
+    if (!empty($images)) {
+      $img_path = array_shfit($images);
+      $img_path = $img_path['url'];
+    }
+  }
+  else{
     $img_path = false;
   }
-
   return $img_path;
 }
 
