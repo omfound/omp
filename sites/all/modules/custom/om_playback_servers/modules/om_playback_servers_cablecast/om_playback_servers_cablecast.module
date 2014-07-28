@@ -106,6 +106,7 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->condition('field_archive_transfer_value', 1, '=');
   $resource = $query_uri->execute();
   while ($result = $resource->fetchAssoc()) {
+    watchdog('om_pbsc', '<pre>'.print_r($result, TRUE).'</pre>');
     $mp4 = '';
     $derivatives = '';
     $metadata = '';
@@ -118,36 +119,40 @@ function om_playback_servers_cablecast_update_vod_field() {
         $ia_handler = new internetArchiveDerivativeHandler();
         $ia_handler->set_item($item);
         $derivatives = $ia_handler->get_derivatives();
-        $derivatives = drupal_json_encode(array($item => $derivatives));
-        $mp4 = $ia_handler->get_derivative('mp4');
+        if ( $derivatives != FALSE) {
+          $derivatives = drupal_json_encode(array($item => $derivatives));
+          $mp4 = $ia_handler->get_derivative('mp4');
+        }
       }
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
         $node = node_load($result['entity_id']);
-        if (!empty($mp4)) {
-          $node->field_om_show_video = array(
+        if (is_object($node)) {
+          if (!empty($mp4)) {
+            $node->field_om_show_video = array(
+              $node->language => array(
+                0 => array(
+                  'value' => $mp4
+                )
+              )
+            );
+            $node->field_archive_derivatives = array(
+              $node->language => array(
+                0 => array(
+                  'value' => $derivatives
+                )
+              )
+            );
+          }
+          $node->field_om_show_duration = array(
             $node->language => array(
               0 => array(
-                'value' => $mp4
+                'value' => $metadata['TotalSeconds']
               )
             )
           );
-          $node->field_archive_derivatives = array(
-            $node->language => array(
-              0 => array(
-                'value' => $derivatives
-              )
-            )
-          );
+          node_save($node);
         }
-        $node->field_om_show_duration = array(
-          $node->language => array(
-            0 => array(
-              'value' => $metadata['TotalSeconds']
-            )
-          )
-        );
-        node_save($node);
       }
     }
   }

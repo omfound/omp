@@ -53,7 +53,7 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   // If coupon is type commerce_coupon_combo
   if ($coupon->is_active == TRUE && $coupon->type == 'commerce_coupon_combo' && is_object($line_item)) {
     $primary_product = commerce_product_load($line_item->commerce_product[LANGUAGE_NONE][0]['product_id']);
-    $is_maxed = _commerce_coupon_class_membership_combo_order_is_maxed($primary_product);
+    $is_maxed = _commerce_coupon_class_membership_combo_order_is_maxed($coupon);
     // If the line item is a membership and matches the type designated by commerce_coupon_combo
     // or the line item is a class.
     if ($is_maxed == FALSE
@@ -80,9 +80,9 @@ function commerce_coupon_class_membership_combo_apply_discount($line_item, $orde
   }
 }
 
-function _commerce_coupon_class_membership_combo_order_is_maxed($product) {
+function _commerce_coupon_class_membership_combo_order_is_maxed($coupon) {
   $order_cache = _commerce_coupon_class_membership_combo_static_cache_discount();
-  if (!empty($order_cache['membership_plan']) && !empty($order_cache['class'])) {
+  if (!empty($order_cache['membership_plan']) && !empty($order_cache['class']) && $order_cache['class'] >= $coupon->coupon_class_count[LANGUAGE_NONE][0]['value']) {
     return TRUE;
   }
   return FALSE;
@@ -94,7 +94,8 @@ function _commerce_coupon_class_membership_combo_static_cache_discount($discount
     $static_cache = array();
   }
   if (!empty($discount)) {
-    $static_cache[$discount] = TRUE;
+    $static_cache[$discount] = !empty($static_cache[$discount]) ? $static_cache[$discount] : 0;
+    $static_cache[$discount] ++;
   }
   return $static_cache;
 }

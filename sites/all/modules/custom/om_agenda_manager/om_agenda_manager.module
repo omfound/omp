@@ -483,7 +483,29 @@ function om_agenda_manager_archive_tabs() {
   );
   $qtname = 'archive_tabs';
   $quicktabs = quicktabs_build_quicktabs($qtname,$qtoptions,$tabs);
-  return drupal_render($quicktabs['content']); 
+  $search = drupal_get_form('om_agenda_manager_dummy_search');
+  return drupal_render($search) . drupal_render($quicktabs['content']); 
+}
+
+function om_agenda_manager_dummy_search($form, $form_state) {
+  $form = array();
+  $form['dummy_search'] = array(
+    '#type' => 'textfield',
+    '#attributes' => array('placeholder' => t('Search'))
+  );
+  $form['dummy_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('submit')
+  );
+  $form['#submit'] = array('om_agenda_manager_dummy_search_submit');
+  return $form;
+}
+
+function om_agenda_manager_dummy_search_submit($form, $form_state) {
+  if (!empty($form_state['values']['dummy_search'])) {
+    $options = array('query' => array('keys' => $form_state['values']['dummy_search']));
+    drupal_goto('archived-sessions/search', $options);
+  }
 }
 
 function om_agenda_manager_live_button($theme) {

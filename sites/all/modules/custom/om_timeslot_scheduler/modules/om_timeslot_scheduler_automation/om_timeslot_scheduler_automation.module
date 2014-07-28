@@ -93,7 +93,7 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
       _om_timeslot_scheduler_build_schedule($context);
       $pid = _om_timeslot_scheduler_batch_complete(array(), $context['results'], array(), '', TRUE);
       om_timeslot_scheduler_process_commit($pid, FALSE, 'automation');
-      watchdog('om_timeslot_scheduler_automation', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.', WATCHDOG_NOTICE);
+      watchdog('om_tsa', 'Automated scheduling process: ' . $pid . ' was completed for channel ' . $name . '.');
     }
   }
 }
@@ -102,11 +102,14 @@ function om_timeslot_scheduler_automation_run_scheduling_jobs() {
  * Implements hook_cron
  */
 function om_timeslot_scheduler_automation_cron() {
+  watchdog('om_ts', 'Starting automation cron');
+  //BRIAN: we never come out of here.... something crazy goes on
   // Only allow automation on live pantheon environments
   if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
     $seconds_between_jobs = variable_get('om_timeslot_scheduler_automation_cron_frequency', 3600);
     $last_cron = variable_get('om_timeslot_scheduler_automation_last_cron', time() - ($seconds_between_jobs + 1));
     if ($last_cron + $seconds_between_jobs < time()) {
+      watchdog('om_ts', 'Firing off om_timeslot_scheduler_automation_run_scheduling_jobs');
       om_timeslot_scheduler_automation_run_scheduling_jobs();
       variable_set('om_timeslot_scheduler_automation_last_cron', time());
     }

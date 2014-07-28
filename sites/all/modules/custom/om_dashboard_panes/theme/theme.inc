@@ -193,8 +193,9 @@ function om_dashboard_panes_preprocess_om_volunteer_pane(&$variables) {
   // @TODO need to loop through all volunteer taxonomy terms.
   $term = taxonomy_get_term_by_name('Volunteer Hours');
   if (!empty($term)) {
+    $term = array_shift($term);
     $multiple = om_volunteer_get_multiple($term->tid);
-    $total = userpoints_get_current_points($user->uid);
+    $total = userpoints_get_current_points($user->uid, $term->tid);
     $message = '<p>' . t('Volunteer hours are currently valued at $!multiple/hour.', array('!multiple' => $multiple)) . '</p>';
     $message .= '<p>' . t('You currently have !total hours available for use.', array('!total' => $total)) . '</p>';
     $variables['message'] = $message;  

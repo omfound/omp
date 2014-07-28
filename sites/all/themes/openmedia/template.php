@@ -335,6 +335,11 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  // Link to project
+  if (!empty($variables['node']->field_om_show_project[$variables['node']->language])) {
+    $project = node_load($variables['node']->field_om_show_project[$variables['node']->language][0]['nid']);
+    $variables['project_link'] = l($project->title, 'node/' . $project->nid);
+  }
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
@@ -381,54 +386,57 @@ function openmedia_preprocess_node__om_project(&$variables) {
   $variables['show_grid'] = '';
   $options = array('html' => TRUE);
   $shows = openmedia_get_project_child_shows($variables['node']->nid);
-  
-  $score_array = array();
-  foreach ($shows AS $show_nid) {
-    $bayesian_score = alternative_rating_bayesian_value($show_nid);
-    $score_array[$show_nid] = $bayesian_score; 
-    $img = openmedia_get_thumbnail_from_show_nid($show_nid);
-    if (!empty($img)) {
-      $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+ 
+  if(!empty($shows)) { 
+      $score_array = array();
+      foreach ($shows AS $show_nid) {
+        $bayesian_score = alternative_rating_bayesian_value($show_nid);
+        $score_array[$show_nid] = $bayesian_score; 
+        $img = openmedia_get_thumbnail_from_show_nid($show_nid);
+        if (!empty($img)) {
+          $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
+        }
+      }
+    //Marty
+        $highest_show = (max($score_array));
+        $highest_score_nid = array_search($highest_show, $score_array);
+        $node_load = node_load($highest_score_nid);
+        $node_array = node_view($node_load);
+   
+    if (module_exists('fivestar')) {
+      if (!empty($vote_info['average']['value'])) {
+        $vote_info = fivestar_get_votes('node', $highest_score_nid);
+        $current_vote = round(($vote_info['average']['value'] / 100) * 5);
+        $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
+      }
+      $variables['vote_widget'] = drupal_render($node_array['field_om_voting_on_video']);
     }
-  }
-  //Marty
-  $highest_show = (max($score_array));
-  $highest_score_nid = array_search($highest_show, $score_array);
-  $node_load = node_load($highest_score_nid);
-  $node_array = node_view($node_load);
-  if (module_exists('fivestar')) {
-    if (!empty($vote_info['average']['value'])) {
-      $vote_info = fivestar_get_votes('node', $highest_score_nid);
-      $current_vote = round(($vote_info['average']['value'] / 100) * 5);
-      $variables['vote_summary'] = "<div id='vote-summary'>" . $current_vote . '/5</div>';
+    if (module_exists('om_social')) {
+      $social = theme('om_social_vertical_sharing');
+      $variables['node_right'] = $social;
     }
-    $variables['vote_widget'] = drupal_render($node_array['field_om_voting_on_video']);
-  }
-  if (module_exists('om_social')) {
-    $social = theme('om_social_vertical_sharing');
-    $variables['node_right'] = $social;
-  }
-  if (isset($node_load->title)) {
-    $variables['video_title'] = $node_load->title;
-  }
- if (isset($node_load->body['und']['0']['value'])) {
-    $variables['video_description'] = $node_load->body['und']['0']['value'];
-  }
-  if (!empty($node_load->field_om_show_date)) {
-    $new_date = date("m-d-y", strtotime($node_load->field_om_show_date['und']['0']['value']));
-    $variables['video_published'] = $new_date;
-  }
-  $variables['video_views'] = $node_load;
-  $stream_wrapper = file_stream_wrapper_get_instance_by_uri($node_load->field_show_thumbnail['und']['0']['uri']);
-  $show_thumbnail = $stream_wrapper->getExternalUrl();
-  if(!empty($node_load)) {
-    $video = $node_load->field_om_show_video['und']['0']['value']; 
-    $variables['video'] = theme('video_player', array('id' => 'project-player',
-                                                   'image' => $show_thumbnail,
-                                                   'file' => $video,
-                                                   'width' => 680,
-                                                   'height' => 400
-                                                   ));
+    if (isset($node_load->title)) {
+      $variables['video_title'] = $node_load->title;
+    }
+   if (isset($node_load->body['und']['0']['value'])) {
+      $variables['video_description'] = $node_load->body['und']['0']['value'];
+    }
+    if (!empty($node_load->field_om_show_date)) {
+      $new_date = date("m-d-y", strtotime($node_load->field_om_show_date['und']['0']['value']));
+      $variables['video_published'] = $new_date;
+    }
+    $variables['video_views'] = $node_load;
+    $stream_wrapper = file_stream_wrapper_get_instance_by_uri($node_load->field_show_thumbnail['und']['0']['uri']);
+    $show_thumbnail = $stream_wrapper->getExternalUrl();
+    if(!empty($node_load)) {
+      $video = $node_load->field_om_show_video['und']['0']['value']; 
+      $variables['video'] = theme('video_player', array('id' => 'project-player',
+                                                     'image' => $show_thumbnail,
+                                                     'file' => $video,
+                                                     'width' => 680,
+                                                     'height' => 400
+                                                     ));
+    }
   }
 }
 
@@ -850,3 +858,4 @@ function openmedia_preprocess_block(&$variables) {
     $variables['classes_array'][] = 'clearfix';
   }
 }
+

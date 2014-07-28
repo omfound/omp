@@ -220,6 +220,7 @@
   width: 550px;
   margin-bottom: 20px;
   line-height: 0;
+  clear: left;
 }
 
 #session-video-embed-tray {
@@ -340,6 +341,7 @@
 
 .not-front #show-right h3 {
   font-weight: bold; 
+  margin-top: 15px;
 }
 
 /**

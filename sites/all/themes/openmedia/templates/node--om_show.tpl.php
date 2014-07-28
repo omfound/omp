@@ -72,6 +72,12 @@
       <?php if (!empty($archive_link)): ?>
         <a href="https://archive.org/details/<?php print $archive_link; ?>">View at Archive.org</a>
       <?php endif; ?>
+      <?php if (!empty($project_link)): ?>
+        <div id="project-link">
+          <h3>Project:</h3>
+          <?php print $project_link; ?>
+        </div>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 </article><!-- /.node -->

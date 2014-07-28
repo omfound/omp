@@ -11,7 +11,10 @@ function commerce_coupon_class_membership_combo_install() {
 
   $coupon_type = commerce_coupon_type_create($values);
   commerce_coupon_type_save($coupon_type, TRUE);
+  commerce_coupon_class_membership_combo_fields();
+}
 
+function commerce_coupon_class_membership_combo_fields() {
   // Set the field name.
   $field_name = 'field_coupon_membership';
  
@@ -50,6 +53,37 @@ function commerce_coupon_class_membership_combo_install() {
  
     field_create_instance($instance);
   }
+  $field_name = 'coupon_class_count';
+  if (!field_info_field($field_name)) {
+    // Create the field.
+    $field = array(
+      'field_name' => $field_name,
+      'type' => 'text',
+    );
+    field_create_field($field);
+  
+    // Create the instance.
+    $instance = array(
+      'field_name' => $field_name,
+      'entity_type' => 'commerce_coupon',
+      'bundle' => 'commerce_coupon_combo',
+      'label' => 'Class Count',
+      'description' => 'Number of free classes that should come with the coupon.',
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'text_textfield',
+        'weight' => 3,
+      ),
+      'display' => array(),
+    );
+ 
+    field_create_instance($instance);
+  } 
+}
+
+function commerce_coupon_class_membership_combo_update_7100(&$sandbox) {
+ commerce_coupon_class_membership_combo_fields();
+ return st('Updated commerce_coupon_class_membership_combo coupon fields.'); 
 }
 
 /**
