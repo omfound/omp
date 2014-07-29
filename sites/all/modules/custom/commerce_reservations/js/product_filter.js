@@ -263,10 +263,12 @@ Drupal.cr = Drupal.cr || {};
           counter = 0;
           blockstatus = $.trim($(data).eq(0).data('blocking'));
           if (blockstatus == 'blocking') {
+            console.log('in here with good color');
             event_class = 'unavailable-time-blocking';
             event_color = '#CA4F4F';
           }
           else {
+            console.log('in here with bad color');
             event_class = 'unavailable-time';
             event_color = '#56a4da';
           }
@@ -286,10 +288,12 @@ Drupal.cr = Drupal.cr || {};
           });
 
           if (blockstatus == 'blocking') {
+            console.log('in here with good color');
             event_class = 'unavailable-date-blocking';
             event_color = '#CA4F4F';
           }
           else {
+            console.log('in here with bad color');
             event_class = 'unavailable-date';
             event_color = '#56a4da';
           }
