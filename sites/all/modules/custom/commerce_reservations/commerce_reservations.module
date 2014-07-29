@@ -441,14 +441,14 @@ function commerce_reservations_get_closed_times($display_nid = false){
     $blocking_value = 'blocking';
   }
 
-  print '<div class = "closed-dates-wrapper" blocking = "'.$blocking_value.'">';
+  print '<div class = "closed-dates-wrapper" data-blocking = "'.$blocking_value.'">';
   $closed_dates = array_merge($closed_dates, $all_days_closed);
   foreach($closed_dates as $date){
     print '<div class = "closed_dates" date = "' . $date . '"></div>'; 
   }
   print '</div>';
   $closed_hours = array();
-  print '<div class = "closed-times-wrapper" blocking = "'.$blocking_value.'">';
+  print '<div class = "closed-times-wrapper" data-blocking = "'.$blocking_value.'">';
   foreach ($days as $day){
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
