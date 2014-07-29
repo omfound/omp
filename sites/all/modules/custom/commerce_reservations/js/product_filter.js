@@ -261,7 +261,7 @@ Drupal.cr = Drupal.cr || {};
         cache : false,
         success : function (data) {
           counter = 0;
-          blockstatus = $('div.closed-time').parent().attr('class');
+          blockstatus = $('div.closed-dates-wrapper').parent().attr('class');
           console.log('block status: '+blockstatus);
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
