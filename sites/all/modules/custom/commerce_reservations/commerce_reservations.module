@@ -431,6 +431,16 @@ function commerce_reservations_get_closed_times($display_nid = false){
         break;
     }
   }
+
+  //wrapper to allow blocking or non-blocking events
+  $blocking = commerce_reservations_availability_var_get('cr_availability_blocking', NULL, $display_nid);
+  if (!$blocking) {
+    print '<div class = "non-blocking">';
+  }
+  else {
+    print '<div class = "blocking">';
+  }
+
   print '<div class = "closed-dates-wrapper">';
   $closed_dates = array_merge($closed_dates, $all_days_closed);
   foreach($closed_dates as $date){
@@ -531,7 +541,7 @@ function commerce_reservations_get_closed_times($display_nid = false){
       }
     }
   }
-  print '</div>'; 
+  print '</div></div>'; 
 }
 
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
