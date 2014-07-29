@@ -2033,6 +2033,7 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
     $key_nid = FALSE;
   }
 
+  dsm($form_state['input']);
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
   commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
   commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
