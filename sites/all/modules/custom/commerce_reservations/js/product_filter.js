@@ -262,6 +262,7 @@ Drupal.cr = Drupal.cr || {};
         success : function (data) {
           counter = 0;
           blockstatus = $('div.closed-time').parent().attr('class');
+          console.log('block status: '+blockstatus);
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
             event_color = '#CA4F4F';
