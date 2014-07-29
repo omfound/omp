@@ -262,7 +262,8 @@ Drupal.cr = Drupal.cr || {};
         success : function (data) {
           counter = 0;
           //blockstatus = $('div.closed-dates-wrapper', data).attr('data-blocking');
-          blockstatus = $('div[data-blocking="blocking"]', data);
+          //blockstatus = $('div[data-blocking="blocking"]', data);
+          blockstatus = $(data).find(‘div’).eq(0).data(‘blocking’);
           console.log('block status: '+blockstatus);
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
