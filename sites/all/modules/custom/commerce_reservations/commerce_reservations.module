@@ -2036,6 +2036,7 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
   commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
   commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
+  commerce_reservations_availability_var_set('cr_availability_blocking', $form_state['input']['cr_availability_blocking'], $key_nid);
 
   $total = 0;
   $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
