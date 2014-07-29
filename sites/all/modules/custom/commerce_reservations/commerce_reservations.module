@@ -2015,7 +2015,7 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     );
   }
 
-  $form['availability_blocking'] = array(
+  $form['cr_availability_blocking'] = array(
     '#type' => 'checkbox',
     '#title' => t('Set times and dates to blocking?'),
     '#description' => t('If this is checked, users will not be able to make reservations across unavailable times. For instance, if you make reservations unavailable on Wednesdays and this box is checked, users will not be able to make a reservation from Tuesday -> Thursday.'),
@@ -2033,7 +2033,6 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
     $key_nid = FALSE;
   }
 
-  dsm($form_state['input']);
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
   commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
   commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
