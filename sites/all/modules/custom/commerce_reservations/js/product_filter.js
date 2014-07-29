@@ -263,14 +263,12 @@ Drupal.cr = Drupal.cr || {};
           counter = 0;
           blockstatus = $.trim($(data).eq(0).data('blocking'));
           if (blockstatus == 'blocking') {
-            console.log('in here with good color');
             event_class = 'unavailable-time-blocking';
             event_color = '#CA4F4F';
           }
           else {
-            console.log('in here with bad color');
             event_class = 'unavailable-time';
-            event_color = '#56a4da';
+            event_color = '#3990C9';
           }
           $('div.closed-time', data).each(function(index){
             event = new Object();
@@ -280,22 +278,20 @@ Drupal.cr = Drupal.cr || {};
             event.allDay = false;
             event.className = event_class;
             event.color = event_color;
-            event.backgroundColor = '#3990C9';
-            event.eventBorderColor = '#3990C9';
+            event.backgroundColor = event_color;
+            event.eventBorderColor = event_color;
             event.textColor = 'white';
             dom_id: this.dom_id;
             $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
 
           if (blockstatus == 'blocking') {
-            console.log('in here with good color');
             event_class = 'unavailable-date-blocking';
             event_color = '#CA4F4F';
           }
           else {
-            console.log('in here with bad color');
             event_class = 'unavailable-date';
-            event_color = '#56a4da';
+            event_color = '#3990C9';
           }
           $('div.closed_dates', data).each(function(index){
             event = new Object();
@@ -305,8 +301,8 @@ Drupal.cr = Drupal.cr || {};
             event.allDay = false;
             event.className = event_class;
             event.color = event_color;
-            event.backgroundColor = '#3990C9';
-            event.eventBorderColor = '#3990C9';
+            event.backgroundColor = event_color;
+            event.eventBorderColor = event_color;
             event.textColor = 'white';
             dom_id: this.dom_id;
             $(".fullcalendar").fullCalendar('renderEvent', event, true);
