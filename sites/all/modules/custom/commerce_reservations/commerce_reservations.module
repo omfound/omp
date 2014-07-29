@@ -1791,6 +1791,11 @@ function commerce_reservations_settings_form($form, &$form_state){
   );
   $availability_items = commerce_reservations_availability_form_items($form, $form_state);
   $form += $availability_items;
+  $form['availability_options_blocking'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Availability Options Blocking'),
+    '#default_value' => variable_get('availability_options_blocking', 1)
+  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Save Settings',
