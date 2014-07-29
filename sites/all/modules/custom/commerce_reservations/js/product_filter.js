@@ -264,9 +264,11 @@ Drupal.cr = Drupal.cr || {};
           blockstatus = $('div.closed-time').parent().attr('class');
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
+            event_color = '#CA4F4F';
           }
           else {
             event_class = 'unavailable-time';
+            event_color = '#56a4da';
           }
           $('div.closed-time', data).each(function(index){
             event = new Object();
@@ -275,7 +277,7 @@ Drupal.cr = Drupal.cr || {};
             event.end = $(this).attr('end');
             event.allDay = false;
             event.className = event_class;
-            event.color = '#56a4da';
+            event.color = event_color;
             event.backgroundColor = '#3990C9';
             event.eventBorderColor = '#3990C9';
             event.textColor = 'white';
@@ -285,9 +287,11 @@ Drupal.cr = Drupal.cr || {};
 
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-date-blocking';
+            event_color = '#CA4F4F';
           }
           else {
             event_class = 'unavailable-date';
+            event_color = '#56a4da';
           }
           $('div.closed_dates', data).each(function(index){
             event = new Object();
@@ -296,7 +300,7 @@ Drupal.cr = Drupal.cr || {};
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
             event.className = event_class;
-            event.color = '#56a4da';
+            event.color = event_color;
             event.backgroundColor = '#3990C9';
             event.eventBorderColor = '#3990C9';
             event.textColor = 'white';
