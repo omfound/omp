@@ -261,12 +261,7 @@ Drupal.cr = Drupal.cr || {};
         cache : false,
         success : function (data) {
           counter = 0;
-          //blockstatus = $('div.closed-dates-wrapper', data).attr('data-blocking');
-          //blockstatus = $('div[data-blocking="blocking"]', data);
-          blockstatus = $(data).eq(0).data('blocking');
-          //console.log($(data).eq(0).attr('data-blocking'));
-          //console.log($(data).eq(0).data('blocking'));
-          console.log('block status: '+blockstatus);
+          blockstatus = $.trim($(data).eq(0).data('blocking'));
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
             event_color = '#CA4F4F';
