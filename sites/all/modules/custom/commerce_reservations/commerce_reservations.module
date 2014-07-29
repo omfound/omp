@@ -435,20 +435,20 @@ function commerce_reservations_get_closed_times($display_nid = false){
   //wrapper to allow blocking or non-blocking events
   $blocking = commerce_reservations_availability_var_get('cr_availability_blocking', NULL, $display_nid);
   if (!$blocking) {
-    print '<div class = "non-blocking">';
+    $blocking_value = 'non-blocking';
   }
   else {
-    print '<div class = "blocking">';
+    $blocking_value = 'blocking';
   }
 
-  print '<div class = "closed-dates-wrapper">';
+  print '<div class = "closed-dates-wrapper" blocking = "'.$blocking_value.'">';
   $closed_dates = array_merge($closed_dates, $all_days_closed);
   foreach($closed_dates as $date){
     print '<div class = "closed_dates" date = "' . $date . '"></div>'; 
   }
   print '</div>';
   $closed_hours = array();
-  print '<div class = "closed-times-wrapper">';
+  print '<div class = "closed-times-wrapper" blocking = "'.$blocking_value.'">';
   foreach ($days as $day){
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
@@ -541,7 +541,7 @@ function commerce_reservations_get_closed_times($display_nid = false){
       }
     }
   }
-  print '</div></div>'; 
+  print '</div>'; 
 }
 
 function commerce_reservations_generate_date_feed_item($date, $index, $value, $value2, $value3, $date_modifier) {
