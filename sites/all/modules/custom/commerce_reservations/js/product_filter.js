@@ -263,9 +263,9 @@ Drupal.cr = Drupal.cr || {};
           counter = 0;
           //blockstatus = $('div.closed-dates-wrapper', data).attr('data-blocking');
           //blockstatus = $('div[data-blocking="blocking"]', data);
-          blockstatus = $(data).find('div.closed-dates-wrapper').data('blocking');
-          console.log($(data).eq(0).attr('data-blocking'));
-          console.log($(data).eq(0).data('blocking'));
+          blockstatus = $(data).eq(0).data('blocking');
+          //console.log($(data).eq(0).attr('data-blocking'));
+          //console.log($(data).eq(0).data('blocking'));
           console.log('block status: '+blockstatus);
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
