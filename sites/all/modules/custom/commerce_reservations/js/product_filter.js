@@ -265,14 +265,16 @@ Drupal.cr = Drupal.cr || {};
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-time-blocking';
             event_color = '#CA4F4F';
+            event_label = 'Reserved';
           }
           else {
             event_class = 'unavailable-time';
             event_color = '#3990C9';
+            event_label = 'Unavailable';
           }
           $('div.closed-time', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = event_label;
             event.start = $(this).attr('start');
             event.end = $(this).attr('end');
             event.allDay = false;
@@ -288,14 +290,16 @@ Drupal.cr = Drupal.cr || {};
           if (blockstatus == 'blocking') {
             event_class = 'unavailable-date-blocking';
             event_color = '#CA4F4F';
+            event_label = 'Reserved';
           }
           else {
             event_class = 'unavailable-date';
             event_color = '#3990C9';
+            event_label = 'Unavailable';
           }
           $('div.closed_dates', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = event_label;
             event.start = $(this).attr('date')+' 00:00:00';
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
