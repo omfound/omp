@@ -84,6 +84,11 @@ function om_show_admin_form($form, &$form_state) {
     '#title' => t('Enable player share bar?'),
     '#default_value' => variable_get('om_show_share_bar', 0),
   );
+  $form['om_show_remote_upload'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable remote upload to Archive.org?'),
+    '#default_value' => variable_get('om_show_remote_upload', 0),
+  );
   $form['om_show_template'] = array(
     '#type' => 'select',
     '#title' => t('Template to use for show page'),
@@ -192,33 +197,34 @@ function om_show_migrate_flash() {
 }
 
 function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
-  /**
-  $node = $form['#node'];
-  $form['upload_method'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Check for remote upload'),
-    '#description' => t('Checking this box should enable remote upload'),
-    '#default_value' => $node->om_show['upload_method'],
-    '#ajax' => array(
-      'callback' => 'om_show_form_upload_callback',
-      'wrapper' => 'om-show-upload-method',
-      'effect' => 'fade',
-    ),
-  );
-  
-  $form['container'] = array(
-    '#prefix' => '<div id="om-show-upload-method">',
-    '#suffix' => '</div>',
-  );
-
-  if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
-    $form['container']['remote_upload'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Remote Upload'),
-      '#description' => t('Remote Upload'),
-      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+  if (variable_get('om_show_remote_upload', 0)) {
+    $node = $form['#node'];
+    $form['upload_method'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Check for remote upload'),
+      '#description' => t('Checking this box should enable remote upload'),
+      '#default_value' => $node->om_show['upload_method'],
+      '#ajax' => array(
+        'callback' => 'om_show_form_upload_callback',
+        'wrapper' => 'om-show-upload-method',
+        'effect' => 'fade',
+      ),
     );
-  }**/
+  
+    $form['container'] = array(
+      '#prefix' => '<div id="om-show-upload-method">',
+      '#suffix' => '</div>',
+    );
+
+    if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
+      $form['container']['remote_upload'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Remote Upload'),
+        '#description' => t('Remote Upload'),
+        '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+      );
+    }
+  }
   // NB: MAY NEED TO BE TWEAKED WHEN ABOVE AJAX IS ENABLED!
   if (arg(1) == 'add') { 
     $form['#attached']['js'] = array(
