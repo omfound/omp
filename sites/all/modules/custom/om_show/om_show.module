@@ -237,7 +237,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function om_show_archive_upload_embed($identifier) {
-  $source = '<iframe src="https://www-rkumar.archive.org/upload/?ia_uploader_embed=1&suggested_identifier='.$identifier.'&title=Testing&description=Testing description.&creator=Denver Open Media&collection=denveropenmedia&language=eng&date=2014" width="500" height="500"></iframe>';
+  $source = '<iframe src="https://www-rkumar.archive.org/upload/?ia_uploader_embed=1&suggested_identifier='.$identifier.'&title=Testing&description=Testing description.&creator=Denver Open Media&collection=denveropenmedia&language=eng&date=2014" width="700" height="500"></iframe>';
   return $source;
 }
 
