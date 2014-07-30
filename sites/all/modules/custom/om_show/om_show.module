@@ -222,7 +222,7 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
       '#suffix' => '</div>',
     );
 
-    if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
+    if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && !empty($node->om_show['upload_method'])) {
       $form['container']['remote_upload'] = array(
         '#markup' => om_show_archive_upload_embed('dom-testing-remote'),
       );
