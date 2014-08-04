@@ -15,7 +15,7 @@
           <div id="project-description">
             <?php print $description; ?>
             <div class="read-more-button">
-              <a href="">Read More</a>
+              <p>Read More</p>
             </div>
           </div>
         <?php endif; ?>
