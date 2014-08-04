@@ -178,6 +178,22 @@ function om_playback_servers_cablecast_default_channel_crawl_info($tid, $show) {
   return $output;
 }
 
+function om_playback_servers_cablecast_channel_wsdl($url, $tid) {
+  $uri = "public://$tid-cablecast.wsdl";
+  $files = file_load_multiple(array(), array('uri' => $uri));
+  if (empty($files)) {
+    $wsdl = file_get_contents($url); 
+    $file = file_save_data($wsdl, $uri);
+  }
+  else {
+    $file = array_shift($files);
+  }
+  if (is_object($file)) {
+    return file_create_url($file->uri);
+  }
+  return FALSE;
+}
+
 /**
  * Implements hook_cron
  */
