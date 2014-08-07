@@ -350,7 +350,7 @@ function alternative_rating_views_data() {
       'handler' => 'views_handler_filter_numeric',
     ),
 	);
-  $data['alternative_rating']['bayesian_period'] = array(
+  $data['alternative_rating']['period'] = array(
     'title' => t('Bayesian Period'),
     'help' => t('Time period within which the score was calculated.'), // The help that appears on the UI,
     // Information for displaying the nid
