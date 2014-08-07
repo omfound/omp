@@ -207,7 +207,7 @@ function alternative_rating_total_average($period = 'alltime') {
       JOIN {node}
       ON votingapi_vote.entity_id = node.nid
       WHERE node.type = :type AND votingapi_vote.timestamp > :week_ago';
-    $value = db_query($query, array(':type' => 'om_show', ':month_ago' => $week_ago))->fetchField();
+    $value = db_query($query, array(':type' => 'om_show', ':week_ago' => $week_ago))->fetchField();
   }
 
   return $value;
