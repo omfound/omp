@@ -11,3 +11,9 @@ function alternative_rating_schema() {
 
   return $schema;
 }
+
+function alternative_rating_update_1() {
+  $ret = array();
+  db_add_field($ret, 'alternative_rating', 'period', array('type' => 'varchar', 'length' => 32, 'not null' => TRUE, 'default' => 'alltime'));
+  return $ret;
+}
