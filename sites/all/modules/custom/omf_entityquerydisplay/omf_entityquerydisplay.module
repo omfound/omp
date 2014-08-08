@@ -8,6 +8,8 @@ function omf_entityquerydisplay_menu() {
 	  'access arguments' => array('access administration pages'),
 	  'type' => MENU_NORMAL_ITEM
   );
+
+  return $items;
 }
 
 function omf_entityquerydisplay_demo() {
