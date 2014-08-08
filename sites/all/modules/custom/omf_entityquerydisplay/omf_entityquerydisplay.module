@@ -37,6 +37,7 @@ function omf_entityquerydisplay_demo() {
     array('data' => t('Nid')),
     array('data' => t('Status')),
     array('data' => t('Created')),
+    array('data' => t('Username')),
   );
 
   $rows = array();
@@ -68,3 +69,11 @@ function omf_entityquerydisplay_filter_elements_user_name() {
   return $filters;
 }
  
+function omf_entityquerydisplay_theme() {
+  return array(
+    'filter_selection_form' => array(
+      'render element' => 'form',
+      'file' => 'includes/entityQueryDisplay.inc',
+    ),
+  );
+}
