@@ -262,6 +262,8 @@ class Filter extends SelectQueryExtender {
  * @ingroup themeable
  */
 function theme_filter_selection_form($form) {
+  $output = 'HELLO';
+  /**
   $output = '';
   if (!empty($form['current'])) {
     $output .= '<p>';
@@ -282,6 +284,7 @@ function theme_filter_selection_form($form) {
   }
   $output .= '</dd></dl>';
   $output .= '<div class="container-inline" id="user-admin-buttons">' . drupal_render($form['buttons']) . '</div></p>';
+  **/
   return $output;
 }
 
