@@ -302,7 +302,7 @@ function theme_filter_selection_form($form) {
  */
 function filter_extender_form($query) {
   print 'GOT TO EXTENDER';
-  return $query->getForm();
+  //return $query->getForm();
 }
 
 /**
