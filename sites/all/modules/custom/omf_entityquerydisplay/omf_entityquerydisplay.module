@@ -20,11 +20,11 @@ function omf_entityquerydisplay_demo() {
   );
 
   $query = db_select('node')->extend('PagerDefault')->extend('Filter');
-  $query->join('user', 'user', 'user.uid = node.uid');
+  $query->join('users', 'users', 'user.uid = node.uid');
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
     ->fields('node', array('title', 'nid', 'status', 'created', 'username'))
-    ->fields('user', array('uid'))
+    ->fields('users', array('uid'))
     ->limit(10)
     ->filterName('user_name')
     ->orderBy('node.created');
@@ -62,7 +62,7 @@ function omf_entityquerydisplay_filter_elements_user_name() {
   $filters['name'] = array(
     'title' => t('username'),
     'autocomplete_path' => 'user/autocomplete',
-    'field' => 'u.name',
+    'field' => 'users.name',
   );
 
   return $filters;
