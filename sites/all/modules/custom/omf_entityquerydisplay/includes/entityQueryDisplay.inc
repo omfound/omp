@@ -115,7 +115,7 @@ class Filter extends SelectQueryExtender {
    *   Fieldset title that should be used for that form.
    */
   public function getForm($title = NULL) {
-    print 'GETTING FORM...';
+    watchdog('brian', 'Got this far...');
     // Only display a form if filter elements were found.
     if (empty($this->elements)) {
       return array();
