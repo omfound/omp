@@ -23,8 +23,8 @@ function omf_entityquerydisplay_demo() {
   $query->join('users', 'users', 'users.uid = node.uid');
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
-    ->fields('node', array('title', 'nid', 'status', 'created', 'username'))
-    ->fields('users', array('uid'))
+    ->fields('node', array('title', 'nid', 'status', 'created'))
+    ->fields('users', array('name'))
     ->limit(10)
     ->filterName('user_name')
     ->orderBy('node.created');
