@@ -13,7 +13,7 @@ function omf_entityquerydisplay_menu() {
 }
 
 function omf_entityquerydisplay_demo() {
-  //module_load_include('inc', 'omf_entityquerydisplay', 'includes/queryDisplay');
+  module_load_include('inc', 'omf_entityquerydisplay', 'includes/entityQueryDisplay');
 
   $build['table_header'] = array(
     '#markup' => '<h2>entityQueryDisplay Demo</h2>',
