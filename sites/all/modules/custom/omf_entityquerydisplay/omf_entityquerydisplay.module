@@ -13,28 +13,40 @@ function omf_entityquerydisplay_menu() {
 }
 
 function omf_entityquerydisplay_demo() {
-  $content = '<h2>entityQueryDisplay Demo</h2>';
+  //module_load_include('inc', 'omf_entityquerydisplay', 'includes/queryDisplay');
 
-  $query = db_select('node');
+  $build['table_header'] = array(
+    '#markup' => '<h2>entityQueryDisplay Demo</h2>',
+  );
+
+  $query = db_select('node')->extend('PagerDefault');
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
-    ->condition('node.created', 1388534400, '>=')
     ->fields('node', array('title', 'nid', 'status', 'created'))
-    ->range(0, 25);
-  $results = $query->execute(); 
+    ->limit(10)
+    ->orderBy('node.created');
+  $result = $query->execute(); 
 
-  $content .= '<table>';
-  $content .= '<thead><th>Title</th><th>Nid</th><th>Status</th><th>Created</th></thead>';
+  $header = array(
+    array('data' => t('Title')),
+    array('data' => t('Nid')),
+    array('data' => t('Status')),
+    array('data' => t('Created')),
+  );
 
-  foreach ($results as $result) {
-    $content .= '<tr>';
-    $content .= '<td>'.$result->title.'</td>';
-    $content .= '<td>'.$result->nid.'</td>';
-    $content .= '<td>'.$result->status.'</td>';
-    $content .= '<td>'.$result->created.'</td>';
-    $content .= '</tr>';
+  $rows = array();
+  foreach ($result as $row) {
+    $rows[] = array('data' => (array) $row);
   }
-  $content .= '</table>';
 
-  return $content;
+  $build['node_table'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('There was no data found matching your specifications.'),
+  );
+
+  $build['pager_pager'] = array('#theme' => 'pager');
+
+  return $build;
 }
