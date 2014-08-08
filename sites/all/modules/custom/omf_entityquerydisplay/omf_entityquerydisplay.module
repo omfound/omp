@@ -19,13 +19,16 @@ function omf_entityquerydisplay_demo() {
     '#markup' => '<h2>entityQueryDisplay Demo</h2>',
   );
 
-  $query = db_select('node')->extend('PagerDefault');
+  $query = db_select('node')->extend('PagerDefault')->extend('Filter');
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
     ->fields('node', array('title', 'nid', 'status', 'created'))
     ->limit(10)
+    ->setFilterName('user_uid')
     ->orderBy('node.created');
   $result = $query->execute(); 
+
+  $build['filters'] = drupal_get_form('filter_extender_form', $query);
 
   $header = array(
     array('data' => t('Title')),
@@ -50,3 +53,16 @@ function omf_entityquerydisplay_demo() {
 
   return $build;
 }
+
+function user_filter_elements_user_admin() {
+  // Regular filters
+  $filters = array();
+  $filters['name'] = array(
+    'title' => t('username'),
+    'autocomplete_path' => 'user/autocomplete',
+    'field' => 'u.name',
+  );
+
+  return $filters;
+}
+ 
