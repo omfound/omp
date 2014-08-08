@@ -20,11 +20,13 @@ function omf_entityquerydisplay_demo() {
   );
 
   $query = db_select('node')->extend('PagerDefault')->extend('Filter');
+  $query->join('user', 'user', 'user.uid = node.uid');
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
-    ->fields('node', array('title', 'nid', 'status', 'created'))
+    ->fields('node', array('title', 'nid', 'status', 'created', 'username'))
+    ->fields('user', array('uid'))
     ->limit(10)
-    ->setFilterName('user_uid')
+    ->setFilterName('user_name')
     ->orderBy('node.created');
   $result = $query->execute(); 
 
@@ -54,7 +56,7 @@ function omf_entityquerydisplay_demo() {
   return $build;
 }
 
-function user_filter_elements_user_admin() {
+function omf_entityquerydisplay_filter_elements_user_name() {
   // Regular filters
   $filters = array();
   $filters['name'] = array(
