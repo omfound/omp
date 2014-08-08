@@ -14,4 +14,5 @@ function omf_entityquerydisplay_menu() {
 
 function omf_entityquerydisplay_demo() {
   $content = '<h2>entityQueryDisplay Demo</h2>';
+  return $content;
 }
