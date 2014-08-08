@@ -115,7 +115,8 @@ class Filter extends SelectQueryExtender {
    *   Fieldset title that should be used for that form.
    */
   public function getForm($title = NULL) {
-
+    print 'GETTING FORM...';
+    return;
     // Only display a form if filter elements were found.
     if (empty($this->elements)) {
       return array();
@@ -300,6 +301,7 @@ function theme_filter_selection_form($form) {
  * @return <type>
  */
 function filter_extender_form($query) {
+  print 'GOT TO EXTENDER';
   return $query->getForm();
 }
 
