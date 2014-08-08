@@ -416,6 +416,15 @@ div.timeslot-theme-wrapper ul li {
 
 .node-type-om-project #project-description p {
   font-weight: 100;
+  max-height: 300px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.node-type-om-project #project-description .active p {
+  max-height: 1000px;
+  overflow: visible;
+  margin-bottom: 10px;
 }
 
 .node-type-om-project .featured-video-area {

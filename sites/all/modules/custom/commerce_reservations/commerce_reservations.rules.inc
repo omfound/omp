@@ -315,7 +315,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     else {
       return;
     }
-
     //if more than 1 day, discount by 1 day
     if ($free_hours >= $hours_days['hours']) {
       //reduce to zero cost if the hours provided are great than the order hours
@@ -324,22 +323,19 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     }
     else {
       if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-        $new_price = $unit_price['amount'] - ($free_hours*$hourly_rate);
+        $new_price = ($unit_price['amount'] - $hourly_rate) * .5;
         $price_difference = $new_price - $unit_price['amount'];
       }
-      elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+      elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {    
         if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
           $new_price = 0;
         }
         else {
-          $new_price = $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+          $new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
         }
         if ($new_price < 0) { $new_price = 0; }
         $price_difference = $new_price - $unit_price['amount'];
       }
-      // Here we need to check and see if free hours have not covered total expense.
-      // If not, we add a 50% discount for some reason.
-      $new_price *= .5;
     }
     $difference = array(
       'amount' => $price_difference,

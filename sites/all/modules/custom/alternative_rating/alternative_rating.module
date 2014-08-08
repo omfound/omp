@@ -146,24 +146,70 @@ function alternative_rating_category_average($term) {
     return $category_average; 
 }
 
-function alternative_rating_value($nid, $function = 'average') {
-   $query = '
-     SELECT value
-     FROM {votingapi_cache}
-     WHERE votingapi_cache.entity_id = :nid AND votingapi_cache.function = :function';
-   $node_value = db_query($query, array(':nid' => $nid, ':function' => $function))->fetchField();
-   return $node_value;
+function alternative_rating_value($nid, $function = 'average', $period = 'alltime') {
+  if ($period == 'month') {
+    $time_limit = strtotime("-30 days");
+  }
+  elseif ($period == 'week') {
+    $time_limit = strtotime("-7 days");
+  }
+
+  if ($period == 'alltime') {
+    $query = '
+      SELECT value
+      FROM {votingapi_cache}
+      WHERE votingapi_cache.entity_id = :nid AND votingapi_cache.function = :function';
+    $node_value = db_query($query, array(':nid' => $nid, ':function' => $function))->fetchField();
+  }
+  elseif (($period == 'month' || $period == 'week') && $function == 'average') {
+    $query = '
+      SELECT AVG(votingapi_vote.value)
+      FROM {votingapi_vote}
+      WHERE votingapi_vote.entity_id = :nid AND votingapi_vote.timestamp > :time_limit';
+    $node_value = db_query($query, array(':nid' => $nid, ':time_limit' => $time_limit))->fetchField();
+  }
+  elseif (($period == 'month' || $period == 'week') && $function == 'count') {
+    $query = '
+      SELECT COUNT(votingapi_vote.value)
+      FROM {votingapi_vote}
+      WHERE votingapi_vote.entity_id = :nid AND votingapi_vote.timestamp > :time_limit';
+    $node_value = db_query($query, array(':nid' => $nid, ':time_limit' => $time_limit))->fetchField();
+  }
+
+  return $node_value;
 }
 
-function alternative_rating_total_average() {
-  $query = '
-    SELECT AVG(votingapi_vote.value)
-    FROM {votingapi_vote}
-    JOIN {node}
-    ON votingapi_vote.entity_id = node.nid
-    WHERE node.type = :type';
+function alternative_rating_total_average($period = 'alltime') {
+  if ($period == 'alltime') {
+    $query = '
+      SELECT AVG(votingapi_vote.value)
+      FROM {votingapi_vote}
+      JOIN {node}
+      ON votingapi_vote.entity_id = node.nid
+      WHERE node.type = :type';
+    $value = db_query($query, array(':type' => 'om_show'))->fetchField();
+  }
+  elseif ($period == 'month') {
+    $month_ago = strtotime("-30 days");
+    $query = '
+      SELECT AVG(votingapi_vote.value)
+      FROM {votingapi_vote}
+      JOIN {node}
+      ON votingapi_vote.entity_id = node.nid
+      WHERE node.type = :type AND votingapi_vote.timestamp > :month_ago';
+    $value = db_query($query, array(':type' => 'om_show', ':month_ago' => $month_ago))->fetchField();
+  }
+  elseif ($period == 'week') {
+    $week_ago = strtotime("-7 days");
+    $query = '
+      SELECT AVG(votingapi_vote.value)
+      FROM {votingapi_vote}
+      JOIN {node}
+      ON votingapi_vote.entity_id = node.nid
+      WHERE node.type = :type AND votingapi_vote.timestamp > :week_ago';
+    $value = db_query($query, array(':type' => 'om_show', ':week_ago' => $week_ago))->fetchField();
+  }
 
-  $value = db_query($query, array(':type' => 'om_show'))->fetchField();
   return $value;
 }
 
@@ -198,21 +244,18 @@ function alternative_rating_category($nid) {
   return $category_tid;  
 }
 
-function alternative_rating_insert($nid, $bayesian) {
+function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
   $result = db_insert('alternative_rating')
     ->fields(array(
       'nid' => $nid,
       'bayesian' => $bayesian,
+      'period' => $period,
     ))
     ->execute();
 }
-
 function alternative_rating_populate() {
   //first empty the existing alternative_rating table
   db_query('TRUNCATE TABLE {alternative_rating}');
-
-  //get an array of theme categories (node references)
-  $categories = alternative_rating_categories();
 
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
@@ -222,20 +265,18 @@ function alternative_rating_populate() {
 
   //average of all votes
   $total_average = alternative_rating_total_average();
+  $month_total_average = alternative_rating_total_average('month');
+  $week_total_average = alternative_rating_total_average('week');
 
   foreach ($nids as $nid) {
     $average = alternative_rating_value($nid);
-    $count = alternative_rating_value($nid, 'count');
-    $category_tid = alternative_rating_category($nid);
-    if (!empty($category_tid)) {
-      $category_average = $categories[$category_tid];
-    }
+    $month_average = alternative_rating_value($nid, 'average', 'month');
+    $week_average = alternative_rating_value($nid, 'average', 'week');
 
-		/** We don't think we need category average?
-    $bayesian = ($count / ($count + $minimum_votes)) * $average +
-      ($minimum_votes / ($count + $minimum_votes)) * $category_average;
-		**/
-		
+    $count = alternative_rating_value($nid, 'count');
+    $month_count = alternative_rating_value($nid, 'count', 'month');
+    $week_count = alternative_rating_value($nid, 'count', 'week');
+
 		//The Bayesian Formula
 		//weighted rank (WR) = (v / (v+m)) * R + (m / (v+m)) * C
 		//where:
@@ -244,20 +285,18 @@ function alternative_rating_populate() {
 		//m = minimum votes required
 		//C = the mean vote across dimension
     
-    $bayesian = ($count / ($count + $minimum_votes)) * $average +
+    $bayesian_alltime = ($count / ($count + $minimum_votes)) * $average +
       ($minimum_votes / ($count + $minimum_votes)) * $total_average;
 
-		//0 + 1
-		//if($bayesian == 0) {
-		  //print 'nid: '.$nid.'<br />';
-			//print 'average: '.$average.'<br />';
-			//print 'count: '.$count.'<br />';
-			//print 'category_nid: '.$category_nid.'<br />';
-			//print 'category_average: '.$category_average.'<br />';
-			//print 'bayesian: '.$bayesian.'<br />';
-			//print '<br />';
-		//}
-    alternative_rating_insert($nid, $bayesian);
+    $bayesian_month = ($month_count / ($month_count + $minimum_votes)) * $month_average +
+      ($minimum_votes / ($month_count + $minimum_votes)) * $month_total_average;
+
+    $bayesian_week = ($week_count / ($week_count + $minimum_votes)) * $week_average +
+      ($minimum_votes / ($week_count + $minimum_votes)) * $week_total_average;
+
+    alternative_rating_insert($nid, $bayesian_alltime, 'alltime');
+    alternative_rating_insert($nid, $bayesian_month, 'month');
+    alternative_rating_insert($nid, $bayesian_week, 'week');
   }
 }
 
@@ -309,6 +348,21 @@ function alternative_rating_views_data() {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_numeric',
+    ),
+	);
+  $data['alternative_rating']['period'] = array(
+    'title' => t('Bayesian Period'),
+    'help' => t('Time period within which the score was calculated.'), // The help that appears on the UI,
+    // Information for displaying the nid
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'votingapi_views_handler_sort',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
     ),
 	);
 	
