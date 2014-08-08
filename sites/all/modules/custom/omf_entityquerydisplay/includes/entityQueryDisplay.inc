@@ -116,7 +116,6 @@ class Filter extends SelectQueryExtender {
    */
   public function getForm($title = NULL) {
     print 'GETTING FORM...';
-    return;
     // Only display a form if filter elements were found.
     if (empty($this->elements)) {
       return array();
@@ -132,7 +131,7 @@ class Filter extends SelectQueryExtender {
       '#title'  => $title,
       '#type'   => 'fieldset',
       '#weight' => -50,
-      '#theme'  => 'filter_selection_form',
+      //'#theme'  => 'filter_selection_form',
       '#query'  => $this,
     );
 
@@ -302,7 +301,7 @@ function theme_filter_selection_form($form) {
  */
 function filter_extender_form($query) {
   print 'GOT TO EXTENDER';
-  //return $query->getForm();
+  return $query->getForm();
 }
 
 /**
