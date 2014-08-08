@@ -84,6 +84,11 @@ function om_show_admin_form($form, &$form_state) {
     '#title' => t('Enable player share bar?'),
     '#default_value' => variable_get('om_show_share_bar', 0),
   );
+  $form['om_show_remote_upload'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable remote upload to Archive.org?'),
+    '#default_value' => variable_get('om_show_remote_upload', 0),
+  );
   $form['om_show_template'] = array(
     '#type' => 'select',
     '#title' => t('Template to use for show page'),
@@ -192,39 +197,48 @@ function om_show_migrate_flash() {
 }
 
 function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
-  /**
-  $node = $form['#node'];
-  $form['upload_method'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Check for remote upload'),
-    '#description' => t('Checking this box should enable remote upload'),
-    '#default_value' => $node->om_show['upload_method'],
-    '#ajax' => array(
-      'callback' => 'om_show_form_upload_callback',
-      'wrapper' => 'om-show-upload-method',
-      'effect' => 'fade',
-    ),
-  );
-  
-  $form['container'] = array(
-    '#prefix' => '<div id="om-show-upload-method">',
-    '#suffix' => '</div>',
-  );
-
-  if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
-    $form['container']['remote_upload'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Remote Upload'),
-      '#description' => t('Remote Upload'),
-      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+  if (variable_get('om_show_remote_upload', 0)) {
+    $node = $form['#node'];
+    if (!empty($node->om_show['upload_method'])) {
+      $upload_default = $node->om_show['upload_method'];
+    }
+    else {
+      $upload_default = NULL;
+    }
+    $form['upload_method'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Check for remote upload'),
+      '#description' => t('Checking this box should enable remote upload'),
+      '#default_value' => $upload_default,
+      '#ajax' => array(
+        'callback' => 'om_show_form_upload_callback',
+        'wrapper' => 'om-show-upload-method',
+        'effect' => 'fade',
+      ),
     );
-  }**/
+  
+    $form['container'] = array(
+      '#prefix' => '<div id="om-show-upload-method">',
+      '#suffix' => '</div>',
+    );
+
+    if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && !empty($node->om_show['upload_method'])) {
+      $form['container']['remote_upload'] = array(
+        '#markup' => om_show_archive_upload_embed('dom-testing-remote'),
+      );
+    }
+  }
   // NB: MAY NEED TO BE TWEAKED WHEN ABOVE AJAX IS ENABLED!
   if (arg(1) == 'add') { 
     $form['#attached']['js'] = array(
       drupal_get_path('module', 'om_show') . '/js/metadata.js',
     );
   }
+}
+
+function om_show_archive_upload_embed($identifier) {
+  $source = '<iframe src="https://www-rkumar.archive.org/upload/?ia_uploader_embed=1&suggested_identifier='.$identifier.'&title=Testing&description=Testing description.&creator=Denver Open Media&collection=denveropenmedia&language=eng&date=2014" width="700" height="500"></iframe>';
+  return $source;
 }
 
 function om_show_form_upload_callback($form, $form_state) {
