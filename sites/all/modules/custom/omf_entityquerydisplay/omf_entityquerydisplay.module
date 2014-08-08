@@ -1,0 +1,15 @@
+<?php
+
+function omf_entityquerydisplay_menu() {
+  $items['admin/querydisplay'] = array(
+	  'title' => t('Demo Page for entityQueryDisplay Class'),
+	  'description' => t('Demo page for entityQueryDisplay Class'),
+	  'page callback' => 'omf_entityquerydisplay_demo',
+	  'access arguments' => array('access administration pages'),
+	  'type' => MENU_NORMAL_ITEM
+  );
+}
+
+function omf_entityquerydisplay_demo() {
+  $content = '<h2>entityQueryDisplay Demo</h2>';
+}
