@@ -26,7 +26,7 @@ function omf_entityquerydisplay_demo() {
     ->fields('node', array('title', 'nid', 'status', 'created', 'username'))
     ->fields('user', array('uid'))
     ->limit(10)
-    ->setFilterName('user_name')
+    ->filterName('user_name')
     ->orderBy('node.created');
   $result = $query->execute(); 
 
