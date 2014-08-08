@@ -19,7 +19,8 @@ function omf_entityquerydisplay_demo() {
   $query->condition('node.uid', 1)
     ->condition('node.status', 1)
     ->condition('node.created', 1388534400, '>=')
-    ->fields('node', array('title', 'nid', 'status', 'created'));
+    ->fields('node', array('title', 'nid', 'status', 'created'))
+    ->range(0, 25);
   $results = $query->execute(); 
 
   $content .= '<table>';
