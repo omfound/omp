@@ -1,0 +1,4 @@
+name = "QueryBuilder Display"
+description = "A class to generate display pages via Drupal's querybuilder"
+package = "OMF"
+core = 7.x
