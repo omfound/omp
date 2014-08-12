@@ -712,7 +712,7 @@ function om_show_tokenize_crawl_text($text, $show) {
 
 function om_show_trends() {
   $query = om_show_trends_base_query();
-  $display = om_show_trends_form_display($query);
+  $display = om_show_trends_display($query);
   return $display;
 }
 
@@ -786,7 +786,7 @@ function om_show_trends_form($form, &$form_state) {
   return $form;
 }
 
-function query_extender_filter_demo_form_display($query) {
+function om_show_trends_display($query) {
   $result = $query->execute();
   $build['filters'] = drupal_get_form('filter_extender_form', $query);
   $header = array(
@@ -812,13 +812,4 @@ function query_extender_filter_demo_form_display($query) {
   $build['pager_pager'] = array('#theme' => 'pager');
 
   return $build;
-}
-
-function query_extender_filter_theme() {
-  return array(
-    'filter_selection_form' => array(
-      'render element' => 'form',
-      'file' => 'includes/filter.inc',
-    ),
-  );
 }
