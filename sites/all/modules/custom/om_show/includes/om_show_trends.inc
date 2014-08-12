@@ -48,29 +48,15 @@ function om_show_trends_filter_conditions(&$query) {
 
 function om_show_trends_form() {
   $form = array();
-  $form['username'] = array(
-    '#title' => t('Username'),
-    '#type' => 'textfield',
-    '#autocomplete_path' => 'user/autocomplete',
-    '#field' => 'users.name',
-  );
-  $form['nid'] = array(
-    '#title' => t('Node ID'),
+  $form['theme'] = array(
+    '#title' => t('Theme Block'),
     '#type' => 'select',
-    '#options' => array('24808' => 'Number 24808', '24689' => 'Number 24689'),
-    '#field' => 'node.nid',
-    '#required' => false,
-    '#empty_value' => '',
+    '#options' => taxonomy_allowed_values(field_info_field('field_om_theme')),
   );
-  $form['title'] = array(
-    '#title' => t('Node Title'),
+  form['period'] = array(
+    '#title' => t('Period'),
     '#type' => 'select',
-    '#options' => array(
-      "Wild Illinois History" => "Wild Illinois History", 
-      "Neighborhood Explorers - Let's Go Outside" => "Neighborhood Explorers - Let's Go Outside", 
-      "Exploring the Colorado River Basin: An Interactive Water Management Exercise" => "Exploring the Colorado River Basin: An Interactive Water Management Exercise"), 
-    '#multiple' => true,
-    '#field' => 'node.title',
+    '#options' => array('alltime' => 'All Time', 'month' => 'Last 30 Days', 'week' => 'Last 7 Days'),
   );
 
   return $form;
