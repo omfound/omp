@@ -26,27 +26,23 @@ function om_show_trends_base_query() {
 }
 
 function om_show_trends_filter_conditions(&$query) {
-  if (!empty($query->filter['period'])) {
-    $subquery = db_select('votingapi_vote', 'votes');
-    $subquery->addExpression('COUNT(entity_id)', 'vote_count');
-    switch ($query->filter['period']) {
-      case 'alltime':
-          $query->condition('rating.period', 'alltime');
-        break;
-      case 'month':
-          $query->condition('rating.period', 'month');
-          $time_limit = strtotime("-30 days");
-          $subquery->condition('votes.timestamp', '>=', $time_limit); 
-        break;
-      case 'week':
-          $query->condition('rating.period', 'week');
-          $time_limit = strtotime("-7 days");
-          $subquery->condition('votes.timestamp', '>=', $time_limit); 
-        break;
-    }
-    dsm('adding join...');
-    $query->addJoin('LEFT', $subquery, 'num_votes', 'node.nid = num_votes.entity_id');
+  $subquery = db_select('votingapi_vote', 'votes');
+  $subquery->addExpression('COUNT(entity_id)', 'vote_count');
+  if (empty($query->filter['period']) || $query->filter['period'] == 'alltime') {
+    $query->condition('rating.period', 'alltime');
   }
+  elseif ($query->filter['period'] == 'month') {
+    $query->condition('rating.period', 'month');
+    $time_limit = strtotime("-30 days");
+    $subquery->condition('votes.timestamp', '>=', $time_limit); 
+  }
+  elseif ($query->filter['period'] == 'week') {
+    $query->condition('rating.period', 'week');
+    $time_limit = strtotime("-7 days");
+    $subquery->condition('votes.timestamp', '>=', $time_limit); 
+  }
+  $query->addJoin('LEFT', $subquery, 'num_votes', 'node.nid = num_votes.entity_id');
+
   if (!empty($query->filter['theme'])) {
     if (count($query->filter['theme']) > 1) {
       $or = db_or();
