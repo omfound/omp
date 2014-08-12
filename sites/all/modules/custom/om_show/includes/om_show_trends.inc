@@ -20,7 +20,7 @@ function om_show_trends_base_query() {
     ->fields('rating', array('bayesian'))
     ->limit(25)
     ->filterForm('om_show_trends')
-    ->orderBy('rating.bayesian');
+    ->orderBy('rating.bayesian', 'DESC');
   return $query;
 }
 
