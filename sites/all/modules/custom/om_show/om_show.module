@@ -25,7 +25,7 @@ function om_show_menu() {
     'page callback' => 'om_show_trends',
     'access arguments' => array('administer show'),
     'file' => 'om_show_trends.inc',
-    'file path' => drupal_get_path('module', 'om_show') . '/includes'),
+    'file path' => drupal_get_path('module', 'om_show') . '/includes',
     'type' => MENU_LOCAL_TASK,
   );
 
