@@ -79,6 +79,9 @@ class Filter extends SelectQueryExtender {
   public function execute() {
     $execute_function = $this->name . '_filter_conditions';
     $execute_function($this);
+    if ($this->debug) {
+      dpq($query);
+    }
     return $this->query->execute();
   }
 
