@@ -18,6 +18,7 @@ function om_show_trends_base_query() {
     ->fields('users', array('name'))
     ->fields('theme', array('field_om_theme_tid'))
     ->fields('rating', array('bayesian'))
+    ->fields('num_votes', array('vote_count'))
     ->limit(25)
     ->filterForm('om_show_trends')
     ->orderBy('rating.bayesian', 'DESC');
@@ -26,17 +27,24 @@ function om_show_trends_base_query() {
 
 function om_show_trends_filter_conditions(&$query) {
   if (!empty($query->filter['period'])) {
+    $subquery = db_select('votingapi_vote', 'votes');
+    $subquery->addExpression('COUNT(entity_id)', 'vote_count');
     switch ($query->filter['period']) {
       case 'alltime':
           $query->condition('rating.period', 'alltime');
         break;
       case 'month':
           $query->condition('rating.period', 'month');
+          $time_limit = strtotime("-30 days");
+          $subquery->condition('votes.timestamp', '>=', $time_limit); 
         break;
       case 'week':
           $query->condition('rating.period', 'week');
+          $time_limit = strtotime("-7 days");
+          $subquery->condition('votes.timestamp', '>=', $time_limit); 
         break;
     }
+    $query->addJoin('LEFT', $subquery, 'num_votes', 'node.nid = num_votes.entity_id');
   }
   if (!empty($query->filter['theme'])) {
     if (count($query->filter['theme']) > 1) {
@@ -81,6 +89,7 @@ function om_show_trends_display($query) {
     array('data' => t('Username')),
     array('data' => t('Tid')),
     array('data' => t('Bayesian')),
+    array('data' => t('# Votes')),
   );
 
   $rows = array();
