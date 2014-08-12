@@ -29,6 +29,7 @@ function om_show_trends_filter_conditions(&$query) {
   $subquery = db_select('votingapi_vote', 'votes');
   $subquery->fields('votes', array('entity_id'));
   $subquery->addExpression('COUNT(entity_id)', 'vote_count');
+  $subquery->groupBy('entity_id');
   if (empty($query->filter['period']) || $query->filter['period'] == 'alltime') {
     $query->condition('rating.period', 'alltime');
   }
