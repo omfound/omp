@@ -34,7 +34,7 @@ class Filter extends SelectQueryExtender {
   /**
    * For active debugging
    */
-  protected $debug = false;
+  public $debug = false;
 
   /**
    * Set the name of the filter.
@@ -72,8 +72,6 @@ class Filter extends SelectQueryExtender {
     $this->addTag('filter_' . $this->name);
     $this->addMetaData('filter', $this->filter);
     $this->addMetaData('form', $this->form);
-
-    $this->debug = true;
   }
 
   public function execute() {
