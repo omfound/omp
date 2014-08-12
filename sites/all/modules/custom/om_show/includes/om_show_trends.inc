@@ -21,27 +21,17 @@ function om_show_trends_base_query() {
 }
 
 function om_show_trends_filter_conditions(&$query) {
-  //autocomplete textfield
-  if (!empty($query->filter['username'])) {
-    $query->condition('users.name', $query->filter['username']);
-  } 
-
-  //single select nid
-  if (!empty($query->filter['nid'])) {
-    $query->condition('node.nid', $query->filter['nid']);
-  }
-
-  //multiple select title
-  if (!empty($query->filter['title'])) {
-    if (count($query->filter['title']) > 1) {
+  if (!empty($query->filter['theme'])) {
+    $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
+    if (count($query->filter['theme']) > 1) {
       $or = db_or();
-      foreach ($query->filter['title'] as $key => $title) {
-        $or->condition('node.title', $title); 
+      foreach ($query->filter['theme'] as $key => $value) {
+        $or->condition('theme.field_om_theme_tid', $value); 
       }
       $query->condition($or); 
     }
     else {
-      $query->condition('node.title', key($query->filter['title'])); 
+      $query->condition('theme.field_om_theme_tid', key($query->filter['theme'])); 
     }
   }
 }
