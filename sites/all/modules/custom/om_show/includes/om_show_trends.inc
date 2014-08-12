@@ -11,18 +11,33 @@ function om_show_trends_base_query() {
   $query = db_select('node')->extend('PagerDefault')->extend('Filter');
   $query->join('users', 'users', 'users.uid = node.uid');
   $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
+  $query->join('alternative_rating', 'rating', 'node.nid = rating.nid');
   $query->condition('node.status', 1)
     ->condition('node.type', 'om_show')
-    ->fields('node', array('title', 'nid', 'status', 'created'))
+    ->fields('node', array('title', 'nid', 'created'))
     ->fields('users', array('name'))
     ->fields('theme', array('field_om_theme_tid'))
+    ->fields('rating', array('bayesian'))
     ->limit(25)
     ->filterForm('om_show_trends')
-    ->orderBy('node.created');
+    ->orderBy('rating.bayesian');
   return $query;
 }
 
 function om_show_trends_filter_conditions(&$query) {
+  if (!empty($query->filter['period'])) {
+    switch ($query->filter['period']) {
+      case 'alltime':
+          $query->condition('rating.period', 'alltime');
+        break;
+      case 'month':
+          $query->condition('rating.period', 'month');
+        break;
+      case 'week':
+          $query->condition('rating.period', 'week');
+        break;
+    }
+  }
   if (!empty($query->filter['theme'])) {
     if (count($query->filter['theme']) > 1) {
       $or = db_or();
@@ -62,10 +77,10 @@ function om_show_trends_display($query) {
   $header = array(
     array('data' => t('Title')),
     array('data' => t('Nid')),
-    array('data' => t('Status')),
     array('data' => t('Created')),
     array('data' => t('Username')),
     array('data' => t('Tid')),
+    array('data' => t('Bayesian')),
   );
 
   $rows = array();
