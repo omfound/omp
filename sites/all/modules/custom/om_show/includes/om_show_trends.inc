@@ -46,7 +46,7 @@ function om_show_trends_filter_conditions(&$query) {
   }
 }
 
-function om_show_trends_form($form, &$form_state) {
+function om_show_trends_form() {
   $form = array();
   $form['username'] = array(
     '#title' => t('Username'),
