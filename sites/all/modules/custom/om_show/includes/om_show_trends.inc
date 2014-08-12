@@ -94,6 +94,7 @@ function om_show_trends_display($query) {
   $rows = array();
   foreach ($result as $row) {
     $rows[] = array(
+      $row->title,
       $row->nid,
       date("Y-m-d H:i:s", $row->created),
       $row->name,
