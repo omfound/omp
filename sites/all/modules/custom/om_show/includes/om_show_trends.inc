@@ -44,6 +44,7 @@ function om_show_trends_filter_conditions(&$query) {
           $subquery->condition('votes.timestamp', '>=', $time_limit); 
         break;
     }
+    dsm('adding join...');
     $query->addJoin('LEFT', $subquery, 'num_votes', 'node.nid = num_votes.entity_id');
   }
   if (!empty($query->filter['theme'])) {
