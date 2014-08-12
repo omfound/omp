@@ -57,7 +57,6 @@ function om_show_trends_filter_conditions(&$query) {
       $query->condition('theme.field_om_theme_tid', key($query->filter['theme'])); 
     }
   }
-  dpq($query);
 }
 
 function om_show_trends_form() {
