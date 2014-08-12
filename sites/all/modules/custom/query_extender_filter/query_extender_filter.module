@@ -6,7 +6,7 @@ function query_extender_filter_menu() {
     'description' => t('Demo page DB Extender: Filter'),
     'page callback' => 'query_extender_filter_demo',
     'access arguments' => array('access administration pages'),
-    'type' => MENU_NORMAL_ITEM
+    'type' => MENU_LOCAL_TASK
   );
 
   return $items;
@@ -57,7 +57,7 @@ function query_extender_filter_demo_filter_conditions(&$query) {
   }
 }
 
-function query_extender_filter_demo_form($form, &$form_state) {
+function query_extender_filter_demo_form() {
   $form = array();
   $form['username'] = array(
     '#title' => t('Username'),
