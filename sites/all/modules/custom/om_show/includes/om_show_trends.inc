@@ -93,7 +93,14 @@ function om_show_trends_display($query) {
 
   $rows = array();
   foreach ($result as $row) {
-    $rows[] = array('data' => (array) $row);
+    $rows[] = array(
+      $row->nid,
+      date("Y-m-d H:i:s", $row->created),
+      $row->name,
+      $row->field_om_theme_tid,
+      $row->bayesian,
+      $row->vote_count,
+    );
   }
 
   $build['node_table'] = array(
