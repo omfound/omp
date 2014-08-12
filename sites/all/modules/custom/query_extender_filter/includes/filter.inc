@@ -139,10 +139,10 @@ class Filter extends SelectQueryExtender {
    * @see filter_extender_form_submit()
    */
   public function submitForm($form, &$form_state) {
+    $value_exists = false;
     switch ($form_state['values']['op']) {
       case t('Filter'):
       case t('Refine'):
-        $value_exists = false;
         foreach ($form_state['values'] as $key => $value) {
           if (!empty($this->form[$key]) && !empty($value)) {
             $this->filter[$key] = $value;
