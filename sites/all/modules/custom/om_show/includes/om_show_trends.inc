@@ -20,7 +20,7 @@ function om_show_trends_base_query() {
   return $query;
 }
 
-function om_show_trends_conditions(&$query) {
+function om_show_trends_filter_conditions(&$query) {
   //autocomplete textfield
   if (!empty($query->filter['username'])) {
     $query->condition('users.name', $query->filter['username']);
