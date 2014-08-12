@@ -43,6 +43,8 @@ function om_show_trends_form() {
     '#title' => t('Theme Block'),
     '#type' => 'select',
     '#options' => taxonomy_allowed_values(field_info_field('field_om_theme')),
+    '#required' => false,
+    '#empty_value' => '',
   );
   $form['period'] = array(
     '#title' => t('Period'),
