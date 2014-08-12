@@ -80,7 +80,7 @@ class Filter extends SelectQueryExtender {
     $execute_function = $this->name . '_filter_conditions';
     $execute_function($this);
     if ($this->debug) {
-      dpq($query);
+      dpq($this->query);
     }
     return $this->query->execute();
   }
