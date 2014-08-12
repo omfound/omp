@@ -23,6 +23,7 @@ function om_show_trends_base_query() {
 function om_show_trends_filter_conditions(&$query) {
   if (!empty($query->filter['theme'])) {
     $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
+    $query->fields('theme', array('field_om_theme_tid'));
     if (count($query->filter['theme']) > 1) {
       $or = db_or();
       foreach ($query->filter['theme'] as $key => $value) {
