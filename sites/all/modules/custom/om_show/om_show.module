@@ -822,6 +822,3 @@ function query_extender_filter_theme() {
     ),
   );
 }
-function om_show_trends() {
-
-}
