@@ -721,7 +721,7 @@ function om_show_trends_base_query() {
   $query = db_select('node')->extend('PagerDefault')->extend('Filter');
   $query->join('users', 'users', 'users.uid = node.uid');
   $query->condition('node.status', 1)
-    ->condition('node.type', 'om_show'),
+    ->condition('node.type', 'om_show')
     ->fields('node', array('title', 'nid', 'status', 'created'))
     ->fields('users', array('name'))
     ->limit(25)
