@@ -10,10 +10,12 @@ function om_show_trends_base_query() {
   module_load_include('inc', 'query_extender_filter', 'includes/filter');
   $query = db_select('node')->extend('PagerDefault')->extend('Filter');
   $query->join('users', 'users', 'users.uid = node.uid');
+  $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
   $query->condition('node.status', 1)
     ->condition('node.type', 'om_show')
     ->fields('node', array('title', 'nid', 'status', 'created'))
     ->fields('users', array('name'))
+    ->fields('theme', array('field_om_theme_tid'))
     ->limit(25)
     ->filterForm('om_show_trends')
     ->orderBy('node.created');
@@ -22,8 +24,6 @@ function om_show_trends_base_query() {
 
 function om_show_trends_filter_conditions(&$query) {
   if (!empty($query->filter['theme'])) {
-    $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
-    $query->fields('theme', array('field_om_theme_tid'));
     if (count($query->filter['theme']) > 1) {
       $or = db_or();
       foreach ($query->filter['theme'] as $key => $value) {
@@ -65,6 +65,7 @@ function om_show_trends_display($query) {
     array('data' => t('Status')),
     array('data' => t('Created')),
     array('data' => t('Username')),
+    array('data' => t('Tid')),
   );
 
   $rows = array();
