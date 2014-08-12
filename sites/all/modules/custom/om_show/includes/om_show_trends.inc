@@ -14,6 +14,7 @@ function om_show_trends_base_query() {
   $query->join('alternative_rating', 'rating', 'node.nid = rating.nid');
   $query->condition('node.status', 1)
     ->condition('node.type', 'om_show')
+    ->condition('num_votes.vote_count', 1, '>=')
     ->fields('node', array('title', 'nid', 'created'))
     ->fields('users', array('name'))
     ->fields('theme', array('field_om_theme_tid'))
