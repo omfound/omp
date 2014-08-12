@@ -159,9 +159,10 @@ class Filter extends SelectQueryExtender {
       $this->filter = array();
     }
 
+    $path = current_path();
     if (!empty($this->filter)) {
       $form_state['redirect'] = array(
-        'admin/querydisplay',
+        $path,
         array(
           'query' => array(
             'conditions' => json_encode($this->filter),
@@ -170,7 +171,7 @@ class Filter extends SelectQueryExtender {
       );
     }
     else {
-      $form_state['redirect'] = 'admin/querydisplay';
+      $form_state['redirect'] = $path;
     }
   }
 }
