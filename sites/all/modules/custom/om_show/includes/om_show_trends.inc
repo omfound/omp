@@ -36,12 +36,12 @@ function om_show_trends_filter_conditions(&$query) {
   elseif ($query->filter['period'] == 'month') {
     $query->condition('rating.period', 'month');
     $time_limit = strtotime("-30 days");
-    $subquery->condition('votes.timestamp', '>=', $time_limit); 
+    $subquery->condition('votes.timestamp', $time_limit, '>='); 
   }
   elseif ($query->filter['period'] == 'week') {
     $query->condition('rating.period', 'week');
     $time_limit = strtotime("-7 days");
-    $subquery->condition('votes.timestamp', '>=', $time_limit); 
+    $subquery->condition('votes.timestamp', $time_limit, '>='); 
   }
   $query->addJoin('LEFT', $subquery, 'num_votes', 'node.nid = num_votes.entity_id');
 
