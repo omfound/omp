@@ -53,7 +53,7 @@ function om_show_trends_form() {
     '#type' => 'select',
     '#options' => taxonomy_allowed_values(field_info_field('field_om_theme')),
   );
-  form['period'] = array(
+  $form['period'] = array(
     '#title' => t('Period'),
     '#type' => 'select',
     '#options' => array('alltime' => 'All Time', 'month' => 'Last 30 Days', 'week' => 'Last 7 Days'),
