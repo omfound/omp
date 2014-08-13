@@ -18,6 +18,8 @@
         </div>
         <div class="show-votes">
           <span class="show-label">Rating: </span><?php print $show['rating']; ?>
+          <br />
+          <span class="show-label">Views: </span><?php print $show['views']; ?>
         </div>
         <div class="voting-widget">
           <?php print $show['voting_widget']; ?>
