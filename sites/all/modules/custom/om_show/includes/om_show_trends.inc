@@ -12,6 +12,8 @@ function om_show_trends_base_query() {
   $query->join('users', 'users', 'users.uid = node.uid');
   $query->join('field_data_field_om_theme', 'theme', 'node.nid = theme.entity_id');
   $query->join('alternative_rating', 'rating', 'node.nid = rating.nid');
+  $query->join('field_data_field_show_thumbnail', 'thumbnail', 'node.nid = thumbnail.entity_id');
+  $query->join('file_managed', 'file', 'thumbnail.field_show_thumbnail_fid = file_managed.fid');
   $query->condition('node.status', 1)
     ->condition('node.type', 'om_show')
     ->condition('num_votes.vote_count', 1, '>=')
@@ -20,6 +22,7 @@ function om_show_trends_base_query() {
     ->fields('theme', array('field_om_theme_tid'))
     ->fields('rating', array('bayesian'))
     ->fields('num_votes', array('vote_count'))
+    ->fields('file', array('uri'))
     ->limit(25)
     ->filterForm('om_show_trends')
     ->orderBy('rating.bayesian', 'DESC');

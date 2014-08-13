@@ -31,7 +31,26 @@ function om_show_preprocess_om_show_upcoming_airings_all(&$variables) {
 }
 
 function om_show_preprocess_om_show_trending_page(&$variables) {
+  $shows = array();
   foreach ($variables['results'] as $result) {
-    dsm($result);
+    $shows[$result->nid] = array(
+      'title' => $result->title,
+      'nid' => $result->nid,
+      'created' => date('F j, Y', $result->created,
+      'username' => $result->name,
+      'theme_tid' => $result->field_om_theme_tid,
+      'rating' => $result->bayesian,
+      'votes' => $result->vote_count,
+    );
+    if (!empty($result->uri)) {
+      $shows[$result->nid]['thumbnail_path'] = file_create_url($result->uri);
+    }
+    else {
+      $shows[$result->nid]['thumbnail_path'] = 'NO PATH DEFINED YET';
+    }
+  }
+
+  if (!empty($shows)) {
+    $variables['shows'] = $shows;
   }
 }
