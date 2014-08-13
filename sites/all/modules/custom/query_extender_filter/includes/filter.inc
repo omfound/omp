@@ -80,7 +80,7 @@ class Filter extends SelectQueryExtender {
     if ($this->debug) {
       dpq($this->query);
     }
-    return $this;
+    return $this->query;
     //return $this->query->execute();
   }
 
