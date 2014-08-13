@@ -19,3 +19,7 @@
     </div>
   <?php } ?>
 </div>
+
+<div class = "pager">
+  <?php print $pager; ?>
+</div>

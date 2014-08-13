@@ -84,8 +84,9 @@ function om_show_trends_form() {
 
 function om_show_trends_display($query) {
   $result = $query->execute();
-  $build['filters'] = drupal_get_form('filter_extender_form', $query);
-  return theme('om_show_trending_page', array('filter' => $build['filters'], 'results' => $result));
+  $filters = drupal_get_form('filter_extender_form', $query);
+  $pager = array('#theme' => 'pager');
+  return theme('om_show_trending_page', array('filter' => $filters, 'results' => $result, 'pager' => $pager));
 
   $header = array(
     array('data' => t('Title')),

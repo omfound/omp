@@ -76,7 +76,7 @@ function om_show_theme($existing, $type, $theme, $path) {
     ),
     'om_show_trending_page' => array(
       'template' => 'om_show_trending_page',
-      'variables' => array('results' => array()),
+      'variables' => array('filter' => array(), 'results' => array(), 'pager' => array()),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
     ),
