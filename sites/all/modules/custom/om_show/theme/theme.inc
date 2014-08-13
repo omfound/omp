@@ -31,6 +31,7 @@ function om_show_preprocess_om_show_upcoming_airings_all(&$variables) {
 }
 
 function om_show_preprocess_om_show_trending_page(&$variables) {
+  drupal_add_css(drupal_get_path('module', 'om_show') . '/css/om_show_trending.css');
   $shows = array();
   foreach ($variables['results'] as $result) {
     $shows[$result->nid] = array(
