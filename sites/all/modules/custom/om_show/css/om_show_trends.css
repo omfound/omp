@@ -8,3 +8,6 @@
 .show-meta {
   padding: 10px;
 }
+.voting-widget .field-label {
+  display: none;
+}
