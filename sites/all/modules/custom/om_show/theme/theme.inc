@@ -43,7 +43,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
       'votes' => $result->vote_count,
     );
     if (!empty($result->uri)) {
-      $shows[$result->nid]['thumbnail_path'] = file_create_url($result->uri);
+      $shows[$result->nid]['thumbnail_path'] = image_style_url('220x135', $result->uri);
     }
     else {
       $shows[$result->nid]['thumbnail_path'] = 'NO PATH DEFINED YET';
@@ -53,5 +53,4 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
   if (!empty($shows)) {
     $variables['shows'] = $shows;
   }
-  dsm($variables['shows']);
 }
