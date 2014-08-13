@@ -31,8 +31,7 @@ function om_show_preprocess_om_show_upcoming_airings_all(&$variables) {
 }
 
 function om_show_preprocess_om_show_trending_page(&$variables) {
-  dsm($variables['results']);
-  //foreach ($variables['results'] as $result) {
-   // dsm($result);
- // }
+  foreach ($variables['results'] as $result) {
+    dsm($result);
+  }
 }
