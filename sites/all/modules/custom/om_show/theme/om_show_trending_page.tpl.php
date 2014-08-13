@@ -2,7 +2,7 @@
   <?php foreach ($shows as $show) { ?>
     <div class="show-preview">
       <div class="show-image">
-        <img src="<?php print $show['thumbnail']; ?>" />
+        <img src="<?php print $show['thumbnail_path']; ?>" />
       </div>
       <div class="show-title">
         <?php print $show['title']; ?>
