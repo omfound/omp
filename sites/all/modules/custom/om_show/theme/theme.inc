@@ -36,7 +36,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
     $shows[$result->nid] = array(
       'title' => $result->title,
       'nid' => $result->nid,
-      'created' => date('F j, Y', $result->created,
+      'created' => date('F j, Y', $result->created),
       'username' => $result->name,
       'theme_tid' => $result->field_om_theme_tid,
       'rating' => $result->bayesian,
