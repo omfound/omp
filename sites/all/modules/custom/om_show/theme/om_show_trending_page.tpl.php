@@ -12,9 +12,9 @@
         <div class="show-title">
           <?php print $show['title']; ?>
         </div>
-      </div>
-      <div class="show-votes">
-        Rating: <?php print $show['rating']; ?>
+        <div class="show-votes">
+          Rating: <?php print $show['rating']; ?>
+        </div>
       </div>
     </div>
   <?php } ?>
