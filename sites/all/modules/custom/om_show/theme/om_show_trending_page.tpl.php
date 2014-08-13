@@ -6,7 +6,9 @@
   <?php foreach ($shows as $show) { ?>
     <div class="show-preview">
       <div class="show-image">
+        <a href="<?php print $show['link']; ?>">
         <img src="<?php print $show['thumbnail_path']; ?>" />
+        </a>
       </div>
       <div class="show-meta">
         <div class="show-title">
@@ -14,6 +16,9 @@
         </div>
         <div class="show-votes">
           Rating: <?php print $show['rating']; ?>
+        </div>
+        <div class="voting-widget">
+          <?php print $show['voting_widget']; ?>
         </div>
       </div>
     </div>

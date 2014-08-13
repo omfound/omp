@@ -34,14 +34,17 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
   drupal_add_css(drupal_get_path('module', 'om_show') . '/css/om_show_trends.css');
   $shows = array();
   foreach ($variables['results'] as $result) {
+    $node = node_load($result->nid);
     $shows[$result->nid] = array(
       'title' => $result->title,
       'nid' => $result->nid,
+      'link' => url('node/'.$result->nid),
       'created' => date('F j, Y', $result->created),
       'username' => $result->name,
       'theme_tid' => $result->field_om_theme_tid,
       'rating' => $result->bayesian,
       'votes' => $result->vote_count,
+      'voting_widget' => field_view_field('node', $node, 'field_om_voting_on_video'),
     );
     if (!empty($result->uri)) {
       $shows[$result->nid]['thumbnail_path'] = image_style_url('220x135', $result->uri);
