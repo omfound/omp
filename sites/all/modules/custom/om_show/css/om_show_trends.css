@@ -11,3 +11,7 @@
 .voting-widget .field-label {
   display: none;
 }
+.show-title,
+.show-label {
+  font-weight: bold;
+}
