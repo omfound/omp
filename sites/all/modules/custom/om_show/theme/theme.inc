@@ -44,7 +44,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
       'theme_tid' => $result->field_om_theme_tid,
       'rating' => $result->bayesian,
       'votes' => $result->vote_count,
-      'voting_widget' => field_view_field('node', $node, 'field_om_voting_on_video'),
+      'voting_widget' => render(field_view_field('node', $node, 'field_om_voting_on_video')),
     );
     if (!empty($result->uri)) {
       $shows[$result->nid]['thumbnail_path'] = image_style_url('220x135', $result->uri);
