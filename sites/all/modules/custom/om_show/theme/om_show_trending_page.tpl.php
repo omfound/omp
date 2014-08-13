@@ -1,3 +1,7 @@
+<div class = "filters">
+  <?php print $filters; ?>
+</div>
+
 <div class = "show-grid">
   <?php foreach ($shows as $show) { ?>
     <div class="show-preview">

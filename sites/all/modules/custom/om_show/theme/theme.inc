@@ -53,4 +53,5 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
   if (!empty($shows)) {
     $variables['shows'] = $shows;
   }
+  $variables['filter'] = render($variables['filter']);
 }
