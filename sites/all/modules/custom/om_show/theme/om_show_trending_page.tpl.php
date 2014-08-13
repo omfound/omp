@@ -1,5 +1,5 @@
-<div class = "filters">
-  <?php print $filters; ?>
+<div class = "filter">
+  <?php print $filter; ?>
 </div>
 
 <div class = "show-grid">
