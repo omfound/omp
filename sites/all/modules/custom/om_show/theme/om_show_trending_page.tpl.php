@@ -16,10 +16,8 @@
             <?php print $show['title']; ?>
           </a>
         </div>
-        <div class="show-votes">
-          <span class="show-label">Rating: </span><?php print $show['rating']; ?>
-          <br />
-          <span class="show-label">Views: </span><?php print $show['views']; ?>
+        <div class="show-stats">
+          <span class="show-label">Rating: </span><?php print $show['rating']; ?> | <span class="show-label">Views: </span><?php print $show['views']; ?>
         </div>
         <div class="voting-widget">
           <?php print $show['voting_widget']; ?>
