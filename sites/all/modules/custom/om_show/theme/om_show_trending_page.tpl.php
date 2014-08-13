@@ -8,8 +8,10 @@
       <div class="show-image">
         <img src="<?php print $show['thumbnail_path']; ?>" />
       </div>
-      <div class="show-title">
-        <?php print $show['title']; ?>
+      <div class="show-meta">
+        <div class="show-title">
+          <?php print $show['title']; ?>
+        </div>
       </div>
       <div class="show-votes">
         Rating: <?php print $show['rating']; ?>
