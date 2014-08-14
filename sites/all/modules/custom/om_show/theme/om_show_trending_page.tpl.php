@@ -17,7 +17,7 @@
           </a>
         </div>
         <div class="show-stats">
-          <span class="show-label">Rating: </span><?php print $show['rating']; ?> | <span class="show-label">Views: </span><?php print $show['views']; ?>
+          <span class="show-label">Rating: </span><a href="/help/om_voting/about-om-voting" target="_blank"><?php print $show['rating']; ?></a> | <span class="show-label">Views: </span><?php print $show['views']; ?>
         </div>
         <div class="voting-widget">
           <?php print $show['voting_widget']; ?>
