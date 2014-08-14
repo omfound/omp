@@ -8,6 +8,9 @@
 .show-meta {
   padding: 10px;
 }
+.show-meta-top {
+  height: 75px;
+}
 .voting-widget .field-label {
   display: none;
 }

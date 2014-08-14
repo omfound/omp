@@ -11,13 +11,15 @@
         </a>
       </div>
       <div class="show-meta">
-        <div class="show-title">
-          <a href="<?php print $show['link']; ?>">
-            <?php print $show['title']; ?>
-          </a>
-        </div>
-        <div class="show-stats">
-          <span class="show-label">Rating: </span><a href="/help/om_voting/about-om-voting" target="_blank"><?php print $show['rating']; ?></a> | <span class="show-label">Views: </span><?php print $show['views']; ?>
+        <div class="show-meta-top">
+          <div class="show-title">
+            <a href="<?php print $show['link']; ?>">
+              <?php print $show['title']; ?>
+            </a>
+          </div>
+          <div class="show-stats">
+            <span class="show-label">Rating: </span><a href="/help/om_voting/about-om-voting" target="_blank"><?php print $show['rating']; ?></a> | <span class="show-label">Views: </span><?php print $show['views']; ?>
+          </div>
         </div>
         <div class="voting-widget">
           <?php print $show['voting_widget']; ?>
