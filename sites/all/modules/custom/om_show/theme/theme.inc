@@ -33,10 +33,15 @@ function om_show_preprocess_om_show_upcoming_airings_all(&$variables) {
 function om_show_preprocess_om_show_trending_page(&$variables) {
   drupal_add_css(drupal_get_path('module', 'om_show') . '/css/om_show_trends.css');
   $shows = array();
+  $param = array(
+    'max_length' => 50,
+    'word_boundary' => true,
+    'ellipsis' => true,
+  );
   foreach ($variables['results'] as $result) {
     $node = node_load($result->nid);
     $shows[$result->nid] = array(
-      'title' => $result->title,
+      'title' => views_trim_text($param, $result->title),
       'nid' => $result->nid,
       'link' => url('node/'.$result->nid),
       'created' => date('F j, Y', $result->created),
