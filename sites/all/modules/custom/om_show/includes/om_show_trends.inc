@@ -39,13 +39,13 @@ function om_show_trends_filter_conditions(&$query) {
   $subquery->fields('votes', array('entity_id'));
   $subquery->addExpression('COUNT(entity_id)', 'vote_count');
   $subquery->groupBy('entity_id');
-  if (empty($query->filter['period']) || $query->filter['period'] == 'alltime') {
-    $query->condition('rating.period', 'alltime');
-  }
-  elseif ($query->filter['period'] == 'month') {
+  if (empty($query->filter['period']) || $query->filter['period'] == 'month') {
     $query->condition('rating.period', 'month');
     $time_limit = strtotime("-30 days");
     $subquery->condition('votes.timestamp', $time_limit, '>='); 
+  }
+  elseif ($query->filter['period'] == 'alltime') {
+    $query->condition('rating.period', 'alltime');
   }
   elseif ($query->filter['period'] == 'week') {
     $query->condition('rating.period', 'week');
