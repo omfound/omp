@@ -23,7 +23,7 @@ function om_show_menu() {
     'title' => 'Show Ratings',
     'description' => 'Shows by rating',
     'page callback' => 'om_show_trends',
-    'access arguments' => array('administer show'),
+    'access arguments' => array('access content'),
     'file' => 'om_show_trends.inc',
     'file path' => drupal_get_path('module', 'om_show') . '/includes',
     'type' => MENU_LOCAL_TASK,
