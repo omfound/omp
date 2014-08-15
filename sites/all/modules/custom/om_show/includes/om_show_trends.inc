@@ -3,6 +3,7 @@
 function om_show_trends() {
   $query = om_show_trends_base_query();
   $display = om_show_trends_display($query);
+  drupal_set_title('Currently Trending Shows');
   return $display;
 }
 
