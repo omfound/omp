@@ -118,8 +118,7 @@ class Filter extends SelectQueryExtender {
     
     $form['buttons']['open_wrapper'] = array(
       '#markup' => '<div class="submit-buttons">',
-    }
-
+    ); 
     $form['buttons']['submit'] = array(
       '#type' => 'submit',
       '#value' => (count($this->filter) ? t('Refine') : t('Filter')),
