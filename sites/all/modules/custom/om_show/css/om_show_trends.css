@@ -4,6 +4,9 @@
   float: left;
   width: 200px;
 }
+#edit-submit {
+  clear: left;
+}
 /** end filters **/
 
 /** shows **/
