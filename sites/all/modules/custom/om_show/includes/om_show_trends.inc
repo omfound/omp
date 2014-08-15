@@ -28,7 +28,7 @@ function om_show_trends_base_query() {
     ->limit(25)
     ->filterForm('om_show_trends')
     ->orderBy('rating.bayesian', 'DESC')
-    ->orderBy('num_votes.vote_count', 'DESC');
+    ->orderBy('num_votes.vote_count', 'DESC')
     ->orderBy('counter.totalcount', 'DESC');
   return $query;
 }
