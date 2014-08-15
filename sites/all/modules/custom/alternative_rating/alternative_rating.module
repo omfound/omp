@@ -254,6 +254,16 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
     ->execute();
 }
 function alternative_rating_populate() {
+  $lastrun = variable_get('alternative_rating_run', false);
+  $limit = strotime("-6 hours");
+  
+  //only run every 6 hours
+  if ($lastrun) {
+    if ($lastrun > $limit) {
+      return; 
+    }
+  }
+
   //first empty the existing alternative_rating table
   db_query('TRUNCATE TABLE {alternative_rating}');
 
@@ -297,6 +307,7 @@ function alternative_rating_populate() {
     alternative_rating_insert($nid, $bayesian_alltime, 'alltime');
     alternative_rating_insert($nid, $bayesian_month, 'month');
     alternative_rating_insert($nid, $bayesian_week, 'week');
+    variable_set('alternative_rating_run', time());
   }
 }
 
