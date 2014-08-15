@@ -19,6 +19,15 @@ function om_show_menu() {
     'access arguments' => array('administer show'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['trending'] = array(
+    'title' => 'Show Ratings',
+    'description' => 'Shows by rating',
+    'page callback' => 'om_show_trends',
+    'access arguments' => array('administer show'),
+    'file' => 'om_show_trends.inc',
+    'file path' => drupal_get_path('module', 'om_show') . '/includes',
+    'type' => MENU_LOCAL_TASK,
+  );
 
   return $items;
 }
@@ -64,7 +73,13 @@ function om_show_theme($existing, $type, $theme, $path) {
       'variables' => array('user' => FALSE),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
-    )
+    ),
+    'om_show_trending_page' => array(
+      'template' => 'om_show_trending_page',
+      'variables' => array('filter' => array(), 'results' => array(), 'pager' => array()),
+      'path' => $path . '/theme',
+      'file' => 'theme.inc'
+    ),
   );
 }
 
@@ -581,7 +596,7 @@ function om_show_video_image($node) {
     $derivatives = json_decode($node->field_archive_derivatives[LANGUAGE_NONE][0]['value']);
     $images = internet_archive_derivative_thumbnails($derivatives);
     if (!empty($images)) {
-      $img_path = array_shfit($images);
+      $img_path = array_shift($images);
       $img_path = $img_path['url'];
     }
   }

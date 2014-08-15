@@ -291,7 +291,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product') {
     return;
   }
 
@@ -326,14 +326,22 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $new_price = ($unit_price['amount'] - $hourly_rate) * .5;
         $price_difference = $new_price - $unit_price['amount'];
       }
-      elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {    
-        if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
-          $new_price = 0;
+      else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
+       if ($free_hours == 0) {
+         $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
+       }
+       else {
+         $new_price = ((($hours_days['days'] + ($hours_days['remainder_hours'] / 24) - ($free_hours / 24))) * $product->commerce_price['und'][0]['amount']) * .5;
+       }
+        //if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
+          //$new_price = 0;
+        //}
+        //else {
+          //$new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
+        //}
+        if ($new_price < 0) { 
+          $new_price = 0; 
         }
-        else {
-          $new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
-        }
-        if ($new_price < 0) { $new_price = 0; }
         $price_difference = $new_price - $unit_price['amount'];
       }
     }

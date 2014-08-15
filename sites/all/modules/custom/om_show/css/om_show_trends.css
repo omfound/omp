@@ -1,0 +1,57 @@
+/** filters **/
+.page-trending .form-item-theme,
+.page-trending .form-item-period {
+  float: left;
+  width: 200px;
+  margin: 20px;
+}
+.submit-buttons {
+  clear: left;
+  margin: 20px;
+}
+/** end filters **/
+
+/** shows **/
+.show-preview {
+  float: left;
+  width: 220px;
+  height: 275px;
+  margin: 20px;
+  background-color: #EFEFEF;
+  border: solid 1px #99948A;
+  border-radius: 3px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  box-shadow: 1px 1px 1px #AAAAAA;
+  -webkit-transition: background 0.5s linear;
+  -moz-transition: background 0.5s linear;
+  -o-transition: background 0.5s linear;
+  transition: background 0.5s linear;
+}
+.show-image img {
+  width: 100%;
+  height: 120px;
+}
+.show-meta {
+  padding: 10px;
+}
+.show-meta-top {
+  height: 80px;
+}
+.voting-widget .field-label {
+  display: none;
+}
+.show-title,
+.show-label {
+  font-weight: bold;
+}
+.show-stats {
+  font-size: 11px;
+}
+.show-title a:link,
+.show-title a:visited,
+.show-title a:active {
+  color: #000;
+  text-decoration: none;
+}
+/** end shows **/
