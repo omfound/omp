@@ -3,6 +3,7 @@
 .form-item-period {
   float: left;
   width: 200px;
+  margin: 20px;
 }
 .submit-buttons {
   clear: left;
