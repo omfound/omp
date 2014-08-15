@@ -1,17 +1,5 @@
 <?php
 
-function query_extender_filter_menu() {
-  $items['admin/querydisplay'] = array(
-    'title' => t('Demo Page for DB Extender: Filter'),
-    'description' => t('Demo page DB Extender: Filter'),
-    'page callback' => 'query_extender_filter_demo',
-    'access arguments' => array('access administration pages'),
-    'type' => MENU_LOCAL_TASK
-  );
-
-  return $items;
-}
-
 function query_extender_filter_demo() {
   $query = query_extender_filter_demo_base_query();
   $display = query_extender_filter_demo_form_display($query);
