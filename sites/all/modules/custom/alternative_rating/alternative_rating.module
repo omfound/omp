@@ -255,7 +255,7 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
 }
 function alternative_rating_populate() {
   $lastrun = variable_get('alternative_rating_run', false);
-  $limit = strotime("-6 hours");
+  $limit = strtotime("-6 hours");
   
   //only run every 6 hours
   if ($lastrun) {
