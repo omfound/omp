@@ -291,7 +291,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product') {
     return;
   }
 
