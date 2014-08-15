@@ -1,3 +1,12 @@
+/** filters **/
+.form-item-theme,
+.form-item-period {
+  float: left;
+  width: 200px;
+}
+/** end filters **/
+
+/** shows **/
 .show-preview {
   float: left;
   width: 220px;
@@ -35,3 +44,4 @@
 .show-title a:active {
   color: #000;
 }
+/** end shows **/
