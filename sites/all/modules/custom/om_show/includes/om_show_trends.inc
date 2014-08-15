@@ -79,7 +79,7 @@ function om_show_trends_form() {
     '#empty_value' => '',
   );
   $form['period'] = array(
-    '#title' => t('Period'),
+    '#title' => t('Time Period'),
     '#type' => 'select',
     '#options' => array('alltime' => 'All Time', 'month' => 'Last 30 Days', 'week' => 'Last 7 Days'),
   );
