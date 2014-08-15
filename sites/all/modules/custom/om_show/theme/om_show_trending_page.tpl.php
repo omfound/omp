@@ -29,6 +29,7 @@
   <?php } ?>
 </div>
 
-<div class = "pager">
+<div class = "pager clearfix">
   <?php print $pager; ?>
+  &nbsp;
 </div>
