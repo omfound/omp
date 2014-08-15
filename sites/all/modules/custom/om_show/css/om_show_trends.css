@@ -48,5 +48,6 @@
 .show-title a:visited,
 .show-title a:active {
   color: #000;
+  text-decoration: none;
 }
 /** end shows **/
