@@ -327,11 +327,11 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $price_difference = $new_price - $unit_price['amount'];
       }
       else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
-       if ($free_days == 0) {
+       if ($free_hours == 0) {
          $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
        }
        else {
-
+         $new_price = (($free_hours / 24) - ($hours_days['days'] + ($hours_days['remainder_hours'] / 24))) * .5;
        }
         //if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
           //$new_price = 0;
