@@ -4,7 +4,7 @@
   float: left;
   width: 200px;
 }
-#edit-submit {
+.submit-buttons {
   clear: left;
 }
 /** end filters **/
