@@ -115,6 +115,10 @@ class Filter extends SelectQueryExtender {
         $form[$name]['#default_value'] = $values; 
       }
     }
+    
+    $form['buttons']['open_wrapper'] = array(
+      '#markup' => '<div class="submit-buttons">',
+    }
 
     $form['buttons']['submit'] = array(
       '#type' => 'submit',
@@ -128,6 +132,9 @@ class Filter extends SelectQueryExtender {
         '#submit' => array('filter_extender_form_submit'),
       );
     }
+    $form['buttons']['close_wrapper'] = array(
+      '#markup' => '</div>',
+    );
     return $form;
   }
 
