@@ -1,6 +1,6 @@
 /** filters **/
-.form-item-theme,
-.form-item-period {
+.page-trending .form-item-theme,
+.page-trending .form-item-period {
   float: left;
   width: 200px;
   margin: 20px;
