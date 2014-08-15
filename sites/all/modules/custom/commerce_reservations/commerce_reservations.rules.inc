@@ -317,6 +317,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     }
     //if more than 1 day, discount by 1 day
     if ($free_hours >= $hours_days['hours']) {
+       drupal_set_message('test', 'notice');
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
       $price_difference = $new_price - $unit_price['amount'];
@@ -333,7 +334,10 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         //else {
           $new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
         //}
-        if ($new_price < 0) { $new_price = 0; }
+        if ($new_price < 0) { 
+          $new_price = 0; 
+          drupal_set_message('test1', 'notice');
+        }
         $price_difference = $new_price - $unit_price['amount'];
       }
     }
