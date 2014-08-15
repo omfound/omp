@@ -582,7 +582,7 @@ function om_show_video_image($node) {
     $derivatives = json_decode($node->field_archive_derivatives[LANGUAGE_NONE][0]['value']);
     $images = internet_archive_derivative_thumbnails($derivatives);
     if (!empty($images)) {
-      $img_path = array_shfit($images);
+      $img_path = array_shift($images);
       $img_path = $img_path['url'];
     }
   }

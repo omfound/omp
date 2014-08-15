@@ -40,6 +40,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
   );
   foreach ($variables['results'] as $result) {
     $node = node_load($result->nid);
+
     $shows[$result->nid] = array(
       'title' => views_trim_text($param, $result->title),
       'nid' => $result->nid,
@@ -52,12 +53,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
       'voting_widget' => render(field_view_field('node', $node, 'field_om_voting_on_video')),
       'views' => $result->totalcount,
     );
-    if (!empty($result->uri)) {
-      $shows[$result->nid]['thumbnail_path'] = image_style_url('220x135', $result->uri);
-    }
-    else {
-      $shows[$result->nid]['thumbnail_path'] = 'NO PATH DEFINED YET';
-    }
+    $shows[$result->nid]['thumbnail_path'] = om_show_video_image($node);
   }
 
   if (!empty($shows)) {
