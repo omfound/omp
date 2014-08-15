@@ -30,3 +30,8 @@
 .show-stats {
   font-size: 11px;
 }
+.show-title a:link,
+.show-title a:visited,
+.show-title a:active {
+  color: #000;
+}
