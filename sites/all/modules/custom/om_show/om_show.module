@@ -19,7 +19,7 @@ function om_show_menu() {
     'access arguments' => array('administer show'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['admin/reports/show-trends'] = array(
+  $items['trending'] = array(
     'title' => 'Show Ratings',
     'description' => 'Shows by rating',
     'page callback' => 'om_show_trends',
