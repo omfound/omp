@@ -34,7 +34,7 @@ function om_show_preprocess_om_show_trending_page(&$variables) {
   drupal_add_css(drupal_get_path('module', 'om_show') . '/css/om_show_trends.css');
   $shows = array();
   $param = array(
-    'max_length' => 50,
+    'max_length' => 60,
     'word_boundary' => true,
     'ellipsis' => true,
   );
