@@ -326,8 +326,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $new_price = ($unit_price['amount'] - $hourly_rate) * .5;
         $price_difference = $new_price - $unit_price['amount'];
       }
-      else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {    
-       $free_days = $product->commerce_price['und'][0]['amount'] / 24;
+      else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
        if ($free_days == 0) {
          $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
        }
