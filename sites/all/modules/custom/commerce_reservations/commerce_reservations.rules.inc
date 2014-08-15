@@ -290,6 +290,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 }
 
 function commerce_reservations_price_reduction($line_item, $component_name, $round_mode) {
+   drupal_set_message('hello', 'notice');
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
   if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product') {
     return;
@@ -302,6 +303,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
   $hours_days = commerce_reservations_hours_days($start, $end);
   if ($hours_days['hours']) { 
+    drupal_set_message('test again', 'notice');
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
     $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
