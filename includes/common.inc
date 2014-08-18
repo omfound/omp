@@ -5287,7 +5287,7 @@ function drupal_cron_run() {
         $start = time();
         watchdog('cron_check', $module . ' started: ' . $time);
         module_invoke($module, 'cron');
-        watchdog('cron_check', $module . ' finished in: ' . time() - $start);
+        watchdog('cron_check', $module . ' finished in: ' . (time() - $start));
       }
       catch (Exception $e) {
         watchdog_exception('cron', $e);
