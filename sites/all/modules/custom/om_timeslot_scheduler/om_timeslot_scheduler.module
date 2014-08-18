@@ -603,7 +603,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                         $process_start = ($process_start - ($process_start % 1800)) + 1800;
                         $next_start = $process_start;
                         $used = $rank;
-                        unset($timeslot->om_timeslot_showlist[$rank]);
+                        unset($all_shows[$show->nid]);
                       }
                     }
                   }
@@ -625,7 +625,7 @@ function _om_timeslot_scheduler_build_schedule(&$context) {
                         $timeslot->schedule[$date['value']][] = _om_timeslot_scheduler_build_schedule_item($process_start, $show_completion, $show);
                         $process_start += ($show->field_om_show_duration['und'][0]['value'] + $spacer);
                         $used = $rank;
-                        unset($timeslot->om_timeslot_showlist[$rank]);
+                        unset($all_shows[$show->nid]);
                       }
                     }
                   }
