@@ -5285,7 +5285,7 @@ function drupal_cron_run() {
       // Do not let an exception thrown by one module disturb another.
       try {
         $start = time();
-        watchdog('cron_check', $module . ' started: ' . $time);
+        watchdog('cron_check', $module . ' started: ' . $start);
         module_invoke($module, 'cron');
         watchdog('cron_check', $module . ' finished in: ' . (time() - $start));
       }
