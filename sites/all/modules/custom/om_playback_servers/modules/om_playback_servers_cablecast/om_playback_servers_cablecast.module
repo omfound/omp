@@ -105,6 +105,8 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
   $query_uri->condition('field_archive_transfer_value', 1, '=');
   $resource = $query_uri->execute();
+  dsm(count($resource->fetchAll()));
+  return;
   while ($result = $resource->fetchAssoc()) {
     $mp4 = '';
     $derivatives = '';
