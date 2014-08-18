@@ -104,9 +104,8 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
   $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
   $query_uri->condition('field_archive_transfer_value', 1, '=');
-  //$query_uri->range(0, 25);
+  $query_uri->range(0, 25);
   $resource = $query_uri->execute();
-  dsm('count: ' . count($resource->fetchAll()));
   $cablecast_exists = class_exists('cablecastFile');
   $ia_exists = class_exists('internetArchiveDerivativeHandler');
   while ($result = $resource->fetchAssoc()) {
