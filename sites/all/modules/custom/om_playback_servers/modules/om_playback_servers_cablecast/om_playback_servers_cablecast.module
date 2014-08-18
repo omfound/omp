@@ -107,7 +107,6 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->range(0, 25);
   $resource = $query_uri->execute();
   dsm('count: ' . count($resource->fetchAll()));
-  return;
   $cablecast_exists = class_exists('cablecastFile');
   $ia_exists = class_exists('internetArchiveDerivativeHandler');
   while ($result = $resource->fetchAssoc()) {
