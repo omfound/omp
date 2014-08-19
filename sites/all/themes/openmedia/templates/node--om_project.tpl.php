@@ -14,7 +14,7 @@
         <?php if (isset($description)): ?>
           <div id="project-description">
             <?php print $description; ?>
-            <a href="" class="read-more-button">Read More</a>
+            <a class="read-more-button">Read More</a>
           </div>
         <?php endif; ?>
         <div id="project-metadata">
