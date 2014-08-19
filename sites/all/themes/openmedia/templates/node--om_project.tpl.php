@@ -18,6 +18,7 @@
             <?php if (isset($read_more)) {
               print $read_more;
             }
+            ?>
           </div>
         <?php endif; ?>
         <div id="project-metadata">
