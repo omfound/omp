@@ -550,3 +550,8 @@ p.project-published {
 .node-type-om-project #project-date-author {
   height: 14px;
 }
+
+p.read-more-button {
+  text-decoration: underline;
+  font-weight: bold;
+}
