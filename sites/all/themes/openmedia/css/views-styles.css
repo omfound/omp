@@ -424,7 +424,7 @@ div.timeslot-theme-wrapper ul li {
 
 .node-type-om-project #project-description .active p {
   max-height: 1000px;
-  overflow: visible;
+  overflow: hidden;
   margin-bottom: 10px;
   transition: max-height 1s;
 }
