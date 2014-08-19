@@ -16,6 +16,7 @@
             <?php print $description; ?>
             <?php if (isset($read_more)) {
               print $read_more;
+              print '<p class="read-more-button">Read More</p>';
             }
             ?>
           </div>
