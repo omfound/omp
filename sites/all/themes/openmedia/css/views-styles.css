@@ -551,7 +551,10 @@ p.project-published {
   height: 14px;
 }
 
-a.read-more-button {
+p.read-more-button {
   text-decoration: underline;
   font-weight: bold;
+  cursor: hand;
 }
+
+
