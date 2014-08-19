@@ -362,9 +362,11 @@ function openmedia_preprocess_node__om_project(&$variables) {
   dsm(str_word_count($variables['description']));
   if (str_word_count($variables['description']) > 70 ) {
     $variables['read_more'] = '<p class="read-more-button">Read More</p>';
+    dsm('more than 70');
   }
   else {
     $variables['read_more'] = 'test';
+    dsm('less than 70');
   }
   // Local production
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
