@@ -359,7 +359,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   // Body
   $variables['description'] = drupal_render($variables['content']['body']);
-  $variables['read_more'] = '<p class="read-more-button">Read More</p>';
+  dsm(str_word_count($variables['description']));
+    $variables['read_more'] = '<p class="read-more-button">Read More</p>';
   // Local production
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
   if ($locally_produced == 1) {
