@@ -359,7 +359,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   // Body
   $variables['description'] = drupal_render($variables['content']['body']);
-  if (str_word_count($variables['content']['body']) > 70 ) {
+  if (str_word_count($variables['description']) > 70 ) {
     $variables['read_more'] = '<p class="read-more-button">Read More</p>';
   }
   // Local production
