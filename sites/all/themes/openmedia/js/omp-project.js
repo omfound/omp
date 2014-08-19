@@ -2,7 +2,7 @@
   Drupal.behaviors.YourBehaviorName =  {
     attach : function(context, settings) {
        $('.read-more-button').click(function() { 
-         $('#project-description .field-name-body').addClass("active");
+         $('#project-description .field-name-body').toggleClass("active");
        });
     }
   }
