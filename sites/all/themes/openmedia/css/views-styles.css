@@ -414,7 +414,7 @@ div.timeslot-theme-wrapper ul li {
   margin-bottom: 8px;
 }
 
-.node-type-om-project #project-description  .field-name-body {
+.node-type-om-project #project-description  .field-name-body .field-item {
   font-weight: 100;
   max-height: 213px;
   overflow: hidden;
@@ -422,7 +422,7 @@ div.timeslot-theme-wrapper ul li {
   transition: max-height 1s;
 } 
 
-.node-type-om-project #project-description .active .field-name-body {
+html .node-type-om-project #project-description .active .field-item {
   max-height: 1000px;
   overflow: hidden;
   margin-bottom: 10px;
