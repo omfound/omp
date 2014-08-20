@@ -368,6 +368,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $variables['read_more'] = 'test';
     dsm('less than 70');
   }
+  dsm($variables['read_more']);
   // Local production
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
   if ($locally_produced == 1) {
