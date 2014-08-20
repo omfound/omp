@@ -416,7 +416,7 @@ div.timeslot-theme-wrapper ul li {
 
 .node-type-om-project #project-description  .field-name-body .field-item {
   font-weight: 100;
-  max-height: 213px;
+  max-height: 199px;
   overflow: hidden;
   margin-bottom: 10px;
   transition: max-height 1s;
