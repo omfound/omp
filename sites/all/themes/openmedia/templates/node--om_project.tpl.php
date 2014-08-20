@@ -14,12 +14,12 @@
         <?php if (isset($description)): ?>
           <div id="project-description">
             <?php print $description; ?>
-            <?php if (isset($read_more)):
-              print $read_more;
-              print '<p class="read-more-button">Read More</p>';
-              endif;
-            ?>
           </div>
+          <?php if (isset($read_more)):
+            print $read_more;
+            print '<p class="read-more-button">Read More</p>';
+            endif;
+           ?>
         <?php endif; ?>
         <div id="project-metadata">
           <div id="project-date-author">
