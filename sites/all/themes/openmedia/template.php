@@ -359,16 +359,9 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   // Body
   $variables['description'] = drupal_render($variables['content']['body']);
-  dsm(str_word_count($variables['description']));
   if (str_word_count($variables['description']) > 70 ) {
     $variables['read_more'] = '<p class="read-more-button">Read More</p>';
-    dsm('more than 70');
   }
-  else {
-    $variables['read_more'] = '';
-    dsm('less than 70');
-  }
-  dsm($variables['read_more']);
   // Local production
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
   if ($locally_produced == 1) {
