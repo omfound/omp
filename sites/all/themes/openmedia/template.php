@@ -365,7 +365,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
     dsm('more than 70');
   }
   else {
-    $variables['read_more'] = 'test';
+    $variables['read_more'] = '';
     dsm('less than 70');
   }
   dsm($variables['read_more']);
