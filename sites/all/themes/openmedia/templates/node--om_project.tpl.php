@@ -69,7 +69,7 @@
             <?php print $vote_widget; ?>
              <div class="project-voting">
                <h2 class="white-font">Your Vote Counts!</h2>
-               <a class="white-font" href="help/om_voting/about-om-voting">Learn More About Voting</a>
+               <a class="white-font" href="/help/om_voting/about-om-voting">Learn More About Voting</a>
              </div>
           </div>
         <?php endif; ?>
