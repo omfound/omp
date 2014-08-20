@@ -1,0 +1,18 @@
+<?php
+
+function ia_js_upload_menu() {
+  $items['admin/ia/upload'] = array(
+	  'title' => t('Internet Archive Uploader'),
+	  'description' => t('Upload to archive.org'),
+	  'page callback' => 'ia_js_upload_demo',
+	  'access arguments' => array('access administration pages'),
+	  'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function ia_js_upload_demo() {
+  $output = t('This is the demo page.');
+  return $output;
+}
