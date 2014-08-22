@@ -99,8 +99,6 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   //only for org admins
-  dsm('user view');
-  dsm($account);
   if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
     reset($membership);
@@ -144,7 +142,7 @@ function om_classes_user_view($account, $view_mode) {
 
     $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
     usort($all_classes, 'om_classes_org_classes_sort');
-
+    dsm($account);
     $account->content['org-classes'] = array(
       'title' => array(
         '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
