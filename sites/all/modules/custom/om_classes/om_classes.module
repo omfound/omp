@@ -142,7 +142,7 @@ function om_classes_user_view($account, $view_mode) {
 
     $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
     usort($all_classes, 'om_classes_org_classes_sort');
-    dsm($account);
+    dsm(om_classes_build_class_table($all_classes));
     $account->content['org-classes'] = array(
       'title' => array(
         '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
