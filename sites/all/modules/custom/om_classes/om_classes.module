@@ -99,17 +99,17 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   //only for org admins
-  if(om_membership_validate_org_admin_member($account)) {
+//  if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
     reset($membership);
     $first_key = key($membership);
 
     $org_info['product'] = commerce_product_load($membership[$first_key]->product_id);
     $org_info['order'] = commerce_order_load($membership[$first_key]->order_id);
-  }
-  else {
-    return;
-  }
+//  }
+//  else {
+//    return;
+//  }
 
   $org_profile = profile2_by_uid_load($account->uid, 'manage_organizational_membership');
   $org_users = array();
