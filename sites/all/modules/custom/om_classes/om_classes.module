@@ -99,6 +99,8 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   //only for org admins
+  dsm('user view');
+  dsm($account);
   if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
     reset($membership);
