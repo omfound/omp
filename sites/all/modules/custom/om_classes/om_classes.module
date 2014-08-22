@@ -115,7 +115,8 @@ function om_classes_user_view($account, $view_mode) {
   $org_users = array();
   $org_users[] = $account;
 
-  om_membership_validate_org_admin_member($account);
+  //marty
+  //om_membership_validate_org_admin_member($account);
   if (!empty($org_profile->field_invitations['und'])) {
     foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
       if (!empty($invitation['value'])) {
