@@ -108,9 +108,7 @@ function om_classes_user_view($account, $view_mode) {
     $org_info['order'] = commerce_order_load($membership[$first_key]->order_id);
   }
   else {
-    dsm($account);
     $all_classes = om_classes_user_classes($account->uid, NULL, NULL);
-    dsm($all_classes);
     $account->content['org-classes'] = array(
       'title' => array(
         '#markup' => '<h3>' . t('Class Use') . '</h3>',
