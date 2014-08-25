@@ -21,7 +21,12 @@ function ia_js_upload_menu() {
 
 function ia_js_upload_demo() {
   drupal_add_js(drupal_get_path('module', 'ia_js_upload', '/includes/evaporate.js'));
-  $output = t('This is the demo page.');
+  drupal_add_js(drupal_get_path('module', 'ia_js_upload', '/js/upload.js'));
+  drupal_set_title("Javascript Upload Test");
+  $output = '<h4>JS Upload Demo</h4>';
+  $output .= '<div>';
+  $output .= '<input type="file" id="files"  multiple />';
+  $output .= '</div>';
   return $output;
 }
 
