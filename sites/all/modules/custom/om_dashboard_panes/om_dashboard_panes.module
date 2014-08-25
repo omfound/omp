@@ -125,6 +125,7 @@ function om_dashboard_panes_upcoming_classes($num) {
   $count = 0;
   foreach ($products AS $product_id => $product) {
     $date_info = date_repeat_helper_fetch_all_date_formats('commerce_product', $product, 'field_class_date');
+    dsm($date_info);
     $final_date = date_repeat_helper_ordered_dates($date_info);
     if (!empty($final_date[0])) {
       $classes[] = array(
@@ -134,7 +135,6 @@ function om_dashboard_panes_upcoming_classes($num) {
       );
     }
   }
-  dsm($classes);
   $classes = array_slice($classes, 0, $num);
   uasort($classes, '_om_dashboard_class_sort');
   return $classes;
