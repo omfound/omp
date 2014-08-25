@@ -99,6 +99,13 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   dsm($account);
+  $test_member = om_membership_get_active_memberships($account->uid);
+  reset($test_member);
+  $test_key = key($test_member);
+  $test_info['product'] = commerce_product_load($test_member[$test_key]->product_id);
+  $test_info['order'] = commerce_order_load($test_member[$test_key]->order_id);
+  dsm($test_info['product']);
+  dsm($test_info['order']);
   //only for org admins
   if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
