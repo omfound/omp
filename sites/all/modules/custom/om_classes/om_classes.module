@@ -98,9 +98,6 @@ function om_classes_get_registrations($user) {
 }
 
 function om_classes_user_view($account, $view_mode) {
-  dsm($account);
-  $test_member_classes = om_classes_user_classes($account->uid, NULL, NULL);
-  dsm($test_member_classes);
   //only for org admins
   if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
@@ -111,6 +108,17 @@ function om_classes_user_view($account, $view_mode) {
     $org_info['order'] = commerce_order_load($membership[$first_key]->order_id);
   }
   else {
+    dsm($account);
+    $all_classes = om_classes_user_classes($account->uid, NULL, NULL);
+    dsm($all_classes);
+    $account->content['org-classes'] = array(
+      'title' => array(
+        '#markup' => '<h3>' . t('Class Use') . '</h3>',
+      ),
+      'class-history' => array(
+        '#markup' => om_classes_build_class_table($all_classes),
+      ),
+    );
     return;
   }
 
