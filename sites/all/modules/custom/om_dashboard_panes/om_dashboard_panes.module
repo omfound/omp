@@ -144,9 +144,10 @@ function om_dashboard_panes_upcoming_classes($num) {
     }  
   }
   dsm($test_list);
-  $classes = array_multisort($test_date, SORT_ASC, $test_list);
+  array_multisort($test_date, SORT_ASC, $test_list);
   $classes = array_slice($classes, 0, $num);
-  dsm($classes);
+  $test_list = array_slice($test_list, 0, $num);
+  dsm($test_list);
 //  uasort($classes, '_om_dashboard_class_sort');
   return $classes;
 }
