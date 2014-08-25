@@ -211,12 +211,11 @@ function om_classes_non_org_build_class_table($classes) {
 
   $output .= count($classes) . t(' classes have been taken under this membership.');
   $output .= '<table>';
-  $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
+  $output .= '<thead><th>Class</th><th>Order Date</th></thead>';
   foreach ($classes as $class) {
     $order_number = $classes[0]->order_number;
     $user_id = om_classes_find_user($order_number);
     $output .= '<tr>';
-    $user = user_load($user_id);
     $output .= '<td>' . $class->title . '</td>';
     $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
     $output .= '</tr>';
