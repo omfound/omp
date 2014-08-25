@@ -134,6 +134,7 @@ function om_dashboard_panes_upcoming_classes($num) {
       );
     }
   }
+  //Take the class list and remove classes from the past.  $class_list now shows the 5 upcoming classes from the current time.
   $today = time();
   $class_list = array();
   $test_date = array();
@@ -146,6 +147,7 @@ function om_dashboard_panes_upcoming_classes($num) {
   array_multisort($test_date, SORT_ASC, $class_list);
   $class_list = array_slice($class_list, 0, $num);
   return $class_list;
+
   //  This is what was here before but not working...not sure what was going on
   //  $classes = array_slice($classes, 0, $num);
   //  uasort($classes, '_om_dashboard_class_sort');
