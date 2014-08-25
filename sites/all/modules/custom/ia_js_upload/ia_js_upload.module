@@ -30,7 +30,8 @@ function ia_js_upload_demo() {
   return $output;
 }
 
-function ia_js_upload_sign($request) {
+function ia_js_upload_sign() {
+  watchdog('brian', '<pre>'.print_r($_GET, TRUE).'</pre>');
   $key = '9Oe9KFJOaJW05MEn';
   $signed_key = base64_encode(hash_hmac('sha256', $request, $key, true));
   print $key;
