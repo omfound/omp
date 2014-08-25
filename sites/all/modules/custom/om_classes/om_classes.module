@@ -99,8 +99,8 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   dsm($account);
-  $test_member = om_membership_get_active_memberships($account->uid);
-  dsm($test_member);
+  $test_member_classes = om_classes_user_classes($account->uid, NULL, NULL);
+  dsm($test_member_classes);
   //only for org admins
   if(om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
