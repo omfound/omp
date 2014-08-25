@@ -6,7 +6,6 @@
     <?php endif; ?>
     <?php if (isset($classes_output)): ?>
       <?php print $classes_output; ?>
-      <?php dsm($classes_output); ?>
     <?php endif; ?>
     <div class="divider">
       <?php print $links; ?>
