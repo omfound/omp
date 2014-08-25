@@ -116,7 +116,7 @@ function om_classes_user_view($account, $view_mode) {
         '#markup' => '<h3>' . t('Class Use') . '</h3>',
       ),
       'class-history' => array(
-        '#markup' => om_classes_build_class_table($all_classes),
+        '#markup' => om_classes_non_org_build_class_table($all_classes),
       ),
     );
     return;
@@ -199,6 +199,32 @@ function om_classes_build_class_table($classes) {
   $output .= '</table>';
   return $output;
 }
+
+//Table for non org memberships
+function om_classes_non_org_build_class_table($classes) {
+  $output = '<strong>Class History</strong>';
+  if (empty($classes)) {
+    $output .= t('No classes have been taken under this membership.');
+    return $output;
+  }
+  $output .= '<br />';
+
+  $output .= count($classes) . t(' classes have been taken under this membership.');
+  $output .= '<table>';
+  $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
+  foreach ($classes as $class) {
+    $order_number = $classes[0]->order_number;
+    $user_id = om_classes_find_user($order_number);
+    $output .= '<tr>';
+    $user = user_load($user_id);
+    $output .= '<td>' . $class->title . '</td>';
+    $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output;
+}
+
 
 function om_classes_user_classes($uids = array(), $after_date = NULL, $before_date = NULL) {
   $query = "
