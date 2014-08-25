@@ -141,7 +141,8 @@ function om_dashboard_panes_upcoming_classes($num) {
   dsm($classes);
   uasort($classes, '_om_dashboard_class_sort');
   dsm('uasort');
-  $test_sort = dsm(uasort($classes, '_om_dashboard_class_sort'));
+  $test_sort = uasort($classes, '_om_dashboard_class_sort');
+  dsm($test_sort);
   return $classes;
 }
 
