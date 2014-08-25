@@ -138,13 +138,16 @@ function om_dashboard_panes_upcoming_classes($num) {
   $today = time();
   dsm($today);
   $test_list = array();
+  $test_date = array();
   foreach ($classes as $class) {
     if ($class['date'] > $today) {
       $test_list[] = $class;
+      $test_date[] = $class['date'];
     }  
   }
-  sort($test_list['date']);
   dsm($test_list);
+  sort($test_date);
+  dsm($test_date);
   $classes = array_slice($classes, 0, $num);
   uasort($classes, '_om_dashboard_class_sort');
   return $classes;
