@@ -135,21 +135,21 @@ function om_dashboard_panes_upcoming_classes($num) {
     }
   }
   $today = time();
-  $test_list = array();
+  $class_list = array();
   $test_date = array();
   foreach ($classes as $class) {
     if ($class['date'] > $today) {
-      $test_list[] = $class;
+      $class_list[] = $class;
       $test_date[] = $class['date'];
     }  
   }
-  array_multisort($test_date, SORT_ASC, $test_list);
-  dsm($test_list);
-  $classes = array_slice($classes, 0, $num);
-  $test_list = array_slice($test_list, 0, $num);
-  dsm($test_list);
-//  uasort($classes, '_om_dashboard_class_sort');
-  return $classes;
+  array_multisort($test_date, SORT_ASC, $class_list);
+  $class_list = array_slice($class_list, 0, $num);
+  return $class_list;
+  //  This is what was here before but not working...not sure what was going on
+  //  $classes = array_slice($classes, 0, $num);
+  //  uasort($classes, '_om_dashboard_class_sort');
+  //return $classes
 }
 
 function _om_dashboard_class_sort($a, $b) {
