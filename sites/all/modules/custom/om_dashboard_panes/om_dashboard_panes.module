@@ -145,8 +145,8 @@ function om_dashboard_panes_upcoming_classes($num) {
       $test_date[] = $class['date'];
     }  
   }
+  array_multisort($test_list['date'], SORT_ASC);
   dsm($test_list);
-  sort($test_date);
   dsm($test_date);
   $classes = array_slice($classes, 0, $num);
   uasort($classes, '_om_dashboard_class_sort');
