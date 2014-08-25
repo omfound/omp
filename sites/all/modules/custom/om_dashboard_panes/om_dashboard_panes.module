@@ -135,8 +135,9 @@ function om_dashboard_panes_upcoming_classes($num) {
     }
   }
   dsm($classes);
+  $today = getdate();
+  dsm($today);
   $classes = array_slice($classes, 0, $num);
-  dsm($classes);
   uasort($classes, '_om_dashboard_class_sort');
   return $classes;
 }
