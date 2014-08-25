@@ -14,7 +14,7 @@
             name: 'test_' + Math.floor(1000000000*Math.random()),
             file: files[i],
             xAmzHeadersAtInitiate : {
-              'x-amz-acl': 'public-read'
+              'x-archive-auto-make-bucket': '1',
             },
             signParams: {
               foo: 'bar'
