@@ -56,6 +56,8 @@ function om_membership_preprocess_om_membership_individual_plans_table(&$variabl
         $table_header .= "<th>" . $plan->title . "</th>";
         $project = $plan_meta_wrapper->commerce_price->value();
         $price = ($project['amount']/100);
+        dsm($project);
+        dsm($price);
         if ($price == 0) {
           $price = 'Free';
         }
