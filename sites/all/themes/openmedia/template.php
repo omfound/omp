@@ -214,7 +214,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
     $registration_button = drupal_render($variables['content']['field_class_display_class']);
     dsm($variables['content']['field_class_display_class']);
-    $registratoin_button = "<a href="www.google.com">Test Link</a>";
+    $registration_button = "<a href="www.google.com">Test Link</a>";
   }
   if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
