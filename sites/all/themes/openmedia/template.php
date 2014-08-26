@@ -216,7 +216,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
       $registration_button = drupal_render($variables['content']['field_class_display_class']);
     } 
     else {
-      $registration_button = '<a class="red-button" href="/user">Register Now</a>';
+      $registration_button = '<a class="red-button" href="/user">Register</a>';
     }
   }
   if ($registration['capacity'] == 0) {
