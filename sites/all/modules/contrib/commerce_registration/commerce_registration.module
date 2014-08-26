@@ -540,7 +540,6 @@ function commerce_registration_add_to_cart_validate($form, &$form_state) {
     // Check that registrations are open and the user has access.
     if (!registration_status('commerce_product', $product_id, TRUE) || !registration_register_page_access('commerce_product', $product)) {
       form_set_error('product_id', t('This product is not available for registration at this time.'));
-      echo "leo is not watching master chef";
       return FALSE;
     }
   }
