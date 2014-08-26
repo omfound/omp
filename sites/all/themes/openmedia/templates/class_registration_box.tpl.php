@@ -7,6 +7,7 @@
       <?php if (!empty($registration_button)): ?>
         <div class="registration-button">
           <?php print $registration_button; ?>
+          <?php dsm($registration_button); ?>
         </div>
       <?php endif; ?>
       <?php if (!empty($discount_message)): ?>
