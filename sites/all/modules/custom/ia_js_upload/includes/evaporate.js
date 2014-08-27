@@ -643,7 +643,7 @@ var Evaporate = function(config){
             
             if (xhr.readyState == 4){
 
-               if (xhr.status == 200 && xhr.response.length == 28){ 
+               if (xhr.status == 200){ 
 
                   l.d('authorizedSend got signature for step: \'' + authRequester.step + '\'    sig: '+ xhr.response);
                   authRequester.auth = xhr.response;
