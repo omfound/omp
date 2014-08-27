@@ -212,7 +212,12 @@ function openmedia_preprocess_node__class_display(&$variables) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
     $variables['content']['field_class_display_class'][0]['submit']['#value'] = t('Register Now');
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
-    $registration_button = drupal_render($variables['content']['field_class_display_class']);
+    if (user_is_logged_in()) {
+      $registration_button = drupal_render($variables['content']['field_class_display_class']);
+    } 
+    else {
+      $registration_button = '<a class="red-button" href="/user">Register</a>';
+    }
   }
   if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
