@@ -1,0 +1,6 @@
+name = Open Media Youtube Transcripts
+description = Pull automated transcriptions from youtube and store on a field on video nodes
+core = 7.x
+package = Open Media System
+php = 5.2.4
+
