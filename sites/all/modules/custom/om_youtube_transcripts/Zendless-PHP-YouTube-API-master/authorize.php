@@ -1,5 +1,4 @@
 <?php
-    session_start();
 
     require 'api/google_oauth.php';
     require 'api/youtube.php';
