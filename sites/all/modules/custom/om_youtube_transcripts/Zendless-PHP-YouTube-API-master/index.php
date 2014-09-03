@@ -9,7 +9,6 @@
 
     //TODO: Be sure to alter the callback url below to reflect your environment
     $data = $auth->get_request_token('http://dev-thornton.gotpantheon.com/sites/all/modules/custom/om_youtube_transcripts/Zendless-PHP-YouTube-API-master/authorize.php');
-    dsm($data);
     // Store the returned token_secret in memory some where so
     // that it can be recalled during the authorization step.
     $_SESSION['token_secret'] = $data['token_secret'];
