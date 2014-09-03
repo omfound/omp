@@ -9,10 +9,6 @@ function om_youtube_transcripts_help($path, $arg) {
 }
 
 
-function get_youtube_link() {
-  
-}
-
 
 
 
