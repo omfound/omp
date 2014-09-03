@@ -2,7 +2,7 @@
 
     require 'api/google_oauth.php';
 
-    $key = '6h03d9WznAVxJ4Gg7I6Daqdr'; //TODO: This should be the key given to you by google
+    $key = '36353249106-lb9r6engrvtksgaqie9g22vvovtr4uae.apps.googleusercontent.com'; //TODO: This should be the key given to you by google
     $secret = '6h03d9WznAVxJ4Gg7I6Daqdr'; //TODO: This should be the secret given to you by google
 
     $auth = new \API\google_oauth($key, $secret);
