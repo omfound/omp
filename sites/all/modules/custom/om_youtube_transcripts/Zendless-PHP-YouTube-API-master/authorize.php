@@ -4,8 +4,8 @@
     require 'api/google_oauth.php';
     require 'api/youtube.php';
 
-    $key = '**************'; //TODO: This should be the key given to you by google
-    $secret = '***************'; //TODO: This should be the secret given to you by google
+    $key = '6h03d9WznAVxJ4Gg7I6Daqdr'; //TODO: This should be the key given to you by google
+    $secret = '6h03d9WznAVxJ4Gg7I6Daqdr'; //TODO: This should be the secret given to you by google
 
     $auth = new \API\google_oauth($key, $secret);
     $oauth_token = $auth->get_access_token($_GET['oauth_token'], $_SESSION['token_secret'], $_GET['oauth_verifier']);
@@ -14,7 +14,7 @@
     foreach($oauth_token as $key => $value)
         $oauth_token[$key] = urlencode($value);
 
-    $youtube_api_key = '****************'; //TODO: This should be the api key give to you by youtube
+    $youtube_api_key = '6h03d9WznAVxJ4Gg7I6Daqdr'; //TODO: This should be the api key give to you by youtube
 
     $youtube = new \API\youtube();
 
