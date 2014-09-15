@@ -17,3 +17,6 @@ function om_agenda_manager_preprocess_om_show_live_block(&$variables) {
     $variables['buttons'] = $buttons;
   }
 }
+function om_agenda_manager_preprocess_om_show_live_page(&$variables) {
+  //placeholder
+}
