@@ -402,9 +402,13 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
+  $output .= '<div class="pure-u-2-3">';
   if ($embed = variable_get('om_agenda_status_embed', false)) {
     $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
   }
+  $output .= '</div>';
+
+  $output .= '<div class="pure-u-1-3">';
   $livestream_info = om_agenda_manager_livestream_info();
   $include_on_live = array();
   foreach ($livestream_info as $tid => $info) {
@@ -418,6 +422,7 @@ function om_agenda_manager_live_page() {
   if ($desc = variable_get('om_agenda_status_desc', false)) {
     $output .= '<div id="om-desc-content">'.$desc.'</div>';
   }
+  $output .= '</div>';
   $output .= '<h1 class="title archive-title">Archived Video</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
