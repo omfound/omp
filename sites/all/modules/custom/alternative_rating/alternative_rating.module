@@ -253,7 +253,9 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
 }
 
 function alternative_rating_testing() {
-  $test = db_query('SELECT * FROM {alternative_rating}');
+  $test = db_query('
+            SELECT * FROM {alternative_rating}
+            WHERE nid = :26235');
   foreach ($test as $row) {
     dsm($row);
   }
