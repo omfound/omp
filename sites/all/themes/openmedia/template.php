@@ -335,10 +335,16 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $social = theme('om_social_vertical_sharing');
     $variables['node_right'] = $social;
   }
+  // Link to project
+  if (!empty($variables['node']->field_om_show_project[$variables['node']->language])) {
+    $project = node_load($variables['node']->field_om_show_project[$variables['node']->language][0]['nid']);
+    $variables['project_link'] = l($project->title, 'node/' . $project->nid);
+  }
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
+  //drupal_add_js(path_to_theme() . '/js/omp-project.js', array('group' => JS_THEME));
   $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
@@ -853,3 +859,4 @@ function openmedia_preprocess_block(&$variables) {
     $variables['classes_array'][] = 'clearfix';
   }
 }
+

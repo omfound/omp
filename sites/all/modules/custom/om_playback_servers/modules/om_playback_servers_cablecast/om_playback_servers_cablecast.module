@@ -104,22 +104,24 @@ function om_playback_servers_cablecast_update_vod_field() {
   $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
   $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
   $query_uri->condition('field_archive_transfer_value', 1, '=');
+  $query_uri->range(0, 25);
   $resource = $query_uri->execute();
+  $cablecast_exists = class_exists('cablecastFile');
+  $ia_exists = class_exists('internetArchiveDerivativeHandler');
   while ($result = $resource->fetchAssoc()) {
-    watchdog('om_pbsc', '<pre>'.print_r($result, TRUE).'</pre>');
     $mp4 = '';
     $derivatives = '';
     $metadata = '';
-    if (class_exists('cablecastFile')) {
+    if ($cablecast_exists) {
       $cablecast_file_controller = new cablecastFile();
       $url = $cablecast_file_controller->get_ia_url($result['field_om_show_broadcast_file_uri']);
       $item = substr($url, strripos($url, '/'), strlen($url));
       $item = rtrim($item, '/');
-      if (class_exists('internetArchiveDerivativeHandler') && !empty($item)) {
+      if ($ia_exists && !empty($item)) {
         $ia_handler = new internetArchiveDerivativeHandler();
         $ia_handler->set_item($item);
         $derivatives = $ia_handler->get_derivatives();
-        if ( $derivatives != FALSE) {
+        if ($derivatives != FALSE) {
           $derivatives = drupal_json_encode(array($item => $derivatives));
           $mp4 = $ia_handler->get_derivative('mp4');
         }
@@ -176,6 +178,22 @@ function om_playback_servers_cablecast_default_channel_crawl_info($tid, $show) {
      }
   }
   return $output;
+}
+
+function om_playback_servers_cablecast_channel_wsdl($url, $tid) {
+  $uri = "public://$tid-cablecast.wsdl";
+  $files = file_load_multiple(array(), array('uri' => $uri));
+  if (empty($files)) {
+    $wsdl = file_get_contents($url); 
+    $file = file_save_data($wsdl, $uri);
+  }
+  else {
+    $file = array_shift($files);
+  }
+  if (is_object($file)) {
+    return file_create_url($file->uri);
+  }
+  return FALSE;
 }
 
 /**

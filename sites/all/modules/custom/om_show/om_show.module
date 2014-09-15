@@ -19,6 +19,15 @@ function om_show_menu() {
     'access arguments' => array('administer show'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['trending'] = array(
+    'title' => 'Show Ratings',
+    'description' => 'Shows by rating',
+    'page callback' => 'om_show_trends',
+    'access arguments' => array('administer show'),
+    'file' => 'om_show_trends.inc',
+    'file path' => drupal_get_path('module', 'om_show') . '/includes',
+    'type' => MENU_LOCAL_TASK,
+  );
 
   return $items;
 }
@@ -64,7 +73,13 @@ function om_show_theme($existing, $type, $theme, $path) {
       'variables' => array('user' => FALSE),
       'path' => $path . '/theme',
       'file' => 'theme.inc'
-    )
+    ),
+    'om_show_trending_page' => array(
+      'template' => 'om_show_trending_page',
+      'variables' => array('filter' => array(), 'results' => array(), 'pager' => array()),
+      'path' => $path . '/theme',
+      'file' => 'theme.inc'
+    ),
   );
 }
 
@@ -83,6 +98,11 @@ function om_show_admin_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Enable player share bar?'),
     '#default_value' => variable_get('om_show_share_bar', 0),
+  );
+  $form['om_show_remote_upload'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable remote upload to Archive.org?'),
+    '#default_value' => variable_get('om_show_remote_upload', 0),
   );
   $form['om_show_template'] = array(
     '#type' => 'select',
@@ -192,33 +212,48 @@ function om_show_migrate_flash() {
 }
 
 function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
-  /**
-  $node = $form['#node'];
-  $form['upload_method'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Check for remote upload'),
-    '#description' => t('Checking this box should enable remote upload'),
-    '#default_value' => $node->om_show['upload_method'],
-    '#ajax' => array(
-      'callback' => 'om_show_form_upload_callback',
-      'wrapper' => 'om-show-upload-method',
-      'effect' => 'fade',
-    ),
-  );
-  
-  $form['container'] = array(
-    '#prefix' => '<div id="om-show-upload-method">',
-    '#suffix' => '</div>',
-  );
-
-  if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && $node->om_show['upload_method']) {
-    $form['container']['remote_upload'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Remote Upload'),
-      '#description' => t('Remote Upload'),
-      '#default_value' => empty($form_state['values']['remote_upload']) ? $node->om_show['remote_upload'] : $form_state['values']['remote_upload'],
+  if (variable_get('om_show_remote_upload', 0)) {
+    $node = $form['#node'];
+    if (!empty($node->om_show['upload_method'])) {
+      $upload_default = $node->om_show['upload_method'];
+    }
+    else {
+      $upload_default = NULL;
+    }
+    $form['upload_method'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Check for remote upload'),
+      '#description' => t('Checking this box should enable remote upload'),
+      '#default_value' => $upload_default,
+      '#ajax' => array(
+        'callback' => 'om_show_form_upload_callback',
+        'wrapper' => 'om-show-upload-method',
+        'effect' => 'fade',
+      ),
     );
-  }**/
+  
+    $form['container'] = array(
+      '#prefix' => '<div id="om-show-upload-method">',
+      '#suffix' => '</div>',
+    );
+
+    if (!empty($form_state['values']['upload_method']) && $form_state['values']['upload_method'] == 1 || empty($form_state['values']) && !empty($node->om_show['upload_method'])) {
+      $form['container']['remote_upload'] = array(
+        '#markup' => om_show_archive_upload_embed('dom-testing-remote'),
+      );
+    }
+  }
+  // NB: MAY NEED TO BE TWEAKED WHEN ABOVE AJAX IS ENABLED!
+  if (arg(1) == 'add') { 
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'om_show') . '/js/metadata.js',
+    );
+  }
+}
+
+function om_show_archive_upload_embed($identifier) {
+  $source = '<iframe src="https://www-rkumar.archive.org/upload/?ia_uploader_embed=1&suggested_identifier='.$identifier.'&title=Testing&description=Testing description.&creator=Denver Open Media&collection=denveropenmedia&language=eng&date=2014" width="700" height="500"></iframe>';
+  return $source;
 }
 
 function om_show_form_upload_callback($form, $form_state) {
@@ -360,7 +395,8 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
     if (!empty($node['field_show_thumbnail'])) {
       $thumb_field = $node['field_show_thumbnail'][$node['language']];
     }
-  }else{
+  }
+  else {
     $nid = $node->nid;
     if (!empty($node->field_om_show_video[$node->language])) {
       $show_field = $node->field_om_show_video[$node->language];
@@ -543,20 +579,30 @@ function om_show_youtube_info($node) {
  * Utility function to select a video image for show nodes from the available options.
  */
 function om_show_video_image($node) {
+  $img_path = '';
   if (!empty($node->field_show_thumbnail)) {
     $img_path = file_create_url($node->field_show_thumbnail[$node->language][0]['uri']);
     if (strpos($img_path, 'no_image') && $image_url = internet_archive_thumb_from_nid($node->nid)) {
       $img_path = $image_url;
-    }elseif(strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
+    }
+    elseif (strpos($img_path, 'no_image') && !empty($node->field_om_theme[$node->language][0]['tid'])) {
       $term = taxonomy_term_load($node->field_om_theme[$node->language][0]['tid']);
       if (!empty($term->field_om_theme_image[LANGUAGE_NONE][0]['uri'])) {
         $img_path = file_create_url($term->field_om_theme_image[LANGUAGE_NONE][0]['uri']);
       }
     }
-  }else{
+  }
+  elseif (!empty($node->field_archive_derivatives[LANGUAGE_NONE])) {
+    $derivatives = json_decode($node->field_archive_derivatives[LANGUAGE_NONE][0]['value']);
+    $images = internet_archive_derivative_thumbnails($derivatives);
+    if (!empty($images)) {
+      $img_path = array_shift($images);
+      $img_path = $img_path['url'];
+    }
+  }
+  else{
     $img_path = false;
   }
-
   return $img_path;
 }
 
