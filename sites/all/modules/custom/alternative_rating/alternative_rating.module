@@ -221,7 +221,6 @@ function alternative_rating_qualified_nids() {
   foreach($result as $node) {
     $qualified_nids[] = $node->nid;
   }
-  dsm($qualified_nids);
   return $qualified_nids;
 }
 
@@ -252,6 +251,12 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
     ))
     ->execute();
 }
+
+function alternative_rating_testing() {
+  $test = db_query('DESC TABLE {alternative_rating}');
+  dsm($test);
+}
+
 function alternative_rating_populate() {
 /*  $lastrun = variable_get('alternative_rating_run', false);
  *  $limit = strtotime("-6 hours");
