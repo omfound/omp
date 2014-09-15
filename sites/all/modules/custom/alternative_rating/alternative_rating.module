@@ -24,7 +24,7 @@ function alternative_rating_menu() {
 
 function alternative_rating_display_category_averages() {
   $averages = alternative_rating_categories();
-	
+  dsm($averages);	
   $display = '';
 	$display .= '<br /><br /><h2>Current Category Averages:</h2>';
 	$display .= '<table><tr><th>Category</th><th>Shows</th><th>Average</th><th>Shows Above Average</th><th>Shows with no Ratings</th></tr>';
