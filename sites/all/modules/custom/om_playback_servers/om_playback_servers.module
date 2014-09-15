@@ -1,0 +1,202 @@
+<?php
+
+require_once(drupal_get_path('module', 'om_playback_servers').'/includes/om_playback_servers.admin.inc');
+
+/**
+ * Implements hook_permission
+ */
+function om_playback_servers_permission() {
+  return array(
+    'administer om playback servers' => array(
+      'title' => t('Administer Open Media Playback Servers'),
+      'description' => t('Create/edit playback server entities.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function om_playback_servers_entity_info() {
+  return array(
+    'om_playback_server' => array(
+      'label' => t('Open Media Playback Server'),
+      'plural label' => t('Open Media Playback Servers'),
+      'description' => t('Entity for handling interactions between the webserver and playback servers.'),
+      'entity class' => 'Entity',
+      'controller class' => 'EntityAPIController',
+      'base table' => 'om_playback_servers',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'pbsid'
+      ),
+      'bundle keys' => array(),
+      'bundles' => array(),
+      // Make use the class' label() and uri() implementation by default.
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+    )
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_type()
+ */
+function om_playback_servers_ctools_plugin_type() {
+  return array(
+    'om_playback_server' => array(
+      'cache' => FALSE,
+      'use hooks' => TRUE,
+      'classes' => array('playbackServerController'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_directory
+ */
+function om_playback_servers_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'om_playback_servers' && !empty($plugin)) {
+    return "includes/$plugin";
+  }
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_playback_servers_menu() {
+  $items = array();
+
+  $items['om_playback_servers'] = array(
+    'title' => t('All Playback Servers'),
+    'page callback' => 'om_playback_servers_admin_list',
+    'access arguments' => array('administer om playback servers'),
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['om_playback_servers/list'] = array(
+    'title' => t('All Playback Servers'),
+    'weight' => -1,
+    'type' => MENU_DEFAULT_LOCAL_TASK
+  );
+
+  $items['om_playback_servers/add'] = array(
+    'title' => t('Add a playback server'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_playback_servers_admin_form'),
+    'access arguments' => array('administer om playback servers'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK
+  );
+
+  $items['om_playback_servers/%om_playback_servers/edit'] = array(
+    'title' => t('Add a playback server'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_playback_servers_admin_form', 1),
+    'access arguments' => array('administer om playback servers'),
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['om_playback_servers/%om_playback_servers/delete'] = array(
+    'title' => t('Add a playback server'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_playback_servers_delete_confirm', 1),
+    'access arguments' => array('administer om playback servers'),
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+/** Utility Functions **/
+
+/**
+ * Menu loader/utility function
+ * 
+ * @param pbsid
+ *   the pbsid of the pbs to load and pass along
+ */
+function om_playback_servers_load($pbs_id, $conditions = array(), $reset = FALSE) {
+  $pbs_ids = array($pbs_id);
+  $pbs = entity_load('om_playback_server', $pbs_ids, $conditions, $reset);
+  return $pbs;
+}
+
+/**
+ * Utility function to load all pbs types.
+ * 
+ * @return types
+ *   return array non-base class types
+ */
+function om_playback_servers_get_types() {
+  ctools_include('plugins');
+  $plugins = ctools_get_plugins('om_playback_servers', 'om_playback_server');
+  unset($plugins['pbs_base']);
+  return $plugins;
+}
+
+/**
+ * Given the pbs entity return the appropriate controller for its type.
+ * 
+ * @param $pbs
+ *   well formed entity object
+ *
+ * @returns pbs controller object
+ */
+function om_playback_servers_entity_get_controller($pbs) {
+  if (is_object($pbs)) {
+    $plugins = om_playback_servers_get_types();
+    $plugin_info = ctools_plugin_get_info('om_playback_servers', 'om_playback_server');
+    ctools_plugin_load_includes($plugin_info);
+    if (!empty($pbs->ompbs_type) && !empty($plugins[$pbs->ompbs_type]['path'])) {
+      require_once($plugins[$pbs->ompbs_type]['path'] . '/' . $plugins[$pbs->ompbs_type]['file']);
+      $controller = new $plugins[$pbs->ompbs_type]['playback_server']['class'];
+      return $controller;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Grab the vocabulary object for the channels vocabulary.
+ * 
+ * @returns $vocabulary object
+ */
+function om_playback_servers_get_channel_vocabulary() {
+  $query = db_select('taxonomy_vocabulary', 'voc');
+  $query->fields('voc', array('vid'));
+  $query->condition('machine_name', 'channels', '=');
+  $result = $query->execute();
+  $vid = $result->fetchAssoc();
+  if (!empty($vid['vid'])) {
+    return taxonomy_get_tree($vid['vid']);
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Given a channel term id return the matching playback server.
+ * 
+ * @param $channel_tid
+ *   The term id of the channel
+ * 
+ * @returns $pbs entity
+ */
+function om_playback_servers_get_pbs_by_term($channel_tid) {
+  $query = db_select('om_playback_servers', 'ompbs');
+  $query->fields('ompbs', array('pbsid'));
+  $query->condition('channel', $channel_tid, '=');
+  $result = $query->execute();
+  $pbs_ids = array();
+  while ($row = $result->fetchAssoc()) {
+    $pbs_ids[] = $row['pbsid'];
+  }
+  return entity_get_controller('om_playback_server')->load($pbs_ids);
+}

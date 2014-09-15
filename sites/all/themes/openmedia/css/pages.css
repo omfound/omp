@@ -1,0 +1,374 @@
+/**
+ * @file
+ * Page Styling
+ *
+ * Style the markup found in page.tpl.php. Also includes some styling of
+ * miscellaneous Drupal elements that appear in the $content variable, such as
+ * ul.links, .pager, .more-link, etc.
+ */
+
+
+/*
+ * Body
+ */
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent url(../images/bg.jpg) top left repeat;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #333333;
+  font-size: 12px;
+  text-shadow: 1px 1px 1px rgba(239, 239, 239, .75);
+}
+
+body.iframe-mode {
+  background-color: #FFF;
+  background-image: none;
+  overflow-x: hidden;
+}
+
+.iframe-mode #footer-wrapper {
+  display: none;
+}
+
+.red,
+.red:link,
+.red:visited {
+  color: #90281D;
+}
+
+.green,
+.green:link,
+.green:visited {
+  color: #84B63F;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+a,
+a:link,
+a:visited {
+  color: #3395d2;
+  text-decoration: underline;
+}
+
+a:focus,
+a:hover {
+  text-decoration: underline;
+}
+
+input[type="submit"].gray-button,
+a:link.gray-button,
+a:visited.gray-button {
+  display: inline-block;
+  color: #FFFFFF;
+  background: #BBBBBB;
+  padding: 3px;
+  text-shadow: none;
+  font-size: 12px;
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #AAAAAA;
+  border-right: solid 1px #AAAAAA;
+  box-shadow: none;
+  border-radius: 0;
+  background-image: none;
+}
+
+input[type="submit"]:hover.gray-button,
+input[type="submit"]:focus.gray-button,
+a:focus.gray-button,
+a:hover.gray-button {
+  border-top: solid 1px #EFEFEF;
+  border-left: solid 1px #EFEFEF;
+  border-bottom: solid 1px #EFEFEF;
+  border-right: solid 1px #EFEFEF;
+  background: #BBBBBB;
+}
+
+input[type="submit"].blue-button,
+a:link.blue-button,
+a:visited.blue-button {
+  display: inline-block;
+  background: #3395D2;
+  padding: 3px;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 1px rgba(51, 51, 51, .85);
+  text-decoration: none;
+  border-radius: 4px;
+  border: solid 1px #2c82b8;
+  box-shadow: 1px 2px 3px rgba(204, 204, 204, .85);
+  line-height: 18px;
+  margin: 0 5px;
+}
+
+input[type="submit"]:hover.blue-button,
+input[type="submit"]:focus.blue-button,
+a:focus.blue-button,
+a:hover.blue-button {
+  box-shadow: none;
+  background: #2c82b8;
+  border: solid 1px #3395D2;
+}
+
+input[type="submit"].red-button,
+a:link.red-button,
+a:visited.red-button {
+  display: inline-block;
+  background: #91291E;
+  padding: 3px;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 1px rgba(51, 51, 51, .85);
+  text-decoration: none;
+  border-radius: 4px;
+  border: solid 1px #661D15;
+  box-shadow: 1px 2px 3px rgba(204, 204, 204, .85);
+  line-height: 18px;
+  margin: 0 5px;
+}
+
+input[type="submit"]:hover.red-button,
+input[type="submit"]:focus.red-button,
+a:focus.red-button,
+a:hover.red-button {
+  box-shadow: none;
+  background: #661D15;
+  border: solid 1px #661d15;
+}
+
+a:link.inset-button,
+a:visited.inset-button {
+  display: inline-block;
+  padding: 0px 4px;
+  border: solid 1px #B7B1A4;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px #FFFFFF;
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 36%, #f1eff0 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(36%,#ffffff), color-stop(100%,#f1eff0)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 36%,#f1eff0 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 36%,#f1eff0 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 36%,#f1eff0 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 36%,#f1eff0 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f1eff0',GradientType=0 ); /* IE6-9 */
+  color: #333333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:focus.inset-button,
+a:hover.inset-button {
+  background: #f1eff0; /* Old browsers */
+  background: -moz-linear-gradient(top,  #f1eff0 0%, #ffffff 64%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f1eff0), color-stop(64%,#ffffff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #f1eff0 0%,#ffffff 64%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #f1eff0 0%,#ffffff 64%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #f1eff0 0%,#ffffff 64%); /* IE10+ */
+  background: linear-gradient(to bottom,  #f1eff0 0%,#ffffff 64%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1eff0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  padding: 10px;
+}
+
+th {
+  padding-left: 10px;
+}
+body.page-membership th {
+  padding-left: 0;
+}
+
+/** Create the Beveled Divider **/
+.divider {
+  border-top: 1px solid #B7B1A4;
+}
+
+.divider .inner {
+  border-top: 1px solid #FFFFFF;
+}
+
+/*
+ * The skip-link link will be completely hidden until a user tabs to the link.
+ * See the element-focusable rule in system.base.css.
+ */
+
+#skip-link {
+  margin: 0;
+}
+#skip-link a,
+#skip-link a:visited {
+  display: block;
+  width: 100%;
+  padding: 2px 0 3px 0;
+  text-align: center;
+  background-color: #666;
+  color: #fff;
+}
+
+.breadcrumb { /* The path to the current page in the form of a list of links */
+}
+.breadcrumb ol {
+  margin: 0;
+  padding: 0;
+}
+.breadcrumb li {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.messages { /* Important messages (status, warning, and error) for the user. See also the declarations in messages.css. */
+  margin: 1.5em 0; /* Drupal core uses "6px 0" margin */
+}
+div.messages ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.front #page {
+  page: 0;
+}
+
+.front #main #content {
+  padding: 0;
+}
+
+.page-classes #main #content {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#header {
+  background-color: #FFFFFF;
+  box-shadow: 3px 3px 3px #AAAAAA;
+  padding: 0;
+}
+
+#header ul {
+  margin: 0;
+  padding: 0;
+}
+
+.front #action-item {
+  border-top: 1px solid #B7B1A4;
+}
+
+.front #action-item .wrapper {
+  border-top: 1px solid #E1DBCD;
+}
+
+.front #main {
+  padding-top: 0;
+  *background-color: #DCD5C3;
+  background-color: rgba(220, 213, 195, .75);
+  border-top: 1px solid #B7B1A4;
+  
+}
+
+.front #main .inner {
+  border-top: solid 1px #E1DBCD;
+}
+
+.breadcrumb ol li,
+.breadcrumb ol li a {
+  color: #3A93CC;
+  font-size: 10px;
+}
+
+.not-front #content {
+  background-color: #F4F4F4;
+  box-shadow: 1px 1px 2px #AAA, -1px -1px 2px #AAA;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+.iframe-mode #content {
+  margin: 0;
+  box-shadow: none;
+}
+
+.front .region-sidebar-second {
+  padding: 0;
+  width: 196px;
+}
+
+.front #footer-wrapper {
+  *background-color: #DCD5C3;
+  background-color: rgba(220, 213, 195, .75);
+}
+
+#footer-wrapper .inner {
+  width: 980px;
+  margin: auto;
+  border-top: 1px solid #B7B1A4;
+}
+
+#footer {
+  border-top: solid 1px #E1DBCD !important;
+  padding: 0;
+}
+
+body.page-user-orders div.commerce-registration {
+  margin-top: 20px;
+}
+
+body.page-views div#content-inner {
+  padding: 10px;
+}
+
+body.page-classes div#content-inner {
+  padding: 0;
+}
+
+body.front h1.title,
+body.front h2.block-title {
+  font-size: 1.9em;
+  font-family: 'PTSansBold', sans-serif;
+  margin-top: 0.75em;
+  line-height: 36px;
+}
+body.front h1.title {
+  margin-bottom: 0;
+}
+body.front h2.block-title {
+  margin-top: 76px;
+  margin-bottom: 0;
+}
+
+.hidden-form {
+  display: none;
+}
+
+#page-iframe-embed {
+  margin-left: 10px;
+}
+#page-iframe-embed textarea {
+  width: 800px;
+}
+ 
+.form-item .form-value-override {
+  border-color: rgb(0, 168, 255);
+  background-color: rgb(0, 168, 255);
+}
+
+/**
+ * Project of OMF
+ */
+.region-footer #block-om-theme-assets-project-of-omf-block {
+  float: right;
+  position: relative;
+  bottom: 5px;
+}

@@ -1,0 +1,373 @@
+<?php
+/**
+ * Implements hook_permission
+ */
+function om_theme_assets_permission() {
+  return array(
+    'manage theme assets' => array(
+      'title' => t('Upload and modify assets for the OMP theme.'),
+      'description' => t('Allows users to upload and delete files and manage text/url configuration for OMP theme assets.'),
+    ),
+    'admin omp theme' => array(
+      'title' => t('Administer the OMP theme'),
+      'description' => t('Allows users to change the color scheme and manage other low level functionality of the OMP theme.'),
+    ),
+    'view iframe embed' => array(
+      'title' => t('View iframe embed code at bottom of pages'),
+      'description' => t('Roles with this permission will see the iframe embed code at the bottom of applicable pages.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_theme_assets_menu() {
+  $items = array();
+  $items['om_theme_assets'] = array(
+    'title' => t('Administer Open Media Theme Assets'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_theme_assets_admin_form'),
+    'access arguments' => array('manage theme assets'),
+    'file' => 'includes/om_theme_assets_form.inc',
+    'type' => MENU_NORMAL_ITEM
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_block_info
+ */
+function om_theme_assets_block_info() {
+  $blocks = array();
+  $blocks['om_footer_block'] = array(
+    'info' => t('Footer Block'), 
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['project_of_omf_block'] = array(
+    'info' => t('Project of OMF Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['om_round_social_media'] = array(
+    'info' => t('Round Social Media Icons'), 
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['om_site_links'] = array(
+    'info' => t('Persistant Site Links'), 
+    'cache' => DRUPAL_CACHE_PER_ROLE
+  );
+  $callout_blocks = om_theme_assets_callout_block_content();
+  foreach ($callout_blocks AS $key => $info) {
+    $blocks['om_callout_block_' . $key] = array(
+      'info' => $info['admin_title'], 
+      'cache' => DRUPAL_CACHE_GLOBAL
+    );
+  }
+  $blocks['om_action_items'] = array(
+    'info' => t('Action Items'), 
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['om_main_banner'] = array(
+    'info' => t('Main Banner'), 
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['om_site_search'] = array(
+    'info' => t('OM Site Search'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view
+ */
+function om_theme_assets_block_view($delta = "") {
+  $blocks = array();
+  switch($delta) {
+    case 'om_footer_block':
+      $blocks['content'] = om_theme_assets_footer_block();
+      break;
+    case 'project_of_omf_block':
+      if (variable_get('omf_project', FALSE) == 1) {
+        $blocks['content'] = om_theme_assets_om_footer_block();
+      }
+      break;
+    case 'om_round_social_media':
+      $blocks['content'] = theme('om_round_social_media');
+      break;
+    case 'om_site_links':
+      $blocks['content'] = theme('om_site_links');
+      break;
+    case 'om_action_items':
+      // Glom all action items into one block.
+      $blocks['content'] = '';
+      $action_items = om_theme_assets_action_item_content();
+      if (!empty($action_items)) {
+        foreach ($action_items AS $action_item) {
+          $blocks['content'] .= theme('om_action_item', $action_item);
+        }
+      }
+      break;
+    case 'om_main_banner':
+      $blocks['content'] = om_theme_assets_main_banner();
+      break;
+    case 'om_site_search':
+      $blocks['content'] = theme('om_site_search');
+      break;
+  }
+  if (is_numeric(stripos($delta, 'om_callout_block_'))) {
+    $index = str_replace('om_callout_block_', '', $delta);
+    $callout_blocks = om_theme_assets_callout_block_content();
+    if (!empty($callout_blocks[$index])) {
+      $options = array('block_info' => $callout_blocks[$index]);
+      $blocks['content'] = theme('om_callout_block', $options);
+    }
+  }
+  return $blocks;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_theme_assets_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_footer_block' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_footer_block',
+      'file' => 'theme.inc'
+    ),
+    'om_round_social_media' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_round_social_media',
+      'file' => 'theme.inc'
+    ),
+    'om_site_links' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_site_links',
+      'file' => 'theme.inc'
+    ),
+    'om_callout_block' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_callout_block',
+      'file' => 'theme.inc'
+    ),
+    'om_action_item' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_action_item'
+    ),
+    'om_theme_dynamic_css' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_theme_dynamic_css',
+      'file' => 'theme.inc'
+    ),
+    'om_site_search' => array( 
+      'path' => $path . '/theme',
+      'template' => 'om_site_search',
+      'file' => 'theme.inc'
+    )
+  );
+}
+
+function om_theme_assets_footer_block() {
+  $block = array();
+  $text = array( 
+     'footer_address' => variable_get('footer_address', ''),
+     'phone_number' => variable_get('phone_number', ''),
+     'email' => variable_get('email', '')
+     );
+  
+  $output = '';
+  foreach ($text as $item) {
+    $output .= '<span class="footer-item">';
+    $output .= $item;
+    $output .= '</span>';
+  }
+
+  if (!empty($output)) {
+    $block = array(
+      'message' => array(
+        '#type' => 'markup',
+        '#markup' => $output,
+      )
+    );
+
+    return $block;
+  }
+}
+  
+
+/**
+ * Helper function to return content information for callout blocks.
+ */
+function om_theme_assets_callout_block_content() {
+  $output = array();
+  $cta_1_fid = variable_get('call_to_action_1', FALSE);
+  if (is_numeric($cta_1_fid)) {
+    $cta_1_file = file_load($cta_1_fid);
+    if (is_object($cta_1_file)) {
+      $cta_1_image = image_style_url('300x', $cta_1_file->uri);
+      $output[] = array(
+        'admin_title' => 'Callout Block 1',
+        'block_title' => variable_get('call_to_action_title_1', ''),
+        'image_path' => $cta_1_image,
+        'url' => variable_get('call_to_action_url_1', '')
+      );
+    }
+  }
+  $cta_2_fid = variable_get('call_to_action_2', FALSE);
+  if (is_numeric($cta_2_fid)) {
+    $cta_2_file = file_load($cta_2_fid);
+    if (is_object($cta_2_file)) {
+    $cta_2_image = image_style_url('300x', $cta_2_file->uri);
+      $output[] = array(
+        'admin_title' => 'Callout Block 2',
+        'block_title' => variable_get('call_to_action_title_2', ''),
+        'image_path' => $cta_2_image,
+        'url' => variable_get('call_to_action_url_2', '')
+      );
+    }
+  }
+  $cta_3_fid = variable_get('call_to_action_3', FALSE);
+  if (is_numeric($cta_3_fid)) {
+    $cta_3_file = file_load($cta_3_fid);
+    if (is_object($cta_3_file)) {
+      $cta_3_image = image_style_url('300x', $cta_3_file->uri);
+      $output[] = array(
+        'admin_title' => 'Callout Block 3',
+        'block_title' => variable_get('call_to_action_title_3', ''),
+        'image_path' => $cta_3_image,
+        'url' => variable_get('call_to_action_url_3', '')
+      );
+    }
+  }
+  return $output;
+}
+
+/**
+ * Helper function to return action items.
+ */
+function om_theme_assets_action_item_content() {
+  $output = array();
+  for ($i = 1; $i <= 4; $i ++ ) {
+    $highlight = variable_get('info_tags_highlight_' . $i, '');
+    if (!empty($highlight)) {
+      $output[] = array(
+        'admin_title' => 'Action Item Block ' . $i,
+        'bubble_text' => $highlight,
+        'black_text' => variable_get('info_tags_label_' . $i, ''),
+        'blue_text' => variable_get('info_tags_link_' . $i, ''),
+        'url' => variable_get('info_tags_url_' . $i, ''),
+        'position' => '',
+      );
+    }
+  }
+  if (isset($output[0])) {
+    $output[0]['position'] = 'first';
+  }
+  if (!empty($output)) {
+    $output[count($output) - 1]['position'] = 'last';
+  }
+  return $output;
+}
+
+function om_theme_assets_main_banner() {
+  $banner_fid = variable_get('theme_banner', FALSE);
+  if (is_numeric($banner_fid)) {
+    $banner_file = file_load($banner_fid);
+    if (is_object($banner_file)) {
+      $stream_wrapper = file_stream_wrapper_get_instance_by_uri($banner_file->uri);
+      $banner_url = $stream_wrapper->getExternalUrl();
+      $image = "<image src='$banner_url' title='home' alt='main site banner with station's logo' />";
+      $options = array('html' => TRUE);
+      return l($image, '<front>', $options);
+    }
+  }
+  return '';
+}
+
+function om_theme_assets_om_footer_block() {
+    global $theme;
+    $path = drupal_get_path('theme', $theme) . '/images/project-omf.png';
+    $image = "<img src='$path' />";
+    $options = array(
+      'attributes' => array(
+        'target' => '_blank'
+      ),
+      'html' => TRUE
+    );
+    return l($image, 'http://openmediafoundation.org', $options);
+}
+
+function om_theme_assets_show_status_images() {
+  $fids = array();
+  $fids['processing'] = variable_get('show_processing', FALSE); 
+  $fids['live'] = variable_get('show_live', FALSE); 
+  $fids['ondemand'] = variable_get('show_ondemand', FALSE); 
+
+  $show_status_images = array();
+  foreach ($fids as $key => $fid) {
+    if (is_numeric($fid)) {
+      $show_file = file_load($fid);
+      if (is_object($show_file)) {
+        $stream_wrapper = file_stream_wrapper_get_instance_by_uri($show_file->uri);
+        $show_url = $stream_wrapper->getExternalUrl();
+        $image = "<image src='$show_url' />";
+        $show_status_images[$key] = $image;
+      }
+    }
+  }
+  
+  return $show_status_images;
+}
+
+/*
+function om_theme_assets_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#id'] == 'views-exposed-form-show-grid-page') {
+    if (empty($_GET['sort_by']) && empty($_GET['sort_order'])) {
+      $form_state['input']['sort_by'] = 'score';
+      $form_state['input']['sort_order'] = 'DESC';
+    }
+  }
+}
+*/
+
+function om_theme_assets_build_dynamic_css() {
+  global $user;
+  $css = theme('om_theme_dynamic_css');
+  if (!empty($css)) {
+    $destination = 'public://theme_assets/om_theme_dynamic_css.css';
+    $file = file_save_data($css, $destination, FILE_EXISTS_REPLACE);
+    $file->status = FILE_STATUS_PERMANENT;
+    file_save($file);
+    file_usage_add($file, 'om_theme_assets', 'om_theme_dynamic_css', $user->uid);
+    drupal_set_message('OMP theme css has been rebuilt.');
+  }
+  else {
+   $file = file_load_multiple($fids = array(), $conditions = array('filename' => 'om_theme_dynamic_css.css'));
+   if (!empty($file)) {
+     $file = array_shift($file);
+     file_delete($file, TRUE);
+   }
+  }
+}
+
+
+function om_theme_assets_hex_to_rgba($hex) {
+  if ($hex == 'transparent') {
+    return '0,0,0,0';
+  }
+
+  $hex = str_replace("#", "", $hex);
+  if(strlen($hex) == 3) {
+    $r = hexdec(substr($hex,0,1).substr($hex,0,1));
+    $g = hexdec(substr($hex,1,1).substr($hex,1,1));
+    $b = hexdec(substr($hex,2,1).substr($hex,2,1));
+  }
+  else {
+   $r = hexdec(substr($hex,0,2));
+   $g = hexdec(substr($hex,2,2));
+   $b = hexdec(substr($hex,4,2));
+  }
+  $rgba = array($r, $g, $b, '.75');
+  return implode(",", $rgba); // returns the rgb values separated by commas
+}

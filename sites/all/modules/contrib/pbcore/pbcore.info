@@ -1,0 +1,17 @@
+; $Id
+name = PBCore
+description = "Provides standards metadata elements from Public Broadcasting Metadata Dictionary to other modules with UI to enable/disable elements for the entire site."
+core = 7.x
+package = Search and Metadata
+
+dependencies[] = taxonomy
+
+configure = admin/config/search/pbcore
+
+
+; Information added by drupal.org packaging script on 2012-06-06
+version = "7.x-1.0-beta2"
+core = "7.x"
+project = "pbcore"
+datestamp = "1339001563"
+

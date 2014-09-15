@@ -1,0 +1,216 @@
+<?php 
+/**
+ * Implements hook_permission
+ */
+function om_dashboard_permission() {
+  return array(
+    'access dashboard' => array(
+      'title' => t('Access Dashboard'), 
+      'description' => t('Access the dashboard page.'),
+    ),
+    'administer dashboards' => array(
+      'title' => t('Administer Dashboards'),
+      'description' => t('Administer dashboard panes'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_dashboard_menu() {
+  $items = array();
+  $items['dashboard'] = array(
+    'title' => t('My Dashboard'),
+    'page callback' => 'om_dashboard_page',
+    'access arguments' => array('access dashboard'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['dashboard/%om_dashboard_pane'] = array(
+    'title' => t('My Dashboard'),
+    'page callback' => 'om_dashboard_pane_page',
+    'page arguments' => array(1),
+    'access arguments' => array('access dashboard'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/om/dashboard-panes'] = array(
+    'title' => t('Administer Dashboard Panes'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_dashboard_admin_form'), 
+    'access arguments' => array('administer dashboards'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $panes = om_dashboard_get_panes();
+  if (!empty($panes)) {
+    foreach ($panes AS $key => $pane) {
+      if (isset($pane['menu']) && variable_get('om_dashboard_item_'.$key, TRUE)) {
+        $items += $pane['menu'];
+      }
+    }
+  }
+  return $items;
+}
+
+function om_dashboard_admin_form() {
+  $form = array();
+  $form['om_dashboard_form_header'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Open Media Dashboard Panes'),
+    '#suffix' => '</h2>'
+  );
+  $form['om_dashboard_form_help'] = array(
+    '#markup' => t('Use the checkboxes below to disable or enable available dashboard panes.')
+  );
+  $panes = om_dashboard_get_panes();
+  foreach ($panes as $key => $pane) {
+    $form_item = 'om_dashboard_item_'.$key;
+    $form[$form_item] = array(
+      '#title' => $pane['title'],
+      '#type' => 'checkbox',
+      '#default_value' => variable_get($form_item, true),
+    );
+  } 
+  return system_settings_form($form);
+}
+
+/**
+ * Load a pane by its id.
+ */
+function om_dashboard_pane_load($pane_id) {
+  $panes = om_dashboard_get_panes();
+  if (isset($panes[$pane_id])) {
+    return $panes[$pane_id];
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Page callback to view a single pane on a page.
+ */
+function om_dashboard_pane_page($pane) {
+  if (!empty($pane)) {
+    return om_dashboard_render_pane($pane);
+  }
+  else {
+    return drupal_not_found();
+  }
+}
+
+/**
+ * Page callback to view all panes on one page.
+ */
+function om_dashboard_page() {
+  $options = array(
+    'type' => 'file',
+     'group' => JS_LIBRARY
+  );
+  drupal_add_js('sites/all/libraries/masonry/jquery.masonry.min.js', $options);
+  drupal_add_js(drupal_get_path('module', 'om_dashboard') . '/js/dashboard-masonry.js', $options);
+  $panes = om_dashboard_get_panes();
+  $rendered_panes = "";
+  foreach ($panes AS $key => $pane) {
+    if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+      $rendered_panes .= om_dashboard_render_pane($pane);
+    }
+  }
+  $output = theme('om_dashboard_page', array('panes' => $rendered_panes));
+  return $output;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_dashboard_theme($existing, $type, $theme, $path) {
+  $themes = array(
+    'om_dashboard_page' => array(
+      'function' => 'om_dashboard_page_render',
+      'variables' => array('panes' => array()),
+    )
+  );
+  $panes = om_dashboard_get_panes();
+  if (!empty($panes)) {
+    foreach ($panes AS $key => $pane) {
+      if (variable_get('om_dashboard_item_'.$key, TRUE)) {
+        $themes += $pane['theme'];
+      }
+    }
+  }
+  return $themes;
+}
+
+/**
+ * Render a single pane.
+ */
+function om_dashboard_render_pane($pane) {
+  $theme = $pane['theme'];
+  $theme_name = array_shift(array_keys($theme));
+  return theme($theme_name);
+}
+
+/**
+ * Given pane content render dashboard page.
+ */
+function om_dashboard_page_render($variables) {
+  if (!empty($variables['panes'])) {
+    $output =  $variables['panes'];
+  }
+  else {
+    $output = t('No dashboard panes are available.');
+  }
+  return "<div id='om-dashboard'>$output</div>";
+}
+
+/**
+ * Get all panes implemented by hook_om_dashboard_panes.
+ */
+function om_dashboard_get_panes() {
+  $panes = &drupal_static(__FUNCTION__);
+  if (!isset($panes)) {
+    $panes = array();
+    $all_panes = module_invoke_all('om_dashboard_panes');
+    if (!empty($all_panes)) {
+      foreach ($all_panes AS $key => $pane) {
+        if (!empty($panes['dependencies'])) {
+          $dependencies_found = true;
+          foreach ($panes['dependencies'] AS $dependency) {
+            if (!module_exists($dependency)) {
+              $dependencies_found = false;
+            }
+          }
+          if ($dependencies_found == TRUE) {
+            if (!empty($pane['access'])) {
+              if (user_access($pane['access'])) {
+                $panes[$key] = $pane;
+              }
+            }
+            else {
+              $panes[$key] = $pane;
+            }
+          }
+        }
+        else {
+          if (!empty($pane['access'])) {
+            if (user_access($pane['access'])) {
+              $panes[$key] = $pane;
+            }
+          }
+          else {
+            $panes[$key] = $pane;
+          }
+        }
+      }
+    }
+  }
+  return $panes;
+}
+
+function om_dashboard_user_login(&$edit, $account) {
+  $redirection = 'dashboard';
+  
+  if (empty($_GET['destination']) && !is_null($redirection) && (!isset($_POST['form_id']) || $_POST['form_id'] != 'user_pass_reset')) {
+    $edit['redirect'] = $redirection;
+  }
+
+}

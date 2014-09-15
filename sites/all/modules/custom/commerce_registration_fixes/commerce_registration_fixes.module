@@ -1,0 +1,122 @@
+<?php
+
+function commerce_registration_fixes_commerce_checkout_page_info_alter(&$checkout_pages) {
+  if(!commerce_registration_fixes_is_registration_cart()) {
+    unset($checkout_pages['registration']);
+  }
+}
+
+function commerce_registration_fixes_is_registration_cart() {
+  global $user;
+
+  //disable notices momentarily due to unresolvable issue with commerce
+  //http://drupal.org/node/1461726
+  $old_error_reporting = error_reporting(error_reporting() ^ E_NOTICE);
+  $current_error_reporting = error_reporting();
+  error_reporting(E_ERROR | E_WARNING | E_PARSE);
+  $cart = commerce_cart_order_load($user->uid);
+  error_reporting($old_error_reporting);
+
+  $registration_status = false;
+  if(!empty($cart->commerce_line_items[LANGUAGE_NONE])) {
+    foreach($cart->commerce_line_items[LANGUAGE_NONE] as $id => $info) {
+      $line_item = commerce_line_item_load($info['line_item_id']); 
+      if(commerce_registration_product_has_registration_field($line_item->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+        $registration_status = true;
+      }
+    }
+  }
+
+  return $registration_status; 
+}
+
+function commerce_registration_fixes_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'commerce_checkout_form_registration') {
+
+    $form['omp']['#after_build'] = array('commerce_registration_fixes_load_js');
+
+    global $user;
+    $contact_info = profile2_load_by_user($user, 'contact_info');
+    $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+    $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
+    $phone = $contact_info->field_phone_number[LANGUAGE_NONE][0]['safe_value'];
+    if (!empty($form['registration_information'])) {
+      foreach($form['registration_information'] as $class_key => $class) {
+        if(is_array($class)) {
+          reset($class);
+          $reg_key = key($class);
+          if($reg_key) {
+            if($first_name && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_first_name']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_first_name'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_first_name']['und'][0]['value']['#default_value'] = $first_name; 
+            }
+            if($last_name && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_last_name']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_last_name'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_last_name'][LANGUAGE_NONE][0]['value']['#default_value'] = $last_name; 
+            }
+            if($phone && 
+                !empty($form['registration_information'][$class_key][$reg_key]['field_phone_number']) &&
+                is_array($form['registration_information'][$class_key][$reg_key]['field_phone_number'])) {
+              $form['registration_information'][$class_key][$reg_key]['field_phone_number'][LANGUAGE_NONE][0]['value']['#default_value'] = $phone; 
+            }
+	          if(!empty($form['registration_information'][$class_key][$reg_key]['register_for']) && is_array($form['registration_information'][$class_key][$reg_key]['register_for'])) {
+              $form['registration_information'][$class_key][$reg_key]['register_for']['#default_value'] = 'registration_registrant_type_me';
+	          }
+          }
+        }
+      }
+    }
+  }
+}
+
+function commerce_registration_fixes_load_js($element) {
+  drupal_add_js(drupal_get_path('module', 'commerce_registration_fixes').'/js/clearother.js');
+  return $element;	
+}
+
+function commerce_registration_fixes_preprocess_table(&$variables) {
+  if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'registrations') {
+    $payment_column = array();
+    foreach ($variables['rows'] as $key => $registration_info) {
+      $registration_id = strip_tags($registration_info[0]);
+      $order_id = commerce_registration_fixes_registration_oid($registration_id);
+      $payment_status = commerce_registration_fixes_order_status($registration_id);
+      if (empty($payment_status)) {
+        $payment_status = 'No Payment';
+      }
+      $payment_column[$key] = l($payment_status, 'admin/commerce/orders/'.$order_id);
+    } 
+
+    $last_header = array_pop($variables['header']);
+    $variables['header'][] = t('Payment');
+    $variables['header'][] = $last_header;
+    foreach ($payment_column as $key => $link) {
+      $last_column = array_pop($variables['rows'][$key]);
+      $variables['rows'][$key][] = $link;
+      $variables['rows'][$key][] = $last_column;
+    }
+  }
+}
+
+function commerce_registration_fixes_order_status($registration_id) {
+  $query = "
+    SELECT status 
+    FROM {commerce_payment_transaction}
+    JOIN {registration} ON registration.order_id = commerce_payment_transaction.order_id
+    WHERE registration.registration_id = :regid";
+
+  $status = db_query($query, array(':regid' => $registration_id))->fetchField();
+  return $status;
+}
+
+function commerce_registration_fixes_registration_oid($registration_id) {
+  $query = "
+    SELECT order_id
+    FROM {registration}
+    WHERE registration.registration_id = :regid";
+
+  $order_id = db_query($query, array(':regid' => $registration_id))->fetchField();
+  return $order_id;
+}

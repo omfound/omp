@@ -1,0 +1,38 @@
+.calendar-calendar .month-view .full td.single-day div.monthview,
+.calendar-calendar .week-view .full td.single-day div.weekview,
+.calendar-calendar .day-view .full td.single-day div.dayview {
+  background-color: transparent;
+}
+
+.calendar-calendar .month-view .full tr.single-day td.single-day div.monthview .no-bg,
+.calendar-calendar .week-view .full tr.single-day td.single-day div.weekview .no-bg,
+.calendar-calendar .day-view .full tr.single-day td.single-day div.dayview .no-bg {
+  background: #EFEFEF;
+}
+
+.calendar-calendar td .inner div.calendar div.timeslot-theme-wrapper {
+  padding: 5px;
+}
+
+.calendar-calendar td .inner div.calendar div.timeslot-theme-wrapper ul,
+.calendar-calendar td .inner div.calendar div.timeslot-theme-wrapper ul li,
+#block-om-timeslot-scheduler-theme_key .content ul,
+#block-om-timeslot-scheduler-theme_key .content ul li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  list-style-position: inside;
+}
+
+#block-om_timeslot_scheduler-theme_key .theme-swatch {
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin-right: 5px;
+}
+div.timeslot-theme-wrapper ul li a {
+  text-shadow: none;
+}
+div.timeslot-theme-wrapper ul li {
+  color: #222222;
+}

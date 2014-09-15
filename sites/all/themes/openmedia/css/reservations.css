@@ -1,0 +1,558 @@
+/*-------Commerce Reservations Theming--------*/
+
+.view-id-reservation_calendar{
+}
+
+body.page-reservations .fieldset-wrapper {
+  padding: 10px;
+  background: #dddddd;
+  border: 0px;
+  text-shadow: none;
+}
+body.page-reservations fieldset {
+  border: 0px;
+  padding: 0;
+}
+
+.view-id-reservation_calendar div.view-header{
+	background-color: white;
+	color: #5d5d5f;
+	text-shadow: none;
+	height: 115px;
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+  width: 750px;
+}
+
+.view-id-reservation_calendar .fullcalendar{
+	width: 750px;
+}
+
+.view-id-reservation_calendar .view-content{
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+.view-id-reservation_calendar div.view-header h3{
+	position: relative;
+  top: -30px;
+  color: white;
+  background-color: #3C2D36;
+  width: 530px;
+  margin: 0px;
+  left: -15px;
+  padding: 5px;
+  padding-left: 13px;
+}
+
+.view-id-reservation_calendar div.view-header p{
+	position: relative;
+  padding: 10px;
+}
+
+.view-id-reservation_calendar .fc-header-left,
+.view-id-reservation_calendar .fc-header-center,
+.view-id-reservation_calendar .fc-header-right{
+	background-color: #d0cbc3;
+	color: #3c2d36;
+	text-shadow: none;
+}
+
+.view-id-reservation_calendar .fc-widget-header{
+	background-color: white;
+  color: #d0cbc3;
+  text-shadow: none;
+}
+
+.view-id-reservation_calendar .fc-header-title{
+	float: left;
+	height: 38px;
+}
+
+.view-id-reservation_calendar .fc-header-title h2{
+  margin-top: 10px;
+  margin-left: 45px;
+}
+
+.view-id-reservation_calendar .fc-button-effect span{
+	height: 0px;
+	width: 0px;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek,
+.view-id-reservation_calendar .fc-button-month,
+.view-id-reservation_calendar .fc-button-today{
+	height: 35px;
+	width: 70px;
+	border: none;
+}
+
+.view-id-reservation_calendar .fc-button-prev,
+.view-id-reservation_calendar .fc-button-next,
+.view-id-reservation_calendar .fc-button-prev .fc-button-inner,
+.view-id-reservation_calendar .fc-button-next .fc-button-inner{
+	height: 35px;
+	border: none;
+	background-color: transparent;
+}
+
+.view-id-reservation_calendar .fc-button-prev .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-next .fc-button-inner .fc-button-content{
+	line-height: 2.6em;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek .fc-button-inner,
+.view-id-reservation_calendar .fc-button-month .fc-button-inner,
+.view-id-reservation_calendar .fc-button-today .fc-button-inner{
+	height: 35px;
+	width: 70px;
+	border: none;
+	background-color: #b4d270;
+	box-shadow: inset -2px -1px 15px rgba(125, 128, 125, 0.64);
+	color: white;
+}
+
+.view-id-reservation_calendar .fc-button-agendaWeek .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-month .fc-button-inner .fc-button-content,
+.view-id-reservation_calendar .fc-button-today .fc-button-inner .fc-button-content{
+  line-height: 2.7em;
+  padding-left: 18px;
+}
+
+.view-id-reservation_calendar .fc-state-active,
+.view-id-reservation_calendar .fc-state-hover{
+	border: none;
+}
+
+.view-id-reservation_calendar .fc-state-active .fc-button-inner,
+.view-id-reservation_calendar .fc-state-disabled .fc-button-inner{
+  border: none;
+  color: white;
+  background-color: #91be3d;
+  box-shadow: inset 4px 6px 5px rgba(55, 104, 47, 0.61);
+}
+
+.view-id-reservation_calendar .fc-header-space{
+	padding-left: 0px;
+}
+
+.view-id-reservation_calendar .fc-agenda-slots tr{
+	background-color: transparent;
+}
+
+.view-id-reservation_calendar .fc-agenda-days{
+	background-color: white;
+}
+
+.view-id-reservation_calendar .fc-select-helper{
+	background-color: #acbdc4;
+	opacity: 1 !important;
+}
+
+.view-id-reservation_calendar .fc-event-time,
+.view-id-reservation_calendar .fc-event-title{
+	text-shadow: none;
+}
+
+.view-id-reservation_calendar .fc-event-bg{
+	opacity: 0;
+}
+
+.view-id-reservation_calendar .closed-all-day{
+	height: 35px;
+}
+
+.page-reservations .qtip-borderTop{
+	height: 0px !important;
+	margin-left: 0px !important;
+}
+
+.page-reservations .qtip-wrapper{
+	-moz-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 3px 3px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+.page-reservations .qtip-content{
+	padding: 0px !important;
+}
+
+.page-reservations .qtip-content p{
+	margin: 5px;
+}
+
+.page-reservations .qtip-contentWrapper{
+	border-width: 0px 0px !important; 
+}
+
+#edit-line-item-fields-field-reservation-dates--9 legend{
+	background-color: #adbec5;
+	width: 225px;
+	padding-left: 10px;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.page-reservations .add-to-cart .form-wrapper{
+	margin: 0px;
+}
+
+.page-reservations .qtip-content .add-to-cart .form-wrapper .field-name-field-commercial-reservation{
+	display: none !important;
+}
+
+.page-reservations .add-to-cart span.fieldset-legend{
+	font-family: "proxima-nova";
+	font-size: 18px;
+	width: 230px;
+	background-color: #adbec5;
+	color: #3d2d37;
+}
+
+.page-reservations .add-to-cart div.fieldset-wrapper{
+	background-color: white;
+}
+
+#pickedStartDate,
+#pickedEndDate{
+	background-color: #362a2e;
+	color: white;
+}
+
+.page-reservations .add-to-cart .form-submit{
+	background: #5e5f61;
+	color: white;
+	text-shadow: none;
+	border-radius: 0px;
+	float: right;
+	width: 95px;
+	padding: 5px 3px;
+	margin-right: 10px;
+	box-shadow: inset -2px -2px 1px black;
+	font-size: 12px;
+}
+
+.page-reservations .add-to-cart .form-item{
+  margin: 0;
+}
+
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-month,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-day,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value-year,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-month,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-day,
+.page-reservations .add-to-cart .form-item-line-item-fields-field-reservation-dates-und-0-value2-year{
+	margin-bottom: 20px;
+}
+
+.page-reservations .add-to-cart .date-padding{
+	padding: 0px;
+}
+
+.page-reservations .add-to-cart div.fieldset-wrapper{
+	padding: 8px;
+}
+
+.page-reservations .add-to-cart .form-type-date-select label{
+	font-weight: bold;
+}
+
+.page-reservations .add-to-cart .form-type-date-select label[for^=edit-line-item-fields-field-reservation-dates-und-0-value2--]{
+	color: #912a1b;
+	background-color: #f4f4f4;
+	padding: 10px;
+	margin-bottom: 10px;
+	font-weight: bold;
+	text-transform: capitalize;
+	position: relative;
+	width: 212px;
+	left: -10px;
+}
+
+.qtip-tip{
+	opacity: 0;
+}
+
+#block-views-reservations_cart-block_1{
+	-moz-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /* Firefox */
+  -webkit-box-shadow: 1px 1px 15px rgba(0,0,0,0.5); /*  Safari  Chrome */
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.5); /*CSS3 */
+}
+
+#block-views-reservations_cart-block_1 .block-title{
+	margin: 0px;
+	background-color: #3d2d37;
+	color: white;
+	text-shadow: none;
+	font-weight: 100;
+	font-family: "proxima-nova";
+	font-size: 15px;
+	padding: 5px;
+}
+
+#block-views-reservations_cart-block_1 thead tr{
+	height: 25px;
+}
+
+#block-views-reservations_cart-block_1 thead tr th{
+	background-color: #f0f5f1;
+	border: 1px solid #cac7c0;
+	color: #3d2d37;
+	text-shadow: none;
+	font-weight: normal;
+	padding-left: 5px;
+}
+
+#block-views-reservations_cart-block_1 tbody tr.odd td{
+	padding: 5px;
+	background-color: #d0ccc3;
+	border: 1px solid #cac7c0;
+}
+
+#block-views-reservations_cart-block_1 tbody tr.even td{
+	padding: 5px;
+	background-color: #f1f6f2;
+	border: 1px solid #cac7c0;
+}
+
+#block-views-reservations_cart-block_1 .views-table{
+	border-bottom: none;
+}
+
+#block-views-reservations_cart-block_1 .view-footer{
+	background-color: #f1f6f2;
+	color: #3d2d37;
+}
+
+#block-views-reservations_cart-block_1 ul.links{
+	display: block;
+	width: 225px;
+	height: 25px;
+	background-color: #D0CCC3;
+	padding-top: 10px;
+}
+
+#block-views-reservations_cart-block_1 .block-inner{
+	padding: 0px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary{
+	margin-bottom: 0px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary-view-cart{
+	display: block;
+	float: left;
+	margin-left: 90px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-summary-checkout{
+	display: block;
+	float: left;
+	margin-left: 30px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-quantity{
+	padding-top: 10px;
+	padding-left: 5px;
+}
+
+#block-views-reservations_cart-block_1 .line-item-total{
+	height: 20px;
+	padding-top: 10px;
+	padding-right: 10px;
+}
+
+.view-id-reservations_cart td{
+  padding: 0px;
+}
+
+.commercial-message{
+	min-height: 23px;
+  background-color: #912A1B;
+  color: white;
+  width: 535px;
+  padding-top: 7px;
+  box-shadow: 2px 2px 10px grey;
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.no-certification-message p, 
+.commercial-message p{
+	width: 300px;
+}
+
+.no-certification-message a,
+.commercial-message .commercial-button{
+	font-family:  Helvetica, Arial,sans-serif;
+	font-size: 12px;
+	color: #ffffff;
+	padding: 5px 7px;
+	background:#3395d2;
+	background:#3395d2;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	border: 1px solid #2e87be;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 2px rgba(255,255,255,0.7);
+	position: relative;
+  z-index: 666;
+	float: right;
+  top: -40px;
+  margin-right: 40px;
+}
+.no-certification-message a:hover,
+.commercial-message .commercial-button:hover{
+	text-shadow: 0 0 10px rgba(255, 255, 255, .75);
+	background:#acf4f9);
+	border: 1px solid #acf4f9;	
+	-webkit-transition: All 0.7s ease;
+	-moz-transition: All 0.7s ease;
+	-o-transition: All 0.7s ease;
+	-ms-transition: All 0.7s ease;
+	transition: All 0.7s ease;
+	cursor: pointer;
+}
+
+#views-form-commerce-cart-form-default .form-disabled .form-text{
+	border: none;
+	background-color: whiteSmoke;
+}
+
+.section-administer-reservations .reservation{
+  padding: 10px;
+  background: white;
+  box-shadow: 2px 2px 10px grey;
+  margin-bottom: 15px;
+}
+
+.section-administer-reservations .reservation-overdue{
+	padding: 10px;
+  background: #FFF68F;
+  box-shadow: 2px 2px 10px grey;
+  margin-bottom: 15px;
+}
+
+.section-administer-reservations .reservation .reservation-dates{
+	color: #85B740;
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.section-administer-reservations .reservation-overdue .reservation-dates{
+	color: #912a1b;
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.section-administer-reservations .reservation .reservation-info-table,
+.section-administer-reservations .eservation-overdue .reservation-info-table{
+	margin-top: 10px;
+}
+
+.section-administer-reservations .reservation .checkout_button,
+.section-administer-reservations .reservation-overdue .checkout_button{ 
+  color: #fff; 
+  background-color: #85B740;
+  float: right;
+  font-size: 10px; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  padding: 5px 14px 6px 14px; 
+  cursor: pointer; font-family: Arial, Helvetica, sans-serif; 
+  line-height: 19px;
+  width: 60px;
+  text-align: center;
+  text-decoration: none;
+  margin-right: 25px;
+  box-shadow: inset -2px -2px 10px grey;
+}
+
+.section-administer-reservations .reservation .checkin_button,
+.section-administer-reservations .reservation-overdue .checkin_button{ 
+  color: #fff; 
+  background-color: #85B740;
+  float: right;
+  font-size: 10px; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  padding: 5px 14px 6px 14px; 
+  cursor: pointer; font-family: Arial, Helvetica, sans-serif; 
+  line-height: 19px;
+  width: 60px;
+  text-align: center;
+  text-decoration: none;
+  margin-right: 25px;
+  box-shadow: inset -2px -2px 10px grey;
+}
+
+.section-administer-reservations .reservation .checkout_button:hover,
+.section-administer-reservations .reservation-overdue .checkout_button:hover{ 
+  background-position: 0 -25px; 
+}
+
+.section-administer-reservations .reservation .checkout_button:hover,
+.section-administer-reservations .reservation-overdue .checkout_button:hover{ 
+  background-position: 0 -50px; 
+}
+
+.checkout_status_bad{
+	color: #912a1b;
+	font-weight: bold;
+}
+
+.checkout_status_good{
+	color: #85B740;
+	font-weight: bold;
+}
+
+.section-administer-reservations .checkout-options {
+  width: 350px;
+}
+
+
+.page-cr-res-checkout #main-content-inner-2 div.region-content,
+.page-cr-res-checkin #main-content-inner-2 div.region-content,
+.page-cr-missing-accessories-confirm #main-content-inner-2 div.region-content{
+	background-color: white;
+	margin-top: 145px;
+	box-shadow: 2px 2px 10px grey;
+	padding: 10px;
+}
+
+.page-cr-missing-accessories-confirm #main-content-inner-2 div.region-content{
+	margin-top: 0px;
+}
+
+/*------------Reservations Usage Report----------*/
+
+.page-reservations-reports-usage-report #block-system-main .quarterly-report td{
+	text-align: center;
+	border: 1px solid grey;
+}
+
+.page-reservations-reports-usage-report #block-system-main .quarterly-report td.odd{
+	background-color: #e9e8e8;
+}
+
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value-hour,
+.page-reservations .form-item-line-item-fields-field-reservation-dates-und-0-value2-hour {
+  clear: left;
+}
+
+.page-reservations select#edit-line-item-fields-field-reservation-dates-und-0-value-ampm--9,
+.page-reservations select#edit-line-item-fields-field-reservation-dates-und-0-value2-ampm--9 {
+  position: relative;
+  top: -3px;
+}

@@ -1,0 +1,235 @@
+<?php
+
+/**
+ * Include Open Media System Class Reports
+ */
+include_once('om_classes.om_reports.inc');
+
+/**
+** Implements hook_menu
+**/
+function om_classes_menu() {
+  $items = array();
+
+  $items['user/registrations'] = array(
+    'title' => t('Registration History'),
+    'page callback' => 'om_classes_user_registrations',
+    'access callback' => 'om_classes_user_registrations_access',
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function om_classes_user_registrations_access() {
+  return true;
+}
+
+function om_classes_order_contains_class($commerce_order) {
+  $classes = array();
+  if (is_object($commerce_order)) {
+    $order_metadata = entity_metadata_wrapper('commerce_order', $commerce_order);
+    $line_items = $order_metadata->commerce_line_items->value();
+    foreach ($line_items AS $line_item) {
+      $line_item_metadata = entity_metadata_wrapper('commerce_line_item', $line_item);
+      $product = $line_item_metadata->commerce_product->value();
+      if (is_object($product) && $product->type == 'class') {
+        $classes[] = $product;
+      }
+    }
+  }
+  return $classes;
+}
+
+/**
+ * Implements hook_theme
+ */
+function om_classes_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_classes_user_registrations' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_classes_user_registrations',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
+    'om_classes_user_registrations_simple' => array(
+      'path' => $path . '/theme',
+      'template' => 'om_classes_user_registrations_simple',
+      'file' => 'theme.inc',
+      'variables' => array('plans' => array())
+    ),
+  );
+}
+
+/**
+ * Helper to load plans and send to theme layer.
+ */
+function om_classes_user_registrations($user = false, $format = 'full') {
+  if (!$user) {
+    global $user;
+  }
+  $registrations = om_classes_get_registrations($user);
+  if ($format == 'full') {
+    return theme('om_classes_user_registrations', array('registrations' => $registrations));
+  }
+  else {
+    return theme('om_classes_user_registrations_simple', array('registrations' => $registrations));
+  }
+}
+
+function om_classes_get_registrations($user) {
+  $query = "SELECT * FROM registration WHERE user_uid = :uid ORDER BY created ASC";
+  $results = db_query($query, array(':uid' => $user->uid));
+  $registrations = array();
+  foreach ($results as $registration) {
+    $registrations[$registration->registration_id] = $registration; 
+  }
+  if (count($registrations > 0)) {
+    foreach($registrations as $key => $registration) {
+      $product = commerce_product_load($registration->entity_id);
+      $registrations[$key]->product = $product;
+    }
+
+    return $registrations;
+  }
+  else {
+    return false;
+  }
+}
+
+function om_classes_user_view($account, $view_mode) {
+  //only for org admins
+  if(om_membership_validate_org_admin_member($account)) {
+    $membership = om_membership_get_active_memberships($account->uid);
+    reset($membership);
+    $first_key = key($membership);
+
+    $org_info['product'] = commerce_product_load($membership[$first_key]->product_id);
+    $org_info['order'] = commerce_order_load($membership[$first_key]->order_id);
+  }
+  else {
+    return;
+  }
+
+  $org_profile = profile2_by_uid_load($account->uid, 'manage_organizational_membership');
+  $org_users = array();
+  $org_users[] = $account;
+
+  om_membership_validate_org_admin_member($account);
+  if (!empty($org_profile->field_invitations['und'])) {
+    foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
+      if (!empty($invitation['value'])) {
+        $org_users[] = user_load_by_mail($invitation['value']);
+      }
+    } 
+
+  }
+  else {
+    $org_users = null;
+  }
+
+  if (!empty($org_info['order']) && $org_info['order']->uid == $account->uid) {
+    if(!empty($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'])) { 
+      $membership_end = $org_info['order']->created + ($org_info['product']->field_duration[LANGUAGE_NONE][0]['value'] * 31688800);
+    }
+    else {
+      $membership_end = 0;
+    }
+
+    foreach ($org_users as $key => $org_user) {
+      $uids[] = $org_user->uid;
+    }
+
+    $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
+    usort($all_classes, 'om_classes_org_classes_sort');
+
+    $account->content['org-classes'] = array(
+      'title' => array(
+        '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
+      ),
+      'class-history' => array(
+        '#markup' => om_classes_build_class_table($all_classes),
+      ),
+    );
+  }
+}
+
+function om_classes_org_classes_sort($a, $b) {
+  if ($a->created == $b->created) {
+    return 0;
+  }
+  return ($a->created < $b->created) ? -1 : 1;
+}
+
+function om_classes_find_user($order_number) {
+  $load_order = commerce_order_load($order_number);
+  return $load_order->uid;
+}
+
+function om_classes_build_class_table($classes) {
+  $output = '<strong>Class History</strong>';
+  if (empty($classes)) {
+    $output .= t('No classes have been taken under this membership.');
+    return $output;
+  }
+  $output .= '<br />';
+
+  $output .= count($classes) . t(' classes have been taken under this membership.');
+  $output .= '<table>';
+  $output .= '<thead><th>User</th><th>Class</th><th>Order Date</th></thead>';
+  foreach ($classes as $class) {
+    $order_number = $classes[0]->order_number;
+    $user_id = om_classes_find_user($order_number);
+    $output .= '<tr>';
+    $user = user_load($user_id);
+    $output .= '<td>' . l($user->name, 'user/' . $user->uid) . '</td>';
+    $output .= '<td>' . $class->title . '</td>';
+    $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output;
+}
+
+function om_classes_user_classes($uids = array(), $after_date = NULL, $before_date = NULL) {
+  $query = "
+    SELECT * FROM commerce_line_item
+    JOIN commerce_order ON commerce_order.order_id = commerce_line_item.order_id
+    JOIN commerce_product ON commerce_product.sku = commerce_line_item.line_item_label
+    WHERE commerce_order.uid IN (:uids) 
+    AND commerce_product.type = 'class'
+    ";
+
+  if (!empty($after_date) || !empty($before_date)) {
+    if (!empty($after_date) && !empty($before_date)) {
+      $query .= " AND commerce_order.created < :before_date";
+      $query .= " AND commerce_order.created > :after_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':after_date' => $after_date, ':before_date' => $before_date));
+    }
+    elseif (!empty($after_date)) {
+      $query .= " AND commerce_order.created > :after_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':after_date' => $after_date));
+    }
+    else {
+      $query .= " AND commerce_order.created < :before_date";
+      $class_orders = db_query($query, array(':uids' => $uids, ':before_date' => $before_date));
+    }
+  }
+  else {
+    $class_orders = db_query($query, array(':uids' => $uids));
+  }
+
+  return $class_orders->fetchAllAssoc('line_item_id');
+}
+
+/**
+ * Distinct titles for the class meta view
+ */
+function om_classes_query_alter($query) {
+  if ($query->hasTag('class_meta')) {
+    $subquery = db_select('node');
+    $subquery->addExpression('MAX(node.nid)', 'max_nid');
+    $subquery->groupBy('node.title');
+    $query->condition('node.nid', $subquery, 'IN');
+  }
+}

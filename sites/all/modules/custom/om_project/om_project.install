@@ -1,0 +1,40 @@
+<?php
+function om_project_schema() {
+  $schema['om_project_members'] = array(
+    'description' => 'Stores project membership data.',
+    'fields' => array(
+      'pmid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'entity_id' => array(
+        'type' => 'int',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'isadmin' => array(
+        'type' => 'int',
+        'length' => 1,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'timestamp' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'indexes' => array(
+      'pbsid' => array('pmid'),
+    ),
+    'primary key' => array('pmid'),
+  );
+  
+return $schema;
+}

@@ -1,0 +1,347 @@
+/**Agenda Manager Styles**/
+
+.ca-grey-button {
+  cursor: pointer;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: normal;
+  padding: 3px;
+  display: inline-block;
+  background: #7d7d7d; /* Old browsers */
+  background: -moz-linear-gradient(top,  #7d7d7d 0%, #7d7d7d 50%, #666666 51%, #666666 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7d7d), color-stop(50%,#7d7d7d), color-stop(51%,#666666), color-stop(100%,#666666)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #7d7d7d 0%,#7d7d7d 50%,#666666 51%,#666666 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #7d7d7d 0%,#7d7d7d 50%,#666666 51%,#666666 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #7d7d7d 0%,#7d7d7d 50%,#666666 51%,#666666 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #7d7d7d 0%,#7d7d7d 50%,#666666 51%,#666666 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7d7d', endColorstr='#666666',GradientType=0 ); /* IE6-9 */
+}
+
+.ca-grey-button:hover {
+  background: #666666; /* Old browsers */
+  background: -moz-linear-gradient(top,  #666666 0%, #666666 49%, #7d7d7d 50%, #7d7d7d 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#666666), color-stop(49%,#666666), color-stop(50%,#7d7d7d), color-stop(100%,#7d7d7d)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #666666 0%,#666666 49%,#7d7d7d 50%,#7d7d7d 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #666666 0%,#666666 49%,#7d7d7d 50%,#7d7d7d 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #666666 0%,#666666 49%,#7d7d7d 50%,#7d7d7d 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #666666 0%,#666666 49%,#7d7d7d 50%,#7d7d7d 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#7d7d7d',GradientType=0 ); /* IE6-9 */
+}
+
+#content .ca-grey-button {
+ text-shadow: none;
+}
+
+.bill-list-item,
+.cue-point-list-item {
+  position: relative;
+}
+
+.bill-list-item .ca-grey-button,
+.cue-point-list-item .action-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.cue-point-list-item .action-edit,
+.cue-point-list-item .action-save {
+  position: absolute;
+  top: 5px;
+  right: 49px;
+}
+
+.bill-list-item .bill-title {
+  width: 308px;
+}
+
+.cue-point-list-item .cue-point-title {
+  float: left;
+  width: 245px;
+}
+
+.cue-point-list-item textarea.cue-point-title {
+  float: left;
+  width: 200px;
+  margin-right: 5px;
+}
+
+.cue-point-list-item textarea.cue-point-seconds {
+  float: left;
+  width: 65px;
+}
+
+.cue-point-list-item .cue-point-seconds {
+  float: left;
+  width: 55px;
+  text-align: center;
+}
+
+#video {
+  width: 425px;
+  height: 185px;
+  float: left;
+}
+
+#timer-area {
+	float: left;
+}
+
+#agenda-manager-form {
+  position: relative;
+}
+
+#add-bill-timer{
+	font-size: 15px;
+	margin-top: 5px;
+}
+
+#agenda-manager-form iframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#agenda-manager-form fieldset {
+	width: 400px;
+  float: left;
+  margin: 0 28px 5px 0;
+  border: none;
+  background: #E6E7E7;
+  clear: left;
+}
+
+#agenda-manager-form fieldset #edit-submit {
+	float: right;
+}
+
+.global-start-button:hover{
+	cursor: pointer;
+	background-color: #005374;
+}
+
+.global-start-button:active{
+	box-shadow: none;
+}
+
+#edit-session-controls .form-item-time-container {
+  float: left;
+  padding: 0;
+  font-size: 28px;
+  width: 210px;
+  height: 55px;
+  display: block;
+  margin: 0 0 0 7px;
+}
+
+#timer-wrapper {
+  font-size: 28px;
+  width: 205px;
+  height: 42px;
+  display: block;
+}
+
+#agenda-time-toggle {
+  background: transparent url(/sites/all/modules/custom/om_clickable_agenda/theme/img/start-button.png);
+  display: block;
+  line-height: 59px;
+  float: left;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  height: 54px;
+  width: 175px;
+}
+
+#agenda-time-toggle:hover{
+  cursor: pointer;
+}
+
+#agenda-time-toggle:active{
+  box-shadow: none;
+}
+
+#agenda-time-toggle.active {
+  
+}
+
+.form-item-session-toggle-live {
+  width: 180px;
+  margin-top: 13px;
+  float: left;
+}
+
+#edit-session-type-wrapper {
+  margin-top: 10px;
+  width: 75px;
+  float: left;
+}
+
+#session-status {
+  width: 145px;
+  height: 100px;
+  float: left;
+}
+
+#session-status ul {
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+
+#session-status li {
+  list-style: none;
+}
+
+#session-status li.offline {
+  color: #BBB;
+}
+
+#session-status li.live {
+  color: red;
+}
+
+div#global-timer {
+	display: block;
+  margin-top: 25px;
+  float: left;
+  width: 230px;
+  height: 53px;
+  margin-left: 10px;
+  line-height: 56px;
+  font-size: 17px;
+}
+
+#bill-list {
+  float: left;
+  width: 355px;
+  margin-top: 15px;
+  background-image: url('img/pending-background.png');
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: #E6E7E7;
+  padding: 20px 10px 10px 50px;
+  margin-bottom: 35px;
+  min-height: 250px;
+  margin-left: 10px;
+}
+
+#cue-point-list {
+	float: right;
+  width: 465px;
+  min-height: 100px;
+  margin-top: 15px;
+  background-image: url('img/recorded-background.png');
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: #E6E7E7;
+  padding: 20px 10px 10px 50px;
+  margin-bottom: 35px;
+  min-height: 350px;
+  margin-right: 10px;
+}
+
+#stamped-bill-table tr {
+  background-color: white;
+  border: 1px solid #cccccc;
+}
+
+#cue-point-list td{
+	padding: 10px;
+}
+
+#cue-point-list td.views-field-body {
+	min-width: 315px;
+}
+.cue-point-list-item,
+.bill-list-item {
+  display: block;
+  color: #680B00;
+  text-decoration: none;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #cccccc;
+}
+
+.bill-list-item:hover{
+	cursor: pointer;
+}
+
+.bill-list-item:active{
+	box-shadow: none;
+}
+
+.bill-box {
+  display: block;
+  margin-top: 13px;
+  margin-right: 115px;
+  float: right;
+  width: 100px;
+  height: 25px;
+  border: 1px solid black;
+}
+
+div#session-video {
+  position: relative;
+}
+div#session-unavailable {
+  background-image: url('img/processing.jpg');
+  background-repeat: no-repeat;
+  width: 869px;
+  height: 399px; 
+}
+body.youtube div#session-video-container {
+  position: relative;
+}
+body.live-session div#session-video-container {
+  margin-bottom: 45px;
+}
+body.live-session div#control-hider {
+  width: 489px;
+  height: 34px;
+  position: absolute;
+  z-index: 1;
+  left: 0px;
+  bottom: 22px;
+  background-color: #fff;
+}
+body.live-session div#youtube-overlay {
+  width: 489px;
+  height: 401px;
+  position: absolute;
+  z-index: 2;
+  left: 0px;
+  top: 0px;
+  background-image: url('img/spacer.gif');
+}
+body.live-session div#button-bar {
+  display: none;
+}
+body.live-session span.agenda-instructions {
+  display: none;
+}
+body.live-senate div#session-wrapper {
+  background: url('img/senate-live.png');
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+body.live-house div#session-wrapper {
+  background: url('img/house-live.png');
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+body.youtube div#session-documents {
+  margin-top: 0px;
+}
+
+#agenda-manager-form .jwplayer {
+  width: 525px !important;
+  height: 300px !important;
+}
+#agenda-manager-form .field-name-field-om-show-video {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#agenda-manager-form .field-name-field-om-show-video .field-label {
+  display: none;
+}

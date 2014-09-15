@@ -1,0 +1,252 @@
+/**
+ * @file
+ * Form Styling
+ */
+
+
+.form-item { /* Wrapper for a form element (or group of form elements) and its label */
+  margin: 1.5em 0;
+}
+
+.form-item input.error,
+.form-item textarea.error,
+.form-item select.error { /* Highlight the form elements that caused a form submission error */
+  border: 1px solid #c00;
+}
+
+.form-item label { /* The label for a form element */
+  display: block;
+  font-weight: bold;
+}
+
+.form-item label.option { /* The label for a radio button or checkbox */
+  display: inline;
+  font-weight: normal;
+}
+
+.form-required { /* The part of the label that indicates a required field */
+  color: #c00;
+}
+
+.form-item .description { /* The descriptive help text (separate from the label) */
+  font-size: 0.85em;
+}
+
+.form-checkboxes .form-item,
+.form-radios .form-item { /* Pack groups of checkboxes and radio buttons closer together */
+  margin: 0; /* Drupal core uses "0.4em 0" */
+}
+
+.form-submit { /* The submit button */
+}
+
+.container-inline div,
+.container-inline label { /* Inline labels and form divs */
+  display: inline;
+}
+
+.tips { /* Tips for Drupal's input formats */
+}
+
+a.button { /* Buttons used by contrib modules like Media */
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+/*
+ * Password confirmation
+ */
+
+.password-parent,
+.confirm-parent {
+  margin: 0;
+}
+
+/*
+ * Search (search-block-form.tpl.php)
+ */
+
+#block-search-form { /* Wrapper for the search form */
+}
+
+/*
+ * Drupal's default login form block
+ */
+
+#user-login-form {
+  text-align: left; /* LTR */
+}
+
+/*
+ * OpenID
+ *
+ * The default styling for the OpenID login link seems to assume Garland's
+ * styling of list items.
+ */
+
+#user-login-form ul { /* OpenID creates a new ul above the login form's links. */
+  margin-bottom: 0; /* Position OpenID's ul next to the rest of the links. */
+}
+
+html.js #user-login-form li.openid-link,
+#user-login-form li.openid-link { /* The "Log in using OpenID" link. */
+  margin-top: 1.5em;
+  margin-left: -20px; /* LTR */ /* Un-do some of the padding on the ul list. */
+}
+
+#user-login-form li.user-link { /* The "Cancel OpenID login" link. */
+  margin-top: 1.5em;
+}
+
+#user-login ul {
+  margin: 1.5em 0;
+}
+
+/*
+ * Drupal admin tables
+ *
+ * We overrode these styles in normalize.css, but restore them for the admin
+ * section of the site.
+ */
+
+form th {
+  text-align: left; /* LTR */
+  padding-right: 1em; /* LTR */
+  border-bottom: 3px solid #ccc;
+}
+
+form tbody {
+  border-top: 1px solid #ccc;
+}
+
+form tr.even {
+  background-color: #fff;
+}
+
+form table .item-list ul {
+  margin: 0;
+}
+
+.lt-ie8 tr.even th,
+.lt-ie8 tr.even td,
+.lt-ie8 tr.odd th,
+.lt-ie8 tr.odd td {
+  border-bottom: 1px solid #ccc; /* IE doesn't display borders on table rows */
+}
+
+/*
+ * Drupal core wrongly puts this in system.menus.css. Since we override that, add it back.
+ */
+
+td.menu-disabled {
+  background: #ccc;
+}
+
+/** Custom Forms **/
+
+.form-field-type-file,
+.form-field-type-file * {
+  display: inline-block;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  margin-right: 10px;
+  line-height: 12px;
+}
+
+input[type="submit"],
+input[type="button"],
+input[type="text"],
+input[type="password"],
+textarea,
+.form-field-type-file a:link,
+.form-field-type-file a:visited {
+  font-family: Helvetica, Arial, sans-serif;
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 0%, #f9f9f9 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f9f9f9)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 0%,#f9f9f9 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 ); /* IE6-9 */
+  color: #333333;
+  border: solid 1px #CCCCCC;
+  border-radius: 5px;
+  padding: 6px;
+  box-shadow: 1px 2px 3px #EFEFEF;
+  text-decoration: none;
+}
+
+input[type="submit"]:focus,
+input[type="button"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="text"]:hover,
+input[type="password"]:hover,
+textarea:hover,
+.form-field-type-file a:focus,
+.form-field-type-file a:hover {
+  background: #FFFFFF;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+input[type="submit"],
+input[type="button"] {
+  margin-right: 5px;
+}
+.media-item img,
+.media-item .media-thumbnail,
+.media-widget .preview .media-item {
+  margin: 0;
+}
+form div.field-widget-cablecast-file-selector-widget table th,
+form div.field-widget-cablecast-file-selector-widget table td {
+  padding-right: 5px;
+}
+
+body.front div.views-widget div.form-type-textfield input {
+  padding: 3px;
+}
+
+/**
+ * Theme asset form.
+ */
+#om-theme-assets-admin-form fieldset,
+#om-theme-assets-admin-form .form-item-call-to-action-url-1,
+#om-theme-assets-admin-form .form-item-call-to-action-url-2,
+#om-theme-assets-admin-form .form-item-call-to-action-url-3,
+#om-theme-assets-admin-form .form-item-call-to-action-url-4,
+#om-theme-assets-admin-form .form-item-info-tags-url-1,
+#om-theme-assets-admin-form .form-item-info-tags-url-2,
+#om-theme-assets-admin-form .form-item-info-tags-url-3,
+#om-theme-assets-admin-form .form-item-info-tags-url-4 {
+  margin-bottom: 35px;
+}
+
+/** hide path form on taxonomy pages **/
+.page-taxonomy-term fieldset.path-form {
+  display: none;
+}
+
+/**
+ * Dummy submit form for gov home page.
+ */
+#om-agenda-manager-dummy-search {
+  position: relative;
+  width: 250px;
+}
+
+#om-agenda-manager-dummy-search #edit-dummy-search {
+  width: 175px;
+}
+
+#om-agenda-manager-dummy-search #edit-dummy-submit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+} 

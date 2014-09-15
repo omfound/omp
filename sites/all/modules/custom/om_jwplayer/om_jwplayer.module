@@ -1,0 +1,75 @@
+<?php
+/**
+ * Implements hook_theme
+ */
+function om_jwplayer_theme($existing, $type, $theme, $path) {
+  return array(
+    'om_show_share_bar' => array(
+      'path' => $path . '/theme',
+      'template' => 'share_bar',
+      'file' => 'theme.inc',
+      'variables' => array(),
+    ),
+    'om_show_share_page' => array(
+      'path' => $path . '/theme',
+      'template' => 'share_page',
+      'file' => 'theme.inc',
+      'variables' => array('node' => ''),
+    )
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function om_jwplayer_menu() {
+  $items = array();
+  $items['node/%node/share'] = array(
+    'page callback' => 'om_jwplayer_share_show',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function om_jwplayer_share_show($node) {
+  print theme('om_show_share_page', array('node' => $node));
+}
+
+/**
+ * Implements hook_library
+ */
+function om_jwplayer_library() {
+  $libraries['underscore'] = array(
+    'title' => 'Underscore JS',
+    'website' => 'http://underscorejs.org',
+    'version' => '1.4.3',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('underscore') . '/underscore-min.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    )
+  );
+  $libraries['backbone'] = array(
+    'title' => 'Backbone JS',
+    'website' => 'http://backbonejs.org',
+    'version' => '0.9.10',
+    'js' => array(
+      array(
+        'type' => 'file',
+        'data' => libraries_get_path('backbone') . '/backbone-min.js',
+        'group' => JS_LIBRARY,
+        'preprocess' => FALSE
+      ),
+    ),
+    'dependencies' => array(
+      array('om_jwplayer', 'underscore'),
+    ),
+  );
+
+  return $libraries;
+}

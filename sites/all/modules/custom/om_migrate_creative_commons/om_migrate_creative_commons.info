@@ -1,0 +1,3 @@
+name = Open Media Creative Commons Migration
+description = Drush command for migrating denver open media's creative commons data.
+core = 7.x

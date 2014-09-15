@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * @file
+ * Coupon with percentage field.
+ */
+
+/**
+ * Implements hook_commerce_coupon_type_configure().
+ */
+function commerce_coupon_userpoint_commerce_coupon_type_configure($bundle, $reset = FALSE) {
+  // Skip all $bundles except the pct coupon type
+  if ($bundle != 'commerce_coupon_userpoint') {
+    return;
+  }
+
+  $entity_type = 'commerce_coupon';
+
+  // If a field type we know should exist isn't found, clear the Field cache.
+  if (!field_info_field_types('commerce_price')) {
+    field_cache_clear();
+  }
+
+  // Look for or add the specified percentage amount.
+  $field_name = 'commerce_coupon_userpoint_ratio';
+  $field = field_info_field($field_name);
+  $instance = field_info_instance($entity_type, $field_name, $bundle);
+
+  if (empty($field) || $reset) {
+    $field_data = array(
+      'field_name' => $field_name,
+      'type' => 'number_decimal',
+      'label' => t('How many points are worth one hour'),
+      'cardinality' => 1,
+      'entity_types' => array($entity_type),
+      'translatable' => FALSE,
+      'locked' => FALSE,
+      'settings' => array(
+        'decimal_separator' => '.',
+        'precision' => '10',
+        'scale' => '2',
+      ),
+    );
+
+    if (empty($field)) {
+      $field = field_create_field($field_data);
+    }
+    else {
+      $field = field_update_field($field_data);
+    }
+  }
+
+  if (empty($instance) || $reset) {
+    $instance_data = array(
+      'field_name' => $field_name,
+      'entity_type' => $entity_type,
+      'bundle' => $bundle,
+      'label' => t('How many points are worth one hour'),
+      'required' => TRUE,
+      'display' => array(),
+      'settings' => array(
+        'min' => '0',
+        'max' => '1000',
+      ),
+    );
+
+    if (empty($instance)) {
+      field_create_instance($instance_data);
+    }
+    else {
+      field_update_instance($instance_data);
+    }
+  }
+}
+
+/**
+ * Implements hook_commerce_coupon_granted_amount_alter().
+ *
+ * Gets the right amount value to display it in the coupon "log" view.
+ */
+function commerce_coupon_userpoint_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
+  $amount = 0;
+  foreach ($order->commerce_line_items[LANGUAGE_NONE] as $key => $info) {
+    $line_item = commerce_line_item_load($info['line_item_id']);
+    if ($line_item->type == 'commerce_coupon' && $line_item->commerce_coupon_reference[LANGUAGE_NONE][0]['target_id'] == $coupon->coupon_id) {
+      $total = $line_item->commerce_total[LANGUAGE_NONE][0]['amount'] * -1;
+      $amount = commerce_currency_format($total, $line_item->commerce_total[LANGUAGE_NONE][0]['currency_code'], $coupon);
+    }
+  }
+}
+
+/**
+ * Implements hook_commerce_price_component_type_info().
+ */
+function commerce_coupon_userpoint_commerce_price_component_type_info() {
+  $components = array();
+  $userpoint_coupons = commerce_coupon_load_multiple(array(), array('type' => 'commerce_coupon_userpoint'));
+
+  // Add a price component type per each fixed coupon.
+  foreach ($userpoint_coupons as $coupon) {
+    $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
+    $components['commerce_coupon_' . $coupon->type . '_' . $coupon_wrapper->commerce_coupon_code->value()] = array(
+      'title' => $coupon_wrapper->type->label->value(),
+      'display_title' => $coupon_wrapper->type->label->value(),
+      'coupon_type' => $coupon->type,
+      'coupon_code' => $coupon_wrapper->commerce_coupon_code->value(),
+    );
+  }
+
+  return $components;
+}
+
+/**
+ * Implements hook_commerce_coupon_price_component_name_alter().
+ */
+function commerce_coupon_userpoint_commerce_coupon_price_component_name_alter(&$price_component_name, $coupon) {
+  if ($coupon->type == 'commerce_coupon_userpoint') {
+    $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
+    $price_component_name = 'commerce_coupon_' . $coupon->type . '_' . $coupon_wrapper->commerce_coupon_code->value();
+  }
+}
+
+function commerce_coupon_userpoint_get_userpoints_terms() {
+  $voc = taxonomy_vocabulary_machine_name_load('userpoints');
+  return taxonomy_get_tree($voc->vid);
+}
+
+function _commerce_coupon_userpoint_taxonomy_options() {
+  $options = array();
+  $terms = commerce_coupon_userpoint_get_userpoints_terms();
+  if (!empty($terms)) {
+    foreach ($terms AS $term) {
+      $options[$term->tid] = $term->name;
+    }
+  }
+  return $options;
+}

@@ -1,0 +1,30 @@
+name = Payment tests
+description = "Supports Payment's automated tests."
+core = 7.x
+dependencies[] = payment
+dependencies[] = views
+dependencies[] = xtools
+package = Payment
+hidden = TRUE
+files[] = tests/PaymentTestActionHookAndCallbackWebTestCase.test
+files[] = tests/PaymentTestCallablesWebTestCase.test
+files[] = tests/PaymentTestEntityCrudWebTestCase.test
+files[] = tests/PaymentTestPaymentAmountFormElementWebTestCase.test
+files[] = tests/PaymentTestPaymentEntityPermissionWebTestCase.test
+files[] = tests/PaymentTestPaymentLineItemFormElementWebTestCase.test
+files[] = tests/PaymentTestPaymentLineItemWebTestCase.test
+files[] = tests/PaymentTestPaymentMenuRouterItemPermissionWebTestCase.test
+files[] = tests/PaymentTestPaymentMethodEntityPermissionWebTestCase.test
+files[] = tests/PaymentTestPaymentMethodMenuRouterItemPermissionWebTestCase.test
+files[] = tests/PaymentTestPaymentStatusItemWebTestCase.test
+files[] = tests/PaymentTestPaymentValidationWebTestCase.test
+files[] = tests/PaymentTestUpdatePathWithContentWebTestCase.test
+files[] = tests/PaymentTestUpdatePathWithoutContentWebTestCase.test
+files[] = tests/PaymentTestUnavailableWebTestCase.test
+
+; Information added by drupal.org packaging script on 2013-04-22
+version = "7.x-1.6"
+core = "7.x"
+project = "payment"
+datestamp = "1366630975"
+
