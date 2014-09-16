@@ -1,6 +1,7 @@
 <?php
 
 function minim_preprocess_block__nice_menus_1 (&$vars) {
+  dsm($vars);
   $vars['classes'][] = 'pure-u-2-4';
   $vars['content_classes'] = 'pure-menu pure-menu-open pure-menu-horizontal';
   $menu_content = $vars['content'];
