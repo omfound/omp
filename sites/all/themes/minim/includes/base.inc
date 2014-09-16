@@ -22,16 +22,13 @@ function minim_preprocess_html(&$variables) {
  * @see minim/processors/blocks.inc
  */
 function minim_preprocess_block(&$vars) {
-  dsm($vars['block']);
-  //$sane_plugin_id = str_replace(':', '__', $vars['plugin_id']);
-  //$sane_plugin_id = str_replace('-', '_', $sane_plugin_id);
-  //$sub_functions = array();
-  //$sub_functions[] = __FUNCTION__ . '__' . $sane_plugin_id;
-  //$sub_functions[] = __FUNCTION__ . '_' . 'instance' . '__' . $vars['elements']['#contextual_links']['block']['route_parameters']['block'];
+  $sub_functions = array();
+  $block_id = $vars['block']->module . '_' . $vars['block']->delta;
+  $sub_functions[] = __FUNCTION__ . '__' . $block_id;
 
-  //foreach ($sub_functions AS $function) {
-    //if (function_exists($function)) {
-      //$function($vars);
-    //}
-  //}
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($vars);
+    }
+  }
 }
