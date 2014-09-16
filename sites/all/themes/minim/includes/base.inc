@@ -22,7 +22,7 @@ function minim_preprocess_html(&$variables) {
  * @see minim/processors/blocks.inc
  */
 function minim_preprocess_block(&$vars) {
-  dsm($vars);
+  dsm($vars['block']);
   //$sane_plugin_id = str_replace(':', '__', $vars['plugin_id']);
   //$sane_plugin_id = str_replace('-', '_', $sane_plugin_id);
   //$sub_functions = array();
