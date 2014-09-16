@@ -2,6 +2,10 @@
 
 function minim_preprocess_block__nice_menus_1 (&$vars) {
   $vars['content_classes'] = 'pure-menu pure-menu-open pure-menu-horizontal';
-  dsm($vars);
+  $menu_content = $vars['content'];
+  $menu_content = str_replace('nice-menu ', '', $menu_content);
+  $menu_content = str_replace('nice-menu-down ', '', $menu_content);
+  $menu_content = str_replace('nice-menu-main-menu', '', $menu_content);
+  $vars['content'] = $menu_content;
 }
 
