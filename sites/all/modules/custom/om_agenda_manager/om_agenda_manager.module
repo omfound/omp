@@ -402,14 +402,11 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
-  $output .= '<div class="center-box">';
-  $output .= '<div class="pure-u-2-3">';
+  $page_elements = array();
   if ($embed = variable_get('om_agenda_status_embed', false)) {
-    $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
+    $page_elements['embed'] = $embed;
   }
-  $output .= '</div>';
 
-  $output .= '<div class="pure-u-1-3">';
   $livestream_info = om_agenda_manager_livestream_info();
   $include_on_live = array();
   foreach ($livestream_info as $tid => $info) {
@@ -419,12 +416,14 @@ function om_agenda_manager_live_page() {
     }
   }
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
-  $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
+  $live_buttons = theme('om_show_live_block', array('live_themes' => $include_on_live));
+  $page_elements['live_buttons'] = $live_buttons;
+
   if ($desc = variable_get('om_agenda_status_desc', false)) {
-    $output .= '<div id="om-desc-content">'.$desc.'</div>';
+    $page_elements['description'] = $desc;
   }
-  $output .= '</div>';
-  $output .= '</div>';
+  $output .= theme('om_show_live_page', array('page_elements' => $page_elements));
+
   $output .= '<h1 class="title archive-title">Archived Video</h2>';
   $output .= om_agenda_manager_archive_tabs();
   return $output;
@@ -440,9 +439,19 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
       'template' => 'om-show-live-block', 
       'file' => 'theme.inc',
       'variables' => array('live_themes' => array()),
+    ),
+    'om_show_live_page' => array(
+      'path' => $path . '/theme', 
+      'template' => 'om-show-live-page', 
+      'file' => 'theme.inc',
+      'variables' => array('page_elements' => array()),
     )
   );
   return $themes;
+}
+
+function om_agenda_manager_theme_registry_alter(&$theme_registry) {
+  dsm($theme_registry);
 }
 
 function om_agenda_manager_render_live_status_page($variables) {
