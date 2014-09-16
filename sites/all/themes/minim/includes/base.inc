@@ -26,6 +26,7 @@ function minim_preprocess_block(&$vars) {
   $block_id = $vars['block']->module . '_' . $vars['block']->delta;
   $sub_functions[] = __FUNCTION__ . '__' . $block_id;
 
+  dsm($sub_functions);
   foreach ($sub_functions AS $function) {
     if (function_exists($function)) {
       $function($vars);
