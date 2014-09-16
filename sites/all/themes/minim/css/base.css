@@ -9,3 +9,7 @@ h3 {
 h1 {
   text-transform: uppercase;
 }
+
+body .pure-menu a {
+  border: none;
+}
