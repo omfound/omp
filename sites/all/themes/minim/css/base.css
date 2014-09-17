@@ -27,4 +27,6 @@ table.pure-table a {
 table.pure-table tr.even,
 table.pure-table tr.odd {
   background-color: #fff;
+  border: none;
+  padding: none;
 }
