@@ -3,6 +3,7 @@
  */
 .region-left .pure-menu {
   border: none;
+  background-color: #191818;
 }
 .region-left .pure-menu-header {
   font-size: 125%;
