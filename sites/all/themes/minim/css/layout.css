@@ -5,6 +5,8 @@
 
 #page {
   padding-left: 160px;
+  left: 0;
+  position: relative;
 }
 
 .region-left {
