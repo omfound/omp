@@ -6,7 +6,6 @@
 #quicktabs-archive_tabs {
   clear: left; 
 }
-
 #om-agenda-manager-dummy-search .form-type-textfield {
   float: left;
 }
@@ -14,4 +13,13 @@
   float: left;
   margin-top: 1em;
   margin-left: 1em;
+}
+
+#om-show-live-block {
+  float: left;
+  width: 400px;
+}
+#om-embedded-content {
+  float: left;
+  width: 575px;
 }
