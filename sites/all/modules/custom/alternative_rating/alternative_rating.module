@@ -265,7 +265,9 @@ function alternative_rating_testing() {
   $second_query = "SELECT * FROM {alternative_rating}
             ORDER BY nid WHERE nid = :nid";  
   $blah = db_query($second_query, array(':nid' => $first_nid));
-  dsm($blah);
+  foreach ($blah as $omg) {
+    dsm($omg);
+  }
 }
 
 function alternative_rating_populate() {
