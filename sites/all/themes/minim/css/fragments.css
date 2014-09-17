@@ -25,6 +25,7 @@
 }
 #om-live-button {
   width: 75%;
+  margin-bottom: 20px;
 }
 #om-show-live-page .pure-button {
   white-space: normal;
