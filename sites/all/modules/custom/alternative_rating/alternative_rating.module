@@ -255,7 +255,7 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
 function alternative_rating_testing() {
   
   $query = 'SELECT * FROM {alternative_rating}
-            ORDER BY nid ASC LIMIT 1';
+            ORDER BY nid ASC LIMIT 10';
   $test = db_query($query);
   foreach ($test as $row) {
     dsm($row);
