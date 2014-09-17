@@ -259,6 +259,7 @@ function alternative_rating_testing() {
   $test = db_query($query);
   foreach ($test as $nid) {
     dsm($nid);
+    dsm($nid->nid);
   }
 }
 
