@@ -1,0 +1,3 @@
+name = Internet Archive Javascript Uploader
+description = Provides a javascript uploader that can be attached to forms.
+core = 7.x

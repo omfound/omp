@@ -1,0 +1,45 @@
+<?php
+
+function ia_js_upload_menu() {
+  $items['admin/ia/upload'] = array(
+	  'title' => t('Internet Archive Uploader'),
+	  'description' => t('Upload to archive.org'),
+	  'page callback' => 'ia_js_upload_demo',
+	  'access arguments' => array('access administration pages'),
+	  'type' => MENU_CALLBACK
+  );
+
+  $items['ia/sign'] = array(
+    'title' => t('Internet Archive Signature'),
+    'page callback' => 'ia_js_upload_sign',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function ia_js_upload_demo() {
+  drupal_add_js(drupal_get_path('module', 'ia_js_upload'). '/includes/evaporate.js');
+  drupal_add_js(drupal_get_path('module', 'ia_js_upload'). '/js/upload.js');
+  drupal_set_title("Javascript Upload Test");
+  $output = '<h4>JS Upload Demo</h4>';
+  $output .= '<div>';
+  $output .= '<input type="file" id="files"  multiple />';
+  $output .= '</div>';
+  return $output;
+}
+
+function ia_js_upload_sign() {
+  $key = '9Oe9KFJOaJW05MEn';
+  if (!empty($_GET['to_sign'])) {
+    $signed_key = base64_encode(extension_loaded('hash') ?
+      hash_hmac('sha1', $string, $key, true) : pack('H*', sha1(
+      (str_pad($key, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
+      pack('H*', sha1((str_pad($key, 64, chr(0x00)) ^
+      (str_repeat(chr(0x36), 64))) . $string)))));
+    //$signed_key = base64_encode(hash_hmac('sha256', $_GET['to_sign'], $key, true));
+    print $signed_key;
+  }
+  print '';
+}
