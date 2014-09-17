@@ -1,0 +1,17 @@
+<table class="{{classes}} pure-table" {{attributes}}>
+  {% if title or caption %}
+    <caption>{{caption}}{{title}}</caption>
+  {% endif %}
+  {% if headers_rendered  %}
+    <thead>
+      <tr>
+        {{ headers_rendered }}
+      </tr>
+    </thead>
+  {% endif %}
+  {% if rows_rendered %}
+    <tbody>
+      {{ rows_rendered }}
+    </tbody>
+  {% endif %}
+</table>
