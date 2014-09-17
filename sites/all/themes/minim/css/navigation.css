@@ -4,6 +4,15 @@
 .region-left .pure-menu {
   border: none;
 }
+.region-left .pure-menu-header {
+  font-size: 125%;
+  font-weight: 300;
+  color: #fff;
+  margin-top: 0;
+  padding: 0.5em 0.8em;
+  font-family: "proxima-nova-alt-condensed",sans-serif;
+  text-transform: uppercase;
+}
 .region-left .pure-menu li a {
   background-color: #191818;
   color: #999;
