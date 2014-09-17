@@ -2,3 +2,16 @@
  * This stylesheet is for irregular, non-paternistic css.
  * Feel free to break this sheet into smaller sheets like header or footer where it makes sense.
  */
+
+#quicktabs-archive_tabs {
+  clear: left; 
+}
+
+#om-agenda-manager-dummy-search .form-type-textfield {
+  float: left;
+}
+#om-agenda-manager-dummy-search #edit-dummy-submit {
+  float: left;
+  margin-top: 1em;
+  margin-left: 1em;
+}
