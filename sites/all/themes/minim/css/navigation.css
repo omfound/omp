@@ -13,6 +13,9 @@
   font-family: "proxima-nova-alt-condensed",sans-serif;
   text-transform: uppercase;
 }
+.region-left .pure-menu-header a {
+  display: block;
+}
 .region-left .pure-menu li a {
   background-color: #191818;
   color: #999;
