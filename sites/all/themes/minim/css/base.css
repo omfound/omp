@@ -14,7 +14,7 @@ body .pure-menu a {
   border: none;
 }
 
-.pure-table table {
+table.pure-table {
   table-layout: fixed;
 }
 .pure-table td,
