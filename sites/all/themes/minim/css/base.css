@@ -18,3 +18,8 @@ table.pure-table {
   table-layout: fixed;
   width: 100%;
 }
+
+table.pure-table,
+table.pure-table a {
+  word-wrap: break-word;
+}
