@@ -257,8 +257,9 @@ function alternative_rating_testing() {
   $query = 'SELECT * FROM {alternative_rating}
             ORDER BY nid ASC LIMIT 1';
   $test = db_query($query);
-  $nid = $test->nid;
-  dsm($nid);
+  foreach ($test as $nid) {
+    dsm($nid);
+  }
 }
 
 function alternative_rating_populate() {
