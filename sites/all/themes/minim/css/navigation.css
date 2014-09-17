@@ -1,6 +1,9 @@
 /**
  * This stylesheet is for CSS regarding menus.
  */
+.region-left .pure-menu {
+  border: none;
+}
 .region-left .pure-menu li a {
   background-color: #191818;
   color: #999;
