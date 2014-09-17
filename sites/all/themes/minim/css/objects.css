@@ -19,3 +19,7 @@
   width: 100% !important;
   height: auto !important;
 }
+
+.wrap-links a {
+  word-wrap: break-word;
+}
