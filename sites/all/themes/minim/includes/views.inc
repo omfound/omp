@@ -77,6 +77,7 @@ function minim_preprocess_views_view_table(&$variables) {
     $variables['rows_rendered'] = '';
     foreach ($variables['rows'] as $row_count => $row) {
       $row_zebra_class = $row_zebra % 2 == 0 ? 'views-row-even' : 'views-row-odd pure-table-odd';
+      $row_zebra ++;
       if (!empty($variables['row_classes'][$row_count])) {
         $variables['rows_rendered'] .= "<tr class='" . implode(' ', $variables['row_classes'][$row_count]) . " " . $row_zebra_class . "'>";
       }
