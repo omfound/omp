@@ -16,8 +16,5 @@ body .pure-menu a {
 
 table.pure-table {
   table-layout: fixed;
-}
-.pure-table td,
-.pure-table th {
-  width: 100px;
+  width: 100%;
 }
