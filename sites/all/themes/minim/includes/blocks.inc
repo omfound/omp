@@ -19,7 +19,7 @@ function minim_preprocess_block__om_theme_assets_om_site_links (&$vars) {
   $vars['content_classes'] = 'pure-menu pure-menu-open';
   dsm($vars['content']);
   $menu_content = $vars['content'];
-  $menu_content = str_replace('" | "', '', $menu_content);
+  $menu_content = str_replace(' | ', '', $menu_content);
   $vars['content'] = $menu_content;
 }
 
