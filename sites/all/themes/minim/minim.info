@@ -4,6 +4,7 @@ core = 7.x
 engine = twig
 
 ; Regions
+regions[left] = Left Sidebar
 regions[header] = Header
 regions[content] = Content
 regions[footer] = Footer
