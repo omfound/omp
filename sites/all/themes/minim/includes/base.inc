@@ -32,3 +32,7 @@ function minim_preprocess_block(&$vars) {
     }
   }
 }
+
+function minim_preprocess_om_show_live_block (&$vars) {
+  dsm($vars);
+}
