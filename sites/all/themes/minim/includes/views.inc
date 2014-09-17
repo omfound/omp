@@ -73,13 +73,15 @@ function minim_preprocess_views_view_table(&$variables) {
     }
   }
   if (!empty($variables['rows'])) {
+    $row_zebra = 0;
     $variables['rows_rendered'] = '';
     foreach ($variables['rows'] as $row_count => $row) {
+      $row_zebra_class = $row_zebra % 2 == 0 ? 'views-row-even' : 'views-row-odd pure-table-odd';
       if (!empty($variables['row_classes'][$row_count])) {
-        $variables['rows_rendered'] .= "<tr class='" . implode(' ', $variables['row_classes'][$row_count]) . "'>";
+        $variables['rows_rendered'] .= "<tr class='" . implode(' ', $variables['row_classes'][$row_count]) . " " . $row_zebra_class . "'>";
       }
       else {
-        $variables['rows_rendered'] .= "<tr>";
+        $variables['rows_rendered'] .= "<tr class='" . $row_zebra_class . "'>";
       }
       $zebra = 0;
       foreach ($row as $field => $content) {
