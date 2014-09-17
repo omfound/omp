@@ -23,3 +23,6 @@
   float: left;
   width: 575px;
 }
+#om-show-live-page .pure-button {
+  width: 75%;
+}
