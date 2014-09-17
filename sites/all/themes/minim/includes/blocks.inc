@@ -17,6 +17,8 @@ function minim_preprocess_block__om_theme_assets_om_round_social_media (&$vars) 
 
 function minim_preprocess_block__om_theme_assets_om_site_links (&$vars) {
   $vars['content_classes'] = 'pure-menu pure-menu-open';
+  $menu_content = '';
+  $menu_content .= '<a class="pure-menu-heading" href="/">OMP GOV DEMO</a>';
   $menu_content = $vars['content'];
   $menu_content = str_replace(' | ', '', $menu_content);
   $vars['content'] = $menu_content;
