@@ -23,3 +23,8 @@ table.pure-table,
 table.pure-table a {
   word-wrap: break-word;
 }
+
+table.pure-table tr.even,
+table.pure-table tr.odd {
+  background-color: #fff;
+}
