@@ -264,6 +264,8 @@ function alternative_rating_testing() {
   }
   $second_query = "SELECT * FROM {alternative_rating}
             ORDER BY nid WHERE nid = $first_nid";  
+  $blah = dbquery($second_query);
+  dsm($blah);
 }
 
 function alternative_rating_populate() {
