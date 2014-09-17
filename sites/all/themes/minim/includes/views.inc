@@ -84,7 +84,7 @@ function minim_preprocess_views_view_table(&$variables) {
       $zebra = 0;
       foreach ($row as $field => $content) {
         if (!empty($variables['field_classes'][$field][$row_count])) {
-          $field_zebra_class = $zebra % 2 == 0 ? 'views-field-even' : 'views-field-odd';
+          $field_zebra_class = $zebra % 2 == 0 ? 'views-field-even' : 'views-field-odd pure-table-odd';
           $variables['field_classes'][$field][$row_count] .= ' ' . $field_zebra_class;
           $zebra ++;
           $variables['rows_rendered'] .= "<td class='" . $variables['field_classes'][$field][$row_count] . "'" . drupal_attributes($variables['field_attributes'][$field][$row_count]) .">" . $content . "</td>";
