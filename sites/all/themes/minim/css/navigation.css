@@ -5,7 +5,7 @@
   border: none;
   background-color: #191818;
 }
-.region-left .pure-menu-header {
+.region-left .pure-menu .pure-menu-header {
   font-size: 125%;
   font-weight: 300;
   color: #fff;
@@ -13,9 +13,6 @@
   padding: 0.5em 0.8em;
   font-family: "proxima-nova-alt-condensed",sans-serif;
   text-transform: uppercase;
-}
-.region-left .pure-menu-header a {
-  display: block;
 }
 .region-left .pure-menu li a {
   background-color: #191818;
