@@ -252,19 +252,19 @@ function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
     ->execute();
 }
 
-//function alternative_rating_testing() {
-//  
-//  $query = 'SELECT * FROM {alternative_rating}
-//            ORDER BY nid ASC LIMIT 1';
-//  $test = db_query($query);
-//  foreach ($test as $nid) {
-//    dsm($nid);
-//    dsm($nid->nid);
-//    $first_nid = $nid->nid
-//  }
-//  $second_query = "SELECT * FROM {alternative_rating}
-//            ORDER BY nid WHERE nid = $first_nid";  
-//}
+function alternative_rating_testing() {
+  
+  $query = 'SELECT * FROM {alternative_rating}
+            ORDER BY nid ASC LIMIT 1';
+  $test = db_query($query);
+  foreach ($test as $nid) {
+    dsm($nid);
+    dsm($nid->nid);
+    $first_nid = $nid->nid
+  }
+  $second_query = "SELECT * FROM {alternative_rating}
+            ORDER BY nid WHERE nid = $first_nid";  
+}
 
 function alternative_rating_populate() {
 /*  $lastrun = variable_get('alternative_rating_run', false);
