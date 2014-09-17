@@ -12,6 +12,7 @@
 .region-left {
   left: 160px;
   margin-left: -160px;
+  width: 160px;
   position: fixed;
   top: 0;
   bottom: 0;
