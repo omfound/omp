@@ -10,3 +10,12 @@
 .site-width {
   max-width: 1000px;
 }
+
+.width-full {
+  width: 100%;
+}
+
+.fit-image img {
+  width: 100% !important;
+  height: auto !important;
+}

@@ -24,3 +24,8 @@ function minim_preprocess_block__om_theme_assets_om_site_links (&$vars) {
   $vars['content'] = $menu_content;
 }
 
+function minim_preprocess_block__om_theme_assets_om_main_banner (&$vars) {
+  $vars['content_classes'] = 'fit-image';
+  $vars['classes_array'][] = 'width-full';
+}
+
