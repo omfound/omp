@@ -55,3 +55,46 @@ function minim_preprocess_views_view_fields(&$variables) {
     }
   }
 }
+
+function minim_preprocess_views_view_table(&$variables) {
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
+  $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($variables);
+    }
+  }
+
+  if (!empty($variables['header'])) {
+    $variables['headers_rendered'] = '';
+    foreach ($variables['header'] as $field => $label) {
+      $variables['headers_rendered'] .= "<th class='" . $variables['header_classes'][$field] . "'>" . $label . "</th>";
+    }
+  }
+  if (!empty($variables['rows'])) {
+    $variables['rows_rendered'] = '';
+    foreach ($variables['rows'] as $row_count => $row) {
+      if (!empty($variables['row_classes'][$row_count])) {
+        $variables['rows_rendered'] .= "<tr class='" . implode(' ', $variables['row_classes'][$row_count]) . "'>";
+      }
+      else {
+        $variables['rows_rendered'] .= "<tr>";
+      }
+      $zebra = 0;
+      foreach ($row as $field => $content) {
+        if (!empty($variables['field_classes'][$field][$row_count])) {
+          $field_zebra_class = $zebra % 2 == 0 ? 'views-field-even' : 'views-field-odd';
+          $variables['field_classes'][$field][$row_count] .= ' ' . $field_zebra_class;
+          $zebra ++;
+          $variables['rows_rendered'] .= "<td class='" . $variables['field_classes'][$field][$row_count] . "'" . drupal_attributes($variables['field_attributes'][$field][$row_count]) .">" . $content . "</td>";
+        }
+        else {
+          $variables['rows_rendered'] .= "<td " . drupal_attributes($variables['field_attributes'][$field][$row_count]) . ">" .  $content . "</td>";
+        }
+      }
+      $variables['rows_rendered'] .= "</tr>";
+    }
+  }
+}
+
