@@ -1,3 +1,13 @@
 /**
  * This stylesheet is for CSS regarding menus.
  */
+.region-left .pure-menu li a {
+  background-color: #191818;
+  color: #999;
+}
+
+.region-left .pure-menu li a:hover, 
+.region-left .pure-menu li a:focus {
+  background-color: #333;
+}
+
