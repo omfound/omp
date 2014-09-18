@@ -34,12 +34,12 @@ function minim_preprocess_block(&$vars) {
 }
 
 function minim_preprocess_node (&$vars) {
-  if(strpos($node->field_om_calendar[0]['url'], '/pub') !== false) { 
-    $edit_view = str_replace('/pub', '/edit?rm=minimal', $node->field_om_calendar[0]['url']);
-  }elseif(strpos($node->field_om_calendar[0]['url'], '/edit') !== false) {
-    $edit_view = str_replace('/edit', '/edit?rm=minimal', $node->field_om_calendar[0]['url']);
+  if(strpos($vars['field_om_calendar'][0]['url'], '/pub') !== false) { 
+    $edit_view = str_replace('/pub', '/edit?rm=minimal', $vars['field_om_calendar'][0]['url']);
+  }elseif(strpos($vars['field_om_calendar'][0]['url'], '/edit') !== false) {
+    $edit_view = str_replace('/edit', '/edit?rm=minimal', $vars['field_om_calendar'][0]['url']);
   }else{
-    $edit_view = $node->field_om_calendar;
+    $edit_view = $vars['field_om_calendar'][0]['url'];
   }
   $vars['edit_view'] = $edit_view;
   dsm($vars);
