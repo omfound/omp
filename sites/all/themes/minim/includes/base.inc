@@ -47,6 +47,7 @@ function minim_preprocess_node (&$vars) {
 
 dsm('DOES THIS FUNCTION LOAD');
 function minim_preprocess_field(&$variables) {
+  watchdog('brian', 'preprocess field is firing');
   dsm('HELLO');
   dsm($variables);
   // Allow preprocessing for fields
