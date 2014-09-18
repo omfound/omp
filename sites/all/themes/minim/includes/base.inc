@@ -34,6 +34,7 @@ function minim_preprocess_block(&$vars) {
 }
 
 function minim_preprocess_node (&$vars) {
+  dsm($vars);
   if(strpos($vars['field_om_calendar'][0]['url'], '/pub') !== false) { 
     $edit_view = str_replace('/pub', '/edit?rm=minimal', $vars['field_om_calendar'][0]['url']);
   }elseif(strpos($vars['field_om_calendar'][0]['url'], '/edit') !== false) {
