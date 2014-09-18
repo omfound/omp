@@ -18,5 +18,4 @@ function minim_preprocess_field__field_om_show_video(&$variables) {
   if (!empty($video)) {
     $variables['video'] = $video;
   }
-  dsm($variables);
 }
