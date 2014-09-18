@@ -259,13 +259,11 @@ function alternative_rating_testing() {
   foreach ($test as $nid) {
     $first_nid = $nid->nid;
   }
-  dsm($first_nid);
   $nid_range = $first_nid + 250;
-  dsm($nid_range);
   $newquery = '
     SELECT * FROM {alternative_rating}
-    WHERE nid = :nid';
-  $newtest = db_query($newquery, array(':nid' => $first_nid));
+    WHERE nid >= :nid <= :nid_range';
+  $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   foreach ($newtest as $result) {
     dsm($result);
   }
