@@ -3,10 +3,6 @@
  * Feel free to break this sheet into smaller sheets like header or footer where it makes sense.
  */
 
-div.error {
-  display: none;
-}
-
 #quicktabs-archive_tabs {
   clear: left; 
 }
