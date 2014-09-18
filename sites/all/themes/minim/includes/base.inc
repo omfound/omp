@@ -42,5 +42,4 @@ function minim_preprocess_node (&$vars) {
     $edit_view = $vars['field_om_calendar'][0]['url'];
   }
   $vars['edit_view'] = $edit_view;
-  dsm($vars);
 }
