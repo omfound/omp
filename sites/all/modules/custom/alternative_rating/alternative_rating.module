@@ -268,7 +268,8 @@ function alternative_rating_testing() {
   foreach ($newtest as $result) {
     $blah[] = $result;
   }
-  $last_nid = end($blah);
+  $last = end($blah);
+  $last_nid = $last->nid;
   dsm($last_nid);
 }
 
