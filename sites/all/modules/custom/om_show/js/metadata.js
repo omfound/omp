@@ -12,6 +12,7 @@
                   url: '/project-metadata/' + $(this).val(),
                   success: function(data) {
                     updateFields(data);
+                    console.log('removing disable');
                     $(this).attr('disabled', '');
                   },
                   context: this
@@ -27,8 +28,6 @@
     data = JSON.parse(data);
     for (var x in data) {
       if (data[x]) {
-        console.log('#' + fieldMap[x] + ' value = ' + $('#' + fieldMap[x]).val(data[x]));
-        console.log($('#' + fieldMap[x]).val(data[x]));
         $('#' + fieldMap[x]).val(data[x]);
       }
     }
