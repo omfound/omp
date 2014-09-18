@@ -42,7 +42,7 @@
 
 /** hiding input formats **/
 a.ckeditor_links {
-  display: none;
+  display: none !important;
 }
 fieldset.filter-wrapper {
   display: none;
