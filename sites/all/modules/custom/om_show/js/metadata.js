@@ -13,7 +13,6 @@
                   success: function(data) {
                     updateFields(data);
                     console.log('removing disable');
-                    //$(this).attr('disabled', '');
                     $(this).prop('disabled', false);
                   },
                   context: this
