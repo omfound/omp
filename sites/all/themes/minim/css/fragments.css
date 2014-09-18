@@ -75,6 +75,10 @@ div#om-desc-content {
 .page-node-agenda-manager .field-name-field-om-show-video {
   width: 525px;
 }
+.page-node-agenda-manager #main {
+  min-width: 955px;
+}
 div#cue-point-list {
   margin-right: 0;
 }
+
