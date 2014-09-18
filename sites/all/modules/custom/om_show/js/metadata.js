@@ -8,6 +8,7 @@
             function() {
               if ($(this).val() != '_none') {
                 $(this).attr('disabled', 'disabled');
+                console.log('/project-metadata/' + $(this).val());
                 $.ajax({
                   url: '/project-metadata/' + $(this).val(),
                   success: function(data) {
