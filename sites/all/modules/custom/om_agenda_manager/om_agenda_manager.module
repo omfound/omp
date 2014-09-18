@@ -450,10 +450,6 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
   return $themes;
 }
 
-function om_agenda_manager_theme_registry_alter(&$theme_registry) {
-  dsm($theme_registry);
-}
-
 function om_agenda_manager_render_live_status_page($variables) {
   $theme_taxonomy = taxonomy_vocabulary_machine_name_load('themes');
   $themes = taxonomy_get_tree($theme_taxonomy->vid);
