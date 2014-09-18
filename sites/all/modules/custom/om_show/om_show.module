@@ -244,11 +244,12 @@ function om_show_form_om_show_node_form_alter(&$form, &$form_state, $form_id) {
     }
   }
   // NB: MAY NEED TO BE TWEAKED WHEN ABOVE AJAX IS ENABLED!
+  /**
   if (arg(1) == 'add') { 
     $form['#attached']['js'] = array(
       drupal_get_path('module', 'om_show') . '/js/metadata.js',
     );
-  }
+  }**/
 }
 
 function om_show_archive_upload_embed($identifier) {
