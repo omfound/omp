@@ -17,14 +17,14 @@
 
 #om-show-live-block {
   float: left;
-  width: 400px;
+  width: 300px;
 }
 #om-embedded-content {
   float: left;
   width: 575px;
 }
 .om-live-button {
-  width: 75%;
+  width: 100%;
   margin-bottom: 20px;
 }
 #om-show-live-page .pure-button {
