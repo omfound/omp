@@ -1,10 +1,10 @@
 <div id="page">
-  <div id="content">
-    {% render(page.left) %}
-    <header id="header" role="banner">
-      {% render(page.header) %}
-    </header>
-    <div id="main" class="center site-width">
+  {% render(page.left) %}
+  <header id="header" role="banner">
+    {% render(page.header) %}
+  </header>
+  <div id="main" class="center site-width">
+    <div id="content">
       {% render(page.highlighted) %}
       {{breadcrumb}}
       <a id="main-content"></a>
