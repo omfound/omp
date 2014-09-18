@@ -1,0 +1,79 @@
+<article class="node-{{ node.nid }} {{ classes }} clearfix"{{ attributes }}>
+  <div id="show-left">
+    {% if video %}
+      {{ video }}
+    {% endif %}
+    <h2>{{ node.title }}</h2>
+    {% if edit_link %}
+      <div class="edit-link-wrapper">
+        {{ edit_link }}
+      </div>
+    {% endif %}
+    <div id="show-details" class="clearfix">
+      {% if picture_rendered %}
+        <div id="show-details-left">
+          {{ picture_rendered }}
+        </div>
+      {% endif %}
+      <div id="show-details-right" {{ picture_rendered ? "class='with-photo'" : "class='without-photo'" }}>
+        <div id="author">
+          {{ name }}
+        </div>
+        <div id="created" class="bold">
+          {{ created }}
+        </div>
+        {% if show_theme %}
+          <div id="theme" class="bold">
+            {{ show_theme }}
+          </div>
+        {% endif %}
+        {% if locally_produced %}
+          <div id="locally-produced" class="bold">
+            {{ locally_produced }}
+          </div>
+        {% endif %}
+        <div id="view-count" class="bold">
+          {{ view_count }}
+        </div>
+      </div>
+    </div>
+    {% if description %}
+      <div id="description" class="divider show-hide">
+        <div class="inner">
+          {{ description }}
+        </div>
+      </div>
+    {% endif %}
+    {% render(content.comments) %}
+  </div>
+  {% if node_right %}
+    <div id="show-right">
+      {{ node_right }}
+      <div id="voting" class="clearfix">
+        <div id="voting-widget">
+          {% if vote_summary %}
+            {{ vote_summary }}
+          {% endif %}
+          {{ vote_widget }}
+          {% if bayesian_score %}
+            {{ bayesian_score }}
+          {% endif %}
+        </div>
+      <div id="voting-msg">
+        {{ vote_message }}
+      </div>
+      {% if upcoming_airings %}
+        {{ upcoming_airings }}
+      {% endif %}
+      {% if archive_link %}
+        <a href="https://archive.org/details/{{ archive_link }}">View at Archive.org</a>
+      {% endif %}
+      {% if project_link %}
+        <div id="project-link">
+          <h3>Project:</h3>
+          {{ project_link }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</article>
