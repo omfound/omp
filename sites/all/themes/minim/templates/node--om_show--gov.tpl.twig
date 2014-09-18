@@ -1,0 +1,33 @@
+<article class="node-{{ node.nid }} {{ classes }} clearfix"{{ attributes }}>
+  <h2>{{ node.title }}</h2>
+    {% if video %}
+      {{ video }}
+    {% endif %}
+
+    {% if video_info.status and video_info.status == 'processing' and video_info.image %} 
+      <div class="video-status video-processing">{{ video_info.image }}</div>
+    {% elseif video_info.status and video_info.status == 'processing' %}
+      <div class="video-status video-processing">This video is currently processing, please check back later.</div>
+    {% endif %}
+
+    {% if video_info.status and video_info.status == 'live' and video_info.image %}
+      <div class="video-status video-live">{{ video_info.image }}</div>
+    {% endif %}
+
+    {% if video_info.status and video_info.status == 'ondemand' and video_info.image %}
+      <div class="video-status video-ondemand">{{ video_info.image }}</div>
+    {% endif %}
+      
+    {% if description %}
+      <div id="gov-description">
+        {{ description }}
+      </div>
+    {% endif %}
+
+    {% if node.field_om_calendar %}
+      <div id="documents">
+        <br />
+        <iframe src="{{ edit_view }}" width="100%" height="500" ></iframe> 
+      </div>
+    {% endif %}
+</article>
