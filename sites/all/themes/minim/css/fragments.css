@@ -47,6 +47,7 @@ div#om-desc-content {
   display: none;
 }
 
+/** adjustments for show page view **/
 .field-name-field-om-show-video {
   float: left;
   width: 550px;
@@ -65,4 +66,15 @@ div#om-desc-content {
 }
 #session-video-embed-tray {
   margin-bottom: 40px;
+}
+
+/** adjustments for agenda manager **/
+#bill-list {
+  margin-left: 0;
+}
+.page-node-agenda-manager .field-name-field-om-show-video {
+  width: 525px;
+}
+div#cue-point-list {
+  margin-right: 0;
 }
