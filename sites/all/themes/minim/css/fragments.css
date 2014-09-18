@@ -18,6 +18,8 @@
 #om-show-live-block {
   float: left;
   width: 300px;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 div#om-desc-content {
   width: 300px;
