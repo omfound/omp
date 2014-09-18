@@ -7,3 +7,7 @@ require_once($theme_path . '/includes/base.inc');
 require_once($theme_path . '/includes/blocks.inc');
 require_once($theme_path . '/includes/views.inc');
 require_once($theme_path . '/includes/components.inc');
+
+function minim_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);
+}
