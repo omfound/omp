@@ -259,7 +259,7 @@ function alternative_rating_testing() {
   foreach ($test as $nid) {
     $first_nid = $nid->nid;
   }
-  $nid_range = $first_nid + 251;
+  $nid_range = $first_nid + 250;
   $newquery = '
     SELECT * FROM {alternative_rating}
     WHERE nid BETWEEN :nid AND :nid_range';
@@ -268,9 +268,8 @@ function alternative_rating_testing() {
   foreach ($newtest as $result) {
     $blah[] = $result;
   }
-  dsm($blah);
-  $blank = count($blah);
-  dsm($blank);
+  $last_nid = end($blah);
+  dsm($last_nid);
 }
 
 function alternative_rating_populate() {
