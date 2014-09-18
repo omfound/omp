@@ -46,6 +46,7 @@ function minim_preprocess_node (&$vars) {
 
 function minim_preprocess_field(&$vars) {
   dsm('WHY DO YOU NOT GET CALLED????!?!?!?!');
+  watchdog('brian', 'please get called');
   $sub_functions = array();
   $sub_functions[] = __FUNCTION__ . '__' . $vars['element']['#field_name'];
   foreach ($sub_functions AS $function) {
