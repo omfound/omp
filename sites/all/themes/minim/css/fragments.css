@@ -39,11 +39,3 @@
 #field-om-show-date-add-more-wrapper legend {
   display: none;
 }
-
-/** hiding input formats **/
-a.ckeditor_links {
-  display: none !important;
-}
-fieldset.filter-wrapper {
-  display: none;
-}
