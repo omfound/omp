@@ -20,3 +20,12 @@ function minim_preprocess_field__field_om_show_video(&$variables) {
     $variables['video'] = $video;
   }
 }
+
+function minim_preprocess_video_player(&$variables) {
+  drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
+  drupal_add_js(drupal_get_path('theme', 'minim') . '/js/video-player.js', array('type' => 'file', 'group' => JS_THEME));
+  $settings = array(
+    'video_player' => array($variables)
+  );
+  drupal_add_js($settings, array('type' => 'setting', 'group' => JS_THEME));
+}
