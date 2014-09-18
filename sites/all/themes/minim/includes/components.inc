@@ -11,3 +11,11 @@ function minim_preprocess_om_site_links (&$vars) {
     $vars['links'][] = l('Add Session', 'node/add/om-show', array('attributes' => array('class' => array('session-link'))));
   }
 }
+
+function minim_preprocess_field__field_om_show_video(&$variables) {
+  $url = $variables['items'][0]['#markup'];
+  $video = om_show_render_video_url($url);
+  if (!empty($video)) {
+    $variables['video'] = $video;
+  }
+}

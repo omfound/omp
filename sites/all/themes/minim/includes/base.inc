@@ -43,3 +43,11 @@ function minim_preprocess_node (&$vars) {
   }
   $vars['edit_view'] = $edit_view;
 }
+
+function minim_preprocess_field(&$variables, $hook) {
+  // Allow preprocessing for fields
+  $function = __FUNCTION__ . '__' . $variables['element']['#field_name'];
+  if (function_exists($function)) {
+    $function($variables);
+  }
+}
