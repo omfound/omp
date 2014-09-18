@@ -29,4 +29,5 @@
 }
 #om-show-live-page .pure-button {
   white-space: normal;
+  cursor: default;
 }

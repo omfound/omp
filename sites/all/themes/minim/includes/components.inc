@@ -1,4 +1,8 @@
 <?php
-/**
- * This file is a good place to preprocess any custom theme components you create.
- */
+
+function minim_preprocess_om_show_live_block (&$vars) {
+  dsm($vars);
+  foreach ($vars['buttons'] as $key => $button) {
+    $vars['buttons'][$key] = str_replace('om-live-button-content', 'pure-button', $button);
+  }
+}
