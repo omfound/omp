@@ -59,7 +59,7 @@ function minim_preprocess_field(&$vars) {
 /**
  * Implements hook_preprocess_HOOK
  */
-function openmedia_preprocess_node__om_show(&$variables) {
+function minim_preprocess_node__om_show(&$variables) {
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
     $file = file_load($variables['picture']);
