@@ -257,16 +257,13 @@ function alternative_rating_testing() {
             ORDER BY nid ASC LIMIT 1';
   $test = db_query($query);
   foreach ($test as $nid) {
-    dsm($nid);
-    dsm($nid->nid);
     $first_nid = $nid->nid;
   }
-  $second_query = "SELECT * FROM {alternative_rating}
-            ORDER BY nid WHERE nid = :nid";  
-  $blah = db_query($second_query, array(':nid' => $first_nid));
-  foreach ($blah as $omg) {
-    dsm($omg);
-  }
+  $newquery = '
+    SELECT bayesian FROM {alternative_rating}
+    WHERE nid = :nid';
+  $newtest = db_query($newquery, array(':nid' => $firstnid))->fetchField();
+  dsm($newtest);
 }
 
 function alternative_rating_populate() {
