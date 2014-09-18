@@ -22,7 +22,6 @@ function minim_preprocess_block__om_theme_assets_om_site_links (&$vars) {
   $menu_content .= $vars['content'];
   $menu_content = str_replace(' | ', '', $menu_content);
   $vars['content'] = $menu_content;
-  dsm($vars['content']);
 }
 
 function minim_preprocess_block__om_theme_assets_om_main_banner (&$vars) {
