@@ -34,7 +34,6 @@ function minim_preprocess_block(&$vars) {
 }
 
 function minim_preprocess_node (&$vars) {
-  dsm($vars);
   if(strpos($vars['field_om_calendar'][0]['url'], '/pub') !== false) { 
     $edit_view = str_replace('/pub', '/edit?rm=minimal', $vars['field_om_calendar'][0]['url']);
   }elseif(strpos($vars['field_om_calendar'][0]['url'], '/edit') !== false) {
@@ -45,15 +44,12 @@ function minim_preprocess_node (&$vars) {
   $vars['edit_view'] = $edit_view;
 }
 
-dsm('DOES THIS FUNCTION LOAD');
-function minim_preprocess_field(&$variables) {
-  watchdog('brian', 'preprocess field is firing');
-  dsm('HELLO');
-  dsm($variables);
-  // Allow preprocessing for fields
-  $function = __FUNCTION__ . '__' . $variables['element']['#field_name'];
-  dsm($function);
-  if (function_exists($function)) {
-    $function($variables);
+function minim_preprocess_field(&$vars) {
+  $sub_functions = array();
+  $sub_functions[] = __FUNCTION__ . '__' . $vars['element']['#field_name'];
+  foreach ($sub_functions AS $function) {
+    if (function_exists($function)) {
+      $function($vars);
+    }
   }
 }
