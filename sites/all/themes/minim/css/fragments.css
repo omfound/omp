@@ -52,6 +52,7 @@ div#om-desc-content {
   width: 550px;
 }
 #gov-description {
+  clear: left;
   margin-top: 50px;
 }
 .share-show-hide {
@@ -61,4 +62,7 @@ div#om-desc-content {
   float: left;
   padding: 0 0 15px 11px;
   margin: 0 15px 0 0;
+}
+#session-video-embed-tray {
+  margin-bottom: 40px;
 }
