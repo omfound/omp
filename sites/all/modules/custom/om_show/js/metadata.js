@@ -28,6 +28,7 @@
     for (var x in data) {
       if (data[x]) {
         console.log('#' + fieldMap[x] + ' value = ' + $('#' + fieldMap[x]).val(data[x]));
+        console.log($('#' + fieldMap[x]).val(data[x]));
         $('#' + fieldMap[x]).val(data[x]);
       }
     }
