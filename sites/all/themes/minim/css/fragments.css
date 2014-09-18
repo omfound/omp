@@ -32,9 +32,18 @@
   cursor: default;
 }
 
+/** weird padding on show add form for date **/
 .container-inline-date .date-padding {
   padding: 0;
 }
 #field-om-show-date-add-more-wrapper legend {
+  display: none;
+}
+
+/** hiding input formats **/
+a.ckeditor_links {
+  display: none;
+}
+fieldset.filter-wrapper {
   display: none;
 }
