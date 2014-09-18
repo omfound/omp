@@ -260,6 +260,8 @@ function alternative_rating_testing() {
     $first_nid = $nid->nid;
   }
   dsm($first_nid);
+  $nid_range = $first_nid + 250;
+  dsm($nid_range);
   $newquery = '
     SELECT * FROM {alternative_rating}
     WHERE nid = :nid';
