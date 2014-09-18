@@ -263,7 +263,7 @@ function alternative_rating_testing() {
   $newquery = '
     SELECT bayesian FROM {alternative_rating}
     WHERE nid = :nid';
-  $newtest = db_query($newquery, array(':nid' => $first_nid))->fetchField();
+  $newtest = db_query($newquery, array(':nid' => $first_nid));
   foreach ($newtest as $result) {
     dsm($result);
   }
