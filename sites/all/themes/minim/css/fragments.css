@@ -19,8 +19,10 @@
   float: left;
   width: 300px;
 }
-#div#om-desc-content {
+div#om-desc-content {
   width: 300px;
+  padding-left: 0;
+  padding-right: 0;
 }
 #om-embedded-content {
   float: left;
