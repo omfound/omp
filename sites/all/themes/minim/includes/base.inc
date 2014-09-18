@@ -45,6 +45,7 @@ function minim_preprocess_node (&$vars) {
   $vars['edit_view'] = $edit_view;
 }
 
+dsm('DOES THIS FUNCTION LOAD');
 function minim_preprocess_field(&$variables) {
   dsm('HELLO');
   dsm($variables);
