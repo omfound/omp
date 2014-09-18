@@ -259,7 +259,7 @@ function alternative_rating_testing() {
   foreach ($test as $nid) {
     $first_nid = $nid->nid;
   }
-  $nid_range = $first_nid + 250;
+  $nid_range = $first_nid + 251;
   $newquery = '
     SELECT * FROM {alternative_rating}
     WHERE nid BETWEEN :nid AND :nid_range';
