@@ -45,6 +45,7 @@ function minim_preprocess_node (&$vars) {
 }
 
 function minim_preprocess_field(&$variables) {
+  dsm('HELLO');
   dsm($variables);
   // Allow preprocessing for fields
   $function = __FUNCTION__ . '__' . $variables['element']['#field_name'];
