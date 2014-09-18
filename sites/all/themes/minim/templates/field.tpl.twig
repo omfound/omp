@@ -1,0 +1,8 @@
+<div class="{{classes}}" {{attributes}}>
+  {% if not label_hidden %}
+    <div class="field-label"{{title_attributes}}>{{label}}:&nbsp;</div>
+  {% endif %}
+  {% for item in items %}
+    {% render(item) %}
+  {% endfor %}
+</div>
