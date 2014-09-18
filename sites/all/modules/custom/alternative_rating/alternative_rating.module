@@ -264,9 +264,13 @@ function alternative_rating_testing() {
     SELECT * FROM {alternative_rating}
     WHERE nid >= :nid <= :nid_range';
   $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
+  $blah = array();
   foreach ($newtest as $result) {
-    dsm($result);
+    $blah[] = $result;
   }
+  dsm($blah);
+  $blank = count($blah);
+  dsm($blank);
 }
 
 function alternative_rating_populate() {
