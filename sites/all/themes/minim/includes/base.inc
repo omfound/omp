@@ -33,6 +33,9 @@ function minim_preprocess_block(&$vars) {
   }
 }
 
+/**
+ * Implements hook_preprocess_HOOK
+ */
 function minim_preprocess_node (&$vars) {
   if(strpos($vars['field_om_calendar'][0]['url'], '/pub') !== false) { 
     $edit_view = str_replace('/pub', '/edit?rm=minimal', $vars['field_om_calendar'][0]['url']);
@@ -42,6 +45,11 @@ function minim_preprocess_node (&$vars) {
     $edit_view = $vars['field_om_calendar'][0]['url'];
   }
   $vars['edit_view'] = $edit_view;
+
+  $function = __FUNCTION__ . '__' . $vars['node']->type;
+  if (function_exists($function)) {
+    $function($vars);
+  }
 }
 
 function minim_preprocess_field(&$vars) {
