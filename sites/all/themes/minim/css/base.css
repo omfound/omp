@@ -1,5 +1,15 @@
 //stuff here
 
+a:link,
+a:visited {
+  color: #C43B28;
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: underline;
+}
+
 h1,
 h2,
 h3 {
