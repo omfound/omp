@@ -34,9 +34,12 @@ div#om-desc-content {
   width: 100%;
   margin-bottom: 20px;
 }
-#om-show-live-page .pure-button {
+.stream-offline .pure-button {
   white-space: normal;
   cursor: default;
+}
+.stream-offline .pure-button:hover {
+  background-image: initial;
 }
 
 /** weird padding on show add form for date **/
