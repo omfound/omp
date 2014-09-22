@@ -10,6 +10,11 @@ function minim_preprocess_html(&$variables) {
   // Suggest seperate header and footer script variables in addition to scripts if needed.
   $variables['header_scripts'] = drupal_get_js('header');
   $variables['footer_scripts'] = drupal_get_js('footer');
+
+  if (!empty($_GET['iframe_mode'])) {
+    $variables['classes_array'][] = 'iframe-mode';
+    //TODO: may need to remove sidebars etc here
+  }
 }
 
 /**
@@ -165,4 +170,20 @@ function minim_preprocess_node__om_show(&$variables) {
     $variables['project_link'] = l($project->title, 'node/' . $project->nid);
   }
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
+}
+
+function minim_preprocess_page (&$vars) {
+  if (user_access('view iframe embed')) {
+    if (arg(0) == 'archived-sessions' || arg(0) == 'live') {
+      global $base_url;
+      $path = $base_url.'/'.request_path().'?iframe_mode=true';
+      $variables['page']['iframe_embed'] = '<iframe src="'.$path.'" width="760" height="1000" frameborder="0"></iframe>';
+    }
+  }
+  if (!empty($_GET['iframe_mode'])) {
+    $content = $variables['page']['content'];
+    unset($variables['page']);
+    $variables['page']['content'] = $content;
+    $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
+  }
 }

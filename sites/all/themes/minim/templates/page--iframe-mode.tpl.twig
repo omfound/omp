@@ -1,0 +1,12 @@
+<div id="page" class="iframe">
+  <div id="main" class="center site-width">
+    <div id="content">
+      {% render(page.title_prefix) %}
+      {% if title %}
+        <h1 class="title" id="page-title">{{title}}</h1>
+      {% endif %}
+      {% render(page.title_suffix) %}
+      {% render(page.content) %}
+    </div><!-- /#main -->
+  </div>
+</div><!-- /#page -->
