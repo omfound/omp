@@ -265,6 +265,7 @@ function om_agenda_manager_google_api_init() {
   $base = libraries_get_path('google-api-php-client');
   require_once $base.'/src/Google_Client.php';
   require_once $base.'/src/contrib/Google_DriveService.php';
+  require_once $base.'/src/contrib/Google_YouTubeService.php';
 }
 
 function om_agenda_manager_agenda_items($node) {
