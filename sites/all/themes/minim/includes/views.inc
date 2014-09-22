@@ -118,6 +118,10 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
         $link = l($vars['result'][$row_key]->node_title, $row_info['path'], $options);
         $vars['rows'][$row_key][$field_key] = $link;
       }
+      elseif ($field_key == 'field_om_calendar') {
+        $calendar_link = l('Download PDF', str_replace('/pub', '/export?format=pdf', $vars['result'][$row_key]->field_field_om_calendar[0]['raw']['url']));
+        $vars['rows'][$row_key][$field_key] = $calendar_link;
+      }
     } 
   }
   dsm ($vars);
