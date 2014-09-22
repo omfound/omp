@@ -1,7 +1,11 @@
 /**
  *  This stylesheet is for media queries that are not layout specific.
  */
-
+@media only screen and (max-width:945px) {
+  div#om-desc-content {
+    width: 265px;
+  }
+}
 @media only screen and (max-width:600px) {
   #om-embedded-content {
     width: 100%;
