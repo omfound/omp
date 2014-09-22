@@ -281,7 +281,7 @@ function om_agenda_manager_google_captions($video_id) {
     //get caption track url from xml content src
     $dd = new DOMDocument();
     libxml_use_internal_errors(true);
-    $dd->loadHTML($caption_track_xml);
+    $dd->loadHTML($caption_tracks_xml);
     $xpath = new DOMXPath($dd);
     $tracks = $xpath->query("//content");
     $track_urls = array();
