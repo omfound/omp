@@ -172,8 +172,7 @@ function minim_preprocess_node__om_show(&$variables) {
   $variables['upcoming_airings'] = theme('om_show_upcoming_airings_display', array('show' => $variables['node']));
 }
 
-function minim_preprocess_page (&$vars) {
-  dsm($vars);
+function minim_preprocess_page (&$variables) {
   if (user_access('view iframe embed')) {
     if (arg(0) == 'archived-sessions' || arg(0) == 'live') {
       global $base_url;
