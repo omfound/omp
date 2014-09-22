@@ -91,7 +91,7 @@ div#cue-point-list {
 
 #page-iframe-embed {
   margin: 20px auto auto auto;
-  width: 600px;
+  width: 100%;
 }
 #page-iframe-embed textarea {
   width: 100%;
