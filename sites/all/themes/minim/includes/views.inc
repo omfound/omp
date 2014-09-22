@@ -103,6 +103,23 @@ function minim_preprocess_views_view_table(&$variables) {
 }
 
 function minim_preprocess_views_view_table__archived_sessions (&$vars) {
+  foreach ($vars['rows'] as $row_key => $row_info) {
+    foreach ($row_info as $field_key => $field_value) {
+      if ($field_key == 'title') {
+        if (!empty($_GET['iframe_mode'])) {
+          $options = array();
+          $options['absolute'] = TRUE;
+          $options['attributes']['target'] = '_blank';
+          $options['query']['iframe_mode'] = 'true';
+        }
+        else {
+          $options = array('absolute' => TRUE); 
+        }
+        $link = l($content, $row_info['path'], $options);
+        $vars['rows'][$row_key][$field_key] = $link;
+      }
+    } 
+  }
   dsm ($vars);
 }
 function minim_preprocess_views_view_table__archived_sessions__page_2 (&$vars) {
