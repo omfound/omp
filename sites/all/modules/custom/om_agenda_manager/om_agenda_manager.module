@@ -133,7 +133,7 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://rss.jwpcdn.com/">';
   $output .= '<channel>';
   $output .= '<title>Cuepoints playlist</title>';
-  $output .= '<link>http://omp.omfound.org</link>';
+  $output .= '<link>http://ompnetwork.org</link>';
   $node = node_load($session_nid);
  
   $youtube_info = om_show_youtube_info($node);
