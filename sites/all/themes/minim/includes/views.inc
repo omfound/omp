@@ -60,7 +60,6 @@ function minim_preprocess_views_view_table(&$variables) {
   $sub_functions = array();
   $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name;
   $sub_functions[] = __FUNCTION__ . '__' . $variables['view']->name . '__' . $variables['view']->current_display;
-  dsm($sub_functions);
   foreach ($sub_functions AS $function) {
     if (function_exists($function)) {
       $function($variables);
@@ -124,8 +123,6 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
       }
     } 
   }
-  dsm ($vars);
-  dsm($vars['result']);
 }
 function minim_preprocess_views_view_table__archived_sessions__page_2 (&$vars) {
   minim_preprocess_views_view_table__archived_sessions($vars);
