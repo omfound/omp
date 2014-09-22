@@ -273,11 +273,10 @@ function om_agenda_manager_google_captions($video_id) {
   $client = om_agenda_manager_google_client_create();
   if ($token_json = $client->getAccessToken()) {
     //get access token via OAUTH
-    $token_parts = json_decode($token);
+    $token_parts = json_decode($token_json);
     $token = $token_parts->access_token;  
     $caption_tracks_url = 'https://gdata.youtube.com/feeds/api/videos/' . $video_id . '/captions?v=2';
     $caption_tracks_xml = om_agenda_manager_google_get($caption_tracks_url, $token);
-    dsm($caption_tracks_xml);
 
     //get caption track url from xml content src
     $dd = new DOMDocument();
