@@ -121,6 +121,7 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
     } 
   }
   dsm ($vars);
+  dsm($vars['result']);
 }
 function minim_preprocess_views_view_table__archived_sessions__page_2 (&$vars) {
   minim_preprocess_views_view_table__archived_sessions($vars);
