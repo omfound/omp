@@ -85,3 +85,10 @@ div#cue-point-list {
   margin-right: 0;
 }
 
+#page-iframe-embed {
+  margin: 20px auto auto auto;
+  width: 600px;
+}
+#page-iframe-embed iframe {
+  width: 100%;
+}
