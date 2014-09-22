@@ -251,7 +251,7 @@ function om_agenda_manager_google_client_create() {
   $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
   $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
   $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
-  $client->setScopes(array('https://www.googleapis.com/auth/drive'));
+  $client->setScopes(array('https://www.googleapis.com/auth/drive', 'https://gdata.youtube.com'));
   $client->setUseObjects(true);
   
   if ($token = variable_get('om_agenda_manager_google_auth_token', false)) { 
