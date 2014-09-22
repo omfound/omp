@@ -115,7 +115,7 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
         else {
           $options = array('absolute' => TRUE); 
         }
-        $link = l($field_value, $content, $row_info['path'], $options);
+        $link = l($field_value, $row_info['path'], $options);
         $vars['rows'][$row_key][$field_key] = $link;
       }
     } 
