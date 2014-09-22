@@ -277,7 +277,6 @@ function om_agenda_manager_google_captions($video_id) {
     $token = $token_parts->access_token;  
     $caption_tracks_url = 'https://gdata.youtube.com/feeds/api/videos/' . $video_id . '/captions?v=2';
     $caption_tracks_xml = om_agenda_manager_google_get($caption_tracks_url, $token);
-    dsm($caption_tracks_xml);
 
     //get caption track url from xml content src
     $dd = new DOMDocument();
