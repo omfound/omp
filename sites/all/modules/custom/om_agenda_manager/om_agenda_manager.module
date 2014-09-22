@@ -243,13 +243,14 @@ function om_agenda_manager_google_authenticate() {
 }
 
 function om_agenda_manager_google_client_create() {
+  global $base_url;
   om_agenda_manager_google_api_init();
 
   $client = new Google_Client();
-  $client->setApplicationName('OMP Calendar Manager');
+  $client->setApplicationName('OMP Agenda Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
   $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
-  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
+  $client->setRedirectUri($base_url . '/google/auth');
   $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
   $client->setScopes(array('https://www.googleapis.com/auth/drive', 'https://gdata.youtube.com'));
   $client->setUseObjects(true);
