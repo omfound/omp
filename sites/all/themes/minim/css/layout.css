@@ -9,6 +9,9 @@
   left: 0;
   position: relative;
 }
+.iframe {
+  padding-left: 0;
+}
 
 #main {
   padding: 20px;
@@ -25,3 +28,4 @@
   background-color: #191818;
   overflow-y: auto;
 }
+.
