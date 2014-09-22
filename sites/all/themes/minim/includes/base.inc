@@ -175,7 +175,7 @@ function minim_preprocess_node__om_show(&$variables) {
 function minim_preprocess_page (&$variables) {
   dsm($variables);
   if (user_access('view iframe embed')) {
-    if (arg(0) == 'archived-sessions' || arg(0) == 'live') {
+    if (arg(0) == 'archived-sessions' || arg(0) == 'live' || (!empty($variables['node']) && $variables['node']->type == 'om_show')) {
       global $base_url;
       $path = $base_url.'/'.request_path().'?iframe_mode=true';
       $variables['page']['iframe_embed'] = '<iframe src="'.$path.'" width="760" height="1000" frameborder="0"></iframe>';
