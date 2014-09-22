@@ -173,7 +173,6 @@ function minim_preprocess_node__om_show(&$variables) {
 }
 
 function minim_preprocess_page (&$variables) {
-  dsm($variables);
   if (user_access('view iframe embed')) {
     if (arg(0) == 'archived-sessions' || arg(0) == 'live' || (!empty($variables['node']) && $variables['node']->type == 'om_show')) {
       global $base_url;
