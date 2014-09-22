@@ -115,7 +115,7 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
         else {
           $options = array('absolute' => TRUE); 
         }
-        $link = l($vars['result']->$row_key['node_title'], $row_info['path'], $options);
+        $link = l($vars['result'][$row_key]->node_title, $row_info['path'], $options);
         $vars['rows'][$row_key][$field_key] = $link;
       }
     } 
