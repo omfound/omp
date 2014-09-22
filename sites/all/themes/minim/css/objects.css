@@ -23,3 +23,21 @@
 .wrap-links a {
   word-wrap: break-word;
 }
+
+/** VIDEO **/
+.fit-youtube {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 25px;
+  height: 0;
+}
+.fit-youtube iframe,
+.fit-youtube object,
+.fit-youtube embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/** END VIDEO **/
