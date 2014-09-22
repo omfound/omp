@@ -20,12 +20,12 @@
     {% endif %}
     {% render(page.content) %}
     {{feed_icons}}
+    {% if page.iframe_embed %}
+      <div id="page-iframe-embed">
+        <label>Embed this page:</label>
+        <textarea class="iframe-embed">{{ page.iframe_embed }}</textarea>
+      </div>
+    {% endif %}
   </div><!-- /#main -->
-  {% if page.iframe_embed %}
-    <div id="page-iframe-embed">
-      <label>Embed this page:</label>
-      <textarea class="iframe-embed">{{ page.iframe_embed }}</textarea>
-    </div>
-  {% endif %}
   {% render(page.footer) %}
 </div><!-- /#page -->
