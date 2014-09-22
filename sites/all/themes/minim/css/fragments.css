@@ -55,7 +55,7 @@ div#om-desc-content {
   float: left;
   width: 550px;
 }
-body.node-om_show-form .field-name-field-om-show-video {
+.node-om_show-form .field-name-field-om-show-video {
   float: none;
   width: auto;
 }
