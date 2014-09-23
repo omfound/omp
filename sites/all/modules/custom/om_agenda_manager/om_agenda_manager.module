@@ -77,6 +77,14 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['node/%node/captions'] = array(
+    'title' => 'Captions',
+    'description' => 'Captions',
+    'page callback' => 'om_agenda_manager_captions',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
 
   $items['jwplayer/test/%node'] = array(
     'title' => 'JWPlayer Test',
@@ -101,6 +109,12 @@ function om_agenda_manager_test($node) {
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   return '<div id="jwplayer-test"></div>';
+}
+
+function om_agenda_manager_captions($node) {
+  $output = '';
+  $output .= '<h2>node captions</h2>';
+  dsm($node);
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
