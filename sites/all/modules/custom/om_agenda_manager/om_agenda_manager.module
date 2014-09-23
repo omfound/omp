@@ -115,6 +115,7 @@ function om_agenda_manager_captions($node) {
   $output = '';
   $output .= '<h2>node captions</h2>';
   dsm($node);
+  return $output;
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
