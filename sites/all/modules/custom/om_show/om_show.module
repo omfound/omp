@@ -386,6 +386,7 @@ function om_show_reload($form, $form_state) {
 }
 
 function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338, $node = FALSE) {
+  dsm('testing');
   if (empty($node)) {
     $node = menu_get_object();
   }
@@ -413,7 +414,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   }
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
-  dsm($youtube_info);
   if ($youtube_info['live_status'] || empty($show_field)) {
     return;
   }
@@ -554,6 +554,7 @@ function om_show_youtube_livestream_status($id) {
 }
 
 function om_show_youtube_info($node) {
+  dsm($node);
   if (!is_object($node)) {
     $show_field = $node['field_om_show_video'];
   }else{
