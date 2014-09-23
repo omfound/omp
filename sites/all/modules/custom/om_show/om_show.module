@@ -473,6 +473,7 @@ function om_show_render_video_url($url, $width = null, $height = null, $disable_
       $height = variable_get('om_show_video_height', 338); 
     }
   }
+  dsm($url);
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
