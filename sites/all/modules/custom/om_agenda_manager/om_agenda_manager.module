@@ -180,11 +180,7 @@ function om_agenda_manager_caption_test() {
   $output .= '<h2>Testing Youtube Captions</h2>';
 
   $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
-  $dd = new DOMDocument();
-  libxml_use_internal_errors(true);
-  $dd->loadHTML($caption_xml);
-  $dd->formatOutput = true;
-  $output .= $dd->saveXML();
+  dsm($caption_xml);
 
   return $output;
 }
