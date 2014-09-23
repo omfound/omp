@@ -178,17 +178,15 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
 function om_agenda_manager_caption_test() {
   $output = '';
   $output .= '<h2>Testing Youtube Captions</h2>';
-  $client = om_agenda_manager_google_client_create();
-  $token_json = $client->getAccessToken();
-  $token_array = json_decode($token_json);
-  dsm($token_array);
-  if ($token_array->created + $token_array->expires_in < time()) {
-    dsm('Token expired...');
-    $client->refreshToken($token_array->refresh_token);
-  }
-  else {
-    dsm('Token is great...');
-  }
+
+  $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
+  $dd = new DOMDocument();
+  libxml_use_internal_errors(true);
+  $dd->loadHTML($caption_xml);
+  $dd->preserveWhiteSpace = false;
+  $dd->formatOutput = true;
+  $output .= $dd->saveXML();
+
   return $output;
 }
 
