@@ -182,6 +182,7 @@ function om_agenda_manager_caption_test() {
   if ($token_json = $client->getAccessToken()) {
     dsm($token_json);
   }
+  return $output;
 }
 
 function om_agenda_manager_admin_form() {
