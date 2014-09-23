@@ -635,3 +635,9 @@ function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $
     return $replacements;
   }
 }
+
+function om_agenda_manager_youtube_id ($url) {
+  $pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+  preg_match($pattern, $url, $matches);
+  return (isset($matches[1])) ? $matches[1] : false;
+}
