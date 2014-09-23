@@ -517,7 +517,6 @@ function om_show_youtube_id($url) {
   if (!empty($url_info['query'])) {
     parse_str(html_entity_decode($url_info['query']), $query);
     if (!empty($query['v'])) {
-      dsm('found youtube');
       return $query['v'];
     }
   }
@@ -570,6 +569,8 @@ function om_show_youtube_info($node) {
         'live_status' => om_show_youtube_livestream_status($youtube_id),
       );
 
+      dsm('youtube info:');
+      dsm($youtube_info);
       return $youtube_info;
     }
   }
