@@ -182,7 +182,7 @@ function om_agenda_manager_caption_test() {
   $token_json = $client->getAccessToken();
   $token_array = json_decode($token_json);
   dsm($token_array);
-  if ($token_array['created'] + $token_array['expires_in'] < time()) {
+  if ($token_array->created + $token_array->expires_in < time()) {
     dsm('Token has expired');
   }
   return $output;
