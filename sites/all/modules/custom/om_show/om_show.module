@@ -386,7 +386,6 @@ function om_show_reload($form, $form_state) {
 }
 
 function om_show_jwplayer_include($disable_playlist = false, $width = 550, $height = 338, $node = FALSE) {
-  dsm('testing');
   if (empty($node)) {
     $node = menu_get_object();
   }
@@ -518,10 +517,12 @@ function om_show_youtube_id($url) {
   if (!empty($url_info['query'])) {
     parse_str(html_entity_decode($url_info['query']), $query);
     if (!empty($query['v'])) {
+      dsm('found youtube');
       return $query['v'];
     }
   }
 
+  dsm('did not find youtube');
   return false;
 }
 
@@ -554,7 +555,6 @@ function om_show_youtube_livestream_status($id) {
 }
 
 function om_show_youtube_info($node) {
-  dsm($node);
   if (!is_object($node)) {
     $show_field = $node['field_om_show_video'];
   }else{
