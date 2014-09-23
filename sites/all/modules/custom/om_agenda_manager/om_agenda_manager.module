@@ -114,7 +114,17 @@ function om_agenda_manager_test($node) {
 function om_agenda_manager_captions($node) {
   $output = '';
   $output .= '<h2>node captions</h2>';
-  dsm($node);
+  if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+    $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']);
+    dsm($video_id);
+    if (!empty($video_id)) {
+      $captions = om_agenda_manager_google_captions($video_id);
+      if (!empty($captions)) {
+        $output .= $captions;
+      }
+    }
+  }
+
   return $output;
 }
 
