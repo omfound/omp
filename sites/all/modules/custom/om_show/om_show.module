@@ -475,7 +475,6 @@ function om_show_render_video_url($url, $width = null, $height = null, $disable_
   }
   if (!empty($url)) {
     if ($youtube_id = om_show_youtube_id($url)) {
-      dsm('found youtube id');
       $livestream_status = om_show_youtube_livestream_status($youtube_id); 
       if (!empty($livestream_status) && $livestream_status == 'active') {
         //youtube embed
