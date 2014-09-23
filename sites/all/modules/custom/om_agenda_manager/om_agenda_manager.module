@@ -183,7 +183,6 @@ function om_agenda_manager_caption_test() {
   $dd = new DOMDocument();
   libxml_use_internal_errors(true);
   $dd->loadHTML($caption_xml);
-  $dd->preserveWhiteSpace = false;
   $dd->formatOutput = true;
   $output .= $dd->saveXML();
 
