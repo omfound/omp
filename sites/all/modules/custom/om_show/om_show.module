@@ -413,6 +413,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   }
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
+  dsm($youtube_info);
   if ($youtube_info['live_status'] || empty($show_field)) {
     return;
   }
