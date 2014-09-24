@@ -140,8 +140,9 @@ function om_agenda_manager_cuepoints($node) {
     SELECT field_data_field_acp_show_reference.entity_id, field_acp_seconds_value, title 
     FROM {field_data_field_acp_show_reference}
     JOIN {field_data_field_acp_seconds} ON field_data_field_acp_seconds.entity_id = field_data_field_acp_show_reference.entity_id
+    JOIN {field_data_field_acp_type} ON field_data_field_acp_type.entity_id = field_data_field_acp_show_reference.entity_id
     JOIN {node} ON node.nid = field_data_field_acp_show_reference.entity_id
-    WHERE field_acp_show_reference_target_id = :nid
+    WHERE field_acp_show_reference_target_id = :nid AND field_data_field_acp_type.field_acp_type_value = 'Agenda Item'
     ORDER BY field_acp_seconds_value ASC";
   $result = db_query($query, array(':nid' => $node->nid));
   $cuepoints = array();
