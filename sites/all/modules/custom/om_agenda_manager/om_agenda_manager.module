@@ -242,6 +242,19 @@ function om_agenda_manager_admin_form() {
     '#default_value' => variable_get('om_agenda_clear_video_field', ''),
   );
 
+  $form['om_agenda_start_marker'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Start marker for agenda parsing:'),
+    '#default_value' => variable_get('om_agenda_start_marker', ''),
+  );
+
+  $form['om_agenda_end_marker'] = array(
+    '#type' => 'textfield',
+    '#title' => t('End marker for agenda parsing:'),
+    '#default_value' => variable_get('om_agenda_end_marker', ''),
+  );
+
+
   return system_settings_form($form); 
 }
 
@@ -361,7 +374,6 @@ function om_agenda_manager_agenda_items($node) {
   $url = $node->field_om_calendar[$node->language][0]['url'];
   if ($url) {
     $text = om_agenda_manager_fetch_google_doc($url);
-    print 'text: '.$text;
     $items = om_agenda_manager_parse_agenda($text);
     $legacy_items = om_agenda_manager_legacy_agenda_items($items);
     
@@ -391,10 +403,23 @@ function om_agenda_manager_legacy_agenda_items($items) {
 function om_agenda_manager_parse_agenda($text) {
   //TODO: eventually need to support multiple options here
   //BASIC for Thornton
-  $start_matches = array(
-    '1. ',
-  );
-  $end_match = 'ADJOURNMENT';
+  if (!variable_get('om_agenda_start_marker', '')) {
+    $start_matches = array(
+      '1. ',
+    );
+  }
+  else {
+    $start_matches = array(
+      variable_get('om_agenda_start_marker', ''),
+    );
+  }
+
+  if (!variable_get('om_agenda_end_marker', '')) {
+    $end_match = 'ADJOURNMENT';
+  }
+  else {
+    $end_match = variable_get('om_agenda_end_marker', '');
+  }
   
   //break text into lines
   $lines = preg_split("/((\r?\n)|(\r\n?))/", $text);
