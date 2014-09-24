@@ -361,7 +361,7 @@ function om_agenda_manager_agenda_items($node) {
   $url = $node->field_om_calendar[$node->language][0]['url'];
   if ($url) {
     $text = om_agenda_manager_fetch_google_doc($url);
-    dsm($text);
+    print 'text: '.$text;
     $items = om_agenda_manager_parse_agenda($text);
     $legacy_items = om_agenda_manager_legacy_agenda_items($items);
     
