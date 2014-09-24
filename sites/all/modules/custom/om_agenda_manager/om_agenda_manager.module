@@ -206,6 +206,10 @@ function om_agenda_manager_caption_test() {
 
   $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
   $caption_array = explode("\n\n", $caption_xml);
+  foreach ($caption_array as $key => $caption) {
+    $caption_array[$key] = explode(' ', $caption, 2); 
+  }
+
   dsm($caption_array);
 
   return $output;
