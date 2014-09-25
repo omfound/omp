@@ -266,7 +266,7 @@ function alternative_rating_testing() {
   $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   $blah = array();
   foreach ($newtest as $result) {
-    $blah[] = $result;
+    $blah[] = $result->nid;
   }
   dsm($blah);
   $last = end($blah);
