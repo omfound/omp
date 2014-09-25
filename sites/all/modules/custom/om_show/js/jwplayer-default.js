@@ -24,12 +24,10 @@
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
                       // if we have an inpoint, do not seek to playlist the first time
                       if (Drupal.settings.jwplayer[0].embedInPoint) {
-                        console.log('seeking: ' + Drupal.settings.jwplayer[0].embedInPoint);
                         jwplayer().seek(Drupal.settings.jwplayer[0].embedInPoint - 1);
                         Drupal.settings.jwplayer[0].embedInPoint = null;
                       }
                       else{
-                        console.log('playlist seeking');
                         var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
                         jwplayer().seek(currentPlaylistItem.mediaid);
                       }
