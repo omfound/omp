@@ -6,13 +6,8 @@
 #quicktabs-archive_tabs {
   clear: left; 
 }
-#om-agenda-manager-dummy-search .form-type-textfield {
-  float: left;
-}
-#om-agenda-manager-dummy-search #edit-dummy-submit {
-  float: left;
-  margin-top: 1em;
-  margin-left: 1em;
+#views-exposed-form-agenda-caption-search-page #edit-submit-agenda-caption-search {
+  margin-top: 1.1em;
 }
 
 #om-show-live-block {
