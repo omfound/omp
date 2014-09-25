@@ -24,6 +24,7 @@
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
                       // if we have an inpoint, do not seek to playlist the first time
                       if (Drupal.settings.jwplayer[i].embedInPoint) {
+                        console.log('deleting inpoint');
                         delete Drupal.settings.jwplayer[i].embedInPoint;
                       }
                       else {
