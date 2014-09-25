@@ -732,6 +732,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
     $node->status = 1;
     $node->language = LANGUAGE_NONE;
     $node->title = $caption['caption'];
+    $node->body = $caption['caption'];
     $node->uid = 1;
     $node->field_acp_type[LANGUAGE_NONE][0]['value'] = 'Caption';
     
@@ -741,8 +742,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
     $seconds = floor(($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2]);
     $node->field_acp_seconds[LANGUAGE_NONE][0]['value'] = $seconds; 
 
-    dsm($node);
-    //node_save($node);
+    node_save($node);
   }
 }
 
