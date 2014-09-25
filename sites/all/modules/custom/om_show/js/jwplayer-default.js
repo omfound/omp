@@ -26,7 +26,7 @@
                       if ('one' == 'one') {
                         console.log('deleting inpoint');
                         //var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
-                        //player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
+                        player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
                         //Drupal.settings.jwplayer[i].embedInPoint = null;
                       }
                       else{
