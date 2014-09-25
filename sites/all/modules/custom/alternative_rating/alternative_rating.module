@@ -269,6 +269,7 @@ function alternative_rating_first_nid() {
 }
 
 function alternative_rating_testing() {
+  //leo says instead of deleting try update or insert
   $query = 'SELECT * FROM {alternative_rating}
             ORDER BY nid ASC LIMIT 1';
   $test = db_query($query);
