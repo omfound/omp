@@ -725,13 +725,11 @@ function om_agenda_manager_store_captions($nid, $captions) {
     
     $node->field_acp_show_reference[LANGUAGE_NONE][0]['target_id'] = $nid;
 
-    dsm($caption['start']);
     $start_parts = explode(':', $caption['start']);
     $seconds = floor(($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2]);
-    dsm($seconds);
     $node->field_acp_seconds[LANGUAGE_NONE][0]['value'] = $seconds; 
 
-    //dsm($node);
+    dsm($node);
     //node_save($node);
   }
 }
