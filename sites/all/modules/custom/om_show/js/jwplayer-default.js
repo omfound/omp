@@ -22,6 +22,7 @@
                 events: {
                   onPlay: function(event) {
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
+                      console.log('seeking now...');
                       var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
                       jwplayer().seek(currentPlaylistItem.mediaid);
                     }
