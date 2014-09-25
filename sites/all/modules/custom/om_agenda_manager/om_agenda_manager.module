@@ -205,20 +205,28 @@ function om_agenda_manager_caption_test() {
   $output .= '<h2>Testing Youtube Captions</h2>';
 
   $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
+  $captions = om_agenda_manager_parse_captions($caption_xml);
+
+  dsm($captions);
+
+  return $output;
+}
+
+function om_agenda_manager_parse_captions($captions) {
   $caption_array = explode("\n\n", $caption_xml);
   foreach ($caption_array as $key => $caption) {
     $time_text = explode("\n", $caption, 2);
     $split_time = explode(',', $time_text[0]);
-    $caption_array[$key] = array(
-      'start' => $split_time[0],
-      'end' => $split_time[1],
-      'caption' => $time_text[1],
-    );
+    if (strlen($time_text[1] > 3)) {
+      $caption_array[$key] = array(
+        'start' => $split_time[0],
+        'end' => $split_time[1],
+        'caption' => $time_text[1],
+      );
+    }
   }
 
-  dsm($caption_array);
-
-  return $output;
+  return $caption_array;
 }
 
 function om_agenda_manager_admin_form() {
