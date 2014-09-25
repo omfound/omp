@@ -25,7 +25,7 @@
                       // if we have an inpoint, do not seek to playlist the first time
                       if (Drupal.settings.jwplayer[0].embedInPoint) {
                         player.seek(Drupal.settings.jwplayer[0].embedInPoint - 1);
-                        Drupal.settings.jwplayer[i].embedInPoint = null;
+                        Drupal.settings.jwplayer[0].embedInPoint = null;
                       }
                       else{
                         var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
