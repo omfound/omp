@@ -221,6 +221,7 @@ function om_agenda_manager_parse_captions($captions) {
       'start' => $split_time[0],
       'end' => $split_time[1],
       'caption' => $time_text[1],
+      'caption_length' => strlen($time_text[1]),
     );
   }
 
