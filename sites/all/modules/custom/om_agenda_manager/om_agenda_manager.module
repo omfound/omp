@@ -214,22 +214,21 @@ function om_agenda_manager_caption_test() {
 
 function om_agenda_manager_parse_captions($captions) {
   $caption_array = explode("\n\n", $captions);
+  $structured_captions = array();
   foreach ($caption_array as $key => $caption) {
     $time_text = explode("\n", $caption, 2);
     $split_time = explode(',', $time_text[0]);
     $caption_length = mb_strlen($time_text[1]);
-    $caption_array[$key] = array(
-      'start' => $split_time[0],
-      'end' => $split_time[1],
-      'caption' => $time_text[1],
-      'caption_length' => $caption_length,
-    );
     if ($caption_length > 3) {
-      $caption_array[$key]['include'] = 'yes';
+      $structured_captions[] = array(
+        'start' => $split_time[0],
+        'end' => $split_time[1],
+        'caption' => $time_text[1],
+      );
     }
   }
 
-  return $caption_array;
+  return $structured_captions;
 }
 
 function om_agenda_manager_admin_form() {
