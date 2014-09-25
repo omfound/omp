@@ -23,15 +23,11 @@
                   onPlay: function(event) {
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
                       // if we have an inpoint, do not seek to playlist the first time
-                      if ('one' == 'one') {
-                        console.log('deleting inpoint');
-                        console.log(Drupal.settings);
-                        //var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
-                        player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
-                        //Drupal.settings.jwplayer[i].embedInPoint = null;
+                      if (Drupal.settings.jwplayer[0].embedInPoint) {
+                        player.seek(Drupal.settings.jwplayer[0].embedInPoint - 1);
+                        Drupal.settings.jwplayer[i].embedInPoint = null;
                       }
                       else{
-                        console.log('playlist seeking');
                         var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
                         jwplayer().seek(currentPlaylistItem.mediaid);
                       }
