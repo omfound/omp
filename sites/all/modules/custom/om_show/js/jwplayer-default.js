@@ -27,6 +27,7 @@
                         delete Drupal.settings.jwplayer[i].embedInPoint;
                       }
                       else {
+                        console.log('playlist seeking');
                         var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
                         jwplayer().seek(currentPlaylistItem.mediaid);
                       }
