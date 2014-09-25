@@ -9,7 +9,12 @@
 #views-exposed-form-agenda-caption-search-page #edit-submit-agenda-caption-search {
   margin-top: 1.1em;
 }
-
+#edit-keys-wrapper {
+  width: 250px;
+}
+#edit-keys-wrapper #edit-keys {
+  width: 100%;
+}
 #om-show-live-block {
   float: left;
   width: 300px;
