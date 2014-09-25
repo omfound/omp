@@ -22,9 +22,14 @@
                 events: {
                   onPlay: function(event) {
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
-                      console.log('seeking now...');
-                      var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
-                      jwplayer().seek(currentPlaylistItem.mediaid);
+                      // if we have an inpoint, do not seek to playlist the first time
+                      if (Drupal.settings.jwplayer[i].embedInPoint) {
+                        delete Drupal.settings.jwplayer[i].embedInPoint;
+                      }
+                      else {
+                        var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
+                        jwplayer().seek(currentPlaylistItem.mediaid);
+                      }
                     }
                   }
                 }
