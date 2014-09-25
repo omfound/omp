@@ -213,11 +213,12 @@ function alternative_rating_total_average($period = 'alltime') {
 }
 
 function alternative_rating_qualified_nids() {
-  $chunk_nids = alternative_rating_testing();
+/*  $chunk_nids = alternative_rating_testing();
   if (!empty($chunk_nids)) {
     $qualified_nids = $chunk_nids;
   }
   else {
+*/
     $query = '
       SELECT nid
       FROM {node}
@@ -226,7 +227,6 @@ function alternative_rating_qualified_nids() {
     foreach($result as $node) {
       $qualified_nids[] = $node->nid;
     }
-  }
   return $qualified_nids;
 }
 
@@ -303,15 +303,16 @@ function alternative_rating_populate() {
  */
   //first empty the existing alternative_rating table
 
-//  db_query('TRUNCATE TABLE {alternative_rating}');
-   $first_nid = alternative_rating_first_nid();
-   $nid_range = $first_nid + 250;
+    db_query('TRUNCATE TABLE {alternative_rating}');
 
+/*   $first_nid = alternative_rating_first_nid();
+   $nid_range = $first_nid + 250;
    $chunk = 'DELETE FROM {alternative_rating} WHERE nid BETWEEN :nid AND :nid_range';
    db_query($chunk, array(':nid' => $first_nid, ':nid_range' => $nid_range));
+*/
+
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
-  dsm($nids);
   //minimum votes to qualify for rating.
   $minimum_votes = 10;
 
