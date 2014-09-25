@@ -25,6 +25,7 @@
                       // if we have an inpoint, do not seek to playlist the first time
                       if (Drupal.settings.jwplayer[i].embedInPoint) {
                         console.log('deleting inpoint');
+                        player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
                         Drupal.settings.jwplayer[i].embedInPoint = null;
                       }
                       else {
