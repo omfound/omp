@@ -268,6 +268,7 @@ function alternative_rating_testing() {
   foreach ($newtest as $result) {
     $blah[] = $result;
   }
+  dsm($blah);
   $last = end($blah);
   $last_nid = $last->nid;
 }
@@ -284,8 +285,10 @@ function alternative_rating_populate() {
  * }
  */
   //first empty the existing alternative_rating table
-  db_query('TRUNCATE TABLE {alternative_rating}');
 
+  db_query('TRUNCATE TABLE {alternative_rating}');
+//  $chunk = 'DELETE FROM {alternative_rating} WHERE nid BETWEEN :nid AND :nid_range';
+//  db_query($chunk, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
 
