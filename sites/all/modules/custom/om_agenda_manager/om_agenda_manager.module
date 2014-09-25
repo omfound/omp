@@ -727,7 +727,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
 
     dsm($caption['start']);
     $start_parts = explode(':', $caption['start']);
-    $seconds = ($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2];
+    $seconds = floor(($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2]);
     dsm($seconds);
     $node->field_acp_seconds[LANGUAGE_NONE][0]['value'] = $seconds; 
 
