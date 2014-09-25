@@ -216,6 +216,7 @@ function alternative_rating_qualified_nids() {
   $chunk_nids = alternative_rating_testing();
   if (!empty($chunk_nids)) {
     $qualified_nids = $chunk_nids;
+    dsm($qualified_nids);
   }
   else {
     $query = '
