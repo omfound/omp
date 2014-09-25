@@ -206,8 +206,8 @@ function om_agenda_manager_caption_test() {
 
   $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
   $captions = om_agenda_manager_parse_captions($caption_xml);
-
-  dsm($captions);
+  $nid = 29245;
+  om_agenda_manager_store_captions($nid, $captions);
 
   return $output;
 }
@@ -712,3 +712,25 @@ function om_agenda_manager_youtube_id ($url) {
   preg_match($pattern, $url, $matches);
   return (isset($matches[1])) ? $matches[1] : false;
 }
+
+function om_agenda_manager_store_captions($nid, $captions) {
+  foreach ($captions as $key => $caption) {
+    $node = new StdClass();
+    $node->type = 'agenda_cue_point';
+    $node->status = 1;
+    $node->language = LANGUAGE_NONE;
+    $node->title = $caption['caption'];
+    $node->uid = 1;
+    $node->field_acp_type[LANGUAGE_NONE][0]['value'] = 'Caption';
+    
+    $node->field_acp_show_reference[LANGUAGE_NONE][0]['target_id'] = $nid;
+
+    $start_parts = explode(':', $caption['start']);
+    $seconds = ($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2];
+    $node->field_acp_seconds[LANGUAGE_NONE][0]['value'] = $seconds; 
+
+    dsm($node);
+    //node_save($node);
+  }
+}
+
