@@ -25,6 +25,7 @@
                       // if we have an inpoint, do not seek to playlist the first time
                       if ('one' == 'one') {
                         console.log('deleting inpoint');
+                        console.log(Drupal.settings);
                         //var currentPlaylistItem = jwplayer().getPlaylistItem(event.index);
                         player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
                         //Drupal.settings.jwplayer[i].embedInPoint = null;
