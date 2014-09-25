@@ -217,12 +217,13 @@ function om_agenda_manager_parse_captions($captions) {
   foreach ($caption_array as $key => $caption) {
     $time_text = explode("\n", $caption, 2);
     $split_time = explode(',', $time_text[0]);
-    $caption_array[$key] = array(
-      'start' => $split_time[0],
-      'end' => $split_time[1],
-      'caption' => $time_text[1],
-      'caption_length' => strlen($time_text[1]),
-    );
+    if (strlen($time_text[1]) > 3) {
+      $caption_array[$key] = array(
+        'start' => $split_time[0],
+        'end' => $split_time[1],
+        'caption' => $time_text[1],
+      );
+    }
   }
 
   return $caption_array;
