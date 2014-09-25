@@ -213,7 +213,7 @@ function om_agenda_manager_caption_test() {
 }
 
 function om_agenda_manager_parse_captions($captions) {
-  $caption_array = explode("\n\n", $caption_xml);
+  $caption_array = explode("\n\n", $captions);
   foreach ($caption_array as $key => $caption) {
     $time_text = explode("\n", $caption, 2);
     $split_time = explode(',', $time_text[0]);
