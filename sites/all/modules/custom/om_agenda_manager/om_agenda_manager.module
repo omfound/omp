@@ -224,6 +224,9 @@ function om_agenda_manager_parse_captions($captions) {
       'caption' => $time_text[1],
       'caption_length' => $caption_length,
     );
+    if ($caption_length > 3) {
+      $caption_array[$key]['include'] = 'yes';
+    }
   }
 
   return $caption_array;
