@@ -714,6 +714,18 @@ function om_agenda_manager_youtube_id ($url) {
 }
 
 function om_agenda_manager_store_captions($nid, $captions) {
+  //create one caption for the node title and body so they are searchable
+  $node = node_load($nid);
+  $captions[] = array(
+    'start' => '0:00:00',
+    'caption' => $node->title,
+  );
+  if (!empty($node->body)) {
+    $captions[] = array(
+      'start' => '0:00:00',
+      'caption' => $node->body,
+    );
+  }
   foreach ($captions as $key => $caption) {
     $node = new StdClass();
     $node->type = 'agenda_cue_point';
