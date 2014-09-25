@@ -562,6 +562,8 @@ function om_agenda_manager_live_page() {
   $output .= theme('om_show_live_page', array('page_elements' => $page_elements));
 
   $output .= '<h1 class="title archive-title">Archived Video</h2>';
+  $block = module_invoke('views', 'block_view', '-exp-agenda_caption_search-page');
+  $output .= render($block);
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
