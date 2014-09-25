@@ -213,13 +213,19 @@ function alternative_rating_total_average($period = 'alltime') {
 }
 
 function alternative_rating_qualified_nids() {
-  $query = '
-    SELECT nid
-    FROM {node}
-    WHERE node.type = :type';
-  $result = db_query($query, array(':type' => 'om_show'));
-  foreach($result as $node) {
-    $qualified_nids[] = $node->nid;
+  $chunk_nids = alternative_rating_testing();
+  if (!empty($chunk_nids)) {
+    $qualified_nids = $chunk_nids;
+  }
+  else {
+    $query = '
+      SELECT nid
+      FROM {node}
+      WHERE node.type = :type';
+    $result = db_query($query, array(':type' => 'om_show'));
+    foreach($result as $node) {
+      $qualified_nids[] = $node->nid;
+    }
   }
   return $qualified_nids;
 }
@@ -268,9 +274,9 @@ function alternative_rating_testing() {
   foreach ($newtest as $result) {
     $blah[] = $result->nid;
   }
-  dsm($blah);
   $last = end($blah);
   $last_nid = $last->nid;
+  return $blah;
 }
 
 function alternative_rating_populate() {
