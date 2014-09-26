@@ -227,6 +227,7 @@ function alternative_rating_qualified_nids() {
       $qualified_nids[] = $node->nid;
     }
   }
+  dsm($qualified_nids);
   return $qualified_nids;
 }
 
