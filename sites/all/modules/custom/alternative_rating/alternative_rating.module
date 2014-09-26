@@ -180,6 +180,7 @@ function alternative_rating_value($nid, $function = 'average', $period = 'alltim
 
 function alternative_rating_total_average($period = 'alltime') {
   if ($period == 'alltime') {
+    dsm('all time fires');
     $query = '
       SELECT AVG(votingapi_vote.value)
       FROM {votingapi_vote}
@@ -189,6 +190,7 @@ function alternative_rating_total_average($period = 'alltime') {
     $value = db_query($query, array(':type' => 'om_show'))->fetchField();
   }
   elseif ($period == 'month') {
+     dsm('month fires');
     $month_ago = strtotime("-30 days");
     $query = '
       SELECT AVG(votingapi_vote.value)
@@ -199,6 +201,7 @@ function alternative_rating_total_average($period = 'alltime') {
     $value = db_query($query, array(':type' => 'om_show', ':month_ago' => $month_ago))->fetchField();
   }
   elseif ($period == 'week') {
+    dsm('week fires');
     $week_ago = strtotime("-7 days");
     $query = '
       SELECT AVG(votingapi_vote.value)
