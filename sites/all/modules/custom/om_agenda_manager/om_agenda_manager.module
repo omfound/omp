@@ -40,6 +40,20 @@ function om_agenda_manager_project_options() {
 function om_agenda_manager_menu() {
   $items = array();
 
+  $items['api/%node/agenda'] = array(
+    'title' => 'Stamped Agenda Items',
+    'page callback' => 'om_agenda_manager_agenda_items', 
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['api/%node/captions'] = array(
+    'title' => 'Captions',
+    'page callback' => 'om_agenda_manager_api_captions', 
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['google/auth'] = array(
     'title' => t('Google Authentication'),
     'page callback' => 'om_agenda_manager_google_authenticate',
@@ -198,6 +212,19 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output .= '</channel>';
   $output .= '</rss>';
   return $output;
+}
+
+function om_agenda_manager_api_captions($node) {
+  header("content-type:application/json");
+  if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+    $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
+    $caption_xml = om_agenda_manager_google_captions($video_id);
+    $captions = om_agenda_manager_parse_captions($caption_xml);
+    print drupal_json_encode($captions);
+  }
+  else {
+    print json_encode(array());
+  }
 }
 
 function om_agenda_manager_caption_test() {
