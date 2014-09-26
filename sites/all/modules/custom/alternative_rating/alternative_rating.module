@@ -213,12 +213,11 @@ function alternative_rating_total_average($period = 'alltime') {
 }
 
 function alternative_rating_qualified_nids() {
-/*  $chunk_nids = alternative_rating_testing();
+ $chunk_nids = alternative_rating_testing();
   if (!empty($chunk_nids)) {
     $qualified_nids = $chunk_nids;
   }
   else {
-*/
     $query = '
       SELECT nid
       FROM {node}
@@ -227,6 +226,7 @@ function alternative_rating_qualified_nids() {
     foreach($result as $node) {
       $qualified_nids[] = $node->nid;
     }
+  }
   return $qualified_nids;
 }
 
