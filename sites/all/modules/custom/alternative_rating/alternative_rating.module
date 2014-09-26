@@ -227,7 +227,6 @@ function alternative_rating_qualified_nids() {
       $qualified_nids[] = $node->nid;
     }
   }
-  dsm($qualified_nids);
   return $qualified_nids;
 }
 
@@ -308,6 +307,7 @@ function alternative_rating_populate() {
 
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
+  dsm($nids);
   //minimum votes to qualify for rating.
   $minimum_votes = 10;
 
