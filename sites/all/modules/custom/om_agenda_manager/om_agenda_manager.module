@@ -40,7 +40,7 @@ function om_agenda_manager_project_options() {
 function om_agenda_manager_menu() {
   $items = array();
 
-  $items['api/%node/agenda'] = array(
+  $items['api/%node/agenda-items'] = array(
     'title' => 'Stamped Agenda Items',
     'page callback' => 'om_agenda_manager_agenda_items', 
     'page arguments' => array(1),
