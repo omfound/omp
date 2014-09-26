@@ -60,8 +60,8 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['api/%node/sessions'] = array(
-    'title' => 'Sessions',
+  $items['api/%node/session'] = array(
+    'title' => 'Session',
     'page callback' => 'om_agenda_manager_api_session', 
     'page arguments' => array(1),
     'access arguments' => array('access content'),
