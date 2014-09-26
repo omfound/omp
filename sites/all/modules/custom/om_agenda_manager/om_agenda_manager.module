@@ -54,6 +54,12 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['api/sessions'] = array(
+    'title' => 'Sessions',
+    'page callback' => 'om_agenda_manager_api_sessions', 
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['google/auth'] = array(
     'title' => t('Google Authentication'),
     'page callback' => 'om_agenda_manager_google_authenticate',
@@ -212,6 +218,19 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output .= '</channel>';
   $output .= '</rss>';
   return $output;
+}
+
+function om_agenda_manager_api_sessions() {
+  $nodes = node_load_multiple(array(), array('type' => 'om_show'));
+  $sessions = array();
+  foreach ($nodes as $key => $node) {
+    $sessions[] = array(
+      'nid' => $node->nid,
+      'title' => $node->title,
+    );
+  }
+  header("content-type:application/json");
+  print drupal_json_encode($sessions);
 }
 
 function om_agenda_manager_api_captions($node) {
