@@ -251,11 +251,17 @@ function alternative_rating_category($nid) {
 function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
   //was db_insert
   $result = db_merge('alternative_rating')
-    ->fields(array(
+    ->insertFields(array(
       'nid' => $nid,
       'bayesian' => $bayesian,
       'period' => $period,
     ))
+    ->updateFields(array(
+      'nid' => $nid,
+      'bayesian' => $bayesian,
+      'period' => $period,
+    ))
+    ->key(array('nid' => $nid))
     ->execute();
 }
 
