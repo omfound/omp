@@ -3,6 +3,9 @@
   <header id="header" role="banner">
     {% render(page.header) %}
   </header>
+  {% if logo %}
+    <div id="logo">{{ logo }}</div>
+  {% endif %}
   <div id="main" class="center site-width">
     {% render(page.highlighted) %}
     {{breadcrumb}}
