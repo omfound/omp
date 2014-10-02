@@ -108,6 +108,13 @@
     color: <?php print $title_color; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($title_font)): ?>
+  #page #content h1,
+  #page #content h2,
+  #page #content h3 {
+    font-family: <?php print $title_font; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($om_dashboard_title_color)): ?>
   .section-dashboard #page #content h1,
   .section-dashboard #page #content h2,
