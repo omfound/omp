@@ -3,10 +3,10 @@
   <header id="header" role="banner">
     {% render(page.header) %}
   </header>
-  {% if logo %}
-  <div id="logo"><img src="{{ logo }}" /></div>
-  {% endif %}
   <div id="main" class="center site-width">
+    {% if logo %}
+      <div id="logo"><img src="{{ logo }}" /></div>
+    {% endif %}
     {% render(page.highlighted) %}
     {{breadcrumb}}
     <a id="main-content"></a>
