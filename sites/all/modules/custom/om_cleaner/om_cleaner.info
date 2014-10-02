@@ -1,0 +1,4 @@
+name = OM Cleaner
+description = Utility functions to reset content on an OMP site.
+core = 7.x
+package = "Open Media System"

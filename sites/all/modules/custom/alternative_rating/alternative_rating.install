@@ -1,0 +1,24 @@
+<?php
+
+function alternative_rating_schema() {
+  $schema['alternative_rating'] = array(
+    'fields' => array(
+    	'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    	'bayesian' => array('type' => 'numeric', 'size' => 'normal', 'not null' => TRUE, 'default' => 0, 'precision' => 12, 'scale' => 6),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  return $schema;
+}
+
+function alternative_rating_update_1() {
+  $ret = array();
+  db_add_field('alternative_rating', 'period', array('type' => 'varchar', 'length' => 32, 'not null' => TRUE, 'default' => 'alltime'));
+  return $ret;
+}
+
+function alternative_rating_update_2() {
+  db_drop_primary_key('alternative_rating');
+  db_add_primary_key('alternative_rating', array('nid', 'period'));
+}

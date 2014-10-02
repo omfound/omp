@@ -1,0 +1,5 @@
+name = Open Media Timeslot Scheduler Automation
+description = Provides automatic scheduling functionality.
+core = 7.x
+package = "Open Media System"
+dependencies[] = "om_timeslot_scheduler"

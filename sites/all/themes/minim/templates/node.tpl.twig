@@ -1,0 +1,21 @@
+<article class="node-{{node.nid}} {{classes}} clearfix" {{attributes}}>
+  {% if title_prefix || title_suffix || display_submitted || unpublished || page is null && title %}
+    <header>
+      {% render(title_prefix) %}
+      {% if page && title %}
+        <h2 {{title_attributes}}><a href="{{node_url}}">{{title}}</a></h2>
+      {% endif %}
+      {% render(title_suffix) %}
+      {% if display_submitted %}
+        <p class="submitted">
+          {{user_picture}}
+          {{submitted}}
+        </p>
+      {% endif %}
+      {% if unpublished %}
+        <p class="unpublished">Unpublished</p>
+      {% endif %}
+    </header>
+  {% endif %}
+  {% render(content) %}
+</article>

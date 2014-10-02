@@ -1,0 +1,5 @@
+name = Commerce Reservations Reports
+description = Provides basic reporting for Commerce Reservations.
+core = 7.x
+package = Other
+php = 5.2.4

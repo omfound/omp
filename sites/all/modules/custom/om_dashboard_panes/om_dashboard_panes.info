@@ -1,0 +1,5 @@
+name = Open Media Dashboard Panes
+description = Provide panes for the various Open Media Project systems.
+dependencies[] = om_dashboard
+core = 7.x
+package = Open Media System

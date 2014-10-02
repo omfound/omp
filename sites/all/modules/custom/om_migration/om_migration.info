@@ -1,0 +1,22 @@
+name = "Openmedia Migration"
+description = "The Openmedia drupal 6 to 7 migration"
+package = "Open Media System"
+core = 7.x
+dependencies[] = migrate
+dependencies[] = list
+dependencies[] = number
+dependencies[] = "commerce"
+dependencies[] = "commerce_order"
+dependencies[] = "commerce_product"
+files[] = om_project.inc
+files[] = om_show.inc
+files[] = om_migration.module
+files[] = om_users.inc
+files[] = om_users_cleanup.inc
+files[] = om_users_with_project.inc
+files[] = om_users_with_membership.inc
+files[] = om_users_with_certification.inc
+files[] = om_cablecast_show.inc
+files[] = includes/om_migration_utils.inc
+files[] = includes/cablecast.inc
+

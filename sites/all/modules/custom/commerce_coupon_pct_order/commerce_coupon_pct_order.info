@@ -1,0 +1,5 @@
+name = Commerce Coupon Percentage Amount per Order
+description = "A coupon type for percentage discounts limited to one item per order."
+dependencies[] = commerce_coupon
+package = Commerce Coupon
+core = 7.x

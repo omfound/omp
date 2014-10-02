@@ -1,0 +1,4 @@
+name = Open Media Get_Reports() Hook
+description = This module is a hook that collects all Open Media System reports from modules that uses om_get_reports()
+core = 7.x
+package = Open Media System

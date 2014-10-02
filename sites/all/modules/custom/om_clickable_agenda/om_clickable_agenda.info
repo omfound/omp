@@ -1,0 +1,3 @@
+name = Open Media Clickable Agenda Module
+description = "Adds the clickable agenda functionality to shows."
+core = 7.x

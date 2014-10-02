@@ -1,0 +1,64 @@
+.page-dashboard #content {
+  box-shadow: none;
+  background: transparent;
+  border: none;
+}
+
+.page-dashboard #content-inner {
+  padding: 0;
+}
+
+.page-dashboard #content .pane {
+  background-color: #FFFFFF;
+  box-shadow: 1px 1px 2px #AAA, -1px -1px 2px #AAA;
+  margin: 0 30px 30px 0;
+  width: 350px;
+  float: left;
+}
+
+.page-dashboard #content .pane .inner {
+  padding: 10px;
+}
+
+.page-dashboard #content h3 {
+  width: 340px;
+  color: #FFFFFF;
+  background: #54474F;
+  text-shadow: none;
+  font-style: normal;
+  padding: 5px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.page-dashboard #content .pane-title-only h3 {
+  padding: 10px 5px;
+}
+
+.page-dashboard #content h3 a:link.blue-button,
+.page-dashboard #content h3 a:visited.blue-button {
+  box-shadow: 1px 2px 3px rgba(60, 45, 54, .85);
+  font-size: 12px;
+  float: right;
+}
+
+.page-dashboard #content .label,
+.page-dashboard #content th {
+  font-weight: bold;
+  color: #54474F;
+}
+
+.page-dashboard #content .pane table {
+  margin: 0;
+}
+
+.page-dashboard #content .pane table th,
+.page-dashboard #content .pane table td {
+  padding: 3px 8px;
+}
+
+.page-dashboard #content .divider {
+  margin: 10px 0;
+  padding-top: 10px;
+  border-top: solid 1px #CCCCCC;
+  text-align: right;
+}

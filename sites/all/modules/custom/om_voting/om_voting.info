@@ -1,0 +1,4 @@
+name = OM Voting System
+description = Provides email and bayesian voting amongst other things.
+core = 7.x
+package = "Open Media System"

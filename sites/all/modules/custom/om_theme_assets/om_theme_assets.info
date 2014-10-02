@@ -1,0 +1,4 @@
+name = Open Media Theme Assets
+description = Provides blocks and other theme assets for use with the Open Media Project theme.
+core = 7.x
+package = "Open Media System"

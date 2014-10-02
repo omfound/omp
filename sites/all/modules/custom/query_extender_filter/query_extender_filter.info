@@ -1,0 +1,3 @@
+name = "Query Extender: Filter"
+description = "Provides a db extender for Filters"
+core = 7.x

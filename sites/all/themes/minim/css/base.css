@@ -1,0 +1,40 @@
+a:link,
+a:visited {
+  color: #C43B28;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "proxima-nova-alt-condensed",sans-serif;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+body .pure-menu a {
+  border: none;
+}
+
+table.pure-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.pure-table,
+table.pure-table a {
+  word-wrap: break-word;
+}
+
+table.pure-table tr.even,
+table.pure-table tr.odd {
+  background-color: #fff;
+  border: none;
+  padding: none;
+}

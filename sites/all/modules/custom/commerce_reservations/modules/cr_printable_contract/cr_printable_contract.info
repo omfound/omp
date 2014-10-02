@@ -1,0 +1,6 @@
+name = Commerce Reservations Contracts
+description = Provides printable contracts for commerce reservations.
+core = 7.x
+package = Other
+
+dependencies[] = commerce_reservations 

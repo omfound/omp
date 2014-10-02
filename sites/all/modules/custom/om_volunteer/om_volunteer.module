@@ -1,0 +1,100 @@
+<?php
+
+require_once('sites/all/modules/custom/om_volunteer/includes/om_volunteer_discount.checkout_pane.inc');
+
+/**
+ * Implements hook_commerce_checkout_pane_info().
+ */
+function om_volunteer_commerce_checkout_pane_info() {
+  $checkout_panes = array();
+  $checkout_panes['om_volunteer_discount'] = array(
+    'title' => t('Alternative Payment'),
+    'page' => 'checkout',
+    'locked' => TRUE,
+    'file' => 'includes/om_volunteer_discount.checkout_pane.inc',
+    'base' => 'om_volunteer_discount',
+    'weight' => 10,
+    'callbacks' => array(
+      'checkout_form' => 'om_volunteer_discount_checkout_form',
+    )
+  );
+  return $checkout_panes;
+}
+
+
+function om_volunteer_get_multiple($tid) {
+  $coupon = om_volunteer_get_coupon_by_term($tid);
+  if (!empty($coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0])) {
+    return $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'];
+  }
+  return FALSE;
+}
+
+function om_volunteer_get_coupon_by_term($tid) {
+  $query = db_select('field_data_commerce_coupon_userpoint_type', 'term');
+  $query->fields('term', array('entity_id'));
+  $query->condition('entity_type', 'commerce_coupon');
+  $query->condition('commerce_coupon_userpoint_type_value', $tid);
+  $resource = $query->execute();
+  $result = $resource->fetchAll();
+  $result = !empty($result) ? array_shift($result) : FALSE;
+  $coupon = FALSE;
+  if (!empty($result)) {
+   $coupon = commerce_coupon_load($result->entity_id);
+  }
+  return $coupon;
+}
+
+function om_volunteer_get_default_points($total_points, $required_points) {
+  $default_points = $required_points;
+  if ($total_points < $required_points) {
+    $default_points = $total_points;
+  }
+  return $default_points;
+}
+
+function om_volunteer_apply_points($commerce_order, $user_points_used, $type_tid) {
+  $coupon = om_volunteer_get_coupon_by_term($type_tid);
+  rules_invoke_event('commerce_coupon_redeem', $coupon, $commerce_order);
+  $amount = $user_points_used * $coupon->commerce_coupon_userpoint_ratio[LANGUAGE_NONE][0]['value'] * 100;
+  $currency_code = 'USD';
+  $component_name = 'base_price';
+
+  $commerce_order_wrapper = entity_metadata_wrapper('commerce_order', $commerce_order);
+
+  $line_item = commerce_coupon_line_item_new($coupon, $commerce_order_wrapper->order_id->raw());
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+
+  // Set the unit price on the line item object.
+  $line_item_wrapper->commerce_unit_price->amount = $amount * -1;
+  $line_item_wrapper->commerce_unit_price->currency_code = $currency_code;
+
+  // Add the base price to the components array.
+  if ($coupon->is_active && !commerce_price_component_load($line_item_wrapper->commerce_unit_price->value(), $component_name)) {
+    $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+      $line_item_wrapper->commerce_unit_price->value(), $component_name, $line_item_wrapper->commerce_unit_price->value(), TRUE, FALSE
+    );
+  }
+
+  commerce_line_item_save($line_item);
+
+  $commerce_order_wrapper->commerce_line_items[] = $line_item;
+  commerce_order_save($commerce_order);
+}
+
+function om_volunteer_term_format_plural($term, $count = 0, $tansform_case = FALSE) {
+  $output = FALSE;
+  if (is_numeric($term)) {
+    $term = taxonomy_term_load($term);
+  }
+  if (is_object($term)) {
+    $l = LANGUAGE_NONE;
+    $singular = $term->field_type_label_singular[$l][0]['value'];
+    $plural = $term->field_type_label_plural[$l][0]['value'];
+    $output = format_plural($count, "1 $singular", "@count $plural");
+    if ($tansform_case != FALSE && function_exists($tansform_case)) {
+      $output = $tansform_case($output);
+    }
+  }
+  return $output;
+}

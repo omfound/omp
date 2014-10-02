@@ -1,0 +1,4 @@
+name = Open Media Internet Archive 
+description = Provides utility functions for files hosted at archive.org.
+core = 7.x
+package = Open Media System

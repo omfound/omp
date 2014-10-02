@@ -1,0 +1,116 @@
+<?php
+
+function internet_archive_thumb_from_nid($nid) {
+  $node = node_load($nid);
+  if (!empty($node->field_archive_derivatives)) {
+    $derivatives = json_decode($node->field_archive_derivatives[$node->language][0]['value']);
+    $thumbnails = internet_archive_derivative_thumbnails($derivatives);
+    if (!empty($thumbnails)) {
+      if (!empty($thumbnails[1])) {
+        return $thumbnails[1]['url']; 
+      }else{
+        return $thumbnails[0]['url'];
+      }
+    }
+  }
+
+  return false;
+}
+
+function internet_archive_derivative_thumbnails($derivatives) {
+  foreach ($derivatives as $item_path => $info) {
+    foreach ($info->files as $key => $file) {
+      if ($file->format == 'Thumbnail') {
+        $thumbnails[] = array(
+          'details' => $file,
+          'url' => 'http://www.archive.org/download/'.$item_path.$key,
+        ); 
+      }
+    }
+  }
+
+  if (!empty($thumbnails)) {
+    return $thumbnails;
+  }else{
+    return false;
+  }
+}
+
+function internet_archive_item_from_file_url($url) {
+  if (strpos($url, 'archive.org') !== false && strpos($url, 'download') !== false) {
+    $urlinfo = parse_url($url);
+    if (!empty($urlinfo['path'])) {
+      $parts = explode('/', $urlinfo['path']);
+      if (!empty($parts[2])) {
+        return $parts[2];
+      }
+    }
+  }
+
+  return false;
+}
+
+
+/**
+ * Super small class to get all derivatives from a an item.
+ *   @TODO should be replace by a less taxing method of retrieval.
+ * @public set_item
+ * @public get_item
+ * @public get_derivative(extension)
+ *   Get a single derivative by extension. Caches result so multiple uses per request are ok
+ * @public get_derivatives
+ *   Get all derivatives.
+ */
+class internetArchiveDerivativeHandler {
+  public $item;
+  public function __construct() {
+    $this->url_stem = "http://archive.org/details";
+  }
+  public function set_item($item) {
+    $this->item = $item;
+  }
+  public function get_item() {
+    return $this->item;
+  }
+  public function get_derivatives() {
+    $derivatives = $this->make_curl_request();
+    if (!empty($derivatives)) {
+      $this->derivatives = drupal_json_decode($derivatives);
+      return $this->derivatives;
+    }
+    return false;
+  }
+  public function get_derivative($extension) {
+    if (strpos($extension, '.') === FALSE) {
+      $extension = '.' . $extension;
+    }
+    if (empty($this->derivatives)) {
+      $this->get_derivatives();
+    }
+    if (isset($this->derivatives['files'])) {
+      foreach ($this->derivatives['files'] AS $key => $derivative) {
+        if (is_numeric(strpos($key, $extension))) {
+          return "http://archive.org/download" . $this->item . $key;
+        }
+      }
+    }
+    return FALSE;
+  }
+  private function make_curl_request() {
+    $complete_path = $this->url_stem . '/' . $this->item . '?output=json';
+    $this->ch = curl_init();
+    curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($this->ch, CURLOPT_URL, $complete_path);
+    $output = curl_exec($this->ch);
+    $response = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+    curl_close($this->ch);
+    if ($response > 300) {
+      watchdog('om_internet_archive', "internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path");
+      dsm("internetArchiveDerivativeHandler::make_curl_request received a bad response: $response from archive.org while requesting: $complete_path");
+      return FALSE;
+    }
+    else {
+      return $output;
+    }
+  }
+}

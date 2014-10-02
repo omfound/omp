@@ -1,0 +1,166 @@
+/** Membership Tables **/
+#membership-header {
+  margin: 0 4px 0 0;
+  padding: 0;
+  float: right;
+  width: 100%;
+  text-align: right;
+}
+
+#membership-table table {
+  width: 958px;
+  margin: auto;
+  text-shadow: none;
+}
+
+#membership-header-links {
+  clear: both;
+}
+
+#membership-header li {
+  list-style: none;
+  font-size: 110%;
+  margin: 10px 0;
+}
+
+.section-membership h1#page-title {
+  display: none;
+}
+
+.section-membership #content th.table-title {
+  font-size: 24px;
+  background: transparent;
+  text-align: left;
+  line-height: 30px;
+}
+
+.section-membership #content td {
+  border: 1px solid #F4F4F4;
+  padding: 5px 0;
+}
+
+.section-membership th.table-title {
+  background-color: transparent;
+}
+
+.section-membership #content th {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
+  font-family: 'PTSansRegular', sans-serif;
+}
+
+.section-membership #content th,
+.section-membership td.feature-no {
+  background-color: #A89F94;
+  border: 1px solid #F4F4F4;
+}
+.section-membership #content th,
+.section-membership #content td.feature {
+  width: 94px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.section-membership td.feature-no  {
+  text-indent: -999em;
+}
+
+.section-membership td.feature-yes {
+  text-indent: -999em;
+  background: #84B63F url(../images/membership-check.png) center center no-repeat;
+}
+
+.section-membership #content td.plan-feature {
+  border-bottom: 1px solid #A89F94;
+}
+
+.section-membership #content td.plan-feature.last {
+  border-bottom: none;
+}
+
+.section-membership #content td.price,
+.section-membership #content td.action {
+  background: #3395D2;
+  border-top: none;
+  border-bottom: none;
+  text-align: center;
+  padding: 0;
+  color: #FFFFFF;
+  font-size: 11px;
+}
+
+.section-membership #content td.action a:link,
+.section-membership #content td.action a:visited {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.section-membership #content td.action a:focus,
+.section-membership #content td.action a:hover {
+  text-decoration: underline;
+}
+
+#om-membership-registration-form {
+  padding-top: 10px;
+}
+
+/** Membership Steps **/
+#edit-form-helper {
+  padding: 10px 0 10px 0;
+  margin: 0;
+  border-left: none;
+  border-right: none;
+}
+
+#form-helper-prev,
+#form-helper-text {
+  float: left;
+  margin-right: 10px;
+}
+
+#edit-form-helper-next {
+  float: right;
+  margin-right: 0;
+}
+
+#form-helper-prev a:link,
+#form-helper-prev a:visited {
+  display: inline-block;
+  line-height: 14px;
+  font-family: Helvetica, Arial, sans-serif;
+  background: white;
+  background: -moz-linear-gradient(top, white 0%, #F9F9F9 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(100%,#F9F9F9));
+  background: -webkit-linear-gradient(top, white 0%,#F9F9F9 100%);
+  background: -o-linear-gradient(top, white 0%,#F9F9F9 100%);
+  background: -ms-linear-gradient(top, white 0%,#F9F9F9 100%);
+  background: linear-gradient(to bottom, white 0%,#F9F9F9 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 );
+  color: #333;
+  border: solid 1px #CCC;
+  border-radius: 5px;
+  padding: 6px;
+  box-shadow: 1px 2px 3px #EFEFEF;
+  text-decoration: none;
+}
+
+#form-helper-text {
+  font-size: 24px;
+  padding-top: 4px;
+  font-family: 'PTSansRegular', sans-serif;
+}
+
+fieldset.checkout-buttons {
+  padding: 1em;
+}
+
+input.checkout-cancel,
+input.checkout-back {
+  box-shadow: none;
+}
+
+.section-checkout table {
+  width: 100%;
+}

@@ -1,0 +1,34 @@
+<div id="page">
+  {% render(page.left) %}
+  <header id="header" role="banner">
+    {% render(page.header) %}
+  </header>
+  <div id="main" class="center site-width">
+    <div id="content">
+      {% render(page.highlighted) %}
+      {{breadcrumb}}
+      <a id="main-content"></a>
+      {% render(page.title_prefix) %}
+      {% if title %}
+        <h1 class="title" id="page-title">{{title}}</h1>
+      {% endif %}
+      {% render(page.title_suffix) %}
+      {{messages}}
+      {% render(tabs) %}
+      {% render(help) %}
+      {% if action_links %}
+        <ul class="action-links">{% render(action_links) %}</ul>
+      {% endif %}
+      {% render(page.content) %}
+      {{feed_icons}}
+    </div><!-- /#main -->
+    {% if page.iframe_embed %}
+      <div id="page-iframe-embed">
+        <label>Embed this page:</label>
+        <textarea class="iframe-embed">{{ page.iframe_embed }}</textarea>
+      </div>
+    {% endif %}
+    {% render(page.footer) %}
+    </div>
+  </div>
+</div><!-- /#page -->

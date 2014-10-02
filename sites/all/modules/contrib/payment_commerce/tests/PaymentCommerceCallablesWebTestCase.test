@@ -1,0 +1,29 @@
+<?php
+
+class PaymentCommerceCallablesWebTestCase extends XtoolsWebTestCase {
+
+  /**
+   * Implements DrupalTestCase::getInfo().
+   */
+  static function getInfo() {
+    return array(
+      'name' => 'Callables',
+      'group' => 'Payment for Drupal Commerce',
+      'dependencies' => array('payment_commerce', 'xtools'),
+    );
+  }
+
+  /**
+   * Overrides parent::setUp().
+   */
+  function setUp(array $modules = array()) {
+    parent::setUp($modules + array('xtools'));
+  }
+
+  /**
+   * Tests callables.
+   */
+  function testCallables() {
+    $this->XtoolsAssertCallables(array('payment_commerce'), array('commerce_payment', 'drupal', 'payment', 'views'));
+  }
+}

@@ -1,0 +1,5 @@
+name = "Alternative Rating"
+description = "Provides calculated views based on VotingAPI Data"
+package = "Voting"
+dependencies[] = votingapi 
+core = 7.x

@@ -1,0 +1,5 @@
+name = Commerce Userpoint Discount Coupon
+description = "A coupon type for discounting orders based on userpoints."
+dependencies[] = commerce_coupon
+package = Commerce Coupon
+core = 7.x

@@ -1,0 +1,56 @@
+<?php
+
+//define('PAYMENT_STATUS_MONEY_TRANSFERRED', 'payment_status_money_transferred');
+define('PAYMENT_STATUS_SUCCESS_CASH', 'payment_status_success_cash');
+define('PAYMENT_STATUS_SUCCESS_CHECK', 'payment_status_success_check');
+define('PAYMENT_STATUS_SUCCESS_CARD', 'payment_status_success_card');
+define('PAYMENT_STATUS_SUCCESS_GIFT', 'payment_status_success_gift');
+define('PAYMENT_STATUS_SUCCESS_INTERN_CREDIT', 'payment_status_success_intern_credit');
+define('PAYMENT_STATUS_SUCCESS_BOARD_CREDIT', 'payment_status_success_board_credit');
+define('PAYMENT_STATUS_SUCCESS_ORG_CREDIT', 'payment_status_success_org_credit');
+define('PAYMENT_STATUS_SUCCESS_MEMBER_CREDIT', 'payment_status_success_member_credit');
+
+function om_payment_options_payment_status_info() {
+  return array(
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_CASH,
+      'title' => t('Paid by Cash'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_CHECK,
+      'title' => t('Paid by Check'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_CARD,
+      'title' => t('Paid by Card'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_GIFT,
+      'title' => t('Gifted'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_INTERN_CREDIT,
+      'title' => t('Paid by Internship Credit'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_BOARD_CREDIT,
+      'title' => t('Paid by Board Credit'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_ORG_CREDIT,
+      'title' => t('Paid by Organization Credit'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+    new PaymentStatusInfo(array(
+      'status' => PAYMENT_STATUS_SUCCESS_MEMBER_CREDIT,
+      'title' => t('Paid by Membership Credit'),
+      'parent' => PAYMENT_STATUS_MONEY_TRANSFERRED,
+    )),
+  );
+}
