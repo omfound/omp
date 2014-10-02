@@ -186,4 +186,6 @@ function minim_preprocess_page (&$variables) {
     $variables['page']['content'] = $content;
     $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
   }
+
+  dsm($variables);
 }
