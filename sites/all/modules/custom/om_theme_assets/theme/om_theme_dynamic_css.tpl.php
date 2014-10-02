@@ -102,16 +102,16 @@
   }
 <?php endif; ?>
 <?php if (!empty($title_color)): ?>
-  #page #content h1,
-  #page #content h2,
-  #page #content h3 {
+  #page h1,
+  #page h2,
+  #page h3 {
     color: <?php print $title_color; ?>;
   }
 <?php endif; ?>
 <?php if (!empty($title_font)): ?>
-  #page #content h1,
-  #page #content h2,
-  #page #content h3 {
+  #page h1,
+  #page h2,
+  #page h3 {
     font-family: <?php print $title_font; ?>;
   }
 <?php endif; ?>
