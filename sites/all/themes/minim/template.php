@@ -18,6 +18,10 @@ function minim_form_alter(&$form, &$form_state, $form_id) {
 }
 
 if (file_exists('sites/default/files/theme_assets/om_theme_dynamic_css.css')) {
+  dsm('adding dyno css');
   $css_options = array('type' => 'file', 'group' => CSS_THEME);
   drupal_add_css('sites/default/files/theme_assets/om_theme_dynamic_css.css', $css_options);
+}
+else {
+  dsm('not adding dyno css');
 }
