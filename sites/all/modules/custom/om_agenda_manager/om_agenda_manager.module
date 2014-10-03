@@ -121,13 +121,7 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['admin/captions'] = array(
-    'title' => 'Captions Testing',
-    'description' => 'Captions Testing',
-    'page callback' => 'om_agenda_manager_caption_test',
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
+
   return $items;
 }
 
@@ -265,18 +259,6 @@ function om_agenda_manager_api_captions($node) {
   else {
     print json_encode(array());
   }
-}
-
-function om_agenda_manager_caption_test() {
-  $output = '';
-  $output .= '<h2>Testing Youtube Captions</h2>';
-
-  $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
-  $captions = om_agenda_manager_parse_captions($caption_xml);
-  $nid = 29245;
-  om_agenda_manager_store_captions($nid, $captions);
-
-  return $output;
 }
 
 function om_agenda_manager_parse_captions($captions) {
