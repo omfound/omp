@@ -202,6 +202,10 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     $provider = 'youtube';
   }
   $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
+  if (om_agenda_manager_captions_exist($session_nid)) {
+    global $base_url;
+    $output .= '<jwplayer:captions.file>'. $base_url . '/api/'.$session_nid.'/webvtt</jwplayer:captions.file>';
+  }
   $output .= '</item>';
 
   foreach($points as $key => $point) {
