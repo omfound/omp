@@ -249,7 +249,6 @@ function om_agenda_manager_api_session($node) {
 } 
 
 function om_agenda_manager_api_captions($node, $type = 'json') {
-  header("content-type:application/json");
   if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
     $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
     if (om_agenda_manager_captions_exist($node->nid) && !empty($video_id)) {
@@ -263,9 +262,35 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
 
   switch ($type) {
     case 'json':
+      header("content-type:application/json");
       print drupal_json_encode($captions);
       break;
+    case 'WebVTT':
+      header("content-type:text/vtt");
+      print om_agenda_manager_captions_webvtt($captions);
+      break;
   }
+}
+
+function om_agenda_manager_captions_webvtt($captions) {
+  $webvtt = "WEBVTT \n";
+
+  foreach ($captions as $key => $caption) {
+    $start_hours = floor($caption['start'] / 3600);
+    $start_mins = floor(($caption['start'] - ($start_hours*3600)) / 60);
+    $start_secs = floor($caption['start'] % 60);
+    $start_value = $start_hours . ':' . $start_mins . ':' . $start_secs;
+
+    $end_hours = floor($caption['end'] / 3600);
+    $end_mins = floor(($caption['end'] - ($end_hours*3600)) / 60);
+    $end_secs = floor($caption['end'] % 60);
+    $end_value = $end_hours . ':' . $end_mins . ':' . $end_secs;
+
+    $webvtt .= $start_value . ' --> ' . $end_value . "\n";
+    $webvtt .= $caption['caption'] . "\n\n";
+  }
+
+  return $webvtt;
 }
 
 function om_agenda_manager_session_captions($nid) {
