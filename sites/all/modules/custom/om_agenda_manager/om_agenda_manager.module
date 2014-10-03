@@ -205,9 +205,9 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   if (om_agenda_manager_captions_exist($session_nid)) {
     global $base_url;
     //TODO try the jwplayer method so we can give track a title
-    $output .= '<jwplayer:track file="'. $base_url . '/api/'.$session_nid.'/captions/webvtt" />';
     $output .= '<jwplayer:track kind="captions" />';
     $output .= '<jwplayer:track label="English" />';
+    $output .= '<jwplayer:track file="'. $base_url . '/api/'.$session_nid.'/captions/webvtt" />';
   }
   $output .= '</item>';
 
@@ -221,9 +221,9 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
     if (om_agenda_manager_captions_exist($session_nid)) {
       global $base_url;
-      $output .= '<jwplayer:track file="'. $base_url . '/api/'.$session_nid.'/captions/webvtt" />';
       $output .= '<jwplayer:track kind="captions" />';
       $output .= '<jwplayer:track label="English" />';
+      $output .= '<jwplayer:track file="'. $base_url . '/api/'.$session_nid.'/captions/webvtt" />';
     }
     $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
     $output .= '<guid>'.$point['seconds'].'</guid>';
