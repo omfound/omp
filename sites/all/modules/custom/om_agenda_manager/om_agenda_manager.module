@@ -253,8 +253,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
   if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
     $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
     if (om_agenda_manager_captions_exist($node->nid) && !empty($video_id)) {
-      $caption_xml = om_agenda_manager_google_captions($video_id);
-      $captions = om_agenda_manager_parse_captions($caption_xml);
+      $captions = om_agenda_manager_session_captions($node->nid);
     }
   }
   else {
@@ -270,8 +269,20 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
 }
 
 function om_agenda_manager_session_captions($nid) {
-  $node = node_load($nid);
-  //TODO: finish
+  $caption_query = '
+    SELECT field_data_field_acp_seconds.field_acp_seconds_value start, field_data_field_acp_seconds_end.field_acp_seconds_end_value end, field_data_body.body_value caption,  
+    FROM node 
+    JOIN field_data_body ON field_data_body.entity_id = node.nid
+    JOIN field_data_field_acp_type ON field_data_field_acp_type.entity_id = node.nid 
+    JOIN field_data_field_acp_show_reference ON field_data_field_acp_show_reference.entity_id = node.nid 
+    JOIN field_data_field_acp_seconds ON field_data_field_acp_seconds.entity_id = node.nid
+    JOIN field_data_field_acp_seconds_end ON field_data_field_acp_seconds_end.entity_id = node.nid
+    WHERE field_data_field_acp_show_reference.field_acp_show_reference_target_id = :session_nid 
+    AND field_data_field_acp_type.field_acp_type_value = :caption';
+
+  $captions = db_query($caption_query, array(':session_nid' => $nid, ':caption' => 'Caption'))->fetchAll();
+
+  return $captions; 
 }
 
 function om_agenda_manager_parse_captions($captions) {
