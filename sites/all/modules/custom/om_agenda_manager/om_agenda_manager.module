@@ -789,6 +789,7 @@ function om_agenda_manager_youtube_id ($url) {
 
 function om_agenda_manager_cron () {
   if (variable_get('om_agenda_manager_youtube_captions', '')) {
+    watchdog('om_agenda_manager', 'Fetching new youtube captions');
     om_agenda_manager_retrieve_youtube_captions();
   }
 }
@@ -809,6 +810,7 @@ function om_agenda_manager_retrieve_youtube_captions() {
       WHERE field_data_field_acp_show_reference.field_acp_show_reference_target_id = :session_nid 
       AND field_data_field_acp_type.field_acp_type_value = "Caption"';
     $caption_count = db_query($caption_count_query, array(':session_nid' => $session->entity_id))->fetchField();
+    watchdog('om_agenda_manager', 'Found count '.$caption_count);
     if (!$caption_count) {
       $session_node = node_load($session->entity_id);
       if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
