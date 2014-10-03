@@ -798,7 +798,7 @@ function om_agenda_manager_retrieve_youtube_captions() {
   $sessions_query = '
     SELECT entity_id 
     FROM field_data_field_om_show_video 
-    WHERE field_om_show_video_value LIKE "%youtube%"';
+    WHERE field_om_show_video_value LIKE "%%youtube%%"';
   $sessions = db_query($sessions_query);
   foreach ($sessions as $session) {
     unset($captions);
