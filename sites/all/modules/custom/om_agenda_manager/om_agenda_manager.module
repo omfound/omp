@@ -204,7 +204,9 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
   if (om_agenda_manager_captions_exist($session_nid)) {
     global $base_url;
-    $output .= '<jwplayer:captions.file>'. $base_url . '/api/'.$session_nid.'/captions/webvtt</jwplayer:captions.file>';
+    $output .= '<jwplayer:track@file>'. $base_url . '/api/'.$session_nid.'/captions/webvtt</jwplayer:track@file>';
+    $output .= '<jwplayer:track@kind>captions</jwplayer:track@kind>';
+    $output .= '<jwplayer:track@label>English</jwplayer:track@label>';
   }
   $output .= '</item>';
 
@@ -218,7 +220,9 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
     $output .= '<jwplayer:provider>'.$provider.'</jwplayer:provider>';
     if (om_agenda_manager_captions_exist($session_nid)) {
       global $base_url;
-      $output .= '<jwplayer:captions.file>'. $base_url . '/api/'.$session_nid.'/captions/webvtt</jwplayer:captions.file>';
+      $output .= '<jwplayer:track@file>'. $base_url . '/api/'.$session_nid.'/captions/webvtt</jwplayer:track@file>';
+      $output .= '<jwplayer:track@kind>captions</jwplayer:track@kind>';
+      $output .= '<jwplayer:track@label>English</jwplayer:track@label>';
     }
     $output .= '<jwplayer:start>'.$point['seconds'].'</jwplayer:start>';
     $output .= '<guid>'.$point['seconds'].'</guid>';
