@@ -19,11 +19,6 @@
                   position: 'right',
                   size: 410
                 },
-                tracks: {
-                  file: Drupal.settings.jwplayer[i].tracks.file,
-                  label: Drupal.settings.jwplayer[i].tracks.label,
-                  kind: Drupal.settings.jwplayer[i].tracks.kind
-                },
                 events: {
                   onPlay: function(event) {
                     if (event.oldstate == "BUFFERING" && event.newstate == "PLAYING") {
@@ -47,11 +42,6 @@
                 height: Drupal.settings.jwplayer[i].height,
                 width: Drupal.settings.jwplayer[i].width,
                 image: Drupal.settings.jwplayer[i].image,
-                tracks: {
-                  file: Drupal.settings.jwplayer[i].tracks.file,
-                  label: Drupal.settings.jwplayer[i].tracks.label,
-                  kind: Drupal.settings.jwplayer[i].tracks.kind
-                },
                 autostart: Drupal.settings.jwplayer[i].autostart
               });
             }
