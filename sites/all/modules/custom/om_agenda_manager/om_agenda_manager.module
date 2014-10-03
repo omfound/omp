@@ -273,7 +273,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
 }
 
 function om_agenda_manager_captions_webvtt($captions) {
-  $webvtt = "WEBVTT \n";
+  $webvtt = "WEBVTT \n\n";
 
   foreach ($captions as $key => $caption) {
     $start_hours = floor($caption['start'] / 3600);
