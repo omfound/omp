@@ -330,6 +330,12 @@ function om_agenda_manager_admin_form() {
     '#default_value' => variable_get('om_agenda_clear_video_field', ''),
   );
 
+  $form['om_agenda_manager_youtube_captions'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Pull and store captions automatically from Youtube?'),
+    '#default_value' => variable_get('om_agenda_manager_youtube_captions', ''),
+  );
+
   $form['om_agenda_start_marker'] = array(
     '#type' => 'textfield',
     '#title' => t('Start marker for agenda parsing:'),
@@ -779,6 +785,43 @@ function om_agenda_manager_youtube_id ($url) {
   $pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
   preg_match($pattern, $url, $matches);
   return (isset($matches[1])) ? $matches[1] : false;
+}
+
+function om_agenda_manager_cron () {
+  if (variable_get('om_agenda_manager_youtube_captions', '')) {
+    om_agenda_manager_retrieve_youtube_captions();
+  }
+}
+
+function om_agenda_manager_retrieve_youtube_captions() {
+  $sessions_query = '
+    SELECT entity_id 
+    FROM field_data_field_om_show_video 
+    WHERE field_om_show_video_value LIKE "%youtube%"';
+  $sessions = db_query($sessions_query);
+  foreach ($sessions as $session) {
+    unset($captions);
+    $caption_count_query = '
+      SELECT count(*) 
+      FROM node 
+      JOIN field_data_field_acp_type ON field_data_field_acp_type.entity_id = node.nid 
+      JOIN field_data_field_acp_show_reference ON field_data_field_acp_show_reference.entity_id = node.nid 
+      WHERE field_data_field_acp_show_reference.field_acp_show_reference_target_id = :session_nid 
+      AND field_data_field_acp_type.field_acp_type_value = "Caption"';
+    $caption_count = db_query($caption_count_query, array(':session_nid' => $session->entity_id))->fetchField();
+    if (!$caption_count) {
+      $session_node = node_load($session->entity_id);
+      if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+        $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']);
+        if (!empty($video_id)) {
+          $captions = om_agenda_manager_google_captions($video_id);
+          if (!empty($captions)) {
+            om_agenda_manager_store_captions($session_node->nid, $captions);
+          }
+        }
+      }
+    }
+  }
 }
 
 function om_agenda_manager_store_captions($nid, $captions) {
