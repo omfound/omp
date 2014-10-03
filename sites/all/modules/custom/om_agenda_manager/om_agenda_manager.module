@@ -808,8 +808,8 @@ function om_agenda_manager_retrieve_youtube_captions() {
       JOIN field_data_field_acp_type ON field_data_field_acp_type.entity_id = node.nid 
       JOIN field_data_field_acp_show_reference ON field_data_field_acp_show_reference.entity_id = node.nid 
       WHERE field_data_field_acp_show_reference.field_acp_show_reference_target_id = :session_nid 
-      AND field_data_field_acp_type.field_acp_type_value = "Caption"';
-    $caption_count = db_query($caption_count_query, array(':session_nid' => $session->entity_id))->fetchField();
+      AND field_data_field_acp_type.field_acp_type_value = :caption';
+    $caption_count = db_query($caption_count_query, array(':session_nid' => $session->entity_id, ':caption' => 'Caption'))->fetchField();
     watchdog('om_agenda_manager', 'Found count '.$caption_count);
     if (!$caption_count) {
       $session_node = node_load($session->entity_id);
