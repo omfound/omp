@@ -429,14 +429,6 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       'autostart' => $autostart,
       'embedInPoint' => isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE,
     );
-
-    if (om_agenda_manager_captions_exist($nid)) {
-      $jwplayer[0]['tracks'] = array(
-        'file' => '/api/'.$nid.'/captions/webvtt',
-        'label' => 'English',
-        'kind' => 'captions',
-      );
-    } 
   }
   elseif (!empty($show_field[0]['value'])) {
     $jwplayer = array();
