@@ -3,6 +3,12 @@
     background-color: <?php print $main_nav_bar_background; ?>;
   }
 <?php endif; ?>
+<?php if (!empty($link_color)): ?>
+  a:link,
+  a:visited {
+    color: <?php print $link_color; ?>;
+  }
+<?php endif; ?>
 <?php if (!empty($main_nav_color)): ?>
   body .block-nice-menus a:link,
   body .block-nice-menus a:visited {
