@@ -253,6 +253,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
   if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
     $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
     if (om_agenda_manager_captions_exist($node->nid) && !empty($video_id)) {
+      watchdog('brian', 'working on captions api');
       $captions = om_agenda_manager_session_captions($node->nid);
     }
   }
