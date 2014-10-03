@@ -276,8 +276,8 @@ function om_agenda_manager_captions_webvtt($captions) {
   $webvtt = "WEBVTT \n\n";
 
   foreach ($captions as $key => $caption) {
-    $start_value = gmdate("H:i:s", $caption['start']%86400)
-    $end_value = gmdate("H:i:s", $caption['end']%86400)
+    $start_value = gmdate("H:i:s", $caption['start']%86400);
+    $end_value = gmdate("H:i:s", $caption['end']%86400);
 
     $webvtt .= $start_value . ' --> ' . $end_value . "\n";
     $webvtt .= $caption['caption'] . "\n\n";
