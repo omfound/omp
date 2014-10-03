@@ -270,7 +270,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
 
 function om_agenda_manager_session_captions($nid) {
   $caption_query = '
-    SELECT field_data_field_acp_seconds.field_acp_seconds_value, field_data_field_acp_seconds_end.field_acp_seconds_end_value, field_data_body.body_value,  
+    SELECT field_data_field_acp_seconds.field_acp_seconds_value, field_data_field_acp_seconds_end.field_acp_seconds_end_value, field_data_body.body_value  
     FROM node 
     JOIN field_data_body ON field_data_body.entity_id = node.nid
     JOIN field_data_field_acp_type ON field_data_field_acp_type.entity_id = node.nid 
