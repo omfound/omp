@@ -253,7 +253,6 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
   if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
     $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
     if (om_agenda_manager_captions_exist($node->nid) && !empty($video_id)) {
-      watchdog('brian', 'working on captions api');
       $captions = om_agenda_manager_session_captions($node->nid);
     }
   }
@@ -271,7 +270,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
 
 function om_agenda_manager_session_captions($nid) {
   $caption_query = '
-    SELECT field_data_field_acp_seconds.field_acp_seconds_value start, field_data_field_acp_seconds_end.field_acp_seconds_end_value end, field_data_body.body_value caption,  
+    SELECT field_data_field_acp_seconds.field_acp_seconds_value AS start, field_data_field_acp_seconds_end.field_acp_seconds_end_value AS end, field_data_body.body_value AS caption,  
     FROM node 
     JOIN field_data_body ON field_data_body.entity_id = node.nid
     JOIN field_data_field_acp_type ON field_data_field_acp_type.entity_id = node.nid 
