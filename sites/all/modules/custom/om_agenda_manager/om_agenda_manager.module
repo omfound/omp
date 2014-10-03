@@ -265,7 +265,7 @@ function om_agenda_manager_api_captions($node, $type = 'json') {
       header("content-type:application/json");
       print drupal_json_encode($captions);
       break;
-    case 'WebVTT':
+    case 'webvtt':
       header("content-type:text/vtt");
       print om_agenda_manager_captions_webvtt($captions);
       break;
