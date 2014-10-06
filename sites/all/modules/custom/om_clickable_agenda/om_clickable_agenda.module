@@ -252,7 +252,6 @@ function om_clickable_agenda_init() {
  * Listen for POST data from script to save or update nodes.
  */
 function om_clickable_agenda_save_cue_point() {
-  watchdog('brian', '<pre>'.print_r($_POST['node'], TRUE).'</pre>');
   if (!empty($_POST['node'])) {
     $node_data = drupal_json_decode($_POST['node']);
     if (empty($node_data['nid'])) {
@@ -266,7 +265,13 @@ function om_clickable_agenda_save_cue_point() {
     $node->language = LANGUAGE_NONE;
     $node->title = $node_data['title'];
     if (!empty($node_data['node_revisions_body'])) {
-      $node->body = $node_data['node_revisions_body'];
+      $node->body = array(
+        'und' => array(
+          0 => array(
+            'value' => $node_data['node_revisions_body'],
+          )
+        ),
+      );
     }
     $node->field_acp_show_reference = array(
       'und' => array(
@@ -282,7 +287,6 @@ function om_clickable_agenda_save_cue_point() {
         )
       )
     );
-    watchdog('brian', '<pre>'.print_r($node, TRUE).'</pre>');
     node_save($node);
     print drupal_json_encode($node);
   }
