@@ -298,8 +298,6 @@ function om_agenda_manager_captions_webvtt($captions) {
 }
 
 function om_agenda_manager_session_captions($nid, $type = 'Caption') {
-  dsm('calling session caption function');
-  watchdog('brian', 'ore debug');
   $caption_query = '
     SELECT field_data_field_acp_seconds.field_acp_seconds_value, field_data_field_acp_seconds_end.field_acp_seconds_end_value, field_data_body.body_value, node.nid
     FROM node 
@@ -323,7 +321,6 @@ function om_agenda_manager_session_captions($nid, $type = 'Caption') {
     );
   }
 
-  dsm('debugging');
   return $captions; 
 }
 
