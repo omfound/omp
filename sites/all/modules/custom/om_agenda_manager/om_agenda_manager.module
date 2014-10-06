@@ -552,10 +552,10 @@ function om_agenda_manager_legacy_agenda_items($items) {
   $legacy_items = array();
   foreach ($items as $key => $title) {
     $legacy_items[$key] = new stdClass(); 
-    if (function_exists('views_trim_text')) {
-      $alter = array('max_length' => 175, 'ellipsis' => TRUE, 'word_boundary' => FALSE);
-      $title = views_trim_text($alter, $title);
-    }
+    //if (function_exists('views_trim_text')) {
+      //$alter = array('max_length' => 175, 'ellipsis' => TRUE, 'word_boundary' => FALSE);
+      //$title = views_trim_text($alter, $title);
+    //}
     $legacy_items[$key]->title = $title;
   }
 
