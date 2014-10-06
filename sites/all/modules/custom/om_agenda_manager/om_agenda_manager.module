@@ -525,10 +525,6 @@ function om_agenda_manager_agenda_items($node) {
     return;
   }
 
-  //start operating in utf8
-  $previous_encoding = mb_internal_encoding();
-  mb_internal_encoding('UTF-8');
-
   switch ($format) {
     case 'json':
       header("content-type:application/json");
@@ -549,7 +545,6 @@ function om_agenda_manager_agenda_items($node) {
       break;
   }
   
-  mb_internal_encoding($previous_encoding);
   return;
 }
 
@@ -600,10 +595,12 @@ function om_agenda_manager_parse_agenda($text) {
       }
     }
 
+    //byte order mark...
+    $bom = pack("CCC", 0xef, 0xbb, 0xbf);
     if ($active) {
       $clean = trim($info);
       if (!empty($clean)) {
-        $agenda_lines[] = utf8_encode($clean); 
+        $agenda_lines[] = str_replace($bom, '', utf8_encode($clean)); 
       }
     }
 
