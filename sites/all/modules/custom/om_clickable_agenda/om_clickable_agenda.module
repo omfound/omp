@@ -252,6 +252,7 @@ function om_clickable_agenda_init() {
  * Listen for POST data from script to save or update nodes.
  */
 function om_clickable_agenda_save_cue_point() {
+  watchdog('brian', '<pre>'.print_r($_POST['node'], TRUE).'</pre>');
   if (!empty($_POST['node'])) {
     $node_data = drupal_json_decode($_POST['node']);
     if (empty($node_data['nid'])) {
