@@ -3,6 +3,15 @@
     background-color: <?php print $main_nav_bar_background; ?>;
   }
 <?php endif; ?>
+<<<<<<< HEAD
+=======
+<?php if (!empty($link_color)): ?>
+  a:link,
+  a:visited {
+    color: <?php print $link_color; ?>;
+  }
+<?php endif; ?>
+>>>>>>> louisville
 <?php if (!empty($main_nav_color)): ?>
   body .block-nice-menus a:link,
   body .block-nice-menus a:visited {
@@ -102,12 +111,28 @@
   }
 <?php endif; ?>
 <?php if (!empty($title_color)): ?>
+<<<<<<< HEAD
   #page #content h1,
   #page #content h2,
   #page #content h3 {
     color: <?php print $title_color; ?>;
   }
 <?php endif; ?>
+=======
+  #page h1,
+  #page h2,
+  #page h3 {
+    color: <?php print $title_color; ?>;
+  }
+<?php endif; ?>
+<?php if (!empty($title_font)): ?>
+  #page h1,
+  #page h2,
+  #page h3 {
+    font-family: <?php print $title_font; ?>;
+  }
+<?php endif; ?>
+>>>>>>> louisville
 <?php if (!empty($om_dashboard_title_color)): ?>
   .section-dashboard #page #content h1,
   .section-dashboard #page #content h2,
