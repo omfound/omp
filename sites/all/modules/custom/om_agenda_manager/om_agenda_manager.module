@@ -46,7 +46,7 @@ function om_agenda_manager_menu() {
   $items['api/%node/agenda-items'] = array(
     'title' => 'Stamped Agenda Items',
     'page callback' => 'om_agenda_manager_agenda_items', 
-    'page arguments' => array(1,3),
+    'page arguments' => array(1),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -509,9 +509,16 @@ function om_agenda_manager_google_get($url, $token) {
   return $xml;
 }
 
-function om_agenda_manager_agenda_items($node, $format = 'json') {
+function om_agenda_manager_agenda_items($node) {
+  $format = ($_GET['format'] ? $_GET['format'] : 'json');
+  $source = ($_GET['source'] ? $_GET['source'] : 'original');
+
   $url = $node->field_om_calendar[$node->language][0]['url'];
-  if ($url) {
+  if ($source == 'original' && !empty($node->field_om_calendar[$node->language][0]['url'])) {
+    $text = om_agenda_manager_fetch_google_doc($url);
+    $items = om_agenda_manager_parse_agenda($text);
+    $agenda_items = om_agenda_manager_legacy_agenda_items($items);
+  } elseif ($source == 'stamped') {
     $agenda_items = om_agenda_manager_session_captions($node->nid, $type = 'Agenda Item');
   } else {
     print '';
@@ -524,7 +531,6 @@ function om_agenda_manager_agenda_items($node, $format = 'json') {
       print drupal_json_encode($agenda_items);
       break;
     case 'field-json':
-      header("content-type:application/json");
       $field_format = array();
       foreach ($agenda_items as $key => $item) {
         $field_format[$key] = array(
@@ -534,7 +540,8 @@ function om_agenda_manager_agenda_items($node, $format = 'json') {
           'node_data_field_session_reference_field_session_reference_nid' => $node->nid,
         ); 
       }
-      print drupal_json_encode($agenda_items);
+      header("content-type:application/json");
+      print drupal_json_encode($field_format);
       break;
   }
   
