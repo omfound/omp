@@ -91,10 +91,7 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   $variables['main_nav_color_hover'] = variable_get('main_nav_color_hover', '');
   $variables['main_nav_background_hover'] = variable_get('main_nav_background_hover', '');
 
-<<<<<<< HEAD
-=======
   $variables['link_color'] = variable_get('link_color', '');
->>>>>>> louisville
   $variables['site_links_color'] = variable_get('site_link_color', '');
 
   $variables['main_nav_dropdown_color'] = variable_get('main_nav_dropdown_color', '');
@@ -128,10 +125,7 @@ function om_theme_assets_preprocess_om_theme_dynamic_css(&$variables) {
   }
   
   $variables['title_color'] = variable_get('title_color', '');
-<<<<<<< HEAD
-=======
   $variables['title_font'] = variable_get('title_font', '');
->>>>>>> louisville
   
   $variables['info_tag_color'] = variable_get('info_tag_color', '');
   $variables['show_page_left_width'] = variable_get('show_page_left_width', '');
