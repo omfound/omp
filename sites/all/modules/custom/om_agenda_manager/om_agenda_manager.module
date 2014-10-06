@@ -321,6 +321,7 @@ function om_agenda_manager_session_captions($nid, $type = 'Caption') {
     );
   }
 
+  dsm('debugging');
   return $captions; 
 }
 
