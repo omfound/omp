@@ -512,7 +512,7 @@ function om_agenda_manager_google_get($url, $token) {
 function om_agenda_manager_agenda_items($node, $format = 'json') {
   $url = $node->field_om_calendar[$node->language][0]['url'];
   if ($url) {
-    $agenda_items = om_agenda_manager_session_captions($nid, $type = 'Agenda Item');
+    $agenda_items = om_agenda_manager_session_captions($node->nid, $type = 'Agenda Item');
   } else {
     print '';
     return;
