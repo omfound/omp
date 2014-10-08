@@ -25,7 +25,7 @@
   <?php endif;?>
   <?php if (!empty($fields['field_certifications_required']->content)) { ?>
     <div class = "certifications item-data">
-      <?php print '<span class="certifications-label">Certifications Required: </span>' . $fields['field_certifications_required']->content;?>
+      <?php print '<span class="certifications-label">Certifications Required: </span>' . $fields['field_certifications_required']->content . ' for Free/Discounted Member Reservations';?>
     </div>
   <?php } ?>
   <?php if (!empty($fields['field_commercial_cost']->content) && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
