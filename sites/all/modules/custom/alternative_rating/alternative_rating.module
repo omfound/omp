@@ -301,8 +301,7 @@ function alternative_rating_testing() {
     $blah[] = $result->nid;
   }
   $last = end($blah);
-  $last_nid = $last->nid;
-  variable_set('alternative_rating_last', $last_nid);
+  variable_set('alternative_rating_last', $last);
 
   dsm($blah);
   return $blah;
