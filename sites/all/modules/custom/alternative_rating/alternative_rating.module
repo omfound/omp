@@ -279,7 +279,7 @@ function alternative_rating_testing() {
     $last_nid = $nid->nid;
   }
 
-  if ($previous_last == $last_nid) {
+  if ($previous_last == $last_nid || empty($previous_last)) {
     $query = 'SELECT * FROM {alternative_rating}
               ORDER BY nid ASC LIMIT 1';
     $test = db_query($query);
