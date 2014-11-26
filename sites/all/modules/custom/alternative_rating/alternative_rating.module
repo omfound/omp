@@ -251,17 +251,10 @@ function alternative_rating_category($nid) {
 function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
   //was db_insert
   $result = db_merge('alternative_rating')
-    ->insertFields(array(
-      'nid' => $nid,
+    ->key(array('nid' => $nid, 'period' => $period)),
+    ->fields(array(
       'bayesian' => $bayesian,
-      'period' => $period,
     ))
-    ->updateFields(array(
-      'nid' => $nid,
-      'bayesian' => $bayesian,
-      'period' => $period,
-    ))
-    ->key(array('nid' => $nid))
     ->execute();
 }
 
@@ -314,7 +307,7 @@ function alternative_rating_populate() {
 
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
-  dsm($nids);
+
   //minimum votes to qualify for rating.
   $minimum_votes = 10;
 
