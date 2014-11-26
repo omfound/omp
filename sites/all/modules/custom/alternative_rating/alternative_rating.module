@@ -291,7 +291,7 @@ function alternative_rating_testing() {
     $first_nid = $previous_last;
   }
 
-  $nid_range = $first_nid + 1000;
+  $nid_range = $first_nid + 500;
   $newquery = '
     SELECT DISTINCT(nid) FROM {alternative_rating}
     WHERE nid BETWEEN :nid AND :nid_range';
