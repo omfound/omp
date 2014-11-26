@@ -269,13 +269,28 @@ function alternative_rating_first_nid() {
 }
 
 function alternative_rating_testing() {
-  //leo says instead of deleting try update or insert
+  $previous_last = variable_get('alternative_rating_last', false);
+  dsm('starting nid: '.$previous_last);
+  
   $query = 'SELECT * FROM {alternative_rating}
-            ORDER BY nid ASC LIMIT 1';
+            ORDER BY nid DESC LIMIT 1';
   $test = db_query($query);
   foreach ($test as $nid) {
-    $first_nid = $nid->nid;
+    $last_nid = $nid->nid;
   }
+
+  if ($previous_last == $last_nid) {
+    $query = 'SELECT * FROM {alternative_rating}
+              ORDER BY nid ASC LIMIT 1';
+    $test = db_query($query);
+    foreach ($test as $nid) {
+      $first_nid = $nid->nid;
+    }
+  }
+  else {
+    $first_nid = $previous_last;
+  }
+
   $nid_range = $first_nid + 250;
   $newquery = '
     SELECT * FROM {alternative_rating}
@@ -287,6 +302,9 @@ function alternative_rating_testing() {
   }
   $last = end($blah);
   $last_nid = $last->nid;
+  variable_set('alternative_rating_last', $last_nid);
+
+  dsm($blah);
   return $blah;
 }
 
