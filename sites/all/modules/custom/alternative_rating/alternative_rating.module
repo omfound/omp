@@ -293,7 +293,7 @@ function alternative_rating_testing() {
 
   $nid_range = $first_nid + 250;
   $newquery = '
-    SELECT * FROM {alternative_rating}
+    SELECT DISTINCT(nid) FROM {alternative_rating}
     WHERE nid BETWEEN :nid AND :nid_range';
   $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   $blah = array();
