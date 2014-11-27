@@ -296,7 +296,7 @@ function alternative_rating_testing() {
   $nid_range = $first_nid + 500;
   $newquery = '
     SELECT nid FROM {node}
-    WHERE type="om_show" AND nid BETWEEN :nid AND :nid_range';
+    WHERE type="om_show" AND (nid BETWEEN :nid AND :nid_range)';
   $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   $blah = array();
   foreach ($newtest as $result) {
