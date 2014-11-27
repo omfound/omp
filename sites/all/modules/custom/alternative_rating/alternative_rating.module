@@ -303,7 +303,13 @@ function alternative_rating_testing() {
     $blah[] = $result->nid;
   }
   $last = end($blah);
-  variable_set('alternative_rating_last', $last);
+  if ($last != $previous_last) {
+    variable_set('alternative_rating_last', $last);
+  }
+  else {
+    $new_last = $last + 500;
+    variable_set('alternative_rating_last', $new_last);
+  }
 
   dsm($blah);
   return $blah;
