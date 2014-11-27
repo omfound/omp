@@ -272,7 +272,8 @@ function alternative_rating_testing() {
   $previous_last = variable_get('alternative_rating_last', false);
   dsm('starting nid: '.$previous_last);
   
-  $query = 'SELECT * FROM {alternative_rating}
+  $query = 'SELECT * FROM {node}
+            WHERE type="om_show" 
             ORDER BY nid DESC LIMIT 1';
   $test = db_query($query);
   foreach ($test as $nid) {
@@ -280,7 +281,8 @@ function alternative_rating_testing() {
   }
 
   if ($previous_last == $last_nid || empty($previous_last)) {
-    $query = 'SELECT * FROM {alternative_rating}
+    $query = 'SELECT * FROM {node}
+              WHERE type="om_show" 
               ORDER BY nid ASC LIMIT 1';
     $test = db_query($query);
     foreach ($test as $nid) {
@@ -293,8 +295,8 @@ function alternative_rating_testing() {
 
   $nid_range = $first_nid + 500;
   $newquery = '
-    SELECT DISTINCT(nid) FROM {alternative_rating}
-    WHERE nid BETWEEN :nid AND :nid_range';
+    SELECT nid FROM {node}
+    WHERE type="om_show" AND nid BETWEEN :nid AND :nid_range';
   $newtest = db_query($newquery, array(':nid' => $first_nid, ':nid_range' => $nid_range));
   $blah = array();
   foreach ($newtest as $result) {
