@@ -446,6 +446,7 @@ function alternative_rating_bayesian_value($nid) {
 }
 
 function alternative_rating_cron() {
+  /**
   $lastrun = variable_get('alternative_rating_run', false);
   $limit = strtotime("-6 hours");
  
@@ -454,6 +455,6 @@ function alternative_rating_cron() {
     if ($lastrun > $limit) {
       return;
     }
-  }
+  }**/
   alternative_rating_populate();
 }
