@@ -18,4 +18,5 @@ function drush_alternative_rating_dom_alternative_rating_calculate($count = 1) {
     alternative_rating_populate();
   }
   drush_log('Alternative rating scores calculation complete.', 'success');
+  drush_log('Alternative rating scores calculation ran ' . $count . ' times.', 'success');
 }
