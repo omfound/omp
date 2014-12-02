@@ -135,6 +135,9 @@ function om_playback_servers_cablecast_update_vod_field() {
           $derivatives = drupal_json_encode(array($item => $derivatives));
           $mp4 = $ia_handler->get_derivative('mp4');
         }
+        elseif ($result['created'] < $corruption_date) {
+          om_playback_servers_cablecast_mark_corrupt($result['entity_id']);
+        }
       }
       elseif ($result['created'] < $corruption_date) {
         om_playback_servers_cablecast_mark_corrupt($result['entity_id']);
