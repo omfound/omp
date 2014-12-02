@@ -292,6 +292,11 @@ function om_admin_menu_admin_menu_output_build(&$content) {
     '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
     '#href' => 'om_timeslot_scheduler',
   );
+  $content['menu']['scheduling']['add-timeslot'] = array(
+    '#title' => t('Create Timeslot'),
+    '#access' => om_admin_menu_role_access(array('Schedule Administrator')),
+    '#href' => 'node/add/om-timeslot-event',
+  );
 }
 
 function om_admin_menu_admin_menu_output_alter(&$content) {
