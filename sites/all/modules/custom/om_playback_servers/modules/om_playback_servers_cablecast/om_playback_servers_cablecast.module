@@ -92,6 +92,9 @@ function om_playback_servers_cablecast_file_ia_url($uri) {
  *   a vod resource available yet. If so, update node. Also update show duration.
  */
 function om_playback_servers_cablecast_update_vod_field() {
+  //30 day corruption timer, if a file hasn't succeeded by then it never will
+  $corruption_date = time() - (30 * 24 * 60 * 60);
+
   $query = db_select('field_data_field_om_show_video', 'vod_files');
   $query->fields('vod_files', array('entity_id'));
   $resource = $query->execute();
@@ -101,9 +104,13 @@ function om_playback_servers_cablecast_update_vod_field() {
   }
   $query_uri = db_select('field_data_field_om_show_broadcast_file', 'bc_files');
   $query_uri->join('field_data_field_archive_transfer', 'transfer', 'bc_files.entity_id=transfer.entity_id');
+  $query_uri->join('field_data_field_om_show_corrupted', 'corrupted', 'bc_files.entity_id=corrupted.entity_id');
+  $query_uri->join('node', 'node', 'bc_files.entity_id=node.nid');
   $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
+  $query_uri->addField('node', 'created', 'created');
   $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
   $query_uri->condition('field_archive_transfer_value', 1, '=');
+  $query_uri->condition('corrupted.field_om_show_corrupted_value', 1, '!=');
   $query_uri->range(0, 25);
   $resource = $query_uri->execute();
   $cablecast_exists = class_exists('cablecastFile');
@@ -125,6 +132,9 @@ function om_playback_servers_cablecast_update_vod_field() {
           $derivatives = drupal_json_encode(array($item => $derivatives));
           $mp4 = $ia_handler->get_derivative('mp4');
         }
+      }
+      elseif ($result['created'] < $corruption_date) {
+        om_playback_servers_cablecast_mark_corrupt($result['entity_id']);
       }
       $metadata = $cablecast_file_controller->get_show_record($result['field_om_show_broadcast_file_uri']);
       if (!empty($metadata)) {
@@ -156,8 +166,17 @@ function om_playback_servers_cablecast_update_vod_field() {
           node_save($node);
         }
       }
+      elseif ($result['created'] < $corruption_date) {
+        om_playback_servers_cablecast_mark_corrupt($result['entity_id']); 
+      }
     }
   }
+}
+
+function om_playback_servers_cablecast_mark_corrupt($nid) {
+  $node = node_load($nid);
+  $node->field_om_show_corrupted[LANGUAGE_NONE][0]['value'] = 1;
+  node_save($node);
 }
 
 function om_playback_servers_cablecast_default_channel_crawl_info($tid, $show) {
