@@ -104,13 +104,16 @@ function om_playback_servers_cablecast_update_vod_field() {
   }
   $query_uri = db_select('field_data_field_om_show_broadcast_file', 'bc_files');
   $query_uri->join('field_data_field_archive_transfer', 'transfer', 'bc_files.entity_id=transfer.entity_id');
-  $query_uri->join('field_data_field_om_show_corrupted', 'corrupted', 'bc_files.entity_id=corrupted.entity_id');
+  $query_uri->leftJoin('field_data_field_om_show_corrupted', 'corrupted', 'bc_files.entity_id=corrupted.entity_id');
   $query_uri->join('node', 'node', 'bc_files.entity_id=node.nid');
   $query_uri->fields('bc_files', array('entity_id', 'field_om_show_broadcast_file_uri'));
   $query_uri->addField('node', 'created', 'created');
   $query_uri->condition('bc_files.entity_id', $nids, 'NOT IN');
   $query_uri->condition('field_archive_transfer_value', 1, '=');
-  $query_uri->condition('corrupted.field_om_show_corrupted_value', 1, '!=');
+  $or = db_or();
+  $or->isNull('corrupted.field_om_show_corrupted_value');
+  $or->condition('corrupted.field_om_show_corrupted_value', 1, '!=');
+  $query_uri->condition($or);
   $query_uri->range(0, 25);
   $resource = $query_uri->execute();
   $cablecast_exists = class_exists('cablecastFile');
