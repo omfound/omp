@@ -80,6 +80,9 @@ function commerce_coupon_pct_order_commerce_coupon_type_configure($bundle, $rese
  * Gets the right amount value to display it in the coupon "log" view.
  */
 function commerce_coupon_pct_order_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
+  dsm($amount);
+  dsm($coupon);
+  dsm($order);
   // Get the price component.
   if ($coupon->type == 'commerce_coupon_pct_order') {
     $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
