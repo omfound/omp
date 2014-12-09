@@ -68,7 +68,7 @@ function commerce_coupon_pct_order_all_default_rules_configuration() {
 
   $rule->action($loop);
 
-  $rules['commerce_coupon_pct_order_all_apply_pct_coupons_to_line_item'] = $rule;
+  //$rules['commerce_coupon_pct_order_all_apply_pct_coupons_to_line_item'] = $rule;
 
   return $rules;
 }
