@@ -8,7 +8,7 @@
 /**
  * Implements hook_rules_action_info().
  */
-function commerce_coupon_pct_order_all_action_info() {
+function commerce_coupon_pct_order_all_rules_action_info() {
   $actions = array();
   $actions['commerce_coupon_pct_order_all_apply_to_product_line_item'] = array(
     'label' => t('Apply a percentage coupon to an entire order'),
