@@ -8,7 +8,7 @@
 /**
  * Implements hook_default_rules_configuration().
  */
-/*
+
 function commerce_coupon_pct_order_all_default_rules_configuration() {
   $rules = array();
 
@@ -72,4 +72,4 @@ function commerce_coupon_pct_order_all_default_rules_configuration() {
   $rules['commerce_coupon_pct_order_all_apply_pct_coupons_to_line_item'] = $rule;
 
   return $rules;
-}*/
+}
