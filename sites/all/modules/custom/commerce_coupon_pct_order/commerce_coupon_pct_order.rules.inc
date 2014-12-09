@@ -89,8 +89,8 @@ function commerce_coupon_pct_order_apply_to_product_line_item($line_item, $order
         $price_component_name = $coupon_wrapper->price_component_name->value();
 
         $wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+        dsm($line_item);
         $unit_price = commerce_price_wrapper_value($wrapper, 'commerce_unit_price', TRUE);
-        dsm( $unit_price['amount']);
         $amount = commerce_round($round_mode, $unit_price['amount'] * $rate);
 
         // Calculate the updated amount and create a price array representing the
