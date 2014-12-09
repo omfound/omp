@@ -40,7 +40,7 @@ function commerce_coupon_pct_order_all_action_info() {
         'default value' => COMMERCE_ROUND_HALF_UP,
       ),
     ),
-    'base' => 'commerce_coupon_pct_order_apply_to_product_line_item',
+    'base' => 'commerce_coupon_pct_order_all_apply_to_product_line_item',
     'group' => t('Commerce Coupon'),
   );
 
