@@ -48,6 +48,7 @@ function commerce_coupon_pct_order_rules_action_info() {
 }
 
 function commerce_coupon_pct_order_apply_to_product_line_item($line_item, $order, $coupon, $component_name, $round_mode) {
+  dsm('hai');
   $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
   $fields = $coupon_wrapper->getPropertyInfo();
   // Apply the coupon just if it's active, the type is of pct and it has the
