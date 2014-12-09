@@ -36,7 +36,7 @@ function commerce_coupon_pct_order_all_default_rules_configuration() {
       'unique' => 1,
     ));
 
-  $rules['commerce_coupon_pct_order_all_percent_amount'] = $rule;
+  //$rules['commerce_coupon_pct_order_all_percent_amount'] = $rule;
 
   $rule = rules_reaction_rule();
   $rule->label = t('Apply percentage coupons to ALL product line item');
