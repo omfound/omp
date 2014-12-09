@@ -21,24 +21,23 @@ function commerce_coupon_pct_order_all_fields() {
       'type' => 'text',
     );
     field_create_field($field);
-
-    // Create the instance.
-    $instance = array(
-      'field_name' => $field_name,
-      'entity_type' => 'commerce_coupon',
-      'bundle' => 'commerce_coupon_pct_order_all',
-      'label' => 'Percent Value to Discount',
-      'description' => 'Whole number between 1 and 100.',
-      'required' => TRUE,
-      'widget' => array(
-        'type' => 'text_textfield',
-        'weight' => 3,
-      ),
-      'display' => array(),
-    );
-
-    field_create_instance($instance);
   }
+  // Create the instance.
+  $instance = array(
+    'field_name' => $field_name,
+    'entity_type' => 'commerce_coupon',
+    'bundle' => 'commerce_coupon_pct_order_all',
+    'label' => 'Percent Value to Discount',
+    'description' => 'Whole number between 1 and 100.',
+    'required' => TRUE,
+    'widget' => array(
+      'type' => 'text_textfield',
+      'weight' => 3,
+    ),
+    'display' => array(),
+  );
+
+  field_create_instance($instance);
 }
 
 /**
