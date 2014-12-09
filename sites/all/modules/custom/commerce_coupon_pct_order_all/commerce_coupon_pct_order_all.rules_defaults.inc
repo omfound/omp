@@ -8,6 +8,7 @@
 /**
  * Implements hook_default_rules_configuration().
  */
+/*
 function commerce_coupon_pct_order_all_default_rules_configuration() {
   $rules = array();
 
@@ -36,7 +37,7 @@ function commerce_coupon_pct_order_all_default_rules_configuration() {
       'unique' => 1,
     ));
 
-  //$rules['commerce_coupon_pct_order_all_percent_amount'] = $rule;
+  $rules['commerce_coupon_pct_order_all_percent_amount'] = $rule;
 
   $rule = rules_reaction_rule();
   $rule->label = t('Apply percentage coupons to ALL product line item');
@@ -68,7 +69,7 @@ function commerce_coupon_pct_order_all_default_rules_configuration() {
 
   $rule->action($loop);
 
-  //$rules['commerce_coupon_pct_order_all_apply_pct_coupons_to_line_item'] = $rule;
+  $rules['commerce_coupon_pct_order_all_apply_pct_coupons_to_line_item'] = $rule;
 
   return $rules;
-}
+}*/
