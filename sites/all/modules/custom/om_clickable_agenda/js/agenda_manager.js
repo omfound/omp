@@ -366,7 +366,7 @@ Drupal.agendaManger.Views.cuePointList = Backbone.View.extend({
   },
   addDomElement : function(model) {
     // Prepends a single model to the list.
-    this.domElement.prepend(model.view.addDomElement(model));
+    this.domElement.append(model.view.addDomElement(model));
   },
   updateView : function(models) {
     // Updates the entire view.
