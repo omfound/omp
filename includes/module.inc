@@ -1019,10 +1019,6 @@ function drupal_alter($type, &$data, &$context1 = NULL, &$context2 = NULL, &$con
     $functions[$cid] = array();
     $hook = $type . '_alter';
     $modules = module_implements($hook);
-    if ($hook == 'commerce_coupon_granted_amount_alter') {
-      dsm('dirty: ');
-      dsm($modules);
-    }
     if (!isset($extra_types)) {
       // For the more common case of a single hook, we do not need to call
       // function_exists(), since module_implements() returns only modules with

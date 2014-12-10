@@ -3,7 +3,6 @@
 function commerce_coupon_pct_order_all_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
   // Get the price component.
   if ($coupon->type == 'commerce_coupon_pct_order_all') {
-    dsm($amount);
     $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
     $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
 
@@ -13,6 +12,5 @@ function commerce_coupon_pct_order_all_commerce_coupon_granted_amount_alter(&$am
       $amount += $component['price']['amount'] * -1;
     }
     $amount = commerce_currency_format($amount, $order_wrapper->commerce_order_total->currency_code->value(), $coupon);
-    dsm("PLOXUS: " . $amount);
   }
 }
