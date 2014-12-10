@@ -25,7 +25,10 @@ class commerce_coupon_handler_field_coupon_granted_amount extends views_handler_
     list(, $orders) = $this->query->get_result_entities(array($values), 'commerce_coupon_order_reference_commerce_coupon');
     $order = reset($orders);
 
+    dsm('hi there');
+    dsm($amount);
     drupal_alter('commerce_coupon_granted_amount', $amount, $coupon, $order);
+    dsm($amount);
     return $amount;
   }
 
