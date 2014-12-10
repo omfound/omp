@@ -26,6 +26,7 @@ class commerce_coupon_handler_field_coupon_granted_amount extends views_handler_
     $order = reset($orders);
 
     dsm('hi there');
+    $amount = "foo";
     dsm('auxus: ' . $amount);
     drupal_alter('commerce_coupon_granted_amount', $amount, $coupon, $order);
     dsm('boxus: ' . $amount);
