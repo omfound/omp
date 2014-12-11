@@ -1407,9 +1407,10 @@ function om_membership_form_user_profile_form_alter(&$form, &$form_state) {
 }
 
 function om_membership_views_pre_execute(&$view) {
+  dsm($view);
   if ($view->name == 'membership_report') {
-    $query->add_groupby('commerce_line_item.line_item_id');
-    dsm($query);
+    //$query->add_groupby('commerce_line_item.line_item_id');
+    //dsm($query);
     //dpq($query);
   }
 }
