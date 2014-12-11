@@ -686,10 +686,10 @@ body.page-reservations #main-content #squeeze{
 .no-certification-message a,
 .no-certification-message a:link,
 .no-certification-message a:visited,
-.no-access a,
-.no-access a:link,
-.no-access a:visited,
-.commercial-message .commercial-button{
+.no-access-button a,
+.no-access-button a:link,
+.no-access-button a:visited,
+.commercial-message .commercial-button {
 	font-family:  Helvetica, Arial,sans-serif;
 	font-size: 12px;
 	color: #ffffff;
@@ -716,7 +716,7 @@ body.page-reservations #main-content #squeeze{
   margin-right: 40px;
 }
 .no-certification-message a:hover,
-.no-access a:hover,
+.no-access-button a:hover,
 .commercial-message .commercial-button:hover{
 	text-shadow: 0 0 10px #FFFFFF;
 	background:#acf4f9);
