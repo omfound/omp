@@ -23,7 +23,7 @@
       <?php print '<span class="price-label">Commercial Rate ('.$period.'): </span>' . $fields['commerce_price']->content;?>
     </div>
   <?php endif;?>
-  <?php if (!empty($fields['field_certifications_required']->content) && empty(variable_get('cr_hide_certs', 0))) { ?>
+  <?php if (!empty($fields['field_certifications_required']->content) && variable_get('cr_hide_certs', 0)) { ?>
     <div class = "certifications item-data">
       <?php print '<span class="certifications-label">Certifications Required: </span>' . $fields['field_certifications_required']->content;?>
     </div>
