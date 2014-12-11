@@ -280,7 +280,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
-    if (variable_set('cr_debug_price_rules', 0)) {
+    if (variable_get('cr_debug_price_rules', 0)) {
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
@@ -354,7 +354,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       'data' => array(),
     );
 
-    if (variable_set('cr_debug_price_rules', 0)) {
+    if (variable_get('cr_debug_price_rules', 0)) {
       watchdog('commerce_reservations', 'price_reduction: '.$difference['amount']);
     }
     // Set the amount of the unit price and add the difference as a component.
@@ -410,7 +410,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
       'data' => array(),
     );
 
-    if (variable_set('cr_debug_price_rules', 0)) {
+    if (variable_get('cr_debug_price_rules', 0)) {
       watchdog('commerce_reservations', 'discount_by_day: '.$difference['amount']);
     }
     // Set the amount of the unit price and add the difference as a component.
