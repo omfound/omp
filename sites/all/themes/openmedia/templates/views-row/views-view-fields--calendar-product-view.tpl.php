@@ -20,7 +20,7 @@
       <?php $period = 'Hourly'; ?>
     <?php } ?>
     <div class = "price item-data">
-      <?php print '<span class="price-label">Price ('.$period.'): </span>' . $fields['commerce_price']->content;?>
+      <?php print '<span class="price-label">Commercial Rate ('.$period.'): </span>' . $fields['commerce_price']->content;?>
     </div>
   <?php endif;?>
   <?php if (!empty($fields['field_certifications_required']->content)) { ?>
