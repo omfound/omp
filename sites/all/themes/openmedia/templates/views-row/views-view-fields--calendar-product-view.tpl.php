@@ -23,9 +23,9 @@
       <?php print '<span class="price-label">Commercial Rate ('.$period.'): </span>' . $fields['commerce_price']->content;?>
     </div>
   <?php endif;?>
-  <?php if (!empty($fields['field_certifications_required']->content)) { ?>
+  <?php if (!empty($fields['field_certifications_required']->content) && empty(variable_get('cr_hide_certs', 0))) { ?>
     <div class = "certifications item-data">
-      <?php print '<span class="certifications-label">Certifications Required: </span>' . $fields['field_certifications_required']->content . ' for <a href="/membership">Free/Discounted Member Reservations</a><br /><strong>No certifications required for paid rentals.</strong>';?>
+      <?php print '<span class="certifications-label">Certifications Required: </span>' . $fields['field_certifications_required']->content;?>
     </div>
   <?php } ?>
   <?php if (!empty($fields['field_commercial_cost']->content) && $fields['field_commercial_cost']->content != '<div class="field-content"></div>'):?>
