@@ -1406,3 +1406,9 @@ function om_membership_form_user_profile_form_alter(&$form, &$form_state) {
   }
 }
 
+function om_membership_query_alter(QueryAlterableInterface $query) {
+  $view_name = 'membership_report';
+  if ($query->hasTag('views_' . $view_name)) {
+    $query->groupBy('commerce_line_item.line_item_id');
+  }
+}
