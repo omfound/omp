@@ -1,0 +1,5 @@
+name = Commerce Coupon Percent Discount All
+description = Applies a percent discount to the whole order.
+dependencies[] = commerce_coupon
+package = Commerce Coupon
+core = 7.x

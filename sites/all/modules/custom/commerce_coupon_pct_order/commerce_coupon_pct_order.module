@@ -86,6 +86,9 @@ function commerce_coupon_pct_order_commerce_coupon_granted_amount_alter(&$amount
     $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
 
     $amount = 0;
+    dsm($order_wrapper->commerce_order_total->value());
+    dsm($coupon_wrapper->price_component_name->value());
+
     $components = commerce_price_component_load($order_wrapper->commerce_order_total->value(), $coupon_wrapper->price_component_name->value());
     foreach ($components as $component) {
       $amount += $component['price']['amount'] * -1;

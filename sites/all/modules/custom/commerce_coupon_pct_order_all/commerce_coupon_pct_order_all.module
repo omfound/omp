@@ -1,0 +1,16 @@
+<?php
+
+function commerce_coupon_pct_order_all_commerce_coupon_granted_amount_alter(&$amount, $coupon, $order) {
+  // Get the price component.
+  if ($coupon->type == 'commerce_coupon_pct_order_all') {
+    $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+    $coupon_wrapper = entity_metadata_wrapper('commerce_coupon', $coupon);
+
+    $amount = 0;
+    $components = commerce_price_component_load($order_wrapper->commerce_order_total->value(), $coupon_wrapper->price_component_name->value());
+    foreach ($components as $component) {
+      $amount += $component['price']['amount'] * -1;
+    }
+    $amount = commerce_currency_format($amount, $order_wrapper->commerce_order_total->currency_code->value(), $coupon);
+  }
+}
