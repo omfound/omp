@@ -1,0 +1,80 @@
+<?php
+
+function commerce_coupon_pct_order_all_install() {
+  drupal_load('module', 'commerce');
+  $values = array(
+    'type' => 'commerce_coupon_pct_order_all',
+    'label' => st('Whole Order Percent Discount'),
+  );
+
+  $coupon_type = commerce_coupon_type_create($values);
+  commerce_coupon_type_save($coupon_type, TRUE);
+  commerce_coupon_pct_order_all_fields();
+}
+
+function commerce_coupon_pct_order_all_fields() {
+  $field_name = 'commerce_coupon_percent_amount';
+  if (!field_info_field($field_name)) {
+    // Create the field.
+    $field = array(
+      'field_name' => $field_name,
+      'type' => 'text',
+    );
+    field_create_field($field);
+  }
+  // Create the instance.
+  $instance = array(
+    'field_name' => $field_name,
+    'entity_type' => 'commerce_coupon',
+    'bundle' => 'commerce_coupon_pct_order_all',
+    'label' => 'Percent Value to Discount',
+    'description' => 'Whole number between 1 and 100.',
+    'required' => TRUE,
+    'widget' => array(
+      'type' => 'text_textfield',
+      'weight' => 3,
+    ),
+    'display' => array(),
+  );
+
+  field_create_instance($instance);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function commerce_coupon_pct_order_all_uninstall() {
+  // Make sure commerce.module is loaded so that commerce_delete_instances()
+  // is available.
+  drupal_load('module', 'commerce');
+  // The function commerce_coupon_type_delete() can't be used here because
+  // commerce_coupon module might not be enabled anymore at this point.
+  db_delete('commerce_coupon_type')
+    ->condition('type', 'commerce_coupon_pct_order_all')
+    ->execute();
+
+  // Delete all fields that belong to the module's coupon type.
+  commerce_delete_instances('commerce_coupon', 'commerce_coupon_pct_order_all');
+
+  // Also delete coupons.
+  db_delete('commerce_coupon')
+    ->condition('type', 'commerce_coupon_pct_order_all')
+    ->execute();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function commerce_coupon_pct_order_all_disable() {
+  drupal_load('module', 'commerce_coupon');
+  commerce_coupon_type_disable('commerce_coupon_pct_order_all');
+}
+
+/**
+ * Implements hook_enable().
+ */
+function commerce_coupon_pct_order_all_enable() {
+  drupal_load('module', 'commerce_coupon');
+  commerce_coupon_type_enable('commerce_coupon_pct_order_all');
+}
+
