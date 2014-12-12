@@ -489,7 +489,7 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
 
 function commerce_reservations_show_price_explanation($line_item) {
   if (!empty($line_item->price_explanation)) {
-    $output = '';
+    $output = '<strong>Member Discount Details</strong>';
     foreach ($line_item->price_explanation as $key => $message) {
       $output .= $message.'<br />';
     }
