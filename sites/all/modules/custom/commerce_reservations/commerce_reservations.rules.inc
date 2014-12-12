@@ -303,6 +303,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
   $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+  watchdog('commerce_reservations', 'price_reduction: start='.$start.', end='.$end);
   $hours_days = commerce_reservations_hours_days($start, $end);
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
