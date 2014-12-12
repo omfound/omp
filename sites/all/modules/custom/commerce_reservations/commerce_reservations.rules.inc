@@ -370,7 +370,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         if (variable_get('cr_debug_price_rules', 0)) {
           watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
         }
-        $new_price = $unit_price['amount'] - $deduction;
+        //weird hack for now
+        //$new_price = $unit_price['amount'] - $deduction;
+        $new_price = $unit_price['amount'] - $deduction - $product->commerce_price['und'][0]['amount'];
         watchdog('commerce_reservations', 'price_reduction: new price='.$new_price);
         if ($new_price < 0) { 
           $new_price = 0; 
