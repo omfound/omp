@@ -371,6 +371,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
           watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
         }
         $new_price = $unit_price['amount'] - $deduction;
+        watchdog('commerce_reservations', 'price_reduction: new price='.$new_price);
         if ($new_price < 0) { 
           $new_price = 0; 
         }
@@ -438,6 +439,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
       }
     }
     if ($new_price < 0) { $new_price = 0; }
+    watchdog('commerce_reservations', 'discount_by_day: new price='.$new_price);
     $price_difference = $new_price - $unit_price['amount'];
 
     $difference = array(
