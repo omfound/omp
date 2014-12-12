@@ -303,7 +303,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
   $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
-  watchdog('commerce_reservations', 'price_reduction: start='.$start.', end='.$end);
+  if (variable_get('cr_debug_price_rules', 0)) {
+    watchdog('commerce_reservations', 'price_reduction: start='.$start.', end='.$end);
+  }
   $hours_days = commerce_reservations_hours_days($start, $end);
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
@@ -338,14 +340,17 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
          $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
        }
        else {
-         $new_price = ((($hours_days['days'] + ($hours_days['remainder_hours'] / 24) - ($free_hours / 24))) * $product->commerce_price['und'][0]['amount']) * .5;
+         // free hour reduction
+         $new_price = $free_hours * $product->commerce_price['und'][0]['amount'];
+         // member after free hour 50% reduction
+         $new_price = $new_price + (($hours_days['hours']-$free_hours)*($product->commerce_price['und'][0]['amount'] * .5));
+
+         if (variable_get('cr_debug_price_rules', 0)) {
+           watchdog('commerce_reservations', 'price_reduction: total discount='.$new_price);
+         }
+
+         $new_price = $unit_price['amount'] - $new_price;
        }
-        //if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
-          //$new_price = 0;
-        //}
-        //else {
-          //$new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
-        //}
         if ($new_price < 0) { 
           $new_price = 0; 
         }
