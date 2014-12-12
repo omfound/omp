@@ -439,6 +439,7 @@ function commerce_price_field_formatter_view($entity_type, $entity, $field, $ins
   $element = array();
 
   // Loop through each price value in this field.
+  dsm($items);
   foreach ($items as $delta => $item) {
     // Do not render a price if the amount is NULL (i.e. non-zero empty value).
     if (is_null($item['amount'])) {
