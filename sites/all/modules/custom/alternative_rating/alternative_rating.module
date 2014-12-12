@@ -296,8 +296,8 @@ function alternative_rating_testing() {
   $nid_range = $first_nid + 500;
   $newquery = '
     SELECT * FROM {node}
-    WHERE nid > :nid END WHERE type=:type';
-  $newtest = db_query($newquery, array(':type' => 'om_show', ':nid' => $first_nid, ':nid_range' => $nid_range));
+    WHERE nid > :nid AND type=:type';
+  $newtest = db_query($newquery, array(':type' => 'om_show', ':nid' => $first_nid));
   $blah = array();
   foreach ($newtest as $result) {
     $blah[] = $result->nid;
