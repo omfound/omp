@@ -288,7 +288,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, 'Full Price Rate', $difference['amount']);
+    commerce_reservations_explain_price($line_item, 'Full price rate', $difference['amount']);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -449,7 +449,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
     if (variable_get('cr_debug_price_rules', 0)) {
       watchdog('commerce_reservations', 'discount_by_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, $discount_day. 's are free', $difference['amount']); 
+    commerce_reservations_explain_price($line_item, ucfirst($discount_day). 's are free', $difference['amount']); 
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $new_price;
   
@@ -493,6 +493,6 @@ function commerce_reservations_show_price_explanation($line_item) {
     foreach ($line_item->price_explanation as $key => $message) {
       $output .= $message.'<br />';
     }
-    drupal_set_message($output);
+    drupal_set_message($output, 'status', false);
   }
 }
