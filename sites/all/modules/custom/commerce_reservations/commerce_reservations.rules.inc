@@ -288,7 +288,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, 'Full price rate', $difference['amount']);
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $difference['amount']);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -345,7 +345,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         // free hour reduction
         $deduction = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
         if ($free_hours > 0) {
-          commerce_reservations_explain_price($line_item, $free_hours.' member free hours', $deduction);
+          commerce_reservations_explain_price($line_item, $free_hours.' free hours for members', $deduction);
         }
 
         // member after free hour 50% reduction
@@ -449,7 +449,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
     if (variable_get('cr_debug_price_rules', 0)) {
       watchdog('commerce_reservations', 'discount_by_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, ucfirst($discount_day). 's are free', $difference['amount']); 
+    commerce_reservations_explain_price($line_item, ucfirst($discount_day). ' discount', $difference['amount']); 
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $new_price;
   
@@ -480,16 +480,16 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   $value = $value / 100;
   if (empty($line_item->price_explanation)) {
     $line_item->price_explanation = array();
-    $line_item->price_explanation[] = $text . ' : ' . $value; 
+    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
   }
   else {
-    $line_item->price_explanation[] = $text . ' : ' . $value;
+    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
   }
 }
 
 function commerce_reservations_show_price_explanation($line_item) {
   if (!empty($line_item->price_explanation)) {
-    $output = '';
+    $output = '<strong>Member Discount Details </strong><br />';
     foreach ($line_item->price_explanation as $key => $message) {
       $output .= $message.'<br />';
     }
