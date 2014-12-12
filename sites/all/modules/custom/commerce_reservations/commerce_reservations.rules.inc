@@ -342,7 +342,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
        }
        else {
          // free hour reduction
-         $new_price = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
+         $deduction = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
 
          // member after free hour 50% reduction
          // calculate the paid hours by removing previously deducted hours from
@@ -357,12 +357,12 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
          if ($paid_hours < 0) {
            $paid_hours = 0;
          }
-         $new_price = $new_price + ($paid_hours*($product->commerce_price['und'][0]['amount'] * .5));
+         $deduction = $deduction + (($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5));
 
          if (variable_get('cr_debug_price_rules', 0)) {
-           watchdog('commerce_reservations', 'price_reduction: total discount='.$new_price);
+           watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
          }
-         $new_price = $unit_price['amount'] - $new_price;
+         $new_price = $unit_price['amount'] - $deduction;
        }
         if ($new_price < 0) { 
           $new_price = 0; 
