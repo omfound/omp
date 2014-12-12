@@ -51,7 +51,7 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_discount_by_day' => array(
       'label' => t('Remove days from reservations cost calculation'),
     ),
-    'commerce_reservations_explain_price' => array(
+    'commerce_reservations_show_price_explanation' => array(
       'label' => t('Show a message explaining price'),
     ),
   );
@@ -84,7 +84,7 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
-  unset($actions['commerce_reservations_explain_price']['parameter']['round_mode']);
+  unset($actions['commerce_reservations_show_price_explanation']['parameter']['round_mode']);
   $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
     'type' => 'text',
     'label' => t('Day'),
@@ -487,6 +487,6 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   }
 }
 
-function commerce_reservations_explain_price($line_item) {
+function commerce_reservations_show_price_explanation($line_item) {
   dsm($line_item->price_explanation);
 }
