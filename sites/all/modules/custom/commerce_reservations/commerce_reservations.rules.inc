@@ -334,7 +334,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       }
       else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
        if (variable_get('cr_debug_price_rules', 0)) {
-         watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount']);
+         watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount'].', deducted days='.$line_item->deducted_days);
        }
        if ($free_hours == 0) {
          $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
