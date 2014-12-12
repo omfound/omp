@@ -272,7 +272,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
     $current_amount = $unit_price['amount'];
     $difference = array(
-      'amount' => $updated_price - $current_amount,
+      'amount' => $updated_price,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
