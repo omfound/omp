@@ -288,7 +288,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, 'Full price rate', $difference['amount']);
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $difference['amount']);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -480,16 +480,16 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   $value = $value / 100;
   if (empty($line_item->price_explanation)) {
     $line_item->price_explanation = array();
-    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', $value); 
+    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
   }
   else {
-    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', $value);
+    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
   }
 }
 
 function commerce_reservations_show_price_explanation($line_item) {
   if (!empty($line_item->price_explanation)) {
-    $output = '<strong>Member Discount Details</strong>';
+    $output = '<strong>Member Discount Details </strong><br />';
     foreach ($line_item->price_explanation as $key => $message) {
       $output .= $message.'<br />';
     }
