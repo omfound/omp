@@ -272,7 +272,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
     $current_amount = $unit_price['amount'];
     $difference = array(
-      'amount' => $updated_price,
+      'amount' => $updated_price - $current_amount,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
@@ -281,6 +281,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
     if (variable_get('cr_debug_price_rules', 0)) {
+      watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
