@@ -238,7 +238,7 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
       'data' => array(),
     );
    
-    commerce_reservations_explain_price($line_item, '<em>Full Price Rate:</em>', $updated_price);
+    commerce_reservations_explain_price($line_item, '<em>Full Price Rate</em>', $updated_price);
 
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
@@ -344,51 +344,56 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-        $new_price = ($unit_price['amount'] - $hourly_rate) * .5;
-        $price_difference = $new_price - $unit_price['amount'];
+      if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+        $free_hours = $free_hours/24;
+      } 
+      if (variable_get('cr_debug_price_rules', 0)) {
+        watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount'].', deducted days='.$line_item->deducted_days);
       }
-      else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
-        if (variable_get('cr_debug_price_rules', 0)) {
-          watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount'].', deducted days='.$line_item->deducted_days);
-        }
-        // free hour reduction
-        $deduction = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
-        if ($free_hours > 0) {
-          commerce_reservations_explain_price($line_item, $free_hours.' free hours for members', $deduction);
-        }
 
-        // member after free hour 50% reduction
-        // calculate the paid hours by removing previously deducted hours from
-        // rules like discount_by_day and free hours
-        if (!empty($line_item->deducted_days)) {
-          $deduct_hours = $line_item->deducted_days*24;
-        }
-        else {
-          $deduct_hours = 0;
-        }
-        $paid_hours = $hours_days['hours']-$free_hours-$deduct_hours;
-        if ($paid_hours < 0) {
-          $paid_hours = 0;
-        }
-        else {
-          $paid_deduction = ($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5);
-          $deduction = $deduction + $paid_deduction;
-          commerce_reservations_explain_price($line_item, 'Member 50% off hours over free hours', $paid_deduction);
-        }
-
-        if (variable_get('cr_debug_price_rules', 0)) {
-          watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
-        }
-        $new_price = $unit_price['amount'] - $deduction;
-        if ($new_price < 0) { 
-          $new_price = 0; 
-        }
-
-        //weird hack for now
-        //$price_difference = $new_price - $unit_price['amount'];
-        $price_difference = $new_price - $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+      // free hour reduction
+      $deduction = ($free_hours) * $product->commerce_price['und'][0]['amount'];
+      if ($free_hours > 0) {
+        commerce_reservations_explain_price($line_item, $free_hours.' free hours for members', $deduction);
       }
+
+      // member after free hour 50% reduction
+      // calculate the paid hours by removing previously deducted hours from
+      // rules like discount_by_day and free hours
+      if (!empty($line_item->deducted_days)) {
+        $deduct_hours = $line_item->deducted_days*24;
+      }
+      else {
+        $deduct_hours = 0;
+      }
+      $paid_hours = $hours_days['hours']-$free_hours-$deduct_hours;
+
+      // member after free hour 50% reduction
+      // calculate the paid hours by removing previously deducted hours from
+      // rules like discount_by_day and free hours
+      if ($paid_hours < 0) {
+        $paid_hours = 0;
+      }
+      else {
+        if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+          $paid_hours = $paid_hours / 24;
+        }
+        $paid_deduction = $paid_hours*($product->commerce_price['und'][0]['amount'] * .5);
+        $deduction = $deduction + $paid_deduction;
+        commerce_reservations_explain_price($line_item, 'Member 50% off hours over free hours', $paid_deduction);
+      }
+
+      if (variable_get('cr_debug_price_rules', 0)) {
+        watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
+      }
+      $new_price = $unit_price['amount'] - $deduction;
+      if ($new_price < 0) { 
+        $new_price = 0; 
+      }
+
+      //weird hack for now
+      //$price_difference = $new_price - $unit_price['amount'];
+      $price_difference = $new_price - $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
     }
     $difference = array(
       'amount' => $price_difference,
