@@ -490,6 +490,12 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   else {
     $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
   }
+  if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id)) {
+    $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . money_format('$%i', abs($value));
+  }
+  else {
+    $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . money_format('$%i', abs($value));
+  }
 }
 
 function commerce_reservations_show_price_explanation($line_item) {
