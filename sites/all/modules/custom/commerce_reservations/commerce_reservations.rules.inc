@@ -90,7 +90,7 @@ function commerce_reservations_rules_action_info() {
     'label' => 'Adjustment Amount',
   );
   $actions['commerce_reservations_log_price_explanation']['parameter']['explanation'] = array(
-    'type' => 'textarea',
+    'type' => 'text',
     'label' => 'Explanation', 
   );
   $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
