@@ -495,6 +495,9 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
       $value = $value / 100;
       $value = money_format('$%i', abs($value));
     } 
+    if (strpos($text, 'Full price rate') !== false) {
+      $value = '<em>'.$value.'</em>';
+    }
     if (empty($line_item->price_explanation)) {
       $line_item->price_explanation = array();
       $line_item->price_explanation[] = $text . ' : ' . $value; 
