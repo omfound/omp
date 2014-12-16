@@ -493,19 +493,20 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   if (!empty($value)) { 
     if (strpos($value, '%') === false) {
       $value = $value / 100;
+      $value = money_format('$%i', abs($value));
     } 
     if (empty($line_item->price_explanation)) {
       $line_item->price_explanation = array();
-      $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
+      $line_item->price_explanation[] = $text . ' : ' . $value; 
     }
     else {
-      $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
+      $line_item->price_explanation[] = $text . ' : ' . $value;
     }
     if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id])) {
-      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . money_format('$%i', abs($value));
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . $value);
     }
     else {
-      $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . money_format('$%i', abs($value));
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . $value;
     }
   }
 }
