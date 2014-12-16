@@ -19,8 +19,6 @@
  * @ingroup views_templates
  */
 ?>
-<?php dsm ($rows); ?>
-<?php dsm ($view->style_plugin->rendered_fields); ?>
 <table <?php if ($classes) { print 'class="'. $classes . '" '; } ?><?php print $attributes; ?>>
    <?php if (!empty($title) || !empty($caption)) : ?>
      <caption><?php print $caption . $title; ?></caption>
@@ -43,8 +41,8 @@
     <?php foreach ($rows as $row_count => $row): ?>
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
-        <?php dsm($row); ?>
           <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
+            <?php print $content; ?>
           </td>
         <?php endforeach; ?>
         <?php if (!empty($GLOBALS['commerce-line-items'][$view->style_plugin->rendered_fields[$row_count]['line_item_id']])) { ?>
