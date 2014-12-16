@@ -31,7 +31,7 @@
             <?php print $label; ?>
           </th>
         <?php endforeach; ?>
-        <?php if (!empty($GLOBALS['commerce-line-items']) && !empty(variable_get('cr_price_adjustments', 0)) { ?>
+        <?php if (!empty($GLOBALS['commerce-line-items']) && variable_get('cr_price_adjustments', 0)) { ?>
           <th class="price-adjustments">Price Adjustments</th>
         <?php } ?>
       </tr>
@@ -45,7 +45,7 @@
             <?php print $content; ?>
           </td>
         <?php endforeach; ?>
-        <?php if (!empty(variable_get('cr_price_adjustments', 0))) { ?>
+        <?php if (variable_get('cr_price_adjustments', 0)) { ?>
           <?php if (!empty($GLOBALS['commerce-line-items'][$view->style_plugin->rendered_fields[$row_count]['line_item_id']])) { ?>
             <td class="price-adjustments"><?php print $GLOBALS['commerce-line-items'][$view->style_plugin->rendered_fields[$row_count]['line_item_id']]; ?></td>
           <?php }elseif (!empty($GLOBALS['commerce-line-items'])) { ?>
