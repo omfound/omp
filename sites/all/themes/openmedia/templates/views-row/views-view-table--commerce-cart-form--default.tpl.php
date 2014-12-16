@@ -19,6 +19,8 @@
  * @ingroup views_templates
  */
 ?>
+<?php dsm ($rows); ?>
+<?php dsm $view->style_plugin->rendered_fields; ?>
 <table <?php if ($classes) { print 'class="'. $classes . '" '; } ?><?php print $attributes; ?>>
    <?php if (!empty($title) || !empty($caption)) : ?>
      <caption><?php print $caption . $title; ?></caption>
