@@ -482,19 +482,21 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
 }
 
 function commerce_reservations_explain_price($line_item, $text, $value) {
-  $value = $value / 100;
-  if (empty($line_item->price_explanation)) {
-    $line_item->price_explanation = array();
-    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
-  }
-  else {
-    $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
-  }
-  if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id])) {
-    $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . money_format('$%i', abs($value));
-  }
-  else {
-    $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . money_format('$%i', abs($value));
+  if (!empty($value)) { 
+    $value = $value / 100;
+    if (empty($line_item->price_explanation)) {
+      $line_item->price_explanation = array();
+      $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
+    }
+    else {
+      $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value));
+    }
+    if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id])) {
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . money_format('$%i', abs($value));
+    }
+    else {
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . money_format('$%i', abs($value));
+    }
   }
 }
 
