@@ -49,7 +49,7 @@
         <?php if (!empty($GLOBALS['commerce-line-items'][$view->style_plugin->rendered_fields[$row_count]['line_item_id']])) { ?>
           <td><?php print $GLOBALS['commerce-line-items'][$view->style_plugin->rendered_fields[$row_count]['line_item_id']]; ?></td>
         <?php }elseif (!empty($GLOBALS['commerce-line-items'])) { ?>
-          <td>None</a>
+          <td>None</td>
         <?php } ?>
       </tr>
     <?php endforeach; ?>
