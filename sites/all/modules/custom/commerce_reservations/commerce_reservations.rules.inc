@@ -503,7 +503,7 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
       $line_item->price_explanation[] = $text . ' : ' . $value;
     }
     if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id])) {
-      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . $value);
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . $value;
     }
     else {
       $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . $value;
