@@ -492,7 +492,7 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
     if (strpos($value, '%') === false && strpos($value, '.') === false) {
       $value = $value / 100;
     }
-    if (strpos($value, '%' !== false)) {
+    if (strpos($value, '%') === false)) {
       $value = money_format('$%i', abs($value));
     } 
     if (strpos($text, 'Full price rate') !== false) {
