@@ -238,7 +238,7 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
       'data' => array(),
     );
    
-    commerce_reservations_explain_price($line_item, '<em>Full Price Rate</em>', $updated_price);
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $updated_price);
 
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
