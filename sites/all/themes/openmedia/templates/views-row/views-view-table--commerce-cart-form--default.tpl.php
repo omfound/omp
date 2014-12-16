@@ -30,10 +30,10 @@
           <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . '" '; } ?>>
             <?php print $label; ?>
           </th>
-          <?php if (!empty($GLOBALS['commerce-line-items'])) { ?>
-            <th>Price Adjustments</th>
-          <?php } ?>
         <?php endforeach; ?>
+        <?php if (!empty($GLOBALS['commerce-line-items'])) { ?>
+          <th>Price Adjustments</th>
+        <?php } ?>
       </tr>
     </thead>
   <?php endif; ?>
