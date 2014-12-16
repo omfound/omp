@@ -344,15 +344,17 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-        $free_hours = $free_hours/24;
-      } 
       if (variable_get('cr_debug_price_rules', 0)) {
         watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount'].', deducted days='.$line_item->deducted_days);
       }
 
       // free hour reduction
-      $deduction = ($free_hours) * $product->commerce_price['und'][0]['amount'];
+      if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+        $deduction = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
+      }
+      else {
+        $deduction = ($free_hours) * $product->commerce_price['und'][0]['amount'];
+      }
       if ($free_hours > 0) {
         commerce_reservations_explain_price($line_item, $free_hours.' free hours for members', $deduction);
       }
@@ -376,7 +378,10 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       }
       else {
         if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
-          $paid_hours = $paid_hours / 24;
+          $paid_deduction = ($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5);
+        }
+        else {
+          $paid_deduction = $paid_hours*($product->commerce_price['und'][0]['amount'] * .5);
         }
         $paid_deduction = $paid_hours*($product->commerce_price['und'][0]['amount'] * .5);
         $deduction = $deduction + $paid_deduction;
