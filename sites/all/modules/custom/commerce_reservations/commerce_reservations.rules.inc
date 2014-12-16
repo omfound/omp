@@ -491,7 +491,9 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
 
 function commerce_reservations_explain_price($line_item, $text, $value) {
   if (!empty($value)) { 
-    $value = $value / 100;
+    if (strpos($value, '%') === false) {
+      $value = $value / 100;
+    } 
     if (empty($line_item->price_explanation)) {
       $line_item->price_explanation = array();
       $line_item->price_explanation[] = $text . ' : ' . money_format('$%i', abs($value)); 
