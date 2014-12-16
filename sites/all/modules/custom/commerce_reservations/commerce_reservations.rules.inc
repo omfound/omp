@@ -489,8 +489,10 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
 
 function commerce_reservations_explain_price($line_item, $text, $value) {
   if (!empty($value)) { 
-    if (strpos($value, '%') === false) {
+    if (strpos($value, '%') === false && strpos($value, '.') === false) {
       $value = $value / 100;
+    }
+    if (strpos($value, '%' !== false)) {
       $value = money_format('$%i', abs($value));
     } 
     if (strpos($text, 'Full price rate') !== false) {
