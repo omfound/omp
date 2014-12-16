@@ -51,8 +51,8 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_discount_by_day' => array(
       'label' => t('Remove days from reservations cost calculation'),
     ),
-    'commerce_reservations_show_price_explanation' => array(
-      'label' => t('Show a message explaining price'),
+    'commerce_reservations_log_price_explanation' => array(
+      'label' => t('Store a price adjustment message'),
     ),
   );
 
@@ -84,7 +84,15 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
-  unset($actions['commerce_reservations_show_price_explanation']['parameter']['round_mode']);
+  unset($actions['commerce_reservations_log_price_explanation']['parameter']['round_mode']);
+  $actions['commerce_reservations_log_price_explanation']['parameter']['adjustment_amount'] = array(
+    'type' => 'text',
+    'label' => 'Adjustment Amount',
+  );
+  $actions['commerce_reservations_log_price_explanation']['parameter']['explanation'] = array(
+    'type' => 'textarea',
+    'label' => 'Explanation', 
+  );
   $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
     'type' => 'text',
     'label' => t('Day'),
@@ -500,12 +508,6 @@ function commerce_reservations_explain_price($line_item, $text, $value) {
   }
 }
 
-function commerce_reservations_show_price_explanation($line_item) {
-  if (!empty($line_item->price_explanation)) {
-    $output = '<strong>Member Discount Details </strong><br />';
-    foreach ($line_item->price_explanation as $key => $message) {
-      $output .= $message.'<br />';
-    }
-    drupal_set_message($output, 'status', false);
-  }
+function commerce_reservations_log_price_explanation($line_item, $component_name, $adjustment, $explanation) {
+  commerce_reservations_explain_price($line_item, $explanation, $adjustment);
 }
