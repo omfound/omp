@@ -32,7 +32,7 @@
           </th>
         <?php endforeach; ?>
         <?php if (!empty($GLOBALS['commerce-line-items'])) { ?>
-          <th>Price Adjustments</th>
+          <th class="price-adjustments">Price Adjustments</th>
         <?php } ?>
       </tr>
     </thead>
