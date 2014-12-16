@@ -69,9 +69,11 @@ function commerce_reservations_init(){
       $time_lapse = time() - $cart->created;
       $minutes = $time_lapse / 60;
 
-      if ($minutes > 10) {
+      if ($minutes > 15) {
         $cart = l('Click here to review your order and continue', 'cart');
-        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        if (arg(0) != 'cart' && arg(0) != 'checkout' && arg(0) != 'equipment') {
+          drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        }
       } 
     }
   }
