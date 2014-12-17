@@ -44,11 +44,13 @@ function om_theme_assets_preprocess_om_site_links(&$variables) {
   else {
     if (variable_get('om_loginout_link', TRUE)) {
       $options['attributes']['class'] = array('om-login');
-      $links[] = l('Login', 'user', $options);
+      $links[] = '<a href="/user">Login</a>';
+      //$links[] = l('Login', 'user', $options);
     }
     if (variable_get('om_register_link', TRUE)) {
       $options['attributes']['class'] = array('om-membership');
-      $links[] = l('Register', 'membership', $options);
+      $links[] = '<a href="/membership">Register</a>';
+      //$links[] = l('Register', 'membership', $options);
     }
   }
   if (variable_get('om_help_link', TRUE)) {

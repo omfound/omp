@@ -212,7 +212,12 @@ function openmedia_preprocess_node__class_display(&$variables) {
     unset($variables['content']['field_class_display_class'][0]['capacity']);
     $variables['content']['field_class_display_class'][0]['submit']['#value'] = t('Register Now');
     $variables['content']['field_class_display_class'][0]['submit']['#attributes']['class'] = array('red-button');
-    $registration_button = drupal_render($variables['content']['field_class_display_class']);
+    if (user_is_logged_in()) {
+      $registration_button = drupal_render($variables['content']['field_class_display_class']);
+    } 
+    else {
+      $registration_button = '<a class="red-button" href="/user">Register</a>';
+    }
   }
   if ($registration['capacity'] == 0) {
     $seats_left = 'Unlimited';
@@ -344,7 +349,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
 }
 
 function openmedia_preprocess_node__om_project(&$variables) {
-  //drupal_add_js(path_to_theme() . '/js/omp-project.js', array('group' => JS_THEME));
+  drupal_add_js(path_to_theme() . '/js/omp-project.js', array('group' => JS_THEME));
   $variables['project_title'] = $variables['title'];
   // Author Info
   // User picture
@@ -359,6 +364,9 @@ function openmedia_preprocess_node__om_project(&$variables) {
   }
   // Body
   $variables['description'] = drupal_render($variables['content']['body']);
+  if (str_word_count($variables['description']) > 70 ) {
+    $variables['read_more'] = '<p class="read-more-button">Read More</p>';
+  }
   // Local production
   $locally_produced = $variables['node']->field_om_locally_produced[$variables['language']][0]['value'];
   if ($locally_produced == 1) {
@@ -398,7 +406,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
           $variables['show_grid'] .= l($img, 'node/' . $show_nid, $options);
         }
       }
-    //Marty
         $highest_show = (max($score_array));
         $highest_score_nid = array_search($highest_show, $score_array);
         $node_load = node_load($highest_score_nid);

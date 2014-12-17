@@ -69,9 +69,11 @@ function commerce_reservations_init(){
       $time_lapse = time() - $cart->created;
       $minutes = $time_lapse / 60;
 
-      if ($minutes > 10) {
+      if ($minutes > 15) {
         $cart = l('Click here to review your order and continue', 'cart');
-        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        if (arg(0) != 'cart' && arg(0) != 'checkout' && arg(0) != 'equipment' && arg(0) != 'js' && arg(0) != 'reservations') {
+          drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        }
       } 
     }
   }
@@ -1799,6 +1801,21 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#title' => t('Warn users after 10 minutes of an incomplete order'),
     '#default_value' => variable_get('cr_expired_cart_warning', 0),
   );
+  $form['cr_hide_certs'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide certifications in production information box on reservation page?'),
+    '#default_value' => variable_get('cr_hide_certs', 0),
+  );
+  $form['cr_debug_price_rules'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Log discount rule calculations for debugging?'),
+    '#default_value' => variable_get('cr_debug_price_rules', 0),
+  );
+  $form['cr_price_adjustments'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show price adjustments on cart and checkout pages?'),
+    '#default_value' => variable_get('cr_price_adjustments', 0),
+  );
   $availability_items = commerce_reservations_availability_form_items($form, $form_state);
   $form += $availability_items;
   $form['submit'] = array(
@@ -2091,6 +2108,9 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
 	  variable_set('cr_allow_commercial', 0);
   }
   variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
+  variable_set('cr_hide_certs', $form_state['input']['cr_hide_certs'], 0);
+  variable_set('cr_debug_price_rules', $form_state['input']['cr_debug_price_rules'], 0);
+  variable_set('cr_price_adjustments', $form_state['input']['cr_price_adjustments'], 0);
 
   if ($form_state['input']['email_confirm']){
     variable_set('cr_email_admin_confirm', 1);

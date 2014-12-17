@@ -24,7 +24,6 @@ function alternative_rating_menu() {
 
 function alternative_rating_display_category_averages() {
   $averages = alternative_rating_categories();
-	
   $display = '';
 	$display .= '<br /><br /><h2>Current Category Averages:</h2>';
 	$display .= '<table><tr><th>Category</th><th>Shows</th><th>Average</th><th>Shows Above Average</th><th>Shows with no Ratings</th></tr>';
@@ -214,15 +213,20 @@ function alternative_rating_total_average($period = 'alltime') {
 }
 
 function alternative_rating_qualified_nids() {
-  $query = '
-    SELECT nid
-    FROM {node}
-    WHERE node.type = :type';
-  $result = db_query($query, array(':type' => 'om_show'));
-  foreach($result as $node) {
-    $qualified_nids[] = $node->nid;
+ $chunk_nids = alternative_rating_testing();
+  if (!empty($chunk_nids)) {
+    $qualified_nids = array_unique($chunk_nids);
   }
-
+  else {
+    $query = '
+      SELECT nid
+      FROM {node}
+      WHERE node.type = :type';
+    $result = db_query($query, array(':type' => 'om_show'));
+    foreach($result as $node) {
+      $qualified_nids[] = $node->nid;
+    }
+  }
   return $qualified_nids;
 }
 
@@ -245,27 +249,86 @@ function alternative_rating_category($nid) {
 }
 
 function alternative_rating_insert($nid, $bayesian, $period = 'alltime') {
-  $result = db_insert('alternative_rating')
+  //was db_insert
+  $result = db_merge('alternative_rating')
+    ->key(array('nid' => $nid, 'period' => $period))
     ->fields(array(
-      'nid' => $nid,
       'bayesian' => $bayesian,
-      'period' => $period,
     ))
     ->execute();
 }
-function alternative_rating_populate() {
-  $lastrun = variable_get('alternative_rating_run', false);
-  $limit = strtotime("-6 hours");
+
+function alternative_rating_first_nid() {
+  $query = 'SELECT * FROM {alternative_rating}
+            ORDER BY nid ASC LIMIT 1';
+  $test = db_query($query);
+  foreach ($test as $nid) {
+    $first_nid = $nid->nid;
+  }
+  return $first_nid;
+}
+
+function alternative_rating_testing() {
+  $previous_last = variable_get('alternative_rating_last', false);
+  dsm('starting nid: '.$previous_last);
   
-  //only run every 6 hours
-  if ($lastrun) {
-    if ($lastrun > $limit) {
-      return; 
-    }
+  $query = 'SELECT * FROM {node}
+            WHERE type=:type 
+            ORDER BY nid DESC LIMIT 1';
+  $test = db_query($query, array(':type' => 'om_show'));
+  foreach ($test as $nid) {
+    $last_nid = $nid->nid;
   }
 
+  if ($previous_last == $last_nid || empty($previous_last)) {
+    $query = 'SELECT * FROM {node}
+              WHERE type=:type 
+              ORDER BY nid ASC LIMIT 1';
+    $test = db_query($query, array(':type' => 'om_show'));
+    foreach ($test as $nid) {
+      $first_nid = $nid->nid;
+    }
+  }
+  else {
+    $first_nid = $previous_last;
+  }
+
+  $nid_range = $first_nid + 500;
+  $newquery = '
+    SELECT * FROM {node}
+    WHERE nid > :nid AND type=:type LIMIT 0,500';
+  $newtest = db_query($newquery, array(':type' => 'om_show', ':nid' => $first_nid));
+  $blah = array();
+  foreach ($newtest as $result) {
+    $blah[] = $result->nid;
+  }
+  $last = end($blah);
+  if ($last != $previous_last) {
+    variable_set('alternative_rating_last', $last);
+  }
+  else {
+    $new_last = $last + 500;
+    variable_set('alternative_rating_last', $new_last);
+  }
+
+  dsm($blah);
+  return $blah;
+}
+
+function alternative_rating_populate() {
+/*  $lastrun = variable_get('alternative_rating_run', false);
+ *  $limit = strtotime("-6 hours");
+ *  
+ * //only run every 6 hours
+ * if ($lastrun) {
+ *   if ($lastrun > $limit) {
+ *     return; 
+ *   }
+ * }
+ */
   //first empty the existing alternative_rating table
-  db_query('TRUNCATE TABLE {alternative_rating}');
+
+  //db_query('TRUNCATE TABLE {alternative_rating}');
 
   //on initial install, build the table of bayesian values
   $nids = alternative_rating_qualified_nids();
@@ -389,5 +452,15 @@ function alternative_rating_bayesian_value($nid) {
 }
 
 function alternative_rating_cron() {
+  /**
+  $lastrun = variable_get('alternative_rating_run', false);
+  $limit = strtotime("-6 hours");
+ 
+  //only run every 6 hours
+  if ($lastrun) {
+    if ($lastrun > $limit) {
+      return;
+    }
+  }**/
   alternative_rating_populate();
 }

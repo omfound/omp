@@ -51,6 +51,9 @@ function commerce_reservations_rules_action_info() {
     'commerce_reservations_discount_by_day' => array(
       'label' => t('Remove days from reservations cost calculation'),
     ),
+    'commerce_reservations_log_price_explanation' => array(
+      'label' => t('Store a price adjustment message'),
+    ),
   );
 
   // Define the action using a common set of parameters.
@@ -81,6 +84,15 @@ function commerce_reservations_rules_action_info() {
     );
   }
 
+  unset($actions['commerce_reservations_log_price_explanation']['parameter']['round_mode']);
+  $actions['commerce_reservations_log_price_explanation']['parameter']['adjustment_amount'] = array(
+    'type' => 'text',
+    'label' => 'Adjustment Amount',
+  );
+  $actions['commerce_reservations_log_price_explanation']['parameter']['explanation'] = array(
+    'type' => 'text',
+    'label' => 'Explanation', 
+  );
   $actions['commerce_reservations_discount_by_day']['parameter']['day'] = array(
     'type' => 'text',
     'label' => t('Day'),
@@ -226,6 +238,8 @@ function commerce_reservations_price_per_hour($line_item, $component_name, $roun
       'data' => array(),
     );
    
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $updated_price);
+
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
@@ -272,7 +286,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
     $current_amount = $unit_price['amount'];
     $difference = array(
-      'amount' => $updated_price - $current_amount,
+      'amount' => $updated_price,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
@@ -280,6 +294,11 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $updated_price;
     
+    if (variable_get('cr_debug_price_rules', 0)) {
+      watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
+      watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
+    }
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $difference['amount']);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -300,6 +319,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   }
   $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
   $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
+  if (variable_get('cr_debug_price_rules', 0)) {
+    watchdog('commerce_reservations', 'price_reduction: start='.$start.', end='.$end);
+  }
   $hours_days = commerce_reservations_hours_days($start, $end);
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
@@ -322,28 +344,60 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       $price_difference = $new_price - $unit_price['amount'];
     }
     else {
-      if ($product->field_charge_by_the_['und'][0]['value'] == 'hour') {
-        $new_price = ($unit_price['amount'] - $hourly_rate) * .5;
-        $price_difference = $new_price - $unit_price['amount'];
+      if (variable_get('cr_debug_price_rules', 0)) {
+        watchdog('commerce_reservations', 'price_reduction: days='.$hours_days['days'].', remainder_hours='.$hours_days['remainder_hours'].', free_hours='.$free_hours.', price='.$product->commerce_price['und'][0]['amount'].', deducted days='.$line_item->deducted_days);
       }
-      else if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {     
-       if ($free_hours == 0) {
-         $new_price = (($hours_days['days'] + ($hours_days['remainder_hours'] / 24)) * $product->commerce_price['und'][0]['amount']) * .5; 
-       }
-       else {
-         $new_price = ((($hours_days['days'] + ($hours_days['remainder_hours'] / 24) - ($free_hours / 24))) * $product->commerce_price['und'][0]['amount']) * .5;
-       }
-        //if ($unit_price['amount'] <= $product->commerce_price['und'][0]['amount']) {
-          //$new_price = 0;
-        //}
-        //else {
-          //$new_price = ($unit_price['amount'] - $product->commerce_price['und'][0]['amount']) * .5;
-        //}
-        if ($new_price < 0) { 
-          $new_price = 0; 
+
+      // free hour reduction
+      if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+        $deduction = ($free_hours/24) * $product->commerce_price['und'][0]['amount'];
+      }
+      else {
+        $deduction = ($free_hours) * $product->commerce_price['und'][0]['amount'];
+      }
+      if ($free_hours > 0) {
+        commerce_reservations_explain_price($line_item, $free_hours.' free hours for members', $deduction);
+      }
+
+      // member after free hour 50% reduction
+      // calculate the paid hours by removing previously deducted hours from
+      // rules like discount_by_day and free hours
+      if (!empty($line_item->deducted_days)) {
+        $deduct_hours = $line_item->deducted_days*24;
+      }
+      else {
+        $deduct_hours = 0;
+      }
+      $paid_hours = $hours_days['hours']-$free_hours-$deduct_hours;
+
+      // member after free hour 50% reduction
+      // calculate the paid hours by removing previously deducted hours from
+      // rules like discount_by_day and free hours
+      if ($paid_hours < 0) {
+        $paid_hours = 0;
+      }
+      else {
+        if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
+          $paid_deduction = ($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5);
         }
-        $price_difference = $new_price - $unit_price['amount'];
+        else {
+          $paid_deduction = $paid_hours*($product->commerce_price['und'][0]['amount'] * .5);
+        }
+        $deduction = $deduction + $paid_deduction;
+        commerce_reservations_explain_price($line_item, 'Member 50% off hours over free hours', $paid_deduction);
       }
+
+      if (variable_get('cr_debug_price_rules', 0)) {
+        watchdog('commerce_reservations', 'price_reduction: total discount='.$deduction);
+      }
+      $new_price = $unit_price['amount'] - $deduction;
+      if ($new_price < 0) { 
+        $new_price = 0; 
+      }
+
+      //weird hack for now
+      //$price_difference = $new_price - $unit_price['amount'];
+      $price_difference = $new_price - $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
     }
     $difference = array(
       'amount' => $price_difference,
@@ -351,6 +405,9 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
       'data' => array(),
     );
 
+    if (variable_get('cr_debug_price_rules', 0)) {
+      watchdog('commerce_reservations', 'price_reduction: '.$difference['amount']);
+    }
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $new_price;
     
@@ -384,6 +441,7 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
   while($current_date < $end) {
     $res_day = strtolower(date('l', $current_date)); 
     if ($res_day == $day) {
+      $discount_day = $res_day;
       $deduct_days = $deduct_days + 1;
     }
     $current_date = $current_date + (24*60*60);
@@ -394,6 +452,12 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
     }
     elseif ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
       $new_price = $unit_price['amount'] - ($product->commerce_price['und'][0]['amount']*$deduct_days);
+      if (empty($line_item->deducted_days)) {
+        $line_item->deducted_days = $deduct_days;
+      }
+      else {
+        $line_item->deducted_days = $line_item->deducted_days + $deduct_days;
+      }
     }
     if ($new_price < 0) { $new_price = 0; }
     $price_difference = $new_price - $unit_price['amount'];
@@ -404,6 +468,10 @@ function commerce_reservations_discount_by_day($line_item, $component_name, $rou
       'data' => array(),
     );
 
+    if (variable_get('cr_debug_price_rules', 0)) {
+      watchdog('commerce_reservations', 'discount_by_day: '.$difference['amount']);
+    }
+    commerce_reservations_explain_price($line_item, ucfirst($discount_day). ' discount', $difference['amount']); 
     // Set the amount of the unit price and add the difference as a component.
     $line_item_wrapper->commerce_unit_price->amount = $new_price;
   
@@ -428,4 +496,35 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
     $product_display->user_access_blink = $button_link;
     $product_display->user_access_btext = $button_text;
   }
+}
+
+function commerce_reservations_explain_price($line_item, $text, $value) {
+  if (!empty($value)) { 
+    if (strpos($value, '%') === false && strpos($value, '.') === false) {
+      $value = $value / 100;
+    }
+    if (strpos($value, '%') === false) {
+      $value = money_format('$%i', abs($value));
+    } 
+    if (strpos($text, 'Full price rate') !== false) {
+      $value = '<em>'.$value.'</em>';
+    }
+    if (empty($line_item->price_explanation)) {
+      $line_item->price_explanation = array();
+      $line_item->price_explanation[] = $text . ' : ' . $value; 
+    }
+    else {
+      $line_item->price_explanation[] = $text . ' : ' . $value;
+    }
+    if (!empty($GLOBALS['commerce-line-items'][$line_item->line_item_id])) {
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] .= '<br />'.$text . ' : ' . $value;
+    }
+    else {
+      $GLOBALS['commerce-line-items'][$line_item->line_item_id] = $text . ' : ' . $value;
+    }
+  }
+}
+
+function commerce_reservations_log_price_explanation($line_item, $component_name, $adjustment, $explanation) {
+  commerce_reservations_explain_price($line_item, $explanation, $adjustment);
 }
