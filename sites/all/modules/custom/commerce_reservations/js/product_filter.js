@@ -261,31 +261,52 @@ Drupal.cr = Drupal.cr || {};
         cache : false,
         success : function (data) {
           counter = 0;
+          blockstatus = $.trim($(data).eq(0).data('blocking'));
+          if (blockstatus == 'blocking') {
+            event_class = 'unavailable-time-blocking';
+            event_color = '#CA4F4F';
+            event_label = 'Reserved';
+          }
+          else {
+            event_class = 'unavailable-time';
+            event_color = '#3990C9';
+            event_label = 'Unavailable';
+          }
           $('div.closed-time', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = event_label;
             event.start = $(this).attr('start');
             event.end = $(this).attr('end');
             event.allDay = false;
-            event.className = 'unavailable-time';
-            event.color = '#56a4da';
-            event.backgroundColor = '#3990C9';
-            event.eventBorderColor = '#3990C9';
+            event.className = event_class;
+            event.color = event_color;
+            event.backgroundColor = event_color;
+            event.eventBorderColor = event_color;
             event.textColor = 'white';
             dom_id: this.dom_id;
             $(".fullcalendar").fullCalendar('renderEvent', event, true);
           });
 
+          if (blockstatus == 'blocking') {
+            event_class = 'unavailable-date-blocking';
+            event_color = '#CA4F4F';
+            event_label = 'Reserved';
+          }
+          else {
+            event_class = 'unavailable-date';
+            event_color = '#3990C9';
+            event_label = 'Unavailable';
+          }
           $('div.closed_dates', data).each(function(index){
             event = new Object();
-            event.title = 'Unavailable';
+            event.title = event_label;
             event.start = $(this).attr('date')+' 00:00:00';
             event.end = $(this).attr('date')+' 23:59:59';
             event.allDay = false;
-            event.className = 'unavailable-date';
-            event.color = '#56a4da';
-            event.backgroundColor = '#3990C9';
-            event.eventBorderColor = '#3990C9';
+            event.className = event_class;
+            event.color = event_color;
+            event.backgroundColor = event_color;
+            event.eventBorderColor = event_color;
             event.textColor = 'white';
             dom_id: this.dom_id;
             $(".fullcalendar").fullCalendar('renderEvent', event, true);

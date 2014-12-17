@@ -45,7 +45,7 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
         if (array.length >= 1 && dontCheck == false){
           for(i in array){
             //Check for overlaps
-            if (array[i].className == 'overlap' || array[i].className == 'unavailable-date' || array[i].className == 'unavailable-time'){
+            if (array[i].className == 'overlap' || array[i].className == 'unavailable-date-blocking' || array[i].className == 'unavailable-time-blocking'){
               if(!(array[i].start >= end || array[i].end <= start)){
                 $('.date-status').html('<p class = "error">You cannot make a reservation overlapping time when there are no items available.  Please reselect your times.</p>');
                 $('.view-footer .form-submit').hide();
@@ -56,11 +56,15 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
             //if staff ignore hours
             if (!Drupal.settings.commerce_reservations.staff) {
               //Check for closed days
-              if (array[i].className == 'closed-date'){
+              if (array[i].className == 'closed-date' || array[i].className == 'unavailable-date'){
                 if (array[i].start.getDate() == start.getDate()){
                   if (array[i].start.getMonth() == start.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-                      $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      if (array[i].className == 'closed-date') {
+                        $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      } else if (array[i].className == 'unavailable-date') {
+                        $('.date-status').html('<p class = "error">You cannot pickup or return an item when it is unavailable.</p>');
+                      }
                       $('.view-footer .form-submit').hide();
                       dateInvalid = true;
                     }
@@ -69,19 +73,31 @@ Drupal.fullcalendar.plugins.commerce_reservations = {
                 if (array[i].start.getDate() == end.getDate()){
                   if (array[i].start.getMonth() == end.getMonth()){
                     if (array[i].start.getYear() == start.getYear()){
-                      $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      if (array[i].className == 'closed-date') {
+                        $('.date-status').html('<p class = "error">You cannot pickup or return an item at the studio during a time that we are closed, please select a start time during studio hours.</p>');
+                      } else if (array[i].className == 'unavailable-date') {
+                        $('.date-status').html('<p class = "error">You cannot pickup or return an item when it is unavailable.</p>');
+                      }
                       $('.view-footer .form-submit').hide();
                       dateInvalid = true;
                     }   
                   }
                 }
-              } else if (array[i].className == 'closed-time'){
+              } else if (array[i].className == 'closed-time' || array[i].className == 'unavailable-time'){
                 if (start >= array[i].start && start < array[i].end){
-                  $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  if (array[i].className == 'closed-time') {
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  } else if (array[i].className == 'unavailable-time') {
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item when it is unavailable.</p>');
+                  }
                   $('.view-footer .form-submit').hide();
                   dateInvalid = true;
                 } else if(end >= array[i].start && end < array[i].end){
-                  $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  if (array[i].className == 'closed-time') {
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item during hours the station is closed.</p>');
+                  }else if (array[i].className == 'unavailable-time') {
+                    $('.date-status').html('<p class = "error">You cannot pickup or return an item when it is unavailable.</p>');
+                  }
                   $('.view-footer .form-submit').hide();
                   dateInvalid = true;
                 }
