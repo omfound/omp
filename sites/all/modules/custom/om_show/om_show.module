@@ -413,7 +413,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
   }
   $img_path = om_show_video_image($node);
   $youtube_info = om_show_youtube_info($node);
-  if ($youtube_info['live_status'] || empty($show_field)) {
+  if (($youtube_info['live_status'] && $youtube_info['live_status'] != 'completed') || empty($show_field)) {
     return;
   }
 
@@ -427,6 +427,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       'width' => $playlist_width,
       'height' => $height,
       'autostart' => $autostart,
+      'embedInPoint' => isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE,
     );
 
   }
