@@ -18,6 +18,8 @@ function openmedia_preprocess_html(&$variables) {
 
 function openmedia_preprocess_page(&$variables) {
   drupal_add_library('openmedia', 'typekit');
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/show_readmore.js', array('type' => 'file', 'group' => JS_THEME));
+
   if ($variables['is_front']) {
     if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
       if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
@@ -255,6 +257,8 @@ function openmedia_preprocess_node__class_display(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_node__om_show(&$variables) {
+  drupal_add_library('openmedia', 'readmore');
+
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
     $file = file_load($variables['picture']);

@@ -42,7 +42,7 @@
       </div>
     </div>
     <?php if (isset($description)): ?>
-      <div id="description" class="divider show-hide">
+      <div id="description" class="divider">
         <div class="inner">
           <?php print $description; ?>
         </div>
