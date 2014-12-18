@@ -286,7 +286,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
     $current_amount = $unit_price['amount'];
     $difference = array(
-      'amount' => $updated_price,
+      'amount' => $updated_price - $current_amount,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
@@ -395,9 +395,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $new_price = 0; 
       }
 
-      //weird hack for now
-      //$price_difference = $new_price - $unit_price['amount'];
-      $price_difference = $new_price - $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+      $price_difference = $new_price - $unit_price['amount'];
     }
     $difference = array(
       'amount' => $price_difference,
