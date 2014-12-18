@@ -287,6 +287,8 @@
 
 .node-type-om-show #show-details-right #author {
   float: none;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .node-type-om-show #show-details-right #author a:link,
