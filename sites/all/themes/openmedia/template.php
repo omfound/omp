@@ -314,7 +314,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['locally_produced'] = 'Local Production';
   }
   if (!empty($variables['node']->field_om_theme[$variables['language']][0])) {
-    $show_theme = 'in ';
+    $show_theme = 'in Theme Block ';
     foreach ($variables['node']->field_om_theme[$variables['language']] AS $term) {
       $full_term = taxonomy_term_load($term['tid']);
       $show_theme .= $full_term->name . ', ';
