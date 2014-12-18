@@ -2,7 +2,7 @@
   Drupal.behaviors.ShowReadMore =  {
     attach : function(context, settings) {
       $('#description').readmore({
-        maxHeight: 175,
+        maxHeight: 100,
         moreLink: '<a href="#">Read more &raquo;</a>'
       });
     }
