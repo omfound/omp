@@ -90,6 +90,14 @@ function openmedia_library() {
         drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
       )
     ),
+    'readmore' => array(
+      'title' => 'Readmore JS',
+      'website' => 'https://github.com/jedfoster/Readmore.js',
+      'version' => '1',
+      'js' => array(
+        drupal_get_path('theme', 'openmedia') . '/js/readmore.min.js' => array(),
+      )
+    ),
   );
 }
 
