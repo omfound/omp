@@ -249,16 +249,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
            initiate.on200 = function(xhr){
 
-              var match = xhr.response.match(/<UploadId\>(.+)<\/UploadId\>/);
-              if (match && match[1]){
-                 me.uploadId = match[1];
-                 l.d('requester success. got uploadId ' + me.uploadId);
+              //var match = xhr.response.match(/<UploadId\>(.+)<\/UploadId\>/);
+              //if (match && match[1]){
+                 //me.uploadId = match[1];
+                 //l.d('requester success. got uploadId ' + me.uploadId);
+                 l.d('starting multi upload');
                  makeParts();
                  processPartsList();
-              }else{
-                console.log('brian2');
-                 initiate.onErr();
-              }
+              //}else{
+                // initiate.onErr();
+              //}
            };
 
            setupRequest(initiate);
@@ -630,12 +630,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                  if (xhr.readyState == 4){
 
                     if(payload){l.d('  ### ' + payload.size);} // Test, per http://code.google.com/p/chromium/issues/detail?id=167111#c20
-                    if (xhr.status == 200){
+                    //if (xhr.status == 200){
                        requester.on200(xhr);
-                    } else {
-                      console.log('brian1');
-                       requester.onErr(xhr);
-                    }
+                    //} else {
+                       //console.log('brian1');
+                       //requester.onErr(xhr);
+                    //}
                  }
               };
 
