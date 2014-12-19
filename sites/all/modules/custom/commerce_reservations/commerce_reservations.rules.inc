@@ -381,7 +381,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $paid_hours = 0;
       }
       else {
-        watchdog('commerce_reservations', 'paid hours: '.$paid_hours);
         if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
           $paid_deduction = ($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5);
         }
@@ -503,7 +502,7 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
 
 function commerce_reservations_explain_price($line_item, $text, $value) {
   if (!empty($value)) { 
-    if (strpos($value, '%') === false && strpos($value, '.') === false) {
+    if (strpos($value, '%') === false) {
       $value = $value / 100;
     }
     if (strpos($value, '%') === false) {
