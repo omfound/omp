@@ -258,6 +258,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                  makeParts();
                  processPartsList();
               }else{
+                 console.log('firing error...');
                  initiate.onErr();
               }
            };
