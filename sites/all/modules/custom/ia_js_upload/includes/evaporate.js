@@ -610,7 +610,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               }
 
               xhr.open(requester.method, url);
-              xhr.setRequestHeader('Authorization', 'AWS ' + con.aws_key + ':' + requester.auth);
+              //brian HACK
+              //xhr.setRequestHeader('Authorization', 'AWS ' + con.aws_key + ':' + requester.auth);
+              xhr.setRequestHeader('Authorization', 'LOW R7zRpLa4J2Gceu7k:9Oe9KFJOaJW05MEn');
 
               for (var key in all_headers) {
                  if (all_headers.hasOwnProperty(key)) {
@@ -642,7 +644,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                     requester.onProgress(evt);
                  };
               }
-              console.log(payload);
               xhr.send(payload);
            };
 
