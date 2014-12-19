@@ -818,6 +818,14 @@ function openmedia_preprocess_views_view_fields(&$variables) {
 }
 
 function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
+  openmedia_improved_thumbnail($vars);
+}
+
+function openmedia_preprocess_views_view_fields__project_show_list(&$vars) {
+  openmedia_improved_thumbnail($vars);
+}
+
+function openmedia_improved_thumbnail(&$vars) {
   $view = $vars['view'];
   if ($view->name == 'show_grid') {
     if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
