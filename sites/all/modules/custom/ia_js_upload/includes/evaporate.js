@@ -284,7 +284,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
            upload = {
               method: 'PUT',
-              path: getPath() + '?partNumber='+partNumber+'&uploadId='+me.uploadId,
+              //path: getPath() + '?partNumber='+partNumber+'&uploadId='+me.uploadId,
+              path: getPath(),
               step: 'upload #' + partNumber,
               x_amz_headers: me.xAmzHeadersAtUpload,
               attempts: part.attempts
