@@ -10,6 +10,7 @@
 
       $('#files').change(function(evt){
         files = evt.target.files;
+        console.log(files);
         for (var i = 0; i < files.length; i++){
           evap.add({
             name: 'test_' + Math.floor(1000000000*Math.random()),
