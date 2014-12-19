@@ -326,7 +326,12 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-    $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
+    if (!empty($free_hours)) {
+      $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
+    }
+    else {
+      $free_hours = 0;
+    }
 
     if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
       $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
