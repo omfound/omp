@@ -22,6 +22,12 @@
             complete: function(){
               console.log('complete................yay!');
             },
+            warn: function(msg){
+              console.log('warning: ' + msg);
+            },
+            error: function(msg){
+              console.log('error: ' + msg);
+            },
             progress: function(progress){
               console.log('making progress: ' + progress);
             }
