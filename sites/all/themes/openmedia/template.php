@@ -823,6 +823,7 @@ function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
 
 function openmedia_preprocess_views_view_fields__project_show_list(&$vars) {
   openmedia_improved_thumbnail($vars);
+  dsm($vars);
 }
 
 function openmedia_improved_thumbnail(&$vars) {
