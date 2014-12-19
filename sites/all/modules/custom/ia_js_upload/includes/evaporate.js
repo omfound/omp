@@ -409,7 +409,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
            var complete = {
               method: 'POST',
               contentType: 'application/xml; charset=UTF-8',
-              path: getPath() + '?uploadId='+me.uploadId,
+              //path: getPath() + '?uploadId='+me.uploadId,
+              path: getpath(),
               x_amz_headers: me.xAmzHeadersAtComplete,
               step: 'complete'
            };
