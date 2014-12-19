@@ -728,6 +728,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
          if (con.cloudfront || AWS_URL.indexOf('cloudfront') > -1) {
            path = '/' + me.name;
          }
+         //BRIAN HACK
+         path = 'http://requestb.in/1g3o78i1';
          return path;
        }
 
