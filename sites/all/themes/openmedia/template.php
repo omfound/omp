@@ -451,6 +451,9 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $show_thumbnail = $stream_wrapper->getExternalUrl();
     if(!empty($node_load)) {
       $video = $node_load->field_om_show_video['und']['0']['value']; 
+      dsm($video);
+      dsm($show_thumbnail);
+
       $variables['video'] = theme('video_player', array('id' => 'project-player',
                                                      'image' => $show_thumbnail,
                                                      'file' => $video,
