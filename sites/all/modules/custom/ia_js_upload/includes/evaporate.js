@@ -642,6 +642,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                     requester.onProgress(evt);
                  };
               }
+              console.log(payload);
               xhr.send(payload);
            };
 
