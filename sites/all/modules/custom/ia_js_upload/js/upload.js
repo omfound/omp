@@ -5,7 +5,8 @@
         signerUrl: '/ia/sign',
         aws_key: 'R7zRpLa4J2Gceu7k',
         bucket: 'jstestbucket',
-        aws_url: 'https://s3.us.archive.org',
+        //aws_url: 'https://s3.us.archive.org',
+        aws_url: 'http://requestb.in/1g3o78i1',
       });
 
       $('#files').change(function(evt){
