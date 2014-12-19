@@ -410,7 +410,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               method: 'POST',
               contentType: 'application/xml; charset=UTF-8',
               //path: getPath() + '?uploadId='+me.uploadId,
-              path: getpath(),
+              path: getPath(),
               x_amz_headers: me.xAmzHeadersAtComplete,
               step: 'complete'
            };
