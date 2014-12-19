@@ -326,7 +326,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-    if (!empty($free_hours)) {
+    if (!empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
       $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
     }
     else {
