@@ -827,21 +827,18 @@ function openmedia_preprocess_views_view_fields__project_show_list(&$vars) {
 
 function openmedia_improved_thumbnail(&$vars) {
   $view = $vars['view'];
-  if ($view->name == 'show_grid') {
-    if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
-      if (!empty($vars['fields']['field_om_show_video']->content)) {
-        if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
-          if (!empty($_SERVER['HTTP_X_SSL'])) {
-            $url = str_replace('http', 'https', $url);
-          }
-          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
-          $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
-          $content = '<div class="field-content">';
-          $content .= $url;
-          $content .= '</div>';
-          $vars['fields']['field_show_thumbnail']->content = $content;
-          dsm($content);
+  if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
+    if (!empty($vars['fields']['field_om_show_video']->content)) {
+      if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
+        if (!empty($_SERVER['HTTP_X_SSL'])) {
+          $url = str_replace('http', 'https', $url);
         }
+        $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
+        $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
+        $content = '<div class="field-content">';
+        $content .= $url;
+        $content .= '</div>';
+        $vars['fields']['field_show_thumbnail']->content = $content;
       }
     }
   }
