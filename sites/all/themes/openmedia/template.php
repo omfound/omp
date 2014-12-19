@@ -303,6 +303,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid.'/edit', $options);
   }
   // Show details area (name and picture are already included in vars)
+  $variables['name'] = strip_tags($variables['name']);
   $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
   $stats = statistics_get($variables['node']->nid);
   $variables['view_count'] = $stats['totalcount'] . ' Views';
