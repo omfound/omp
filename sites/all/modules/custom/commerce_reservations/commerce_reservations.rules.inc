@@ -266,15 +266,13 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
     $hours_days = commerce_reservations_hours_days($start, $end);
-    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 24; 
     $day_rate = $product->commerce_price['und'][0]['amount'];
     
     $day_cost = $hours_days['days']*$day_rate;
     if ($hours_days['hours'] > 24) {
-      if ($hours_days['remainder_hours'] < 8) {
+      if (!empty($hours_days['remainder_hours'])) {
         $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
-      }else{
-        $hour_cost = $day_rate;
       }
     }
 
