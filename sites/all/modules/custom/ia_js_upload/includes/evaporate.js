@@ -231,7 +231,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
            var initiate = {
               method: 'POST',
-              path: getPath() + '?uploads',
+              //path: getPath() + '?uploads',
+              path: getPath(),
               step: 'initiate',
               x_amz_headers: me.xAmzHeadersAtInitiate,
               not_signed_headers: me.notSignedHeadersAtInitiate
