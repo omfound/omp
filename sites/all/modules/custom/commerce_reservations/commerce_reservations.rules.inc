@@ -296,7 +296,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $difference['amount']);
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $updated_price);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
