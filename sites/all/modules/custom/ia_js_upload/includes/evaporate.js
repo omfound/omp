@@ -427,6 +427,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               return;
            }
 
+           if (me.status == COMPLETE) {
+             console.log('all done');
+             return;
+           }
+
            parts.forEach(function(part,i){
 
               var requiresUpload = false;
