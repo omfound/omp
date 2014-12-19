@@ -243,15 +243,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
            }
 
            initiate.onErr = function(xhr){
-             console.log('hi its brian');
-              l.d('onInitiateError for FileUpload2 ' + me.id);
+              l.d('onInitiateError for FileUpload ' + me.id);
               setStatus(ERROR);
            };
 
            initiate.on200 = function(xhr){
 
-              console.log('Response:');
-              console.log(xhr.response);
               var match = xhr.response.match(/<UploadId\>(.+)<\/UploadId\>/);
               if (match && match[1]){
                  me.uploadId = match[1];
@@ -259,7 +256,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                  makeParts();
                  processPartsList();
               }else{
-                 console.log('firing error...');
+                console.log('brian2');
                  initiate.onErr();
               }
            };
@@ -636,6 +633,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                     if (xhr.status == 200){
                        requester.on200(xhr);
                     } else {
+                      console.log('brian1');
                        requester.onErr(xhr);
                     }
                  }
