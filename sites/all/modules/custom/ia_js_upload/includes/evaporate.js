@@ -729,7 +729,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
            path = '/' + me.name;
          }
          //BRIAN HACK
-         path = 'http://requestb.in/1g3o78i1';
+         path = '/';
          return path;
        }
 
