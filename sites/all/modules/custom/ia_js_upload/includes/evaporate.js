@@ -243,7 +243,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
            }
 
            initiate.onErr = function(xhr){
-              l.d('onInitiateError for FileUpload ' + me.id);
+             console.log('hi its brian');
+              l.d('onInitiateError for FileUpload2 ' + me.id);
               setStatus(ERROR);
            };
 
