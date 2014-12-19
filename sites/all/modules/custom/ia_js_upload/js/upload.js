@@ -11,9 +11,8 @@
       $('#files').change(function(evt){
         files = evt.target.files;
         for (var i = 0; i < files.length; i++){
-          console.log(files[i].name);
           evap.add({
-            name: 'test_' + Math.floor(1000000000*Math.random()),
+            name: Math.floor(1000000000*Math.random()) + '_' + files[i].name,
             file: files[i],
             xAmzHeadersAtInitiate : {
               'x-archive-auto-make-bucket': '1',
