@@ -376,7 +376,8 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $variables['logo'] = theme('image_style', array('style_name' => '220x135', 'path' => $variables['node']->field_om_project_logo[$variables['node']->language][0]['uri']));
   }
   // Body
-  $variables['description'] = $variables['content']['body'];
+  dsm($variables['content']['body']);
+  $variables['description'] = drupal_render($variables['content']['body']);
   if (str_word_count($variables['description']) > 70 ) {
     $variables['read_more'] = '<p class="read-more-button">Read More</p>';
   }
