@@ -18,7 +18,6 @@ function openmedia_preprocess_html(&$variables) {
 
 function openmedia_preprocess_page(&$variables) {
   drupal_add_library('openmedia', 'typekit');
-  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/show_readmore.js', array('type' => 'file', 'group' => JS_THEME));
 
   if ($variables['is_front']) {
     if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
@@ -258,6 +257,7 @@ function openmedia_preprocess_node__class_display(&$variables) {
  */
 function openmedia_preprocess_node__om_show(&$variables) {
   drupal_add_library('openmedia', 'readmore');
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/show_readmore.js', array('type' => 'file', 'group' => JS_THEME));
 
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
@@ -451,8 +451,6 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $show_thumbnail = $stream_wrapper->getExternalUrl();
     if(!empty($node_load)) {
       $video = $node_load->field_om_show_video['und']['0']['value']; 
-      dsm($video);
-      dsm($show_thumbnail);
 
       $variables['video'] = theme('video_player', array('id' => 'project-player',
                                                      'image' => $show_thumbnail,
