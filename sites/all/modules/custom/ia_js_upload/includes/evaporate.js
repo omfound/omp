@@ -324,9 +324,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
            upload.on200 = function (xhr){
 
-              var eTag = xhr.getResponseHeader('ETag'), msg;
-              l.d('uploadPart 200 response for part #' + partNumber + '     ETag: ' + eTag);
-              if(part.isEmpty || (eTag != ETAG_OF_0_LENGTH_BLOB)) // issue #58
+              l.d('uploadPart 200 response for part #' + partNumber);
+              if(part.isEmpty) // issue #58
               { 
                  part.eTag = eTag;
                  part.status = COMPLETE;
@@ -395,44 +394,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         function completeUpload(){ //http://docs.amazonwebservices.com/AmazonS3/latest/API/mpUploadComplete.html
 
-           l.d('completeUpload');
-           me.info('will attempt to complete upload');
-
-           var completeDoc = '<CompleteMultipartUpload>';
-           parts.forEach(function(part,partNumber){
-              if (part){
-                 completeDoc += '<Part><PartNumber>' + partNumber + '</PartNumber><ETag>' + part.eTag + '</ETag></Part>';
-              }
-           });
-           completeDoc += '</CompleteMultipartUpload>';
-
-           var complete = {
-              method: 'POST',
-              contentType: 'application/xml; charset=UTF-8',
-              //path: getPath() + '?uploadId='+me.uploadId,
-              path: getPath(),
-              x_amz_headers: me.xAmzHeadersAtComplete,
-              step: 'complete'
-           };
-
-           complete.onErr = function (){
-              var msg = 'Error completing upload.';
-              l.w(msg);
-              me.error(msg);
-              setStatus(ERROR);
-           };
-
-           complete.on200 = function(xhr){
-              me.complete(xhr);
-              setStatus(COMPLETE);
-           };
-
-           complete.toSend = function() {
-              return completeDoc;
-           };
-
-           setupRequest(complete);
-           authorizedSend(complete);
+          console.log('upload completed');
         }
 
 
