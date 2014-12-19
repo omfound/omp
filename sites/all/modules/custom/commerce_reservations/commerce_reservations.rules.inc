@@ -342,7 +342,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     else {
       return;
     }
-    //if more than 1 day, discount by 1 day
     if ($free_hours >= $hours_days['hours']) {
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
@@ -382,6 +381,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $paid_hours = 0;
       }
       else {
+        watchdog('commerce_reservations', 'paid hours: '.$paid_hours);
         if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
           $paid_deduction = ($paid_hours/24)*($product->commerce_price['und'][0]['amount'] * .5);
         }
