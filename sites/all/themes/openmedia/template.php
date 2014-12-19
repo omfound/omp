@@ -827,10 +827,9 @@ function openmedia_preprocess_views_view_fields__project_show_list(&$vars) {
 
 function openmedia_improved_thumbnail(&$vars) {
   $view = $vars['view'];
-  dsm($vars['fields']);
   if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
-    if (!empty($vars['fields']['field_om_show_video']->content)) {
-      dsm('here2');
+    $node = node_load($vars['fields']['field_show_thumbnail']->raw);
+    if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
       if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
         if (!empty($_SERVER['HTTP_X_SSL'])) {
           $url = str_replace('http', 'https', $url);
