@@ -325,6 +325,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
            upload.on200 = function (xhr){
 
               l.d('uploadPart 200 response for part #' + partNumber);
+              part.status = COMPLETE;
+              /**
               if(part.isEmpty) // issue #58
               { 
                  part.eTag = eTag;
@@ -337,7 +339,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                  msg = 'eTag matches MD5 of 0 length blob for part #' + partNumber  + '   Retrying part.';
                  l.w(msg);
                  me.warn(msg);
-              }
+              }**/
               processPartsList();
            };
 
