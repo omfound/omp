@@ -1439,9 +1439,11 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $checkout_status = commerce_reservations_product_checkout_status($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $line_id);
   if ($checkout_status == 'Awaiting Checkout') {
+    dsm('Swapping Line Item Product IDS');
     $reservations = commerce_reservations_product_reservations($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $line_id);
     reset($reservations);
     $second_lid = key($reservations);
+    dsm('First LID: '.$line_id.', Second LID: '.$second_lid);
     commerce_reservations_line_item_product_swap($line_id, $second_lid);
   }
 
