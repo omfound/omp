@@ -627,7 +627,7 @@ function om_agenda_manager_clean_string($string) {
     }
   }
 
-  $clean = html_entity_decode($clean);
+  $clean = decode_entities($clean);
   return $clean;
 }
 
