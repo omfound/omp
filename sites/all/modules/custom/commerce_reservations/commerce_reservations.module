@@ -1455,8 +1455,8 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
  $cli_select_query = "SELECT * FROM {commerce_line_item} WHERE line_item_id = :lid";
  $first_cli = db_query($cli_select_query, array(':lid' => $first_lid))->fetchAssoc();
  $second_cli = db_query($cli_select_query, array(':lid' => $second_lid))->fetchAssoc();
- $first_cli_original_data = unserialize($first_cli->data);
- $second_cli_original_data = unserialize($second_cli->data);
+ $first_cli_original_data = unserialize($first_cli['data']);
+ $second_cli_original_data = unserialize($second_cli['data']);
 
  $fdcp_select_query = "SELECT * FROM {field_data_commerce_product} WHERE entity_id = :lid";
  $first_fdcp = db_query($fdcp_select_query, array(':lid' => $first_lid))->fetchAssoc();
@@ -1472,7 +1472,7 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
 
  $new_first = db_update('commerce_line_item')
    ->fields(array(
-     'line_item_label' => $second_cli->line_item_label,
+     'line_item_label' => $second_cli['line_item_label'],
      'data' => $first_cli_new_data,
    ))
    ->condition('line_item_id', $first_lid, '=')
@@ -1486,7 +1486,7 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
 
  $new_second = db_update('commerce_line_item')
    ->fields(array(
-     'line_item_label' => $first_cli->line_item_label,
+     'line_item_label' => $first_cli['line_item_label'],
      'data' => $second_cli_new_data,
    ))
    ->condition('line_item_id', $second_lid, '=')
