@@ -1479,7 +1479,7 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
    ->execute();
  $new_first = db_update('field_data_commerce_product')
    ->fields(array(
-     'commerce_product_product_id' => $second_fdcp->commerce_product_product_id,
+     'commerce_product_product_id' => $second_fdcp['commerce_product_product_id'],
    ))
    ->condition('entity_id', $first_lid, '=')
    ->execute();
@@ -1493,7 +1493,7 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
    ->execute();
  $new_second = db_update('field_data_commerce_product')
    ->fields(array(
-     'commerce_product_product_id' => $first_fdcp->commerce_product_product_id,
+     'commerce_product_product_id' => $first_fdcp['commerce_product_product_id'],
    ))
    ->condition('entity_id', $second_lid, '=')
    ->execute();
