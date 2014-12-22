@@ -624,7 +624,7 @@ function om_agenda_manager_clean_string($string) {
       //"ÃÂ¢ÃÂÃÂ" => '-',
     );
 
-    watchdog('brian', utf8_encode($clean));
+    watchdog('brian', htmlentities(utf8_encode($clean)));
     foreach ($removables as $remove => $replace) {
       $clean = str_replace($remove, $replace, utf8_encode($clean));
     }
