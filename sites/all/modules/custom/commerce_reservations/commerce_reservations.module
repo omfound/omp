@@ -1361,13 +1361,11 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     $product_options[] = $available_item->sku;
   }
 
-  $default_product_option = 0;
   if (!empty($line_item->commerce_product['und'][0]['product_id'])) {
-    foreach ($product_options as $key => $sku) {
-      if ($sku == $line_item_wrapper->commerce_product->sku->value()) {
-        $default_product_option = $key;
-      }
-    }
+    $default_product_option = $line_item_wrapper->commerce_product->sku->value();
+  }
+  else {
+    $default_product_option = 0;
   }
 
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
