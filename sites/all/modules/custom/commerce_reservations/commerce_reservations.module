@@ -1451,6 +1451,54 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   $form_state['redirect'] = 'administer_reservations';
 }
 
+function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
+ $cli_select_query = "SELECT * FROM {commerce_line_item} WHERE line_item_id = :lid";
+ $first_cli = db_query($cli_select_query, array(':lid' => $first_lid))->fetchAssoc();
+ $second_cli = db_query($cli_select_query, array(':lid' => $second_lid))->fetchAssoc();
+ $first_cli_original_data = unserialize($first_cli->data);
+ $second_cli_original_data = unserialize($second_cli->data);
+
+ $fdcp_select_query = "SELECT * FROM {commerce_line_item} WHERE entity_id = :lid";
+ $first_fdcp = db_query($fdcp_select_query, array(':lid' => $first_lid))->fetchAssoc();
+ $second_fdcp = db_query($fdcp_select_query, array(':lid' => $second_lid))->fetchAssoc();
+
+ $first_cli_new_data = $first_cli_original_data;
+ $second_cli_new_data = $second_cli_original_data;
+
+ $first_cli_new_data['context']['product_ids'] = $second_cli_original_data['context']['product_ids'];
+ $second_cli_new_data['context']['product_ids'] = $first_cli_original_data['context']['product_ids'];
+ $first_cli_new_data = serialize($first_cli_new_data);
+ $second_cli_new_data = serialize($second_cli_new_data);
+
+ $new_first = db_update('commerce_line_item')
+   ->fields(array(
+     'line_item_label' => $second_cli->line_item_label,
+     'data' => $first_cli_new_data,
+   ))
+   ->condition('line_item_id', $first_lid, '=')
+   ->execute();
+ $new_first = db_update('field_data_commerce_product')
+   ->fields(array(
+     'commerce_product_product_id' => $second_fdcp->commerce_product_product_id,
+   ))
+   ->condition('entity_id', $first_lid, '=')
+   ->execute();
+
+ $new_second = db_update('commerce_line_item')
+   ->fields(array(
+     'line_item_label' => $first_cli->line_item_label,
+     'data' => $second_cli_new_data,
+   ))
+   ->condition('line_item_id', $second_lid, '=')
+   ->execute();
+ $new_second = db_update('field_data_commerce_product')
+   ->fields(array(
+     'commerce_product_product_id' => $first_fdcp->commerce_product_product_id,
+   ))
+   ->condition('entity_id', $second_lid, '=')
+   ->execute();
+}
+
 function commerce_reservations_cancel_reservation_access($lid) {
   global $user;
   $line_item = commerce_line_item_load($lid);
