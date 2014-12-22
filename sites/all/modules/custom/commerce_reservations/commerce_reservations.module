@@ -1361,6 +1361,15 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     $product_options[] = $available_item->sku;
   }
 
+  $default_product_option = 0;
+  if (!empty($line_item->commerce_product['und'][0]['product_id'])) {
+    foreach ($product_options as $key => $sku) {
+      if ($sku == $line_item->commerce_product['und'][0]['sku']) {
+        $default_product_option = $key;
+      }
+    }
+  }
+
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
   $accessories = array();
@@ -1385,12 +1394,11 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a'),
   );
 
-  dsm($line_item_wrapper->commerce_product->value());
   $form['product_picker'] = array(
     '#type' => 'select',
     '#title' => 'Which ' . $product_display_wrapper->title->value() .  ' is the user checking out?',
     '#options' => drupal_map_assoc($product_options),
-    '#default_value' => 0
+    '#default_value' => $default_product_option,
   );
   if (count($accessories) > 0) {
     $form['accessories'] = array(
