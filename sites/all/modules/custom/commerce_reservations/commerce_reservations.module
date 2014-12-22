@@ -1428,6 +1428,7 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
 }
 
 function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
+  dsm($form_state);
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
