@@ -1366,7 +1366,7 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     $default_product_option = $line_item_wrapper->commerce_product->sku->value();
   }
   else {
-    $default_product_option = 0;
+    $default_product_option = $product_options[0];
   }
 
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
