@@ -2367,7 +2367,8 @@ function commerce_reservations_entity_presave($entity, $type) {
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
     }
-    dsm('Product SKU: '.$entity->commerce_product[LANGUAGE_NONE][0]['sku']);
+    dsm($entity);
+    dsm('Product SKU: '.$entity->commerce_product[LANGUAGE_NONE][0]);
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
     dsm('Checkout Status: '.$checkout_status);
     if ($checkout_status != 'Available') {
