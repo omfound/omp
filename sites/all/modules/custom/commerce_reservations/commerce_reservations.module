@@ -1362,7 +1362,7 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
   }
 
   $default_product_option = 0;
-  dsm($line_item->commerce_product);
+  dsm($line_item_wrapper->commerce_product->sku->value());
   /**
   if (!empty($line_item->commerce_product['und'][0]['product_id'])) {
     foreach ($product_options as $key => $sku) {
