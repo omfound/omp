@@ -1445,6 +1445,8 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
     $second_lid = key($reservations);
     dsm('First LID: '.$line_id.', Second LID: '.$second_lid);
     commerce_reservations_line_item_product_swap($line_id, $second_lid);
+    $line_item = commerce_line_item_load($line_id);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   }
 
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
