@@ -1340,9 +1340,9 @@ function commerce_reservations_line_item_checkout($form, &$form_state, $llid) {
 }
 
 function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
-  dsm($line_item_wrapper->commerce_product->sku->value());
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  dsm($line_item_wrapper->commerce_product->sku->value());
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $account = user_load($order_wrapper->uid->value());
