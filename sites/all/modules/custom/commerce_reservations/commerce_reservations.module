@@ -2332,7 +2332,7 @@ function commerce_reservations_build_form($form_id) {
 }
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
-  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id);
   $reservation_status = 'Available';
   foreach ($reservations as $reservation) {
     if ($reservation->field_checkout_status_value == 'Checked Out' || $reservation->field_checkout_status_value == 'Overdue') {
