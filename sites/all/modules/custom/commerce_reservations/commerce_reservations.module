@@ -1384,6 +1384,8 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
   $form['lid'] = array(
     '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a'),
   );
+
+  dsm($line_item_wrapper->commerce_product->value());
   $form['product_picker'] = array(
     '#type' => 'select',
     '#title' => 'Which ' . $product_display_wrapper->title->value() .  ' is the user checking out?',
