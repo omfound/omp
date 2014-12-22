@@ -1342,7 +1342,6 @@ function commerce_reservations_line_item_checkout($form, &$form_state, $llid) {
 function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  dsm($line_item_wrapper->commerce_product->sku->value());
   $order = commerce_order_load($line_item_wrapper->order_id->value());
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $account = user_load($order_wrapper->uid->value());
@@ -2368,6 +2367,10 @@ function commerce_reservations_entity_presave($entity, $type) {
       $exclude_id = $entity->line_item_id;
     }
     dsm('Product SKU: '.$entity->line_item_label);
+
+    // Need to add logic here, basically if a product ID is in "Awaiting Checkout" state, then we need to see
+    // if another line item at same date and time in awaiting checkout exists and if so swap them
+    // BRIAN HERE
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
     dsm('Checkout Status: '.$checkout_status);
     if ($checkout_status != 'Available') {
