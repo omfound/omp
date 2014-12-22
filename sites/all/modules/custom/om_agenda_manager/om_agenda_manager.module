@@ -595,12 +595,10 @@ function om_agenda_manager_parse_agenda($text) {
       }
     }
 
-    //byte order mark...
-    $bom = "ï»¿";
     if ($active) {
-      $clean = trim($info);
+      $clean = om_agenda_manager_clean_string($info);
       if (!empty($clean)) {
-        $agenda_lines[] = str_replace($bom, '', utf8_encode($clean)); 
+        $agenda_lines[] = $clean; 
       }
     }
 
@@ -612,6 +610,19 @@ function om_agenda_manager_parse_agenda($text) {
   }
 
   return $agenda_lines;
+}
+
+function om_agenda_manager_clean_string($string) {
+  $clean = trim($string);
+
+  if (!empty($clean)) {
+    $removables = array("ï»¿","â¢");
+    foreach ($removables as $remove) {
+      $clean = str_replace($remove, '', utf8_encode($clean));
+    }
+  }
+
+  return $clean;
 }
 
 function om_agenda_manager_livestream_info() {
