@@ -618,6 +618,7 @@ function om_agenda_manager_clean_string($string) {
   if (!empty($clean)) {
     $removables = array(
       "ï»¿" => '',
+      "â" => '',
       //"â¢" => '',
       //"Ã¢ÂÂ¢" => '-',
       //"ÃÂ¢ÃÂÃÂ" => '-',
