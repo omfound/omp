@@ -1511,6 +1511,8 @@ function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
    ))
    ->condition('entity_id', $second_lid, '=')
    ->execute();
+
+ field_cache_clear();
 }
 
 function commerce_reservations_cancel_reservation_access($lid) {
