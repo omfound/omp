@@ -1435,16 +1435,20 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
 
-  //BRIAN
+  // reservations admins can change product assignment on line items using
+  // the prep button, the following checks to see if the chosen product is already
+  // temporarily assigned to another line item and if so swaps them so that
+  // the change can get past commerce_reservations_entity_presave 
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $checkout_status = commerce_reservations_product_checkout_status($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
   if ($checkout_status == 'Awaiting Checkout') {
-    dsm('Swapping Line Item Product IDS');
     $reservations = commerce_reservations_product_reservations($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
     reset($reservations);
     $second_lid = key($reservations);
-    dsm('First LID: '.$line_id.', Second LID: '.$second_lid);
     commerce_reservations_line_item_product_swap($line_id, $second_lid);
+
+    // reload the line item since the swap function made changes directly
+    // to the db to avoid commerce_reservations_entity_presave
     $line_item = commerce_line_item_load($line_id);
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   }
@@ -1465,6 +1469,11 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   $form_state['redirect'] = 'administer_reservations';
 }
 
+/**
+ * Takes two commerce line item ids and swaps their assigned products
+ * Intentionally avoids saving the line item in preference for direct
+ * database update to bypass existing protections in commerce_reservations_entity_presave
+ */
 function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
  $cli_select_query = "SELECT * FROM {commerce_line_item} WHERE line_item_id = :lid";
  $first_cli = db_query($cli_select_query, array(':lid' => $first_lid))->fetchAssoc();
@@ -2421,6 +2430,12 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
 //by the time it gets to the line item save -- basically the same sku will get assigned
 //because no available sku will be found. It shouldn't be possible but at some point
 //we should probably make this fail if no swap_product_id is found...
+/*
+ * Implementation of hook_entity_presave
+ * This is the gatekeeper for all commerce reservations line item saves
+ * to prevent the same product from being assigned in the same time period
+ * i.e. overlapping reservations of the same item
+ */
 function commerce_reservations_entity_presave($entity, $type) {
   if ($type == 'commerce_line_item' && $entity->type == 'reservable_product') {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
@@ -2430,18 +2445,12 @@ function commerce_reservations_entity_presave($entity, $type) {
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
     }
-    dsm('Product SKU: '.$entity->line_item_label);
 
-    // Need to add logic here, basically if a product ID is in "Awaiting Checkout" state, then we need to see
-    // if another line item at same date and time in awaiting checkout exists and if so swap them
-    // BRIAN HERE
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
-    dsm('Checkout Status: '.$checkout_status);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();
       $exclude_ids[] = $product_id;
       $swap_product_id = commerce_reservations_available_product_id($product_id, $start_date, $end_date, $exclude_ids);
-      dsm('Swapping to: '.$swap_product_id);
       if ($swap_product_id) {
         $swap_product = commerce_product_load($swap_product_id);
         $entity->commerce_product[LANGUAGE_NONE][0]['product_id'] = $swap_product_id;
