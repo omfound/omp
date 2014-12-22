@@ -616,9 +616,14 @@ function om_agenda_manager_clean_string($string) {
   $clean = trim($string);
 
   if (!empty($clean)) {
-    $removables = array("ï»¿","â¢","Ã¢ÂÂ¢");
-    foreach ($removables as $remove) {
-      $clean = str_replace($remove, '', utf8_encode($clean));
+    $removables = array(
+      "ï»¿" => '',
+      "â¢" => '',
+      "Ã¢ÂÂ¢" => '-',
+    );
+
+    foreach ($removables as $remove => $replace) {
+      $clean = str_replace($remove, $replace, utf8_encode($clean));
     }
   }
 
