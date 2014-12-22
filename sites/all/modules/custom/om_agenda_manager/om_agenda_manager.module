@@ -385,12 +385,14 @@ function om_agenda_manager_admin_form() {
     '#type' => 'textfield',
     '#title' => t('Start marker for agenda parsing:'),
     '#default_value' => variable_get('om_agenda_start_marker', ''),
+    '#description'  => t('Multiple items can be included separated by a comma'),
   );
 
   $form['om_agenda_end_marker'] = array(
     '#type' => 'textfield',
     '#title' => t('End marker for agenda parsing:'),
     '#default_value' => variable_get('om_agenda_end_marker', ''),
+    '#description'  => t('Multiple items can be included separated by a comma'),
   );
 
 
@@ -571,16 +573,14 @@ function om_agenda_manager_parse_agenda($text) {
     );
   }
   else {
-    $start_matches = array(
-      variable_get('om_agenda_start_marker', ''),
-    );
+    $start_matches = explode(',', variable_get('om_agenda_start_marker', ''));
   }
 
   if (!variable_get('om_agenda_end_marker', '')) {
-    $end_match = 'ADJOURNMENT';
+    $end_matches = 'ADJOURNMENT';
   }
   else {
-    $end_match = variable_get('om_agenda_end_marker', '');
+    $end_matches = explode(',', variable_get('om_agenda_end_marker', ''));
   }
   
   //break text into lines
@@ -604,8 +604,10 @@ function om_agenda_manager_parse_agenda($text) {
       }
     }
 
-    if (strpos($info, $end_match) !== false) {
-      $active = false;
+    foreach ($end_matches as $end_match) {
+      if (strpos($info, $end_match) !== false) {
+        $active = false;
+      }
     }
   }
 
