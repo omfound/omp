@@ -620,6 +620,7 @@ function om_agenda_manager_clean_string($string) {
       "ï»¿" => '',
       "â¢" => '',
       "Ã¢ÂÂ¢" => '-',
+      "ÃÂ¢ÃÂÃÂ" => '-',
     );
 
     foreach ($removables as $remove => $replace) {
