@@ -1362,13 +1362,15 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
   }
 
   $default_product_option = 0;
+  dsm($line_item->commerce_product);
+  /**
   if (!empty($line_item->commerce_product['und'][0]['product_id'])) {
     foreach ($product_options as $key => $sku) {
       if ($sku == $line_item->commerce_product['und'][0]['sku']) {
         $default_product_option = $key;
       }
     }
-  }
+  }**/
 
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
   $tree = taxonomy_get_tree($tax->vid);
