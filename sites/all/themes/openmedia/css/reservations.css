@@ -430,9 +430,6 @@ body.page-reservations fieldset {
 	background-color: whiteSmoke;
 }
 
-.section-administer-reservations table.checked-out {
-  background-color: #aacfff;
-}
 .section-administer-reservations .reservation{
   padding: 10px;
   background: white;

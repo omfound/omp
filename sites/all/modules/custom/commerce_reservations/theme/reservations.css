@@ -737,6 +737,9 @@ body.page-reservations #main-content #squeeze{
 .section-administer-reservations table {
   margin-bottom: 0px;
 }
+.section-administer-reservations table.checked-out {
+  background-color: #aacfff;
+}
 
 .section-administer-reservations span.date-display-single {
   display: block;
