@@ -741,7 +741,7 @@ body.page-reservations #main-content #squeeze{
   background-color: #E4E4E4;
 }
 .section-administer-reservations table.prepared {
-  background-image: url('sites/all/themes/openmedia/images/stripes.png');
+  background-image: url('/sites/all/themes/openmedia/images/stripes.png');
 }
 
 .section-administer-reservations span.date-display-single {
