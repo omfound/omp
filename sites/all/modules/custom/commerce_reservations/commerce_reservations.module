@@ -1352,6 +1352,15 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
 
   $invalid_status = array('Checked Out', 'Overdue');
   $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $invalid_status);
+
+  // if we are updating this line item, it could already have a checked out product
+  // that is not returned by available products
+  if (!empty($line_item_wrapper->commerce_product->value())) {
+    if (!in_array($line_item_wrapper->commerce_product->value(), $available_products)) {
+      $available_products[] = $line_item_wrapper->commerce_product->value();  
+    }
+  }
+
   $product_options = array();
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
