@@ -1305,6 +1305,11 @@ function commerce_reservations_commerce_order_status_info(){
     'title' => t('Awaiting Checkout'),
     'state' => 'completed',
   );
+  $order_statuses['prepared'] = array(
+    'name' => 'prepared',
+    'title' => t('Prepared'),
+    'state' => 'completed',
+  );
   $order_statuses['checked_out'] = array(
     'name' => 'checked_out',
     'title' => t('Checked Out'),
@@ -1455,7 +1460,7 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   // the change can get past commerce_reservations_entity_presave 
   $date_array = $line_item_wrapper->field_reservation_dates->value();
   $checkout_status = commerce_reservations_product_checkout_status($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
-  if ($checkout_status == 'Awaiting Checkout') {
+  if ($checkout_status == 'Awaiting Checkout' || $checkout_status == 'Prepared') {
     $reservations = commerce_reservations_product_reservations($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
     reset($reservations);
     $second_lid = key($reservations);
@@ -1479,6 +1484,13 @@ function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
     }
   }
   $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
+
+  // if this line item is not already checked out, set status to prepared
+  $line_item_status = $line_item_wrapper->field_checkout_status->value();
+  if ($line_item_status != 'Checked Out') {
+    $line_item_wrapper->field_checkout_status->set('Prepared');
+  }
+
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
 }
@@ -1543,7 +1555,7 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $line_item = commerce_line_item_load($lid);
   $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_checkout_status[LANGUAGE_NONE][0]['value'];
-  if ($status == 'Awaiting Checkout') { 
+  if ($status == 'Awaiting Checkout' || $status == 'Prepared') { 
     if (user_access('administer commerce reservations')) {
       return true;
     }
@@ -2413,7 +2425,8 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
         if (is_null($reservation->field_checkout_status_value) || 
         $reservation->field_checkout_status_value == 'Checked Out' || 
         $reservation->field_checkout_status_value == 'Overdue' ||
-        $reservation->field_checkout_status_value == 'Awaiting Checkout') {
+        $reservation->field_checkout_status_value == 'Awaiting Checkout' ||
+        $reservation->field_checkout_status_value == 'Prepared') {
           $all_reservations[] = array(
             'start' => strtotime($reservation->field_reservation_dates_value),
             'end' => strtotime($reservation->field_reservation_dates_value2),

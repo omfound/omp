@@ -741,8 +741,9 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   $variables['cr']['buttons'][] = l('Contract', 'cr/contract/' . $variables['row']->commerce_line_item_order_id, $link_options);
   switch ($status) {
     case 'Awaiting Checkout':
+    case 'Prepared':
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
-      $variables['cr']['buttons'][] = l('Prep', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
+      $variables['cr']['buttons'][] = l('Prepare', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
       $link_options['attributes']['class'] = array('btn', 'btn-warning');
