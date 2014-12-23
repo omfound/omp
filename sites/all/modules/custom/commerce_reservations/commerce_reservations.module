@@ -1328,7 +1328,7 @@ function commerce_reservations_commerce_order_status_info(){
   return $order_statuses;
 }
 
-function commerce_reservations_line_item_checkout($form, &$form_state, $llid) {
+function commerce_reservations_line_item_checkout_form($form, &$form_state, $llid) {
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
