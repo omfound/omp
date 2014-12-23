@@ -753,6 +753,8 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     case 'Checked Out':
     case 'Overdue':
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
+      $variables['cr']['buttons'][] = l('Update', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
   } 
