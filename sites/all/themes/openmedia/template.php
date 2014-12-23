@@ -784,6 +784,9 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     else if ($payment_info['method'] == 'pay_later') {
       $payment_label = 'Paid Later / Not Paid!';
     }
+    else if ($payment_info['method'] = 'free_order') {
+      $payment_label = 'Free Order';
+    }
     $variables['cr']['payment'] = l($payment_label, 'payment/'.$payment_info['id'].'/edit', $link_options);
   }else{
     $variables['cr']['payment'] = t('No Payment');
