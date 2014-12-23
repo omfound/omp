@@ -1328,12 +1328,9 @@ function commerce_reservations_commerce_order_status_info(){
   return $order_statuses;
 }
 
-function commerce_reservations_line_item_checkout_form($form, &$form_state, $llid) {
-  $line_id = $form_state['build_info']['args'][0];
-  $line_item = commerce_line_item_load($line_id);
+function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid) {
+  $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-  $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
-  $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
   $line_item_wrapper->field_checkout_status->set('Checked Out');
   $line_item_wrapper->save();
   drupal_goto('administer_reservations');
