@@ -1399,13 +1399,17 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     '#default_value' => $default_product_option,
   );
 
-  dsm($line_item_wrapper->field_checked_out_accessories->value());
-  dsm($accessories);
+  $current_accessories = $line_item_wrapper->field_checked_out_accessories->value();
+  $default_accessories = array();
+  foreach ($current_accessories as $accessory) {
+    $default_accessories[] = $accessory->tid;
+  }
   if (count($accessories) > 0) {
     $form['accessories'] = array(
       '#type' => 'checkboxes',
       '#title' => 'Select all accessories the user is checking out.',
       '#options' => $accessories,
+      '#default_value' => $default_accessories,
     );
   }
   $form['start_date'] = array(
