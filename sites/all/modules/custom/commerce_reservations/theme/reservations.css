@@ -832,7 +832,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .checkout_status_good {
-	color: #85B740;
+  color: #000;
 	font-weight: bold;
 }
 
