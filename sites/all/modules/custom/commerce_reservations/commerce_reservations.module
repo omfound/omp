@@ -1398,6 +1398,8 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
     '#options' => drupal_map_assoc($product_options),
     '#default_value' => $default_product_option,
   );
+
+  dsm($line_item_wrapper->field_checked_out_accessories->value());
   if (count($accessories) > 0) {
     $form['accessories'] = array(
       '#type' => 'checkboxes',
