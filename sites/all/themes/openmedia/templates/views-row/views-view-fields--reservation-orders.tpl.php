@@ -4,7 +4,7 @@
 <?php else:?>
   <div class = "reservation">
 <?php endif;?>
-<table class="reservation-info-table <?php print str_replace(' ', '-', strtolower($fields['field_checkout_status']->content));?>">
+<table class="reservation-info-table <?php print str_replace(' ', '-', strtolower(strip_tags($fields['field_checkout_status']->content)));?>">
   <tr>
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
