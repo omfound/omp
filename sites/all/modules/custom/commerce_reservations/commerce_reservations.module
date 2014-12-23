@@ -1355,9 +1355,10 @@ function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
 
   // if we are updating this line item, it could already have a checked out product
   // that is not returned by available products
-  if (!empty($line_item_wrapper->commerce_product->value())) {
-    if (!in_array($line_item_wrapper->commerce_product->value(), $available_products)) {
-      $available_products[] = $line_item_wrapper->commerce_product->value();  
+  $previous_product_id = $line_item_wrapper->commerce_product->value();
+  if (!empty($previous_product_id)) {
+    if (!in_array($previous_product_id, $available_products)) {
+      $available_products[] = $previous_product_id;  
     }
   }
 
