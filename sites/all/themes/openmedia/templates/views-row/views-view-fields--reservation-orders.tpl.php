@@ -24,7 +24,7 @@
   <?php }else{ ?>
     <tr>
   <?php } ?>
-  <td class="vbo-box"><?php print $fields['views_bulk_operations']->content.$fields['views_bulk_operations_1']->content;?></td>
+  <td class="vbo-box"><?php print $fields['views_bulk_operations']->content;?></td>
     <td class="item-name">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print l(strip_tags($fields['line_item_title']->content), 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
