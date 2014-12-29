@@ -7,7 +7,7 @@
 <?php endif;?>
 <table class="reservation-info-table <?php print str_replace(' ', '-', strtolower(strip_tags($fields['field_checkout_status']->content)));?>">
   <tr>
-  <th class = "vbo-header">Select</th>
+  <th class = "vbo-header"></th>
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order</th>
