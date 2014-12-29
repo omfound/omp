@@ -322,7 +322,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
   }
 
-  dsm($form_id);
   if ($form_id == 'views_form_reservation_orders_page') {
     unset($form['properties']);
     unset($form['bundle_reservable_product']['commerce_display_path']);
@@ -339,6 +338,10 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
 
     unset($form['tokens']);
     $form['bundle_reservable_product']['#title'] = 'Modify';
+  }
+
+  if ($form_id == 'views_exposed_form') {
+    dsm($form);
   }
 }
 
