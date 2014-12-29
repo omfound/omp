@@ -20,8 +20,9 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
     $vote_results = array();
     while($nids = $result->fetchAssoc()) {
       $rating_query = db_select('alternative_rating', 'votes');
-      $rating_query->fields('votes', array('score'));
+      $rating_query->fields('votes', array('bayesian'));
       $rating_query->condition('nid', $nids['nid'], '=');
+      $rating_query->condition('period', 'alltime', '=');
       $rating_result = $rating_query->execute();
       $rating_value = $rating_result->fetchAll();
       $airing_query = db_select('field_data_field_om_show_id', 'airings');
@@ -34,8 +35,8 @@ class highestBayesianAverageRule extends timeslotSchedulingRule {
       if (!is_numeric($airing_count)) {
         $airing_count = 0;
       }
-      if (isset($rating_value[0]->score)) {
-        $vote_results[$nids['nid']] = $rating_value[0]->score - (.02 * $airing_count);
+      if (isset($rating_value[0]->bayesian)) {
+        $vote_results[$nids['nid']] = $rating_value[0]->bayesian - (.02 * $airing_count);
       }
       else {
         $vote_results[$nids['nid']] = 0;
