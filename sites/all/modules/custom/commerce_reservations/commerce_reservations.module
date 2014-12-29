@@ -323,6 +323,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   }
 
   if ($form_id == 'views_form_reservation_orders_page') {
+    dsm($form);
     unset($form['properties']);
     unset($form['bundle_reservable_product']['commerce_display_path']);
     unset($form['bundle_reservable_product']['commerce_unit_price']);
