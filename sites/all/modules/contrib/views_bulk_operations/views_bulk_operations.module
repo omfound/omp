@@ -902,7 +902,6 @@ function views_bulk_operations_adjust_selection($queue_name, $operation, $option
 
   $vbo = _views_bulk_operations_get_field($view);
   $rows = array();
-  dsm($view);
   foreach ($view->result as $row_index => $result) {
     $rows[$row_index] = array(
       'entity_id' => $vbo->get_value($result),
