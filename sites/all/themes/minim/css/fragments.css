@@ -1,0 +1,98 @@
+/**
+ * This stylesheet is for irregular, non-paternistic css.
+ * Feel free to break this sheet into smaller sheets like header or footer where it makes sense.
+ */
+
+#quicktabs-archive_tabs {
+  clear: left; 
+}
+#views-exposed-form-agenda-caption-search-page #edit-submit-agenda-caption-search {
+  margin-top: 1.1em;
+}
+#edit-keys-wrapper {
+  width: 250px;
+}
+#edit-keys-wrapper #edit-keys {
+  width: 100%;
+}
+#om-show-live-block {
+  float: left;
+  width: 300px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+div#om-desc-content {
+  width: 300px;
+  padding-left: 0;
+  padding-right: 0;
+}
+#om-embedded-content {
+  float: left;
+  width: 575px;
+}
+.om-live-button {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.stream-offline .pure-button {
+  white-space: normal;
+  cursor: default;
+}
+.stream-offline .pure-button:hover {
+  background-image: initial;
+}
+
+/** weird padding on show add form for date **/
+.container-inline-date .date-padding {
+  padding: 0;
+}
+#field-om-show-date-add-more-wrapper legend {
+  display: none;
+}
+
+/** adjustments for show page view **/
+.field-name-field-om-show-video {
+  float: left;
+  width: 550px;
+}
+.node-om_show-form .field-name-field-om-show-video {
+  float: none;
+  width: auto;
+}
+#gov-description {
+  clear: left;
+  margin-top: 50px;
+}
+.share-show-hide {
+  font-size: 80%;
+}
+.embed-tray .section {
+  float: left;
+  padding: 0 0 15px 11px;
+  margin: 0 15px 0 0;
+}
+#session-video-embed-tray {
+  margin-bottom: 40px;
+}
+
+/** adjustments for agenda manager **/
+#bill-list {
+  margin-left: 0;
+}
+.page-node-agenda-manager .field-name-field-om-show-video {
+  width: 525px;
+}
+.page-node-agenda-manager #main {
+  min-width: 955px;
+}
+div#cue-point-list {
+  margin-right: 0;
+}
+
+#page-iframe-embed {
+  margin: 20px auto auto auto;
+  width: 100%;
+}
+#page-iframe-embed textarea {
+  width: 100%;
+}

@@ -1,0 +1,14 @@
+{% if items|length > 0 %}
+  <div class="{{ classes }}"{{ attributes }}>
+    {% if label is not defined %}
+      <div class="field-label"{{ title_attributes }}>{{ label }}:&nbsp;</div>
+    {% endif %}
+    <div class="field-items"{{ content_attributes }}>
+      {% for key, item in items %}
+        <div class="field-item {{ key % 2 ? 'odd' : 'even' }}">
+          {{ video }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

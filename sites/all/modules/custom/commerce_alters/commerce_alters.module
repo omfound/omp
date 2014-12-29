@@ -9,12 +9,14 @@ function commerce_alters_field_widget_addressfield_standard_form_alter(&$element
       //this is the correct user editing this profile
       if ($user->uid == $element['#entity']->uid) {
         $contact_info = profile2_load_by_user($user, 'contact_info');
-        $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
-        $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
-        $full_name = $first_name.' '.$last_name;
+        if (!empty($contact_info)) {
+          $first_name = $contact_info->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+          $last_name = $contact_info->field_last_name[LANGUAGE_NONE][0]['safe_value'];
+          $full_name = $first_name.' '.$last_name;
 
-        if($first_name && $last_name) {
-          $element['#address']['name_line'] = $full_name;
+          if($first_name && $last_name) {
+            $element['#address']['name_line'] = $full_name;
+          }
         }
       }
     }

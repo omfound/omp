@@ -40,6 +40,33 @@ function om_agenda_manager_project_options() {
 function om_agenda_manager_menu() {
   $items = array();
 
+  $items['api/%node/agenda-items'] = array(
+    'title' => 'Stamped Agenda Items',
+    'page callback' => 'om_agenda_manager_agenda_items', 
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['api/%node/captions'] = array(
+    'title' => 'Captions',
+    'page callback' => 'om_agenda_manager_api_captions', 
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['api/sessions'] = array(
+    'title' => 'Sessions',
+    'page callback' => 'om_agenda_manager_api_sessions', 
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['api/%node/session'] = array(
+    'title' => 'Session',
+    'page callback' => 'om_agenda_manager_api_session', 
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['google/auth'] = array(
     'title' => t('Google Authentication'),
     'page callback' => 'om_agenda_manager_google_authenticate',
@@ -77,12 +104,27 @@ function om_agenda_manager_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['node/%node/captions'] = array(
+    'title' => 'Captions',
+    'description' => 'Captions',
+    'page callback' => 'om_agenda_manager_captions',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
 
   $items['jwplayer/test/%node'] = array(
     'title' => 'JWPlayer Test',
     'description' => 'JWPlayer Test',
     'page callback' => 'om_agenda_manager_test',
     'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/captions'] = array(
+    'title' => 'Captions Testing',
+    'description' => 'Captions Testing',
+    'page callback' => 'om_agenda_manager_caption_test',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -94,6 +136,22 @@ function om_agenda_manager_test($node) {
   drupal_add_js('sites/all/libraries/jwplayer/jwplayer.js', array('type' => 'file', 'group' => JS_LIBRARY));
   drupal_add_js(array('jwplayer' => $jwplayer), 'setting');
   return '<div id="jwplayer-test"></div>';
+}
+
+function om_agenda_manager_captions($node) {
+  $output = '';
+  $output .= '<h2>Captions</h2>';
+  if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+    $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']);
+    if (!empty($video_id)) {
+      $captions = om_agenda_manager_google_captions($video_id);
+      if (!empty($captions)) {
+        $output .= $captions;
+      }
+    }
+  }
+
+  return $output;
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
@@ -109,8 +167,9 @@ function om_agenda_manager_cuepoints($node) {
     SELECT field_data_field_acp_show_reference.entity_id, field_acp_seconds_value, title 
     FROM {field_data_field_acp_show_reference}
     JOIN {field_data_field_acp_seconds} ON field_data_field_acp_seconds.entity_id = field_data_field_acp_show_reference.entity_id
+    JOIN {field_data_field_acp_type} ON field_data_field_acp_type.entity_id = field_data_field_acp_show_reference.entity_id
     JOIN {node} ON node.nid = field_data_field_acp_show_reference.entity_id
-    WHERE field_acp_show_reference_target_id = :nid
+    WHERE field_acp_show_reference_target_id = :nid AND field_data_field_acp_type.field_acp_type_value = 'Agenda Item'
     ORDER BY field_acp_seconds_value ASC";
   $result = db_query($query, array(':nid' => $node->nid));
   $cuepoints = array();
@@ -133,7 +192,7 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   $output .= '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:jwplayer="http://rss.jwpcdn.com/">';
   $output .= '<channel>';
   $output .= '<title>Cuepoints playlist</title>';
-  $output .= '<link>http://omp.omfound.org</link>';
+  $output .= '<link>http://ompnetwork.org</link>';
   $node = node_load($session_nid);
  
   $youtube_info = om_show_youtube_info($node);
@@ -168,6 +227,77 @@ function om_agenda_manager_cuepoints_to_xml($points, $session_nid) {
   return $output;
 }
 
+function om_agenda_manager_api_sessions() {
+  $nodes = node_load_multiple(array(), array('type' => 'om_show'));
+  $sessions = array();
+  foreach ($nodes as $key => $node) {
+    $sessions[] = array(
+      'nid' => $node->nid,
+      'title' => $node->title,
+    );
+  }
+  header("content-type:application/json");
+  print drupal_json_encode($sessions);
+}
+
+function om_agenda_manager_api_session($node) {
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $node_values = array(
+    'title' => $node->title,
+  );
+  $fields = field_info_instances('node', 'om_show');
+  foreach ($fields as $field_name => $field_info) {
+    $node_values[$field_name] = $wrapper->{$field_name}->value();
+  }
+
+  header("content-type:application/json");
+  print drupal_json_encode($node_values);
+} 
+
+function om_agenda_manager_api_captions($node) {
+  header("content-type:application/json");
+  if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+    $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']); 
+    $caption_xml = om_agenda_manager_google_captions($video_id);
+    $captions = om_agenda_manager_parse_captions($caption_xml);
+    print drupal_json_encode($captions);
+  }
+  else {
+    print json_encode(array());
+  }
+}
+
+function om_agenda_manager_caption_test() {
+  $output = '';
+  $output .= '<h2>Testing Youtube Captions</h2>';
+
+  $caption_xml = om_agenda_manager_google_captions('HQobYaejIag');
+  $captions = om_agenda_manager_parse_captions($caption_xml);
+  $nid = 29245;
+  om_agenda_manager_store_captions($nid, $captions);
+
+  return $output;
+}
+
+function om_agenda_manager_parse_captions($captions) {
+  $caption_array = explode("\n\n", $captions);
+  $structured_captions = array();
+  foreach ($caption_array as $key => $caption) {
+    $time_text = explode("\n", $caption, 2);
+    $split_time = explode(',', $time_text[0]);
+    $caption_length = mb_strlen($time_text[1]);
+    if ($caption_length > 3) {
+      $structured_captions[] = array(
+        'start' => $split_time[0],
+        'end' => $split_time[1],
+        'caption' => $time_text[1],
+      );
+    }
+  }
+
+  return $structured_captions;
+}
+
 function om_agenda_manager_admin_form() {
   $form = array();
 
@@ -199,6 +329,19 @@ function om_agenda_manager_admin_form() {
     '#title' => t('Empty show video field ("web video") upon resetting live broadcast.'),
     '#default_value' => variable_get('om_agenda_clear_video_field', ''),
   );
+
+  $form['om_agenda_start_marker'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Start marker for agenda parsing:'),
+    '#default_value' => variable_get('om_agenda_start_marker', ''),
+  );
+
+  $form['om_agenda_end_marker'] = array(
+    '#type' => 'textfield',
+    '#title' => t('End marker for agenda parsing:'),
+    '#default_value' => variable_get('om_agenda_end_marker', ''),
+  );
+
 
   return system_settings_form($form); 
 }
@@ -243,19 +386,26 @@ function om_agenda_manager_google_authenticate() {
 }
 
 function om_agenda_manager_google_client_create() {
+  global $base_url;
   om_agenda_manager_google_api_init();
 
   $client = new Google_Client();
-  $client->setApplicationName('OMP Calendar Manager');
+  $client->setApplicationName('OMP Agenda Manager');
   $client->setClientId('253524767921.apps.googleusercontent.com');
   $client->setClientSecret('ejKrQaNJPcwOQwR9539MTpld');
-  $client->setRedirectUri('http://dev-thornton.gotpantheon.com/google/auth');
+  $client->setRedirectUri($base_url . '/google/auth');
   $client->setDeveloperKey('AIzaSyDNmQk5cO6HfPmQbVwyW3twZrYZsoTqDxE');
-  $client->setScopes(array('https://www.googleapis.com/auth/drive'));
+  $client->setScopes(array('https://www.googleapis.com/auth/drive', 'https://gdata.youtube.com'));
   $client->setUseObjects(true);
   
   if ($token = variable_get('om_agenda_manager_google_auth_token', false)) { 
     $client->setAccessToken($token);
+  }
+
+  $token_json = $client->getAccessToken();
+  $token_array = json_decode($token_json);
+  if ($token_array->created + $token_array->expires_in < time()) {
+    $client->refreshToken($token_array->refresh_token);
   }
 
   return $client;
@@ -265,6 +415,47 @@ function om_agenda_manager_google_api_init() {
   $base = libraries_get_path('google-api-php-client');
   require_once $base.'/src/Google_Client.php';
   require_once $base.'/src/contrib/Google_DriveService.php';
+  require_once $base.'/src/contrib/Google_YouTubeService.php';
+}
+
+function om_agenda_manager_google_captions($video_id) {
+  $client = om_agenda_manager_google_client_create();
+  if ($token_json = $client->getAccessToken()) {
+    //get access token via OAUTH
+    $token_parts = json_decode($token_json);
+    $token = $token_parts->access_token;  
+    $caption_tracks_url = 'https://gdata.youtube.com/feeds/api/videos/' . $video_id . '/captions?v=2';
+    $caption_tracks_xml = om_agenda_manager_google_get($caption_tracks_url, $token);
+
+    //get caption track url from xml content src
+    $dd = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dd->loadHTML($caption_tracks_xml);
+    $xpath = new DOMXPath($dd);
+    $tracks = $xpath->query("//content");
+    $track_urls = array();
+    for ($i=0; $i < $tracks->length; $i++) {
+      $track = $tracks->item($i);
+      $track_urls[] = $track->getAttribute("src");
+    }
+
+    if (count($track_urls > 0)) {
+      $track_xml = om_agenda_manager_google_get($track_urls[0], $token);
+    }
+  }
+
+  return $track_xml;
+}
+
+function om_agenda_manager_google_get($url, $token) {
+  $ch = curl_init();
+  $dest = $url . '&access_token=' . $token;
+  curl_setopt($ch, CURLOPT_URL, $dest);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  $xml = curl_exec($ch);
+  curl_close($ch);
+  return $xml;
 }
 
 function om_agenda_manager_agenda_items($node) {
@@ -300,10 +491,23 @@ function om_agenda_manager_legacy_agenda_items($items) {
 function om_agenda_manager_parse_agenda($text) {
   //TODO: eventually need to support multiple options here
   //BASIC for Thornton
-  $start_matches = array(
-    '1. ',
-  );
-  $end_match = 'ADJOURNMENT';
+  if (!variable_get('om_agenda_start_marker', '')) {
+    $start_matches = array(
+      '1. ',
+    );
+  }
+  else {
+    $start_matches = array(
+      variable_get('om_agenda_start_marker', ''),
+    );
+  }
+
+  if (!variable_get('om_agenda_end_marker', '')) {
+    $end_match = 'ADJOURNMENT';
+  }
+  else {
+    $end_match = variable_get('om_agenda_end_marker', '');
+  }
   
   //break text into lines
   $lines = preg_split("/((\r?\n)|(\r\n?))/", $text);
@@ -402,9 +606,11 @@ function om_agenda_manager_livestream_update($session_status) {
 
 function om_agenda_manager_live_page() {
   $output = '';
+  $page_elements = array();
   if ($embed = variable_get('om_agenda_status_embed', false)) {
-    $output .= '<div id="om-embedded-content">'.$embed.'</div>'; 
+    $page_elements['embed'] = $embed;
   }
+
   $livestream_info = om_agenda_manager_livestream_info();
   $include_on_live = array();
   foreach ($livestream_info as $tid => $info) {
@@ -414,11 +620,17 @@ function om_agenda_manager_live_page() {
     }
   }
   drupal_add_css(drupal_get_path('module', 'om_agenda_manager') . '/theme/om-show-live-status.css');
-  $output .= theme('om_show_live_block', array('live_themes' => $include_on_live));
+  $live_buttons = theme('om_show_live_block', array('live_themes' => $include_on_live));
+  $page_elements['live_buttons'] = $live_buttons;
+
   if ($desc = variable_get('om_agenda_status_desc', false)) {
-    $output .= '<div id="om-desc-content">'.$desc.'</div>';
+    $page_elements['description'] = $desc;
   }
+  $output .= theme('om_show_live_page', array('page_elements' => $page_elements));
+
   $output .= '<h1 class="title archive-title">Archived Video</h2>';
+  $block = module_invoke('views', 'block_view', '-exp-agenda_caption_search-page');
+  $output .= render($block);
   $output .= om_agenda_manager_archive_tabs();
   return $output;
 }
@@ -433,6 +645,12 @@ function om_agenda_manager_theme($existing, $type, $theme, $path) {
       'template' => 'om-show-live-block', 
       'file' => 'theme.inc',
       'variables' => array('live_themes' => array()),
+    ),
+    'om_show_live_page' => array(
+      'path' => $path . '/theme', 
+      'template' => 'om-show-live-page', 
+      'file' => 'theme.inc',
+      'variables' => array('page_elements' => array()),
     )
   );
   return $themes;
@@ -483,8 +701,7 @@ function om_agenda_manager_archive_tabs() {
   );
   $qtname = 'archive_tabs';
   $quicktabs = quicktabs_build_quicktabs($qtname,$qtoptions,$tabs);
-  $search = drupal_get_form('om_agenda_manager_dummy_search');
-  return drupal_render($search) . drupal_render($quicktabs['content']); 
+  return drupal_render($quicktabs['content']); 
 }
 
 function om_agenda_manager_dummy_search($form, $form_state) {
@@ -557,3 +774,43 @@ function om_agenda_manager_tokens($type, $tokens, array $data = array(), array $
     return $replacements;
   }
 }
+
+function om_agenda_manager_youtube_id ($url) {
+  $pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+  preg_match($pattern, $url, $matches);
+  return (isset($matches[1])) ? $matches[1] : false;
+}
+
+function om_agenda_manager_store_captions($nid, $captions) {
+  //create one caption for the node title and body so they are searchable
+  $node = node_load($nid);
+  $captions[] = array(
+    'start' => '0:00:00',
+    'caption' => $node->title,
+  );
+  if (!empty($node->body)) {
+    $captions[] = array(
+      'start' => '0:00:00',
+      'caption' => $node->body[LANGUAGE_NONE][0]['value'],
+    );
+  }
+  foreach ($captions as $key => $caption) {
+    $node = new StdClass();
+    $node->type = 'agenda_cue_point';
+    $node->status = 1;
+    $node->language = LANGUAGE_NONE;
+    $node->title = $caption['caption'];
+    $node->body[LANGUAGE_NONE][0]['value'] = $caption['caption'];
+    $node->uid = 1;
+    $node->field_acp_type[LANGUAGE_NONE][0]['value'] = 'Caption';
+    
+    $node->field_acp_show_reference[LANGUAGE_NONE][0]['target_id'] = $nid;
+
+    $start_parts = explode(':', $caption['start']);
+    $seconds = floor(($start_parts[0] * 3600) + ($start_parts[1] * 60) + $start_parts[2]);
+    $node->field_acp_seconds[LANGUAGE_NONE][0]['value'] = $seconds; 
+
+    node_save($node);
+  }
+}
+

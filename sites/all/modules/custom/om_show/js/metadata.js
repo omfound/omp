@@ -7,12 +7,13 @@
           $(this).change(
             function() {
               if ($(this).val() != '_none') {
-                $(this).attr('disabled', 'disabled');
+                $(this).prop('disabled', true);
                 $.ajax({
                   url: '/project-metadata/' + $(this).val(),
                   success: function(data) {
                     updateFields(data);
-                    $(this).attr('disabled', '');
+                    console.log('removing disable');
+                    $(this).prop('disabled', false);
                   },
                   context: this
                 });
