@@ -45,7 +45,7 @@
     <td class = "order-link">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print $fields['view_order']->content; ?>
-      <?php l('All Order Items', 'administer_reservations', array('options' => array('query' => array('order_id' => $fields['order_id']->raw)))); ?>
+      <?php print '<br />'.l('All Order Items', 'administer_reservations', array('options' => array('query' => array('order_id' => $fields['order_id']->raw)))); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>
