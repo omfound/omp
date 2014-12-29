@@ -918,11 +918,3 @@ body.page-reservations #main-content #squeeze{
 }
 /** end date picker **/
 
-
-#views-form-reservation-orders-page #edit-properties,
-.form-item-bundle-reservable-product-show-value-commerce-display-path,
-.form-item-bundle-reservable-product-show-value-commerce-unit-price,
-.form-item-bundle-reservable-product-show-value-commerce-product
-{
-  display: none;
-}

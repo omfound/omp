@@ -242,6 +242,7 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   drupal_add_js(array('commerce_reservations' => $commerce_reservations), 'setting');
 
   $my_form_id = substr($form_id, 0, 30);
+  dsm($my_form_id);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
     //we have to cache as it is being loaded via ajax
   /*
