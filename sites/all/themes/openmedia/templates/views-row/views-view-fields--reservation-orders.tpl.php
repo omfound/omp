@@ -1,3 +1,4 @@
+<?php dsm($fields); ?>
 <?php $checkedout = FALSE;?>
 <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>
   <div class = "reservation-overdue">
