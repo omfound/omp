@@ -330,6 +330,12 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     unset($form['bundle_reservable_product']['commerce_product']);
     unset($form['bundle_reservable_product']['commerce_total']);
     unset($form['bundle_reservable_product']['field_reservation_dates']);
+
+    unset($form['bundle_reservable_product']['show_value']['commerce_display_path']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_unit_price']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_product']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_total']);
+    unset($form['bundle_reservable_product']['show_value']['field_reservation_dates']);
   }
 }
 
