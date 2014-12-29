@@ -7,6 +7,7 @@
 <?php endif;?>
 <table class="reservation-info-table <?php print str_replace(' ', '-', strtolower(strip_tags($fields['field_checkout_status']->content)));?>">
   <tr>
+  <th class = "vbo-header">Select</th>
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order</th>
@@ -23,6 +24,7 @@
   <?php }else{ ?>
     <tr>
   <?php } ?>
+  <td class="vbo-box"><?php print $fields['views_bulk_operations']->content.$fields['views_bulk_operations_1']->content;?></td>
     <td class="item-name">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print l(strip_tags($fields['line_item_title']->content), 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
