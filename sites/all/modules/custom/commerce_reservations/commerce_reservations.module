@@ -340,11 +340,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     $form['bundle_reservable_product']['#title'] = 'Modify';
   }
 
-  if ($form_id == 'views_form_reservation_orders_page') {
-    print '<pre>';
-    print_r($form);
-    print '</pre>';
-  }
 }
 
 function commerce_reservations_redirect_add($form, &$form_state) {
