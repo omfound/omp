@@ -242,8 +242,6 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
   drupal_add_js(array('commerce_reservations' => $commerce_reservations), 'setting');
 
   $my_form_id = substr($form_id, 0, 30);
-  dsm($my_form_id);
-  dsm($form_id);
   if ($my_form_id == 'commerce_cart_add_to_cart_form'){
     //we have to cache as it is being loaded via ajax
   /*
@@ -322,6 +320,10 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     }
     $form['reservable_product_availability'] += $availability_items;
     $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
+  }
+
+  if ($form_id == 'views_form_reservation_orders_page') {
+    dsm($form);
   }
 }
 
