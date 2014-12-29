@@ -838,7 +838,6 @@ function views_bulk_operations_execute($vbo, $operation, $selection, $select_all
   // and enqueue them.
   if ($select_all_pages && $vbo->view->query->pager->has_more_records()) {
     $total_rows = $vbo->view->total_rows;
-    dsm('total pager rows:'.$total_rows);
 
     $batch['operations'][] = array(
       'views_bulk_operations_adjust_selection', array($queue_name, $operation, $options),
@@ -846,7 +845,6 @@ function views_bulk_operations_execute($vbo, $operation, $selection, $select_all
   }
   else {
     $total_rows = count($rows);
-    dsm('total nonpager rows: '.$total_rows);
     // We have all the items that we need, enqueue them right away.
     views_bulk_operations_enqueue_rows($queue_name, $rows, $operation, $options);
 
@@ -919,6 +917,8 @@ function views_bulk_operations_adjust_selection($queue_name, $operation, $option
     }
   }
 
+  dsm('rows:');
+  dsm($rows);
   // Enqueue the gathered rows.
   views_bulk_operations_enqueue_rows($queue_name, $rows, $operation, $options);
 
