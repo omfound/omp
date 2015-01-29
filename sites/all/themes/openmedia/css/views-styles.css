@@ -414,8 +414,19 @@ div.timeslot-theme-wrapper ul li {
   margin-bottom: 8px;
 }
 
-.node-type-om-project #project-description p {
+.node-type-om-project #project-description  .field-name-body .field-item {
   font-weight: 100;
+  max-height: 199px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  transition: max-height 1s;
+} 
+
+html .node-type-om-project #project-description .active .field-item {
+  max-height: 1000px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  transition: max-height 1s;
 }
 
 .node-type-om-project .featured-video-area {
@@ -541,3 +552,11 @@ p.project-published {
 .node-type-om-project #project-date-author {
   height: 14px;
 }
+
+p.read-more-button {
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+

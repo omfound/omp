@@ -15,6 +15,10 @@
           <div id="project-description">
             <?php print $description; ?>
           </div>
+          <?php if (isset($read_more)):
+            print $read_more;
+            endif;
+           ?>
         <?php endif; ?>
         <div id="project-metadata">
           <div id="project-date-author">
@@ -65,7 +69,7 @@
             <?php print $vote_widget; ?>
              <div class="project-voting">
                <h2 class="white-font">Your Vote Counts!</h2>
-               <a class="white-font" href="help/om_voting/about-om-voting">Learn More About Voting</a>
+               <a class="white-font" href="/help/om_voting/about-om-voting">Learn More About Voting</a>
              </div>
           </div>
         <?php endif; ?>

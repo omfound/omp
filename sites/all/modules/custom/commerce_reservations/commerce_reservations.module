@@ -69,9 +69,11 @@ function commerce_reservations_init(){
       $time_lapse = time() - $cart->created;
       $minutes = $time_lapse / 60;
 
-      if ($minutes > 10) {
+      if ($minutes > 15) {
         $cart = l('Click here to review your order and continue', 'cart');
-        drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        if (arg(0) != 'cart' && arg(0) != 'checkout' && arg(0) != 'equipment' && arg(0) != 'js' && arg(0) != 'reservations') {
+          drupal_set_message('You started an order that has not been completed. '.$cart.'. Incomplete orders older than 60 minutes will be deleted.', 'warning', FALSE);
+        }
       } 
     }
   }
@@ -431,14 +433,24 @@ function commerce_reservations_get_closed_times($display_nid = false){
         break;
     }
   }
-  print '<div class = "closed-dates-wrapper">';
+
+  //wrapper to allow blocking or non-blocking events
+  $blocking = commerce_reservations_availability_var_get('cr_availability_blocking', NULL, $display_nid);
+  if (!$blocking) {
+    $blocking_value = 'non-blocking';
+  }
+  else {
+    $blocking_value = 'blocking';
+  }
+
+  print '<div class = "closed-dates-wrapper" data-blocking = "'.$blocking_value.'">';
   $closed_dates = array_merge($closed_dates, $all_days_closed);
   foreach($closed_dates as $date){
     print '<div class = "closed_dates" date = "' . $date . '"></div>'; 
   }
   print '</div>';
   $closed_hours = array();
-  print '<div class = "closed-times-wrapper">';
+  print '<div class = "closed-times-wrapper" data-blocking = "'.$blocking_value.'">';
   foreach ($days as $day){
     $variable = 'cr_' . $day . '_hours';
     $value = commerce_reservations_availability_var_get($variable, NULL, $display_nid);
@@ -1789,6 +1801,21 @@ function commerce_reservations_settings_form($form, &$form_state){
     '#title' => t('Warn users after 10 minutes of an incomplete order'),
     '#default_value' => variable_get('cr_expired_cart_warning', 0),
   );
+  $form['cr_hide_certs'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide certifications in production information box on reservation page?'),
+    '#default_value' => variable_get('cr_hide_certs', 0),
+  );
+  $form['cr_debug_price_rules'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Log discount rule calculations for debugging?'),
+    '#default_value' => variable_get('cr_debug_price_rules', 0),
+  );
+  $form['cr_price_adjustments'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show price adjustments on cart and checkout pages?'),
+    '#default_value' => variable_get('cr_price_adjustments', 0),
+  );
   $availability_items = commerce_reservations_availability_form_items($form, $form_state);
   $form += $availability_items;
   $form['submit'] = array(
@@ -2015,6 +2042,13 @@ function commerce_reservations_availability_form_items($form, &$form_state) {
     );
   }
 
+  $form['cr_availability_blocking'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Set times and dates to blocking?'),
+    '#description' => t('If this is checked, users will not be able to make reservations across unavailable times. For instance, if you make reservations unavailable on Wednesdays and this box is checked, users will not be able to make a reservation from Tuesday -> Thursday.'),
+    '#default_value' => commerce_reservations_availability_var_get('cr_availability_blocking', 0, $key_nid),
+  );
+
   return $form;
 }
 
@@ -2029,6 +2063,7 @@ function commerce_reservations_availability_items_submit($form, &$form_state) {
   commerce_reservations_availability_var_set('cr_max_reservation_length', $form_state['input']['cr_max_reservation_length'], $key_nid);
   commerce_reservations_availability_var_set('cr_max_quantity', $form_state['input']['cr_max_quantity'], $key_nid);
   commerce_reservations_availability_var_set('cr_reservation_window', $form_state['input']['cr_reservation_window'], $key_nid);
+  commerce_reservations_availability_var_set('cr_availability_blocking', $form_state['input']['cr_availability_blocking'], $key_nid);
 
   $total = 0;
   $old_total = commerce_reservations_availability_var_get('cr_closed_total', NULL, $key_nid);
@@ -2073,6 +2108,9 @@ function commerce_reservations_settings_form_submit($form, &$form_state){
 	  variable_set('cr_allow_commercial', 0);
   }
   variable_set('cr_expired_cart_warning', $form_state['input']['cr_expired_cart_warning'], 0);
+  variable_set('cr_hide_certs', $form_state['input']['cr_hide_certs'], 0);
+  variable_set('cr_debug_price_rules', $form_state['input']['cr_debug_price_rules'], 0);
+  variable_set('cr_price_adjustments', $form_state['input']['cr_price_adjustments'], 0);
 
   if ($form_state['input']['email_confirm']){
     variable_set('cr_email_admin_confirm', 1);

@@ -24,9 +24,11 @@ class cablecastPlaybackServerController extends playbackServerController {
         $crawl_duration = $file->field_om_show_duration[$show->language][0]['value'];
       }
       if (empty($crawl_text)) {
-        $crawl_info = om_playback_servers_cablecast_default_channel_crawl_info($pbs->tid, $show);
-        $crawl_text = $crawl_info['text'];
-        $crawl_duration = $crawl_info['duration'];
+        $crawl_info = om_playback_servers_cablecast_default_channel_crawl_info($pbs->channel, $show);
+        if (!empty($crawl_info)) {
+          $crawl_text = $crawl_info['text'];
+          $crawl_duration = $crawl_info['duration'];
+        }
       }
       $crawl_text = om_show_tokenize_crawl_text($crawl_text, $show);
       // Map drupal fields to cablecast fields.
@@ -216,10 +218,7 @@ class cablecastPlaybackServerController extends playbackServerController {
   private function soap_request($pbs, $function, $data = array()) {
     try {
       $endpoint = $pbs->uri . '/CablecastWS/CablecastWS.asmx?WSDL';
-      $temp = '/tmp/' . $pbs->channel . '.cablecast.wsdl';
-      if (!file_exists($temp)) {
-        file_put_contents($temp, file_get_contents($endpoint));
-      }
+      $temp = om_playback_servers_cablecast_channel_wsdl($endpoint, $pbs->channel); 
       $client = new SoapClient($temp, array('cache_wsdl' => WSDL_CACHE_NONE));
       $auth = array(
         'username' => $pbs->user,

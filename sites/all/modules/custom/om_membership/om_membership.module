@@ -182,6 +182,31 @@ function om_membership_profile2_access($op, $profile = NULL, $account = NULL) {
   }
 }
 
+
+/**
+ * Implements hook_user_view
+ */
+function om_membership_user_view($account, $view_mode, $langcode) {
+  $org_membership = om_membership_user_org_membership($account);
+  if (!empty($org_membership)) {
+    $org_order = $org_membership['order'];
+    if ($account->uid != $org_order->uid) {
+      $owner = user_load($org_order->uid);
+      $type = 'manage_organizational_membership';
+      if ($profile = profile2_load_by_user($owner, $type)) {
+        if (profile2_access('view', $profile)) {
+          $account->content['profile_' . $type] = array(
+            '#type' => 'user_profile_category',
+            '#title' => $profile->label,
+            '#prefix' => '<a id="profile-' . $profile->type . '"></a>',
+          );
+          $account->content['profile_' . $type]['view'] = $profile->view('account');
+        }
+      } 
+    }
+  }
+}
+
 /**
  * Helper to load plans and send to theme layer.
  */
@@ -840,7 +865,7 @@ function om_membership_user_org_membership($user) {
       return $org_membership;
     }
   }
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1343,3 +1368,47 @@ function om_membership_default_address($uid) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function om_membership_form_user_admin_settings_alter(&$form, &$form_state) {
+  // reorder fieldset weights
+  $form['anonymous_settings']['#weight'] = -4;
+  $form['admin_role']['#weight'] = -3;
+  $form['registration_cancellation']['#weight'] = -2;
+  $form['om_membership_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Require Current Password'),
+    '#weight' => -1,
+  );
+  $form['om_membership_settings']['om_membership_disabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Do not require current password'),
+    '#description' => t('Check this box to disable the "current password" field on the User Edit form.'),
+    '#default_value' => variable_get('om_membership_disabled', TRUE),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Remove the current password field from the user_profile_form form (user/%/edit).
+ */
+function om_membership_form_user_profile_form_alter(&$form, &$form_state) {
+  if (variable_get('om_membership_disabled', TRUE)) {
+    // searches the #validate array for the current_pass validation function, and removes it
+    $key = array_search('user_validate_current_pass', $form['#validate']);
+    if ($key !== FALSE) {
+      unset($form['#validate'][$key]);
+    }
+    // hide the current password fields
+    $form['account']['current_pass_required_value']['#access'] = FALSE;
+    $form['account']['current_pass']['#access'] = FALSE;
+  }
+}
+
+function om_membership_query_alter(QueryAlterableInterface $query) {
+  $view_name = 'membership_report';
+  if ($query->hasTag('views_' . $view_name)) {
+    $query->groupBy('commerce_line_item.line_item_id');
+  }
+}

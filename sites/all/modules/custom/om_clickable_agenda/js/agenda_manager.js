@@ -51,6 +51,8 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     // Timer stuff
     this.set('timerState', false);
     this.set('currentTime', 0);
+    this.set('startTime', new Date().getTime());
+    this.set('updateTime', new Date().getTime());
   },
   retrieveData : function() {
     // @TODO this should use an endpoint in the same module!
@@ -120,9 +122,14 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }
   },
   startTimer : function() {
+    var currentStart =  new Date().getTime();
+      this.set('startTime', currentStart);
+    this.set('updateTime', currentStart);
     if (this.sessionControllerView.timeInput) {
-      var start = formatTimeTimestamp(this.sessionControllerView.timeInput.val());
-      this.set('currentTime', start);
+      var formValue = formatTimeTimestamp(this.sessionControllerView.timeInput.val()) * 1000;
+      if (formValue > 0) {
+        this.set('startTime', parseInt(currentStart - formValue, 10));
+      }
     }
     this.timerInterval = setInterval(this.calcTime, 1005);
     if (this.sessionControllerView.sessionToggleLive.attr('checked')) {
@@ -176,9 +183,12 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     }**/
   },
   calcTime : function() {
-    var newTime = this.get('currentTime') + 1;
-    this.set('currentTime', newTime);
-    this.trigger('timeChange', this.get('currentTime'));
+      var currentTime = this.get('updateTime'),
+        startTime = this.get('startTime'),
+        newTime = Math.ceil((parseInt(currentTime, 10) - parseInt(startTime, 10)) / 1000);
+      this.set('updateTime', new Date().getTime());
+      this.set('currentTime', newTime);
+    this.trigger('timeChange', newTime);
   },
   newCuePointHelper : function(data) {
     if (data['node_revisions_body']) {

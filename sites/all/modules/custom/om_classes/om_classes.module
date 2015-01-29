@@ -99,7 +99,7 @@ function om_classes_get_registrations($user) {
 
 function om_classes_user_view($account, $view_mode) {
   //only for org admins
-  if(om_membership_validate_org_admin_member($account)) {
+  if(module_exists('om_membership') && om_membership_validate_org_admin_member($account)) {
     $membership = om_membership_get_active_memberships($account->uid);
     reset($membership);
     $first_key = key($membership);
@@ -108,6 +108,15 @@ function om_classes_user_view($account, $view_mode) {
     $org_info['order'] = commerce_order_load($membership[$first_key]->order_id);
   }
   else {
+    $all_classes = om_classes_user_classes($account->uid, NULL, NULL);
+    $account->content['org-classes'] = array(
+      'title' => array(
+        '#markup' => '<h3>' . t('Class Use') . '</h3>',
+      ),
+      'class-history' => array(
+        '#markup' => om_classes_non_org_build_class_table($all_classes),
+      ),
+    );
     return;
   }
 
@@ -115,7 +124,6 @@ function om_classes_user_view($account, $view_mode) {
   $org_users = array();
   $org_users[] = $account;
 
-  om_membership_validate_org_admin_member($account);
   if (!empty($org_profile->field_invitations['und'])) {
     foreach ($org_profile->field_invitations['und'] as $key => $invitation) {
       if (!empty($invitation['value'])) {
@@ -142,7 +150,6 @@ function om_classes_user_view($account, $view_mode) {
 
     $all_classes = om_classes_user_classes($uids, $org_info['order']->created, $membership_end);
     usort($all_classes, 'om_classes_org_classes_sort');
-
     $account->content['org-classes'] = array(
       'title' => array(
         '#markup' => '<h3>' . t('Organizational Class Use') . '</h3>',
@@ -190,6 +197,31 @@ function om_classes_build_class_table($classes) {
   $output .= '</table>';
   return $output;
 }
+
+//Table for non org memberships
+function om_classes_non_org_build_class_table($classes) {
+  $output = '<strong>Class History</strong>';
+  if (empty($classes)) {
+    $output .= t('No classes have been taken under this membership.');
+    return $output;
+  }
+  $output .= '<br />';
+
+  $output .= count($classes) . t(' classes have been taken under this membership.');
+  $output .= '<table>';
+  $output .= '<thead><th>Class</th><th>Order Date</th></thead>';
+  foreach ($classes as $class) {
+    $order_number = $classes[0]->order_number;
+    $user_id = om_classes_find_user($order_number);
+    $output .= '<tr>';
+    $output .= '<td>' . $class->title . '</td>';
+    $output .= '<td>' . date("F j, Y", $class->created) . '</td>';
+    $output .= '</tr>';
+  }
+  $output .= '</table>';
+  return $output;
+}
+
 
 function om_classes_user_classes($uids = array(), $after_date = NULL, $before_date = NULL) {
   $query = "
