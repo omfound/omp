@@ -404,7 +404,7 @@ function om_agenda_manager_google_client_create() {
 
   $token_json = $client->getAccessToken();
   $token_array = json_decode($token_json);
-  if ($token_array->created + $token_array->expires_in < time()) {
+  if (!empty($token_array) && ($token_array->created + $token_array->expires_in < time())) {
     $client->refreshToken($token_array->refresh_token);
   }
 
