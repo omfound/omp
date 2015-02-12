@@ -117,7 +117,7 @@ function minim_preprocess_views_view_table__archived_sessions (&$vars) {
         $link = l($vars['result'][$row_key]->node_title, 'node/' . $vars['result'][$row_key]->_field_data['nid']['entity']->nid, $options);
         $vars['rows'][$row_key][$field_key] = $link;
       }
-      elseif ($field_key == 'field_om_calendar') {
+      elseif ($field_key == 'field_om_calendar' && !empty($vars['result'][$row_key]->field_field_om_calendar[0]['raw']['url'])) {
         $calendar_link = l('Download PDF', str_replace('/pub', '/export?format=pdf', $vars['result'][$row_key]->field_field_om_calendar[0]['raw']['url']));
         $vars['rows'][$row_key][$field_key] = $calendar_link;
       }

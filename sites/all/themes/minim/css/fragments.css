@@ -96,3 +96,7 @@ div#cue-point-list {
 #page-iframe-embed textarea {
   width: 100%;
 }
+
+ul.quicktabs-tabs.quicktabs-style-zen li {
+  margin: 0;
+}
