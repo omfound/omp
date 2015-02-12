@@ -186,4 +186,11 @@ function minim_preprocess_page (&$variables) {
     $variables['page']['content'] = $content;
     $variables['theme_hook_suggestions'][] = 'page__iframe_mode';
   }
+
+  if (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'om-show') {
+    drupal_set_title('Create Session');
+  }
+  elseif (arg(0) == 'node' && arg(2) == 'edit' && arg(3) == 'om-show') {
+    drupal_set_title('Edit Session');
+  }
 }

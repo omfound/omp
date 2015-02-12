@@ -55,7 +55,6 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('updateTime', new Date().getTime());
   },
   retrieveData : function() {
-    // @TODO this should use an endpoint in the same module!
     $.ajax({
       type : 'GET',
       url : '/node/' + this.get('currentNid') + '/agenda-items',
@@ -63,7 +62,7 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     });
     $.ajax({
       type : 'GET',
-      url : '/list-cue-points/' + this.get('currentNid'),
+      url : '/node/' + this.get('currentNid') + '/agenda-items?source=stamped&format=field-json',
       success : this.addCuePoints
     });
     var obj = {'nid' : this.get('currentNid')};
@@ -83,9 +82,9 @@ Drupal.agendaManger.Models.interpreter = Backbone.Model.extend({
     this.set('sessionBillsComplete', true);
   },
   addCuePoints : function(data) {
-    dataJSON = JSON.parse(data);
-    for (x in dataJSON) {
-      this.cuePointList.add(dataJSON[x]);
+    //dataJSON = JSON.parse(data);
+    for (x in data) {
+      this.cuePointList.add(data[x]);
     }
     this.updateCuePointListView();
     this.set('addCuePointsComplete', true);
@@ -377,7 +376,7 @@ Drupal.agendaManger.Views.cuePointList = Backbone.View.extend({
   },
   addDomElement : function(model) {
     // Prepends a single model to the list.
-    this.domElement.prepend(model.view.addDomElement(model));
+    this.domElement.append(model.view.addDomElement(model));
   },
   updateView : function(models) {
     // Updates the entire view.
