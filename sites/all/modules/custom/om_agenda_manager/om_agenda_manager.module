@@ -796,7 +796,8 @@ function om_agenda_manager_archive_tabs() {
   );
   $qtname = 'archive_tabs';
   $quicktabs = quicktabs_build_quicktabs($qtname,$qtoptions,$tabs);
-  return drupal_render($quicktabs['content']); 
+  $search = drupal_get_form('om_agenda_manager_dummy_search');
+  return drupal_render($search) . drupal_render($quicktabs['content']);
 }
 
 function om_agenda_manager_dummy_search($form, $form_state) {
