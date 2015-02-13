@@ -1,5 +1,5 @@
 <?php
-
+//panth
 /**
  * Implements hook_rules_event_info
  */
@@ -266,15 +266,13 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
     $start = strtotime($line_item->field_reservation_dates['und'][0]["value"]);
     $end = strtotime($line_item->field_reservation_dates['und'][0]["value2"]);
     $hours_days = commerce_reservations_hours_days($start, $end);
-    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
+    $hourly_rate = $product->commerce_price['und'][0]['amount'] / 24; 
     $day_rate = $product->commerce_price['und'][0]['amount'];
     
     $day_cost = $hours_days['days']*$day_rate;
     if ($hours_days['hours'] > 24) {
-      if ($hours_days['remainder_hours'] < 8) {
+      if (!empty($hours_days['remainder_hours'])) {
         $hour_cost = $hours_days['remainder_hours']*$hourly_rate;
-      }else{
-        $hour_cost = $day_rate;
       }
     }
 
@@ -286,7 +284,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
 
     $current_amount = $unit_price['amount'];
     $difference = array(
-      'amount' => $updated_price,
+      'amount' => $updated_price - $current_amount,
       'currency_code' => $unit_price['currency_code'],
       'data' => array(),
     );
@@ -298,7 +296,7 @@ function commerce_reservations_price_per_day($line_item, $component_name, $round
       watchdog('commerce_reservations', 'price_per_day: day_rate='.$day_rate); 
       watchdog('commerce_reservations', 'price_per_day: '.$difference['amount']);
     }
-    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $difference['amount']);
+    commerce_reservations_explain_price($line_item, '<em>Full price rate</em>', $updated_price);
     $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
       $line_item_wrapper->commerce_unit_price->value(),
       $component_name,
@@ -326,7 +324,12 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
   if ($hours_days['hours']) { 
     $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
     $unit_price = commerce_price_wrapper_value($line_item_wrapper, 'commerce_unit_price', TRUE);
-    $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
+    if (!empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+      $free_hours = $product->field_hours_days_free_for_member['und'][0]['value'];
+    }
+    else {
+      $free_hours = 0;
+    }
 
     if ($product->field_charge_by_the_['und'][0]['value'] == 'day') {
       $hourly_rate = $product->commerce_price['und'][0]['amount'] / 8; 
@@ -337,7 +340,6 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
     else {
       return;
     }
-    //if more than 1 day, discount by 1 day
     if ($free_hours >= $hours_days['hours']) {
       //reduce to zero cost if the hours provided are great than the order hours
       $new_price = 0; 
@@ -395,9 +397,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
         $new_price = 0; 
       }
 
-      //weird hack for now
-      //$price_difference = $new_price - $unit_price['amount'];
-      $price_difference = $new_price - $unit_price['amount'] - $product->commerce_price['und'][0]['amount'];
+      $price_difference = $new_price - $unit_price['amount'];
     }
     $difference = array(
       'amount' => $price_difference,
@@ -424,7 +424,7 @@ function commerce_reservations_price_reduction($line_item, $component_name, $rou
 function commerce_reservations_discount_by_day($line_item, $component_name, $round_mode, $day){
   $day = strtolower($day);
   $product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
-  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product' || empty($product->field_hours_days_free_for_member['und'][0]['value'])) {
+  if (empty($product->field_charge_by_the_['und'][0]['value']) || $product->type != 'reservable_product') {
     return;
   }
 
@@ -500,7 +500,7 @@ function om_membership_deny_product_access($user, $product_display, $product, $m
 
 function commerce_reservations_explain_price($line_item, $text, $value) {
   if (!empty($value)) { 
-    if (strpos($value, '%') === false && strpos($value, '.') === false) {
+    if (strpos($value, '%') === false) {
       $value = $value / 100;
     }
     if (strpos($value, '%') === false) {

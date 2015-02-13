@@ -17,7 +17,7 @@
       <?php endif; ?>
       <div id="show-details-right" <?php print !empty($picture_rendered) ? "class='with-photo'" : "class='without-photo'"; ?>>
         <div id="author">
-          <?php print $name; ?>
+          <?php print 'Producer: '.$name; ?>
         </div>
         <div id="created" class="bold">
           <?php print $created; ?> | 
@@ -42,7 +42,7 @@
       </div>
     </div>
     <?php if (isset($description)): ?>
-      <div id="description" class="divider show-hide">
+      <div id="description" class="divider">
         <div class="inner">
           <?php print $description; ?>
         </div>

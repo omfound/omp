@@ -1,11 +1,13 @@
+<?php //dsm($fields); ?>
 <?php $checkedout = FALSE;?>
 <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"):?>
   <div class = "reservation-overdue">
 <?php else:?>
   <div class = "reservation">
 <?php endif;?>
-  <table class="reservation-info-table">
+<table class="reservation-info-table <?php print str_replace(' ', '-', strtolower(strip_tags($fields['field_checkout_status']->content)));?>">
   <tr>
+  <th class = "vbo-header"></th>
   <th class = "item-title">Item</th>
   <th class="user-title">Username</th>
   <th class="order-title">Order</th>
@@ -22,6 +24,7 @@
   <?php }else{ ?>
     <tr>
   <?php } ?>
+  <td class="vbo-box"><?php print $fields['views_bulk_operations']->content;?></td>
     <td class="item-name">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print l(strip_tags($fields['line_item_title']->content), 'administer_reservations/line-item/'.$fields['line_item_id']->raw, $link_options); ?>
@@ -45,6 +48,7 @@
     <td class = "order-link">
       <?php $link_options = array('query' => drupal_get_destination());?>
       <?php print $fields['view_order']->content; ?>
+      <?php print '<br />'.l('all items', 'administer_reservations', array('query' => array('field_reservation_dates_value[value][date]' => '', 'field_reservation_dates_value2[value][date]' => '', 'order_id' => $fields['order_id']->raw))); ?>
     </td>
     <td class="checkout-status">
       <?php if (!empty($row->field_field_checkout_status[0]['raw']['value']) && $row->field_field_checkout_status[0]['raw']['value'] == "Overdue"){?>

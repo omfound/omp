@@ -18,6 +18,7 @@ function openmedia_preprocess_html(&$variables) {
 
 function openmedia_preprocess_page(&$variables) {
   drupal_add_library('openmedia', 'typekit');
+
   if ($variables['is_front']) {
     if (!empty($variables['page']['#views_contextual_links_info']['views_ui']['view_name'])) {
       if ($variables['page']['#views_contextual_links_info']['views_ui']['view_name'] == 'classes') {
@@ -88,6 +89,14 @@ function openmedia_library() {
       'js' => array(
         'https://use.typekit.net/nqe8fpz.js' => array(),
         drupal_get_path('theme', 'openmedia') . '/js/typekit.js' => array(),
+      )
+    ),
+    'readmore' => array(
+      'title' => 'Readmore JS',
+      'website' => 'https://github.com/jedfoster/Readmore.js',
+      'version' => '1',
+      'js' => array(
+        drupal_get_path('theme', 'openmedia') . '/js/readmore.min.js' => array(),
       )
     ),
   );
@@ -247,6 +256,9 @@ function openmedia_preprocess_node__class_display(&$variables) {
  * Implements hook_preprocess_HOOK
  */
 function openmedia_preprocess_node__om_show(&$variables) {
+  drupal_add_library('openmedia', 'readmore');
+  drupal_add_js(drupal_get_path('theme', 'openmedia') . '/js/show_readmore.js', array('type' => 'file', 'group' => JS_THEME));
+
   // User picture
   if (isset($variables['picture']) && $variables['picture'] > 0) {
     $file = file_load($variables['picture']);
@@ -291,6 +303,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['edit_link'] = l('<div class="icon"></div>Edit', 'node/' . $variables['node']->nid.'/edit', $options);
   }
   // Show details area (name and picture are already included in vars)
+  $variables['name'] = strip_tags($variables['name']);
   $variables['created'] = 'Published: ' . date('n/d/Y', $variables['node']->created);
   $stats = statistics_get($variables['node']->nid);
   $variables['view_count'] = $stats['totalcount'] . ' Views';
@@ -302,7 +315,7 @@ function openmedia_preprocess_node__om_show(&$variables) {
     $variables['locally_produced'] = 'Local Production';
   }
   if (!empty($variables['node']->field_om_theme[$variables['language']][0])) {
-    $show_theme = 'in ';
+    $show_theme = 'in Theme Block ';
     foreach ($variables['node']->field_om_theme[$variables['language']] AS $term) {
       $full_term = taxonomy_term_load($term['tid']);
       $show_theme .= $full_term->name . ', ';
@@ -438,6 +451,7 @@ function openmedia_preprocess_node__om_project(&$variables) {
     $show_thumbnail = $stream_wrapper->getExternalUrl();
     if(!empty($node_load)) {
       $video = $node_load->field_om_show_video['und']['0']['value']; 
+
       $variables['video'] = theme('video_player', array('id' => 'project-player',
                                                      'image' => $show_thumbnail,
                                                      'file' => $video,
@@ -728,6 +742,18 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
   switch ($status) {
     case 'Awaiting Checkout':
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
+      $variables['cr']['buttons'][] = l('Prepare', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
+      $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-warning');
+      $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-danger');
+      $variables['cr']['buttons'][] = l('Cancel Reservation', 'cr/res_cancel/' . $variables['row']->line_item_id, $link_options);
+      break;
+    case 'Prepared':
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
+      $variables['cr']['buttons'][] = l('Update', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check Out', 'cr/res_checkout/' . $variables['row']->line_item_id, $link_options);
       $link_options['attributes']['class'] = array('btn', 'btn-warning');
       $variables['cr']['buttons'][] = l('No Show', 'cr/res_noshow/' . $variables['row']->line_item_id, $link_options);
@@ -736,6 +762,8 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
       break;
     case 'Checked Out':
     case 'Overdue':
+      $link_options['attributes']['class'] = array('btn', 'btn-primary');
+      $variables['cr']['buttons'][] = l('Update', 'cr/res_prep/' . $variables['row']->line_item_id, $link_options);
       $link_options['attributes']['class'] = array('btn', 'btn-primary');
       $variables['cr']['buttons'][] = l('Check In', 'cr/res_checkin/' . $variables['row']->line_item_id, $link_options);
       break;
@@ -755,6 +783,9 @@ function openmedia_preprocess_views_view_fields__reservation_orders(&$variables)
     }
     else if ($payment_info['method'] == 'pay_later') {
       $payment_label = 'Paid Later / Not Paid!';
+    }
+    else if ($payment_info['method'] = 'free_order') {
+      $payment_label = 'Free Order';
     }
     $variables['cr']['payment'] = l($payment_label, 'payment/'.$payment_info['id'].'/edit', $link_options);
   }else{
@@ -805,21 +836,28 @@ function openmedia_preprocess_views_view_fields(&$variables) {
 }
 
 function openmedia_preprocess_views_view_fields__show_grid(&$vars) {
+  openmedia_improved_thumbnail($vars);
+}
+
+function openmedia_preprocess_views_view_fields__project_show_list(&$vars) {
+  openmedia_improved_thumbnail($vars);
+}
+
+function openmedia_improved_thumbnail(&$vars) {
   $view = $vars['view'];
-  if ($view->name == 'show_grid') {
-    if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
-      if (!empty($vars['fields']['field_om_show_video']->content)) {
-        if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
-          if (!empty($_SERVER['HTTP_X_SSL'])) {
-            $url = str_replace('http', 'https', $url);
-          }
-          $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
-          $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
-          $content = '<div class="field-content">';
-          $content .= $url;
-          $content .= '</div>';
-          $vars['fields']['field_show_thumbnail']->content = $content;
+  if(strpos($vars['fields']['field_show_thumbnail']->content, 'no_image.jpg') !== false) {
+    $node = node_load($vars['fields']['field_show_thumbnail']->raw);
+    if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
+      if ($url = internet_archive_thumb_from_nid($vars['row']->nid)) {
+        if (!empty($_SERVER['HTTP_X_SSL'])) {
+          $url = str_replace('http', 'https', $url);
         }
+        $image = '<img typeof="foaf:Image" src="' . $url . '" width="220" height="135" alt="" />';
+        $url = l($image, 'node/'.$vars['fields']['field_show_thumbnail']->raw, array('html' => true));
+        $content = '<div class="field-content">';
+        $content .= $url;
+        $content .= '</div>';
+        $vars['fields']['field_show_thumbnail']->content = $content;
       }
     }
   }

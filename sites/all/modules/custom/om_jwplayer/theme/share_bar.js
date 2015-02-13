@@ -157,6 +157,7 @@ Drupal.shareBar.views.shareBar = Backbone.View.extend({
     url += '&height=' + this.shareBarModel.get('height');
     url += '&embedInPoint=' + this.shareBarModel.get('embedInPoint');
     url += '&embedOutPoint=' + this.shareBarModel.get('embedOutPoint');
+    $(this.el).find('input.facebook').val(url);
     this.shareBarModel.set('embedUrl', url);
     url = "<iframe width='" + this.shareBarModel.get('width')  + "' height='" + this.shareBarModel.get('height') + "' frameborder='0' scrolling='no' src='" + url + "'></iframe>";
     $(this.el).find('input.embed').val(url);

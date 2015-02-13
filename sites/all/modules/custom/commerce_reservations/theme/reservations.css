@@ -737,6 +737,12 @@ body.page-reservations #main-content #squeeze{
 .section-administer-reservations table {
   margin-bottom: 0px;
 }
+.section-administer-reservations table.checked-out {
+  background-color: #E4E4E4;
+}
+.section-administer-reservations table.prepared {
+  background-image: url('/sites/all/themes/openmedia/images/stripes.png');
+}
 
 .section-administer-reservations span.date-display-single {
   display: block;
@@ -826,7 +832,7 @@ body.page-reservations #main-content #squeeze{
 }
 
 .checkout_status_good {
-	color: #85B740;
+  color: #000;
 	font-weight: bold;
 }
 
@@ -911,3 +917,4 @@ body.page-reservations #main-content #squeeze{
   display: none;
 }
 /** end date picker **/
+

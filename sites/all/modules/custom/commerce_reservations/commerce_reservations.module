@@ -156,6 +156,12 @@ function commerce_reservations_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['cr/res_prep'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commerce_reservations_line_item_prep_form', 2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   $items['cr/res_checkin'] = array(
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_reservations_line_item_checkin_form', 2),
@@ -315,6 +321,25 @@ function commerce_reservations_form_alter(&$form, &$form_state, $form_id){
     $form['reservable_product_availability'] += $availability_items;
     $form['#submit'][] = 'commerce_reservations_availability_items_submit'; 
   }
+
+  if ($form_id == 'views_form_reservation_orders_page') {
+    unset($form['properties']);
+    unset($form['bundle_reservable_product']['commerce_display_path']);
+    unset($form['bundle_reservable_product']['commerce_unit_price']);
+    unset($form['bundle_reservable_product']['commerce_product']);
+    unset($form['bundle_reservable_product']['commerce_total']);
+    unset($form['bundle_reservable_product']['field_reservation_dates']);
+
+    unset($form['bundle_reservable_product']['show_value']['commerce_display_path']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_unit_price']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_product']);
+    unset($form['bundle_reservable_product']['show_value']['commerce_total']);
+    unset($form['bundle_reservable_product']['show_value']['field_reservation_dates']);
+
+    unset($form['tokens']);
+    $form['bundle_reservable_product']['#title'] = 'Modify';
+  }
+
 }
 
 function commerce_reservations_redirect_add($form, &$form_state) {
@@ -1299,6 +1324,11 @@ function commerce_reservations_commerce_order_status_info(){
     'title' => t('Awaiting Checkout'),
     'state' => 'completed',
   );
+  $order_statuses['prepared'] = array(
+    'name' => 'prepared',
+    'title' => t('Prepared'),
+    'state' => 'completed',
+  );
   $order_statuses['checked_out'] = array(
     'name' => 'checked_out',
     'title' => t('Checked Out'),
@@ -1322,7 +1352,15 @@ function commerce_reservations_commerce_order_status_info(){
   return $order_statuses;
 }
 
-function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid){
+function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid) {
+  $line_item = commerce_line_item_load($lid);
+  $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  $line_item_wrapper->field_checkout_status->set('Checked Out');
+  $line_item_wrapper->save();
+  drupal_goto('administer_reservations');
+}
+
+function commerce_reservations_line_item_prep_form($form, &$form_state, $lid){
   $line_item = commerce_line_item_load($lid);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
   $order = commerce_order_load($line_item_wrapper->order_id->value());
@@ -1338,10 +1376,27 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
 
   $invalid_status = array('Checked Out', 'Overdue');
   $available_products = commerce_reservations_items_on_hand($line_item->commerce_product['und'][0]['product_id'], $date_array['value'], $date_array['value2'], $invalid_status);
+
+  // if we are updating this line item, it could already have a checked out product
+  // that is not returned by available products
+  $previous_product_id = $line_item_wrapper->commerce_product->value()->product_id;
+  if ($previous_product_id) {
+    if (!in_array($previous_product_id, $available_products)) {
+      $available_products[] = $previous_product_id;  
+    }
+  }
+
   $product_options = array();
   foreach ($available_products as $available_id) {
     $available_item = commerce_product_load($available_id);
     $product_options[] = $available_item->sku;
+  }
+
+  if (!empty($line_item->commerce_product['und'][0]['product_id'])) {
+    $default_product_option = $line_item_wrapper->commerce_product->sku->value();
+  }
+  else {
+    $default_product_option = $product_options[0];
   }
 
   $tax = taxonomy_vocabulary_machine_name_load('reservable_product_accessories');
@@ -1365,19 +1420,27 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   }
   
   $form['lid'] = array(
-    '#markup' => '<p>You are checking out ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a'),
+    '#markup' => '<p>You are updating ' . $account_wrapper->name->value() . "'s reservation for " . $product_display_wrapper->title->value() . ".</br>" . " From " . $start_date->format('l, F d, Y h:i a') . "</br> To " . $end_date->format('l, F d, Y h:i a'),
   );
+
   $form['product_picker'] = array(
     '#type' => 'select',
     '#title' => 'Which ' . $product_display_wrapper->title->value() .  ' is the user checking out?',
     '#options' => drupal_map_assoc($product_options),
-    '#default_value' => 0
+    '#default_value' => $default_product_option,
   );
+
+  $current_accessories = $line_item_wrapper->field_checked_out_accessories->value();
+  $default_accessories = array();
+  foreach ($current_accessories as $accessory) {
+    $default_accessories[] = $accessory->tid;
+  }
   if (count($accessories) > 0) {
     $form['accessories'] = array(
       '#type' => 'checkboxes',
       '#title' => 'Select all accessories the user is checking out.',
       '#options' => $accessories,
+      '#default_value' => $default_accessories,
     );
   }
   $form['start_date'] = array(
@@ -1394,7 +1457,7 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Checkout')
+    '#value' => t('Save')
   );
   $form['cancel'] = array(
     '#markup' => '<a href = "../todays_reservations">Cancel</a>'
@@ -1402,15 +1465,35 @@ function commerce_reservations_line_item_checkout_form($form, &$form_state, $lid
   return $form;
 }
 
-function commerce_reservations_line_item_checkout_form_submit($form, &$form_state){
+function commerce_reservations_line_item_prep_form_submit($form, &$form_state){
   $line_id = $form_state['build_info']['args'][0];
   $line_item = commerce_line_item_load($line_id);
   $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+
   $product = commerce_product_load_by_sku($form_state['values']['product_picker']);
   $product_wrapper = entity_metadata_wrapper('commerce_product', $product);
+
+  // reservations admins can change product assignment on line items using
+  // the prep button, the following checks to see if the chosen product is already
+  // temporarily assigned to another line item and if so swaps them so that
+  // the change can get past commerce_reservations_entity_presave 
+  $date_array = $line_item_wrapper->field_reservation_dates->value();
+  $checkout_status = commerce_reservations_product_checkout_status($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
+  if ($checkout_status == 'Awaiting Checkout' || $checkout_status == 'Prepared') {
+    $reservations = commerce_reservations_product_reservations($product_wrapper->product_id->value(), $date_array['value'], $date_array['value2'], $line_id);
+    reset($reservations);
+    $second_lid = key($reservations);
+    commerce_reservations_line_item_product_swap($line_id, $second_lid);
+
+    // reload the line item since the swap function made changes directly
+    // to the db to avoid commerce_reservations_entity_presave
+    $line_item = commerce_line_item_load($line_id);
+    $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
+  }
+
   $line_item_wrapper->commerce_product->set($product_wrapper->product_id->value());
   $line_item_wrapper->line_item_label->set($product_wrapper->sku->value());
-  $line_item_wrapper->field_checkout_status->set('Checked Out');
+
   $checked_out_accessories = array();
   if (!is_null($form_state['input']['accessories'])) {
     foreach($form_state['input']['accessories'] as $accessory){
@@ -1420,8 +1503,70 @@ function commerce_reservations_line_item_checkout_form_submit($form, &$form_stat
     }
   }
   $line_item_wrapper->field_checked_out_accessories->set($checked_out_accessories);
+
+  // if this line item is not already checked out, set status to prepared
+  $line_item_status = $line_item_wrapper->field_checkout_status->value();
+  if ($line_item_status != 'Checked Out') {
+    $line_item_wrapper->field_checkout_status->set('Prepared');
+  }
+
   $line_item_wrapper->save();
   $form_state['redirect'] = 'administer_reservations';
+}
+
+/**
+ * Takes two commerce line item ids and swaps their assigned products
+ * Intentionally avoids saving the line item in preference for direct
+ * database update to bypass existing protections in commerce_reservations_entity_presave
+ */
+function commerce_reservations_line_item_product_swap($first_lid, $second_lid) {
+ $cli_select_query = "SELECT * FROM {commerce_line_item} WHERE line_item_id = :lid";
+ $first_cli = db_query($cli_select_query, array(':lid' => $first_lid))->fetchAssoc();
+ $second_cli = db_query($cli_select_query, array(':lid' => $second_lid))->fetchAssoc();
+ $first_cli_original_data = unserialize($first_cli['data']);
+ $second_cli_original_data = unserialize($second_cli['data']);
+
+ $fdcp_select_query = "SELECT * FROM {field_data_commerce_product} WHERE entity_id = :lid";
+ $first_fdcp = db_query($fdcp_select_query, array(':lid' => $first_lid))->fetchAssoc();
+ $second_fdcp = db_query($fdcp_select_query, array(':lid' => $second_lid))->fetchAssoc();
+
+ $first_cli_new_data = $first_cli_original_data;
+ $second_cli_new_data = $second_cli_original_data;
+
+ $first_cli_new_data['context']['product_ids'] = $second_cli_original_data['context']['product_ids'];
+ $second_cli_new_data['context']['product_ids'] = $first_cli_original_data['context']['product_ids'];
+ $first_cli_new_data = serialize($first_cli_new_data);
+ $second_cli_new_data = serialize($second_cli_new_data);
+
+ $new_first = db_update('commerce_line_item')
+   ->fields(array(
+     'line_item_label' => $second_cli['line_item_label'],
+     'data' => $first_cli_new_data,
+   ))
+   ->condition('line_item_id', $first_lid, '=')
+   ->execute();
+ $new_first = db_update('field_data_commerce_product')
+   ->fields(array(
+     'commerce_product_product_id' => $second_fdcp['commerce_product_product_id'],
+   ))
+   ->condition('entity_id', $first_lid, '=')
+   ->execute();
+
+ $new_second = db_update('commerce_line_item')
+   ->fields(array(
+     'line_item_label' => $first_cli['line_item_label'],
+     'data' => $second_cli_new_data,
+   ))
+   ->condition('line_item_id', $second_lid, '=')
+   ->execute();
+ $new_second = db_update('field_data_commerce_product')
+   ->fields(array(
+     'commerce_product_product_id' => $first_fdcp['commerce_product_product_id'],
+   ))
+   ->condition('entity_id', $second_lid, '=')
+   ->execute();
+
+ field_cache_clear();
 }
 
 function commerce_reservations_cancel_reservation_access($lid) {
@@ -1429,7 +1574,7 @@ function commerce_reservations_cancel_reservation_access($lid) {
   $line_item = commerce_line_item_load($lid);
   $order = commerce_order_load($line_item->order_id);
   $status = $line_item->field_checkout_status[LANGUAGE_NONE][0]['value'];
-  if ($status == 'Awaiting Checkout') { 
+  if ($status == 'Awaiting Checkout' || $status == 'Prepared') { 
     if (user_access('administer commerce reservations')) {
       return true;
     }
@@ -2241,7 +2386,7 @@ function commerce_reservations_build_form($form_id) {
 }
 
 function commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id = null) {
-  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id = null);
+  $reservations = commerce_reservations_product_reservations($product_id, $start_date, $end_date, $exclude_id);
   $reservation_status = 'Available';
   foreach ($reservations as $reservation) {
     if ($reservation->field_checkout_status_value == 'Checked Out' || $reservation->field_checkout_status_value == 'Overdue') {
@@ -2299,7 +2444,8 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
         if (is_null($reservation->field_checkout_status_value) || 
         $reservation->field_checkout_status_value == 'Checked Out' || 
         $reservation->field_checkout_status_value == 'Overdue' ||
-        $reservation->field_checkout_status_value == 'Awaiting Checkout') {
+        $reservation->field_checkout_status_value == 'Awaiting Checkout' ||
+        $reservation->field_checkout_status_value == 'Prepared') {
           $all_reservations[] = array(
             'start' => strtotime($reservation->field_reservation_dates_value),
             'end' => strtotime($reservation->field_reservation_dates_value2),
@@ -2330,6 +2476,12 @@ function commerce_reservations_product_quantity_available($product_id, $start_da
 //by the time it gets to the line item save -- basically the same sku will get assigned
 //because no available sku will be found. It shouldn't be possible but at some point
 //we should probably make this fail if no swap_product_id is found...
+/*
+ * Implementation of hook_entity_presave
+ * This is the gatekeeper for all commerce reservations line item saves
+ * to prevent the same product from being assigned in the same time period
+ * i.e. overlapping reservations of the same item
+ */
 function commerce_reservations_entity_presave($entity, $type) {
   if ($type == 'commerce_line_item' && $entity->type == 'reservable_product') {
     $product_id = $entity->commerce_product[LANGUAGE_NONE][0]['product_id'];
@@ -2339,6 +2491,7 @@ function commerce_reservations_entity_presave($entity, $type) {
     if (!empty($entity->line_item_id)) {
       $exclude_id = $entity->line_item_id;
     }
+
     $checkout_status = commerce_reservations_product_checkout_status($product_id, $start_date, $end_date, $exclude_id);
     if ($checkout_status != 'Available') {
       $exclude_ids = array();

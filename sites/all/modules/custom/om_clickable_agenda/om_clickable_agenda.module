@@ -149,6 +149,8 @@ function om_clickable_agenda_check_for_session_node($node){
 function get_session_bills($nid) {
   global $base_path;
   $bill_json = file_get_contents($base_path . '/node/' . $nid . '/agenda-items');
+  print $bill_json;
+  /**
   $bills = drupal_json_decode($bill_json);
   $formatted_bills = array();
   foreach ($bills as $key => $text) {
@@ -159,6 +161,7 @@ function get_session_bills($nid) {
     $formatted_bills[] = array('title' => $text);
   }
   print drupal_json_encode($formatted_bills);
+  **/
 }
 
 /**
@@ -265,7 +268,13 @@ function om_clickable_agenda_save_cue_point() {
     $node->language = LANGUAGE_NONE;
     $node->title = $node_data['title'];
     if (!empty($node_data['node_revisions_body'])) {
-      $node->body = $node_data['node_revisions_body'];
+      $node->body = array(
+        'und' => array(
+          0 => array(
+            'value' => $node_data['node_revisions_body'],
+          )
+        ),
+      );
     }
     $node->field_acp_show_reference = array(
       'und' => array(
