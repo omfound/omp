@@ -502,7 +502,12 @@ function om_agenda_manager_google_captions($video_id) {
     }
   }
 
-  return $track_xml;
+  if (!empty($track_xml)) {
+    return $track_xml;
+  }
+  else {
+    return false;
+  }
 }
 
 function om_agenda_manager_google_get($url, $token) {
@@ -904,7 +909,9 @@ function om_agenda_manager_retrieve_youtube_captions() {
         $video_id = om_agenda_manager_youtube_id($session_node->field_om_show_video[LANGUAGE_NONE][0]['value']);
         if (!empty($video_id)) {
           $captions = om_agenda_manager_google_captions($video_id);
-          $captions = om_agenda_manager_parse_captions($captions);
+          if (!empty($captions)) {
+            $captions = om_agenda_manager_parse_captions($captions);
+          }
           if (!empty($captions)) {
             watchdog('om_agenda_manager', 'Saving captions for node: '.$session_node->nid);
             om_agenda_manager_store_captions($session_node->nid, $captions);
