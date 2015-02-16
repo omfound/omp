@@ -953,7 +953,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
     $captions[] = array(
       'start' => '0:00:00',
       'end' => '0:00:00',
-      'caption' => $node->body[LANGUAGE_NONE][0]['value'],
+      'caption' => string_replace(array("\r", "\n"), " ", strip_tags($node->body[LANGUAGE_NONE][0]['value'])),
     );
   }
   foreach ($captions as $key => $caption) {
@@ -962,7 +962,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
     $node->status = 1;
     $node->language = LANGUAGE_NONE;
     $node->title = truncate_utf8(strip_tags($caption['caption']), 128);
-    $node->body[LANGUAGE_NONE][0]['value'] = str_replace("\n\n", " ", strip_tags($caption['caption']));
+    $node->body[LANGUAGE_NONE][0]['value'] = strip_tags($caption['caption']);
     $node->uid = 1;
     $node->field_acp_type[LANGUAGE_NONE][0]['value'] = 'Caption';
     
