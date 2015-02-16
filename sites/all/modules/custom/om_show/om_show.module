@@ -448,6 +448,7 @@ function om_show_jwplayer_include($disable_playlist = false, $width = 550, $heig
       $jwplayer[$key]['width'] = $width;
       $jwplayer[$key]['height'] = $height;
       $jwplayer[$key]['autostart'] = $autostart;
+      $jwplayer[$key]['captions'] = '/api/'.$nid.'/captions/webvtt';
       $jwplayer[$key]['embedInPoint'] = isset($_GET['embedInPoint']) ? $_GET['embedInPoint'] : FALSE;
       $jwplayer[$key]['embedOutPoint'] = isset($_GET['embedOutPoint']) ? $_GET['embedOutPoint'] : FALSE;
     }

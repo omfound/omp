@@ -42,6 +42,11 @@
                 height: Drupal.settings.jwplayer[i].height,
                 width: Drupal.settings.jwplayer[i].width,
                 image: Drupal.settings.jwplayer[i].image,
+                tracks: [{
+                  file: Drupal.settings.jwplayer[i].captions,
+                  label: "English",
+                  kind: "captions"
+                }],
                 autostart: Drupal.settings.jwplayer[i].autostart
               });
             }
