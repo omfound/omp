@@ -136,7 +136,6 @@ function om_agenda_manager_test($node) {
 
 function om_agenda_manager_captions($node) {
   $output = '';
-  $output .= '<h2>Captions</h2>';
   if (!empty($node->field_om_show_video[LANGUAGE_NONE][0]['value'])) {
     $video_id = om_agenda_manager_youtube_id($node->field_om_show_video[LANGUAGE_NONE][0]['value']);
     if (!empty($video_id)) {
@@ -147,7 +146,13 @@ function om_agenda_manager_captions($node) {
     }
   }
 
-  return $output;
+  if (!empty($output)) {
+    $output = '<h2>Captions</h2>'.$output;
+    return $output;
+  }
+  else {
+    return false;
+  }
 }
 
 function om_agenda_manager_cuepoints_xml($node) {
