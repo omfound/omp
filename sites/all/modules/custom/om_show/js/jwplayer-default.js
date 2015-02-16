@@ -37,18 +37,29 @@
               });
             }
             else{
-              var player = jwplayer("jwplayer-" + i).setup({
-                file: Drupal.settings.jwplayer[i].path,
-                height: Drupal.settings.jwplayer[i].height,
-                width: Drupal.settings.jwplayer[i].width,
-                image: Drupal.settings.jwplayer[i].image,
-                tracks: [{
-                  file: Drupal.settings.jwplayer[i].captions,
-                  label: "English",
-                  kind: "captions"
-                }],
-                autostart: Drupal.settings.jwplayer[i].autostart
-              });
+              if (Drupal.settings.jwplayer[i].captions_available) {
+                var player = jwplayer("jwplayer-" + i).setup({
+                  file: Drupal.settings.jwplayer[i].path,
+                  height: Drupal.settings.jwplayer[i].height,
+                  width: Drupal.settings.jwplayer[i].width,
+                  image: Drupal.settings.jwplayer[i].image,
+                  tracks: [{
+                    file: Drupal.settings.jwplayer[i].caption_url,
+                    label: "English",
+                    kind: "captions"
+                  }],
+                  autostart: Drupal.settings.jwplayer[i].autostart
+                });
+              }
+              else{
+                var player = jwplayer("jwplayer-" + i).setup({
+                  file: Drupal.settings.jwplayer[i].path,
+                  height: Drupal.settings.jwplayer[i].height,
+                  width: Drupal.settings.jwplayer[i].width,
+                  image: Drupal.settings.jwplayer[i].image,
+                  autostart: Drupal.settings.jwplayer[i].autostart
+                });
+              }
             }
             if (Drupal.settings.jwplayer[i].embedInPoint) {
               player.seek(Drupal.settings.jwplayer[i].embedInPoint - 1);
