@@ -961,7 +961,7 @@ function om_agenda_manager_store_captions($nid, $captions) {
     $node->type = 'agenda_cue_point';
     $node->status = 1;
     $node->language = LANGUAGE_NONE;
-    $node->title = $caption['caption'];
+    $node->title = truncate_utf8(strip_tags($caption['caption']), 128);
     $node->body[LANGUAGE_NONE][0]['value'] = $caption['caption'];
     $node->uid = 1;
     $node->field_acp_type[LANGUAGE_NONE][0]['value'] = 'Caption';
