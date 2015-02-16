@@ -492,7 +492,7 @@ function om_agenda_manager_google_captions($video_id) {
       $track_urls[] = $track->getAttribute("src");
     }
 
-    if (count($track_urls > 0)) {
+    if (count($track_urls) > 0) {
       $track_xml = om_agenda_manager_google_get($track_urls[0], $token);
     }
   }
