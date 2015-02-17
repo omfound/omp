@@ -1002,7 +1002,7 @@ function om_agenda_manager_caption_management_form() {
   $all_sessions = json_decode($session_json);
   $picker_sessions = array('all' => '-- All --');
   foreach ($all_sessions as $session) {
-    $picker_sessions[$session['nid']] = $session['title'];
+    $picker_sessions[$session->nid] = $session->title;
   }
 
   $form['session'] = array(
