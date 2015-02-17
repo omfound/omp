@@ -84,6 +84,14 @@ function om_agenda_manager_menu() {
     'access arguments' => array('administer agenda manager'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['admin/config/om/captions'] = array(
+    'title' => t('Automated Caption Management'),
+    'description' => t('Configuration and cache management for Youtube automated captions.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('om_agenda_manager_caption_management_form'),
+    'access arguments' => array('administer agenda manager'),
+    'type' => MENU_CALLBACK,
+  );
   $items['live/status'] = array(
     'title' => 'Live Broadcast',
     'description' => 'Livestream page',
@@ -384,6 +392,10 @@ function om_agenda_manager_admin_form() {
     '#type' => 'checkbox',
     '#title' => t('Pull and store captions automatically from Youtube?'),
     '#default_value' => variable_get('om_agenda_manager_youtube_captions', ''),
+  );
+
+  $form['om_agenda_manager_youtube_caption_link'] = array(
+    '#markup' => l('Click here to manage Youtube Captions', 'admin/config/om/captions'),
   );
 
   $form['om_agenda_start_marker'] = array(
@@ -980,3 +992,26 @@ function om_agenda_manager_store_captions($nid, $captions) {
   }
 }
 
+function om_agenda_manager_caption_management_form() {
+  global $base_url;
+  $form = array();
+  $form['description'] = array(
+    '#markup' => t('Automated captions are pulled down from Youtube and cached locally to improve performance.').'<br />',
+  );
+  $session_json = file_get_contents($base_url . '/api/sessions');
+  $all_sessions = json_decode($session_json);
+  $picker_sessions = array('all' => '-- All --') + $indicators;
+  foreach ($all_sessions as $session) {
+    $picker_sessions[$session['nid']] = $session['title'];
+  }
+
+  $form['session'] = array(
+    '#type' => 'select',
+    '#options' => $picker_sessions,
+    '#default_value' => 'all',
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Cache Now',
+  );
+}
