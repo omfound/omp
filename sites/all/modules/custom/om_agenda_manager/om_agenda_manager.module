@@ -1000,7 +1000,7 @@ function om_agenda_manager_caption_management_form() {
   );
   $session_json = file_get_contents($base_url . '/api/sessions');
   $all_sessions = json_decode($session_json);
-  $picker_sessions = array('all' => '-- All --') + $indicators;
+  $picker_sessions = array('all' => '-- All --');
   foreach ($all_sessions as $session) {
     $picker_sessions[$session['nid']] = $session['title'];
   }
