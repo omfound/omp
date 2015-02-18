@@ -1067,7 +1067,7 @@ function om_agenda_manager_caption_cache($session = false) {
 
     $single_session = new stdClass();
     $single_session->nid = $session;
-    $single_session->title = $node->title; 
+    $single_session->title = $session_node->title; 
     $sessions = array($session => $single_session);
   }
   $operations = array();
