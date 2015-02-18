@@ -902,7 +902,7 @@ function om_agenda_manager_youtube_id ($url) {
 function om_agenda_manager_cron () {
   if (variable_get('om_agenda_manager_youtube_captions', '')) {
     watchdog('om_agenda_manager', 'Fetching new youtube captions');
-    om_agenda_manager_retrieve_youtube_captions();
+    //om_agenda_manager_retrieve_youtube_captions();
   }
 }
 
@@ -1039,13 +1039,32 @@ function om_agenda_manager_caption_management_form_submit($form, &$form_state) {
 
 function om_agenda_manager_caption_cache($session = false) {
   if (!$session) {
-    //delete all caption nodes
+    $query = "
+      SELECT nid FROM {node}
+      JOIN {field_data_field_acp_type} ON field_data_field_acp_type.revision_id = node.vid
+      WHERE field_data_field_acp_type.field_acp_type_value = :caption";
+    $results = db_query($query, array(':caption' => 'Caption'))->fetchAll();
+    foreach ($results as $result) {
+      node_delete($result->nid);
+    }
     $session_json = file_get_contents($base_url . '/api/sessions');
     $sessions = json_decode($session_json);
   }
   else {
     //delete captions associated with this session
     $session_node = node_load($session);
+
+    $query = "
+      SELECT nid FROM {node}
+      JOIN {field_data_field_acp_type} ON field_data_field_acp_type.revision_id = node.vid
+      JOIN {field_data_field_acp_show_reference} ON field_data_field_acp_show_reference.revision_id = node.vid
+      WHERE field_data_field_acp_type.field_acp_type_value = :caption
+      AND field_data_field_acp_show_reference.field_acp_show_reference_target_id = :nid";
+    $results = db_query($query, array(':caption' => 'Caption', ':nid' => $session))->fetchAll();
+    foreach ($results as $result) {
+      node_delete($result->nid);
+    }  
+
     $single_session = new stdClass();
     $single_session->nid = $session;
     $single_session->title = $node->title; 
@@ -1074,6 +1093,20 @@ function om_agenda_manager_caption_cache($session = false) {
 }
 
 function om_agenda_manager_cache_caption($session, $operation_details, &$context) {
-  //$context['results']['sessions'][] = $;
-  //and here we grab the captions
+  $context['results']['sessions'][] = $session->nid;
+  om_agenda_manager_retrieve_youtube_captions($session->nid);
+  $context['message'] = t('Processing Session: "@title"', array('@title' => $session->title)). ' | '.$operation_details;
+}
+
+function om_agenda_manager_caption_cache_finished($success, $results, $operations) {
+  if ($success) {
+    drupal_set_message(t('@count session youtube captions cached.', array('@count' => count($results['sessions']))));
+  }
+  else {
+    $error_operation = reset($operations);
+    drupal_set_message(t('An error occurred while processing @operation with arguments : @args', array(
+      '@operation' => $error_operation[0],
+      '@args' => print_r($error_operation[0], TRUE),
+    )));
+  }
 }
