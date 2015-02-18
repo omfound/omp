@@ -906,12 +906,21 @@ function om_agenda_manager_cron () {
   }
 }
 
-function om_agenda_manager_retrieve_youtube_captions() {
-  $sessions_query = '
-    SELECT entity_id 
-    FROM field_data_field_om_show_video 
-    WHERE field_om_show_video_value LIKE :youtube';
-  $sessions = db_query($sessions_query, array(':youtube' => '%' . db_like('youtube'). '%'));
+function om_agenda_manager_retrieve_youtube_captions($session_nid = false) {
+  if (!$session_nid) {
+    $sessions_query = '
+      SELECT entity_id 
+      FROM field_data_field_om_show_video 
+      WHERE field_om_show_video_value LIKE :youtube';
+    $sessions = db_query($sessions_query, array(':youtube' => '%' . db_like('youtube'). '%'));
+  }
+  else {
+    $sessions = array();
+    $session = new stdClass();
+    $session->entity_id = $session_nid;
+    $sessions[$session_nid] = $session;
+  }
+
   foreach ($sessions as $session) {
     unset($captions);
     if (!om_agenda_manager_captions_exist($session->entity_id)) {
@@ -1015,4 +1024,56 @@ function om_agenda_manager_caption_management_form() {
     '#value' => 'Cache Now',
   );
   return $form;
+}
+
+function om_agenda_manager_caption_management_form_submit($form, &$form_state) {
+  if ($form_state['values']['session'] == 'all') {
+    $batch = om_agenda_manager_caption_cache();
+    batch_set($batch);
+  }
+  else {
+    $batch = om_agenda_manager_caption_cache($form_state['values']['session']);
+    batch_set($batch);
+  }
+}
+
+function om_agenda_manager_caption_cache($session = false) {
+  if (!$session) {
+    //delete all caption nodes
+    $session_json = file_get_contents($base_url . '/api/sessions');
+    $sessions = json_decode($session_json);
+  }
+  else {
+    //delete captions associated with this session
+    $session_node = node_load($session);
+    $single_session = new stdClass();
+    $single_session->nid = $session;
+    $single_session->title = $node->title; 
+    $sessions = array($session => $single_session);
+  }
+  $operations = array();
+  
+  $count = 0;
+  foreach ($sessions as $session) {
+    $count++;
+    $operations[] = array(
+      'om_agenda_manager_cache_caption',
+      array(
+        $session, 
+        t('(Operation @count)', array('@count' => $count)),
+      ),
+    );
+  }
+
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'om_agenda_manager_caption_cache_finished',
+  );
+
+  return $batch;
+}
+
+function om_agenda_manager_cache_caption($session, $operation_details, &$context) {
+  $context['results']['sessions'][] = $;
+  //and here we grab the captions
 }
