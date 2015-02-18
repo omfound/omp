@@ -1074,6 +1074,6 @@ function om_agenda_manager_caption_cache($session = false) {
 }
 
 function om_agenda_manager_cache_caption($session, $operation_details, &$context) {
-  $context['results']['sessions'][] = $;
+  //$context['results']['sessions'][] = $;
   //and here we grab the captions
 }
