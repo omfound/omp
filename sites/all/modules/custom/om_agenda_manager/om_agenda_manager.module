@@ -1039,6 +1039,7 @@ function om_agenda_manager_caption_management_form_submit($form, &$form_state) {
 
 function om_agenda_manager_caption_cache($session = false) {
   if (!$session) {
+    global $base_url;
     $session_json = file_get_contents($base_url . '/api/sessions');
     $sessions = json_decode($session_json);
   }
