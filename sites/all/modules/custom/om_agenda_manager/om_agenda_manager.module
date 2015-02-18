@@ -1080,19 +1080,18 @@ function om_agenda_manager_caption_cache($session = false) {
 }
 
 function om_agenda_manager_delete_caption($session, $operation_details, &$context) {
-  $context['results']['sessions'][] = $session->nid;
   om_agenda_manager_delete_session_captions($session->nid);
-  $context['message'] = t('Deleting cached captions for session: "@title"', array('@title' => $session->title)). ' | '.$operation_details;
+  $context['message'] = t('Deleted cached captions for session: "@title"', array('@title' => $session->title)). ' | '.$operation_details;
 }
 function om_agenda_manager_cache_caption($session, $operation_details, &$context) {
   $context['results']['sessions'][] = $session->nid;
   om_agenda_manager_retrieve_youtube_captions($session->nid);
-  $context['message'] = t('Storing captions for session: "@title"', array('@title' => $session->title)). ' | '.$operation_details;
+  $context['message'] = t('Stored captions for session: "@title"', array('@title' => $session->title)). ' | '.$operation_details;
 }
 
 function om_agenda_manager_caption_cache_finished($success, $results, $operations) {
   if ($success) {
-    drupal_set_message(t('@count session youtube captions cached.', array('@count' => count($results['sessions']))));
+    drupal_set_message(t('@count sessions processed.', array('@count' => count($results['sessions']))));
   }
   else {
     $error_operation = reset($operations);
