@@ -1007,7 +1007,7 @@ function om_agenda_manager_caption_management_form() {
   $form['description'] = array(
     '#markup' => t('Automated captions are pulled down from Youtube and cached locally to improve performance.').'<br />',
   );
-  $session_json = file_get_contents($base_url . '/api/sessions');
+  $session_json = om_agenda_manager_file_get_contents($base_url . '/api/sessions');
   $all_sessions = json_decode($session_json);
   $picker_sessions = array('all' => '-- All --', 'new' => '-- New --');
   foreach ($all_sessions as $session) {
@@ -1029,7 +1029,7 @@ function om_agenda_manager_caption_management_form() {
 function om_agenda_manager_caption_management_form_submit($form, &$form_state) {
   if ($form_state['values']['session'] == 'all') {
     global $base_url;
-    $session_json = file_get_contents($base_url . '/api/sessions');
+    $session_json = om_agenda_manager_file_get_contents($base_url . '/api/sessions');
     $sessions = json_decode($session_json);
 
     $batch = om_agenda_manager_caption_cache($sessions);
@@ -1123,7 +1123,7 @@ function om_agenda_manager_delete_session_captions($session_nid) {
 
 function om_agenda_manager_uncaptioned_sessions() {
   global $base_url;
-  $session_json = file_get_contents($base_url . '/api/sessions');
+  $session_json = om_agenda_manager_file_get_contents($base_url . '/api/sessions');
   $sessions = json_decode($session_json);
   $uncaptioned_sessions = array();
 
@@ -1134,4 +1134,14 @@ function om_agenda_manager_uncaptioned_sessions() {
   }
 
   return $uncaptioned_sessions;
+}
+
+function om_agenda_manager_file_get_contents($url) {
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $output = curl_exec($ch);
+  curl_close($ch);
+
+  return $output;
 }
