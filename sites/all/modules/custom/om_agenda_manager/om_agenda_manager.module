@@ -1028,29 +1028,32 @@ function om_agenda_manager_caption_management_form() {
 
 function om_agenda_manager_caption_management_form_submit($form, &$form_state) {
   if ($form_state['values']['session'] == 'all') {
-    $batch = om_agenda_manager_caption_cache();
-    batch_set($batch);
-  }
-  else {
-    $batch = om_agenda_manager_caption_cache($form_state['values']['session']);
-    batch_set($batch);
-  }
-}
-
-function om_agenda_manager_caption_cache($session = false) {
-  if (!$session) {
     global $base_url;
     $session_json = file_get_contents($base_url . '/api/sessions');
     $sessions = json_decode($session_json);
+
+    $batch = om_agenda_manager_caption_cache($sessions);
+    batch_set($batch);
+  }
+  elseif ($form_state['values']['session'] == 'new') {
+    $sessions = om_agenda_manager_uncaptioned_sessions();
+
+    $batch = om_agenda_manager_caption_cache($sessions);
+    batch_set($batch);
   }
   else {
-    //delete captions associated with this session
-    $session_node = node_load($session);
+    $session_node = node_load($form_state['values']['session']);
     $single_session = new stdClass();
     $single_session->nid = $session;
     $single_session->title = $session_node->title; 
     $sessions = array($session => $single_session);
+
+    $batch = om_agenda_manager_caption_cache($sessions);
+    batch_set($batch);
   }
+}
+
+function om_agenda_manager_caption_cache($sessions) {
   $operations = array();
   
   $count = 0;
