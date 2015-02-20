@@ -1009,7 +1009,7 @@ function om_agenda_manager_caption_management_form() {
   );
   $session_json = file_get_contents($base_url . '/api/sessions');
   $all_sessions = json_decode($session_json);
-  $picker_sessions = array('all' => '-- All --');
+  $picker_sessions = array('all' => '-- All --', 'new' => '-- New --');
   foreach ($all_sessions as $session) {
     $picker_sessions[$session->nid] = $session->title;
   }
@@ -1116,4 +1116,19 @@ function om_agenda_manager_delete_session_captions($session_nid) {
   }
 
   return;
+}
+
+function om_agenda_manager_uncaptioned_sessions() {
+  global $base_url;
+  $session_json = file_get_contents($base_url . '/api/sessions');
+  $sessions = json_decode($session_json);
+  $uncaptioned_sessions = array();
+
+  foreach ($sessions as $session) {
+    if (!om_agenda_manager_captions_exist($session->nid)) {
+      $uncaptioned_sessions[] = $session; 
+    }
+  }
+
+  return $uncaptioned_sessions;
 }
