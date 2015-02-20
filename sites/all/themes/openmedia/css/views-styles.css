@@ -559,4 +559,9 @@ p.read-more-button {
   cursor: pointer;
 }
 
-
+.view-archived-sessions .views-field-body {
+  margin-left: 20px;
+}
+.view-archived-sessions h3 {
+  font-size: 18px;
+}
